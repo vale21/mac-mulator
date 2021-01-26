@@ -13,6 +13,8 @@
 		3B391EF425C075F50030E914 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B391EF225C075F50030E914 /* Main.storyboard */; };
 		3B391F0025C075F50030E914 /* MacMulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EFF25C075F50030E914 /* MacMulatorTests.swift */; };
 		3B391F0B25C075F50030E914 /* MacMulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */; };
+		3B87AB7D25C07FA400A9C71B /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */; };
+		3B87AB8225C080E100A9C71B /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB8125C080E100A9C71B /* VirtualDrive.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		3B391F0625C075F50030E914 /* MacMulatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorUITests.swift; sourceTree = "<group>"; };
 		3B391F0C25C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
+		3B87AB8125C080E100A9C71B /* VirtualDrive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,8 +100,10 @@
 		3B391EEB25C075F50030E914 /* MacMulator */ = {
 			isa = PBXGroup;
 			children = (
+				3B87AB8125C080E100A9C71B /* VirtualDrive.swift */,
 				3B391EEC25C075F50030E914 /* AppDelegate.swift */,
 				3B391EEE25C075F50030E914 /* ViewController.swift */,
+				3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */,
 				3B391EF025C075F50030E914 /* Assets.xcassets */,
 				3B391EF225C075F50030E914 /* Main.storyboard */,
 				3B391EF525C075F50030E914 /* Info.plist */,
@@ -254,6 +260,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B391EEF25C075F50030E914 /* ViewController.swift in Sources */,
+				3B87AB7D25C07FA400A9C71B /* VirtualMachine.swift in Sources */,
+				3B87AB8225C080E100A9C71B /* VirtualDrive.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
