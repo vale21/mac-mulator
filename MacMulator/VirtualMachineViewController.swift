@@ -1,24 +1,31 @@
 //
-//  ViewController.swift
-//  QManage
+//  VirtualMachineViewController.swift
+//  MacMulator
 //
-//  Created by Vale on 26/01/21.
+//  Created by Vale on 27/01/21.
 //
 
 import Cocoa
 
-class ViewController: NSViewController {
-
-    let libraryPath = "/Volumes/valeMac\\ SSD/Parallels";
-    let qemuPath = "/opt/local/qemu/qemu-system-ppc";
+class VirtualMachineViewController: NSViewController {
     
     var isRunning = false;
-    var vm : VirtualMachine?
+    var vm : VirtualMachine!;
+    var rootController: RootViewController!;
     
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet weak var vmFilePath: NSTextField!
     @IBOutlet weak var vmResolution: NSTextField!
     @IBOutlet weak var vmMemory: NSTextField!
+           
+    func setRootController(rootController:RootViewController) {
+        self.rootController = rootController;
+        
+        let virm = VirtualMachine(name:"tiger", displayName: "Mac OS X Tiger", memory: 2048, resolution: "1440x900x32", bootArg: "c");
+        let drive = VirtualDrive(name:"tiger", format: "qcow2", mediaType: "disk");
+        virm.addVirtualDrive(drive: drive);
+        self.setVirtualMachine(virtualmachine: virm);
+    }
     
     @IBAction
     func buttonClicked(sender: NSButton) {
@@ -39,9 +46,9 @@ class ViewController: NSViewController {
                     let memory: String = String(vm.memory);
                     let res: String = vm.resolution;
                     
-                    let drive: String = self.libraryPath + "/" + self.escape(text: vm.displayName) + ".qvm/" + vm.drives[0].name + "." + vm.drives[0].format + ",format=" + vm.drives[0].format + ",media=" + vm.drives[0].mediaType
+                    let drive: String = self.rootController.getLibraryPath() + "/" + self.escape(text: vm.displayName) + ".qvm/" + vm.drives[0].name + "." + vm.drives[0].format + ",format=" + vm.drives[0].format + ",media=" + vm.drives[0].mediaType
                     
-                    let command: String = self.qemuPath
+                    let command: String = self.rootController.getQemuPath()
                         + " -L pc-bios -boot c -M mac99,via=pmu -m " + memory
                         + " -g " + res + " -prom-env 'auto-boot?=true' -prom-env 'vga-ndrv?=true' -drive file=" + drive
                         + " -netdev user,id=mynet0 -device sungem,netdev=mynet0";
@@ -74,25 +81,17 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
-        vm = VirtualMachine(name:"tiger", displayName: "Mac OS X Tiger", memory: 2048, resolution: "1440x900x32", bootArg: "c");
-        let drive = VirtualDrive(name:"tiger", format: "qcow2", mediaType: "disk");
-        vm?.addVirtualDrive(drive: drive);
+    }
+    
+    func setVirtualMachine(virtualmachine: VirtualMachine) {
+        self.vm = virtualmachine;
         
         if let vm = self.vm {
             vmName.stringValue = vm.displayName;
-            vmFilePath.stringValue = self.libraryPath + "/" + vm.displayName + ".qvm";
+            vmFilePath.stringValue = rootController.getLibraryPath() + "/" + vm.displayName + ".qvm";
             vmResolution.stringValue = vm.resolution;
             vmMemory.stringValue = String(vm.memory / 1024) + " GB";
         }
     }
 
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-
-
 }
-
