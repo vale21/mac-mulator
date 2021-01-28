@@ -10,8 +10,8 @@ import Cocoa
 class VirtualMachineViewController: NSViewController {
     
     var isRunning = false;
-    var vm : VirtualMachine!;
-    var rootController: RootViewController!;
+    var vm : VirtualMachine?;
+    var rootController: RootViewController?;
     
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet weak var vmFilePath: NSTextField!
@@ -20,15 +20,10 @@ class VirtualMachineViewController: NSViewController {
            
     func setRootController(rootController:RootViewController) {
         self.rootController = rootController;
-        
-        let virm = VirtualMachine(name:"tiger", displayName: "Mac OS X Tiger", memory: 2048, resolution: "1440x900x32", bootArg: "c");
-        let drive = VirtualDrive(name:"tiger", format: "qcow2", mediaType: "disk");
-        virm.addVirtualDrive(drive: drive);
-        self.setVirtualMachine(virtualmachine: virm);
     }
     
     @IBAction
-    func buttonClicked(sender: NSButton) {
+    func startVM(sender: NSButton) {
         
         if let vm = self.vm {
             if (isRunning) {
@@ -46,12 +41,12 @@ class VirtualMachineViewController: NSViewController {
                     let memory: String = String(vm.memory);
                     let res: String = vm.resolution;
                     
-                    let drive: String = self.rootController.getLibraryPath() + "/" + self.escape(text: vm.displayName) + ".qvm/" + vm.drives[0].name + "." + vm.drives[0].format + ",format=" + vm.drives[0].format + ",media=" + vm.drives[0].mediaType
+                    let drive: String = self.rootController!.getLibraryPath() + "/" + self.escape(text: vm.displayName) + ".qvm/" + vm.drives[0].name + "." + vm.drives[0].format + ",format=" + vm.drives[0].format + ",media=" + vm.drives[0].mediaType
                     
-                    let command: String = self.rootController.getQemuPath()
+                    let command: String = self.rootController!.getQemuPath()
                         + " -L pc-bios -boot c -M mac99,via=pmu -m " + memory
                         + " -g " + res + " -prom-env 'auto-boot?=true' -prom-env 'vga-ndrv?=true' -drive file=" + drive
-                        + " -netdev user,id=mynet0 -device sungem,netdev=mynet0";
+                        + " -netdev user,id=mynet0 -device sungem,netdev=mynet0 -qmp tcp:localhost:4444,server,nowait";
                     print(self.shell(command));
                     
                     self.isRunning = false;
@@ -88,7 +83,7 @@ class VirtualMachineViewController: NSViewController {
         
         if let vm = self.vm {
             vmName.stringValue = vm.displayName;
-            vmFilePath.stringValue = rootController.getLibraryPath() + "/" + vm.displayName + ".qvm";
+            vmFilePath.stringValue = rootController!.getLibraryPath() + "/" + vm.displayName + ".qvm";
             vmResolution.stringValue = vm.resolution;
             vmMemory.stringValue = String(vm.memory / 1024) + " GB";
         }

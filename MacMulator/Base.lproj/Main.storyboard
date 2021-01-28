@@ -680,16 +680,16 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-231" y="-379"/>
+            <point key="canvasLocation" x="-364" y="-605"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" sceneMemberID="viewController">
-                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titleVisibility="hidden" id="IQv-IB-iLA">
+                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" titlebarAppearsTransparent="YES" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="219" y="523" width="800" height="500"/>
+                        <rect key="contentRect" x="182" y="392" width="800" height="500"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="490" height="250"/>
                         <connections>
@@ -702,7 +702,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-226" y="-27"/>
+            <point key="canvasLocation" x="-267" y="-103"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="YwI-h8-uGh">
@@ -727,63 +727,80 @@
                 </splitViewController>
                 <customObject id="vqg-Tn-aqh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-183" y="557"/>
+            <point key="canvasLocation" x="-267" y="641"/>
         </scene>
-        <!--View Controller-->
+        <!--Virtual Machines List View Controller-->
         <scene sceneID="tdQ-bA-MaQ">
             <objects>
-                <viewController id="a5L-tW-V2f" sceneMemberID="viewController">
-                    <scrollView key="view" misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="oCo-hN-rcu">
+                <viewController id="a5L-tW-V2f" customClass="VirtualMachinesListViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <scrollView key="view" misplaced="YES" borderType="line" autohidesScrollers="YES" horizontalLineScroll="55" horizontalPageScroll="10" verticalLineScroll="55" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="oCo-hN-rcu">
                         <rect key="frame" x="0.0" y="0.0" width="200" height="500"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <clipView key="contentView" id="wTC-Ft-qwg">
                             <rect key="frame" x="1" y="1" width="198" height="498"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="a7y-SM-3es">
-                                    <rect key="frame" x="0.0" y="0.0" width="228" height="498"/>
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="55" rowSizeStyle="automatic" viewBased="YES" id="a7y-SM-3es">
+                                    <rect key="frame" x="0.0" y="0.0" width="218" height="498"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="gridColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn width="216" minWidth="40" maxWidth="1000" id="YZh-2P-LJL">
+                                        <tableColumn width="206" minWidth="40" maxWidth="1000" id="YZh-2P-LJL">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                             </tableHeaderCell>
-                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="nko-AY-hvx">
+                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" selectable="YES" editable="YES" title="Text Cell" id="nko-AY-hvx">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView id="nQd-YO-CSf">
-                                                    <rect key="frame" x="8" y="0.0" width="211" height="24"/>
+                                                <tableCellView id="nQd-YO-CSf" customClass="VirtualMachineTableCellView" customModule="MacMulator" customModuleProvider="target">
+                                                    <rect key="frame" x="8" y="0.0" width="201" height="55"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="KVE-Nw-kWV">
-                                                            <rect key="frame" x="0.0" y="4" width="211" height="16"/>
-                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="OUR-ia-9fp">
-                                                                <font key="font" usesAppearanceFont="YES"/>
-                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="QAz-zy-mTK">
+                                                            <rect key="frame" x="3" y="5" width="45" height="49"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="MCY-un-ad5">
+                                                                <imageReference key="image" image="applelogo" catalog="system" symbolScale="large"/>
+                                                            </imageCell>
+                                                        </imageView>
+                                                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="i6t-uT-MUV">
+                                                            <rect key="frame" x="-37" y="-2" width="304" height="5"/>
+                                                        </box>
+                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qJR-bt-XWc">
+                                                            <rect key="frame" x="51" y="18" width="118" height="19"/>
+                                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Mac OS X Tiger" placeholderString="Mac OS X Tiger" id="BEt-Jw-pWW">
+                                                                <font key="font" metaFont="system" size="16"/>
+                                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                         </textField>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="KVE-Nw-kWV" firstAttribute="centerY" secondItem="nQd-YO-CSf" secondAttribute="centerY" id="V5w-44-rsU"/>
-                                                        <constraint firstItem="KVE-Nw-kWV" firstAttribute="leading" secondItem="nQd-YO-CSf" secondAttribute="leading" constant="2" id="g8N-tU-OeA"/>
-                                                        <constraint firstItem="KVE-Nw-kWV" firstAttribute="centerX" secondItem="nQd-YO-CSf" secondAttribute="centerX" id="tTs-iZ-VGc"/>
+                                                        <constraint firstAttribute="trailing" secondItem="i6t-uT-MUV" secondAttribute="trailing" constant="-66" id="23e-M6-aTR"/>
+                                                        <constraint firstItem="i6t-uT-MUV" firstAttribute="top" secondItem="QAz-zy-mTK" secondAttribute="bottom" constant="8" symbolic="YES" id="CcC-j4-bXD"/>
+                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="qJR-bt-XWc" secondAttribute="trailing" constant="3" id="Wcq-YX-SE7"/>
+                                                        <constraint firstItem="qJR-bt-XWc" firstAttribute="leading" secondItem="QAz-zy-mTK" secondAttribute="trailing" constant="5" id="YYM-9o-bb4"/>
+                                                        <constraint firstItem="i6t-uT-MUV" firstAttribute="leading" secondItem="nQd-YO-CSf" secondAttribute="leading" constant="-37" id="eUv-f0-fDF"/>
+                                                        <constraint firstItem="qJR-bt-XWc" firstAttribute="centerY" secondItem="nQd-YO-CSf" secondAttribute="centerY" id="hpQ-52-hx3"/>
                                                     </constraints>
                                                     <connections>
-                                                        <outlet property="textField" destination="KVE-Nw-kWV" id="kpw-E1-iS9"/>
+                                                        <outlet property="vmName" destination="qJR-bt-XWc" id="DJr-aW-UBS"/>
                                                     </connections>
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
                                     </tableColumns>
+                                    <connections>
+                                        <outlet property="dataSource" destination="a5L-tW-V2f" id="7pk-dr-Fxb"/>
+                                        <outlet property="delegate" destination="a5L-tW-V2f" id="maw-6l-aID"/>
+                                    </connections>
                                 </tableView>
                             </subviews>
                         </clipView>
@@ -796,21 +813,24 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <connections>
+                        <outlet property="table" destination="a7y-SM-3es" id="W1h-Vt-y1I"/>
+                    </connections>
                 </viewController>
                 <customObject id="hpJ-fP-YbJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="467" y="258"/>
+            <point key="canvasLocation" x="436.5" y="93"/>
         </scene>
         <!--Virtual Machine View Controller-->
         <scene sceneID="u4Y-Zv-Uvj">
             <objects>
                 <viewController id="n2u-az-Aeh" customClass="VirtualMachineViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="1Pg-MR-aGJ">
-                        <rect key="frame" x="0.0" y="0.0" width="590" height="500"/>
+                        <rect key="frame" x="0.0" y="0.0" width="570" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="V8I-XZ-gU2">
-                                <rect key="frame" x="18" y="456" width="554" height="24"/>
+                                <rect key="frame" x="18" y="456" width="534" height="24"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="VM Title" id="ZoI-bQ-BqI">
                                     <font key="font" metaFont="system" size="20"/>
@@ -855,7 +875,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="JVO-IO-fqz">
-                                <rect key="frame" x="125" y="406" width="420" height="16"/>
+                                <rect key="frame" x="125" y="406" width="402" height="16"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consectetur adipisci elit" id="vnH-3s-eVv">
                                     <font key="font" metaFont="system"/>
@@ -864,7 +884,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="S2t-r4-mAh">
-                                <rect key="frame" x="125" y="382" width="420" height="16"/>
+                                <rect key="frame" x="125" y="382" width="402" height="16"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consectetur adipisci elit" id="xRt-sg-i8x">
                                     <font key="font" metaFont="system"/>
@@ -873,7 +893,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="kDA-qA-yaJ">
-                                <rect key="frame" x="125" y="358" width="420" height="16"/>
+                                <rect key="frame" x="125" y="358" width="402" height="16"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consectetur adipisci elit" id="XCR-ET-AHZ">
                                     <font key="font" metaFont="system"/>
@@ -882,7 +902,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nHq-r7-T2Y">
-                                <rect key="frame" x="252" y="20" width="86" height="56"/>
+                                <rect key="frame" x="242" y="20" width="86" height="56"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="86" id="NQN-kt-RwR"/>
                                     <constraint firstAttribute="height" constant="50" id="Xpy-Ve-87T"/>
@@ -893,7 +913,7 @@
                                     <imageReference key="image" image="play.circle.fill" catalog="system" symbolScale="large"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="buttonClickedWithSender:" target="n2u-az-Aeh" id="VKv-CG-OHJ"/>
+                                    <action selector="startVMWithSender:" target="n2u-az-Aeh" id="VKv-CG-OHJ"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -929,10 +949,11 @@
                 </viewController>
                 <customObject id="udD-cD-mfQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="784" y="780.5"/>
+            <point key="canvasLocation" x="680" y="708"/>
         </scene>
     </scenes>
     <resources>
+        <image name="applelogo" catalog="system" width="16" height="19"/>
         <image name="play.circle.fill" catalog="system" width="19" height="19"/>
     </resources>
 </document>

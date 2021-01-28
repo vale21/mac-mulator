@@ -14,7 +14,7 @@ class VirtualMachine {
     var memory: Int32;
     var resolution: String;
     var bootArg: String;
-    var drives: Array<VirtualDrive>;
+    var drives: [VirtualDrive];
     
     init(name: String, displayName: String, memory: Int32, resolution: String, bootArg: String) {
         self.name = name;

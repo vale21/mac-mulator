@@ -26,5 +26,20 @@
 	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>LSTypeIsPackage</key>
+			<true/>
+			<key>CFBundleTypeName</key>
+			<string>Qemu Virtual Machine Bundle</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>qvm</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -9,7 +9,7 @@ import Foundation
 
 class VirtualDrive {
     
-    var name: String = "";
+    var name: String;
     var format: String;
     var mediaType: String;
 
