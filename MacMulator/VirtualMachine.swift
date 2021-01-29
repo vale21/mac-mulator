@@ -9,18 +9,16 @@ import Foundation
 
 class VirtualMachine {
     
-    var name: String;
     var displayName: String;
     var memory: Int32;
-    var resolution: String;
+    var displayResolution: String;
     var bootArg: String;
     var drives: [VirtualDrive];
     
-    init(name: String, displayName: String, memory: Int32, resolution: String, bootArg: String) {
-        self.name = name;
+    init(displayName: String, memory: Int32, displayResolution: String, bootArg: String) {
         self.displayName = displayName;
         self.memory = memory;
-        self.resolution = resolution;
+        self.displayResolution = displayResolution;
         self.bootArg = bootArg;
         self.drives = [];
     }

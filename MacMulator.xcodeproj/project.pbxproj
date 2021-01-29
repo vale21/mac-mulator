@@ -17,6 +17,7 @@
 		3B87AB7D25C07FA400A9C71B /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */; };
 		3B87AB8225C080E100A9C71B /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB8125C080E100A9C71B /* VirtualDrive.swift */; };
 		3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */; };
+		3BC4083E25C4742B00C7E032 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
 		3B87AB8125C080E100A9C71B /* VirtualDrive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
 		3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineTableCellView.swift; sourceTree = "<group>"; };
+		3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +113,7 @@
 				3B391EF525C075F50030E914 /* Info.plist */,
 				3B391EF625C075F50030E914 /* MacMulator.entitlements */,
 				3B391EF225C075F50030E914 /* Main.storyboard */,
+				3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
 				3B87AB8125C080E100A9C71B /* VirtualDrive.swift */,
 				3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */,
@@ -268,6 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BC4083E25C4742B00C7E032 /* NewVMViewController.swift in Sources */,
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,

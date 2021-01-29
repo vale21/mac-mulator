@@ -9,6 +9,20 @@ import Cocoa
 
 class RootViewController: NSSplitViewController {
 
+    struct Drive: Codable {
+        var name:String
+        var format:String
+        var mediaType:String
+    }
+    
+    struct VM: Codable {
+        var displayName:String
+        var memory:Int
+        var displayResolution:String
+        var bootArg: String
+        var drives: [Drive]
+    }
+    
     private let libraryPath = "/Volumes/valeMac\\ SSD/Parallels";
     private let qemuPath = "/opt/local/qemu/qemu-system-ppc";
         
@@ -20,25 +34,14 @@ class RootViewController: NSSplitViewController {
             
         let children = self.children;
         
-        let virm = VirtualMachine(name:"tiger", displayName: "Mac OS X Tiger", memory: 2048, resolution: "1440x900x32", bootArg: "c");
-        let drive = VirtualDrive(name:"disk-0", format: "qcow2", mediaType: "disk");
-        virm.addVirtualDrive(drive: drive);
-        
-        let virm2 = VirtualMachine(name:"panther", displayName: "Mac OS X Panther", memory: 1024, resolution: "1440x900x32", bootArg: "c");
-        let drive2 = VirtualDrive(name:"panther", format: "qcow2", mediaType: "disk");
-        virm2.addVirtualDrive(drive: drive2);
-        
         listController = children[0] as? VirtualMachinesListViewController;
         if let listController = self.listController {
-            listController.setRootController(rootController: self);
-            listController.addVirtualMachine(virtualMachine: virm);
-            listController.addVirtualMachine(virtualMachine: virm2);
+            listController.setRootController(self);
         }
         
         vmController = children[1] as? VirtualMachineViewController;
         if let vmController = self.vmController {
-            vmController.setRootController(rootController: self);
-            vmController.setVirtualMachine(virtualmachine: virm);
+            vmController.setRootController(self);
         }
     }
 
@@ -56,10 +59,37 @@ class RootViewController: NSSplitViewController {
         return qemuPath;
     }
     
-    func setCurrentVirtualMachine(currentVm: VirtualMachine) {
+    func setCurrentVirtualMachine(_ currentVm: VirtualMachine) {
         if let vmController = self.vmController {
             vmController.setVirtualMachine(virtualmachine: currentVm);
         }
+    }
+    
+    func addVirtualMachineFromFile(_ fileName: String) {
+                
+        let fileManager = FileManager.default;
+        do {
+            let xml = fileManager.contents(atPath: (fileName + "/Info.plist"));
+            let preferences = try PropertyListDecoder().decode(VM.self, from: xml!);
+            
+            let virtualMachine: VirtualMachine = createVM(preferences);
+            
+            listController?.addVirtualMachine(virtualMachine);
+            self.setCurrentVirtualMachine(virtualMachine);
+            
+        } catch {
+            print("ERROR while reading Info.plist");
+        }
+    }
+    
+    private func createVM(_ vm: VM) -> VirtualMachine {
+        let virtualMachine = VirtualMachine(displayName: vm.displayName, memory: Int32(vm.memory), displayResolution: vm.displayResolution, bootArg: vm.bootArg);
+        for drive: Drive in vm.drives {
+            let virtualDrive  = VirtualDrive(name: drive.name, format: drive.format, mediaType: drive.mediaType);
+            virtualMachine.addVirtualDrive(drive: virtualDrive);
+        }
+        
+        return virtualMachine;
     }
 }
 

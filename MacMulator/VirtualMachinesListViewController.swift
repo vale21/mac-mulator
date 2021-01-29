@@ -14,11 +14,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     var virtualMachines: [VirtualMachine] = [];
     var rootController: RootViewController?;
     
-    func setRootController(rootController:RootViewController) {
+    func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
     
-    func addVirtualMachine(virtualMachine: VirtualMachine) {
+    func addVirtualMachine(_ virtualMachine: VirtualMachine) {
         virtualMachines.append(virtualMachine);
         self.table.reloadData();
     }
@@ -40,6 +40,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableViewSelectionDidChange(_ notification: Notification) {
         let tableView = notification.object as! NSTableView;
         let selectedvm = virtualMachines[tableView.selectedRow];
-        rootController!.setCurrentVirtualMachine(currentVm: selectedvm);
+        rootController!.setCurrentVirtualMachine(selectedvm);
     }
 }

@@ -18,7 +18,7 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet weak var vmResolution: NSTextField!
     @IBOutlet weak var vmMemory: NSTextField!
            
-    func setRootController(rootController:RootViewController) {
+    func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
     
@@ -39,7 +39,7 @@ class VirtualMachineViewController: NSViewController {
                     self.isRunning = true;
                     
                     let memory: String = String(vm.memory);
-                    let res: String = vm.resolution;
+                    let res: String = vm.displayResolution;
                     
                     let drive: String = self.rootController!.getLibraryPath() + "/" + self.escape(text: vm.displayName) + ".qvm/" + vm.drives[0].name + "." + vm.drives[0].format + ",format=" + vm.drives[0].format + ",media=" + vm.drives[0].mediaType
                     
@@ -84,7 +84,7 @@ class VirtualMachineViewController: NSViewController {
         if let vm = self.vm {
             vmName.stringValue = vm.displayName;
             vmFilePath.stringValue = rootController!.getLibraryPath() + "/" + vm.displayName + ".qvm";
-            vmResolution.stringValue = vm.resolution;
+            vmResolution.stringValue = vm.displayResolution;
             vmMemory.stringValue = String(vm.memory / 1024) + " GB";
         }
     }
