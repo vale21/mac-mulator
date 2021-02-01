@@ -23,7 +23,7 @@ class VirtualMachine {
         self.drives = [];
     }
     
-    func addVirtualDrive(drive: VirtualDrive){
+    func addVirtualDrive(_ drive: VirtualDrive){
         drives.append(drive);
     }
 }

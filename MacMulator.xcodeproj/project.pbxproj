@@ -13,6 +13,7 @@
 		3B391EF425C075F50030E914 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B391EF225C075F50030E914 /* Main.storyboard */; };
 		3B391F0025C075F50030E914 /* MacMulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EFF25C075F50030E914 /* MacMulatorTests.swift */; };
 		3B391F0B25C075F50030E914 /* MacMulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */; };
+		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
 		3B87AB7D25C07FA400A9C71B /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */; };
 		3B87AB8225C080E100A9C71B /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B87AB8125C080E100A9C71B /* VirtualDrive.swift */; };
@@ -52,6 +53,7 @@
 		3B391F0625C075F50030E914 /* MacMulatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorUITests.swift; sourceTree = "<group>"; };
 		3B391F0C25C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
 		3B87AB7C25C07FA400A9C71B /* VirtualMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
 		3B87AB8125C080E100A9C71B /* VirtualDrive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */,
 				3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */,
 				3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */,
+				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
 			);
 			path = MacMulator;
 			sourceTree = "<group>";
@@ -279,6 +282,7 @@
 				3B87AB8225C080E100A9C71B /* VirtualDrive.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
+				3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

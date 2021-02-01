@@ -31,6 +31,10 @@ class RootViewController: NSSplitViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        let userDefaults = UserDefaults.standard;
+        userDefaults.set(libraryPath, forKey: "libraryPath");
+        userDefaults.set(qemuPath, forKey: "qemuPath");
             
         let children = self.children;
         
@@ -74,19 +78,23 @@ class RootViewController: NSSplitViewController {
             
             let virtualMachine: VirtualMachine = createVM(preferences);
             
-            listController?.addVirtualMachine(virtualMachine);
-            self.setCurrentVirtualMachine(virtualMachine);
+            addVirtualMachine(virtualMachine);
             
         } catch {
             print("ERROR while reading Info.plist");
         }
     }
     
+    func addVirtualMachine(_ virtualMachine: VirtualMachine) {
+            listController?.addVirtualMachine(virtualMachine);
+            self.setCurrentVirtualMachine(virtualMachine);
+    }
+    
     private func createVM(_ vm: VM) -> VirtualMachine {
         let virtualMachine = VirtualMachine(displayName: vm.displayName, memory: Int32(vm.memory), displayResolution: vm.displayResolution, bootArg: vm.bootArg);
         for drive: Drive in vm.drives {
             let virtualDrive  = VirtualDrive(name: drive.name, format: drive.format, mediaType: drive.mediaType);
-            virtualMachine.addVirtualDrive(drive: virtualDrive);
+            virtualMachine.addVirtualDrive(virtualDrive);
         }
         
         return virtualMachine;
