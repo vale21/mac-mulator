@@ -15,6 +15,7 @@ class VirtualMachine: Codable, Hashable {
     var displayResolution: String;
     var bootArg: String;
     var drives: [VirtualDrive];
+    var isNew: Bool = true;
     
     init(path: String,  displayName: String, memory: Int32, displayResolution: String, bootArg: String) {
         self.path = path;
@@ -49,11 +50,29 @@ class VirtualMachine: Codable, Hashable {
         }
     }
     
+    func writeToPlist() {
+       do {
+           let data = try PropertyListEncoder().encode(self);
+        try data.write(to: URL(fileURLWithPath: self.path + "/Info.plist"));
+       } catch {
+           print("ERROR while writing Info.plist: " + error.localizedDescription);
+       }
+   }
+    
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
         return lhs.displayName == rhs.displayName;
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(displayName);
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case path
+        case displayName
+        case memory
+        case displayResolution
+        case bootArg
+        case drives
     }
 }

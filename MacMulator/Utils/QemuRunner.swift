@@ -25,7 +25,7 @@ class QemuRunner {
         shell.runCommand(command);
     }
     
-    func runVM(virtualMachine: VirtualMachine, uponCompletion callback: @escaping () -> Void) {
+    func runVM(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (VirtualMachine) -> Void) {
         var command: String = qemuPath
             + "/qemu-system-ppc -L pc-bios -boot " + virtualMachine.bootArg + " -M mac99,via=pmu -m " + String(virtualMachine.memory)
             + " -g " + virtualMachine.displayResolution + " -prom-env 'auto-boot?=true' -prom-env 'vga-ndrv?=true'";
@@ -34,7 +34,15 @@ class QemuRunner {
             command += (" -drive file=" + drive.path + ",format=" + drive.format + ",media=" + drive.mediaType);
         }
         command += " -netdev user,id=mynet0 -device sungem,netdev=mynet0 -qmp tcp:localhost:" + String(listenPort) + ",server,nowait";
-        shell.runAsyncCommand(command, uponCompletion: callback);
+        shell.runAsyncCommand(command, uponCompletion: {
+            callback(virtualMachine);
+        });
+        
+        if (virtualMachine.isNew) {
+            virtualMachine.isNew = false;
+            virtualMachine.bootArg = "c";
+            virtualMachine.writeToPlist();
+        }
     }
     
     func setListenPort(_ listenPort: Int32) {

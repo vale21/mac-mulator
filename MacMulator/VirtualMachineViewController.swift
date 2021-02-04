@@ -11,15 +11,33 @@ class VirtualMachineViewController: NSViewController {
     
     var listenPort: Int32 = 4444;
     var vm : VirtualMachine?;
-    var runner: QemuRunner?;
     var rootController: RootViewController?;
-    var runners: [VirtualMachine: QemuRunner] = [:];
-    
+    var runningVMs: [VirtualMachine : Bool] = [:];
+
+    @IBOutlet weak var vmIcon: NSImageView!
     @IBOutlet weak var vmName: NSTextField!
+    @IBOutlet weak var vmFilePathDesc: NSTextField!
     @IBOutlet weak var vmFilePath: NSTextField!
+    @IBOutlet weak var vmResolutionDesc: NSTextField!
     @IBOutlet weak var vmResolution: NSTextField!
+    @IBOutlet weak var vmMemoryDesc: NSTextField!
     @IBOutlet weak var vmMemory: NSTextField!
-           
+    @IBOutlet weak var startVMButton: NSButton!
+    @IBOutlet weak var runningProgress: NSProgressIndicator!
+    @IBOutlet weak var runningLabel: NSTextField!
+    @IBOutlet weak var noVMView: NSView!
+    
+    override func viewWillAppear() {
+        self.setRunningStatus(false);
+        if let vm = self.vm {
+            changeStatusOfAllControls(hidden: false);
+            startVMButton.isHidden = false;
+        } else {
+            changeStatusOfAllControls(hidden: true);
+            startVMButton.isHidden = true;
+        }
+    }
+    
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
@@ -28,12 +46,19 @@ class VirtualMachineViewController: NSViewController {
     func startVM(sender: NSButton) {
         
         if let vm = self.vm {
-            if (runner!.isRunning()) {
+            runningVMs[vm] = true;
+            let runner = QemuRunner();
+            runner.setListenPort(listenPort);
+            listenPort += 1;
+            if (runner.isRunning()) {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                 message: "Virtual Machine " + vm.displayName + " is already running!");
             } else {
-                runner!.runVM(virtualMachine: vm, uponCompletion: {
-                    self.runners.removeValue(forKey: vm)
+                self.setRunningStatus(true);
+                runner.runVM(virtualMachine: vm, uponCompletion: {
+                    virtualMachine in
+                    self.runningVMs.removeValue(forKey: virtualMachine);
+                    self.setRunningStatus(false);
                 });
             }
         }
@@ -47,7 +72,7 @@ class VirtualMachineViewController: NSViewController {
         super.viewDidLoad();
     }
     
-    func setVirtualMachine(virtualMachine: VirtualMachine?) {
+    func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
             self.vm = virtualMachine;
             vmName.stringValue = vm.displayName;
@@ -55,14 +80,43 @@ class VirtualMachineViewController: NSViewController {
             vmResolution.stringValue = vm.displayResolution;
             vmMemory.stringValue = String(vm.memory / 1024) + " GB";
             
-            runner = runners[vm];
-            if (runner == nil) {
-                runner = QemuRunner();
-                runner?.setListenPort(listenPort);
-                runners[vm] = runner;
-                listenPort += 1;
+            if (runningVMs[vm] == true) {
+                setRunningStatus(true);
+            } else {
+                setRunningStatus(false);
             }
+            changeStatusOfAllControls(hidden: false);
+        }
+    }
+    
+    fileprivate func setRunningStatus(_ running: Bool) {
+        self.startVMButton.isHidden = running;
+        self.runningProgress.isHidden = !running;
+        self.runningLabel.isHidden = !running;
+        if (running) {
+            self.runningProgress.startAnimation(self);
+        } else {
+            self.runningProgress.stopAnimation(self);
         }
     }
 
+    fileprivate func changeStatusOfAllControls(hidden: Bool) {
+        vmIcon.isHidden = hidden;
+        vmName.isHidden = hidden;
+        vmFilePathDesc.isHidden = hidden;
+        vmFilePath.isHidden = hidden;
+        vmResolutionDesc.isHidden = hidden;
+        vmResolution.isHidden = hidden;
+        vmMemoryDesc.isHidden = hidden;
+        vmMemory.isHidden = hidden;
+        noVMView.isHidden = !hidden;
+    }
+    
+    @IBAction func createVMButtonClicked(_ sender: Any) {
+        self.view.window?.windowController?.performSegue(withIdentifier: "newVMSegue", sender: self);
+    }
+    
+    @IBAction func importVMButtonClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: ["qvm"], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
+    }
 }

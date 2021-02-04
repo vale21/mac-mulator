@@ -14,12 +14,18 @@ class Shell {
     func runCommand(_ command: String) -> String {
         
         print("Running " + command);
-        
-        task.standardOutput = pipe
-        task.arguments = ["-c", command]
-        task.launchPath = "/bin/zsh"
-        task.launch()
-        
+        do {
+            try ObjC.catchException({
+                if (!self.task.isRunning) {
+                    self.task.standardOutput = self.pipe
+                    self.task.arguments = ["-c", command]
+                    self.task.launchPath = "/bin/zsh"
+                    self.task.launch();
+                }
+            })
+        } catch {
+            print(error);
+        }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         
@@ -29,10 +35,14 @@ class Shell {
     func runAsyncCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
         DispatchQueue.global().async() {
             self.runCommand(command);
-            print("Terminated? :" + String(self.task.isRunning));
-            print("Exit status: " + String(self.task.terminationStatus));
-            if (self.task.terminationStatus == 0) {
-                callback();
+            do {
+                try ObjC.catchException({
+                    DispatchQueue.main.async {
+                        callback();
+                    }
+                })
+            } catch {
+                print(error);
             }
         }
     }

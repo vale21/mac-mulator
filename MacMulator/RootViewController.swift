@@ -50,21 +50,20 @@ class RootViewController: NSSplitViewController {
     }
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine) {
-        if let vmController = self.vmController {
-            vmController.setVirtualMachine(virtualMachine: currentVm);
-        }
+        vmController?.setVirtualMachine(currentVm);
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName + "/Info.plist");
         if let vm = virtualMachine {
+            virtualMachine?.isNew = false; // we suppose that imported VM already has a valid HDD
             self.addVirtualMachine(vm);
         }
     }
     
     func addVirtualMachine(_ virtualMachine: VirtualMachine) {
         listController?.addVirtualMachine(virtualMachine);
-        self.setCurrentVirtualMachine(virtualMachine);
+        vmController?.setVirtualMachine(virtualMachine);
     }
 }
 
