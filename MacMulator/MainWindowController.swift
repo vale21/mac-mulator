@@ -18,8 +18,6 @@ class MainWindowController: NSWindowController {
             let destinationController: NewVMViewController = dest.contentViewController as! NewVMViewController;
             
             destinationController.setRootController(sourceController);
-            
-            print();
         }
     }
 }

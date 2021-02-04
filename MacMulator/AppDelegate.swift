@@ -10,22 +10,36 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    private var app: NSApplication?;
+    
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
         if (performSanityCheck(filename)) {
-            let rootViewController = sender.mainWindow?.contentViewController as! RootViewController;
-            rootViewController.addVirtualMachineFromFile(filename);
+            let rootViewController = app?.mainWindow?.contentViewController as? RootViewController;
+            rootViewController?.addVirtualMachineFromFile(filename);
             return true;
         } else {
-            let alert: NSAlert = NSAlert();
-            alert.alertStyle = NSAlert.Style.warning;
-            alert.messageText = "Coul not open file " + filename + ". It migh be corrupted.";
-            alert.addButton(withTitle: "OK");
-            alert.beginSheetModal(for: sender.mainWindow!, completionHandler: nil);
+            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning,
+                            message: "Could not open file " + filename + ". It migh be corrupted.");
             return false;
         }
     }
+        
+    @IBAction func newVMMenuBarClicked(_ sender: Any) {
+        app?.mainWindow?.windowController?.performSegue(withIdentifier: "newVMSegue", sender: self);
+    }
     
-    private func performSanityCheck(_ filename: String) -> Bool{
+    @IBAction func openVMMenuBarClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: ["qvm"], uponSelection: { panel in self.application(app!, openFile: String(panel.url!.path)) });
+    }
+    
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        self.app = aNotification.object as? NSApplication;
+    }
+
+    func applicationWillTerminate(_ aNotification: Notification) {
+    }
+    
+    fileprivate func performSanityCheck(_ filename: String) -> Bool{
         if (filename.hasSuffix(".qvm")) {
             
             let fileManager = FileManager.default;
@@ -42,12 +56,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         return false;
-    }
-    
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
     }
 }
 

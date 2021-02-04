@@ -7,15 +7,19 @@
 
 import Foundation
 
-class VirtualDrive {
+class VirtualDrive: Codable {
     
+    var path: String;
     var name: String;
     var format: String;
     var mediaType: String;
+    var size: Int32;
 
-    init(name: String, format: String, mediaType: String) {
+    init(path: String, name: String, format: String, mediaType: String, size: Int32) {
+        self.path = path;
         self.name = name;
         self.format = format;
         self.mediaType = mediaType;
+        self.size = size;
     }
 }

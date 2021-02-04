@@ -9,22 +9,8 @@ import Cocoa
 
 class RootViewController: NSSplitViewController {
 
-    struct Drive: Codable {
-        var name:String
-        var format:String
-        var mediaType:String
-    }
-    
-    struct VM: Codable {
-        var displayName:String
-        var memory:Int
-        var displayResolution:String
-        var bootArg: String
-        var drives: [Drive]
-    }
-    
     private let libraryPath = "/Volumes/valeMac\\ SSD/Parallels";
-    private let qemuPath = "/opt/local/qemu/qemu-system-ppc";
+    private let qemuPath = "/opt/local/qemu";
         
     var listController: VirtualMachinesListViewController?;
     var vmController: VirtualMachineViewController?;
@@ -65,39 +51,20 @@ class RootViewController: NSSplitViewController {
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine) {
         if let vmController = self.vmController {
-            vmController.setVirtualMachine(virtualmachine: currentVm);
+            vmController.setVirtualMachine(virtualMachine: currentVm);
         }
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
-                
-        let fileManager = FileManager.default;
-        do {
-            let xml = fileManager.contents(atPath: (fileName + "/Info.plist"));
-            let preferences = try PropertyListDecoder().decode(VM.self, from: xml!);
-            
-            let virtualMachine: VirtualMachine = createVM(preferences);
-            
-            addVirtualMachine(virtualMachine);
-            
-        } catch {
-            print("ERROR while reading Info.plist");
+        let virtualMachine = VirtualMachine.readFromPlist(fileName + "/Info.plist");
+        if let vm = virtualMachine {
+            self.addVirtualMachine(vm);
         }
     }
     
     func addVirtualMachine(_ virtualMachine: VirtualMachine) {
-            listController?.addVirtualMachine(virtualMachine);
-            self.setCurrentVirtualMachine(virtualMachine);
-    }
-    
-    private func createVM(_ vm: VM) -> VirtualMachine {
-        let virtualMachine = VirtualMachine(displayName: vm.displayName, memory: Int32(vm.memory), displayResolution: vm.displayResolution, bootArg: vm.bootArg);
-        for drive: Drive in vm.drives {
-            let virtualDrive  = VirtualDrive(name: drive.name, format: drive.format, mediaType: drive.mediaType);
-            virtualMachine.addVirtualDrive(virtualDrive);
-        }
-        
-        return virtualMachine;
+        listController?.addVirtualMachine(virtualMachine);
+        self.setCurrentVirtualMachine(virtualMachine);
     }
 }
 
