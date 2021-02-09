@@ -5,7 +5,7 @@
 //  Created by Vale on 03/02/21.
 //
 
-import Foundation
+import Cocoa
 
 class QemuRunner {
     
@@ -20,29 +20,57 @@ class QemuRunner {
     func createDiskImage(path: String, virtualDrive: VirtualDrive) {
         shell.setWorkingDir(path);
         
-        let command: String = qemuPath
-            + "/qemu-img create -f " + virtualDrive.format + " -o size=" + String(virtualDrive.size) + "G " + virtualDrive.name + ".qcow2 ";
+        let command: String =
+            QemuImgCommandBuilder(qemuPath:qemuPath)
+            .withCommand(QemuConstants.ImgCommands.Create.rawValue)
+                .withFormat(virtualDrive.format)
+                .withSize(virtualDrive.size)
+                .withName(virtualDrive.name)
+                .withExtension(QemuConstants.ImgTypes.Qcow2.rawValue)
+                .build();
         shell.runCommand(command);
     }
     
     func runVM(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (VirtualMachine) -> Void) {
-        var command: String = qemuPath
-            + "/qemu-system-ppc -L pc-bios -boot " + virtualMachine.bootArg + " -M mac99,via=pmu -m " + String(virtualMachine.memory)
-            + " -g " + virtualMachine.displayResolution + " -prom-env 'auto-boot?=true' -prom-env 'vga-ndrv?=true'";
-        
+        var builder: QemuCommandBuilder =
+            QemuCommandBuilder(qemuPath: qemuPath)
+            .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
+            .withBootArg(virtualMachine.bootArg)
+            .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
+            .withMemory(virtualMachine.memory)
+            .withGraphics(virtualMachine.displayResolution)
+            .withAutoBoot(true)
+            .withVgaEnabled(true);
+            
         for drive in virtualMachine.drives {
-            command += (" -drive file=" + drive.path + ",format=" + drive.format + ",media=" + drive.mediaType);
+            if (driveExists(drive)) {
+                builder = builder.withDrive(file: drive.path, format: drive.format, media: drive.mediaType);
+            } else {
+                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found.");
+            }
         }
-        command += " -netdev user,id=mynet0 -device sungem,netdev=mynet0 -qmp tcp:localhost:" + String(listenPort) + ",server,nowait";
-        shell.runAsyncCommand(command, uponCompletion: {
+
+        builder = builder
+            .withNetwork(name: "network-0", device: QemuConstants.NetworkTypes.Sungem.rawValue)
+            .withManagementPort(listenPort);
+
+        shell.runAsyncCommand(builder.build(), uponCompletion: {
             callback(virtualMachine);
         });
         
         if (virtualMachine.isNew) {
             virtualMachine.isNew = false;
-            virtualMachine.bootArg = "c";
+            virtualMachine.bootArg = QemuConstants.BootArgs.HD.rawValue;
             virtualMachine.writeToPlist();
         }
+    }
+    
+    func driveExists(_ drive: VirtualDrive) -> Bool {
+        if (drive.mediaType == QemuConstants.MediaTypes.CdRom.rawValue) {
+            let filemanager = FileManager.default;
+            return filemanager.fileExists(atPath: drive.path);
+        }
+        return true;
     }
     
     func setListenPort(_ listenPort: Int32) {

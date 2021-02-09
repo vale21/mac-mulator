@@ -9,7 +9,7 @@ import Foundation
 
 class VirtualMachine: Codable, Hashable {
     
-    var path: String;
+    var path: String = "";
     var displayName: String;
     var memory: Int32;
     var displayResolution: String;
@@ -53,7 +53,7 @@ class VirtualMachine: Codable, Hashable {
     func writeToPlist() {
        do {
            let data = try PropertyListEncoder().encode(self);
-        try data.write(to: URL(fileURLWithPath: self.path + "/Info.plist"));
+        try data.write(to: URL(fileURLWithPath: self.path + "/" + QemuConstants.INFO_PLIST));
        } catch {
            print("ERROR while writing Info.plist: " + error.localizedDescription);
        }
@@ -68,7 +68,6 @@ class VirtualMachine: Codable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
-        case path
         case displayName
         case memory
         case displayResolution

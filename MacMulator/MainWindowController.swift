@@ -9,8 +9,10 @@ import Cocoa
 
 class MainWindowController: NSWindowController {
     
+    static let NEW_VM_SEGUE = "newVMSegue";
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if (segue.identifier == "newVMSegue") {
+        if (segue.identifier == MainWindowController.NEW_VM_SEGUE) {
             let source: NSWindowController = segue.sourceController as! NSWindowController;
             let dest: NSWindowController = segue.destinationController as! NSWindowController;
             

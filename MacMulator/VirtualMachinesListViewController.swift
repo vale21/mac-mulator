@@ -10,6 +10,7 @@ import Cocoa
 class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
      
     @IBOutlet weak var table: NSTableView!
+    @IBOutlet weak var rightClickmenu: NSMenu!
     
     var virtualMachines: [VirtualMachine] = [];
     var rootController: RootViewController?;
@@ -41,5 +42,27 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let tableView = notification.object as! NSTableView;
         let selectedvm = virtualMachines[tableView.selectedRow];
         rootController!.setCurrentVirtualMachine(selectedvm);
+    }
+    
+    override func viewDidLoad() {
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
+        table.menu = menu
+    }
+    
+    @objc func tableViewEditItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        let item = virtualMachines[table.clickedRow];
+        print("Edit " + item.displayName);
+    }
+    
+    @objc func tableViewDeleteItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        let row = table.clickedRow
+        let removed = virtualMachines.remove(at: row);
+        table.reloadData();
+        
+        rootController?.deleteVirtualMachine(removed);
     }
 }

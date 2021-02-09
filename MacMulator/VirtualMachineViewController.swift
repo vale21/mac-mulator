@@ -29,7 +29,7 @@ class VirtualMachineViewController: NSViewController {
     
     override func viewWillAppear() {
         self.setRunningStatus(false);
-        if let vm = self.vm {
+        if self.vm != nil {
             changeStatusOfAllControls(hidden: false);
             startVMButton.isHidden = false;
         } else {
@@ -86,6 +86,9 @@ class VirtualMachineViewController: NSViewController {
                 setRunningStatus(false);
             }
             changeStatusOfAllControls(hidden: false);
+        } else {
+            changeStatusOfAllControls(hidden: true);
+            startVMButton.isHidden = true;
         }
     }
     
@@ -113,10 +116,10 @@ class VirtualMachineViewController: NSViewController {
     }
     
     @IBAction func createVMButtonClicked(_ sender: Any) {
-        self.view.window?.windowController?.performSegue(withIdentifier: "newVMSegue", sender: self);
+        self.view.window?.windowController?.performSegue(withIdentifier: MainWindowController.NEW_VM_SEGUE, sender: self);
     }
     
     @IBAction func importVMButtonClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: ["qvm"], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
+        Utils.showFileSelector(fileTypes: [QemuConstants.VM_EXTENSION], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
     }
 }

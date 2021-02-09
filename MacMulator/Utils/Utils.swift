@@ -47,4 +47,8 @@ class Utils {
     static func escape(_ string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "\\ ");
     }
+    
+    static func unescape(_ string: String) -> String {
+        return string.replacingOccurrences(of: "\\ ", with: " ");
+    }
 }

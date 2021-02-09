@@ -12,8 +12,8 @@ class RootViewController: NSSplitViewController {
     private let libraryPath = "/Volumes/valeMac\\ SSD/Parallels";
     private let qemuPath = "/opt/local/qemu";
         
-    var listController: VirtualMachinesListViewController?;
-    var vmController: VirtualMachineViewController?;
+    private var listController: VirtualMachinesListViewController?;
+    private var vmController: VirtualMachineViewController?;
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -33,6 +33,9 @@ class RootViewController: NSSplitViewController {
         if let vmController = self.vmController {
             vmController.setRootController(self);
         }
+        
+        let delegate = NSApp.delegate as! AppDelegate;
+        delegate.rootControllerDidFinishLoading(self);
     }
 
     override var representedObject: Any? {
@@ -49,21 +52,36 @@ class RootViewController: NSSplitViewController {
         return qemuPath;
     }
     
-    func setCurrentVirtualMachine(_ currentVm: VirtualMachine) {
+    func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
         vmController?.setVirtualMachine(currentVm);
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
-        let virtualMachine = VirtualMachine.readFromPlist(fileName + "/Info.plist");
+        let virtualMachine = VirtualMachine.readFromPlist(fileName + "/" + QemuConstants.INFO_PLIST);
+        virtualMachine?.path = fileName;
         if let vm = virtualMachine {
             virtualMachine?.isNew = false; // we suppose that imported VM already has a valid HDD
             self.addVirtualMachine(vm);
         }
     }
     
+    func deleteVirtualMachine(_ virtualMachine: VirtualMachine) {
+        vmController?.setVirtualMachine(nil);
+        
+        let delegate = NSApp.delegate as! AppDelegate;
+        delegate.removeSavedVM(virtualMachine.path);
+    }
+    
     func addVirtualMachine(_ virtualMachine: VirtualMachine) {
         listController?.addVirtualMachine(virtualMachine);
         vmController?.setVirtualMachine(virtualMachine);
+        
+        let delegate = NSApp.delegate as! AppDelegate;
+        delegate.addSavedVM(virtualMachine.path);
+    }
+    
+    func showAlert(_ message: String) {
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: message);
     }
 }
 
