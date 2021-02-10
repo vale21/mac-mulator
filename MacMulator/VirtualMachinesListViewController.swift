@@ -38,6 +38,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         return cell;
     }
     
+    func tableView(_ tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
+        return [
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: "Delete", handler: { action, index in self.deleteVirtualMachine(index)}),
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: "Edit", handler: { action, index in self.editVirtualMachine(index)}),
+        ];
+    }
+    
     func tableViewSelectionDidChange(_ notification: Notification) {
         let tableView = notification.object as! NSTableView;
         let selectedvm = virtualMachines[tableView.selectedRow];
@@ -53,14 +60,22 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     @objc func tableViewEditItemClicked(_ sender: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        let item = virtualMachines[table.clickedRow];
-        print("Edit " + item.displayName);
+        editVirtualMachine(table.clickedRow);
     }
     
     @objc func tableViewDeleteItemClicked(_ sender: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        let row = table.clickedRow
-        let removed = virtualMachines.remove(at: row);
+        deleteVirtualMachine(table.clickedRow);
+        
+    }
+    
+    func editVirtualMachine(_ index: Int) {
+        let item = virtualMachines[index];
+        print("Edit " + item.displayName);
+    }
+        
+    func deleteVirtualMachine(_ index: Int) {
+        let removed = virtualMachines.remove(at: index);
         table.reloadData();
         
         rootController?.deleteVirtualMachine(removed);

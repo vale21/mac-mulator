@@ -116,7 +116,8 @@ class NewVMViewController: NSViewController {
     @IBAction func selectPath(_ sender: Any) {
         Utils.showDirectorySelector(uponSelection: {
             panel in
-            self.vmLocation = panel.url?.path ?? vmLocation;
+            let selectedPath = panel.url?.path;
+            self.vmLocation = Utils.escape(selectedPath ?? vmLocation);
             path.stringValue = vmLocation;
         });
     }

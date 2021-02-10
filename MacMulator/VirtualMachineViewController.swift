@@ -76,9 +76,9 @@ class VirtualMachineViewController: NSViewController {
         if let vm = virtualMachine {
             self.vm = virtualMachine;
             vmName.stringValue = vm.displayName;
-            vmFilePath.stringValue = vm.path;
+            vmFilePath.stringValue = Utils.unescape(vm.path);
             vmResolution.stringValue = vm.displayResolution;
-            vmMemory.stringValue = String(vm.memory / 1024) + " GB";
+            vmMemory.stringValue = vm.memory < 1024 ? String(vm.memory) + " MB" :  String(Double(vm.memory) / 1024.0) + " GB";
             
             if (runningVMs[vm] == true) {
                 setRunningStatus(true);
