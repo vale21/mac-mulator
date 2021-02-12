@@ -78,7 +78,7 @@ class VirtualMachineViewController: NSViewController {
             vmName.stringValue = vm.displayName;
             vmFilePath.stringValue = Utils.unescape(vm.path);
             vmResolution.stringValue = vm.displayResolution;
-            vmMemory.stringValue = vm.memory < 1024 ? String(vm.memory) + " MB" :  String(Double(vm.memory) / 1024.0) + " GB";
+            vmMemory.stringValue = formatMemory(vm.memory);
             
             if (runningVMs[vm] == true) {
                 setRunningStatus(true);
@@ -89,6 +89,21 @@ class VirtualMachineViewController: NSViewController {
         } else {
             changeStatusOfAllControls(hidden: true);
             startVMButton.isHidden = true;
+        }
+    }
+    
+    func formatMemory(_ value: Int32) -> String {
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+        formatter.numberStyle = .decimal
+        
+        if value < 1024 {
+            return String(value) + " MB";
+        } else {
+            let number: NSNumber = Double(value) / 1024.0 as NSNumber ;
+            let formatted: String = formatter.string(from: number) ?? "n/a";
+            return formatted + " GB";
         }
     }
     
