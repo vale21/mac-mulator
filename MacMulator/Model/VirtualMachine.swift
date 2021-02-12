@@ -9,15 +9,18 @@ import Foundation
 
 class VirtualMachine: Codable, Hashable {
     
+    var os: String
     var path: String = "";
     var displayName: String;
+    var description: String?;
     var memory: Int32;
     var displayResolution: String;
     var bootArg: String;
     var drives: [VirtualDrive];
     var isNew: Bool = true;
     
-    init(path: String,  displayName: String, memory: Int32, displayResolution: String, bootArg: String) {
+    init(os: QemuConstants.OS, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootArg: String) {
+        self.os = os.rawValue;
         self.path = path;
         self.displayName = displayName;
         self.memory = memory;
@@ -68,7 +71,9 @@ class VirtualMachine: Codable, Hashable {
     }
     
     enum CodingKeys: String, CodingKey {
+        case os
         case displayName
+        case description
         case memory
         case displayResolution
         case bootArg

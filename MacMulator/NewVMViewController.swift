@@ -138,7 +138,7 @@ class NewVMViewController: NSViewController {
         let path = self.path.stringValue;
         let fullPath = path + "/" + Utils.escape(self.name.stringValue) + "." + QemuConstants.VM_EXTENSION;
         
-        let virtualMachine = VirtualMachine(path: fullPath, displayName: self.name.stringValue, memory: self.memorySize, displayResolution: "1440x900x32", bootArg: QemuConstants.BootArgs.CD.rawValue);
+        let virtualMachine = VirtualMachine(os: QemuConstants.OS.MAC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: "1440x900x32", bootArg: QemuConstants.BootArgs.CD.rawValue);
         let virtualCD = VirtualDrive(path: self.installMedia, name: QemuConstants.MediaTypes.CdRom.rawValue + "-0", format: QemuConstants.ImgTypes.Raw.rawValue, mediaType: QemuConstants.MediaTypes.CdRom.rawValue, size: 0);
         let virtualHDD = VirtualDrive(path: fullPath + "/" + QemuConstants.MediaTypes.Disk.rawValue + "-0." + QemuConstants.ImgTypes.Qcow2.rawValue, name: QemuConstants.MediaTypes.Disk.rawValue + "-0", format: QemuConstants.ImgTypes.Qcow2.rawValue, mediaType: QemuConstants.MediaTypes.Disk.rawValue, size: self.driveSize);
         

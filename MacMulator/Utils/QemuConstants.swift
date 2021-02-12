@@ -30,6 +30,12 @@ class QemuConstants {
     
     // Virtual Machine constants
     
+    enum OS: String {
+        case MAC = "macOS";
+        case WIN = "Windows";
+        case LINUX = "Linux";
+    }
+    
     enum MachineTypes: String {
         case Mac99_pmu = "mac99,via=pmu";
     }
@@ -45,5 +51,21 @@ class QemuConstants {
     enum BootArgs: String {
         case CD = "d";
         case HD = "c";
+        case NET = "n";
+    }
+    
+    // Utility methods
+    
+    static func getOSIndex(_ os: String) -> Int {
+        switch os {
+        case OS.MAC.rawValue:
+            return 0;
+        case OS.WIN.rawValue:
+            return 1;
+        case OS.LINUX.rawValue:
+            return 2;
+        default:
+            return 0;
+        }
     }
 }
