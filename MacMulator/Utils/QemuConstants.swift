@@ -14,6 +14,9 @@ class QemuConstants {
     
     // Disk image constants
     
+    static let MEDIATYPE_DISK = "disk";
+    static let MEDIATYPE_CDROM = "cdrom";
+    
     enum ImgCommands: String {
         case Create = "create";
     }
@@ -23,19 +26,20 @@ class QemuConstants {
         case Raw = "raw";
     }
     
-    enum MediaTypes: String {
-        case Disk = "disk";
-        case CdRom = "cdrom";
-    }
-    
     // Virtual Machine constants
     
-    enum OS: String {
-        case MAC = "macOS";
-        case WIN = "Windows";
-        case LINUX = "Linux";
-    }
+    static let CD = "CD/DVD";
+    static let HD = "Hard Disk";
+    static let NET = "Network";
     
+    static let ARG_CD = "d";
+    static let ARG_HD = "c";
+    static let ARG_NET = "n";
+    
+    static let OS_MAC = "macOS";
+    static let OS_WIN = "Windows";
+    static let OS_LINUX = "Linux";
+
     enum MachineTypes: String {
         case Mac99_pmu = "mac99,via=pmu";
     }
@@ -46,26 +50,5 @@ class QemuConstants {
     
     enum NetworkTypes: String {
         case Sungem = "sungem";
-    }
-    
-    enum BootArgs: String {
-        case CD = "d";
-        case HD = "c";
-        case NET = "n";
-    }
-    
-    // Utility methods
-    
-    static func getOSIndex(_ os: String) -> Int {
-        switch os {
-        case OS.MAC.rawValue:
-            return 0;
-        case OS.WIN.rawValue:
-            return 1;
-        case OS.LINUX.rawValue:
-            return 2;
-        default:
-            return 0;
-        }
     }
 }

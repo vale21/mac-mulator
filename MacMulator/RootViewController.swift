@@ -60,7 +60,6 @@ class RootViewController: NSSplitViewController {
         let virtualMachine = VirtualMachine.readFromPlist(fileName + "/" + QemuConstants.INFO_PLIST);
         virtualMachine?.path = fileName;
         if let vm = virtualMachine {
-            virtualMachine?.isNew = false; // we suppose that imported VM already has a valid HDD
             self.addVirtualMachine(vm);
         }
     }

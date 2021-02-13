@@ -13,19 +13,20 @@ class VirtualMachine: Codable, Hashable {
     var path: String = "";
     var displayName: String;
     var description: String?;
+    var cpus: Int32;
     var memory: Int32;
     var displayResolution: String;
-    var bootArg: String;
+    var bootOrder: [String];
     var drives: [VirtualDrive];
-    var isNew: Bool = true;
     
-    init(os: QemuConstants.OS, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootArg: String) {
-        self.os = os.rawValue;
+    init(os: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootOrder: [String]) {
+        self.os = os;
         self.path = path;
         self.displayName = displayName;
         self.memory = memory;
+        self.cpus = 1;
         self.displayResolution = displayResolution;
-        self.bootArg = bootArg;
+        self.bootOrder = bootOrder;
         self.drives = [];
     }
     
@@ -68,15 +69,5 @@ class VirtualMachine: Codable, Hashable {
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(displayName);
-    }
-    
-    enum CodingKeys: String, CodingKey {
-        case os
-        case displayName
-        case description
-        case memory
-        case displayResolution
-        case bootArg
-        case drives
     }
 }

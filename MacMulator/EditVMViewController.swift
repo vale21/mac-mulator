@@ -19,4 +19,8 @@ class EditVMViewController: NSTabViewController {
         print(general);
         general.setVirtualMachine(vm);
     }
+    
+    override func viewWillDisappear() {
+        virtualMachine?.writeToPlist();
+    }
 }

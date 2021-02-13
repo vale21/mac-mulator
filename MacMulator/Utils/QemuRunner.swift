@@ -35,7 +35,7 @@ class QemuRunner {
         var builder: QemuCommandBuilder =
             QemuCommandBuilder(qemuPath: qemuPath)
             .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
-            .withBootArg(virtualMachine.bootArg)
+            .withBootArg(computeBootArg(virtualMachine))
             .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
@@ -57,16 +57,35 @@ class QemuRunner {
         shell.runAsyncCommand(builder.build(), uponCompletion: {
             callback(virtualMachine);
         });
+    }
         
-        if (virtualMachine.isNew) {
-            virtualMachine.isNew = false;
-            virtualMachine.bootArg = QemuConstants.BootArgs.HD.rawValue;
-            virtualMachine.writeToPlist();
+    fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
+        let bootOrder:[String] = vm.bootOrder;
+        for bootOption in bootOrder {
+            if (bootOption == QemuConstants.CD) {
+                if searchForDrive(vm, QemuConstants.MEDIATYPE_CDROM) {
+                    return QemuConstants.ARG_CD;
+                }
+            } else if (bootOption == QemuConstants.HD) {
+                if searchForDrive(vm, QemuConstants.MEDIATYPE_DISK) {
+                    return QemuConstants.ARG_HD;
+                }
+            }
         }
+        return QemuConstants.ARG_NET;
     }
     
-    func driveExists(_ drive: VirtualDrive) -> Bool {
-        if (drive.mediaType == QemuConstants.MediaTypes.CdRom.rawValue) {
+    fileprivate func searchForDrive(_ vm: VirtualMachine, _ mediaType: String) -> Bool {
+        for virtualDrive in vm.drives {
+            if (virtualDrive.mediaType == mediaType) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    fileprivate func driveExists(_ drive: VirtualDrive) -> Bool {
+        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM) {
             let filemanager = FileManager.default;
             return filemanager.fileExists(atPath: drive.path);
         }
