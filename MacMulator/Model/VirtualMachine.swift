@@ -9,18 +9,22 @@ import Foundation
 
 class VirtualMachine: Codable, Hashable {
     
-    var os: String
+    var os: String;
+    var architecture: String;
     var path: String = "";
     var displayName: String;
     var description: String?;
-    var cpus: Int32;
+    var cpus: Int;
     var memory: Int32;
     var displayResolution: String;
     var bootOrder: [String];
     var drives: [VirtualDrive];
+    var qemuPath: String?;
+    var qemuCommand: String?;
     
-    init(os: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootOrder: [String]) {
+    init(os: String, architecture: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootOrder: [String]) {
         self.os = os;
+        self.architecture = architecture;
         self.path = path;
         self.displayName = displayName;
         self.memory = memory;

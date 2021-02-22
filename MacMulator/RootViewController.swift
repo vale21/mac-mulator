@@ -82,5 +82,12 @@ class RootViewController: NSSplitViewController {
     func showAlert(_ message: String) {
         Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: message);
     }
+    
+    func refreshViewForVM(_ virtualMachine: VirtualMachine) {
+        self.listController?.refreshList();
+        if (vmController?.vm == virtualMachine) {
+            vmController?.setVirtualMachine(virtualMachine);
+        }
+    }
 }
 

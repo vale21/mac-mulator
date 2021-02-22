@@ -16,8 +16,7 @@ class VirtualMachineViewController: NSViewController {
 
     @IBOutlet weak var vmIcon: NSImageView!
     @IBOutlet weak var vmName: NSTextField!
-    @IBOutlet weak var vmFilePathDesc: NSTextField!
-    @IBOutlet weak var vmFilePath: NSTextField!
+    @IBOutlet weak var vmDescription: NSTextField!
     @IBOutlet weak var vmResolutionDesc: NSTextField!
     @IBOutlet weak var vmResolution: NSTextField!
     @IBOutlet weak var vmMemoryDesc: NSTextField!
@@ -47,15 +46,14 @@ class VirtualMachineViewController: NSViewController {
         
         if let vm = self.vm {
             runningVMs[vm] = true;
-            let runner = QemuRunner();
-            runner.setListenPort(listenPort);
+            let runner = QemuRunner(listenPort: listenPort, virtualMachine: vm);
             listenPort += 1;
             if (runner.isRunning()) {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                 message: "Virtual Machine " + vm.displayName + " is already running!");
             } else {
                 self.setRunningStatus(true);
-                runner.runVM(virtualMachine: vm, uponCompletion: {
+                runner.runVM(uponCompletion: {
                     virtualMachine in
                     self.runningVMs.removeValue(forKey: virtualMachine);
                     self.setRunningStatus(false);
@@ -75,10 +73,12 @@ class VirtualMachineViewController: NSViewController {
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
             self.vm = virtualMachine;
+            
+            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os));
             vmName.stringValue = vm.displayName;
-            vmFilePath.stringValue = Utils.unescape(vm.path);
+            vmDescription.stringValue = vm.description ?? "";
             vmResolution.stringValue = vm.displayResolution;
-            vmMemory.stringValue = formatMemory(vm.memory);
+            vmMemory.stringValue = Utils.formatMemory(vm.memory);
             
             if (runningVMs[vm] == true) {
                 setRunningStatus(true);
@@ -89,21 +89,6 @@ class VirtualMachineViewController: NSViewController {
         } else {
             changeStatusOfAllControls(hidden: true);
             startVMButton.isHidden = true;
-        }
-    }
-    
-    func formatMemory(_ value: Int32) -> String {
-        let formatter = NumberFormatter()
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-        formatter.numberStyle = .decimal
-        
-        if value < 1024 {
-            return String(value) + " MB";
-        } else {
-            let number: NSNumber = Double(value) / 1024.0 as NSNumber ;
-            let formatted: String = formatter.string(from: number) ?? "n/a";
-            return formatted + " GB";
         }
     }
     
@@ -121,8 +106,7 @@ class VirtualMachineViewController: NSViewController {
     fileprivate func changeStatusOfAllControls(hidden: Bool) {
         vmIcon.isHidden = hidden;
         vmName.isHidden = hidden;
-        vmFilePathDesc.isHidden = hidden;
-        vmFilePath.isHidden = hidden;
+        vmDescription.isHidden = hidden;
         vmResolutionDesc.isHidden = hidden;
         vmResolution.isHidden = hidden;
         vmMemoryDesc.isHidden = hidden;

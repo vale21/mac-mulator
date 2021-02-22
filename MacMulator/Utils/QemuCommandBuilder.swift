@@ -10,8 +10,9 @@ import Foundation
 class QemuCommandBuilder {
         
     var qemuPath: String;
-    var executable: String = "qemu-system-ppc";
+    var executable: String;
     var bios: String?;
+    var cpus: Int?;
     var bootArg: String?;
     var machine: String?;
     var memory: Int32?
@@ -22,12 +23,18 @@ class QemuCommandBuilder {
     var network: String?;
     var managementPort: Int32?;
     
-    init(qemuPath: String) {
+    init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath;
+        self.executable = architecture;
     }
     
     func withBios(_ bios: String) -> QemuCommandBuilder {
         self.bios = bios;
+        return self;
+    }
+    
+    func withCpus(_ cpus: Int) -> QemuCommandBuilder {
+        self.cpus = cpus;
         return self;
     }
     
@@ -80,6 +87,9 @@ class QemuCommandBuilder {
         var cmd = self.qemuPath + "/" + self.executable;
         if let bios = self.bios {
             cmd += " -L " + bios;
+        }
+        if let cpus = self.cpus {
+            cmd += " -smp " + String(cpus);
         }
         if let bootArg = self.bootArg {
             cmd += " -boot " + bootArg;

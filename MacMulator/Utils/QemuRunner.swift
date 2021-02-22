@@ -9,32 +9,28 @@ import Cocoa
 
 class QemuRunner {
     
-    var listenPort: Int32 = 4444;
+    let listenPort: Int32;
     let shell = Shell();
     let qemuPath: String;
+    let virtualMachine: VirtualMachine;
     
-    init() {
+    init(listenPort: Int32, virtualMachine: VirtualMachine) {
         qemuPath = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
+        self.listenPort = listenPort;
+        self.virtualMachine = virtualMachine;
+    }
+
+    func runVM(uponCompletion callback: @escaping (VirtualMachine) -> Void) {
+        shell.runAsyncCommand(getQemuCommand(), uponCompletion: {
+            callback(self.virtualMachine);
+        });
     }
     
-    func createDiskImage(path: String, virtualDrive: VirtualDrive) {
-        shell.setWorkingDir(path);
-        
-        let command: String =
-            QemuImgCommandBuilder(qemuPath:qemuPath)
-            .withCommand(QemuConstants.ImgCommands.Create.rawValue)
-                .withFormat(virtualDrive.format)
-                .withSize(virtualDrive.size)
-                .withName(virtualDrive.name)
-                .withExtension(QemuConstants.ImgTypes.Qcow2.rawValue)
-                .build();
-        shell.runCommand(command);
-    }
-    
-    func runVM(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (VirtualMachine) -> Void) {
+    func getQemuCommand() -> String {
         var builder: QemuCommandBuilder =
-            QemuCommandBuilder(qemuPath: qemuPath)
+            QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath as! String : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
+            .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
             .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
             .withMemory(virtualMachine.memory)
@@ -46,17 +42,18 @@ class QemuRunner {
             if (driveExists(drive)) {
                 builder = builder.withDrive(file: drive.path, format: drive.format, media: drive.mediaType);
             } else {
-                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found.");
+                Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
+                                    response in if response.rawValue == Utils.ALERT_RESP_OK {
+                                        self.virtualMachine.drives.remove(at: self.virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
+                                        self.virtualMachine.writeToPlist();
+                                    }});
             }
         }
-
+        
         builder = builder
             .withNetwork(name: "network-0", device: QemuConstants.NetworkTypes.Sungem.rawValue)
             .withManagementPort(listenPort);
-
-        shell.runAsyncCommand(builder.build(), uponCompletion: {
-            callback(virtualMachine);
-        });
+        return builder.build();
     }
         
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
@@ -90,10 +87,6 @@ class QemuRunner {
             return filemanager.fileExists(atPath: drive.path);
         }
         return true;
-    }
-    
-    func setListenPort(_ listenPort: Int32) {
-        self.listenPort = listenPort;
     }
     
     func waitForCompletion() {

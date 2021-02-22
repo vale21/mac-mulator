@@ -66,13 +66,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if (toRemove.count > 0) {
             var removed:[String] = [];
+            toRemove.reverse();
             for index in toRemove {
                 removed.append((savedVMs?.remove(at: index))!);
             }
             
             rootController?.showAlert("Could not find some Virtual Machines that were configured in MacMulator: " + removed.joined(separator: ", "));
-            // let removedVMsMessage = "Could not find some VM that were previously configured in MacMulator: " + removed.joined(separator: ", ");
-            // Utils.showAlert(window: NSApp.mainWindow!, style:NSAlert.Style.warning, message: removedVMsMessage);
 
             let userDefaults = UserDefaults.standard;
             userDefaults.set(savedVMs, forKey: "savedVMs");
@@ -98,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try fileManager.removeItem(at: URL(fileURLWithPath: savedVM));
         } catch {
-            print("ERROR while deleting" + savedVM);
+            print("ERROR while deleting" + savedVM + ": " + error.localizedDescription);
         }
 
         
@@ -122,7 +121,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             } catch {
-                print("ERROR while reading" + filename);
+                print("ERROR while reading" + filename + ": " + error.localizedDescription);
             }
         }
         

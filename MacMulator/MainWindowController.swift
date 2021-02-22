@@ -13,22 +13,21 @@ class MainWindowController: NSWindowController {
     static let EDIT_VM_SEGUE = "editVMSegue";
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        
+        let source = segue.sourceController as! NSWindowController;
+        let dest = segue.destinationController as! NSWindowController;
+        let sourceController = source.contentViewController as! RootViewController;
+        
         if (segue.identifier == MainWindowController.NEW_VM_SEGUE) {
-            let source = segue.sourceController as! NSWindowController;
-            let dest = segue.destinationController as! NSWindowController;
-            
-            let sourceController = source.contentViewController as! RootViewController;
             let destinationController = dest.contentViewController as! NewVMViewController;
-            
             destinationController.setRootController(sourceController);
         }
         if (segue.identifier == MainWindowController.EDIT_VM_SEGUE) {
             let vmToEdit = sender as! VirtualMachine;
             
-            let dest = segue.destinationController as! NSWindowController;
             let destinationController = dest.contentViewController as! EditVMViewController;
-            
             destinationController.setVirtualMachine(vmToEdit);
+            destinationController.setRootController(sourceController);
         }
     }
 }

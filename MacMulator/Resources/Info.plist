@@ -39,6 +39,8 @@
 			<array>
 				<string>qvm</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 		</dict>
 	</array>
 </dict>

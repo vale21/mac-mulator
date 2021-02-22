@@ -66,7 +66,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     @objc func tableViewDeleteItemClicked(_ sender: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         deleteVirtualMachine(table.clickedRow);
-        
     }
     
     func editVirtualMachine(_ index: Int) {
@@ -76,8 +75,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         
     func deleteVirtualMachine(_ index: Int) {
         let removed = virtualMachines.remove(at: index);
-        table.reloadData();
+        table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
+        //table.reloadData();
         
         rootController?.deleteVirtualMachine(removed);
+    }
+    
+    func refreshList() {
+        self.table.reloadData();
     }
 }

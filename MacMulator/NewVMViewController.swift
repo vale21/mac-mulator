@@ -138,11 +138,24 @@ class NewVMViewController: NSViewController {
         let path = self.path.stringValue;
         let fullPath = path + "/" + Utils.escape(self.name.stringValue) + "." + QemuConstants.VM_EXTENSION;
         
-        let virtualMachine = VirtualMachine(os: QemuConstants.OS_MAC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: "1440x900x32", bootOrder: [QemuConstants.CD, QemuConstants.HD, QemuConstants.NET]);
-        let virtualCD = VirtualDrive(path: self.installMedia, name: QemuConstants.MEDIATYPE_CDROM + "-0", format: QemuConstants.ImgTypes.Raw.rawValue, mediaType: QemuConstants.MEDIATYPE_CDROM, size: 0);
-        let virtualHDD = VirtualDrive(path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + QemuConstants.ImgTypes.Qcow2.rawValue, name: QemuConstants.MEDIATYPE_DISK + "-0", format: QemuConstants.ImgTypes.Qcow2.rawValue, mediaType: QemuConstants.MEDIATYPE_DISK, size: self.driveSize);
+        let virtualMachine = VirtualMachine(os: QemuConstants.OS_MAC, architecture: QemuConstants.ARCH_PPC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: QemuConstants.RES_1024_768, bootOrder: [QemuConstants.CD, QemuConstants.HD, QemuConstants.NET]);
         
-        virtualMachine.addVirtualDrive(virtualCD);
+        if (self.installMedia != "") {
+            let virtualCD = VirtualDrive(
+                path: self.installMedia,
+                name: QemuConstants.MEDIATYPE_CDROM + "-0",
+                format: QemuConstants.IMAGE_TYPE_RAW,
+                mediaType: QemuConstants.MEDIATYPE_CDROM,
+                size: 0);
+            virtualMachine.addVirtualDrive(virtualCD);
+        }
+        
+        let virtualHDD = VirtualDrive(
+            path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + QemuConstants.IMAGE_TYPE_QCOW2,
+            name: QemuConstants.MEDIATYPE_DISK + "-0",
+            format: QemuConstants.IMAGE_TYPE_QCOW2,
+            mediaType: QemuConstants.MEDIATYPE_DISK,
+            size: self.driveSize);
         virtualMachine.addVirtualDrive(virtualHDD);
         
         let shell = Shell();
@@ -151,8 +164,7 @@ class NewVMViewController: NSViewController {
             do {
                 try self.createDocumentPackage(tempPath);
                 
-                let qemuRunner = QemuRunner();
-                qemuRunner.createDiskImage(path: tempPath, virtualDrive: virtualHDD);
+                QemuUtils.createDiskImage(path: tempPath, virtualDrive: virtualHDD);
                 
                 virtualMachine.writeToPlist(tempPath + "/" + QemuConstants.INFO_PLIST);
                 
