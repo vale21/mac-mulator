@@ -134,9 +134,9 @@ class NewVMViewController: NSViewController {
         
         setupProgressBar(sender);
         
-        let tempPath = NSTemporaryDirectory() + self.name.stringValue + "." + QemuConstants.VM_EXTENSION;
+        let tempPath = NSTemporaryDirectory() + self.name.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
         let path = self.path.stringValue;
-        let fullPath = path + "/" + Utils.escape(self.name.stringValue) + "." + QemuConstants.VM_EXTENSION;
+        let fullPath = path + "/" + Utils.escape(self.name.stringValue) + "." + MacMulatorConstants.VM_EXTENSION;
         
         let virtualMachine = VirtualMachine(os: QemuConstants.OS_MAC, architecture: QemuConstants.ARCH_PPC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: QemuConstants.RES_1024_768, bootOrder: [QemuConstants.CD, QemuConstants.HD, QemuConstants.NET]);
         
@@ -144,16 +144,16 @@ class NewVMViewController: NSViewController {
             let virtualCD = VirtualDrive(
                 path: self.installMedia,
                 name: QemuConstants.MEDIATYPE_CDROM + "-0",
-                format: QemuConstants.IMAGE_TYPE_RAW,
+                format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_CDROM,
                 size: 0);
             virtualMachine.addVirtualDrive(virtualCD);
         }
         
         let virtualHDD = VirtualDrive(
-            path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + QemuConstants.IMAGE_TYPE_QCOW2,
+            path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + QemuConstants.FORMAT_QCOW2,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
-            format: QemuConstants.IMAGE_TYPE_QCOW2,
+            format: QemuConstants.FORMAT_QCOW2,
             mediaType: QemuConstants.MEDIATYPE_DISK,
             size: self.driveSize);
         virtualMachine.addVirtualDrive(virtualHDD);
@@ -166,7 +166,7 @@ class NewVMViewController: NSViewController {
                 
                 QemuUtils.createDiskImage(path: tempPath, virtualDrive: virtualHDD);
                 
-                virtualMachine.writeToPlist(tempPath + "/" + QemuConstants.INFO_PLIST);
+                virtualMachine.writeToPlist(tempPath + "/" + MacMulatorConstants.INFO_PLIST);
                 
                 let moveCommand = "mv " + Utils.escape(tempPath) + " " + path;
                 shell.runCommand(moveCommand);

@@ -1633,6 +1633,9 @@
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
+                                                                    <connections>
+                                                                        <segue destination="jnj-BN-7iT" kind="sheet" identifier="editDiskSegue" id="khb-Sj-yFs"/>
+                                                                    </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WlM-ep-jAj">
                                                                     <rect key="frame" x="28" y="3" width="27" height="23"/>
@@ -1728,7 +1731,8 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <segue destination="jnj-BN-7iT" kind="sheet" id="A9b-m4-tey"/>
+                                    <action selector="createNewDisk:" target="fBa-tq-xkS" id="js8-SO-qv2"/>
+                                    <segue destination="jnj-BN-7iT" kind="sheet" identifier="newDiskSegue" id="qMP-wa-FjT"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-qf-AbG">
@@ -1744,6 +1748,7 @@
                     <connections>
                         <outlet property="architectureComboBox" destination="TgZ-59-ml0" id="BW9-Zz-SYZ"/>
                         <outlet property="cpusComboBox" destination="alY-XH-NeD" id="c1V-fI-wGP"/>
+                        <outlet property="drivesTableView" destination="XFF-rf-sSL" id="cg4-qr-ZVO"/>
                         <outlet property="memorySlider" destination="Or2-CQ-Js9" id="cur-AD-NEy"/>
                         <outlet property="memoryStepper" destination="Hw3-U6-vgX" id="UE7-io-KWq"/>
                         <outlet property="memoryTextView" destination="ZXG-j2-bCx" id="LMn-tY-j5k"/>
@@ -1753,10 +1758,10 @@
             </objects>
             <point key="canvasLocation" x="1636" y="-1454"/>
         </scene>
-        <!--View Controller-->
+        <!--New Disk View Controller-->
         <scene sceneID="CDp-5y-AbP">
             <objects>
-                <viewController id="jnj-BN-7iT" sceneMemberID="viewController">
+                <viewController id="jnj-BN-7iT" customClass="NewDiskViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="FKu-RT-N5p">
                         <rect key="frame" x="0.0" y="0.0" width="444" height="241"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1775,7 +1780,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="2000" doubleValue="256" id="ztS-Bg-c1z"/>
                                 <connections>
-                                    <action selector="stepperChanged:" target="fBa-tq-xkS" id="BYy-cl-QLA"/>
+                                    <action selector="stepperChanged:" target="jnj-BN-7iT" id="QYi-De-aZZ"/>
                                 </connections>
                             </stepper>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEu-kH-YSK">
@@ -1801,7 +1806,7 @@
                                 </textFieldCell>
                                 <connections>
                                     <action selector="textValueChanged:" target="U78-Vj-q8T" id="kjM-A0-ftK"/>
-                                    <outlet property="delegate" destination="fBa-tq-xkS" id="m1c-zD-tQI"/>
+                                    <outlet property="delegate" destination="jnj-BN-7iT" id="xGB-qG-KAL"/>
                                 </connections>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mha-0i-Cbl">
@@ -1809,7 +1814,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="2000" doubleValue="256" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="wO8-4s-gvw"/>
                                 <connections>
-                                    <action selector="sliderChanged:" target="fBa-tq-xkS" id="gov-0c-6ed"/>
+                                    <action selector="sliderChanged:" target="jnj-BN-7iT" id="Grv-tK-enL"/>
                                 </connections>
                             </slider>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-7X-lcl">
@@ -1828,6 +1833,9 @@
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="cowCheckboxChanged:" target="jnj-BN-7iT" id="0QX-zW-ACa"/>
+                                </connections>
                             </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Aca-LT-ADi">
                                 <rect key="frame" x="18" y="67" width="408" height="26"/>
@@ -1849,7 +1857,7 @@ DQ
 </string>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="dismissController:" target="g3v-oM-ElA" id="EBJ-O9-EzH"/>
+                                    <segue destination="WIg-V7-WEp" kind="sheet" identifier="createDiskFileSegue" id="iV8-Yb-g7T"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0p0-dA-iaq">
@@ -1862,6 +1870,9 @@ DQ
 Gw
 </string>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" target="jnj-BN-7iT" id="gO0-45-6sI"/>
+                                </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
                                 <rect key="frame" x="395" y="141" width="32" height="16"/>
@@ -1874,10 +1885,47 @@ Gw
                             </textField>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="diskSizeSlider" destination="Mha-0i-Cbl" id="HBp-jE-r2K"/>
+                        <outlet property="diskSizeStepper" destination="akO-hG-CqH" id="Tk6-0a-EiM"/>
+                        <outlet property="diskSizeTextField" destination="0D0-8B-khC" id="lx4-8g-Ne3"/>
+                        <outlet property="useCow" destination="3fZ-xR-idW" id="jXm-nP-0Gb"/>
+                    </connections>
                 </viewController>
                 <customObject id="g3v-oM-ElA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2282" y="-1413.5"/>
+        </scene>
+        <!--Create Disk File View Controller-->
+        <scene sceneID="NyM-H2-c2N">
+            <objects>
+                <viewController id="WIg-V7-WEp" customClass="CreateDiskFileViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="1Yq-wO-pLY">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3m2-bb-wv8">
+                                <rect key="frame" x="127" y="46" width="124" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Creating new disk..." id="re0-IZ-qYs">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="FG4-oW-5kx">
+                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="progressBar" destination="FG4-oW-5kx" id="C1o-X6-MZQ"/>
+                    </connections>
+                </viewController>
+                <customObject id="kPs-5W-4qs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2366" y="-1109"/>
         </scene>
         <!--NewVM View Controller-->
         <scene sceneID="PYg-vB-mbq">
@@ -2282,6 +2330,9 @@ Gw
             <point key="canvasLocation" x="1636" y="-1001"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="khb-Sj-yFs"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="NSAddTemplate" width="15" height="13"/>
         <image name="NSCaution" width="32" height="32"/>

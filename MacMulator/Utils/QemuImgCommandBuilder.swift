@@ -61,7 +61,7 @@ class QemuImgCommandBuilder {
             cmd += " " + name;
         }
         if let ext = self.ext {
-            cmd += "." + ext;
+            cmd += ext;
         }
         
         return cmd;

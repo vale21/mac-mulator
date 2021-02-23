@@ -21,7 +21,7 @@ class QemuUtils {
                 .withFormat(virtualDrive.format)
                 .withSize(virtualDrive.size)
                 .withName(virtualDrive.name)
-                .withExtension(QemuConstants.IMAGE_TYPE_QCOW2)
+                .withExtension(Utils.getExtension(virtualDrive.format))
                 .build();
         shell.runCommand(command);
     }

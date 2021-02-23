@@ -61,7 +61,7 @@ class VirtualMachine: Codable, Hashable {
     func writeToPlist() {
        do {
            let data = try PropertyListEncoder().encode(self);
-        try data.write(to: URL(fileURLWithPath: self.path + "/" + QemuConstants.INFO_PLIST));
+        try data.write(to: URL(fileURLWithPath: self.path + "/" + MacMulatorConstants.INFO_PLIST));
        } catch {
            print("ERROR while writing Info.plist: " + error.localizedDescription);
        }

@@ -119,4 +119,8 @@ class Utils {
         let formatted: String = formatter.string(from: value as NSNumber) ?? "n/a";
         return formatted + " GB";
     }
+    
+    static func getExtension(_ format: String) -> String {
+        return format == QemuConstants.FORMAT_RAW ? QemuConstants.EXTENSION_ISO : QemuConstants.EXTENSION_QCOW2;
+    }
 }

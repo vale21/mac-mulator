@@ -23,6 +23,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet weak var memoryTextView: NSTextField!
     @IBOutlet weak var memoryStepper: NSStepper!
     @IBOutlet weak var memorySlider: NSSlider!
+    @IBOutlet weak var drivesTableView: NSTableView!
     
     var virtualMachine: VirtualMachine?;
     
@@ -70,6 +71,30 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         }
     }
     
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if let virtualMachine = self.virtualMachine {
+            if (segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE) {
+                let diskName = "disk-" + String(virtualMachine.drives.count);
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: 250);
+                
+                let destinationController = segue.destinationController as! NewDiskViewController;
+                destinationController.setVirtualDrive(virtualDrive);
+                destinationController.setparentController(self);
+            }
+            if (segue.identifier == MacMulatorConstants.EDIT_DISK_SEGUE) {
+                let destinationController = segue.destinationController as! NewDiskViewController;
+                destinationController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
+                destinationController.setparentController(self);
+                destinationController.setMode(NewDiskViewController.Mode.EDIT);
+            }
+        }
+    }
+    
+    func addVirtualDrive(_ virtualDrive: VirtualDrive) {
+        virtualMachine?.drives.append(virtualDrive);
+        self.drivesTableView.reloadData();
+    }
+    
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         if (comboBox == architectureComboBox) {
             return supportedArchitectures.count
@@ -92,7 +117,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if (notification.object as! NSComboBox) == architectureComboBox {
             if let virtualMachine = self.virtualMachine {
                 virtualMachine.architecture = QemuConstants.ALL_ARCHITECTURES[architectureComboBox.indexOfSelectedItem];
-            
+                
                 cpusComboBox.reloadData();
                 cpusComboBox.selectItem(at: (virtualMachine.cpus - 1));
             }
@@ -151,7 +176,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let cellView = cell as! DrivesTableDriveSizeCell;
             cellView.label.stringValue = Utils.formatDisk(virtualMachine?.drives[row].size ?? 0);
         }
-
+        
         if tableColumn?.identifier.rawValue == "Path" {
             let cellView = cell as! DrivesTableDrivePathCell;
             cellView.label.stringValue = Utils.unescape(virtualMachine?.drives[row].path ?? "");

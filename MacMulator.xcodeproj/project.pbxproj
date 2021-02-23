@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
+		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B391F0025C075F50030E914 /* MacMulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EFF25C075F50030E914 /* MacMulatorTests.swift */; };
@@ -31,6 +32,8 @@
 		3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473025CABDC600A4DBA7 /* Main.storyboard */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
 		3BC4083E25C4742B00C7E032 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */; };
+		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
+		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 /* End PBXBuildFile section */
@@ -55,6 +58,7 @@
 /* Begin PBXFileReference section */
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
+		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 		3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
 		3BBC4BB525DE74020001CA02 /* QemuUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuUtils.swift; sourceTree = "<group>"; };
 		3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
+		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
+		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,7 +147,6 @@
 				3BF8F62125E401D4006E2C1C /* VM Editor */,
 				3B391EEC25C075F50030E914 /* AppDelegate.swift */,
 				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
-				3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
 				3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */,
 				3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */,
@@ -185,6 +190,7 @@
 				3B73E41525CAE040004BAA92 /* QemuRunner.swift */,
 				3BBB471D25CABDAE00A4DBA7 /* Shell.swift */,
 				3BBB471E25CABDAE00A4DBA7 /* Utils.swift */,
+				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -219,11 +225,14 @@
 		3BF8F62125E401D4006E2C1C /* VM Editor */ = {
 			isa = PBXGroup;
 			children = (
+				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
 				3B477A9425D69525008685BE /* EditVMViewController.swift */,
+				3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */,
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
-				3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */,
-				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
+				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
+				3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */,
+				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
 			);
 			path = "VM Editor";
 			sourceTree = "<group>";
@@ -358,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */,
 				3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */,
 				3BC4083E25C4742B00C7E032 /* NewVMViewController.swift in Sources */,
 				3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */,
@@ -371,6 +381,7 @@
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */,
+				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
@@ -380,6 +391,7 @@
 				3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */,
 				3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */,
 				3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */,
+				3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

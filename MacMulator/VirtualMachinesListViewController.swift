@@ -70,7 +70,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func editVirtualMachine(_ index: Int) {
         let item = virtualMachines[index];
-        self.view.window?.windowController?.performSegue(withIdentifier: MainWindowController.EDIT_VM_SEGUE, sender: item);
+        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: item);
     }
         
     func deleteVirtualMachine(_ index: Int) {

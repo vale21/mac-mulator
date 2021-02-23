@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var rootController: RootViewController?;
 
     @IBAction func newVMMenuBarClicked(_ sender: Any) {
-        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MainWindowController.NEW_VM_SEGUE, sender: self);
+        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
     }
     
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
@@ -116,7 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             do {
                 let fileNames: [String] = try fileManager.contentsOfDirectory(atPath: filename);
                 for file in fileNames {
-                    if (file == QemuConstants.INFO_PLIST) {
+                    if (file == MacMulatorConstants.INFO_PLIST) {
                         return true;
                     }
                 }

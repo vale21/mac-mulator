@@ -9,16 +9,15 @@ import Foundation
 
 class QemuConstants {
 
-    static let VM_EXTENSION = "qvm";
-    static let INFO_PLIST = "Info.plist";
-    
     // Disk image constants
     
     static let MEDIATYPE_DISK = "disk";
     static let MEDIATYPE_CDROM = "cdrom";
     static let IMAGE_CMD_CREATE = "create";
-    static let IMAGE_TYPE_QCOW2 = "qcow2";
-    static let IMAGE_TYPE_RAW = "raw";
+    static let FORMAT_QCOW2 = "qcow2";
+    static let FORMAT_RAW = "raw";
+    static let EXTENSION_ISO = ".iso";
+    static let EXTENSION_QCOW2 = ".qcow2";
     
     // Virtual Machine constants
     

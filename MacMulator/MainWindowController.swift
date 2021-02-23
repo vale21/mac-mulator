@@ -9,20 +9,17 @@ import Cocoa
 
 class MainWindowController: NSWindowController {
     
-    static let NEW_VM_SEGUE = "newVMSegue";
-    static let EDIT_VM_SEGUE = "editVMSegue";
-
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
         let source = segue.sourceController as! NSWindowController;
         let dest = segue.destinationController as! NSWindowController;
         let sourceController = source.contentViewController as! RootViewController;
         
-        if (segue.identifier == MainWindowController.NEW_VM_SEGUE) {
+        if (segue.identifier == MacMulatorConstants.NEW_VM_SEGUE) {
             let destinationController = dest.contentViewController as! NewVMViewController;
             destinationController.setRootController(sourceController);
         }
-        if (segue.identifier == MainWindowController.EDIT_VM_SEGUE) {
+        if (segue.identifier == MacMulatorConstants.EDIT_VM_SEGUE) {
             let vmToEdit = sender as! VirtualMachine;
             
             let destinationController = dest.contentViewController as! EditVMViewController;
