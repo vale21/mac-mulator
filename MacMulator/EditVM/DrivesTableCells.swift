@@ -22,3 +22,9 @@ class DrivesTableDriveSizeCell: NSTableCellView {
 class DrivesTableDrivePathCell: NSTableCellView {
     @IBOutlet weak var label: NSTextField!
 }
+
+class DrivesTableButtonsCell: NSTableCellView {
+    @IBOutlet weak var infoButton: NSButton!
+    @IBOutlet weak var editButton: NSButton!
+    @IBOutlet weak var deleteButton: NSButton!
+}

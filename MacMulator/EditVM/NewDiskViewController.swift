@@ -18,6 +18,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var diskSizeStepper: NSStepper!
     @IBOutlet weak var diskSizeSlider: NSSlider!
     @IBOutlet weak var useCow: NSButton!
+    @IBOutlet weak var okButton: NSButton!
     
     var virtualDrive: VirtualDrive?
     var parentController: EditVMViewControllerHardware?;
@@ -68,13 +69,11 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         }
     }
     
-    override func viewDidAppear() {
-        isVisible = true;
-        
+    override func viewWillAppear() {
         if let virtualDrive = self.virtualDrive {
-            diskSizeTextField.stringValue = String(virtualDrive.size);
             diskSizeSlider.intValue = virtualDrive.size;
             diskSizeStepper.intValue = virtualDrive.size;
+            diskSizeTextField.stringValue = String(virtualDrive.size);
             
             if (virtualDrive.format == QemuConstants.FORMAT_QCOW2) {
                 useCow.intValue = 1;
@@ -84,8 +83,17 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         }
     }
     
+    override func viewDidAppear() {
+        isVisible = true;
+    }
+    
     override func viewDidDisappear() {
         isVisible = false;
+        
+        diskSizeSlider.intValue = 0;
+        diskSizeSlider.intValue = 0;
+        diskSizeTextField.stringValue = "";
+        diskSizeTextField.abortEditing();
     }
     
     func controlTextDidEndEditing(_ notification: Notification) {

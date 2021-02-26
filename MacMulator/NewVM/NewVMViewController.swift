@@ -123,7 +123,7 @@ class NewVMViewController: NSViewController {
     }
     
     @IBAction func selectInstallMedia(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: ["img", "iso", "cdr"], uponSelection: {
+        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: {
             panel in
             self.installMedia = panel.url?.path ?? installMedia;
             diskImage.stringValue = installMedia

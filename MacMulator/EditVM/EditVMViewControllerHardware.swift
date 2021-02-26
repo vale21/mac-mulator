@@ -33,7 +33,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         updateView();
     }
     
-    override func viewDidAppear() {
+    override func viewWillAppear() {
         updateView();
     }
     
@@ -48,6 +48,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             memoryStepper.intValue = virtualMachine.memory;
             memorySlider.intValue = virtualMachine.memory;
             memoryTextView.stringValue = String(virtualMachine.memory);
+            
+            drivesTableView.reloadData();
         }
     }
     
@@ -86,6 +88,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 destinationController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
                 destinationController.setparentController(self);
                 destinationController.setMode(NewDiskViewController.Mode.EDIT);
+            }
+            if (segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE) {
+                let destinationController = segue.destinationController as! DriveInfoViewController;
+                destinationController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
             }
         }
     }
@@ -182,6 +188,17 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             cellView.label.stringValue = Utils.unescape(virtualMachine?.drives[row].path ?? "");
         }
         
+        if (tableColumn?.identifier.rawValue == "Buttons") {
+            let cellView = cell as! DrivesTableButtonsCell;
+            if (virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_CDROM) {
+                cellView.editButton.isEnabled = false;
+                cellView.infoButton.isEnabled = false;
+            } else {
+                cellView.editButton.isEnabled = true;
+                cellView.infoButton.isEnabled = true;
+            }
+        }
+        
         return cell;
     }
     
@@ -192,6 +209,52 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         return 30.0;
     }
+    
+    @IBAction func openImage(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
+            if let path = panel.url?.path {
+                if let virtualMachine = self.virtualMachine {
+                    for virtualDrive in virtualMachine.drives {
+                        if virtualDrive.mediaType == QemuConstants.MEDIATYPE_CDROM {
+                            Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You already have a CD Drive configutred in your VM. You can only have one. Do you want to replace it with the image located at " + path + "?", completionHandler: { response in
+                                    if response.rawValue == Utils.ALERT_RESP_OK {
+                                        virtualDrive.path = path;
+                                        virtualMachine.writeToPlist();
+                                        self.drivesTableView.reloadData();
+                                    }
+                            })
+                        }
+                    }
+                    
+                    // no existing CD drive found
+                    let virtualCD = VirtualDrive(
+                        path: path,
+                        name: QemuConstants.MEDIATYPE_CDROM + "-0",
+                        format: QemuConstants.FORMAT_RAW,
+                        mediaType: QemuConstants.MEDIATYPE_CDROM,
+                        size: 0);
+                    virtualMachine.addVirtualDrive(virtualCD);
+                    virtualMachine.writeToPlist();
+                    drivesTableView.reloadData();
+                }
+            }
+        })
+    }
+    
+    @IBAction func deleteVirtualDrive(_ sender: Any) {
+        if let virtualMachine = self.virtualMachine {
+            let row = drivesTableView.row(for: sender as! NSView);
+            let drive = virtualMachine.drives[row];
+            Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
+                    virtualMachine.drives.remove(at: row);
+                    virtualMachine.writeToPlist();
+                }
+            })
+        }
+    }
+    
 }
 
 

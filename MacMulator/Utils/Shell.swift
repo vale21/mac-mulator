@@ -13,7 +13,7 @@ class Shell {
     
     func runCommand(_ command: String) -> String {
         
-        print("Running " + command);
+        print("Running " + command + " in " + task.currentDirectoryPath);
         do {
             try ObjC.catchException({
                 if (!self.task.isRunning) {
@@ -24,7 +24,8 @@ class Shell {
                 }
             })
         } catch {
-            print(error);
+            print(error.localizedDescription);
+            return "";
         }
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!

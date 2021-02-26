@@ -36,6 +36,7 @@
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BD669B425E58080004E129D /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669B325E58080004E129D /* EditVM.storyboard */; };
 		3BD669BD25E580A0004E129D /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669BB25E580A0004E129D /* NewVM.storyboard */; };
+		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 /* End PBXBuildFile section */
@@ -96,6 +97,7 @@
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BD669B325E58080004E129D /* EditVM.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditVM.storyboard; sourceTree = "<group>"; };
 		3BD669BC25E580A0004E129D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MacMulator/UI/Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,7 +150,8 @@
 		3B391EEB25C075F50030E914 /* MacMulator */ = {
 			isa = PBXGroup;
 			children = (
-				3BF8F62125E401D4006E2C1C /* VM Editor */,
+				3BA3AC1525E6645E00F02B0E /* NewVM */,
+				3BF8F62125E401D4006E2C1C /* EditVM */,
 				3B391EEC25C075F50030E914 /* AppDelegate.swift */,
 				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
@@ -179,6 +182,14 @@
 				3B391F0C25C075F50030E914 /* Info.plist */,
 			);
 			path = MacMulatorUITests;
+			sourceTree = "<group>";
+		};
+		3BA3AC1525E6645E00F02B0E /* NewVM */ = {
+			isa = PBXGroup;
+			children = (
+				3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */,
+			);
+			path = NewVM;
 			sourceTree = "<group>";
 		};
 		3BBB471C25CABDAE00A4DBA7 /* Utils */ = {
@@ -228,7 +239,7 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		3BF8F62125E401D4006E2C1C /* VM Editor */ = {
+		3BF8F62125E401D4006E2C1C /* EditVM */ = {
 			isa = PBXGroup;
 			children = (
 				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
@@ -237,10 +248,10 @@
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
-				3BC4083D25C4742B00C7E032 /* NewVMViewController.swift */,
 				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
+				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
 			);
-			path = "VM Editor";
+			path = EditVM;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -384,6 +395,7 @@
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
 				3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */,
 				3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */,
+				3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */,
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,

@@ -380,7 +380,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" headerView="la4-XS-a2p" viewBased="YES" id="XFF-rf-sSL">
-                                            <rect key="frame" x="0.0" y="0.0" width="558" height="169"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="564" height="169"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -405,7 +405,7 @@
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h56-AJ-mfz">
                                                                     <rect key="frame" x="2" y="3" width="25" height="25"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSCaution" id="peT-Gj-4OR"/>
+                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="HD Icon" id="peT-Gj-4OR"/>
                                                                 </imageView>
                                                             </subviews>
                                                             <connections>
@@ -478,7 +478,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Path" width="230" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
+                                                <tableColumn identifier="Path" width="206" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="File location">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -491,11 +491,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="0.0" width="230" height="30"/>
+                                                            <rect key="frame" x="255" y="0.0" width="206" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CBk-hq-ylm">
-                                                                    <rect key="frame" x="1" y="7" width="232" height="16"/>
+                                                                    <rect key="frame" x="1" y="7" width="208" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/vale/documents/a/aaaaa/bla/deskytip/url/myFolder" id="8Sn-gW-gZi">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -514,7 +514,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Buttons" width="60" minWidth="60" maxWidth="60" id="jb5-ij-uaV">
+                                                <tableColumn identifier="Buttons" width="90" minWidth="90" maxWidth="90" id="jb5-ij-uaV">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -526,12 +526,12 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView id="OAu-7N-Hdb">
-                                                            <rect key="frame" x="502" y="0.0" width="57" height="30"/>
+                                                        <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
+                                                            <rect key="frame" x="478" y="0.0" width="87" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
-                                                                    <rect key="frame" x="2" y="3" width="28" height="23"/>
+                                                                    <rect key="frame" x="29" y="3" width="28" height="23"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="square.and.pencil" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WWP-wA-zjI">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -541,15 +541,34 @@
                                                                         <segue destination="jnj-BN-7iT" kind="sheet" identifier="editDiskSegue" id="khb-Sj-yFs"/>
                                                                     </connections>
                                                                 </button>
+                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iyh-5Y-kMc">
+                                                                    <rect key="frame" x="3" y="3" width="28" height="23"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="info.circle" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="l9a-wh-Hb8">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <segue destination="ARL-7A-Alw" kind="show" identifier="showDriveInfoSegue" id="4Xv-dw-4K0"/>
+                                                                    </connections>
+                                                                </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WlM-ep-jAj">
-                                                                    <rect key="frame" x="28" y="3" width="27" height="23"/>
+                                                                    <rect key="frame" x="55" y="3" width="28" height="23"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="trash" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GWD-J1-iWs">
                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="deleteVirtualDrive:" target="fBa-tq-xkS" id="MZY-0j-rn2"/>
+                                                                    </connections>
                                                                 </button>
                                                             </subviews>
+                                                            <connections>
+                                                                <outlet property="deleteButton" destination="WlM-ep-jAj" id="szy-Pg-iHM"/>
+                                                                <outlet property="editButton" destination="5Mx-j6-AJ0" id="c9U-AV-1m3"/>
+                                                                <outlet property="infoButton" destination="Iyh-5Y-kMc" id="z5z-xK-jMB"/>
+                                                            </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
@@ -561,7 +580,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
                                     <rect key="frame" x="1" y="182" width="558" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -570,7 +589,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="la4-XS-a2p">
-                                    <rect key="frame" x="0.0" y="0.0" width="558" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="564" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
@@ -646,6 +665,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="openImage:" target="fBa-tq-xkS" id="Tca-i6-JU0"/>
+                                </connections>
                             </button>
                         </subviews>
                     </view>
@@ -661,6 +683,176 @@
                 <customObject id="Zzu-lc-Uxm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1636" y="-1454"/>
+        </scene>
+        <!--Virtual Disk Info-->
+        <scene sceneID="7Et-Uh-sZM">
+            <objects>
+                <viewController title="Virtual Disk Info" id="ARL-7A-Alw" customClass="DriveInfoViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="8Y1-qg-99B">
+                        <rect key="frame" x="0.0" y="0.0" width="333" height="590"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yiE-wD-9eP">
+                                <rect key="frame" x="20" y="514" width="47" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Name: " id="fUS-3r-6eL">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wbv-Uw-n74">
+                                <rect key="frame" x="75" y="466" width="240" height="16"/>
+                                <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="mCl-p9-Cr0">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qOT-F7-RTk">
+                                <rect key="frame" x="75" y="442" width="240" height="16"/>
+                                <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="6Lg-AO-OiO">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4mj-in-AGf">
+                                <rect key="frame" x="75" y="490" width="240" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="SAJ-Ch-pi6">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bbf-2M-Bbm">
+                                <rect key="frame" x="75" y="514" width="240" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="D4y-ln-zuh">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kOH-5v-H8G">
+                                <rect key="frame" x="20" y="490" width="34" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="Hbp-cf-MfV"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Size:" id="pG9-oX-KkH">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dlY-Sa-DfD">
+                                <rect key="frame" x="20" y="466" width="51" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Format:" id="FeO-h6-43L">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Dv-gT-Jae">
+                                <rect key="frame" x="20" y="442" width="36" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Path:" id="uIc-3d-PNR">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E00-i6-Vsl">
+                                <rect key="frame" x="20" y="399" width="207" height="15"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Output of Qemu img info command:" id="jif-kB-01e">
+                                    <font key="font" metaFont="cellTitle"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qja-ct-dGu">
+                                <rect key="frame" x="22" y="20" width="291" height="371"/>
+                                <clipView key="contentView" drawsBackground="NO" id="uYr-mr-Twj">
+                                    <rect key="frame" x="0.0" y="0.0" width="291" height="371"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="AMt-oY-ZGj">
+                                            <rect key="frame" x="0.0" y="0.0" width="291" height="371"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="291" height="371"/>
+                                            <size key="maxSize" width="367" height="10000000"/>
+                                            <attributedString key="textStorage">
+                                                <fragment content="Lorem ipsum dolor">
+                                                    <attributes>
+                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <font key="NSFont" size="11" name="Menlo-Regular"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Qgp-qL-hRL">
+                                    <rect key="frame" x="-100" y="-100" width="240" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Ih1-GH-Kve">
+                                    <rect key="frame" x="275" y="0.0" width="16" height="371"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NfQ-CG-a3J">
+                                <rect key="frame" x="125" y="551" width="83" height="19"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Virtual Disk" id="bsZ-ct-bq4">
+                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="baseline" secondItem="qOT-F7-RTk" secondAttribute="baseline" id="5Vn-Bc-hB5"/>
+                            <constraint firstAttribute="trailing" secondItem="bbf-2M-Bbm" secondAttribute="trailing" constant="20" symbolic="YES" id="5c9-db-Bxw"/>
+                            <constraint firstItem="wbv-Uw-n74" firstAttribute="trailing" secondItem="qOT-F7-RTk" secondAttribute="trailing" id="74E-A1-LKd"/>
+                            <constraint firstItem="E00-i6-Vsl" firstAttribute="top" secondItem="3Dv-gT-Jae" secondAttribute="bottom" constant="28" id="G20-gJ-nhb"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="leading" id="HJ9-4K-6Rf"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="baseline" secondItem="bbf-2M-Bbm" secondAttribute="baseline" id="JMk-oq-MDz"/>
+                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="trailing" secondItem="4mj-in-AGf" secondAttribute="trailing" id="Kqb-Dp-fwN"/>
+                            <constraint firstItem="wbv-Uw-n74" firstAttribute="leading" secondItem="qOT-F7-RTk" secondAttribute="leading" id="Mvh-qd-FfH"/>
+                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="top" secondItem="NfQ-CG-a3J" secondAttribute="bottom" constant="21" id="R4T-kA-CQY"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="trailing" secondItem="wbv-Uw-n74" secondAttribute="trailing" id="S1e-aM-vWU"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="trailing" constant="25" id="VOC-E8-Zeo"/>
+                            <constraint firstItem="NfQ-CG-a3J" firstAttribute="top" secondItem="8Y1-qg-99B" secondAttribute="top" constant="20" symbolic="YES" id="XZ6-wb-OUe"/>
+                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="leading" secondItem="4mj-in-AGf" secondAttribute="leading" id="Yfq-hs-tHZ"/>
+                            <constraint firstAttribute="bottom" secondItem="Qja-ct-dGu" secondAttribute="bottom" constant="20" symbolic="YES" id="c00-4Q-DnJ"/>
+                            <constraint firstItem="E00-i6-Vsl" firstAttribute="leading" secondItem="Qja-ct-dGu" secondAttribute="leading" id="cRt-Re-mMW"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="8Y1-qg-99B" secondAttribute="leading" constant="22" id="epO-Oe-7n1"/>
+                            <constraint firstItem="Qja-ct-dGu" firstAttribute="top" secondItem="E00-i6-Vsl" secondAttribute="bottom" constant="8" symbolic="YES" id="fRs-W8-t2c"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="baseline" secondItem="wbv-Uw-n74" secondAttribute="baseline" id="fgb-I2-VTp"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="baseline" secondItem="4mj-in-AGf" secondAttribute="baseline" id="get-lL-sKy"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="leading" secondItem="3Dv-gT-Jae" secondAttribute="leading" id="hDv-zd-cSN"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="leading" secondItem="dlY-Sa-DfD" secondAttribute="leading" id="hXh-ae-Gkf"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="top" secondItem="kOH-5v-H8G" secondAttribute="bottom" constant="8" symbolic="YES" id="i9E-HX-xxG"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="top" secondItem="yiE-wD-9eP" secondAttribute="bottom" constant="8" symbolic="YES" id="igZ-XR-LYC"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="wbv-Uw-n74" secondAttribute="leading" id="j2l-UO-UyR"/>
+                            <constraint firstItem="NfQ-CG-a3J" firstAttribute="centerX" secondItem="8Y1-qg-99B" secondAttribute="centerX" id="jli-8I-LzU"/>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="leading" secondItem="E00-i6-Vsl" secondAttribute="leading" id="mOn-xl-4HL"/>
+                            <constraint firstItem="qOT-F7-RTk" firstAttribute="trailing" secondItem="Qja-ct-dGu" secondAttribute="trailing" id="tAI-6N-QDP"/>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="top" secondItem="dlY-Sa-DfD" secondAttribute="bottom" constant="8" symbolic="YES" id="xn1-5S-X0T"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="driveFormat" destination="wbv-Uw-n74" id="j24-XY-7n0"/>
+                        <outlet property="driveName" destination="bbf-2M-Bbm" id="RZj-dq-J8r"/>
+                        <outlet property="drivePath" destination="qOT-F7-RTk" id="A2j-Lu-hza"/>
+                        <outlet property="driveSize" destination="4mj-in-AGf" id="wZw-eh-HWN"/>
+                        <outlet property="infoView" destination="AMt-oY-ZGj" id="i5L-2t-TPz"/>
+                    </connections>
+                </viewController>
+                <customObject id="CTy-I5-vti" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2275.5" y="-1917"/>
         </scene>
         <!--New Disk View Controller-->
         <scene sceneID="CDp-5y-AbP">
@@ -792,6 +984,7 @@ Gw
                         <outlet property="diskSizeSlider" destination="Mha-0i-Cbl" id="HBp-jE-r2K"/>
                         <outlet property="diskSizeStepper" destination="akO-hG-CqH" id="Tk6-0a-EiM"/>
                         <outlet property="diskSizeTextField" destination="0D0-8B-khC" id="lx4-8g-Ne3"/>
+                        <outlet property="okButton" destination="2gj-pF-841" id="byu-0A-5md"/>
                         <outlet property="useCow" destination="3fZ-xR-idW" id="jXm-nP-0Gb"/>
                     </connections>
                 </viewController>
@@ -961,11 +1154,12 @@ Gw
         <segue reference="khb-Sj-yFs"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="HD Icon" width="25" height="25"/>
         <image name="NSAddTemplate" width="15" height="13"/>
-        <image name="NSCaution" width="32" height="32"/>
         <image name="cpu" catalog="system" width="18" height="16"/>
         <image name="folder.fill" catalog="system" width="19" height="14"/>
         <image name="gear" catalog="system" width="17" height="17"/>
+        <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="plus.app.fill" catalog="system" width="16" height="14"/>
         <image name="rays" catalog="system" width="16" height="16"/>
         <image name="square.and.pencil" catalog="system" width="16" height="15"/>

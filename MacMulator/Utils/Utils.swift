@@ -11,6 +11,7 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
+    static let IMAGE_TYPES  = ["img", "iso", "cdr"];
     
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();
@@ -119,8 +120,9 @@ class Utils {
         let formatted: String = formatter.string(from: value as NSNumber) ?? "n/a";
         return formatted + " GB";
     }
-    
-    static func getExtension(_ format: String) -> String {
-        return format == QemuConstants.FORMAT_RAW ? QemuConstants.EXTENSION_ISO : QemuConstants.EXTENSION_QCOW2;
+        
+    static func getParentDir(_ path: String) -> String {
+        guard let lastSlash = path.lastIndex(where: { char in char == "/"}) else { return path };
+        return path.substring(to: lastSlash);
     }
 }

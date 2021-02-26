@@ -13,7 +13,10 @@ class QemuConstants {
     
     static let MEDIATYPE_DISK = "disk";
     static let MEDIATYPE_CDROM = "cdrom";
+    
     static let IMAGE_CMD_CREATE = "create";
+    static let IMAGE_CMD_INFO = "info";
+    
     static let FORMAT_QCOW2 = "qcow2";
     static let FORMAT_RAW = "raw";
     static let EXTENSION_ISO = ".iso";

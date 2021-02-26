@@ -9,6 +9,14 @@ import Foundation
 
 class QemuUtils {
     
+    static func getExtension(_ format: String) -> String {
+        return format == QemuConstants.FORMAT_RAW ? QemuConstants.EXTENSION_ISO : QemuConstants.EXTENSION_QCOW2;
+    }
+    
+    static func getDriveFormatDescription(_ format: String) -> String {
+        return format == QemuConstants.FORMAT_RAW ? "(Plain data)" : "(Qemu Copy On Write format)"
+    }
+    
     static func createDiskImage(path: String, virtualDrive: VirtualDrive) {
         let qemuPath = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
         let shell = Shell();
@@ -21,9 +29,24 @@ class QemuUtils {
                 .withFormat(virtualDrive.format)
                 .withSize(virtualDrive.size)
                 .withName(virtualDrive.name)
-                .withExtension(Utils.getExtension(virtualDrive.format))
+                .withExtension(getExtension(virtualDrive.format))
                 .build();
         shell.runCommand(command);
     }
     
+    static func updateDiskImage(_ virtualDrive: VirtualDrive) {
+        
+    }
+    
+    static func getDiskImageInfo(_ virtualDrive: VirtualDrive) -> String {
+        let qemuPath = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
+        let shell = Shell();
+
+        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+            .withCommand(QemuConstants.IMAGE_CMD_INFO)
+            .withName(virtualDrive.path)
+            .build();
+        
+        return shell.runCommand(command);
+    }
 }
