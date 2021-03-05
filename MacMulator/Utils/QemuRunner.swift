@@ -57,18 +57,22 @@ class QemuRunner {
     }
         
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
-        let bootOrder:[String] = vm.bootOrder;
-        for bootOption in bootOrder {
-            if (bootOption == QemuConstants.CD) {
-                if searchForDrive(vm, QemuConstants.MEDIATYPE_CDROM) {
-                    return QemuConstants.ARG_CD;
+        
+        if vm.qemuBootLoader {
+            return QemuConstants.ARG_BOOTLOADER;
+        }
+        
+        for drive in vm.drives {
+            if drive.isBootDrive          {
+                if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
+                    return QemuConstants.ARG_HD
                 }
-            } else if (bootOption == QemuConstants.HD) {
-                if searchForDrive(vm, QemuConstants.MEDIATYPE_DISK) {
-                    return QemuConstants.ARG_HD;
+                if drive.mediaType == QemuConstants.MEDIATYPE_CDROM {
+                    return QemuConstants.ARG_CD;
                 }
             }
         }
+         
         return QemuConstants.ARG_NET;
     }
     

@@ -76,8 +76,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if let virtualMachine = self.virtualMachine {
             if (segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE) {
-                let diskName = "disk-" + String(virtualMachine.drives.count);
-                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: 250);
+                let diskName = QemuConstants.MEDIATYPE_DISK + "-" + String(virtualMachine.drives.count);
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: 256);
                 
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);
@@ -98,6 +98,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func addVirtualDrive(_ virtualDrive: VirtualDrive) {
         virtualMachine?.drives.append(virtualDrive);
+        reloadDrives();
+    }
+    
+    func reloadDrives() {
         self.drivesTableView.reloadData();
     }
     
@@ -178,15 +182,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             }
         }
         
+        if tableColumn?.identifier.rawValue == "Name" {
+            let cellView = cell as! DrivesTableDriveNameCell;
+            cellView.label.stringValue = virtualMachine?.drives[row].name ?? "";
+        }
+        
         if tableColumn?.identifier.rawValue == "Type" {
             let cellView = cell as! DrivesTableDriveTypeCell;
-            
-            if virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_DISK {
-                cellView.label.stringValue = QemuConstants.HD;
-            }
-            if virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_CDROM {
-                cellView.label.stringValue = QemuConstants.CD;
-            }
+            cellView.label.stringValue = QemuUtils.getDriveTypeDescription(virtualMachine?.drives[row].mediaType ?? "");
         }
         
         if tableColumn?.identifier.rawValue == "Size" {
@@ -226,33 +229,23 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if let path = panel.url?.path {
                 if let virtualMachine = self.virtualMachine {
                     
-                    var exists = false;
                     for virtualDrive in virtualMachine.drives {
-                        if virtualDrive.mediaType == QemuConstants.MEDIATYPE_CDROM {
-                            exists = true;
-                            Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You already have a CD Drive configutred in your VM. You can only have one. Do you want to replace it with the image located at " + path + "?", completionHandler: { response in
-                                    if response.rawValue == Utils.ALERT_RESP_OK {
-                                        virtualDrive.path = path;
-                                        virtualMachine.writeToPlist();
-                                        self.drivesTableView.reloadData();
-                                        return;
-                                    }
-                            })
+                        if virtualDrive.mediaType == QemuConstants.MEDIATYPE_CDROM && virtualDrive.path == path {
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "You already have configured image at path " + path + " to be loaded as a virtual CD/DVD drive.");
+                            return;
                         }
                     }
                     
-                    if !exists {
-                        // no existing CD drive found
-                        let virtualCD = VirtualDrive(
-                            path: path,
-                            name: QemuConstants.MEDIATYPE_CDROM + "-0",
-                            format: QemuConstants.FORMAT_RAW,
-                            mediaType: QemuConstants.MEDIATYPE_CDROM,
-                            size: 0);
-                        virtualMachine.addVirtualDrive(virtualCD);
-                        virtualMachine.writeToPlist();
-                        drivesTableView.reloadData();
-                    }
+                    // no existing CD drive found
+                    let virtualCD = VirtualDrive(
+                        path: path,
+                        name: QemuConstants.MEDIATYPE_CDROM + "-" + String(virtualMachine.drives.count),
+                        format: QemuConstants.FORMAT_RAW,
+                        mediaType: QemuConstants.MEDIATYPE_CDROM,
+                        size: 0);
+                    virtualMachine.addVirtualDrive(virtualCD);
+                    virtualMachine.writeToPlist();
+                    drivesTableView.reloadData();
                 }
             }
         })

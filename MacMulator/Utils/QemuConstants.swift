@@ -31,6 +31,7 @@ class QemuConstants {
     static let ARG_CD = "d";
     static let ARG_HD = "c";
     static let ARG_NET = "n";
+    static let ARG_BOOTLOADER = "menu=on";
     
     static let OS_MAC = "macOS";
     static let OS_WIN = "Windows";

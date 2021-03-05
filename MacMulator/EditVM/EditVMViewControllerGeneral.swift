@@ -42,6 +42,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet weak var bootOrderTable: NSTableView!
     @IBOutlet weak var resolutionTable: NSTableView!
+    @IBOutlet weak var qemuBootloaderCheck: NSButton!
     
     var virtualMachine: VirtualMachine?;
     let accountPasteboardType = NSPasteboard.PasteboardType.string;
@@ -55,26 +56,37 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         updateView();
     }
     
+    fileprivate func selectBootDrive(_ virtualMachine: VirtualMachine) {
+        var i = 0;
+        for drive in virtualMachine.drives {
+            if drive.isBootDrive {
+                bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false);
+                return;
+            }
+            i += 1;
+        }
+        bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false);
+    }
+    
     func updateView() {
         if let virtualMachine = self.virtualMachine {
             vmType.selectItem(at: supportedVMTypes.firstIndex(of: virtualMachine.os)!);
             vmName.stringValue = virtualMachine.displayName;
             vmDescription.string = virtualMachine.description ?? "";
+            qemuBootloaderCheck.state = virtualMachine.qemuBootLoader ? NSButton.StateValue.on : NSButton.StateValue.off;
+            
             let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution)!
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false);
-            resolutionTable.scrollRowToVisible((-1 * (rowIndex.distance(to: 0))) + 2);
+            
             bootOrderTable.reloadData();
+            selectBootDrive(virtualMachine);
+            
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bootOrderTable.registerForDraggedTypes([accountPasteboardType]);
-    }
-    
+
     func numberOfRows(in tableView: NSTableView) -> Int {
         if tableView == bootOrderTable {
-            return virtualMachine?.bootOrder.count ?? 0;
+            return (virtualMachine?.drives.count ?? 0) + 1;
         }
         if tableView == resolutionTable {
             return supportedResolutions.count;
@@ -83,57 +95,43 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self);
-        if tableView == bootOrderTable {
-            cell?.addSubview(NSTextField(labelWithString: virtualMachine?.bootOrder[row] ?? ""));
+        let cell = NSView();
+
+        if let virtualMachine = self.virtualMachine {
+            if tableView == bootOrderTable {
+                let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, row));
+                cell.addSubview(view);
+                if (virtualMachine.qemuBootLoader) {
+                    view.textColor = NSColor.gray;
+                } else {
+                    view.textColor = NSColor.labelColor;
+                }
+            }
         }
+        
         if tableView == resolutionTable {
-            cell?.addSubview(NSTextField(labelWithString: supportedResolutions[QemuConstants.ALL_RESOLUTIONS[row]]!));
+            cell.addSubview(NSTextField(labelWithString: supportedResolutions[QemuConstants.ALL_RESOLUTIONS[row]]!));
         }
+        
         return cell;
     }
     
-    func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
-        guard let opt = virtualMachine?.bootOrder[row] else { return nil };
-        let pasteboardItem = NSPasteboardItem()
-        pasteboardItem.setString(opt, forType: accountPasteboardType)
-        return pasteboardItem
-    }
-    
-    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
-        if dropOperation == .above {
-            return .move
+    fileprivate func getDriveDescription(_ vm: VirtualMachine, _ row: Int) -> String {
+        if row == vm.drives.count {
+            return "Network"
         } else {
-            return []
+            let drive = vm.drives[row];
+            let type = QemuUtils.getDriveTypeDescription(drive.mediaType);
+            let descr = " (" + type + (drive.size > 0 ? (" " + String(drive.size) + " GB)") : ")")
+            return drive.name + descr;
         }
     }
     
-    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
-        guard
-            let item: NSPasteboardItem = info.draggingPasteboard.pasteboardItems?.first,
-            let value: String = item.string(forType: accountPasteboardType),
-            let option: String = virtualMachine?.bootOrder.first(where: { $0 == value }),
-            let originalRow: Int = virtualMachine?.bootOrder.firstIndex(of: option)
-        else { return false }
-        
-        var newRow:Int = row;
-        if originalRow < newRow {
-            newRow = row - 1
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        if tableView == bootOrderTable {
+            return !(virtualMachine?.qemuBootLoader ?? true);
         }
-        
-        // Animate the rows
-        tableView.beginUpdates()
-        tableView.moveRow(at: originalRow, to: newRow)
-        tableView.endUpdates()
-        
-        if let virtualMachine = self.virtualMachine {
-            let originalValue = virtualMachine.bootOrder[originalRow];
-            let newValue = virtualMachine.bootOrder[newRow];
-            virtualMachine.bootOrder[newRow] = originalValue;
-            virtualMachine.bootOrder[originalRow] = newValue;
-        }
-        
-        return true
+        return true;
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -161,9 +159,29 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
+        if ((notification.object as! NSTableView) == bootOrderTable) {
+            if let virtualMachine = self.virtualMachine {
+                let row = bootOrderTable.selectedRow;
+                var i = 0;
+                for drive in virtualMachine.drives {
+                    if row == i {
+                        drive.setBootDrive(true);
+                    } else {
+                        drive.setBootDrive(false);
+                    }
+                    i += 1;
+                }
+            }
+            
+        }
         if ((notification.object as! NSTableView) == resolutionTable) {
             virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow];
         }
+    }
+    
+    @IBAction func qemuBootLoaderCheck(_ sender: Any) {
+        virtualMachine?.qemuBootLoader = (self.qemuBootloaderCheck.state == NSButton.StateValue.on);
+        self.bootOrderTable.reloadData();
     }
 }
 

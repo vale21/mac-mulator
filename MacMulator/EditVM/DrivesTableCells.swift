@@ -11,6 +11,10 @@ class DrivesTableIconCell: NSTableCellView {
     @IBOutlet weak var icon: NSImageView!
 }
 
+class DrivesTableDriveNameCell: NSTableCellView {
+    @IBOutlet weak var label: NSTextField!
+}
+
 class DrivesTableDriveTypeCell: NSTableCellView {
     @IBOutlet weak var label: NSTextField!
 }

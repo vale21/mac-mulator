@@ -17,6 +17,10 @@ class QemuUtils {
         return format == QemuConstants.FORMAT_RAW ? "(Plain data)" : "(Qemu Copy On Write format)"
     }
     
+    static func getDriveTypeDescription(_ driveType: String) -> String {
+        return driveType == QemuConstants.MEDIATYPE_CDROM ? QemuConstants.CD : QemuConstants.HD;
+    }
+    
     static func createDiskImage(path: String, virtualDrive: VirtualDrive) {
         let qemuPath = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
         let shell = Shell();
@@ -49,4 +53,6 @@ class QemuUtils {
         
         return shell.runCommand(command);
     }
+    
+    
 }

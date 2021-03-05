@@ -138,7 +138,7 @@ class NewVMViewController: NSViewController {
         let path = self.path.stringValue;
         let fullPath = path + "/" + Utils.escape(self.name.stringValue) + "." + MacMulatorConstants.VM_EXTENSION;
         
-        let virtualMachine = VirtualMachine(os: QemuConstants.OS_MAC, architecture: QemuConstants.ARCH_PPC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: QemuConstants.RES_1024_768, bootOrder: [QemuConstants.CD, QemuConstants.HD, QemuConstants.NET]);
+        let virtualMachine = VirtualMachine(os: QemuConstants.OS_MAC, architecture: QemuConstants.ARCH_PPC, path: fullPath, displayName: self.name.stringValue, description: nil, memory: self.memorySize, displayResolution: QemuConstants.RES_1024_768, qemuBootloader: false);
         
         if (self.installMedia != "") {
             let virtualCD = VirtualDrive(
@@ -147,6 +147,7 @@ class NewVMViewController: NSViewController {
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_CDROM,
                 size: 0);
+            virtualCD.setBootDrive(true);
             virtualMachine.addVirtualDrive(virtualCD);
         }
         

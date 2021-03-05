@@ -17,12 +17,12 @@ class VirtualMachine: Codable, Hashable {
     var cpus: Int;
     var memory: Int32;
     var displayResolution: String;
-    var bootOrder: [String];
+    var qemuBootLoader: Bool;
     var drives: [VirtualDrive];
     var qemuPath: String?;
     var qemuCommand: String?;
     
-    init(os: String, architecture: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, bootOrder: [String]) {
+    init(os: String, architecture: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, qemuBootloader: Bool) {
         self.os = os;
         self.architecture = architecture;
         self.path = path;
@@ -30,7 +30,7 @@ class VirtualMachine: Codable, Hashable {
         self.memory = memory;
         self.cpus = 1;
         self.displayResolution = displayResolution;
-        self.bootOrder = bootOrder;
+        self.qemuBootLoader = qemuBootloader;
         self.drives = [];
     }
     

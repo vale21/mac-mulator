@@ -14,6 +14,7 @@ class VirtualDrive: Codable {
     var format: String;
     var mediaType: String;
     var size: Int32;
+    var isBootDrive: Bool;
 
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
         self.path = path;
@@ -21,5 +22,10 @@ class VirtualDrive: Codable {
         self.format = format;
         self.mediaType = mediaType;
         self.size = size;
+        self.isBootDrive = false;
+    }
+    
+    func setBootDrive(_ bootDrive: Bool) {
+        self.isBootDrive = bootDrive;
     }
 }

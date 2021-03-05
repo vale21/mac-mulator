@@ -52,9 +52,9 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBAction func sliderChanged(_ sender: Any) {
         if (sender as? NSObject == diskSizeSlider) {
             if let virtualDrive = self.virtualDrive {
-                virtualDrive.size = diskSizeSlider.intValue
-                diskSizeTextField.stringValue = String(virtualDrive.size);
-                diskSizeStepper.intValue = virtualDrive.size;
+                virtualDrive.size = diskSizeSlider.intValue;
+                diskSizeTextField.intValue = diskSizeSlider.intValue;
+                diskSizeStepper.intValue = diskSizeSlider.intValue;
             }
         }
     }
@@ -63,8 +63,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         if (sender as? NSObject == diskSizeStepper) {
             if let virtualDrive = self.virtualDrive {
                 virtualDrive.size = diskSizeStepper.intValue
-                diskSizeTextField.stringValue = String(virtualDrive.size);
-                diskSizeSlider.intValue = virtualDrive.size;
+                diskSizeTextField.intValue = diskSizeStepper.intValue;
+                diskSizeSlider.intValue = diskSizeStepper.intValue;
             }
         }
     }
@@ -73,8 +73,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         if let virtualDrive = self.virtualDrive {
             diskSizeSlider.intValue = virtualDrive.size;
             diskSizeStepper.intValue = virtualDrive.size;
-            diskSizeTextField.stringValue = String(virtualDrive.size);
-            
+            diskSizeTextField.intValue = virtualDrive.size
+
             if (virtualDrive.format == QemuConstants.FORMAT_QCOW2) {
                 useCow.intValue = 1;
             } else {
@@ -89,27 +89,28 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     
     override func viewDidDisappear() {
         isVisible = false;
-        
-        diskSizeSlider.intValue = 0;
-        diskSizeSlider.intValue = 0;
-        diskSizeTextField.stringValue = "";
-        diskSizeTextField.abortEditing();
+    }
+    
+    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
+        if control == diskSizeTextField {
+            let size = diskSizeTextField.intValue;
+            if (size >= 1 && size <= 2000) {
+                return true;
+            }
+        }
+        return false;
     }
     
     func controlTextDidEndEditing(_ notification: Notification) {
         if (notification.object as! NSTextField) == diskSizeTextField && self.isVisible {
             if let virtualDrive = self.virtualDrive {
-                let size = diskSizeTextField.stringValue;
-                let size_num = Utils.toInt32WithAutoLocale(size);
-                if let driveSize = size_num {
-                    virtualDrive.size = driveSize;
-                    diskSizeStepper.intValue = virtualDrive.size;
-                    diskSizeSlider.intValue = virtualDrive.size;
-                }
+                virtualDrive.size = diskSizeTextField.intValue;
+                diskSizeStepper.intValue = diskSizeTextField.intValue;
+                diskSizeSlider.intValue = diskSizeTextField.intValue;
             }
         }
     }
-    
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if (segue.identifier == MacMulatorConstants.CREATE_DISK_FILE_SEGUE) {
             if let virtualDrive = self.virtualDrive {
@@ -124,6 +125,9 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         if let virtualDrive = self.virtualDrive {
             if mode == Mode.ADD {
                 parentController?.addVirtualDrive(virtualDrive);
+            }
+            else {
+                parentController?.reloadDrives();
             }
         }
         self.dismiss(self);
