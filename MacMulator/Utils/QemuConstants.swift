@@ -16,11 +16,11 @@ class QemuConstants {
     
     static let IMAGE_CMD_CREATE = "create";
     static let IMAGE_CMD_INFO = "info";
+    static let IMAGE_CMD_RESIZE = "resize";
+    static let IMAGE_CMD_CONVERT = "convert";
     
     static let FORMAT_QCOW2 = "qcow2";
     static let FORMAT_RAW = "raw";
-    static let EXTENSION_ISO = ".iso";
-    static let EXTENSION_QCOW2 = ".qcow2";
     
     // Virtual Machine constants
     

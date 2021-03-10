@@ -27,33 +27,45 @@ class QemuRunner {
     }
     
     func getQemuCommand() -> String {
-        var builder: QemuCommandBuilder =
-            QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath as! String : qemuPath, architecture: virtualMachine.architecture)
-            .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
-            .withMemory(virtualMachine.memory)
-            .withGraphics(virtualMachine.displayResolution)
-            .withAutoBoot(true)
-            .withVgaEnabled(true);
-            
-        for drive in virtualMachine.drives {
-            if (driveExists(drive)) {
-                builder = builder.withDrive(file: drive.path, format: drive.format, media: drive.mediaType);
-            } else {
-                Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
-                                    response in if response.rawValue == Utils.ALERT_RESP_OK {
-                                        self.virtualMachine.drives.remove(at: self.virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
-                                        self.virtualMachine.writeToPlist();
-                                    }});
+        if let command = virtualMachine.qemuCommand {
+            return command;
+        } else {
+            var builder: QemuCommandBuilder =
+                QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath as! String : qemuPath, architecture: virtualMachine.architecture)
+                .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
+                .withCpus(virtualMachine.cpus)
+                .withBootArg(computeBootArg(virtualMachine))
+                .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
+                .withMemory(virtualMachine.memory)
+                .withGraphics(virtualMachine.displayResolution)
+                .withAutoBoot(true)
+                .withVgaEnabled(true);
+                
+            var index = 1;
+            for drive in virtualMachine.drives {
+                if (driveExists(drive)) {
+                    
+                    var driveIndex = 0;
+                    if !drive.isBootDrive {
+                        driveIndex = index;
+                        index += 1;
+                    }
+                    
+                    builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: drive.mediaType);
+                } else {
+                    Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
+                                        response in if response.rawValue == Utils.ALERT_RESP_OK {
+                                            self.virtualMachine.drives.remove(at: self.virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
+                                            self.virtualMachine.writeToPlist();
+                                        }});
+                }
             }
+            
+            builder = builder
+                .withNetwork(name: "network-0", device: QemuConstants.NetworkTypes.Sungem.rawValue)
+                .withManagementPort(listenPort);
+            return builder.build();
         }
-        
-        builder = builder
-            .withNetwork(name: "network-0", device: QemuConstants.NetworkTypes.Sungem.rawValue)
-            .withManagementPort(listenPort);
-        return builder.build();
     }
         
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {

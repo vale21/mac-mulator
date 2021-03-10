@@ -13,9 +13,12 @@ class QemuImgCommandBuilder {
     var executable: String = "qemu-img";
     var command: String?;
     var format: String?;
+    var targetFormat: String?;
     var size: Int32?;
     var name: String?;
-    var ext: String?;
+    var targetName: String?;
+    var shrinkArg: Bool?;
+    var shortSize: Int32?;
     
     init(qemuPath: String) {
         self.qemuPath = qemuPath;
@@ -31,6 +34,11 @@ class QemuImgCommandBuilder {
         return self;
     }
     
+    func withTargetFormat(_ targetFormat: String) -> QemuImgCommandBuilder {
+        self.targetFormat = targetFormat;
+        return self;
+    }
+    
     func withSize(_ size: Int32) -> QemuImgCommandBuilder {
         self.size = size;
         return self;
@@ -41,8 +49,18 @@ class QemuImgCommandBuilder {
         return self;
     }
     
-    func withExtension(_ ext: String) -> QemuImgCommandBuilder {
-        self.ext = ext;
+    func withTargetName(_ targetName: String) -> QemuImgCommandBuilder {
+        self.targetName = targetName;
+        return self;
+    }
+    
+    func withShrinkArg(_ shrinkArg: Bool) -> QemuImgCommandBuilder {
+        self.shrinkArg = shrinkArg;
+        return self;
+    }
+    
+    func withShortSize(_ shortSize: Int32) -> QemuImgCommandBuilder {
+        self.shortSize = shortSize;
         return self;
     }
     
@@ -54,14 +72,23 @@ class QemuImgCommandBuilder {
         if let format = self.format {
             cmd += " -f " + format;
         }
+        if let targetFormat = self.targetFormat {
+            cmd += " -O " + targetFormat;
+        }
         if let size = self.size {
             cmd += " -o size=" + String(size) + "G";
         }
         if let name = self.name {
             cmd += " " + name;
         }
-        if let ext = self.ext {
-            cmd += ext;
+        if let targetName = self.targetName {
+            cmd += " " + targetName;
+        }
+        if let shrinkArg = self.shrinkArg {
+            cmd += shrinkArg ? " --shrink" : "";
+        }
+        if let shortSize = self.shortSize {
+            cmd += " " + String(shortSize) + "G";
         }
         
         return cmd;

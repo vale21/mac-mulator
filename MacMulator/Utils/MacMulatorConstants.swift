@@ -10,6 +10,7 @@ import Foundation
 class MacMulatorConstants {
     
     static let VM_EXTENSION = "qvm";
+    static let DISK_EXTENSION = "qvd";
     static let INFO_PLIST = "Info.plist";
     static let NEW_VM_SEGUE = "newVMSegue";
     static let EDIT_VM_SEGUE = "editVMSegue";

@@ -107,7 +107,7 @@
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kEK-er-2EU">
                                 <rect key="frame" x="113" y="347" width="156" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="153" id="YgE-5B-3qc"/>
+                                    <constraint firstAttribute="width" constant="153" id="aMD-sa-Q70"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="3" id="8Fn-Xo-9Io">
                                     <font key="font" metaFont="system"/>
@@ -175,7 +175,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="fFT-bn-ENt">
-                                                            <rect key="frame" x="8" y="0.0" width="213" height="24"/>
+                                                            <rect key="frame" x="18" y="0.0" width="213" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -245,27 +245,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tWh-eh-KDr">
-                                <rect key="frame" x="111" y="193" width="68" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Boot Drive" id="nL8-XN-BUB">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Iho-nT-HT1">
-                                <rect key="frame" x="111" y="168" width="220" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="218" id="e7O-FM-Dgw"/>
-                                </constraints>
-                                <buttonCell key="cell" type="check" title="Use Qemu Bootloader" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="07w-xD-1ni">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="qemuBootLoaderCheck:" target="67A-Mm-B6X" id="EEz-eg-0xa"/>
-                                </connections>
-                            </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WfX-Lt-Bbq">
                                 <rect key="frame" x="360" y="169" width="114" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Screen Resolution" id="ohb-bM-hsU">
@@ -274,43 +253,48 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tWh-eh-KDr">
+                                <rect key="frame" x="111" y="169" width="68" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Boot Drive" id="nL8-XN-BUB">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="lRI-vi-tcA" secondAttribute="trailing" constant="20" symbolic="YES" id="0ji-jH-LGh"/>
-                            <constraint firstItem="Iho-nT-HT1" firstAttribute="trailing" secondItem="0TR-1I-x22" secondAttribute="trailing" id="2cj-aT-31m"/>
-                            <constraint firstItem="WfX-Lt-Bbq" firstAttribute="leading" secondItem="Iho-nT-HT1" secondAttribute="trailing" constant="31" id="2eD-wc-XDh"/>
-                            <constraint firstItem="tWh-eh-KDr" firstAttribute="top" secondItem="Zue-W3-X0w" secondAttribute="top" constant="181" id="2lv-Vi-adh"/>
-                            <constraint firstItem="tWh-eh-KDr" firstAttribute="leading" secondItem="Iho-nT-HT1" secondAttribute="leading" id="62K-bO-MNC"/>
-                            <constraint firstItem="lRI-vi-tcA" firstAttribute="top" secondItem="kEK-er-2EU" secondAttribute="bottom" constant="15" id="Dvj-fm-WdU"/>
-                            <constraint firstAttribute="bottom" secondItem="0TR-1I-x22" secondAttribute="bottom" constant="20" symbolic="YES" id="Edi-i8-cLB"/>
-                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="bottom" secondItem="kEK-er-2EU" secondAttribute="bottom" id="GxA-E1-NTB"/>
-                            <constraint firstItem="kEK-er-2EU" firstAttribute="leading" secondItem="lRI-vi-tcA" secondAttribute="leading" id="JPg-86-Wcb"/>
-                            <constraint firstItem="0TR-1I-x22" firstAttribute="top" secondItem="Iho-nT-HT1" secondAttribute="bottom" constant="8" symbolic="YES" id="K9p-35-tAZ"/>
-                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="leading" secondItem="q4Z-4h-oHK" secondAttribute="trailing" constant="9" id="KH9-wY-SVo"/>
-                            <constraint firstItem="q4Z-4h-oHK" firstAttribute="top" secondItem="W6i-Xp-m1z" secondAttribute="top" id="LVf-bD-8XR"/>
-                            <constraint firstItem="lRI-vi-tcA" firstAttribute="leading" secondItem="sDH-bT-UFA" secondAttribute="trailing" constant="36" id="MEe-Ig-bzh"/>
-                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="leading" secondItem="sDH-bT-UFA" secondAttribute="leading" id="R0O-R3-O3a"/>
-                            <constraint firstItem="WfX-Lt-Bbq" firstAttribute="leading" secondItem="zrj-nO-9QX" secondAttribute="leading" id="U9P-gG-lj1"/>
-                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="trailing" secondItem="zrj-nO-9QX" secondAttribute="trailing" id="WZU-UZ-BX1"/>
-                            <constraint firstItem="0TR-1I-x22" firstAttribute="top" secondItem="zrj-nO-9QX" secondAttribute="top" id="X2Q-OD-hns"/>
-                            <constraint firstItem="kEK-er-2EU" firstAttribute="top" secondItem="Zue-W3-X0w" secondAttribute="top" constant="20" symbolic="YES" id="aK4-uW-BAL"/>
-                            <constraint firstItem="sDH-bT-UFA" firstAttribute="bottom" secondItem="lRI-vi-tcA" secondAttribute="bottom" id="dgK-Lq-ExR"/>
-                            <constraint firstItem="Iho-nT-HT1" firstAttribute="baseline" secondItem="WfX-Lt-Bbq" secondAttribute="baseline" id="fOX-Ql-ac8"/>
-                            <constraint firstItem="tWh-eh-KDr" firstAttribute="top" secondItem="W6i-Xp-m1z" secondAttribute="bottom" constant="17" id="gos-xt-agU"/>
-                            <constraint firstItem="Iho-nT-HT1" firstAttribute="top" secondItem="tWh-eh-KDr" secondAttribute="bottom" constant="8" symbolic="YES" id="jrd-oi-ZfD"/>
-                            <constraint firstItem="q4Z-4h-oHK" firstAttribute="top" secondItem="sDH-bT-UFA" secondAttribute="bottom" constant="18" id="kiN-ni-w8i"/>
-                            <constraint firstItem="lRI-vi-tcA" firstAttribute="leading" secondItem="W6i-Xp-m1z" secondAttribute="leading" id="o1O-4p-WIs"/>
-                            <constraint firstItem="sDH-bT-UFA" firstAttribute="leading" secondItem="q4Z-4h-oHK" secondAttribute="leading" id="rlD-nJ-OCg"/>
-                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="leading" secondItem="tWh-eh-KDr" secondAttribute="leading" id="vnO-ce-CrK"/>
-                            <constraint firstItem="Iho-nT-HT1" firstAttribute="leading" secondItem="0TR-1I-x22" secondAttribute="leading" id="x72-9I-YA7"/>
-                            <constraint firstItem="0TR-1I-x22" firstAttribute="bottom" secondItem="zrj-nO-9QX" secondAttribute="bottom" id="x9G-07-vNe"/>
-                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="leading" secondItem="Zue-W3-X0w" secondAttribute="leading" constant="20" symbolic="YES" id="zvv-d0-LPz"/>
-                            <constraint firstItem="lRI-vi-tcA" firstAttribute="trailing" secondItem="W6i-Xp-m1z" secondAttribute="trailing" id="zxt-bB-DTr"/>
+                            <constraint firstItem="zrj-nO-9QX" firstAttribute="leading" secondItem="0TR-1I-x22" secondAttribute="trailing" constant="31" id="1Sv-jc-vdP"/>
+                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="leading" secondItem="tWh-eh-KDr" secondAttribute="leading" id="46m-r6-1yv"/>
+                            <constraint firstItem="0TR-1I-x22" firstAttribute="top" secondItem="zrj-nO-9QX" secondAttribute="top" id="4Ug-0y-0m2"/>
+                            <constraint firstItem="0TR-1I-x22" firstAttribute="top" secondItem="Zue-W3-X0w" secondAttribute="top" constant="229" id="7bo-wz-yap"/>
+                            <constraint firstItem="tWh-eh-KDr" firstAttribute="leading" secondItem="0TR-1I-x22" secondAttribute="leading" id="8V4-nf-eNR"/>
+                            <constraint firstItem="zrj-nO-9QX" firstAttribute="leading" secondItem="Zue-W3-X0w" secondAttribute="leading" constant="362" id="FqT-He-lT3"/>
+                            <constraint firstItem="lRI-vi-tcA" firstAttribute="leading" secondItem="W6i-Xp-m1z" secondAttribute="leading" id="GUk-CU-OXD"/>
+                            <constraint firstItem="kEK-er-2EU" firstAttribute="leading" secondItem="lRI-vi-tcA" secondAttribute="leading" id="IEi-72-BA8"/>
+                            <constraint firstItem="0TR-1I-x22" firstAttribute="bottom" secondItem="zrj-nO-9QX" secondAttribute="bottom" id="ISh-V8-HP1"/>
+                            <constraint firstItem="lRI-vi-tcA" firstAttribute="leading" secondItem="sDH-bT-UFA" secondAttribute="trailing" constant="36" id="MMM-WN-Bh7"/>
+                            <constraint firstItem="lRI-vi-tcA" firstAttribute="trailing" secondItem="W6i-Xp-m1z" secondAttribute="trailing" id="Mb7-th-GTB"/>
+                            <constraint firstItem="0TR-1I-x22" firstAttribute="top" secondItem="tWh-eh-KDr" secondAttribute="bottom" constant="8" symbolic="YES" id="Nci-7K-yGd"/>
+                            <constraint firstAttribute="trailing" secondItem="lRI-vi-tcA" secondAttribute="trailing" constant="20" symbolic="YES" id="OdM-6W-QJ6"/>
+                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="leading" secondItem="q4Z-4h-oHK" secondAttribute="trailing" constant="9" id="OwC-eC-15q"/>
+                            <constraint firstItem="kEK-er-2EU" firstAttribute="top" secondItem="Zue-W3-X0w" secondAttribute="top" constant="20" symbolic="YES" id="S3c-oS-FVS"/>
+                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="leading" secondItem="sDH-bT-UFA" secondAttribute="leading" id="SyG-oB-6He"/>
+                            <constraint firstItem="sDH-bT-UFA" firstAttribute="bottom" secondItem="lRI-vi-tcA" secondAttribute="bottom" id="V6d-dK-r7t"/>
+                            <constraint firstItem="tWh-eh-KDr" firstAttribute="top" secondItem="W6i-Xp-m1z" secondAttribute="bottom" constant="41" id="Vkc-AM-eZS"/>
+                            <constraint firstAttribute="bottom" secondItem="0TR-1I-x22" secondAttribute="bottom" constant="20" symbolic="YES" id="Vwl-EW-oFz"/>
+                            <constraint firstItem="tWh-eh-KDr" firstAttribute="baseline" secondItem="WfX-Lt-Bbq" secondAttribute="baseline" id="cVK-KY-PRK"/>
+                            <constraint firstItem="lRI-vi-tcA" firstAttribute="top" secondItem="kEK-er-2EU" secondAttribute="bottom" constant="15" id="cgi-8T-NLI"/>
+                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="leading" secondItem="Zue-W3-X0w" secondAttribute="leading" constant="20" symbolic="YES" id="h38-37-Lyn"/>
+                            <constraint firstItem="q4Z-4h-oHK" firstAttribute="top" secondItem="sDH-bT-UFA" secondAttribute="bottom" constant="18" id="hTh-mu-2RQ"/>
+                            <constraint firstItem="sDH-bT-UFA" firstAttribute="leading" secondItem="q4Z-4h-oHK" secondAttribute="leading" id="nTO-TU-ouF"/>
+                            <constraint firstItem="W6i-Xp-m1z" firstAttribute="trailing" secondItem="zrj-nO-9QX" secondAttribute="trailing" id="op9-nu-DjV"/>
+                            <constraint firstItem="q4Z-4h-oHK" firstAttribute="top" secondItem="W6i-Xp-m1z" secondAttribute="top" id="pNj-v9-G9M"/>
+                            <constraint firstItem="WfX-Lt-Bbq" firstAttribute="leading" secondItem="zrj-nO-9QX" secondAttribute="leading" id="tVz-8w-gpJ"/>
+                            <constraint firstItem="Ncg-hL-CsH" firstAttribute="bottom" secondItem="kEK-er-2EU" secondAttribute="bottom" id="zof-J1-Dtp"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="bootOrderTable" destination="Avq-va-yuz" id="N47-oD-QaB"/>
-                        <outlet property="qemuBootloaderCheck" destination="Iho-nT-HT1" id="k6A-29-V9W"/>
                         <outlet property="resolutionTable" destination="4ds-iT-Rsu" id="Tnw-rL-kQc"/>
                         <outlet property="vmDescription" destination="6NK-mS-sgm" id="xis-a6-Y1F"/>
                         <outlet property="vmName" destination="lRI-vi-tcA" id="RGE-aQ-hr9"/>
@@ -415,7 +399,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="9GC-5d-VQE" customClass="DrivesTableIconCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="8" y="0.0" width="28" height="30"/>
+                                                            <rect key="frame" x="18" y="0.0" width="28" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h56-AJ-mfz">
@@ -443,7 +427,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="KhP-eW-AEL" customClass="DrivesTableDriveNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="53" y="0.0" width="67" height="30"/>
+                                                            <rect key="frame" x="63" y="0.0" width="67" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WiN-RH-B9g">
@@ -476,7 +460,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Hcs-08-TrM" customClass="DrivesTableDriveTypeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="137" y="0.0" width="69" height="30"/>
+                                                            <rect key="frame" x="147" y="0.0" width="69" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ckm-MX-63N">
@@ -508,7 +492,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="223" y="0.0" width="52" height="30"/>
+                                                            <rect key="frame" x="233" y="0.0" width="52" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -540,7 +524,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="292" y="0.0" width="160" height="30"/>
+                                                            <rect key="frame" x="302" y="0.0" width="160" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CBk-hq-ylm">
@@ -576,7 +560,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="469" y="0.0" width="87" height="30"/>
+                                                            <rect key="frame" x="479" y="0.0" width="87" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -912,9 +896,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RsM-HF-gGy">
-                                <rect key="frame" x="159" y="200" width="126" height="21"/>
+                                <rect key="frame" x="18" y="200" width="408" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Create new disk" id="Vrn-mM-2tu">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Create new disk" id="Vrn-mM-2tu">
                                     <font key="font" textStyle="title2" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1031,6 +1015,7 @@ Gw
                         <outlet property="diskSizeStepper" destination="fCN-Je-KJo" id="c8a-vV-QOI"/>
                         <outlet property="diskSizeTextField" destination="aEd-ol-QxY" id="ThD-dI-BIo"/>
                         <outlet property="okButton" destination="2gj-pF-841" id="byu-0A-5md"/>
+                        <outlet property="titleField" destination="RsM-HF-gGy" id="1wy-L5-1mo"/>
                         <outlet property="useCow" destination="3fZ-xR-idW" id="jXm-nP-0Gb"/>
                     </connections>
                 </viewController>

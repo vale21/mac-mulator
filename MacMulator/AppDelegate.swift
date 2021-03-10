@@ -18,7 +18,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: ["qvm"], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
     }
     
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
@@ -110,7 +110,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     fileprivate func performSanityCheck(_ filename: String) -> Bool{
-        if (filename.hasSuffix(".qvm")) {
+        if (filename.hasSuffix("." + MacMulatorConstants.VM_EXTENSION)) {
             
             let fileManager = FileManager.default;
             do {

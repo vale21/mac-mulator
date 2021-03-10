@@ -11,11 +11,16 @@ class CreateDiskFileViewController: NSViewController {
     
     @IBOutlet weak var progressBar: NSProgressIndicator!
     
-    var virtualDrive: VirtualDrive?
+    var oldVirtualDrive: VirtualDrive?
+    var newVirtualDrive: VirtualDrive?
     var parentController: NewDiskViewController?;
     
-    func setVirtualDrive(_ virtualDrive: VirtualDrive) {
-        self.virtualDrive = virtualDrive;
+    func setOldVirtualDrive(_ virtualDrive: VirtualDrive?) {
+        self.oldVirtualDrive = virtualDrive;
+    }
+    
+    func setNewVirtualDrive(_ virtualDrive: VirtualDrive?) {
+        self.newVirtualDrive = virtualDrive;
     }
     
     func setparentController(_ parentController: NewDiskViewController) {
@@ -25,16 +30,16 @@ class CreateDiskFileViewController: NSViewController {
     override func viewDidAppear() {
         progressBar.startAnimation(self);
         
-        if let virtualDrive = self.virtualDrive {
+        if let newVirtualDrive = self.newVirtualDrive {
             var complete = false;
             
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background);
             dispatchQueue.async {
                 if (self.parentController?.mode == NewDiskViewController.Mode.ADD) {
-                    QemuUtils.createDiskImage(path: virtualDrive.path, virtualDrive: virtualDrive);
-                    virtualDrive.path = Utils.escape(virtualDrive.path + "/" + virtualDrive.name + QemuUtils.getExtension(virtualDrive.format));
+                    QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive);
+                    newVirtualDrive.path = Utils.escape(newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION);
                 } else {
-                    QemuUtils.updateDiskImage(virtualDrive);
+                    QemuUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive);
                 }
                 complete = true;
             }

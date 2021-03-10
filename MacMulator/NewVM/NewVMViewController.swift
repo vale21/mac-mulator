@@ -152,7 +152,7 @@ class NewVMViewController: NSViewController {
         }
         
         let virtualHDD = VirtualDrive(
-            path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + QemuConstants.FORMAT_QCOW2,
+            path: fullPath + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
             format: QemuConstants.FORMAT_QCOW2,
             mediaType: QemuConstants.MEDIATYPE_DISK,

@@ -68,8 +68,8 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withDrive(file: String, format: String, media:String)-> QemuCommandBuilder {
-        self.drives.append("file=" + file + ",format=" + format + ",media=" + media);
+    func withDrive(file: String, format: String, index: Int, media:String)-> QemuCommandBuilder {
+        self.drives.append("file=" + file + ",format=" + format + ",index=" + String(index) + ",media=" + media);
         return self;
     }
     

@@ -42,7 +42,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet weak var bootOrderTable: NSTableView!
     @IBOutlet weak var resolutionTable: NSTableView!
-    @IBOutlet weak var qemuBootloaderCheck: NSButton!
     
     var virtualMachine: VirtualMachine?;
     let accountPasteboardType = NSPasteboard.PasteboardType.string;
@@ -73,7 +72,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             vmType.selectItem(at: supportedVMTypes.firstIndex(of: virtualMachine.os)!);
             vmName.stringValue = virtualMachine.displayName;
             vmDescription.string = virtualMachine.description ?? "";
-            qemuBootloaderCheck.state = virtualMachine.qemuBootLoader ? NSButton.StateValue.on : NSButton.StateValue.off;
             
             let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution)!
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false);
@@ -177,11 +175,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         if ((notification.object as! NSTableView) == resolutionTable) {
             virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow];
         }
-    }
-    
-    @IBAction func qemuBootLoaderCheck(_ sender: Any) {
-        virtualMachine?.qemuBootLoader = (self.qemuBootloaderCheck.state == NSButton.StateValue.on);
-        self.bootOrderTable.reloadData();
     }
 }
 

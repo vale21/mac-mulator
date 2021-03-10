@@ -28,4 +28,11 @@ class VirtualDrive: Codable {
     func setBootDrive(_ bootDrive: Bool) {
         self.isBootDrive = bootDrive;
     }
+    
+    func clone() -> VirtualDrive {
+        let drive = VirtualDrive(path: self.path, name: self.name, format: self.format, mediaType: self.mediaType, size: self.size);
+        drive.setBootDrive(self.isBootDrive);
+        
+        return drive;
+    }
 }
