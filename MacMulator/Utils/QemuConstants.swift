@@ -106,9 +106,13 @@ class QemuConstants {
         RES_5120_2280,
         RES_6016_3384
     ]
-    
-    
 
+    static let supportedVMTypes: [String] = [
+        QemuConstants.OS_MAC,
+        QemuConstants.OS_WIN,
+        QemuConstants.OS_LINUX
+    ]
+    
     enum MachineTypes: String {
         case Mac99_pmu = "mac99,via=pmu";
     }

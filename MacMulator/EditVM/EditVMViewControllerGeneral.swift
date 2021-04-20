@@ -30,13 +30,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         QemuConstants.RES_6016_3384: "6K (6016 x 3384)"
     ];
     
-    let supportedVMTypes: [String] = [
-        QemuConstants.OS_MAC,
-        QemuConstants.OS_WIN,
-        QemuConstants.OS_LINUX
-    ]
-    
-    
     @IBOutlet weak var vmType: NSComboBox!
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
@@ -69,7 +62,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     
     func updateView() {
         if let virtualMachine = self.virtualMachine {
-            vmType.selectItem(at: supportedVMTypes.firstIndex(of: virtualMachine.os)!);
+            vmType.selectItem(at: QemuConstants.supportedVMTypes.firstIndex(of: virtualMachine.os)!);
             vmName.stringValue = virtualMachine.displayName;
             vmDescription.string = virtualMachine.description ?? "";
             
@@ -133,15 +126,15 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
-        return supportedVMTypes.count;
+        return QemuConstants.supportedVMTypes.count;
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        return supportedVMTypes[index];
+        return QemuConstants.supportedVMTypes[index];
     }
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        virtualMachine?.os = supportedVMTypes[vmType.indexOfSelectedItem];
+        virtualMachine?.os = QemuConstants.supportedVMTypes[vmType.indexOfSelectedItem];
     }
     
     func controlTextDidChange(_ notification: Notification) {

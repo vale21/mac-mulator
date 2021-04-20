@@ -115,8 +115,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                                 <connections>
-                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="Ksx-zR-Ag7"/>
-                                    <outlet property="delegate" destination="67A-Mm-B6X" id="RoP-62-lsS"/>
+                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="Ljz-0P-2og"/>
+                                    <outlet property="delegate" destination="67A-Mm-B6X" id="6GK-Ld-WmY"/>
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
@@ -814,7 +814,7 @@
                                             <size key="minSize" width="291" height="371"/>
                                             <size key="maxSize" width="367" height="10000000"/>
                                             <attributedString key="textStorage">
-                                                <fragment content="Lorem ipsum dolor">
+                                                <fragment content="Executing command...">
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="11" name="Menlo-Regular"/>
