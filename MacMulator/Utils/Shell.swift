@@ -8,42 +8,29 @@
 import Foundation
 
 class Shell {
-    let task = Process()
-    let pipe = Pipe()
+    let task = Process();
+    let pipe_out = Pipe();
+    let pipe_err = Pipe();
     
-    func runCommand(_ command: String) -> String {
+    func runCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
         
-        print("Running " + command + " in " + task.currentDirectoryPath);
-        do {
-            try ObjC.catchException({
-                if (!self.task.isRunning) {
-                    self.task.standardOutput = self.pipe
-                    self.task.arguments = ["-c", command]
-                    self.task.launchPath = "/bin/zsh"
-                    self.task.launch();
-                }
-            })
-        } catch {
-            print(error.localizedDescription);
-            return "";
-        }
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)!
-        
-        return output
-    }
-    
-    func runAsyncCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
-        DispatchQueue.global().async() {
-            self.runCommand(command);
+        DispatchQueue.global().async {
+            print("Running " + command + " in " + self.task.currentDirectoryPath);
             do {
                 try ObjC.catchException({
-                    DispatchQueue.main.async {
-                        callback();
+                    if (!self.task.isRunning) {
+                        self.task.standardOutput = self.pipe_out;
+                        self.task.standardError = self.pipe_err;
+                        
+                        self.task.arguments = ["-c", command];
+                        self.task.launchPath = "/bin/zsh";
+                        
+                        self.task.terminationHandler = {process in callback() };
+                        self.task.launch();
                     }
                 })
             } catch {
-                print(error);
+                print(error.localizedDescription);
             }
         }
     }
@@ -58,5 +45,17 @@ class Shell {
     
     func waitForCommand() {
         task.waitUntilExit();
+    }
+    
+    func getStandardOutput() -> String {
+        let data = pipe_out.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)!
+        return output;
+    }
+    
+    func getStandardError() -> String {
+        let data = pipe_err.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)!
+        return output;
     }
 }

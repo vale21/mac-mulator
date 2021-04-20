@@ -21,7 +21,7 @@ class QemuRunner {
     }
 
     func runVM(uponCompletion callback: @escaping (VirtualMachine) -> Void) {
-        shell.runAsyncCommand(getQemuCommand(), uponCompletion: {
+        shell.runCommand(getQemuCommand(), uponCompletion: {
             callback(self.virtualMachine);
         });
     }

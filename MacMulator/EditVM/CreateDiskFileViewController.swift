@@ -36,12 +36,15 @@ class CreateDiskFileViewController: NSViewController {
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background);
             dispatchQueue.async {
                 if (self.parentController?.mode == NewDiskViewController.Mode.ADD) {
-                    QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive);
+                    QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
+                        complete = true;
+                    });
                     newVirtualDrive.path = Utils.escape(newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION);
                 } else {
-                    QemuUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive);
+                    QemuUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, uponCompletion: {
+                        complete = true;
+                    });
                 }
-                complete = true;
             }
             
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in

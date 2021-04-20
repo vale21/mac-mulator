@@ -38,18 +38,20 @@ class VirtualMachine: Codable, Hashable {
         drives.append(drive);
     }
     
-    static func readFromPlist(_ plistFilePath: String) -> VirtualMachine? {
+    static func readFromPlist(_ plistFilePath: String, _ plistFileName: String) -> VirtualMachine? {
         let fileManager = FileManager.default;
         do {
-            let xml = fileManager.contents(atPath: plistFilePath);
-            return try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
+            let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName);
+            let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
+            vm.path = plistFilePath;
+            return vm;
         } catch {
             print("ERROR while reading Info.plist: " + error.localizedDescription);
             return nil;
         }
     }
     
-     func writeToPlist(_ plistFilePath: String) {
+    func writeToPlist(_ plistFilePath: String) {
         do {
             let data = try PropertyListEncoder().encode(self);
             try data.write(to: URL(fileURLWithPath: plistFilePath));
@@ -59,13 +61,13 @@ class VirtualMachine: Codable, Hashable {
     }
     
     func writeToPlist() {
-       do {
-           let data = try PropertyListEncoder().encode(self);
-        try data.write(to: URL(fileURLWithPath: self.path + "/" + MacMulatorConstants.INFO_PLIST));
-       } catch {
-           print("ERROR while writing Info.plist: " + error.localizedDescription);
-       }
-   }
+        do {
+            let data = try PropertyListEncoder().encode(self);
+            try data.write(to: URL(fileURLWithPath: self.path + "/" + MacMulatorConstants.INFO_PLIST));
+        } catch {
+            print("ERROR while writing Info.plist: " + error.localizedDescription);
+        }
+    }
     
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
         return lhs.displayName == rhs.displayName;

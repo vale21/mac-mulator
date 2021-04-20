@@ -643,7 +643,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1248" y="-745"/>
+            <point key="canvasLocation" x="-370" y="-588"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
@@ -661,20 +661,6 @@
                         </view>
                         <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
                             <allowedToolbarItems>
-                                <toolbarItem implicitItemIdentifier="157F94CD-4BB2-4B43-9E72-3E455969789A" label="Dummy Button" paletteLabel="" sizingBehavior="auto" id="3cu-YJ-rXX">
-                                    <nil key="toolTip"/>
-                                    <button key="view" verticalHuggingPriority="750" id="Ezy-l6-2Jb">
-                                        <rect key="frame" x="0.0" y="14" width="82" height="32"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" enabled="NO" imageScaling="proportionallyDown" inset="2" id="jqA-ek-s0g">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <segue destination="BzT-Xz-QxF" kind="show" identifier="editVMSegue" id="XxK-ud-aWv"/>
-                                        </connections>
-                                    </button>
-                                </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
                                 <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" catalog="system" sizingBehavior="auto" id="F8q-EA-dwq">
                                     <nil key="toolTip"/>
@@ -685,14 +671,29 @@
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <connections>
+                                            <segue destination="oYE-q0-uX8" kind="show" identifier="newVMSegue" id="qFr-w4-uB3"/>
+                                        </connections>
                                     </button>
-                                    <connections>
-                                        <segue destination="8eA-6A-anD" kind="show" identifier="newVMSegue" id="Syn-ZD-jAd"/>
-                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button" paletteLabel="Dummy Button" sizingBehavior="auto" id="REK-Zf-PKp">
+                                    <nil key="toolTip"/>
+                                    <button key="view" verticalHuggingPriority="750" id="G5X-is-yFQ">
+                                        <rect key="frame" x="5" y="14" width="76" height="32"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" enabled="NO" borderStyle="border" transparent="YES" imageScaling="proportionallyDown" inset="2" id="hfN-Fy-w6b">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <segue destination="BzT-Xz-QxF" kind="show" identifier="editVMSegue" id="scP-fk-l3l"/>
+                                        </connections>
+                                    </button>
                                 </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
-                                <toolbarItem reference="3cu-YJ-rXX"/>
+                                <toolbarItem reference="PWA-N2-g1r"/>
+                                <toolbarItem reference="REK-Zf-PKp"/>
                                 <toolbarItem reference="PWA-N2-g1r"/>
                                 <toolbarItem reference="F8q-EA-dwq"/>
                             </defaultToolbarItems>
@@ -832,7 +833,7 @@
                 </viewController>
                 <customObject id="gua-la-20l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-90" y="120"/>
+            <point key="canvasLocation" x="-225" y="72"/>
         </scene>
         <!--Virtual Machine View Controller-->
         <scene sceneID="zlr-3i-aCs">
@@ -1072,7 +1073,7 @@
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60" y="756.5"/>
+            <point key="canvasLocation" x="-62" y="718"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">
@@ -1080,15 +1081,15 @@
                 <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
                 <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-442" y="-1322"/>
+            <point key="canvasLocation" x="-478" y="-500"/>
         </scene>
         <!--NewVM-->
-        <scene sceneID="ydk-rR-xOF">
+        <scene sceneID="yBO-JT-jb1">
             <objects>
-                <controllerPlaceholder storyboardName="NewVM" id="8eA-6A-anD" sceneMemberID="viewController"/>
-                <customObject id="zLF-IQ-HXY" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
+                <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-105" y="-756"/>
+            <point key="canvasLocation" x="-431" y="-444"/>
         </scene>
     </scenes>
     <resources>

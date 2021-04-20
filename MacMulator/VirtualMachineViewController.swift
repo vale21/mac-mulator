@@ -55,8 +55,10 @@ class VirtualMachineViewController: NSViewController {
                 self.setRunningStatus(true);
                 runner.runVM(uponCompletion: {
                     virtualMachine in
-                    self.runningVMs.removeValue(forKey: virtualMachine);
-                    self.setRunningStatus(false);
+                    DispatchQueue.main.async {
+                        self.runningVMs.removeValue(forKey: virtualMachine);
+                        self.setRunningStatus(false);
+                    }
                 });
             }
         }
