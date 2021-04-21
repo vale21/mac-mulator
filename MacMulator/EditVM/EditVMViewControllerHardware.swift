@@ -248,7 +248,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     drivesTableView.reloadData();
                 }
             }
-        })
+        });
     }
     
     @IBAction func deleteVirtualDrive(_ sender: Any) {
@@ -261,7 +261,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     virtualMachine.drives.remove(at: row);
                     virtualMachine.writeToPlist();
                 }
-            })
+            });
         }
     }
     

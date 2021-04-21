@@ -17,7 +17,7 @@ class MainWindowController: NSWindowController {
         
         if (segue.identifier == MacMulatorConstants.NEW_VM_SEGUE) {
             let destinationController = dest.contentViewController as! NewVMViewController;
-            //destinationController.setRootController(sourceController);
+            destinationController.setRootController(sourceController);
         }
         if (segue.identifier == MacMulatorConstants.EDIT_VM_SEGUE) {
             let vmToEdit = sender as! VirtualMachine;

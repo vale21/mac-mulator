@@ -13,7 +13,7 @@
                     <window key="window" title="New Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="dIq-vo-sNu">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="294" y="324" width="547" height="372"/>
+                        <rect key="contentRect" x="413" y="456" width="547" height="372"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
                         <value key="minSize" type="size" width="547" height="372"/>
                         <value key="maxSize" type="size" width="547" height="372"/>
@@ -57,6 +57,9 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="findInstallMedia:" target="xGt-xo-6x3" id="Eom-3c-w7k"/>
+                                </connections>
                             </button>
                             <box fixedFrame="YES" title="Essential information" translatesAutoresizingMaskIntoConstraints="NO" id="MKc-8o-Spu">
                                 <rect key="frame" x="17" y="246" width="513" height="106"/>
@@ -119,7 +122,7 @@ DQ
 </string>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="createVM:" target="xGt-xo-6x3" id="mHh-1j-2bS"/>
+                                    <action selector="createVM:" target="xGt-xo-6x3" id="M9k-mV-hZk"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KND-mb-4GG">
@@ -154,6 +157,9 @@ DQ
                                                 </fragment>
                                             </attributedString>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="xGt-xo-6x3" id="ht9-eS-ksQ"/>
+                                            </connections>
                                         </textView>
                                     </subviews>
                                 </clipView>
@@ -180,9 +186,22 @@ DQ
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="CD Icon" id="I3W-Cv-3Lw"/>
                             </imageView>
+                            <button identifier="Dummy Button" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tka-U1-EMq">
+                                <rect key="frame" x="320" y="20" width="16" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="trl-IN-UZv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <segue destination="Tqa-YD-Kdm" kind="sheet" identifier="createVmFileSegue" id="gBi-at-Q15"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="fullConfiguration" destination="KND-mb-4GG" id="yHD-x3-ueL"/>
+                        <outlet property="installMedia" destination="CSW-rW-Lt7" id="EeF-il-Nwr"/>
                         <outlet property="vmDescription" destination="xiH-rE-LV3" id="cyW-US-sTi"/>
                         <outlet property="vmName" destination="0SJ-fj-RZf" id="i0K-t6-rah"/>
                         <outlet property="vmType" destination="LRv-Q5-G4W" id="PcH-1f-F8D"/>
@@ -191,6 +210,37 @@ DQ
                 <customObject id="mUs-v5-0Ew" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-637.5" y="-471"/>
+        </scene>
+        <!--CreateVM File View Controller-->
+        <scene sceneID="Zeb-2H-1sR">
+            <objects>
+                <viewController id="Tqa-YD-Kdm" customClass="CreateVMFileViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="qJp-Fk-Y4f">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="bso-Cc-Epo">
+                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyV-iQ-kJO">
+                                <rect key="frame" x="92" y="46" width="194" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Creating new Virtual Machine..." id="zoH-ZF-BQj">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="progressBar" destination="bso-Cc-Epo" id="pOH-xs-K8N"/>
+                    </connections>
+                </viewController>
+                <customObject id="Gkt-7J-oh7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4" y="-333"/>
         </scene>
     </scenes>
     <resources>

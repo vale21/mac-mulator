@@ -27,6 +27,7 @@ class VirtualMachine: Codable, Hashable {
         self.architecture = architecture;
         self.path = path;
         self.displayName = displayName;
+        self.description = description;
         self.memory = memory;
         self.cpus = 1;
         self.displayResolution = displayResolution;

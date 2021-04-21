@@ -23,7 +23,7 @@ class CreateDiskFileViewController: NSViewController {
         self.newVirtualDrive = virtualDrive;
     }
     
-    func setparentController(_ parentController: NewDiskViewController) {
+    func setParentController(_ parentController: NewDiskViewController) {
         self.parentController = parentController;
     }
     
@@ -57,7 +57,7 @@ class CreateDiskFileViewController: NSViewController {
                     self.parentController!.diskCreated();
                     return;
                 }
-            })
+            });
         }
     }
     

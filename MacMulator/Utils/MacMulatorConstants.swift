@@ -17,6 +17,7 @@ class MacMulatorConstants {
     static let NEW_DISK_SEGUE = "newDiskSegue";
     static let EDIT_DISK_SEGUE = "editDiskSegue";
     static let CREATE_DISK_FILE_SEGUE = "createDiskFileSegue";
+    static let CREATE_VM_FILE_SEGUE = "createVmFileSegue";
     static let SHOW_DRIVE_INFO_SEGUE = "showDriveInfoSegue";
 
 }

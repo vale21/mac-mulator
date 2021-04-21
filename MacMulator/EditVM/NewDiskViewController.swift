@@ -127,7 +127,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                 let destinationController = segue.destinationController as! CreateDiskFileViewController;
                 destinationController.setNewVirtualDrive(newVirtualDrive);
                 destinationController.setOldVirtualDrive((mode == Mode.EDIT) ? oldVirtualDrive : nil);
-                destinationController.setparentController(self);
+                destinationController.setParentController(self);
             }
         }
     }

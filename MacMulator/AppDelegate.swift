@@ -34,8 +34,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
-        //userDefaults.removeObject(forKey: "savedVMs");
-        
+
         self.savedVMs = userDefaults.object(forKey: "savedVMs") as? [String];
         if self.savedVMs == nil {
             self.savedVMs = [];
