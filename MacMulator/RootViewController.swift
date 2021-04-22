@@ -9,19 +9,13 @@ import Cocoa
 
 class RootViewController: NSSplitViewController {
 
-    private let libraryPath = "/Volumes/valeMac\\ SSD/Parallels";
-    private let qemuPath = "/opt/local/qemu";
-        
+  
     private var listController: VirtualMachinesListViewController?;
     private var vmController: VirtualMachineViewController?;
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
-        let userDefaults = UserDefaults.standard;
-        userDefaults.set(libraryPath, forKey: "libraryPath");
-        userDefaults.set(qemuPath, forKey: "qemuPath");
-            
+    
         let children = self.children;
         
         listController = children[0] as? VirtualMachinesListViewController;
@@ -42,14 +36,6 @@ class RootViewController: NSSplitViewController {
         didSet {
         // Update the view, if already loaded.
         }
-    }
-
-    func getLibraryPath() -> String {
-        return libraryPath;
-    }
-    
-    func getQemuPath() -> String {
-        return qemuPath;
     }
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {

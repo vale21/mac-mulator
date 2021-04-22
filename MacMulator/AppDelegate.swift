@@ -35,7 +35,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
 
-        self.savedVMs = userDefaults.object(forKey: "savedVMs") as? [String];
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
+            userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
+        }
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
+            userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
+        }
+
+        self.savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         if self.savedVMs == nil {
             self.savedVMs = [];
         }
@@ -45,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationWillTerminate(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
-        userDefaults.set(savedVMs, forKey: "savedVMs");
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -73,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             rootController?.showAlert("Could not find some Virtual Machines that were configured in MacMulator: " + removed.joined(separator: ", "));
 
             let userDefaults = UserDefaults.standard;
-            userDefaults.set(savedVMs, forKey: "savedVMs");
+            userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         }
     }
     
@@ -84,7 +91,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         let userDefaults = UserDefaults.standard;
-        userDefaults.set(savedVMs, forKey: "savedVMs");
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
     
     func removeSavedVM(_ savedVM: String) {
@@ -101,7 +108,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         
         let userDefaults = UserDefaults.standard;
-        userDefaults.set(savedVMs, forKey: "savedVMs");
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
     
     func rootControllerDidFinishLoading(_ rootController: RootViewController) {

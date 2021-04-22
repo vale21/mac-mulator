@@ -15,7 +15,7 @@ class QemuRunner {
     let virtualMachine: VirtualMachine;
     
     init(listenPort: Int32, virtualMachine: VirtualMachine) {
-        qemuPath = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
+        qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         self.listenPort = listenPort;
         self.virtualMachine = virtualMachine;
     }

@@ -43,7 +43,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
             if let qemuPath = virtualMachine.qemuPath {
                 qemuPathView.stringValue = qemuPath;
             } else {
-                qemuPathView.stringValue = UserDefaults.standard.string(forKey: "qemuPath") ?? "";
+                qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
             }
         }
     }
@@ -51,7 +51,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     func controlTextDidChange(_ notification: Notification) {
         if ((notification.object as! NSTextField) == qemuPathView) {
             if let virtualMachine = self.virtualMachine {
-                let originalPath = UserDefaults.standard.string(forKey: "qemuPath");
+                let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
                
                 if qemuPathView.stringValue != originalPath {
                     if qemuPathView.stringValue != "" {

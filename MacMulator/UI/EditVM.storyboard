@@ -722,11 +722,11 @@
             <objects>
                 <viewController title="Virtual Disk Info" id="ARL-7A-Alw" customClass="DriveInfoViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="8Y1-qg-99B">
-                        <rect key="frame" x="0.0" y="0.0" width="333" height="590"/>
+                        <rect key="frame" x="0.0" y="0.0" width="333" height="550"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yiE-wD-9eP">
-                                <rect key="frame" x="20" y="514" width="47" height="16"/>
+                                <rect key="frame" x="18" y="514" width="47" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Name: " id="fUS-3r-6eL">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -734,7 +734,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wbv-Uw-n74">
-                                <rect key="frame" x="75" y="466" width="240" height="16"/>
+                                <rect key="frame" x="73" y="466" width="240" height="16"/>
                                 <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="mCl-p9-Cr0">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -742,7 +742,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qOT-F7-RTk">
-                                <rect key="frame" x="75" y="442" width="240" height="16"/>
+                                <rect key="frame" x="73" y="442" width="240" height="16"/>
                                 <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="6Lg-AO-OiO">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -750,7 +750,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4mj-in-AGf">
-                                <rect key="frame" x="75" y="490" width="240" height="16"/>
+                                <rect key="frame" x="73" y="490" width="240" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="SAJ-Ch-pi6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -758,7 +758,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bbf-2M-Bbm">
-                                <rect key="frame" x="75" y="514" width="240" height="16"/>
+                                <rect key="frame" x="73" y="514" width="240" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="D4y-ln-zuh">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -766,9 +766,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kOH-5v-H8G">
-                                <rect key="frame" x="20" y="490" width="34" height="16"/>
+                                <rect key="frame" x="18" y="490" width="34" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="Hbp-cf-MfV"/>
+                                    <constraint firstAttribute="width" constant="30" id="LiQ-9M-Fmu"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Size:" id="pG9-oX-KkH">
                                     <font key="font" metaFont="system"/>
@@ -777,7 +777,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dlY-Sa-DfD">
-                                <rect key="frame" x="20" y="466" width="51" height="16"/>
+                                <rect key="frame" x="18" y="466" width="51" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Format:" id="FeO-h6-43L">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -785,7 +785,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Dv-gT-Jae">
-                                <rect key="frame" x="20" y="442" width="36" height="16"/>
+                                <rect key="frame" x="18" y="442" width="36" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Path:" id="uIc-3d-PNR">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -793,7 +793,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E00-i6-Vsl">
-                                <rect key="frame" x="20" y="399" width="207" height="15"/>
+                                <rect key="frame" x="18" y="399" width="207" height="15"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Output of Qemu img info command:" id="jif-kB-01e">
                                     <font key="font" metaFont="cellTitle"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -801,17 +801,17 @@
                                 </textFieldCell>
                             </textField>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qja-ct-dGu">
-                                <rect key="frame" x="22" y="20" width="291" height="371"/>
+                                <rect key="frame" x="20" y="20" width="293" height="371"/>
                                 <clipView key="contentView" drawsBackground="NO" id="uYr-mr-Twj">
-                                    <rect key="frame" x="0.0" y="0.0" width="291" height="371"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="293" height="371"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="AMt-oY-ZGj">
-                                            <rect key="frame" x="0.0" y="0.0" width="291" height="371"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="293" height="371"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="291" height="371"/>
+                                            <size key="minSize" width="293" height="371"/>
                                             <size key="maxSize" width="367" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment content="Executing command...">
@@ -831,48 +831,38 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Ih1-GH-Kve">
-                                    <rect key="frame" x="275" y="0.0" width="16" height="371"/>
+                                    <rect key="frame" x="277" y="0.0" width="16" height="371"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NfQ-CG-a3J">
-                                <rect key="frame" x="125" y="551" width="83" height="19"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Virtual Disk" id="bsZ-ct-bq4">
-                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="baseline" secondItem="qOT-F7-RTk" secondAttribute="baseline" id="5Vn-Bc-hB5"/>
-                            <constraint firstAttribute="trailing" secondItem="bbf-2M-Bbm" secondAttribute="trailing" constant="20" symbolic="YES" id="5c9-db-Bxw"/>
-                            <constraint firstItem="wbv-Uw-n74" firstAttribute="trailing" secondItem="qOT-F7-RTk" secondAttribute="trailing" id="74E-A1-LKd"/>
-                            <constraint firstItem="E00-i6-Vsl" firstAttribute="top" secondItem="3Dv-gT-Jae" secondAttribute="bottom" constant="28" id="G20-gJ-nhb"/>
-                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="leading" id="HJ9-4K-6Rf"/>
-                            <constraint firstItem="yiE-wD-9eP" firstAttribute="baseline" secondItem="bbf-2M-Bbm" secondAttribute="baseline" id="JMk-oq-MDz"/>
-                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="trailing" secondItem="4mj-in-AGf" secondAttribute="trailing" id="Kqb-Dp-fwN"/>
-                            <constraint firstItem="wbv-Uw-n74" firstAttribute="leading" secondItem="qOT-F7-RTk" secondAttribute="leading" id="Mvh-qd-FfH"/>
-                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="top" secondItem="NfQ-CG-a3J" secondAttribute="bottom" constant="21" id="R4T-kA-CQY"/>
-                            <constraint firstItem="4mj-in-AGf" firstAttribute="trailing" secondItem="wbv-Uw-n74" secondAttribute="trailing" id="S1e-aM-vWU"/>
-                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="trailing" constant="25" id="VOC-E8-Zeo"/>
-                            <constraint firstItem="NfQ-CG-a3J" firstAttribute="top" secondItem="8Y1-qg-99B" secondAttribute="top" constant="20" symbolic="YES" id="XZ6-wb-OUe"/>
-                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="leading" secondItem="4mj-in-AGf" secondAttribute="leading" id="Yfq-hs-tHZ"/>
-                            <constraint firstAttribute="bottom" secondItem="Qja-ct-dGu" secondAttribute="bottom" constant="20" symbolic="YES" id="c00-4Q-DnJ"/>
-                            <constraint firstItem="E00-i6-Vsl" firstAttribute="leading" secondItem="Qja-ct-dGu" secondAttribute="leading" id="cRt-Re-mMW"/>
-                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="8Y1-qg-99B" secondAttribute="leading" constant="22" id="epO-Oe-7n1"/>
-                            <constraint firstItem="Qja-ct-dGu" firstAttribute="top" secondItem="E00-i6-Vsl" secondAttribute="bottom" constant="8" symbolic="YES" id="fRs-W8-t2c"/>
-                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="baseline" secondItem="wbv-Uw-n74" secondAttribute="baseline" id="fgb-I2-VTp"/>
-                            <constraint firstItem="kOH-5v-H8G" firstAttribute="baseline" secondItem="4mj-in-AGf" secondAttribute="baseline" id="get-lL-sKy"/>
-                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="leading" secondItem="3Dv-gT-Jae" secondAttribute="leading" id="hDv-zd-cSN"/>
-                            <constraint firstItem="kOH-5v-H8G" firstAttribute="leading" secondItem="dlY-Sa-DfD" secondAttribute="leading" id="hXh-ae-Gkf"/>
-                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="top" secondItem="kOH-5v-H8G" secondAttribute="bottom" constant="8" symbolic="YES" id="i9E-HX-xxG"/>
-                            <constraint firstItem="kOH-5v-H8G" firstAttribute="top" secondItem="yiE-wD-9eP" secondAttribute="bottom" constant="8" symbolic="YES" id="igZ-XR-LYC"/>
-                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="wbv-Uw-n74" secondAttribute="leading" id="j2l-UO-UyR"/>
-                            <constraint firstItem="NfQ-CG-a3J" firstAttribute="centerX" secondItem="8Y1-qg-99B" secondAttribute="centerX" id="jli-8I-LzU"/>
-                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="leading" secondItem="E00-i6-Vsl" secondAttribute="leading" id="mOn-xl-4HL"/>
-                            <constraint firstItem="qOT-F7-RTk" firstAttribute="trailing" secondItem="Qja-ct-dGu" secondAttribute="trailing" id="tAI-6N-QDP"/>
-                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="top" secondItem="dlY-Sa-DfD" secondAttribute="bottom" constant="8" symbolic="YES" id="xn1-5S-X0T"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="top" secondItem="yiE-wD-9eP" secondAttribute="bottom" constant="8" symbolic="YES" id="2Mk-1G-dpx"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="baseline" secondItem="bbf-2M-Bbm" secondAttribute="baseline" id="3do-uW-f6s"/>
+                            <constraint firstItem="E00-i6-Vsl" firstAttribute="top" secondItem="3Dv-gT-Jae" secondAttribute="bottom" constant="28" id="3xE-HQ-rXZ"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="leading" id="54N-zR-EV8"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="top" secondItem="8Y1-qg-99B" secondAttribute="top" constant="20" symbolic="YES" id="5Ct-DR-LEX"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="baseline" secondItem="4mj-in-AGf" secondAttribute="baseline" id="A3D-Cf-eUP"/>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="top" secondItem="dlY-Sa-DfD" secondAttribute="bottom" constant="8" symbolic="YES" id="CHZ-cO-kzo"/>
+                            <constraint firstAttribute="trailing" secondItem="Qja-ct-dGu" secondAttribute="trailing" constant="20" symbolic="YES" id="EX6-ML-zSU"/>
+                            <constraint firstItem="wbv-Uw-n74" firstAttribute="leading" secondItem="qOT-F7-RTk" secondAttribute="leading" id="Jd7-KZ-1qb"/>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="leading" secondItem="E00-i6-Vsl" secondAttribute="leading" id="KPv-uL-4Xb"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="top" secondItem="kOH-5v-H8G" secondAttribute="bottom" constant="8" symbolic="YES" id="L4q-db-BZC"/>
+                            <constraint firstItem="yiE-wD-9eP" firstAttribute="leading" secondItem="8Y1-qg-99B" secondAttribute="leading" constant="20" symbolic="YES" id="MSA-eK-Hlq"/>
+                            <constraint firstItem="3Dv-gT-Jae" firstAttribute="baseline" secondItem="qOT-F7-RTk" secondAttribute="baseline" id="Ph4-cb-3vf"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="leading" secondItem="3Dv-gT-Jae" secondAttribute="leading" id="WwT-Ca-cbS"/>
+                            <constraint firstAttribute="bottom" secondItem="Qja-ct-dGu" secondAttribute="bottom" constant="20" symbolic="YES" id="Yam-z7-tYG"/>
+                            <constraint firstItem="wbv-Uw-n74" firstAttribute="trailing" secondItem="qOT-F7-RTk" secondAttribute="trailing" id="acd-sP-6d9"/>
+                            <constraint firstItem="dlY-Sa-DfD" firstAttribute="baseline" secondItem="wbv-Uw-n74" secondAttribute="baseline" id="c9K-1c-j8O"/>
+                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="trailing" secondItem="4mj-in-AGf" secondAttribute="trailing" id="fYH-bD-Ubz"/>
+                            <constraint firstItem="kOH-5v-H8G" firstAttribute="leading" secondItem="dlY-Sa-DfD" secondAttribute="leading" id="frY-Hx-azF"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="trailing" constant="25" id="gsD-AJ-etZ"/>
+                            <constraint firstAttribute="trailing" secondItem="bbf-2M-Bbm" secondAttribute="trailing" constant="22" id="j7M-jv-Cao"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="trailing" secondItem="wbv-Uw-n74" secondAttribute="trailing" id="rIv-Uk-R7p"/>
+                            <constraint firstItem="Qja-ct-dGu" firstAttribute="top" secondItem="E00-i6-Vsl" secondAttribute="bottom" constant="8" symbolic="YES" id="rvm-Ek-3eJ"/>
+                            <constraint firstItem="bbf-2M-Bbm" firstAttribute="leading" secondItem="4mj-in-AGf" secondAttribute="leading" id="umu-Ig-Ng1"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="wbv-Uw-n74" secondAttribute="leading" id="yQ0-vQ-kG4"/>
+                            <constraint firstItem="E00-i6-Vsl" firstAttribute="leading" secondItem="Qja-ct-dGu" secondAttribute="leading" id="zxf-eh-5YH"/>
                         </constraints>
                     </view>
                     <connections>
@@ -885,7 +875,7 @@
                 </viewController>
                 <customObject id="CTy-I5-vti" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2275.5" y="-1917"/>
+            <point key="canvasLocation" x="2275.5" y="-1937"/>
         </scene>
         <!--New Disk View Controller-->
         <scene sceneID="CDp-5y-AbP">

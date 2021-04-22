@@ -26,7 +26,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                            <connections>
+                                                <segue destination="Fkf-Y0-JDu" kind="show" id="KJN-9m-ta9"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem title="Services" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -643,7 +647,119 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-370" y="-588"/>
+            <point key="canvasLocation" x="-1055" y="-1206"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="a5g-mn-8u4">
+            <objects>
+                <windowController id="Fkf-Y0-JDu" sceneMemberID="viewController">
+                    <window key="window" title="MacMulator Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="8w2-j3-l5g">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES"/>
+                        <rect key="contentRect" x="440" y="684" width="399" height="138"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <value key="minSize" type="size" width="399" height="138"/>
+                        <value key="maxSize" type="size" width="399" height="138"/>
+                        <view key="contentView" id="goC-h5-raE">
+                            <rect key="frame" x="0.0" y="0.0" width="399" height="138"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="Fkf-Y0-JDu" id="Vca-VH-aeG"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="cF1-rS-o50" kind="relationship" relationship="window.shadowedContentViewController" id="clZ-Du-h1n"/>
+                    </connections>
+                </windowController>
+                <customObject id="G1w-JR-X7Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1159" y="-878"/>
+        </scene>
+        <!--Preferences View Controller-->
+        <scene sceneID="Bs5-Sg-pDv">
+            <objects>
+                <viewController id="cF1-rS-o50" customClass="PreferencesViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="SYm-hx-Lfj">
+                        <rect key="frame" x="0.0" y="0.0" width="399" height="138"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
+                                <rect key="frame" x="18" y="102" width="144" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Virtual Machines folder" id="NX3-mj-339">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
+                                <rect key="frame" x="20" y="73" width="295" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="7JJ-SA-RYa">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <outlet property="delegate" destination="cF1-rS-o50" id="uqP-6y-4Za"/>
+                                </connections>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXs-MC-95b">
+                                <rect key="frame" x="18" y="49" width="131" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Qemu binaries folder" id="ciT-ZP-2c9">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u1x-Fr-N6k">
+                                <rect key="frame" x="20" y="20" width="295" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Ag2-Lx-SfX">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <outlet property="delegate" destination="cF1-rS-o50" id="ADg-Ow-CFk"/>
+                                </connections>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
+                                <rect key="frame" x="323" y="72" width="56" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0Kf-o9-ZUv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="searchFolder:" target="cF1-rS-o50" id="0h1-Vc-dDu"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZSk-8V-9fP">
+                                <rect key="frame" x="323" y="19" width="56" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eGS-Xf-CRr">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="searchFolder:" target="cF1-rS-o50" id="IkC-Fh-pIG"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="qemuFolderButton" destination="ZSk-8V-9fP" id="YTN-tX-3SX"/>
+                        <outlet property="qemuFolderField" destination="u1x-Fr-N6k" id="9zG-id-6wl"/>
+                        <outlet property="vmFolderButton" destination="7Ih-Ef-1Mh" id="0Dq-hQ-2W8"/>
+                        <outlet property="vmFolderField" destination="FWM-lN-Jy4" id="uEA-dE-Kbk"/>
+                    </connections>
+                </viewController>
+                <customObject id="fsQ-ZF-CS3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-598.5" y="-944"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
@@ -1093,6 +1209,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="NSAddTemplate" width="15" height="13"/>
         <image name="Windows" width="512" height="512"/>
         <image name="applelogo" catalog="system" width="16" height="19"/>
         <image name="play.circle.fill" catalog="system" width="19" height="19"/>

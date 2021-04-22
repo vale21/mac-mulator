@@ -91,7 +91,7 @@ class CreateVMFileViewController : NSViewController {
     
     fileprivate func computePath() -> String {
         let userDefaults = UserDefaults.standard;
-        let path = userDefaults.value(forKey: "libraryPath") as! String;
+        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
         return path + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
     }
     

@@ -125,4 +125,12 @@ class Utils {
         guard let lastSlash = path.lastIndex(where: { char in char == "/"}) else { return path };
         return path.substring(to: lastSlash);
     }
+    
+    static func getDefaultVmFolderPath() -> String {
+        return NSHomeDirectory() + "/MacMulator/";
+    }
+    
+    static func getDefaultQemuFolderPath() -> String {
+        return "/opt/local/bin";
+    }
 }
