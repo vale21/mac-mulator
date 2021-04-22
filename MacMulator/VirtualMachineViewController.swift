@@ -78,7 +78,7 @@ class VirtualMachineViewController: NSViewController {
             
             vmIcon.image = NSImage.init(named: NSImage.Name(vm.os));
             vmName.stringValue = vm.displayName;
-            vmDescription.stringValue = vm.description ?? "";
+            vmDescription.stringValue = vm.description;
             vmResolution.stringValue = vm.displayResolution;
             vmMemory.stringValue = Utils.formatMemory(vm.memory);
             

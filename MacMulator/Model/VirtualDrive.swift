@@ -9,7 +9,7 @@ import Foundation
 
 class VirtualDrive: Codable {
     
-    var path: String;
+    var path: String; // this value is serialized, but is ignored for media type different from CDROM
     var name: String;
     var format: String;
     var mediaType: String;

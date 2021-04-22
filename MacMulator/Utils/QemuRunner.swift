@@ -31,7 +31,7 @@ class QemuRunner {
             return command;
         } else {
             var builder: QemuCommandBuilder =
-                QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath as! String : qemuPath, architecture: virtualMachine.architecture)
+                QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
                 .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
                 .withCpus(virtualMachine.cpus)
                 .withBootArg(computeBootArg(virtualMachine))

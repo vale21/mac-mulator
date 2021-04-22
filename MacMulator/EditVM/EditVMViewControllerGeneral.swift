@@ -64,7 +64,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         if let virtualMachine = self.virtualMachine {
             vmType.selectItem(at: QemuConstants.supportedVMTypes.firstIndex(of: virtualMachine.os)!);
             vmName.stringValue = virtualMachine.displayName;
-            vmDescription.string = virtualMachine.description ?? "";
+            vmDescription.string = virtualMachine.description;
             
             let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution)!
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false);

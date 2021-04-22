@@ -11,9 +11,9 @@ class VirtualMachine: Codable, Hashable {
     
     var os: String;
     var architecture: String;
-    var path: String = "";
+    var path: String = ""; // not serialized
     var displayName: String;
-    var description: String?;
+    var description: String;
     var cpus: Int;
     var memory: Int32;
     var displayResolution: String;
@@ -22,7 +22,11 @@ class VirtualMachine: Codable, Hashable {
     var qemuPath: String?;
     var qemuCommand: String?;
     
-    init(os: String, architecture: String, path: String,  displayName: String, description: String?, memory: Int32, displayResolution: String, qemuBootloader: Bool) {
+    private enum CodingKeys: String, CodingKey {
+        case os, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand;
+    }
+    
+    init(os: String, architecture: String, path: String,  displayName: String, description: String, memory: Int32, displayResolution: String, qemuBootloader: Bool) {
         self.os = os;
         self.architecture = architecture;
         self.path = path;
@@ -44,11 +48,20 @@ class VirtualMachine: Codable, Hashable {
         do {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName);
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
-            vm.path = plistFilePath;
+            setupPaths(vm, plistFilePath);
             return vm;
         } catch {
             print("ERROR while reading Info.plist: " + error.localizedDescription);
             return nil;
+        }
+    }
+    
+    static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
+        vm.path = plistFilePath;
+        for drive in vm.drives {
+            if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION;
+            }
         }
     }
     

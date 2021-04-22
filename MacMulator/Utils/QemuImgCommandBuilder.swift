@@ -45,7 +45,7 @@ class QemuImgCommandBuilder {
     }
     
     func withName(_ name: String) -> QemuImgCommandBuilder {
-        self.name = name;
+        self.name = Utils.escape(name);
         return self;
     }
     

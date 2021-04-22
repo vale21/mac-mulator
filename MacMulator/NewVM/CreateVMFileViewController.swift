@@ -95,12 +95,12 @@ class CreateVMFileViewController : NSViewController {
         return path + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
     }
     
-    fileprivate func computeDescription() -> String? {
+    fileprivate func computeDescription() -> String {
         let description = parentController?.vmDescription.string;
         if description != NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
-            return description;
+            return description!;
         }
-        return nil;
+        return "";
     }
     
     fileprivate func computeMemory(_ type: String) -> Int32 {

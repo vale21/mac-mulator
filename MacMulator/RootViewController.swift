@@ -44,7 +44,6 @@ class RootViewController: NSSplitViewController {
     
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST);
-        virtualMachine?.path = fileName;
         if let vm = virtualMachine {
             self.addVirtualMachine(vm);
         }
