@@ -17,8 +17,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     var userDefaults: UserDefaults = UserDefaults.standard;
     
     override func viewWillAppear() {
-        vmFolderField.stringValue = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
-        qemuFolderField.stringValue = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+        vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
+        qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
     }
     
     @IBAction func searchFolder(_ sender: Any) {
@@ -26,10 +26,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             panel in
             if sender as? NSObject == vmFolderButton {
                 vmFolderField.stringValue = panel.url!.path;
-                userDefaults.set(vmFolderField.stringValue, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
+                userDefaults.set(Utils.escape(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
             } else if sender as? NSObject == qemuFolderButton {
                 qemuFolderField.stringValue = panel.url!.path;
-                userDefaults.set(qemuFolderField.stringValue, forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
+                userDefaults.set(Utils.escape(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
             }
             
         });
@@ -37,9 +37,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
         if obj.object as? NSObject == vmFolderField {
-            userDefaults.set(vmFolderField.stringValue, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
+            userDefaults.set(Utils.escape(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
         } else if obj.object as? NSObject == qemuFolderField {
-            userDefaults.set(qemuFolderField.stringValue, forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
+            userDefaults.set(Utils.escape(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
         }
     }
 }

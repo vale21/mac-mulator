@@ -50,32 +50,34 @@ class CreateVMFileViewController : NSViewController {
             } 
             
             var complete = false;
+            var created = false;
+            
             do {
-                let tempPath = NSTemporaryDirectory() + displayName + "." + MacMulatorConstants.VM_EXTENSION;
-                
-                try createDocumentPackage(tempPath);
-                QemuUtils.createDiskImage(path: tempPath, virtualDrive: virtualHDD, uponCompletion: {
-                    vm.writeToPlist(tempPath + "/" + MacMulatorConstants.INFO_PLIST);
-                    
-                    let moveCommand = "mv " + Utils.escape(tempPath) + " " + path;
-                    
-                    Shell().runCommand(moveCommand, uponCompletion: {
-                        complete = true;
-                    });
+                try createDocumentPackage(path);
+                QemuUtils.createDiskImage(path: path, virtualDrive: virtualHDD, uponCompletion: {
+                    vm.writeToPlist(path + "/" + MacMulatorConstants.INFO_PLIST);
+                    complete = true;
+                    created = true;
                 });
             } catch {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription);
+                                message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
+                                    response in
+                                    complete = true;
+                                    created = false;
+                                })
             }
             
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-            
+                
                 guard !complete else {
                     timer.invalidate();
                     self.progressBar.stopAnimation(self);
                     self.dismiss(self);
                     
-                    self.parentController!.vmCreated(vm);
+                    if created {
+                        self.parentController!.vmCreated(vm);
+                    }
                     return;
                 }
             });
@@ -92,7 +94,7 @@ class CreateVMFileViewController : NSViewController {
     fileprivate func computePath() -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
-        return path + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
+        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
     }
     
     fileprivate func computeDescription() -> String {

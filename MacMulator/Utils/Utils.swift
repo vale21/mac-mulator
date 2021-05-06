@@ -47,6 +47,14 @@ class Utils {
         alert.beginSheetModal(for: window);
     }
     
+    static func showAlert(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
+        let alert: NSAlert = NSAlert();
+        alert.alertStyle = style;
+        alert.messageText = message;
+        alert.addButton(withTitle: "OK");
+        alert.beginSheetModal(for: window, completionHandler: handler);
+    }
+    
     static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
