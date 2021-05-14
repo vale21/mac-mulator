@@ -20,8 +20,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
     
     func addVirtualMachine(_ virtualMachine: VirtualMachine) {
-        virtualMachines.append(virtualMachine);
-        self.table.reloadData();
+        if (!virtualMachines.contains(virtualMachine)) {
+            virtualMachines.append(virtualMachine);
+            self.table.reloadData();
+        }
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
