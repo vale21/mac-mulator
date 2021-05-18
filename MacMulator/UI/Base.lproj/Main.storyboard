@@ -778,12 +778,12 @@
                         <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
-                                <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="Plus Icon" sizingBehavior="auto" id="F8q-EA-dwq">
+                                <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" catalog="system" sizingBehavior="auto" id="F8q-EA-dwq">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
                                         <rect key="frame" x="18" y="14" width="15" height="13"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="Plus Icon" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -882,11 +882,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="nQd-YO-CSf" customClass="VirtualMachineTableCellView" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="8" y="0.0" width="180" height="55"/>
+                                                            <rect key="frame" x="18" y="0.0" width="175" height="55"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsExpansionToolTips="YES" id="qJR-bt-XWc">
-                                                                    <rect key="frame" x="45" y="18" width="134" height="19"/>
+                                                                    <rect key="frame" x="45" y="18" width="129" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" alignment="left" title="Mac OS X Tiger" placeholderString="Mac OS X Tiger" id="BEt-Jw-pWW">
                                                                         <font key="font" metaFont="system" size="16"/>
@@ -967,7 +967,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FVG-4e-OvA">
-                                            <rect key="frame" x="247" y="16" width="86" height="50"/>
+                                            <rect key="frame" x="247" y="16" width="86" height="56"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="86" id="6Gs-4U-wV8"/>
                                                 <constraint firstAttribute="height" constant="50" id="Hyh-Yu-9ST"/>
@@ -993,7 +993,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qmD-w9-lai">
-                                                    <rect key="frame" x="107" y="62" width="133" height="32"/>
+                                                    <rect key="frame" x="109" y="63" width="128" height="32"/>
                                                     <buttonCell key="cell" type="push" title="Create new VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9jV-3W-2fu">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -1003,7 +1003,7 @@
                                                     </connections>
                                                 </button>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ezP-kB-RX4">
-                                                    <rect key="frame" x="96" y="6" width="154" height="32"/>
+                                                    <rect key="frame" x="99" y="8" width="148" height="32"/>
                                                     <buttonCell key="cell" type="push" title="Import existing VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pO1-ZK-ekQ">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -1013,7 +1013,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JWm-Z2-g0x">
-                                                    <rect key="frame" x="163" y="42" width="21" height="16"/>
+                                                    <rect key="frame" x="163" y="43" width="21" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="or" id="g4T-Ry-3Ii">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1209,11 +1209,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="Plus Icon" width="14" height="14"/>
+        <image name="NSAddTemplate" width="15" height="13"/>
         <image name="Windows" width="512" height="512"/>
         <image name="applelogo" catalog="system" width="16" height="19"/>
         <image name="play.circle.fill" catalog="system" width="19" height="19"/>
+        <image name="plus" catalog="system" width="15" height="13"/>
         <namedColor name="VM View Background Color">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </namedColor>
