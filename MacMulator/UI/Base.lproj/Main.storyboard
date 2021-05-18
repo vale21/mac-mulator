@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -783,7 +783,7 @@
                                     <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
                                         <rect key="frame" x="18" y="14" width="15" height="13"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" catalog="system" imagePosition="only" alignment="center" alternateImage="Plus Icon" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -792,7 +792,7 @@
                                         </connections>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button" paletteLabel="Dummy Button" sizingBehavior="auto" id="REK-Zf-PKp">
+                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button" paletteLabel="Dummy Button" title="Button" sizingBehavior="auto" id="REK-Zf-PKp">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="G5X-is-yFQ">
                                         <rect key="frame" x="5" y="14" width="76" height="32"/>
@@ -1210,6 +1210,7 @@
     </scenes>
     <resources>
         <image name="NSAddTemplate" width="15" height="13"/>
+        <image name="Plus Icon" width="14" height="14"/>
         <image name="Windows" width="512" height="512"/>
         <image name="applelogo" catalog="system" width="16" height="19"/>
         <image name="play.circle.fill" catalog="system" width="19" height="19"/>
