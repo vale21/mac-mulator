@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -155,7 +155,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="Avq-va-yuz">
-                                            <rect key="frame" x="0.0" y="0.0" width="230" height="139"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="235" height="139"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -175,7 +175,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="fFT-bn-ENt">
-                                                            <rect key="frame" x="18" y="0.0" width="213" height="24"/>
+                                                            <rect key="frame" x="8" y="0.0" width="218" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -204,7 +204,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" id="4ds-iT-Rsu">
-                                            <rect key="frame" x="0.0" y="0.0" width="216" height="139"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="221" height="139"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -223,7 +223,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="8m3-3W-z8X">
-                                                            <rect key="frame" x="18" y="0.0" width="199" height="24"/>
+                                                            <rect key="frame" x="8" y="0.0" width="204" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -236,7 +236,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xOR-lE-xZ4">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="xOR-lE-xZ4">
                                     <rect key="frame" x="1" y="124" width="216" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -376,11 +376,11 @@
                                 <rect key="frame" x="20" y="39" width="560" height="199"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" ambiguous="YES" id="kPY-Q9-axd">
-                                    <rect key="frame" x="1" y="1" width="558" height="197"/>
+                                    <rect key="frame" x="1" y="0.0" width="558" height="198"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" headerView="la4-XS-a2p" viewBased="YES" id="XFF-rf-sSL">
-                                            <rect key="frame" x="0.0" y="0.0" width="558" height="169"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="558" height="170"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -399,7 +399,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="9GC-5d-VQE" customClass="DrivesTableIconCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="8" y="0.0" width="28" height="30"/>
+                                                            <rect key="frame" x="8" y="0.0" width="30" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h56-AJ-mfz">
@@ -427,7 +427,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="KhP-eW-AEL" customClass="DrivesTableDriveNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="53" y="0.0" width="67" height="30"/>
+                                                            <rect key="frame" x="55" y="0.0" width="67" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WiN-RH-B9g">
@@ -460,7 +460,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Hcs-08-TrM" customClass="DrivesTableDriveTypeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="137" y="0.0" width="69" height="30"/>
+                                                            <rect key="frame" x="139" y="0.0" width="69" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ckm-MX-63N">
@@ -492,7 +492,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="223" y="0.0" width="52" height="30"/>
+                                                            <rect key="frame" x="225" y="0.0" width="52" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -511,7 +511,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Path" width="153" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
+                                                <tableColumn identifier="Path" width="148" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="File location">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -524,11 +524,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="292" y="0.0" width="153" height="30"/>
+                                                            <rect key="frame" x="294" y="0.0" width="148" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CBk-hq-ylm">
-                                                                    <rect key="frame" x="1" y="7" width="155" height="16"/>
+                                                                    <rect key="frame" x="1" y="7" width="150" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/vale/documents/a/aaaaa/bla/deskytip/url/myFolder" id="8Sn-gW-gZi">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -560,7 +560,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="462" y="0.0" width="87" height="30"/>
+                                                            <rect key="frame" x="459" y="0.0" width="90" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -614,7 +614,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
-                                    <rect key="frame" x="1" y="182" width="558" height="16"/>
+                                    <rect key="frame" x="1" y="183" width="558" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9r1-6c-c5M">
@@ -889,7 +889,7 @@
                                 <rect key="frame" x="18" y="200" width="408" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Create new disk" id="Vrn-mM-2tu">
-                                    <font key="font" textStyle="title2" name=".SFNS-Regular"/>
+                                    <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -1176,7 +1176,7 @@ Gw
     </inferredMetricsTieBreakers>
     <resources>
         <image name="HD Icon" width="25" height="25"/>
-        <image name="NSAddTemplate" width="15" height="13"/>
+        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="cpu" catalog="system" width="18" height="16"/>
         <image name="folder.fill" catalog="system" width="19" height="14"/>
         <image name="gear" catalog="system" width="17" height="17"/>
