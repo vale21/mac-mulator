@@ -76,7 +76,7 @@ class VirtualMachineViewController: NSViewController {
         if let vm = virtualMachine {
             self.vm = virtualMachine;
             
-            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os));
+            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os + "-large"));
             vmName.stringValue = vm.displayName;
             vmDescription.stringValue = vm.description;
             vmResolution.stringValue = vm.displayResolution;
