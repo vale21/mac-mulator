@@ -1,17 +1,50 @@
 {
   "images" : [
     {
-      "filename" : "cpu.png",
+      "filename" : "cpu_light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "cpu-1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "cpu_dark.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "cpu_light_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "cpu-2.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "cpu_dark_2.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "cpu_light_3.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "cpu_dark_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -19,5 +52,8 @@
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "auto-scaling" : "auto"
   }
 }
