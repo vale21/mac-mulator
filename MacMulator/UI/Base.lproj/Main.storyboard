@@ -895,26 +895,13 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="QAz-zy-mTK">
-                                                                    <rect key="frame" x="-3" y="4" width="45" height="49"/>
+                                                                    <rect key="frame" x="-3" y="8" width="45" height="45"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="MCY-un-ad5">
-                                                                        <imageReference key="image" image="applelogo" catalog="system" symbolScale="large"/>
+                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" id="MCY-un-ad5">
+                                                                        <imageReference key="image" image="macOS-small" symbolScale="large"/>
                                                                     </imageCell>
                                                                 </imageView>
                                                             </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="centerY" secondItem="QAz-zy-mTK" secondAttribute="centerY" id="2bc-YP-sxj"/>
-                                                                <constraint firstAttribute="trailing" secondItem="qJR-bt-XWc" secondAttribute="trailing" constant="3" id="4Qc-qy-yK5"/>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="top" secondItem="nQd-YO-CSf" secondAttribute="top" constant="18" id="8o5-J4-8Ln"/>
-                                                                <constraint firstAttribute="trailing" secondItem="qJR-bt-XWc" secondAttribute="trailing" constant="3" id="FlE-hJ-haf"/>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="top" secondItem="nQd-YO-CSf" secondAttribute="top" constant="18" id="LYM-7j-JFX"/>
-                                                                <constraint firstAttribute="bottom" secondItem="qJR-bt-XWc" secondAttribute="bottom" constant="18" id="MnK-xh-43D"/>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="leading" secondItem="QAz-zy-mTK" secondAttribute="trailing" constant="5" id="Wdm-8c-A5Z"/>
-                                                                <constraint firstAttribute="trailing" secondItem="qJR-bt-XWc" secondAttribute="trailing" constant="3" id="bav-VF-fbn"/>
-                                                                <constraint firstAttribute="bottom" secondItem="qJR-bt-XWc" secondAttribute="bottom" constant="18" id="hbt-IW-KHR"/>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="leading" secondItem="QAz-zy-mTK" secondAttribute="trailing" constant="5" id="ifZ-d8-DXE"/>
-                                                                <constraint firstItem="qJR-bt-XWc" firstAttribute="leading" secondItem="QAz-zy-mTK" secondAttribute="trailing" constant="5" id="uOz-en-ALa"/>
-                                                            </constraints>
                                                             <connections>
                                                                 <outlet property="vmIcon" destination="QAz-zy-mTK" id="Msr-Lm-EsJ"/>
                                                                 <outlet property="vmName" destination="qJR-bt-XWc" id="DJr-aW-UBS"/>
@@ -1212,7 +1199,7 @@
     <resources>
         <image name="NSAddTemplate" width="15" height="13"/>
         <image name="Windows-large" width="285" height="285"/>
-        <image name="applelogo" catalog="system" width="16" height="19"/>
+        <image name="macOS-small" width="45" height="45"/>
         <image name="play.circle.fill" catalog="system" width="19" height="19"/>
         <image name="plus" catalog="system" width="15" height="13"/>
         <namedColor name="VM View Background Color">
