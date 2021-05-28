@@ -10,7 +10,7 @@ import Foundation
 class QemuImgCommandBuilder {
     
     var qemuPath: String;
-    var executable: String = "qemu-img";
+    var executable: String = QemuConstants.QEMU_IMG;
     var command: String?;
     var format: String?;
     var targetFormat: String?;

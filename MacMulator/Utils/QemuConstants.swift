@@ -37,29 +37,39 @@ class QemuConstants {
     static let OS_WIN = "Windows";
     static let OS_LINUX = "Linux";
     
+    static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
+    static let ARCH_PPC64 = "qemu-system-ppc64";
     static let ARCH_X86 = "qemu-system-i386";
     static let ARCH_X64 = "qemu-system-x86_64";
     static let ARCH_ARM = "qemu-system-arm";
     static let ARCH_ARM64 = "qemu-system-aarch64";
     static let ARCH_68K = "qemu-system-m68k";
+    static let ARCH_RISCV32 = "qemu-system-riscv32"
+    static let ARCH_RISCV64 = "qemu-system-riscv64"
     
     static let ALL_ARCHITECTURES = [
         ARCH_X64,
         ARCH_X86,
         ARCH_PPC,
+        ARCH_PPC64,
         ARCH_ARM,
         ARCH_ARM64,
-        ARCH_68K
+        ARCH_68K,
+        ARCH_RISCV32,
+        ARCH_RISCV64
     ]
     
     static let MAX_CPUS: [String:Int] = [
         ARCH_PPC: 1,
+        ARCH_PPC64: 1,
         ARCH_X86: 4,
         ARCH_X64: 16,
         ARCH_ARM: 2,
         ARCH_ARM64: 8,
-        ARCH_68K: 1
+        ARCH_68K: 1,
+        ARCH_RISCV32: 2,
+        ARCH_RISCV64: 8
     ]
     
     // 4:3

@@ -12,10 +12,13 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     let supportedArchitectures: [String:String] = [
         QemuConstants.ARCH_X64: "Intel/AMD 64bit",
         QemuConstants.ARCH_X86: "Intel/AMD 32bit",
-        QemuConstants.ARCH_PPC: "PowerPc",
+        QemuConstants.ARCH_PPC: "PowerPc 32bit",
+        QemuConstants.ARCH_PPC64: "PowerPc 64bit",
         QemuConstants.ARCH_ARM: "ARM",
         QemuConstants.ARCH_ARM64: "ARM 64bit",
-        QemuConstants.ARCH_68K: "Motorola 68k"
+        QemuConstants.ARCH_68K: "Motorola 68k",
+        QemuConstants.ARCH_RISCV32: "RISC-V 32bit",
+        QemuConstants.ARCH_RISCV64: "RISC-V 64bit"
     ];
     
     @IBOutlet weak var architectureComboBox: NSComboBox!

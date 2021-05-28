@@ -74,17 +74,26 @@ class QemuUtils {
     
     static func getDiskImageInfo(_ virtualDrive: VirtualDrive, uponCompletion callback: @escaping (String) -> Void) -> Void {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
-        let shell = Shell();
+        if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {
+            let shell = Shell();
 
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_INFO)
-            .withName(virtualDrive.path)
-            .build();
-        
-        shell.runCommand(command, uponCompletion: {
-            callback(shell.getStandardOutput());
-        });
+            let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+                .withCommand(QemuConstants.IMAGE_CMD_INFO)
+                .withName(virtualDrive.path)
+                .build();
+            
+            shell.runCommand(command, uponCompletion: {
+                callback(shell.getStandardOutput());
+            });
+        } else {
+            callback("Cannot retrieve information on " + virtualDrive.name + ". Command qemu-img is not available at path " + qemuPath + ". Please review the path in Preferences panel");
+        }
     }
     
-    
+    static func isBinaryAvailable(_ binary: String) -> Bool {
+        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+        let fileManager = FileManager.default;
+        
+        return fileManager.fileExists(atPath: qemuPath + "/" + binary);
+    }
 }

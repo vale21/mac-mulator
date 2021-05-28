@@ -31,6 +31,10 @@ class VirtualMachineViewController: NSViewController {
         if self.vm != nil {
             changeStatusOfAllControls(hidden: false);
             startVMButton.isHidden = false;
+            
+            if !QemuUtils.isBinaryAvailable(vm!.architecture) {
+                startVMButton.isEnabled = false;
+            }
         } else {
             changeStatusOfAllControls(hidden: true);
             startVMButton.isHidden = true;
@@ -88,6 +92,12 @@ class VirtualMachineViewController: NSViewController {
                 setRunningStatus(false);
             }
             changeStatusOfAllControls(hidden: false);
+            
+            if QemuUtils.isBinaryAvailable(vm.architecture) {
+                startVMButton.isEnabled = true;
+            } else {
+                startVMButton.isEnabled = false;
+            }
         } else {
             changeStatusOfAllControls(hidden: true);
             startVMButton.isHidden = true;
