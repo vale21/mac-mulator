@@ -15,6 +15,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemuFolderButton: NSButton!
     
     @IBOutlet weak var qemu_img_tick: NSImageView!
+    @IBOutlet weak var qemu_img_label: NSTextField!
     @IBOutlet weak var qemu_i386_tick: NSImageView!
     @IBOutlet weak var qemu_x86_64_tick: NSImageView!
     @IBOutlet weak var qemu_riscv32_tick: NSImageView!
@@ -78,7 +79,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkFile(QemuConstants.ARCH_68K, qemu_68k_tick);
         } else {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Attention. Folder " + path + " does not exist.");
-            setRedCross(qemu_img_tick);
+            setYellowCross(qemu_img_tick);
+            qemu_img_label.stringValue = QemuConstants.QEMU_IMG + " (Bundled)";
+            
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
             setRedCross(qemu_riscv32_tick);
@@ -94,6 +97,12 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     fileprivate func checkFile(_ path: String, _ image: NSImageView) {
         if QemuUtils.isBinaryAvailable(path) {
             setGreenTick(image);
+            if path == QemuConstants.QEMU_IMG {
+                qemu_img_label.stringValue = QemuConstants.QEMU_IMG;
+            }
+        } else if path == QemuConstants.QEMU_IMG {
+            setYellowCross(image);
+            qemu_img_label.stringValue = QemuConstants.QEMU_IMG + " (Bundled)";
         } else {
             setRedCross(image);
         }
@@ -104,7 +113,16 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil);
             view.contentTintColor = NSColor.systemGreen;
         } else {
-            view.image = NSImage(named: "checkmark.circle.fill")
+            view.image = NSImage(named: "checkmark.circle.fill");
+        }
+    }
+    
+    fileprivate func setYellowCross(_ view: NSImageView) {
+        if #available(macOS 11, *) {
+            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil);
+            view.contentTintColor = NSColor.systemYellow;
+        } else {
+            view.image = NSImage(named: "xmark.circle.fill.yellow");
         }
     }
     
@@ -113,7 +131,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil);
             view.contentTintColor = NSColor.systemRed;
         } else {
-            view.image = NSImage(named: "xmark.circle.fill")
+            view.image = NSImage(named: "xmark.circle.fill");
         }
     }
 }

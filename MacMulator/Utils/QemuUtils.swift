@@ -26,10 +26,10 @@ class QemuUtils {
         let command: String =
             QemuImgCommandBuilder(qemuPath:qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CREATE)
-                .withFormat(virtualDrive.format)
-                .withSize(virtualDrive.size)
-                .withName(virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
-                .build();
+            .withFormat(virtualDrive.format)
+            .withSize(virtualDrive.size)
+            .withName(virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
+            .build();
         
         shell.runCommand(command, uponCompletion: callback);
     }
@@ -37,7 +37,7 @@ class QemuUtils {
     static func resizeDiskImage(_ virtualDrive: VirtualDrive, shrink: Bool, uponCompletion callback: @escaping () -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
-
+        
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_RESIZE)
             .withName(virtualDrive.path)
@@ -51,7 +51,7 @@ class QemuUtils {
     static func convertDiskImage(_ virtualDrive: VirtualDrive, oldFormat: String, uponCompletion callback: @escaping () -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
-
+        
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
             .withFormat(oldFormat)
@@ -74,20 +74,16 @@ class QemuUtils {
     
     static func getDiskImageInfo(_ virtualDrive: VirtualDrive, uponCompletion callback: @escaping (String) -> Void) -> Void {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
-        if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {
-            let shell = Shell();
-
-            let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-                .withCommand(QemuConstants.IMAGE_CMD_INFO)
-                .withName(virtualDrive.path)
-                .build();
-            
-            shell.runCommand(command, uponCompletion: {
-                callback(shell.getStandardOutput());
-            });
-        } else {
-            callback("Cannot retrieve information on " + virtualDrive.name + ". Command qemu-img is not available at path " + qemuPath + ". Please review the path in Preferences panel");
-        }
+        let shell = Shell();
+        
+        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+            .withCommand(QemuConstants.IMAGE_CMD_INFO)
+            .withName(virtualDrive.path)
+            .build();
+        
+        shell.runCommand(command, uponCompletion: {
+            callback(shell.getStandardOutput());
+        });
     }
     
     static func isBinaryAvailable(_ binary: String) -> Bool {

@@ -926,6 +926,7 @@
                         <outlet property="qemu_arm64_tick" destination="h3K-6a-f4h" id="Fur-lQ-FvF"/>
                         <outlet property="qemu_arm_tick" destination="8O0-SH-CV8" id="on6-m3-L2H"/>
                         <outlet property="qemu_i386_tick" destination="sEJ-fi-wqq" id="27Y-NL-hOb"/>
+                        <outlet property="qemu_img_label" destination="TbL-Ch-oZB" id="N9t-Vd-5vH"/>
                         <outlet property="qemu_img_tick" destination="Mno-7U-prL" id="RO1-Cj-JnR"/>
                         <outlet property="qemu_ppc64_tick" destination="KDU-qN-eAe" id="pFt-mL-r25"/>
                         <outlet property="qemu_ppc_tick" destination="XXE-ml-0zx" id="LMc-WM-ogH"/>

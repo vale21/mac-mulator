@@ -65,7 +65,13 @@ class QemuImgCommandBuilder {
     }
     
     func build() -> String {
-        var cmd = self.qemuPath + "/" + self.executable;
+        var cmd = "";
+        if QemuUtils.isBinaryAvailable(self.executable) {
+            cmd = self.qemuPath + "/" + self.executable;
+        } else {
+            cmd = Bundle.main.path(forResource: "qemu-img", ofType: nil)!;
+        }
+        
         if let command = self.command {
             cmd += " " + command;
         }

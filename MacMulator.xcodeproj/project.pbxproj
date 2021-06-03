@@ -18,6 +18,10 @@
 		3B391F0B25C075F50030E914 /* MacMulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
+		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; };
+		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; };
+		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; };
+		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
@@ -60,6 +64,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3B57855C266527400003C3C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Libs;
+			dstSubfolderSpec = 7;
+			files = (
+				3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */,
+				3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */,
+				3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B57855E2665275C0003C3C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
@@ -77,6 +106,10 @@
 		3B391F0C25C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
+		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
+		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
+		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
 		3B6A9E0925CBFD8300123D6B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulator-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B6A9E1325CBFDDC00123D6B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
@@ -189,6 +222,16 @@
 			path = MacMulatorUITests;
 			sourceTree = "<group>";
 		};
+		3B578557266526460003C3C8 /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				3B57857E26652D440003C3C8 /* libintl.8.dylib */,
+				3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */,
+				3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */,
+			);
+			path = Libs;
+			sourceTree = "<group>";
+		};
 		3BA3AC1525E6645E00F02B0E /* NewVM */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +272,8 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B578557266526460003C3C8 /* Libs */,
+				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
 				3BBB473825CABDCB00A4DBA7 /* MacMulator.entitlements */,
 				3BBB473925CABDCB00A4DBA7 /* Info.plist */,
@@ -270,6 +315,8 @@
 				3B391EE525C075F50030E914 /* Sources */,
 				3B391EE625C075F50030E914 /* Frameworks */,
 				3B391EE725C075F50030E914 /* Resources */,
+				3B57855E2665275C0003C3C8 /* CopyFiles */,
+				3B57855C266527400003C3C8 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -596,7 +643,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
@@ -605,6 +652,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
@@ -622,7 +673,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
@@ -631,6 +682,10 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
