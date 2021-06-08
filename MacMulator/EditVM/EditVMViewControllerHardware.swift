@@ -8,19 +8,7 @@
 import Cocoa
 
 class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate {
-    
-    let supportedArchitectures: [String:String] = [
-        QemuConstants.ARCH_X64: "Intel/AMD 64bit",
-        QemuConstants.ARCH_X86: "Intel/AMD 32bit",
-        QemuConstants.ARCH_PPC: "PowerPc 32bit",
-        QemuConstants.ARCH_PPC64: "PowerPc 64bit",
-        QemuConstants.ARCH_ARM: "ARM",
-        QemuConstants.ARCH_ARM64: "ARM 64bit",
-        QemuConstants.ARCH_68K: "Motorola 68k",
-        QemuConstants.ARCH_RISCV32: "RISC-V 32bit",
-        QemuConstants.ARCH_RISCV64: "RISC-V 64bit"
-    ];
-    
+        
     @IBOutlet weak var architectureComboBox: NSComboBox!
     @IBOutlet weak var cpusComboBox: NSComboBox!
     @IBOutlet weak var memoryTextView: NSTextField!
@@ -110,7 +98,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         if (comboBox == architectureComboBox) {
-            return supportedArchitectures.count
+            return QemuConstants.ALL_ARCHITECTURES_DESC.count
         } else {
             if let virtualMachine = self.virtualMachine {
                 return QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0;
@@ -121,7 +109,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if (comboBox == architectureComboBox) {
-            return index >= 0 ? supportedArchitectures[QemuConstants.ALL_ARCHITECTURES[index]] : "";
+            return index >= 0 ? QemuConstants.ALL_ARCHITECTURES_DESC[QemuConstants.ALL_ARCHITECTURES[index]] : "";
         }
         return (index + 1);
     }

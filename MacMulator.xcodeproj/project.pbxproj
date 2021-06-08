@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,7 @@
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; };
 		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
+		3B6FF876266F791700368BAB /* SocketSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3B6FF875266F791700368BAB /* SocketSwift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
@@ -30,6 +31,7 @@
 		3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
 		3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
 		3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */; };
+		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471D25CABDAE00A4DBA7 /* Shell.swift */; };
 		3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471E25CABDAE00A4DBA7 /* Utils.swift */; };
 		3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */; };
@@ -120,6 +122,7 @@
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
 		3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineTableCellView.swift; sourceTree = "<group>"; };
+		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		3BBB473125CABDC600A4DBA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B6FF876266F791700368BAB /* SocketSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +168,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B3624FD266F6253007857FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3B391EE025C075F50030E914 = {
 			isa = PBXGroup;
 			children = (
@@ -171,6 +182,8 @@
 				3B391EFE25C075F50030E914 /* MacMulatorTests */,
 				3B391F0925C075F50030E914 /* MacMulatorUITests */,
 				3B391EEA25C075F50030E914 /* Products */,
+				3BB10092266F5293005D0E44 /* Qemu */,
+				3B3624FD266F6253007857FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -241,17 +254,25 @@
 			path = NewVM;
 			sourceTree = "<group>";
 		};
+		3BB10092266F5293005D0E44 /* Qemu */ = {
+			isa = PBXGroup;
+			children = (
+				3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */,
+				3B15E94725CD87760046891B /* QemuConstants.swift */,
+				3BBC4BB525DE74020001CA02 /* QemuUtils.swift */,
+				3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */,
+				3B73E41525CAE040004BAA92 /* QemuRunner.swift */,
+				3BB10093266F52D8005D0E44 /* QemuMonitor.swift */,
+			);
+			path = Qemu;
+			sourceTree = "<group>";
+		};
 		3BBB471C25CABDAE00A4DBA7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
 				3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */,
 				3B6A9E0925CBFD8300123D6B /* ObjC.h */,
 				3B6A9E1325CBFDDC00123D6B /* ObjC.m */,
-				3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */,
-				3B15E94725CD87760046891B /* QemuConstants.swift */,
-				3BBC4BB525DE74020001CA02 /* QemuUtils.swift */,
-				3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */,
-				3B73E41525CAE040004BAA92 /* QemuRunner.swift */,
 				3BBB471D25CABDAE00A4DBA7 /* Shell.swift */,
 				3BBB471E25CABDAE00A4DBA7 /* Utils.swift */,
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
@@ -323,6 +344,9 @@
 			dependencies = (
 			);
 			name = MacMulator;
+			packageProductDependencies = (
+				3B6FF875266F791700368BAB /* SocketSwift */,
+			);
 			productName = MacMulator;
 			productReference = 3B391EE925C075F50030E914 /* MacMulator.app */;
 			productType = "com.apple.product-type.application";
@@ -395,6 +419,9 @@
 				Base,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
+			packageReferences = (
+				3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */,
+			);
 			productRefGroup = 3B391EEA25C075F50030E914 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -462,6 +489,7 @@
 				3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */,
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
+				3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */,
 				3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */,
 				3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */,
 				3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */,
@@ -656,6 +684,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
+					"$(PROJECT_DIR)/TelnetClient/TelnetFiles/libtelnet",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
@@ -686,6 +715,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
+					"$(PROJECT_DIR)/TelnetClient/TelnetFiles/libtelnet",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
@@ -819,6 +849,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BiAtoms/Socket.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3B6FF875266F791700368BAB /* SocketSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */;
+			productName = SocketSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 3B391EE125C075F50030E914 /* Project object */;
 }

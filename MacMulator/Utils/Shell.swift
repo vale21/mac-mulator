@@ -11,6 +11,31 @@ class Shell {
     let task = Process();
     let pipe_out = Pipe();
     let pipe_err = Pipe();
+    let pipe_in = Pipe();
+    
+    func runAndKillCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
+        DispatchQueue.global().async {
+            print("Running " + command + " in " + self.task.currentDirectoryPath);
+            do {
+                try ObjC.catchException({
+                    if (!self.task.isRunning) {
+                        self.task.standardOutput = self.pipe_out;
+                        self.task.standardError = self.pipe_err;
+                        self.task.standardInput = self.pipe_in;
+                        
+                        self.task.arguments = ["-c", command];
+                        self.task.launchPath = "/bin/zsh";
+                        
+                        self.task.terminationHandler = {process in callback() };
+                        self.task.launch();
+                        self.task.interrupt();
+                    }
+                })
+            } catch {
+                print(error.localizedDescription);
+            }
+        }
+    }
     
     func runCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
         
@@ -43,6 +68,10 @@ class Shell {
         return task.isRunning;
     }
     
+    func kill() {
+        task.terminate();
+    }
+    
     func waitForCommand() {
         task.waitUntilExit();
     }
@@ -57,5 +86,11 @@ class Shell {
         let data = pipe_err.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         return output;
+    }
+    
+    func writeToStandardInput(_ command: String) {
+        if let data = command.data(using: .utf8) {
+            pipe_in.fileHandleForWriting.write(data);
+        }
     }
 }

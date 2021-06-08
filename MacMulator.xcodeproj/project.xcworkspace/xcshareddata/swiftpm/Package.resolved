@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SocketSwift",
+        "repositoryURL": "https://github.com/BiAtoms/Socket.swift.git",
+        "state": {
+          "branch": null,
+          "revision": "36911c13adfe12859ed43dcba878052b1897fcd3",
+          "version": "2.4.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

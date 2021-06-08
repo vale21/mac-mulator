@@ -112,4 +112,8 @@ class QemuRunner {
     func isRunning() -> Bool {
         return shell.isRunning();
     }
+    
+    func kill() {
+        shell.kill();
+    }
 }

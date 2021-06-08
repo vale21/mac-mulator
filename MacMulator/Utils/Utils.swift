@@ -128,6 +128,16 @@ class Utils {
         let formatted: String = formatter.string(from: value as NSNumber) ?? "n/a";
         return formatted + " GB";
     }
+    
+    static func findMainDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        let ret: VirtualDrive? = nil;
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK && drive.isBootDrive {
+                return drive;
+            }
+        }
+        return ret;
+    }
         
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/"}) else { return path };

@@ -60,6 +60,18 @@ class QemuConstants {
         ARCH_RISCV64
     ]
     
+    static let ALL_ARCHITECTURES_DESC: [String:String] = [
+        QemuConstants.ARCH_X64: "Intel/AMD 64bit",
+        QemuConstants.ARCH_X86: "Intel/AMD 32bit",
+        QemuConstants.ARCH_PPC: "PowerPc 32bit",
+        QemuConstants.ARCH_PPC64: "PowerPc 64bit",
+        QemuConstants.ARCH_ARM: "ARM",
+        QemuConstants.ARCH_ARM64: "ARM 64bit",
+        QemuConstants.ARCH_68K: "Motorola 68k",
+        QemuConstants.ARCH_RISCV32: "RISC-V 32bit",
+        QemuConstants.ARCH_RISCV64: "RISC-V 64bit"
+    ];
+    
     static let MAX_CPUS: [String:Int] = [
         ARCH_PPC: 1,
         ARCH_PPC64: 1,
@@ -117,6 +129,27 @@ class QemuConstants {
         RES_6016_3384
     ]
 
+    static let ALL_RESOLUTIONS_DESC: [String:String] = [
+        QemuConstants.RES_640_480: "640 x 480",
+        QemuConstants.RES_800_600: "800 x 600",
+        QemuConstants.RES_1024_768: "1024 x 768",
+        QemuConstants.RES_1280_1024: "1280 x 1024",
+        QemuConstants.RES_1600_1200: "1600 x 1200",
+        QemuConstants.RES_1024_600: "1024 x 600",
+        QemuConstants.RES_1280_800: "1280 x 800",
+        QemuConstants.RES_1440_900: "1440 x 900",
+        QemuConstants.RES_1680_1050: "1680 x 1050",
+        QemuConstants.RES_1920_1200: "1920 x 1200",
+        QemuConstants.RES_1280_720: "HD 720p (1280 x 720)",
+        QemuConstants.RES_1920_1080: "HD 1080p (1920 x 1080)",
+        QemuConstants.RES_2048_1152: "2K (2048 x 1152)",
+        QemuConstants.RES_2560_1440: "QHD (2560 x 1440)",
+        QemuConstants.RES_3840_2160: "UHD (3840 x 2160)",
+        QemuConstants.RES_4096_2160: "4K (4096 x 2160)",
+        QemuConstants.RES_5120_2280: "5K (5120 x 2280",
+        QemuConstants.RES_6016_3384: "6K (6016 x 3384)"
+    ];
+    
     static let supportedVMTypes: [String] = [
         QemuConstants.OS_MAC,
         QemuConstants.OS_WIN,

@@ -9,27 +9,6 @@ import Cocoa
 
 class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTextViewDelegate {
 
-    let supportedResolutions: [String:String] = [
-        QemuConstants.RES_640_480: "640 x 480",
-        QemuConstants.RES_800_600: "800 x 600",
-        QemuConstants.RES_1024_768: "1024 x 768",
-        QemuConstants.RES_1280_1024: "1280 x 1024",
-        QemuConstants.RES_1600_1200: "1600 x 1200",
-        QemuConstants.RES_1024_600: "1024 x 600",
-        QemuConstants.RES_1280_800: "1280 x 800",
-        QemuConstants.RES_1440_900: "1440 x 900",
-        QemuConstants.RES_1680_1050: "1680 x 1050",
-        QemuConstants.RES_1920_1200: "1920 x 1200",
-        QemuConstants.RES_1280_720: "HD 720p (1280 x 720)",
-        QemuConstants.RES_1920_1080: "HD 1080p (1920 x 1080)",
-        QemuConstants.RES_2048_1152: "2K (2048 x 1152)",
-        QemuConstants.RES_2560_1440: "QHD (2560 x 1440)",
-        QemuConstants.RES_3840_2160: "UHD (3840 x 2160)",
-        QemuConstants.RES_4096_2160: "4K (4096 x 2160)",
-        QemuConstants.RES_5120_2280: "5K (5120 x 2280",
-        QemuConstants.RES_6016_3384: "6K (6016 x 3384)"
-    ];
-    
     @IBOutlet weak var vmType: NSComboBox!
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
@@ -80,7 +59,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             return (virtualMachine?.drives.count ?? 0) + 1;
         }
         if tableView == resolutionTable {
-            return supportedResolutions.count;
+            return QemuConstants.ALL_RESOLUTIONS_DESC.count;
         }
         return 0;
     }
@@ -101,7 +80,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         }
         
         if tableView == resolutionTable {
-            cell.addSubview(NSTextField(labelWithString: supportedResolutions[QemuConstants.ALL_RESOLUTIONS[row]]!));
+            cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_RESOLUTIONS_DESC[QemuConstants.ALL_RESOLUTIONS[row]]!));
         }
         
         return cell;
