@@ -209,7 +209,7 @@ class VirtualMachineViewController: NSViewController {
         hideBoxControls(running);
         
         if running {
-            let imagefile = NSImage(contentsOfFile: "/Users/vale/Pictures/Wallpaper/Anna_Kournikova_1210200235157PM58.JPG");
+            let imagefile = NSImage.init(named: NSImage.Name("preview-loading"));
             if let image = imagefile {
                 self.screenshotView = NSImageView(image: image);
                 centralBox.contentView = self.screenshotView;
@@ -269,15 +269,4 @@ class VirtualMachineViewController: NSViewController {
         centralBox.isHidden = false;
         startVMButton.isHidden = false;
     }
-
-    /**
-    @IBAction func createVMButtonClicked(_ sender: Any) {
-        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
-    }
-    
-    @IBAction func importVMButtonClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
-    }
-    */
-    
 }

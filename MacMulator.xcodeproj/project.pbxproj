@@ -681,11 +681,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
-					"$(PROJECT_DIR)/TelnetClient/TelnetFiles/libtelnet",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -712,11 +708,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
-					"$(PROJECT_DIR)/TelnetClient/TelnetFiles/libtelnet",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";

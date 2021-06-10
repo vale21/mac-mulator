@@ -36,6 +36,7 @@ class QemuConstants {
     static let OS_MAC = "macOS";
     static let OS_WIN = "Windows";
     static let OS_LINUX = "Linux";
+    static let OS_OTHER = "Other";
     
     static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
@@ -153,7 +154,8 @@ class QemuConstants {
     static let supportedVMTypes: [String] = [
         QemuConstants.OS_MAC,
         QemuConstants.OS_WIN,
-        QemuConstants.OS_LINUX
+        QemuConstants.OS_LINUX,
+        QemuConstants.OS_OTHER
     ]
     
     enum MachineTypes: String {

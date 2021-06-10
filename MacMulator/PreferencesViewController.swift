@@ -80,8 +80,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         } else {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Attention. Folder " + path + " does not exist.");
             setYellowCross(qemu_img_tick);
-            qemu_img_label.stringValue = QemuConstants.QEMU_IMG + " (Bundled)";
-            
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
             setRedCross(qemu_riscv32_tick);
@@ -97,12 +95,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     fileprivate func checkFile(_ path: String, _ image: NSImageView) {
         if QemuUtils.isBinaryAvailable(path) {
             setGreenTick(image);
-            if path == QemuConstants.QEMU_IMG {
-                qemu_img_label.stringValue = QemuConstants.QEMU_IMG;
-            }
         } else if path == QemuConstants.QEMU_IMG {
             setYellowCross(image);
-            qemu_img_label.stringValue = QemuConstants.QEMU_IMG + " (Bundled)";
         } else {
             setRedCross(image);
         }
@@ -122,7 +116,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil);
             view.contentTintColor = NSColor.systemYellow;
         } else {
-            view.image = NSImage(named: "xmark.circle.fill.yellow");
+            view.image = NSImage.init(named: NSImage.Name("xmark.circle.fill.yellow"));
         }
     }
     

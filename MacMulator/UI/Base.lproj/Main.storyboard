@@ -1408,8 +1408,8 @@
                                                 </constraints>
                                             </view>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="210" id="SjJ-QF-abR"/>
-                                                <constraint firstAttribute="width" constant="468" id="caV-KT-BHh"/>
+                                                <constraint firstAttribute="height" priority="750" constant="210" id="SjJ-QF-abR"/>
+                                                <constraint firstAttribute="width" priority="750" constant="468" id="caV-KT-BHh"/>
                                             </constraints>
                                         </box>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WwV-tF-8bO">
@@ -1464,19 +1464,19 @@
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="top" secondItem="Qga-Ob-GTN" secondAttribute="top" constant="73" id="9iv-qW-TMR"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="HIc-TM-dfg"/>
                                         <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="20" symbolic="YES" id="HPs-DV-l6k"/>
-                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="cI4-jO-AFz" secondAttribute="bottom" constant="19" id="IB8-SA-qKe"/>
+                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="cI4-jO-AFz" secondAttribute="bottom" priority="750" constant="19" id="IB8-SA-qKe"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" priority="1" constant="20" symbolic="YES" id="ISP-Pt-LPJ"/>
                                         <constraint firstAttribute="bottom" secondItem="drX-xb-Fr1" secondAttribute="bottom" constant="20" symbolic="YES" id="Ire-r2-EXS"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="20" symbolic="YES" id="JIA-g2-NzM"/>
                                         <constraint firstItem="drX-xb-Fr1" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="8" id="KZW-wl-Wec"/>
                                         <constraint firstAttribute="bottom" secondItem="WwV-tF-8bO" secondAttribute="bottom" constant="20" symbolic="YES" id="Mum-ES-iQe"/>
-                                        <constraint firstAttribute="trailing" secondItem="cI4-jO-AFz" secondAttribute="trailing" constant="56" id="Ssi-qv-5BB"/>
+                                        <constraint firstAttribute="trailing" secondItem="cI4-jO-AFz" secondAttribute="trailing" priority="750" constant="56" id="Ssi-qv-5BB"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="bxU-xd-kJe"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="-14" id="cpO-JS-Zjx"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="jaF-HO-P0u"/>
                                         <constraint firstAttribute="trailing" secondItem="gzW-c5-Oke" secondAttribute="trailing" constant="20" id="lQ5-rZ-23V"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="centerY" secondItem="Qga-Ob-GTN" secondAttribute="centerY" id="lRS-pa-M3n"/>
-                                        <constraint firstItem="cI4-jO-AFz" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="56" id="mG7-z2-hX3"/>
+                                        <constraint firstItem="cI4-jO-AFz" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" priority="750" constant="56" id="mG7-z2-hX3"/>
                                     </constraints>
                                 </view>
                                 <color key="fillColor" name="VM View Background Color"/>
