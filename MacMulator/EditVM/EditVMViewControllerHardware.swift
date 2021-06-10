@@ -81,8 +81,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 destinationController.setMode(NewDiskViewController.Mode.EDIT);
             }
             if (segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE) {
-                let destinationController = segue.destinationController as! DriveInfoViewController;
-                destinationController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
+                let destinationController = segue.destinationController as! NSWindowController;
+                let contentController = destinationController.contentViewController as! DriveInfoViewController;
+                
+                contentController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
             }
         }
     }

@@ -12,6 +12,7 @@
                 <windowController showSeguePresentationStyle="single" id="oEd-tg-l1q" sceneMemberID="viewController">
                     <window key="window" title="New Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="dIq-vo-sNu">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="413" y="456" width="547" height="372"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
@@ -137,15 +138,15 @@ DQ
                                 <rect key="frame" x="66" y="167" width="415" height="69"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" drawsBackground="NO" id="qxd-lV-vZj">
-                                    <rect key="frame" x="1" y="1" width="413" height="67"/>
+                                    <rect key="frame" x="1" y="1" width="398" height="67"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="xiH-rE-LV3">
-                                            <rect key="frame" x="0.0" y="0.0" width="413" height="67"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="398" height="67"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="413" height="67"/>
+                                            <size key="minSize" width="398" height="67"/>
                                             <size key="maxSize" width="515" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment content="You can type here to write a description of your VM...">
@@ -168,7 +169,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="xHM-30-g5a">
-                                    <rect key="frame" x="398" y="1" width="16" height="67"/>
+                                    <rect key="frame" x="399" y="1" width="15" height="67"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>

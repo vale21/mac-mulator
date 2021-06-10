@@ -16,6 +16,8 @@ class VirtualMachineViewController: NSViewController {
     
     var boxContentView: NSView?;
 
+    @IBOutlet weak var noVMsBox: NSBox!
+    
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet weak var vmDescription: NSTextField!
     
@@ -49,19 +51,26 @@ class VirtualMachineViewController: NSViewController {
     override func viewWillAppear() {
         self.setRunningStatus(false);
         if self.vm != nil {
-            //changeStatusOfAllControls(hidden: false);
+            showVMAvailableLayout();
             
             if !QemuUtils.isBinaryAvailable(vm!.architecture) {
                 startVMButton.isEnabled = false;
             }
         } else {
-            //changeStatusOfAllControls(hidden: true);
-            startVMButton.isHidden = true;
+            showNoVmsLayout();
         }
     }
     
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
+    }
+    
+    @IBAction func createVM(_ sender: Any) {
+        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
+    }
+    
+    @IBAction func importVM(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
     }
     
     @IBAction func editVM(_ sender: Any) {
@@ -178,7 +187,7 @@ class VirtualMachineViewController: NSViewController {
             } else {
                 setRunningStatus(false);
             }
-            //changeStatusOfAllControls(hidden: false);
+            showVMAvailableLayout();
             
             if QemuUtils.isBinaryAvailable(vm.architecture) {
                 startVMButton.isEnabled = true;
@@ -186,8 +195,7 @@ class VirtualMachineViewController: NSViewController {
                 startVMButton.isEnabled = false;
             }
         } else {
-            //changeStatusOfAllControls(hidden: true);
-            startVMButton.isHidden = true;
+            showNoVmsLayout();
         }
     }
         
@@ -243,7 +251,26 @@ class VirtualMachineViewController: NSViewController {
         vmResolution.isHidden = hidden;
         editVMButton.isHidden = hidden;
     }
+    
+    fileprivate func showNoVmsLayout() {
+        noVMsBox.isHidden = false;
+        
+        vmName.isHidden = true;
+        vmDescription.isHidden = true;
+        centralBox.isHidden = true;
+        startVMButton.isHidden = true;
+    }
+    
+    fileprivate func showVMAvailableLayout() {
+        noVMsBox.isHidden = true;
+        
+        vmName.isHidden = false;
+        vmDescription.isHidden = false;
+        centralBox.isHidden = false;
+        startVMButton.isHidden = false;
+    }
 
+    /**
     @IBAction func createVMButtonClicked(_ sender: Any) {
         self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
     }
@@ -251,5 +278,6 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func importVMButtonClicked(_ sender: Any) {
         Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
     }
+    */
     
 }
