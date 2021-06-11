@@ -17,6 +17,8 @@ class VirtualMachineViewController: NSViewController {
     var boxContentView: NSView?;
 
     @IBOutlet weak var noVMsBox: NSBox!
+    @IBOutlet weak var newVMButton: NSButton!
+    @IBOutlet weak var importVMButton: NSButton!
     
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet weak var vmDescription: NSTextField!

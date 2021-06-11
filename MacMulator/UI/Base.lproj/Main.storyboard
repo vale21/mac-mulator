@@ -1152,12 +1152,12 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="eX2-gm-MSx">
-                                                        <rect key="frame" x="65" y="41" width="90" height="96"/>
+                                                        <rect key="frame" x="65" y="44" width="90" height="90"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="90" id="NVb-6u-tVM"/>
                                                             <constraint firstAttribute="height" constant="90" id="e0Q-gu-m9K"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="square" title="createVMButton" bezelStyle="shadowlessSquare" image="plus.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="CgY-NN-kRT">
+                                                        <buttonCell key="cell" type="square" title="createVMButton" bezelStyle="shadowlessSquare" image="new.vm" imagePosition="only" alignment="center" inset="2" id="CgY-NN-kRT">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -1166,12 +1166,12 @@
                                                         </connections>
                                                     </button>
                                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="uLv-zr-jEy">
-                                                        <rect key="frame" x="212" y="41" width="90" height="96"/>
+                                                        <rect key="frame" x="212" y="44" width="90" height="90"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="90" id="7vp-WP-TO2"/>
                                                             <constraint firstAttribute="height" constant="90" id="zJt-46-lyK"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="square" title="importVMButton" bezelStyle="shadowlessSquare" image="folder.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="lya-n1-ifB">
+                                                        <buttonCell key="cell" type="square" title="importVMButton" bezelStyle="shadowlessSquare" image="folder.circle" imagePosition="only" alignment="center" inset="2" id="lya-n1-ifB">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
@@ -1499,6 +1499,8 @@
                         <outlet property="centralBoxTrailingSpace" destination="Ssi-qv-5BB" id="jDN-x9-Yty"/>
                         <outlet property="centralBoxWidth" destination="caV-KT-BHh" id="kiT-UT-qnl"/>
                         <outlet property="editVMButton" destination="oHu-X9-tE7" id="DPc-7e-AK7"/>
+                        <outlet property="importVMButton" destination="uLv-zr-jEy" id="b9C-aG-D5c"/>
+                        <outlet property="newVMButton" destination="eX2-gm-MSx" id="uNK-3i-IAw"/>
                         <outlet property="noVMsBox" destination="f2n-08-TYD" id="obv-00-IdA"/>
                         <outlet property="pauseVMButton" destination="Fft-jP-dG6" id="TAM-Y8-0hz"/>
                         <outlet property="startVMButton" destination="WwV-tF-8bO" id="7aN-9a-6QH"/>
@@ -1543,12 +1545,12 @@
         <image name="NSAddTemplate" width="15" height="13"/>
         <image name="Windows-large" width="285" height="285"/>
         <image name="checkmark.circle.fill" catalog="system" width="15" height="15"/>
-        <image name="folder.circle" catalog="system" width="15" height="15"/>
+        <image name="folder.circle" width="78" height="78"/>
         <image name="macOS-small" width="45" height="45"/>
+        <image name="new.vm" width="78" height="78"/>
         <image name="pause.circle.fill" catalog="system" width="15" height="15"/>
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
         <image name="plus" catalog="system" width="15" height="13"/>
-        <image name="plus.circle" catalog="system" width="15" height="15"/>
         <image name="stop.circle.fill" catalog="system" width="15" height="15"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="VM View Background Color">
