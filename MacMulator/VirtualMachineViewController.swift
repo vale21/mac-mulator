@@ -271,4 +271,14 @@ class VirtualMachineViewController: NSViewController {
         centralBox.isHidden = false;
         startVMButton.isHidden = false;
     }
+    
+    func areThereRunningVMs() -> Bool {
+        return runningVMs.count > 0;
+    }
+    
+    func killAllRunningVMs() {
+        for runner in runningVMs.values {
+            runner.kill();
+        }
+    }
 }

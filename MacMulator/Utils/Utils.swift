@@ -64,6 +64,16 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler);
     }
     
+    static func showPromptAndGetResponse(window: NSWindow, style: NSAlert.Style, message: String) -> NSApplication.ModalResponse {
+        let alert: NSAlert = NSAlert();
+        alert.alertStyle = style;
+        alert.messageText = message;
+        alert.addButton(withTitle: "OK");
+        alert.addButton(withTitle: "Cancel");
+        return alert.runModal();
+    }
+        
+    
     static func escape(_ string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "\\ ");
     }

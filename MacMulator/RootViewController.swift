@@ -74,5 +74,16 @@ class RootViewController: NSSplitViewController {
             vmController?.setVirtualMachine(virtualMachine);
         }
     }
+    
+    func areThereRunningVMs() -> Bool {
+        if let vmController = self.vmController {
+            return vmController.areThereRunningVMs();
+        }
+        return false;
+    }
+    
+    func killAllRunningVMs() {
+        vmController?.killAllRunningVMs();
+    }
 }
 

@@ -49,6 +49,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         setupSavedVMs();
     }
+    
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        if let rootController = self.rootController {
+            if rootController.areThereRunningVMs() {
+                let response = Utils.showPromptAndGetResponse(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+                if response.rawValue != Utils.ALERT_RESP_OK {
+                    return NSApplication.TerminateReply.terminateCancel;
+                } else {
+                    rootController.killAllRunningVMs();
+                }
+            }
+        }
+        
+        return NSApplication.TerminateReply.terminateNow;
+    }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
