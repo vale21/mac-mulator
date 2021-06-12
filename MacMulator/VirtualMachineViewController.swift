@@ -183,13 +183,13 @@ class VirtualMachineViewController: NSViewController {
             let mainDrive = Utils.findMainDrive(vm.drives);
             vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified";
             vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
+            showVMAvailableLayout();
             
             if (runningVMs[vm] != nil) {
                 setRunningStatus(true);
             } else {
                 setRunningStatus(false);
             }
-            showVMAvailableLayout();
             
             if QemuUtils.isBinaryAvailable(vm.architecture) {
                 startVMButton.isEnabled = true;

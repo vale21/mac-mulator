@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return false;
         }
     }
-                
+          
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
 
