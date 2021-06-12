@@ -82,6 +82,14 @@ class Utils {
         return string.replacingOccurrences(of: "\\ ", with: " ");
     }
     
+    static func cleanFoldrPath(_ string: String) -> String {
+        var ret = escape(string);
+        if ret.hasSuffix("/") {
+            ret = String(ret.dropLast());
+        }
+        return ret;
+    }
+    
     fileprivate static func toDecimalWithAutoLocale(_ string: String) -> Decimal? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -155,7 +163,7 @@ class Utils {
     }
     
     static func getDefaultVmFolderPath() -> String {
-        return NSHomeDirectory() + "/MacMulator/";
+        return NSHomeDirectory() + "/MacMulator";
     }
     
     static func getDefaultQemuFolderPath() -> String {

@@ -178,21 +178,25 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if tableColumn?.identifier.rawValue == "Name" {
             let cellView = cell as! DrivesTableDriveNameCell;
             cellView.label.stringValue = virtualMachine?.drives[row].name ?? "";
+            cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Type" {
             let cellView = cell as! DrivesTableDriveTypeCell;
             cellView.label.stringValue = QemuUtils.getDriveTypeDescription(virtualMachine?.drives[row].mediaType ?? "");
+            cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Size" {
             let cellView = cell as! DrivesTableDriveSizeCell;
             cellView.label.stringValue = Utils.formatDisk(virtualMachine?.drives[row].size ?? 0);
+            cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Path" {
             let cellView = cell as! DrivesTableDrivePathCell;
             cellView.label.stringValue = Utils.unescape(virtualMachine?.drives[row].path ?? "");
+            cellView.toolTip = cellView.label.stringValue;
         }
         
         if (tableColumn?.identifier.rawValue == "Buttons") {

@@ -51,6 +51,10 @@ class VirtualMachineViewController: NSViewController {
     var screenshotView: NSImageView?;
 
     override func viewWillAppear() {
+        startVMButton.toolTip = "Start this VM";
+        pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
+        stopVMButton.toolTip = "Stop the execution of this VM";
+        
         self.setRunningStatus(false);
         if self.vm != nil {
             showVMAvailableLayout();
