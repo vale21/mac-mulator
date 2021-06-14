@@ -158,15 +158,19 @@ class QemuConstants {
         QemuConstants.OS_OTHER
     ]
     
-    enum MachineTypes: String {
-        case Mac99_pmu = "mac99,via=pmu";
-    }
+    static let MACHINE_TYPE_MAC99 = "mac99,via=pmu";
+    static let MACHINE_TYPE_Q35 = "q35";
     
-    enum BiosTypes: String {
-        case Pc_bios = "pc-bios";
-    }
+    static let PC_BIOS = "pc-bios";
     
-    enum NetworkTypes: String {
-        case Sungem = "sungem";
-    }
+    static let NETWORK_SUNGEM = "sungem";
+    
+    static let VGA_VIRTIO = "virtio";
+    static let VGA_VMWARE = "vmware";
+    
+    static let CPU_HOST = "host";
+    
+    static let ACCEL_HVF = "hvf";
+    
+    static let USB_TABLET = "usb-tablet";
 }

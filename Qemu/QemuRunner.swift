@@ -30,16 +30,32 @@ class QemuRunner {
         if let command = virtualMachine.qemuCommand {
             return command;
         } else {
-            var builder: QemuCommandBuilder =
-                QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-                .withBios(QemuConstants.BiosTypes.Pc_bios.rawValue)
-                .withCpus(virtualMachine.cpus)
-                .withBootArg(computeBootArg(virtualMachine))
-                .withMachine(QemuConstants.MachineTypes.Mac99_pmu.rawValue)
-                .withMemory(virtualMachine.memory)
-                .withGraphics(virtualMachine.displayResolution)
-                .withAutoBoot(true)
-                .withVgaEnabled(true);
+            var builder: QemuCommandBuilder;
+            if virtualMachine.os == QemuConstants.OS_MAC {
+                builder =
+                    QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+                    .withBios(QemuConstants.PC_BIOS)
+                    .withCpus(virtualMachine.cpus)
+                    .withBootArg(computeBootArg(virtualMachine))
+                    .withMachine(QemuConstants.MACHINE_TYPE_MAC99)
+                    .withMemory(virtualMachine.memory)
+                    .withGraphics(virtualMachine.displayResolution)
+                    .withAutoBoot(true)
+                    .withVgaEnabled(true)
+                    .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+            } else {
+                builder =
+                    QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+                    .withBios(QemuConstants.PC_BIOS)
+                    .withCpus(virtualMachine.cpus)
+                    .withBootArg(computeBootArg(virtualMachine))
+                    .withMachine(QemuConstants.MACHINE_TYPE_Q35)
+                    .withMemory(virtualMachine.memory)
+                    .withVga(QemuConstants.VGA_VIRTIO)
+                    .withCpu(QemuConstants.CPU_HOST)
+                    .withAccel(QemuConstants.ACCEL_HVF)
+                    .withUsb(QemuConstants.USB_TABLET);
+            }
                 
             var index = 1;
             for drive in virtualMachine.drives {
@@ -61,9 +77,7 @@ class QemuRunner {
                 }
             }
             
-            builder = builder
-                .withNetwork(name: "network-0", device: QemuConstants.NetworkTypes.Sungem.rawValue)
-                .withManagementPort(listenPort);
+            builder = builder.withManagementPort(listenPort);
             return builder.build();
         }
     }

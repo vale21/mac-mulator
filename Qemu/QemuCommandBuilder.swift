@@ -13,6 +13,10 @@ class QemuCommandBuilder {
     var executable: String;
     var bios: String?;
     var cpus: Int?;
+    var accel: String?;
+    var vga: String?;
+    var cpu: String?;
+    var usb: String?;
     var bootArg: String?;
     var machine: String?;
     var memory: Int32?
@@ -35,6 +39,26 @@ class QemuCommandBuilder {
     
     func withCpus(_ cpus: Int) -> QemuCommandBuilder {
         self.cpus = cpus;
+        return self;
+    }
+    
+    func withAccel(_ accel: String) -> QemuCommandBuilder {
+        self.accel = accel;
+        return self;
+    }
+    
+    func withVga(_ vga: String) -> QemuCommandBuilder {
+        self.vga = vga;
+        return self;
+    }
+    
+    func withCpu(_ cpu: String) -> QemuCommandBuilder {
+        self.cpu = cpu;
+        return self;
+    }
+    
+    func withUsb(_ usb: String) -> QemuCommandBuilder {
+        self.usb = usb;
         return self;
     }
     
@@ -93,6 +117,18 @@ class QemuCommandBuilder {
         }
         if let bootArg = self.bootArg {
             cmd += " -boot " + bootArg;
+        }
+        if let accel = self.accel {
+            cmd += " -accel " + accel;
+        }
+        if let vga = self.vga {
+            cmd += " -vga " + vga;
+        }
+        if let cpu = self.cpu {
+            cmd += " -cpu " + cpu;
+        }
+        if let usb = self.usb {
+            cmd += " -usb -device " + usb;
         }
         if let machine = self.machine {
             cmd += " -M " + machine;
