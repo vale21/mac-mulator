@@ -13,6 +13,9 @@ class RootViewController: NSSplitViewController {
     private var listController: VirtualMachinesListViewController?;
     private var vmController: VirtualMachineViewController?;
     
+    var virtualMachines: [VirtualMachine] = [];
+    var runningVMs: [VirtualMachine : QemuRunner] = [:];
+    
     override func viewDidLoad() {
         super.viewDidLoad();
     
@@ -49,19 +52,47 @@ class RootViewController: NSSplitViewController {
         }
     }
     
-    func deleteVirtualMachine(_ virtualMachine: VirtualMachine) {
-        vmController?.setVirtualMachine(nil);
-        
-        let delegate = NSApp.delegate as! AppDelegate;
-        delegate.removeSavedVM(virtualMachine.path);
-    }
-    
     func addVirtualMachine(_ virtualMachine: VirtualMachine) {
-        listController?.addVirtualMachine(virtualMachine);
+        if (!virtualMachines.contains(virtualMachine)) {
+            virtualMachines.append(virtualMachine);
+            listController?.refreshList();
+        }
+        
         vmController?.setVirtualMachine(virtualMachine);
         
         let delegate = NSApp.delegate as! AppDelegate;
         delegate.addSavedVM(virtualMachine.path);
+    }
+    
+    func getVirtualMachinesCount() -> Int {
+        return virtualMachines.count;
+    }
+    
+    func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
+        return virtualMachines[index];
+    }
+    
+    func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
+        vmController?.setVirtualMachine(nil);
+        
+        let virtualMachine = virtualMachines.remove(at: index);
+        
+        let delegate = NSApp.delegate as! AppDelegate;
+        delegate.removeSavedVM(virtualMachine.path);
+        
+        return virtualMachine;
+    }
+    
+    func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
+        runningVMs[vm] = runner;
+    }
+    
+    func unsetRunningVM(_ vm: VirtualMachine) {
+        runningVMs.removeValue(forKey: vm);
+    }
+    
+    func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {
+        return runningVMs[vm];
     }
     
     func showAlert(_ message: String) {
@@ -76,14 +107,13 @@ class RootViewController: NSSplitViewController {
     }
     
     func areThereRunningVMs() -> Bool {
-        if let vmController = self.vmController {
-            return vmController.areThereRunningVMs();
-        }
-        return false;
+        return runningVMs.count > 0;
     }
     
     func killAllRunningVMs() {
-        vmController?.killAllRunningVMs();
+        for runner in runningVMs.values {
+            runner.kill();
+        }
     }
 }
 

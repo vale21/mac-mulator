@@ -31,30 +31,10 @@ class QemuRunner {
             return command;
         } else {
             var builder: QemuCommandBuilder;
-            if virtualMachine.os == QemuConstants.OS_MAC {
-                builder =
-                    QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-                    .withBios(QemuConstants.PC_BIOS)
-                    .withCpus(virtualMachine.cpus)
-                    .withBootArg(computeBootArg(virtualMachine))
-                    .withMachine(QemuConstants.MACHINE_TYPE_MAC99)
-                    .withMemory(virtualMachine.memory)
-                    .withGraphics(virtualMachine.displayResolution)
-                    .withAutoBoot(true)
-                    .withVgaEnabled(true)
-                    .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+            if virtualMachine.architecture == QemuConstants.ARCH_PPC {
+                builder = createBuilderForPPC();
             } else {
-                builder =
-                    QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-                    .withBios(QemuConstants.PC_BIOS)
-                    .withCpus(virtualMachine.cpus)
-                    .withBootArg(computeBootArg(virtualMachine))
-                    .withMachine(QemuConstants.MACHINE_TYPE_Q35)
-                    .withMemory(virtualMachine.memory)
-                    .withVga(QemuConstants.VGA_VIRTIO)
-                    .withCpu(QemuConstants.CPU_HOST)
-                    .withAccel(QemuConstants.ACCEL_HVF)
-                    .withUsb(QemuConstants.USB_TABLET);
+                builder = createBuilderForX86_64();
             }
                 
             var index = 1;
@@ -80,6 +60,32 @@ class QemuRunner {
             builder = builder.withManagementPort(listenPort);
             return builder.build();
         }
+    }
+    
+    fileprivate func createBuilderForPPC() -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withBios(QemuConstants.PC_BIOS)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withMachine(QemuConstants.MACHINE_TYPE_MAC99)
+            .withMemory(virtualMachine.memory)
+            .withGraphics(virtualMachine.displayResolution)
+            .withAutoBoot(true)
+            .withVgaEnabled(true)
+            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+    }
+    
+    fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withBios(QemuConstants.PC_BIOS)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withMachine(QemuConstants.MACHINE_TYPE_Q35)
+            .withMemory(virtualMachine.memory)
+            .withVga(QemuConstants.VGA_VIRTIO)
+            .withCpu(QemuConstants.CPU_HOST)
+            .withAccel(QemuConstants.ACCEL_HVF)
+            .withUsb(QemuConstants.USB_TABLET);
     }
         
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {

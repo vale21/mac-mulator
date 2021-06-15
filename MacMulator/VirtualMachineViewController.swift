@@ -12,8 +12,7 @@ class VirtualMachineViewController: NSViewController {
     var listenPort: Int32 = 4444;
     var vm : VirtualMachine?;
     var rootController: RootViewController?;
-    var runningVMs: [VirtualMachine : QemuRunner] = [:];
-    
+  
     var boxContentView: NSView?;
 
     @IBOutlet weak var noVMsBox: NSBox!
@@ -89,7 +88,7 @@ class VirtualMachineViewController: NSViewController {
         if let vm = self.vm {
             boxContentView = centralBox.contentView;
             let runner = QemuRunner(listenPort: listenPort, virtualMachine: vm);
-            runningVMs[vm] = runner;
+            rootController?.setRunningVM(vm, runner);
             listenPort += 1;
             if (runner.isRunning()) {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
@@ -99,7 +98,7 @@ class VirtualMachineViewController: NSViewController {
                 runner.runVM(uponCompletion: {
                     virtualMachine in
                     DispatchQueue.main.async {
-                        self.runningVMs.removeValue(forKey: virtualMachine);
+                        self.rootController?.unsetRunningVM(virtualMachine);
                         self.setRunningStatus(false);
                     }
                 });
@@ -113,7 +112,7 @@ class VirtualMachineViewController: NSViewController {
         Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
             if response.rawValue == Utils.ALERT_RESP_OK {
                 if let vm = self.vm {
-                    self.runningVMs[vm]?.kill();
+                    self.rootController?.getRunnerForRunningVM(vm)?.kill();
                 }
             }
         });
@@ -123,54 +122,56 @@ class VirtualMachineViewController: NSViewController {
         super.viewDidLoad();
     }
     
-    fileprivate func setupScreenshotTimer(_ runner: QemuRunner) {
+    fileprivate func setupScreenshotTimer(_ runnerIn: QemuRunner?) {
         
-        var even = 0;
-        var odd = 1;
+        if let runner = runnerIn {
+            var even = 0;
+            var odd = 1;
+            
+            let updateFrequency = 5.0;
+            
+            if updateFrequency > 1 {
+                Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in
+                    // take initial shot after 1s
+                    let imageName_initial = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
+                    let monitor = QemuMonitor(runner.listenPort);
+                    monitor.takeScreenshot(path: imageName_initial);
+                    monitor.close();
+                });
+            }
+
+            Timer.scheduledTimer(withTimeInterval: updateFrequency, repeats: true, block: { timer in
         
-        let updateFrequency = 5.0;
-        
-        if updateFrequency > 1 {
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in
-                // take initial shot after 1s
-                let imageName_initial = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
-                let monitor = QemuMonitor(runner.listenPort);
-                monitor.takeScreenshot(path: imageName_initial);
-                monitor.close();
+                let imageName_even = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(even) + ".ppm";
+                let imageName_odd = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
+                
+                if !runner.isRunning() || runner.virtualMachine != self.vm {
+                    timer.invalidate();
+                    
+                    let fileManager = FileManager.default;
+                    do {
+                        try fileManager.removeItem(atPath: imageName_even);
+                        try fileManager.removeItem(atPath: imageName_odd);
+                    } catch {
+                        print("Cannot clear temporary images: " + error.localizedDescription);
+                    }
+                } else {
+                    DispatchQueue.global().async {
+                        if runner.isRunning() {
+                            let monitor = QemuMonitor(runner.listenPort);
+                            monitor.takeScreenshot(path: imageName_even);
+                            monitor.close();
+                        }
+                    }
+                    self.screenshotView?.image = NSImage(byReferencingFile: imageName_odd);
+                    
+                    // swap even and odd
+                    let temp = even;
+                    even = odd;
+                    odd = temp;
+                }
             });
         }
-
-        Timer.scheduledTimer(withTimeInterval: updateFrequency, repeats: true, block: { timer in
-    
-            let imageName_even = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(even) + ".ppm";
-            let imageName_odd = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
-            
-            if !runner.isRunning() || runner.virtualMachine != self.vm {
-                timer.invalidate();
-                
-                let fileManager = FileManager.default;
-                do {
-                    try fileManager.removeItem(atPath: imageName_even);
-                    try fileManager.removeItem(atPath: imageName_odd);
-                } catch {
-                    print("Cannot clear temporary images: " + error.localizedDescription);
-                }
-            } else {
-                DispatchQueue.global().async {
-                    if runner.isRunning() {
-                        let monitor = QemuMonitor(runner.listenPort);
-                        monitor.takeScreenshot(path: imageName_even);
-                        monitor.close();
-                    }
-                }
-                self.screenshotView?.image = NSImage(byReferencingFile: imageName_odd);
-                
-                // swap even and odd
-                let temp = even;
-                even = odd;
-                odd = temp;
-            }
-        });
     }
     
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
@@ -189,7 +190,7 @@ class VirtualMachineViewController: NSViewController {
             vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
             showVMAvailableLayout();
             
-            if (runningVMs[vm] != nil) {
+            if (rootController?.getRunnerForRunningVM(vm) != nil) {
                 setRunningStatus(true);
             } else {
                 setRunningStatus(false);
@@ -214,13 +215,13 @@ class VirtualMachineViewController: NSViewController {
         resizeCentralBox(running);
         hideBoxControls(running);
         
-        if running {
+        if running, let vm = self.vm {
             let imagefile = NSImage.init(named: NSImage.Name("preview-loading"));
             if let image = imagefile {
                 self.screenshotView = NSImageView(image: image);
                 centralBox.contentView = self.screenshotView;
             }
-            setupScreenshotTimer(runningVMs[vm!]!);
+            setupScreenshotTimer(rootController?.getRunnerForRunningVM(vm));
         } else if boxContentView != nil {
             centralBox.contentView = boxContentView;
         }
@@ -274,15 +275,5 @@ class VirtualMachineViewController: NSViewController {
         vmDescription.isHidden = false;
         centralBox.isHidden = false;
         startVMButton.isHidden = false;
-    }
-    
-    func areThereRunningVMs() -> Bool {
-        return runningVMs.count > 0;
-    }
-    
-    func killAllRunningVMs() {
-        for runner in runningVMs.values {
-            runner.kill();
-        }
     }
 }

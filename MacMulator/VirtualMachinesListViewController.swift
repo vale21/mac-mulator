@@ -12,22 +12,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     @IBOutlet weak var table: NSTableView!
     @IBOutlet weak var rightClickmenu: NSMenu!
     
-    var virtualMachines: [VirtualMachine] = [];
     var rootController: RootViewController?;
     
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
     
-    func addVirtualMachine(_ virtualMachine: VirtualMachine) {
-        if (!virtualMachines.contains(virtualMachine)) {
-            virtualMachines.append(virtualMachine);
-            self.table.reloadData();
-        }
-    }
-    
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return virtualMachines.count;
+        return rootController?.getVirtualMachinesCount() ?? 0;
     }
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -36,7 +28,9 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView;
-        cell.setVirtualMachine(virtualMachine: virtualMachines[row]);
+        if let rootController = self.rootController {
+            cell.setVirtualMachine(virtualMachine: rootController.getVirtualMachineAt(row));
+        }
         return cell;
     }
     
@@ -48,9 +42,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        let tableView = notification.object as! NSTableView;
-        let selectedvm = virtualMachines[tableView.selectedRow];
-        rootController!.setCurrentVirtualMachine(selectedvm);
+        if let rootController = self.rootController {
+            let tableView = notification.object as! NSTableView;
+            let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow);
+            rootController.setCurrentVirtualMachine(selectedvm);
+        }
     }
     
     override func viewDidLoad() {
@@ -71,16 +67,17 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
     
     func editVirtualMachine(_ index: Int) {
-        let item = virtualMachines[index];
-        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: item);
+        if let rootController = self.rootController {
+            let item = rootController.getVirtualMachineAt(index);
+            self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: item);
+        }
     }
         
     func deleteVirtualMachine(_ index: Int) {
-        let removed = virtualMachines.remove(at: index);
-        table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
-        //table.reloadData();
-        
-        rootController?.deleteVirtualMachine(removed);
+        if let rootController = self.rootController {
+            rootController.removeVirtualMachineAt(index);
+            table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
+        }
     }
     
     func refreshList() {
