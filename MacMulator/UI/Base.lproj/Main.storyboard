@@ -1031,19 +1031,19 @@
         <scene sceneID="2N4-O2-zee">
             <objects>
                 <viewController id="MaW-A6-dOb" customClass="VirtualMachinesListViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="nLr-hu-ybJ">
-                        <rect key="frame" x="0.0" y="0.0" width="220" height="500"/>
+                    <view key="view" misplaced="YES" id="nLr-hu-ybJ">
+                        <rect key="frame" x="0.0" y="0.0" width="220" height="499"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="55" horizontalPageScroll="10" verticalLineScroll="55" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="oCo-hN-rcu">
-                                <rect key="frame" x="0.0" y="0.0" width="220" height="442"/>
+                                <rect key="frame" x="0.0" y="0.0" width="220" height="441"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <clipView key="contentView" drawsBackground="NO" id="wTC-Ft-qwg">
-                                    <rect key="frame" x="0.0" y="0.0" width="220" height="442"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="220" height="441"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="55" rowSizeStyle="automatic" viewBased="YES" id="a7y-SM-3es">
-                                            <rect key="frame" x="0.0" y="0.0" width="220" height="442"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="220" height="441"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1081,8 +1081,20 @@
                                                                         <imageReference key="image" image="macOS-small" symbolScale="large"/>
                                                                     </imageCell>
                                                                 </imageView>
+                                                                <progressIndicator maxValue="100" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="iux-aD-SNu">
+                                                                    <rect key="frame" x="3" y="12" width="32" height="32"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="32" id="ez6-ao-f2M"/>
+                                                                        <constraint firstAttribute="height" constant="32" id="pyC-6c-vGl"/>
+                                                                    </constraints>
+                                                                </progressIndicator>
                                                             </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="iux-aD-SNu" firstAttribute="centerY" secondItem="nQd-YO-CSf" secondAttribute="centerY" id="M8j-cc-4f8"/>
+                                                                <constraint firstItem="iux-aD-SNu" firstAttribute="leading" secondItem="nQd-YO-CSf" secondAttribute="leading" constant="3" id="sgN-X4-an5"/>
+                                                            </constraints>
                                                             <connections>
+                                                                <outlet property="runningSpinner" destination="iux-aD-SNu" id="g4g-ph-sKc"/>
                                                                 <outlet property="vmIcon" destination="QAz-zy-mTK" id="Msr-Lm-EsJ"/>
                                                                 <outlet property="vmName" destination="qJR-bt-XWc" id="DJr-aW-UBS"/>
                                                             </connections>

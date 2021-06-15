@@ -76,6 +76,8 @@ class QemuRunner {
     }
     
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
+        let isNativeIntel = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -83,8 +85,8 @@ class QemuRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withCpu(QemuConstants.CPU_HOST)
-            .withAccel(QemuConstants.ACCEL_HVF)
+            .withCpu(isNativeIntel ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64)
+            .withAccel(isNativeIntel ? QemuConstants.ACCEL_HVF : nil)
             .withUsb(QemuConstants.USB_TABLET);
     }
         

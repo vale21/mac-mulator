@@ -72,7 +72,7 @@ class Utils {
         alert.addButton(withTitle: "Cancel");
         return alert.runModal();
     }
-        
+    
     
     static func escape(_ string: String) -> String {
         return string.replacingOccurrences(of: " ", with: "\\ ");
@@ -109,7 +109,7 @@ class Utils {
         
         return NSDecimalNumber(decimal:decimal).doubleValue
     }
-
+    
     static func toInt32WithAutoLocale(_ string: String) -> Int32? {
         guard let decimal = Utils.toDecimalWithAutoLocale(string) else {
             return nil
@@ -138,7 +138,7 @@ class Utils {
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2
         formatter.numberStyle = .decimal
-
+        
         if value == 0 {
             return "N/A";
         }
@@ -156,7 +156,7 @@ class Utils {
         }
         return ret;
     }
-        
+    
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/"}) else { return path };
         return path.substring(to: lastSlash);
@@ -168,5 +168,33 @@ class Utils {
     
     static func getDefaultQemuFolderPath() -> String {
         return "/opt/local/bin";
+    }
+    
+    static func hostArchitecture() -> String? {
+        /// Returns a `String` representing the machine hardware name or nil if there was an error invoking `uname(_:)` or decoding the response.
+        /// Return value is the equivalent to running `$ uname -m` in shell.
+        var machineHardwareName: String? {
+            var sysinfo = utsname()
+            let result = uname(&sysinfo)
+            guard result == EXIT_SUCCESS else { return nil }
+            let data = Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN))
+            guard let identifier = String(bytes: data, encoding: .ascii) else { return nil }
+            return identifier.trimmingCharacters(in: .controlCharacters)
+        }
+        return machineHardwareName;
+    }
+    
+    static func isRunningInEmulation() -> Bool {
+        var ret = Int32(0)
+        var size = ret.bitWidth;
+        
+        let result = sysctlbyname("sysctl.proc_translated", &ret, &size, nil, 0)
+        if result == -1 {
+            if (errno == ENOENT){
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }

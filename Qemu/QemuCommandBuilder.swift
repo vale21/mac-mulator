@@ -32,62 +32,62 @@ class QemuCommandBuilder {
         self.executable = architecture;
     }
     
-    func withBios(_ bios: String) -> QemuCommandBuilder {
+    func withBios(_ bios: String?) -> QemuCommandBuilder {
         self.bios = bios;
         return self;
     }
     
-    func withCpus(_ cpus: Int) -> QemuCommandBuilder {
+    func withCpus(_ cpus: Int?) -> QemuCommandBuilder {
         self.cpus = cpus;
         return self;
     }
     
-    func withAccel(_ accel: String) -> QemuCommandBuilder {
+    func withAccel(_ accel: String?) -> QemuCommandBuilder {
         self.accel = accel;
         return self;
     }
     
-    func withVga(_ vga: String) -> QemuCommandBuilder {
+    func withVga(_ vga: String?) -> QemuCommandBuilder {
         self.vga = vga;
         return self;
     }
     
-    func withCpu(_ cpu: String) -> QemuCommandBuilder {
+    func withCpu(_ cpu: String?) -> QemuCommandBuilder {
         self.cpu = cpu;
         return self;
     }
     
-    func withUsb(_ usb: String) -> QemuCommandBuilder {
+    func withUsb(_ usb: String?) -> QemuCommandBuilder {
         self.usb = usb;
         return self;
     }
     
-    func withBootArg(_ bootArg: String) -> QemuCommandBuilder {
+    func withBootArg(_ bootArg: String?) -> QemuCommandBuilder {
         self.bootArg = bootArg;
         return self;
     }
     
-    func withMachine(_ machine: String) -> QemuCommandBuilder {
+    func withMachine(_ machine: String?) -> QemuCommandBuilder {
         self.machine = machine;
         return self;
     }
     
-    func withMemory(_ memory: Int32) -> QemuCommandBuilder {
+    func withMemory(_ memory: Int32?) -> QemuCommandBuilder {
         self.memory = memory;
         return self;
     }
     
-    func withGraphics(_ graphics: String) -> QemuCommandBuilder {
+    func withGraphics(_ graphics: String?) -> QemuCommandBuilder {
         self.graphics = graphics;
         return self;
     }
     
-    func withAutoBoot(_ autoBoot: Bool) -> QemuCommandBuilder {
+    func withAutoBoot(_ autoBoot: Bool?) -> QemuCommandBuilder {
         self.autoBoot = autoBoot;
         return self;
     }
     
-    func withVgaEnabled(_ vgaEnabled: Bool) -> QemuCommandBuilder {
+    func withVgaEnabled(_ vgaEnabled: Bool?) -> QemuCommandBuilder {
         self.vgaEnabled = vgaEnabled;
         return self;
     }

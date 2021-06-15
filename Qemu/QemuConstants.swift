@@ -158,6 +158,8 @@ class QemuConstants {
         QemuConstants.OS_OTHER
     ]
     
+    static let HOST_X86_64 = "x86_64";
+    
     static let MACHINE_TYPE_MAC99 = "mac99,via=pmu";
     static let MACHINE_TYPE_Q35 = "q35";
     
@@ -169,6 +171,7 @@ class QemuConstants {
     static let VGA_VMWARE = "vmware";
     
     static let CPU_HOST = "host";
+    static let CPU_QEMU64 = "qemu64";
     
     static let ACCEL_HVF = "hvf";
     

@@ -89,4 +89,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func refreshList() {
         self.table.reloadData();
     }
+    
+    func setRunning(_ index: Int, _ running: Bool) {
+        let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView;
+        if let cellView = view {
+            cellView.setRunning(running);
+        }
+    }
 }

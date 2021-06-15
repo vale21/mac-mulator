@@ -97,10 +97,12 @@ class RootViewController: NSSplitViewController {
     
     func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
         runningVMs[vm] = runner;
+        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
     }
     
     func unsetRunningVM(_ vm: VirtualMachine) {
         runningVMs.removeValue(forKey: vm);
+        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, false);
     }
     
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {
