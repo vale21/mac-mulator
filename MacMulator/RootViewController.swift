@@ -42,7 +42,13 @@ class RootViewController: NSSplitViewController {
     }
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
-        vmController?.setVirtualMachine(currentVm);
+        if let vm = currentVm {
+            vmController?.setVirtualMachine(vm);
+            listController?.selectElement(virtualMachines.firstIndex(of: vm) ?? -1);
+        } else {
+            vmController?.setVirtualMachine(nil);
+            listController?.selectElement(-1);
+        }
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
@@ -58,7 +64,7 @@ class RootViewController: NSSplitViewController {
             listController?.refreshList();
         }
         
-        vmController?.setVirtualMachine(virtualMachine);
+        self.setCurrentVirtualMachine(virtualMachine);
         
         let delegate = NSApp.delegate as! AppDelegate;
         delegate.addSavedVM(virtualMachine.path);
@@ -73,7 +79,13 @@ class RootViewController: NSSplitViewController {
     }
     
     func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
-        vmController?.setVirtualMachine(nil);
+        if index > 0 {
+            self.setCurrentVirtualMachine(virtualMachines[index - 1]);
+        } else if virtualMachines.count > 1 {
+            self.setCurrentVirtualMachine(virtualMachines[0]);
+        } else {
+            self.setCurrentVirtualMachine(nil);
+        }
         
         let virtualMachine = virtualMachines.remove(at: index);
         

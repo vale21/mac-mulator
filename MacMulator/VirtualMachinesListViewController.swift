@@ -44,8 +44,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableViewSelectionDidChange(_ notification: Notification) {
         if let rootController = self.rootController {
             let tableView = notification.object as! NSTableView;
-            let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow);
-            rootController.setCurrentVirtualMachine(selectedvm);
+            if tableView.selectedRow >= 0 {
+                let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow);
+                rootController.setCurrentVirtualMachine(selectedvm);
+            }
         }
     }
     
@@ -75,9 +77,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         
     func deleteVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
-            rootController.removeVirtualMachineAt(index);
             table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
+            rootController.removeVirtualMachineAt(index);
         }
+    }
+    
+    func selectElement(_ index: Int) {
+        table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false);
     }
     
     func refreshList() {
