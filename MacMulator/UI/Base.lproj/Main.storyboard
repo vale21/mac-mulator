@@ -1473,7 +1473,7 @@
                                             </constraints>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="The VM cannot be started because Qemu binary for artchitecture x86 64bit is not available." usesSingleLineMode="YES" id="AbO-eD-YEu">
                                                 <font key="font" metaFont="system" size="10"/>
-                                                <color key="textColor" name="underPageBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
