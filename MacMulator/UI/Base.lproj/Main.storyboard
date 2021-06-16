@@ -1466,6 +1466,17 @@
                                                 <action selector="pauseVM:" target="Urh-Tu-1Cq" id="KYL-o1-Vp9"/>
                                             </connections>
                                         </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23l-NY-BDE">
+                                            <rect key="frame" x="18" y="57" width="544" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="1Cr-uj-X9S"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="The VM cannot be started because Qemu binary for artchitecture x86 64bit is not available." usesSingleLineMode="YES" id="AbO-eD-YEu">
+                                                <font key="font" metaFont="system" size="10"/>
+                                                <color key="textColor" name="underPageBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="top" secondItem="gzW-c5-Oke" secondAttribute="bottom" constant="19" id="6Ub-ID-jWQ"/>
@@ -1474,6 +1485,7 @@
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="top" secondItem="2TJ-y4-d9V" secondAttribute="bottom" constant="8" symbolic="YES" id="91Z-mm-8cZ"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="20" id="9N8-9H-Agv"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="top" secondItem="Qga-Ob-GTN" secondAttribute="top" constant="73" id="9iv-qW-TMR"/>
+                                        <constraint firstItem="23l-NY-BDE" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="20" symbolic="YES" id="E7H-rF-hhr"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="HIc-TM-dfg"/>
                                         <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="20" symbolic="YES" id="HPs-DV-l6k"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="cI4-jO-AFz" secondAttribute="bottom" priority="750" constant="19" id="IB8-SA-qKe"/>
@@ -1483,8 +1495,10 @@
                                         <constraint firstItem="drX-xb-Fr1" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="8" id="KZW-wl-Wec"/>
                                         <constraint firstAttribute="bottom" secondItem="WwV-tF-8bO" secondAttribute="bottom" constant="20" symbolic="YES" id="Mum-ES-iQe"/>
                                         <constraint firstAttribute="trailing" secondItem="cI4-jO-AFz" secondAttribute="trailing" priority="750" constant="56" id="Ssi-qv-5BB"/>
+                                        <constraint firstAttribute="trailing" secondItem="23l-NY-BDE" secondAttribute="trailing" constant="20" symbolic="YES" id="Xae-R8-6I8"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="bxU-xd-kJe"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="-14" id="cpO-JS-Zjx"/>
+                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="23l-NY-BDE" secondAttribute="bottom" constant="1" id="gsv-fD-AAz"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="jaF-HO-P0u"/>
                                         <constraint firstAttribute="trailing" secondItem="gzW-c5-Oke" secondAttribute="trailing" constant="20" id="lQ5-rZ-23V"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="centerY" secondItem="Qga-Ob-GTN" secondAttribute="centerY" id="lRS-pa-M3n"/>
@@ -1515,6 +1529,7 @@
                         <outlet property="newVMButton" destination="eX2-gm-MSx" id="uNK-3i-IAw"/>
                         <outlet property="noVMsBox" destination="f2n-08-TYD" id="obv-00-IdA"/>
                         <outlet property="pauseVMButton" destination="Fft-jP-dG6" id="TAM-Y8-0hz"/>
+                        <outlet property="qemuUnavailableLabel" destination="23l-NY-BDE" id="IEQ-po-m1f"/>
                         <outlet property="startVMButton" destination="WwV-tF-8bO" id="7aN-9a-6QH"/>
                         <outlet property="stopVMButton" destination="drX-xb-Fr1" id="Rvr-gU-z4q"/>
                         <outlet property="vmArchitecture" destination="hm8-Zq-L4L" id="SsA-Eq-JGx"/>

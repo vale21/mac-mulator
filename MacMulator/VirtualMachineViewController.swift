@@ -42,6 +42,7 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet weak var centralBoxWidth: NSLayoutConstraint?
     @IBOutlet weak var centralBoxBottomSpace: NSLayoutConstraint?
     
+    @IBOutlet weak var qemuUnavailableLabel: NSTextField!
     @IBOutlet weak var pauseVMButton: NSButton!
     @IBOutlet weak var startVMButton: NSButton!
     @IBOutlet weak var stopVMButton: NSButton!
@@ -198,8 +199,11 @@ class VirtualMachineViewController: NSViewController {
             
             if QemuUtils.isBinaryAvailable(vm.architecture) {
                 startVMButton.isEnabled = true;
+                qemuUnavailableLabel.isHidden = true;
             } else {
                 startVMButton.isEnabled = false;
+                qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
+                qemuUnavailableLabel.isHidden = false;
             }
         } else {
             showNoVmsLayout();
