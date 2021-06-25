@@ -100,7 +100,9 @@ class VirtualMachineViewController: NSViewController {
                     virtualMachine in
                     DispatchQueue.main.async {
                         self.rootController?.unsetRunningVM(virtualMachine);
-                        self.setRunningStatus(false);
+                        if self.vm == virtualMachine {
+                            self.setRunningStatus(false);
+                        }
                     }
                 });
                 
