@@ -131,7 +131,8 @@ class VirtualMachineViewController: NSViewController {
             var even = 0;
             var odd = 1;
             
-            let updateFrequency = 5.0;
+            let updateFrequency = Double(UserDefaults.standard.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE));
+            print("updateFrequency is " + String(updateFrequency));
             
             if updateFrequency > 1 {
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in

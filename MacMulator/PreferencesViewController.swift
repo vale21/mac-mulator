@@ -26,11 +26,21 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemu_ppc64_tick: NSImageView!
     @IBOutlet weak var qemu_68k_tick: NSImageView!
     
+    @IBOutlet weak var livePreviewLabel: NSTextField!
+    @IBOutlet weak var oneSecLabel: NSTextField!
+    @IBOutlet weak var sixtySecsLabel: NSTextField!
+    @IBOutlet weak var livePreviewSlider: NSSlider!
+    
     var userDefaults: UserDefaults = UserDefaults.standard;
     
     override func viewWillAppear() {
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
+        
+        let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(livePreviewRate) + " seconds)"
+        livePreviewSlider.intValue = Int32(livePreviewRate);
+        
         checkForQemuBinaries();
     }
     
@@ -47,6 +57,31 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             }
             
         });
+    }
+    
+    @IBAction func livePreviewTickChanged(_ sender: Any) {
+        let button = sender as! NSButton;
+        
+        if button.state == NSControl.StateValue.off {
+            livePreviewLabel.textColor = NSColor.tertiaryLabelColor;
+            oneSecLabel.textColor = NSColor.tertiaryLabelColor;
+            sixtySecsLabel.textColor = NSColor.tertiaryLabelColor;
+            livePreviewSlider.isEnabled = false;
+        } else {
+            livePreviewLabel.textColor = NSColor.labelColor;
+            oneSecLabel.textColor = NSColor.labelColor;
+            sixtySecsLabel.textColor = NSColor.labelColor;
+            livePreviewSlider.isEnabled = true;
+        }
+    }
+    
+    @IBAction func sliderChanged(_ sender: Any) {
+        let slider = sender as! NSSlider;
+        
+        let value = slider.intValue
+        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(value) + " seconds)"
+        
+        userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
     }
     
     func controlTextDidChange(_ obj: Notification) {

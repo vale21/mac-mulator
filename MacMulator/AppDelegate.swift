@@ -68,15 +68,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
           
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        let userDefaults = UserDefaults.standard;
-
+    fileprivate func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
             userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
         }
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
             userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
         }
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE) == nil {
+            userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        }
+    }
+    
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
+        let userDefaults = UserDefaults.standard;
+
+        setupDefaultsPreferences(userDefaults)
 
         self.savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         if self.savedVMs == nil {
