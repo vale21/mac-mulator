@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "apple_small.png",
+      "filename" : "windows.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "apple_small_2.png",
+      "filename" : "windows_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "apple_small_3.png",
+      "filename" : "windows_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -13,6 +13,7 @@ class RootViewController: NSSplitViewController {
     private var listController: VirtualMachinesListViewController?;
     private var vmController: VirtualMachineViewController?;
     
+    var currentVm: VirtualMachine?
     var virtualMachines: [VirtualMachine] = [];
     var runningVMs: [VirtualMachine : QemuRunner] = [:];
     
@@ -41,6 +42,18 @@ class RootViewController: NSSplitViewController {
         }
     }
     
+    func startVMMenuBarClicked(_ sender: Any) {
+        vmController?.startVM(sender: sender);
+    }
+    
+    func stopVMMenubarClicked(_ sender: Any) {
+        vmController?.stopVM(sender);
+    }
+    
+    func editVMmenuBarClicked(_ sender: Any) {
+        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: currentVm);
+    }
+    
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
         if let vm = currentVm {
             vmController?.setVirtualMachine(vm);
@@ -49,6 +62,15 @@ class RootViewController: NSSplitViewController {
             vmController?.setVirtualMachine(nil);
             listController?.selectElement(-1);
         }
+        
+        self.currentVm = currentVm;
+        
+        let appDelegate = NSApp.delegate as! AppDelegate;
+        appDelegate.refreshVMMenus();
+    }
+    
+    func isCurrentVMRunning() -> Bool {
+        return currentVm != nil && runningVMs[currentVm!] != nil;
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
@@ -98,11 +120,17 @@ class RootViewController: NSSplitViewController {
     func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
         runningVMs[vm] = runner;
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
+        
+        let appDelegate = NSApp.delegate as! AppDelegate;
+        appDelegate.refreshVMMenus();
     }
     
     func unsetRunningVM(_ vm: VirtualMachine) {
         runningVMs.removeValue(forKey: vm);
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, false);
+        
+        let appDelegate = NSApp.delegate as! AppDelegate;
+        appDelegate.refreshVMMenus();
     }
     
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {

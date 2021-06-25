@@ -84,7 +84,7 @@ class VirtualMachineViewController: NSViewController {
     }
     
     @IBAction
-    func startVM(sender: NSButton) {
+    func startVM(sender: Any) {
         
         if let vm = self.vm {
             boxContentView = centralBox.contentView;
@@ -179,7 +179,7 @@ class VirtualMachineViewController: NSViewController {
         if let vm = virtualMachine {
             self.vm = virtualMachine;
             
-            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os + "-large"));
+            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os.lowercased() + ".large"));
             vmName.stringValue = vm.displayName;
             vmDescription.stringValue = vm.description;
             vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";

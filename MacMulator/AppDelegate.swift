@@ -13,12 +13,48 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var savedVMs: [String]? = [];
     private var rootController: RootViewController?;
 
+    @IBOutlet weak var startVMMenuItem: NSMenuItem!
+    @IBOutlet weak var stopVMMenuItem: NSMenuItem!
+    @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
+    @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    
     @IBAction func newVMMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
     }
     
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
         Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
+    }
+    
+    @IBAction func startVMMenuBarClicked(_ sender: Any) {
+        rootController?.startVMMenuBarClicked(sender);
+    }
+    
+    @IBAction func stopVMMenubarClicked(_ sender: Any) {
+        rootController?.stopVMMenubarClicked(sender);
+    }
+    
+    @IBAction func editVMmenuBarClicked(_ sender: Any) {
+        rootController?.editVMmenuBarClicked(sender);
+    }
+    
+    func refreshVMMenus() {
+        pauseVMMenuItem.isEnabled = false;
+        if let rootController = self.rootController {
+            if rootController.currentVm == nil {
+                startVMMenuItem.isEnabled = false;
+                stopVMMenuItem.isEnabled = false;
+                editVMMenuItem.isEnabled = false;
+            } else {
+                if rootController.isCurrentVMRunning() {
+                    startVMMenuItem.isEnabled = false;
+                    stopVMMenuItem.isEnabled = true;
+                } else {
+                    startVMMenuItem.isEnabled = true;
+                    stopVMMenuItem.isEnabled = false;
+                }
+            }
+        }
     }
     
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {

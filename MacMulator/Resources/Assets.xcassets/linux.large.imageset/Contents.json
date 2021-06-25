@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "windows_large_3-1.png",
+      "filename" : "linux-large.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "windows_large_2.png",
+      "filename" : "linux-large_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "windows_large_3.png",
+      "filename" : "linux-large_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
@@ -21,6 +21,6 @@
     "version" : 1
   },
   "properties" : {
-    "compression-type" : "gpu-optimized-best"
+    "auto-scaling" : "auto"
   }
 }
