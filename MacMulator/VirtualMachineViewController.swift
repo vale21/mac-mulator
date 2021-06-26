@@ -106,7 +106,10 @@ class VirtualMachineViewController: NSViewController {
                     }
                 });
                 
-                setupScreenshotTimer(runner);
+                let livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
+                if livePreviewEnabled {
+                    setupScreenshotTimer(runner);
+                }
             }
         }
     }
@@ -194,7 +197,7 @@ class VirtualMachineViewController: NSViewController {
             vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
             showVMAvailableLayout();
             
-            if (rootController?.getRunnerForRunningVM(vm) != nil) {
+            if rootController?.getRunnerForRunningVM(vm) != nil {
                 setRunningStatus(true);
             } else {
                 setRunningStatus(false);
@@ -218,11 +221,15 @@ class VirtualMachineViewController: NSViewController {
         self.stopVMButton.isHidden = !running;
         self.pauseVMButton.isHidden = !running;
         
-        centralBox.title = running ? "Live preview" : "Virtual machine features";
-        resizeCentralBox(running);
-        hideBoxControls(running);
+        let livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         
-        if running, let vm = self.vm {
+        resizeCentralBox(running && livePreviewEnabled);
+        hideBoxControls(running && livePreviewEnabled);
+        if livePreviewEnabled {
+            centralBox.title = running ? "Live preview" : "Virtual machine features";
+        }
+        
+        if running, livePreviewEnabled, let vm = self.vm {
             let imagefile = NSImage.init(named: NSImage.Name("preview-loading"));
             if let image = imagefile {
                 self.screenshotView = NSImageView(image: image);

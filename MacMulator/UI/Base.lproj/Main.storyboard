@@ -588,6 +588,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="livePreviewEnabledButton" destination="GGz-Fj-dh8" id="flx-Jk-jIA"/>
                         <outlet property="livePreviewLabel" destination="3Tr-xq-8xH" id="6pe-dq-njy"/>
                         <outlet property="livePreviewSlider" destination="t0A-gf-C7u" id="q3h-te-HTO"/>
                         <outlet property="oneSecLabel" destination="wKF-A0-RM3" id="4Ps-ut-O98"/>

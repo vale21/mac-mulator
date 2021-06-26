@@ -25,5 +25,6 @@ class MacMulatorConstants {
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath";
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate";
+    static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled";
 
 }

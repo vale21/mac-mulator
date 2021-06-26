@@ -26,6 +26,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemu_ppc64_tick: NSImageView!
     @IBOutlet weak var qemu_68k_tick: NSImageView!
     
+    @IBOutlet weak var livePreviewEnabledButton: NSButton!
     @IBOutlet weak var livePreviewLabel: NSTextField!
     @IBOutlet weak var oneSecLabel: NSTextField!
     @IBOutlet weak var sixtySecsLabel: NSTextField!
@@ -36,6 +37,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     override func viewWillAppear() {
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
+        
+        let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
+        livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off;
+        livePreviewTickChanged(livePreviewEnabledButton as Any);
         
         let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
         livePreviewLabel.stringValue = "Update Live Preview every: (" + String(livePreviewRate) + " seconds)"
@@ -73,6 +78,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             sixtySecsLabel.textColor = NSColor.labelColor;
             livePreviewSlider.isEnabled = true;
         }
+        
+        userDefaults.set(button.state == NSControl.StateValue.on, forKey:MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
     }
     
     @IBAction func sliderChanged(_ sender: Any) {
