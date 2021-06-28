@@ -82,7 +82,7 @@ class QemuUtils {
             .build();
         
         shell.runCommand(command, uponCompletion: {
-            callback(shell.getStandardOutput());
+            callback(shell.readFromStandardOutput());
         });
     }
     

@@ -64,7 +64,7 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler);
     }
     
-    static func showPromptAndGetResponse(window: NSWindow, style: NSAlert.Style, message: String) -> NSApplication.ModalResponse {
+    static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String) -> NSApplication.ModalResponse {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
         alert.messageText = message;
@@ -82,7 +82,7 @@ class Utils {
         return string.replacingOccurrences(of: "\\ ", with: " ");
     }
     
-    static func cleanFoldrPath(_ string: String) -> String {
+    static func cleanFolderPath(_ string: String) -> String {
         var ret = escape(string);
         if ret.hasSuffix("/") {
             ret = String(ret.dropLast());
@@ -148,13 +148,26 @@ class Utils {
     }
     
     static func findMainDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
-        let ret: VirtualDrive? = nil;
+        // purge non HDD drives
+        var hdds: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
-            if drive.mediaType == QemuConstants.MEDIATYPE_DISK && drive.isBootDrive {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
+                hdds.append(drive);
+            }
+        }
+        
+        if hdds.count == 0 {
+            return nil;
+        }
+        if hdds.count == 1 {
+            return hdds[0];
+        }
+        for drive: VirtualDrive in hdds {
+            if drive.isBootDrive {
                 return drive;
             }
         }
-        return ret;
+        return hdds[0];
     }
     
     static func getParentDir(_ path: String) -> String {

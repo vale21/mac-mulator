@@ -76,21 +76,21 @@ class Shell {
         task.waitUntilExit();
     }
     
-    func getStandardOutput() -> String {
+    func writeToStandardInput(_ command: String) {
+        if let data = command.data(using: .utf8) {
+            pipe_in.fileHandleForWriting.write(data);
+        }
+    }
+    
+    func readFromStandardOutput() -> String {
         let data = pipe_out.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         return output;
     }
     
-    func getStandardError() -> String {
+    func readFromStandardError() -> String {
         let data = pipe_err.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         return output;
-    }
-    
-    func writeToStandardInput(_ command: String) {
-        if let data = command.data(using: .utf8) {
-            pipe_in.fileHandleForWriting.write(data);
-        }
     }
 }

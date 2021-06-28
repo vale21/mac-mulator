@@ -102,9 +102,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     
     func controlTextDidChange(_ obj: Notification) {
         if obj.object as? NSObject == vmFolderField {
-            userDefaults.set(Utils.cleanFoldrPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
+            userDefaults.set(Utils.cleanFolderPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
         } else if obj.object as? NSObject == qemuFolderField {
-            userDefaults.set(Utils.cleanFoldrPath(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
+            userDefaults.set(Utils.cleanFolderPath(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
         }
     }
     
