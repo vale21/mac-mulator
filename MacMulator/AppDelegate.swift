@@ -151,6 +151,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
+        if let controller = rootController, controller.getVirtualMachinesCount() > 0 {
+            rootController?.setCurrentVirtualMachine(rootController?.virtualMachines[0]);
+        }
+        
         if (toRemove.count > 0) {
             var removed:[String] = [];
             toRemove.reverse();
