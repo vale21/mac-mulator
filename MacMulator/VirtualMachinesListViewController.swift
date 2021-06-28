@@ -29,7 +29,9 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView;
         if let rootController = self.rootController {
-            cell.setVirtualMachine(virtualMachine: rootController.getVirtualMachineAt(row));
+            let vm: VirtualMachine = rootController.getVirtualMachineAt(row);
+            cell.setVirtualMachine(virtualMachine: vm);
+            cell.setRunning(rootController.isVMRunning(vm));
         }
         return cell;
     }

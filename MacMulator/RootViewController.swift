@@ -64,7 +64,11 @@ class RootViewController: NSSplitViewController {
     }
     
     func isCurrentVMRunning() -> Bool {
-        return currentVm != nil && runningVMs[currentVm!] != nil;
+        return isVMRunning(currentVm);
+    }
+    
+    func isVMRunning(_ vm: VirtualMachine?) -> Bool {
+        return vm != nil && runningVMs[vm!] != nil;
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
