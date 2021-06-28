@@ -71,21 +71,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return false;
         }
     }
-          
-    fileprivate func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
-            userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
-            userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE) == nil {
-            userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED) == nil {
-            userDefaults.set(true, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
-        }
-    }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
@@ -124,29 +109,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true;
     }
     
-    func setupSavedVMs() {
-        let filemanager = FileManager.default;
-        var toRemove: [Int] = [];
-        for savedVM in savedVMs! {
-            if filemanager.fileExists(atPath: savedVM) && performSanityCheck(savedVM) {
-                rootController?.addVirtualMachineFromFile(savedVM);
-            } else {
-                toRemove.append((savedVMs?.lastIndex(of: savedVM))!);
-            }
-        }
-        
-        if (toRemove.count > 0) {
-            var removed:[String] = [];
-            toRemove.reverse();
-            for index in toRemove {
-                removed.append((savedVMs?.remove(at: index))!);
-            }
-            
-            rootController?.showAlert("Could not find some Virtual Machines that were configured in MacMulator: " + removed.joined(separator: ", "));
-
-            let userDefaults = UserDefaults.standard;
-            userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
-        }
+    func rootControllerDidFinishLoading(_ rootController: RootViewController) {
+        self.rootController = rootController;
     }
     
     func addSavedVM(_ savedVM: String) {
@@ -176,8 +140,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
     
-    func rootControllerDidFinishLoading(_ rootController: RootViewController) {
-        self.rootController = rootController;
+    fileprivate func setupSavedVMs() {
+        let filemanager = FileManager.default;
+        var toRemove: [Int] = [];
+        for savedVM in savedVMs! {
+            if filemanager.fileExists(atPath: savedVM) && performSanityCheck(savedVM) {
+                rootController?.addVirtualMachineFromFile(savedVM);
+            } else {
+                toRemove.append((savedVMs?.lastIndex(of: savedVM))!);
+            }
+        }
+        
+        if (toRemove.count > 0) {
+            var removed:[String] = [];
+            toRemove.reverse();
+            for index in toRemove {
+                removed.append((savedVMs?.remove(at: index))!);
+            }
+            
+            Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: "Could not find some Virtual Machines that were configured in MacMulator: " + removed.joined(separator: ", "));
+
+            let userDefaults = UserDefaults.standard;
+            userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
+        }
     }
     
     fileprivate func performSanityCheck(_ filename: String) -> Bool{
@@ -197,6 +182,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         return false;
+    }
+    
+    fileprivate func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
+            userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
+        }
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
+            userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
+        }
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE) == nil {
+            userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        }
+        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED) == nil {
+            userDefaults.set(true, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        }
     }
 }
 

@@ -10,7 +10,6 @@ import Cocoa
 class VirtualMachineViewController: NSViewController {
     
     var listenPort: Int32 = 4444;
-    var vm : VirtualMachine?;
     var rootController: RootViewController?;
   
     var boxContentView: NSView?;
@@ -49,23 +48,6 @@ class VirtualMachineViewController: NSViewController {
     
     var temporaryPath = NSTemporaryDirectory();
     var screenshotView: NSImageView?;
-
-    override func viewWillAppear() {
-        startVMButton.toolTip = "Start this VM";
-        pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
-        stopVMButton.toolTip = "Stop the execution of this VM";
-        
-        self.setRunningStatus(false);
-        if self.vm != nil {
-            showVMAvailableLayout();
-            
-            if !QemuUtils.isBinaryAvailable(vm!.architecture) {
-                startVMButton.isEnabled = false;
-            }
-        } else {
-            showNoVmsLayout();
-        }
-    }
     
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
@@ -80,13 +62,13 @@ class VirtualMachineViewController: NSViewController {
     }
     
     @IBAction func editVM(_ sender: Any) {
-        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: vm);
+        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: rootController?.currentVm);
     }
     
     @IBAction
     func startVM(sender: Any) {
         
-        if let vm = self.vm {
+        if let vm = rootController?.currentVm {
             boxContentView = centralBox.contentView;
             let runner = QemuRunner(listenPort: listenPort, virtualMachine: vm);
             rootController?.setRunningVM(vm, runner);
@@ -100,7 +82,7 @@ class VirtualMachineViewController: NSViewController {
                     virtualMachine in
                     DispatchQueue.main.async {
                         self.rootController?.unsetRunningVM(virtualMachine);
-                        if self.vm == virtualMachine {
+                        if self.rootController?.currentVm == virtualMachine {
                             self.setRunningStatus(false);
                         }
                     }
@@ -112,15 +94,65 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func stopVM(_ sender: Any) {
         Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
             if response.rawValue == Utils.ALERT_RESP_OK {
-                if let vm = self.vm {
+                if let vm = self.rootController?.currentVm {
                     self.rootController?.getRunnerForRunningVM(vm)?.kill();
                 }
             }
         });
     }
     
+    override func viewWillAppear() {
+        startVMButton.toolTip = "Start this VM";
+        pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
+        stopVMButton.toolTip = "Stop the execution of this VM";
+        
+        self.setRunningStatus(false);
+        if rootController?.currentVm != nil {
+            showVMAvailableLayout();
+            
+            if !QemuUtils.isBinaryAvailable(rootController!.currentVm!.architecture) {
+                startVMButton.isEnabled = false;
+            }
+        } else {
+            showNoVmsLayout();
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad();
+    }
+    
+    func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
+        if let vm = virtualMachine {
+            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os.lowercased() + ".large"));
+            vmName.stringValue = vm.displayName;
+            vmDescription.stringValue = vm.description;
+            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
+            vmProcessors.intValue = Int32(vm.cpus);
+            vmMemory.stringValue = Utils.formatMemory(vm.memory);
+            
+            let mainDrive = Utils.findMainDrive(vm.drives);
+            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified";
+            vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
+            showVMAvailableLayout();
+            
+            if rootController?.getRunnerForRunningVM(vm) != nil {
+                setRunningStatus(true);
+            } else {
+                setRunningStatus(false);
+            }
+            
+            if QemuUtils.isBinaryAvailable(vm.architecture) {
+                startVMButton.isEnabled = true;
+                qemuUnavailableLabel.isHidden = true;
+            } else {
+                startVMButton.isEnabled = false;
+                qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
+                qemuUnavailableLabel.isHidden = false;
+            }
+        } else {
+            showNoVmsLayout();
+        }
     }
     
     fileprivate func livePreviewTimerLogic(_ timer: Timer, _ runner: QemuRunner) {
@@ -131,7 +163,7 @@ class VirtualMachineViewController: NSViewController {
             print("Stopping timer. Frequency changed.");
             timer.invalidate();
         } else {
-            if !runner.isRunning() || self.vm != runner.virtualMachine {
+            if !runner.isRunning() || rootController?.currentVm != runner.virtualMachine {
                 print("Stopping timer");
                 timer.invalidate();
                 
@@ -166,41 +198,6 @@ class VirtualMachineViewController: NSViewController {
             });
         }
     }
-    
-    func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
-        if let vm = virtualMachine {
-            self.vm = virtualMachine;
-            
-            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os.lowercased() + ".large"));
-            vmName.stringValue = vm.displayName;
-            vmDescription.stringValue = vm.description;
-            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
-            vmProcessors.intValue = Int32(vm.cpus);
-            vmMemory.stringValue = Utils.formatMemory(vm.memory);
-            
-            let mainDrive = Utils.findMainDrive(vm.drives);
-            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified";
-            vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
-            showVMAvailableLayout();
-            
-            if rootController?.getRunnerForRunningVM(vm) != nil {
-                setRunningStatus(true);
-            } else {
-                setRunningStatus(false);
-            }
-            
-            if QemuUtils.isBinaryAvailable(vm.architecture) {
-                startVMButton.isEnabled = true;
-                qemuUnavailableLabel.isHidden = true;
-            } else {
-                startVMButton.isEnabled = false;
-                qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
-                qemuUnavailableLabel.isHidden = false;
-            }
-        } else {
-            showNoVmsLayout();
-        }
-    }
         
     fileprivate func setRunningStatus(_ running: Bool) {
         self.startVMButton.isHidden = running;
@@ -215,7 +212,7 @@ class VirtualMachineViewController: NSViewController {
             centralBox.title = running ? "Live preview" : "Virtual machine features";
         }
         
-        if running, livePreviewEnabled, let vm = self.vm {
+        if running, livePreviewEnabled, let vm = rootController?.currentVm {
             let imagefile = NSImage.init(named: NSImage.Name("preview-loading"));
             if let image = imagefile {
                 self.screenshotView = NSImageView(image: image);

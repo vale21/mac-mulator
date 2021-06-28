@@ -753,7 +753,7 @@
                                                                     <rect key="frame" x="-3" y="8" width="44" height="44"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" id="MCY-un-ad5">
-                                                                        <imageReference key="image" image="Windows-small" symbolScale="large"/>
+                                                                        <imageReference key="image" image="windows.small" symbolScale="large"/>
                                                                     </imageCell>
                                                                 </imageView>
                                                                 <progressIndicator maxValue="100" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="iux-aD-SNu">
@@ -1045,7 +1045,7 @@
                                                             <constraint firstAttribute="height" constant="90" id="9kK-fi-Odf"/>
                                                             <constraint firstAttribute="width" constant="90" id="Yo8-30-26G"/>
                                                         </constraints>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="Windows-large" id="juw-gh-9zy"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="windows.large" id="juw-gh-9zy"/>
                                                     </imageView>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oHu-X9-tE7">
                                                         <rect key="frame" x="180" y="13" width="108" height="32"/>
@@ -1137,9 +1137,6 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="pauseVM:" target="Urh-Tu-1Cq" id="KYL-o1-Vp9"/>
-                                            </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23l-NY-BDE">
                                             <rect key="frame" x="18" y="57" width="544" height="16"/>
@@ -1245,8 +1242,6 @@
     </scenes>
     <resources>
         <image name="NSAddTemplate" width="15" height="13"/>
-        <image name="Windows-large" width="90" height="90"/>
-        <image name="Windows-small" width="44" height="44"/>
         <image name="checkmark.circle.fill" catalog="system" width="15" height="15"/>
         <image name="folder.circle" width="78" height="78"/>
         <image name="new.vm" width="78" height="78"/>
@@ -1254,6 +1249,8 @@
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
         <image name="plus" catalog="system" width="15" height="13"/>
         <image name="stop.circle.fill" catalog="system" width="15" height="15"/>
+        <image name="windows.large" width="90" height="90"/>
+        <image name="windows.small" width="44" height="44"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="VM View Background Color">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

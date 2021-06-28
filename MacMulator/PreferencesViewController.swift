@@ -39,25 +39,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         self.rootController = rootController;
     }
     
-    override func viewWillAppear() {
-        vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
-        qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
-        
-        let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
-        livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off;
-        livePreviewTickChanged(livePreviewEnabledButton as Any);
-        
-        let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
-        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(livePreviewRate) + " seconds)"
-        livePreviewSlider.intValue = Int32(livePreviewRate);
-        
-        checkForQemuBinaries();
-    }
-    
-    override func viewDidDisappear() {
-        rootController?.refreshViewForVM(rootController?.currentVm);
-    }
-    
     @IBAction func searchFolder(_ sender: Any) {
         Utils.showDirectorySelector(uponSelection: {
             panel in
@@ -98,6 +79,25 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         livePreviewLabel.stringValue = "Update Live Preview every: (" + String(value) + " seconds)"
         
         userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+    }
+    
+    override func viewWillAppear() {
+        vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
+        qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
+        
+        let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
+        livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off;
+        livePreviewTickChanged(livePreviewEnabledButton as Any);
+        
+        let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(livePreviewRate) + " seconds)"
+        livePreviewSlider.intValue = Int32(livePreviewRate);
+        
+        checkForQemuBinaries();
+    }
+    
+    override func viewDidDisappear() {
+        rootController?.refreshViewForVM(rootController?.currentVm);
     }
     
     func controlTextDidChange(_ obj: Notification) {

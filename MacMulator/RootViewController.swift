@@ -63,14 +63,6 @@ class RootViewController: NSSplitViewController {
         appDelegate.refreshVMMenus();
     }
     
-    func isCurrentVMRunning() -> Bool {
-        return isVMRunning(currentVm);
-    }
-    
-    func isVMRunning(_ vm: VirtualMachine?) -> Bool {
-        return vm != nil && runningVMs[vm!] != nil;
-    }
-    
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST);
         if let vm = virtualMachine {
@@ -97,6 +89,12 @@ class RootViewController: NSSplitViewController {
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
         return virtualMachines[index];
     }
+    
+    func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
+        self.listController?.refreshList();
+        self.vmController?.setVirtualMachine(virtualMachine);
+    }
+    
     
     func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
         if index > 0 {
@@ -131,19 +129,16 @@ class RootViewController: NSSplitViewController {
         appDelegate.refreshVMMenus();
     }
     
+    func isCurrentVMRunning() -> Bool {
+        return isVMRunning(currentVm);
+    }
+    
+    func isVMRunning(_ vm: VirtualMachine?) -> Bool {
+        return vm != nil && runningVMs[vm!] != nil;
+    }
+    
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {
         return runningVMs[vm];
-    }
-    
-    func showAlert(_ message: String) {
-        Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: message);
-    }
-    
-    func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
-        self.listController?.refreshList();
-        if (vmController?.vm == virtualMachine) {
-            setCurrentVirtualMachine(vmController?.vm);
-        }
     }
     
     func areThereRunningVMs() -> Bool {
