@@ -33,6 +33,11 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var livePreviewSlider: NSSlider!
     
     var userDefaults: UserDefaults = UserDefaults.standard;
+    var rootController : RootViewController?
+    
+    func setRootController(_ rootController:RootViewController) {
+        self.rootController = rootController;
+    }
     
     override func viewWillAppear() {
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
@@ -47,6 +52,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         livePreviewSlider.intValue = Int32(livePreviewRate);
         
         checkForQemuBinaries();
+    }
+    
+    override func viewDidDisappear() {
+        rootController?.refreshViewForVM(rootController?.currentVm);
     }
     
     @IBAction func searchFolder(_ sender: Any) {

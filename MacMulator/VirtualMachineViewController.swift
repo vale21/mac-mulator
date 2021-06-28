@@ -105,11 +105,6 @@ class VirtualMachineViewController: NSViewController {
                         }
                     }
                 });
-                
-                let livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
-                if livePreviewEnabled {
-                    setupScreenshotTimer(runner);
-                }
             }
         }
     }
@@ -128,55 +123,46 @@ class VirtualMachineViewController: NSViewController {
         super.viewDidLoad();
     }
     
+    fileprivate func livePreviewTimerLogic(_ timer: Timer, _ runner: QemuRunner) {
+        let imageName = self.temporaryPath + String(runner.virtualMachine.displayName).lowercased().replacingOccurrences(of: " ", with: "_") + "_scr.ppm";
+        
+        let currentFrequency = Double(UserDefaults.standard.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE));
+        if timer.timeInterval != currentFrequency {
+            print("Stopping timer. Frequency changed.");
+            timer.invalidate();
+        } else {
+            if !runner.isRunning() || self.vm != runner.virtualMachine {
+                print("Stopping timer");
+                timer.invalidate();
+                
+                let fileManager = FileManager.default;
+                do {
+                    try fileManager.removeItem(atPath: imageName);
+                } catch {
+                    print("Cannot clear temporary images: " + error.localizedDescription);
+                }
+            } else {
+                DispatchQueue.global().async {
+                    if runner.isRunning() {
+                        let monitor = QemuMonitor(runner.listenPort);
+                        monitor.takeScreenshot(path: imageName);
+                        monitor.close();
+                    }
+                }
+                screenshotView?.image = NSImage(byReferencingFile: imageName);
+            }
+        }
+    }
+    
     fileprivate func setupScreenshotTimer(_ runnerIn: QemuRunner?) {
         
         if let runner = runnerIn {
-            var even = 0;
-            var odd = 1;
-            
-            let updateFrequency = Double(UserDefaults.standard.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE));
-            print("updateFrequency is " + String(updateFrequency));
-            
-            if updateFrequency > 1 {
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { timer in
-                    // take initial shot after 1s
-                    let imageName_initial = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
-                    let monitor = QemuMonitor(runner.listenPort);
-                    monitor.takeScreenshot(path: imageName_initial);
-                    monitor.close();
-                });
-            }
 
+            let updateFrequency = Double(UserDefaults.standard.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE));
+            print("Creating timer with frequency " + String(updateFrequency));
+            
             Timer.scheduledTimer(withTimeInterval: updateFrequency, repeats: true, block: { timer in
-        
-                let imageName_even = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(even) + ".ppm";
-                let imageName_odd = self.temporaryPath + String(runner.virtualMachine.displayName) + "_scr_" + String(odd) + ".ppm";
-                
-                if !runner.isRunning() || runner.virtualMachine != self.vm {
-                    timer.invalidate();
-                    
-                    let fileManager = FileManager.default;
-                    do {
-                        try fileManager.removeItem(atPath: imageName_even);
-                        try fileManager.removeItem(atPath: imageName_odd);
-                    } catch {
-                        print("Cannot clear temporary images: " + error.localizedDescription);
-                    }
-                } else {
-                    DispatchQueue.global().async {
-                        if runner.isRunning() {
-                            let monitor = QemuMonitor(runner.listenPort);
-                            monitor.takeScreenshot(path: imageName_even);
-                            monitor.close();
-                        }
-                    }
-                    self.screenshotView?.image = NSImage(byReferencingFile: imageName_odd);
-                    
-                    // swap even and odd
-                    let temp = even;
-                    even = odd;
-                    odd = temp;
-                }
+                self.livePreviewTimerLogic(timer, runner)
             });
         }
     }

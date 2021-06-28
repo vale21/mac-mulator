@@ -18,6 +18,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
     
+    @IBAction func preferencesMenuBarClicked(_ sender: Any) {
+        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
+    }
+    
     @IBAction func newVMMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
     }

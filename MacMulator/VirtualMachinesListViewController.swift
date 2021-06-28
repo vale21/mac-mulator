@@ -46,7 +46,9 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             let tableView = notification.object as! NSTableView;
             if tableView.selectedRow >= 0 {
                 let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow);
-                rootController.setCurrentVirtualMachine(selectedvm);
+                if selectedvm != rootController.currentVm {
+                    rootController.setCurrentVirtualMachine(selectedvm);
+                }
             }
         }
     }

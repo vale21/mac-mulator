@@ -36,12 +36,6 @@ class RootViewController: NSSplitViewController {
         delegate.rootControllerDidFinishLoading(self);
     }
 
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-    
     func startVMMenuBarClicked(_ sender: Any) {
         vmController?.startVM(sender: sender);
     }
@@ -141,10 +135,10 @@ class RootViewController: NSSplitViewController {
         Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: message);
     }
     
-    func refreshViewForVM(_ virtualMachine: VirtualMachine) {
+    func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
         self.listController?.refreshList();
         if (vmController?.vm == virtualMachine) {
-            vmController?.setVirtualMachine(virtualMachine);
+            setCurrentVirtualMachine(vmController?.vm);
         }
     }
     

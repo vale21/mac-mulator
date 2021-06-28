@@ -28,7 +28,7 @@
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
-                                                <segue destination="Fkf-Y0-JDu" kind="show" id="KJN-9m-ta9"/>
+                                                <action selector="preferencesMenuBarClicked:" target="Voe-Tx-rLC" id="qPp-UL-ZcE"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
@@ -201,7 +201,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1045" y="-1284"/>
+            <point key="canvasLocation" x="-1791" y="-1094"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="a5g-mn-8u4">
@@ -229,7 +229,7 @@
                 </windowController>
                 <customObject id="G1w-JR-X7Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1159" y="-878"/>
+            <point key="canvasLocation" x="-1055" y="-943"/>
         </scene>
         <!--Preferences View Controller-->
         <scene sceneID="Bs5-Sg-pDv">
@@ -657,6 +657,9 @@
                                             <segue destination="BzT-Xz-QxF" kind="show" identifier="editVMSegue" id="scP-fk-l3l"/>
                                         </connections>
                                     </button>
+                                    <connections>
+                                        <segue destination="Fkf-Y0-JDu" kind="show" identifier="preferencesSegue" id="VDU-uU-eTD"/>
+                                    </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
@@ -676,7 +679,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1116" y="-305"/>
+            <point key="canvasLocation" x="-1867" y="-540"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="mC1-nw-Yn8">
@@ -697,7 +700,7 @@
                 </splitViewController>
                 <customObject id="quT-cv-XYJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-987" y="419"/>
+            <point key="canvasLocation" x="-1791" y="252"/>
         </scene>
         <!--Virtual Machines List View Controller-->
         <scene sceneID="2N4-O2-zee">
@@ -801,7 +804,7 @@
                 </viewController>
                 <customObject id="gua-la-20l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-225" y="72"/>
+            <point key="canvasLocation" x="-839" y="1"/>
         </scene>
         <!--Virtual Machine View Controller-->
         <scene sceneID="zlr-3i-aCs">
@@ -1221,7 +1224,7 @@
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-183" y="676"/>
+            <point key="canvasLocation" x="-777" y="615"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">
@@ -1229,7 +1232,7 @@
                 <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
                 <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-336" y="-389"/>
+            <point key="canvasLocation" x="-1150" y="-540"/>
         </scene>
         <!--NewVM-->
         <scene sceneID="yBO-JT-jb1">
@@ -1237,7 +1240,7 @@
                 <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
                 <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-431" y="-444"/>
+            <point key="canvasLocation" x="-1151" y="-471"/>
         </scene>
     </scenes>
     <resources>

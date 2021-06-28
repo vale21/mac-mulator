@@ -26,5 +26,9 @@ class MainWindowController: NSWindowController {
             destinationController.setVirtualMachine(vmToEdit);
             destinationController.setRootController(sourceController);
         }
+        if (segue.identifier == MacMulatorConstants.PREFERENCES_SEGUE) {
+            let destinationController = dest.contentViewController as! PreferencesViewController;
+            destinationController.setRootController(sourceController);
+        }
     }
 }

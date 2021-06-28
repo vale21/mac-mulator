@@ -20,6 +20,7 @@ class MacMulatorConstants {
     static let CREATE_DISK_FILE_SEGUE = "createDiskFileSegue";
     static let CREATE_VM_FILE_SEGUE = "createVmFileSegue";
     static let SHOW_DRIVE_INFO_SEGUE = "showDriveInfoSegue";
+    static let PREFERENCES_SEGUE = "preferencesSegue";
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";
