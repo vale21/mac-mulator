@@ -103,6 +103,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
+        
+        //resetDefaults();
+    }
+    
+    fileprivate func resetDefaults() {
+        let defaults = UserDefaults.standard
+        let dictionary = defaults.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            defaults.removeObject(forKey: key)
+        }
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -199,7 +209,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
         }
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED) == nil {
-            userDefaults.set(true, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+            userDefaults.set(true, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         }
     }
 }
