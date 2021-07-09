@@ -75,13 +75,28 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if let virtualMachine = self.virtualMachine {
             let row = drivesTableView.row(for: sender as! NSView);
             let drive = virtualMachine.drives[row];
-            Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
-                if response.rawValue == Utils.ALERT_RESP_OK {
-                    self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
-                    virtualMachine.drives.remove(at: row);
-                    virtualMachine.writeToPlist();
-                }
-            });
+            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM {
+                self.removeVirtualDrive(row);
+            } else {
+                Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
+                    if response.rawValue == Utils.ALERT_RESP_OK {
+                        self.removeVirtualDrive(row);
+                        do {
+                            try FileManager.default.removeItem(atPath: drive.path);
+                        } catch {
+                            print(error.localizedDescription);
+                        }
+                    }
+                });
+            }
+        }
+    }
+    
+    fileprivate func removeVirtualDrive(_ row: Int) {
+        if let virtualMachine = self.virtualMachine {
+            self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
+            virtualMachine.drives.remove(at: row);
+            virtualMachine.writeToPlist();
         }
     }
     
