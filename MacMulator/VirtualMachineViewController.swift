@@ -263,6 +263,7 @@ class VirtualMachineViewController: NSViewController {
         vmDescription.isHidden = true;
         centralBox.isHidden = true;
         startVMButton.isHidden = true;
+        qemuUnavailableLabel.isHidden = true;
     }
     
     fileprivate func showVMAvailableLayout() {
@@ -272,5 +273,6 @@ class VirtualMachineViewController: NSViewController {
         vmDescription.isHidden = false;
         centralBox.isHidden = false;
         startVMButton.isHidden = false;
+        qemuUnavailableLabel.isHidden = false;
     }
 }
