@@ -152,7 +152,7 @@ class QemuCommandBuilder {
             cmd += " " + network;
         }
         if let managementPort = self.managementPort {
-            cmd += " -qmp tcp:localhost:" + String(managementPort) + ",server,nowait";
+            cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait";
         }
         
         return cmd;
