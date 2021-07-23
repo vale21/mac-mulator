@@ -324,7 +324,7 @@
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hw3-U6-vgX">
                                 <rect key="frame" x="210" y="307" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="2048" doubleValue="512" id="s3C-lX-1tM"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="8192" doubleValue="512" id="s3C-lX-1tM"/>
                                 <connections>
                                     <action selector="stepperChanged:" target="fBa-tq-xkS" id="uyN-eu-jyv"/>
                                 </connections>
@@ -357,7 +357,7 @@
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Or2-CQ-Js9">
                                 <rect key="frame" x="68" y="275" width="367" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <sliderCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="2048" doubleValue="512" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="31d-fc-gp0"/>
+                                <sliderCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="8192" doubleValue="512" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="31d-fc-gp0"/>
                                 <connections>
                                     <action selector="sliderChanged:" target="fBa-tq-xkS" id="PY2-hq-jI1"/>
                                 </connections>
@@ -383,7 +383,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9W-xr-RhF">
                                 <rect key="frame" x="439" y="283" width="34" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="2 GB" id="rNe-Z2-GIL">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="8 GB" id="rNe-Z2-GIL">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
