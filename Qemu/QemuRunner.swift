@@ -20,9 +20,9 @@ class QemuRunner {
         self.virtualMachine = virtualMachine;
     }
 
-    func runVM(uponCompletion callback: @escaping (VirtualMachine) -> Void) {
-        shell.runCommand(getQemuCommand(), uponCompletion: {
-            callback(self.virtualMachine);
+    func runVM(uponCompletion callback: @escaping (Int32, VirtualMachine) -> Void) {
+        shell.runCommand(getQemuCommand(), uponCompletion: { terminationCcode in
+            callback(terminationCcode, self.virtualMachine);
         });
     }
     
@@ -137,5 +137,9 @@ class QemuRunner {
     
     func kill() {
         shell.kill();
+    }
+    
+    func getStandardError() -> String {
+        return shell.readFromStandardError();
     }
 }

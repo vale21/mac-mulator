@@ -37,7 +37,7 @@ class Shell {
         }
     }
     
-    func runCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
+    func runCommand(_ command: String, uponCompletion callback: @escaping (Int32) -> Void) -> Void {
         
         DispatchQueue.global().async {
             print("Running " + command + " in " + self.task.currentDirectoryPath);
@@ -50,7 +50,7 @@ class Shell {
                         self.task.arguments = ["-c", command];
                         self.task.launchPath = "/bin/zsh";
                         
-                        self.task.terminationHandler = {process in callback() };
+                        self.task.terminationHandler = {process in callback(self.task.terminationStatus) };
                         self.task.launch();
                     }
                 })

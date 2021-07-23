@@ -79,11 +79,15 @@ class VirtualMachineViewController: NSViewController {
             } else {
                 self.setRunningStatus(true);
                 runner.runVM(uponCompletion: {
-                    virtualMachine in
+                    terminationCcode, virtualMachine in
                     DispatchQueue.main.async {
                         self.rootController?.unsetRunningVM(virtualMachine);
                         if self.rootController?.currentVm == virtualMachine {
                             self.setRunningStatus(false);
+                        }
+                        
+                        if (terminationCcode != 0) {
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Qemu execution failed with error: " + runner.getStandardError());
                         }
                     }
                 });

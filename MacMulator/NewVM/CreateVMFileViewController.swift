@@ -55,6 +55,7 @@ class CreateVMFileViewController : NSViewController {
             do {
                 try createDocumentPackage(path);
                 QemuUtils.createDiskImage(path: path, virtualDrive: virtualHDD, uponCompletion: {
+                    terminationCcode in 
                     vm.writeToPlist(path + "/" + MacMulatorConstants.INFO_PLIST);
                     complete = true;
                     created = true;

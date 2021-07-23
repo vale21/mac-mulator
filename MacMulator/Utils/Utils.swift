@@ -180,7 +180,11 @@ class Utils {
     }
     
     static func getDefaultQemuFolderPath() -> String {
-        return "/opt/local/bin";
+        var qemuPath = "/opt/local/bin";
+        if (!FileManager.default.fileExists(atPath: qemuPath + "/qemu-img")) {
+            qemuPath = "/usr/local/bin";
+        }
+        return qemuPath;
     }
     
     static func hostArchitecture() -> String? {
@@ -209,5 +213,10 @@ class Utils {
             return true;
         }
         return false;
+    }
+    
+    static func directoryExists(_ path: String) -> Bool {
+        var isDir : ObjCBool = true
+        return FileManager.default.fileExists(atPath: path, isDirectory:&isDir);
     }
 }
