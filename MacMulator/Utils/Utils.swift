@@ -219,4 +219,75 @@ class Utils {
         var isDir : ObjCBool = true
         return FileManager.default.fileExists(atPath: path, isDirectory:&isDir);
     }
+    
+    static func countSubTypes(_ os: String?) -> Int {
+        if os == nil {
+            return 1;
+        }
+        
+        var count = 0;
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os {
+                count += 1;
+            }
+        }
+        return count;
+    }
+    
+    static func getSubType(_ os: String?, _ index: Int?) -> String {
+        if os == nil || index == nil {
+            return QemuConstants.SUB_OTHER_GENERIC;
+        }
+        
+        var count = -1;
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os {
+                count += 1;
+                if count == index {
+                    return vmDefault[1] as! String;
+                }
+            }
+        }
+        return QemuConstants.SUB_OTHER_GENERIC;
+    }
+    
+    static func getIndexOfSubType(_ os: String, _ subtype: String) -> Int {
+        var count = -1;
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os {
+                count += 1;
+                if (vmDefault[1] as? String == subtype) {
+                    return count;
+                }
+            }
+        }
+        return 0;
+    }
+    
+    static func getIconForSubType(_ os: String, _ subtype: String) -> String {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[vmDefault.count - 1] as! String;
+            }
+        }
+        return QemuConstants.OS_OTHER.lowercased();
+    }
+    
+    static func getArchitectureForSubType(_ os: String, _ subtype: String) -> String {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[2] as! String;
+            }
+        }
+        return QemuConstants.ARCH_X64;
+    }
+    
+    static func getCpusForSubType(_ os: String, _ subtype: String) -> Int {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[3] as! Int;
+            }
+        }
+        return 1;
+    }
 }

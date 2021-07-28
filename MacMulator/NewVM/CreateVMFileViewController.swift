@@ -21,14 +21,16 @@ class CreateVMFileViewController : NSViewController {
         
         if let parentController = self.parentController {
             let os = parentController.vmType.stringValue;
-            let architecture = computeArchitecture(os);
+            let subtype = parentController.vmSubType.stringValue;
+            let architecture = Utils.getArchitectureForSubType(os, subtype);
             let path = computePath();
             let displayName = parentController.vmName.stringValue;
             let description = computeDescription();
             let memory = computeMemory(os);
+            let cpus = Utils.getCpusForSubType(os, subtype);
             let displayResolution = QemuConstants.RES_1280_800;
             
-            let vm = VirtualMachine(os: os, architecture: architecture, path: path, displayName: displayName, description: description, memory: memory, displayResolution: displayResolution, qemuBootloader: false);
+            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: memory, cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
             let virtualHDD = VirtualDrive(
                 path: path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
@@ -83,13 +85,6 @@ class CreateVMFileViewController : NSViewController {
                 }
             });
         }
-    }
-    
-    fileprivate func computeArchitecture(_ type: String) -> String {
-        if type == QemuConstants.OS_MAC {
-            return QemuConstants.ARCH_PPC;
-        }
-        return QemuConstants.ARCH_X64;
     }
     
     fileprivate func computePath() -> String {

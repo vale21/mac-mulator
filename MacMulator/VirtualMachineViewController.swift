@@ -24,14 +24,14 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet weak var vmIcon: NSImageView!
     @IBOutlet weak var vmArchitectureDesc: NSTextField!
     @IBOutlet weak var vmArchitecture: NSTextField!
+    @IBOutlet weak var vmTypeDesc: NSTextField!
+    @IBOutlet weak var vmType: NSTextField!
     @IBOutlet weak var vmProcessorsDesc: NSTextField!
     @IBOutlet weak var vmProcessors: NSTextField!
     @IBOutlet weak var vmMemoryDesc: NSTextField!
     @IBOutlet weak var vmMemory: NSTextField!
     @IBOutlet weak var vmHardDriveDesc: NSTextField!
     @IBOutlet weak var vmHardDrive: NSTextField!
-    @IBOutlet weak var vmResolutionDesc: NSTextField!
-    @IBOutlet weak var vmResolution: NSTextField!
     @IBOutlet weak var editVMButton: NSButton!
     
     @IBOutlet weak var centralBox: NSBox!
@@ -128,16 +128,16 @@ class VirtualMachineViewController: NSViewController {
     
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
-            vmIcon.image = NSImage.init(named: NSImage.Name(vm.os.lowercased() + ".large"));
+            vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype ?? Utils.getSubType(vm.os, 0)) + ".large"));
             vmName.stringValue = vm.displayName;
             vmDescription.stringValue = vm.description;
             vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
+            vmType.stringValue = vm.subtype ?? Utils.getSubType(vm.os, 0);
             vmProcessors.intValue = Int32(vm.cpus);
             vmMemory.stringValue = Utils.formatMemory(vm.memory);
             
             let mainDrive = Utils.findMainDrive(vm.drives);
             vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified";
-            vmResolution.stringValue = QemuConstants.ALL_RESOLUTIONS_DESC[vm.displayResolution] ?? "Not Specified";
             showVMAvailableLayout();
             
             if rootController?.getRunnerForRunningVM(vm) != nil {
@@ -249,14 +249,14 @@ class VirtualMachineViewController: NSViewController {
         vmIcon.isHidden = hidden;
         vmArchitectureDesc.isHidden = hidden;
         vmArchitecture.isHidden = hidden;
+        vmTypeDesc.isHidden = hidden;
+        vmType.isHidden = hidden;
         vmProcessorsDesc.isHidden = hidden;
         vmProcessors.isHidden = hidden;
         vmMemoryDesc.isHidden = hidden;
         vmMemory.isHidden = hidden;
         vmHardDriveDesc.isHidden = hidden;
         vmHardDrive.isHidden = hidden;
-        vmResolutionDesc.isHidden = hidden;
-        vmResolution.isHidden = hidden;
         editVMButton.isHidden = hidden;
     }
     

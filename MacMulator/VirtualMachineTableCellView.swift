@@ -18,7 +18,7 @@ class VirtualMachineTableCellView: NSTableCellView {
     func setVirtualMachine(virtualMachine: VirtualMachine) {
         self.virtualMachine = virtualMachine;
         vmName.stringValue = virtualMachine.displayName;
-        vmIcon.image = NSImage.init(named: NSImage.Name(virtualMachine.os.lowercased() + ".small"));
+        vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0)) + ".small"));
     }
     
     func setRunning(_ running: Bool) {

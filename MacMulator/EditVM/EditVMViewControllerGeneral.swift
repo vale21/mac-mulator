@@ -10,6 +10,7 @@ import Cocoa
 class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTextViewDelegate {
 
     @IBOutlet weak var vmType: NSComboBox!
+    @IBOutlet weak var vmSubType: NSComboBox!
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet weak var bootOrderTable: NSTableView!
@@ -42,6 +43,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     func updateView() {
         if let virtualMachine = self.virtualMachine {
             vmType.selectItem(at: QemuConstants.supportedVMTypes.firstIndex(of: virtualMachine.os)!);
+            vmSubType.reloadData();
+            vmSubType.selectItem(at: Utils.getIndexOfSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0)));
             vmName.stringValue = virtualMachine.displayName;
             vmDescription.string = virtualMachine.description;
             
@@ -105,15 +108,27 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
-        return QemuConstants.supportedVMTypes.count;
+        if comboBox == vmType {
+            return QemuConstants.supportedVMTypes.count;
+        }
+        return vmType == nil ? 1 : Utils.countSubTypes(vmType.stringValue);
     }
-
+    
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        return QemuConstants.supportedVMTypes[index];
+        if comboBox == vmType {
+            return index < 0 ? nil : QemuConstants.supportedVMTypes[index];
+        }
+        return vmType == nil ? 1 : Utils.getSubType(vmType.stringValue, index);
     }
     
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        virtualMachine?.os = QemuConstants.supportedVMTypes[vmType.indexOfSelectedItem];
+        if notification.object as? NSComboBox == vmType {
+            vmSubType.stringValue = Utils.getSubType(comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as? String, 0);
+            vmSubType.reloadData();
+            virtualMachine?.os = QemuConstants.supportedVMTypes[vmType.indexOfSelectedItem];
+        } else {
+            virtualMachine?.subtype = Utils.getSubType(comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as? String, vmSubType.indexOfSelectedItem);
+        }
     }
     
     func controlTextDidChange(_ notification: Notification) {

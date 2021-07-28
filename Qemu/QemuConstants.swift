@@ -38,6 +38,56 @@ class QemuConstants {
     static let OS_LINUX = "Linux";
     static let OS_OTHER = "Other";
     
+    static let SUB_MAC_GENERIC = "Generic macOS";
+    static let SUB_MAC_BETA = "Mac OS X Public Beta";
+    static let SUB_MAC_CHEETAH = "Mac OS X 10.0.x (Cheetah)";
+    static let SUB_MAC_PUMA = "Mac OS X 10.1.x (Puma)";
+    static let SUB_MAC_JAGUAR = "Mac OS X 10.2.x (Jaguar)";
+    static let SUB_MAC_PANTHER = "Mac OS X 10.3.x (Panther)";
+    static let SUB_MAC_TIGER = "Mac OS X 10.4.x (Tiger)";
+    static let SUB_MAC_LEOPARD = "Mac OS X 10.5.x (Leopard)";
+    static let SUB_MAC_SNOW_LEOPARD = "Mac OS X 10.6.x (Snow Leopard)";
+    static let SUB_MAC_LION = "Mac OS X 10.7.x (Lion)";
+    static let SUB_MAC_MOUNTAIN_LION = "OS X 10.8.x (Mountain Lion)";
+    static let SUB_MAC_MAVERICKS = "OS X 10.9.x (Mavericks)";
+    static let SUB_MAC_YOSEMITE = "OS X 10.10.x (Yosemite)";
+    static let SUB_MAC_EL_CAPITAN = "OS X 10.11.x (El Capitan)";
+    static let SUB_MAC_SIERRA = "macOS 10.12.x (Sierra)";
+    static let SUB_MAC_HIGH_SIERRA = "macOS 10.13.x (High Sierra)";
+    static let SUB_MAC_MOJAVE = "macOS 10.14.x (Mojave)";
+    static let SUB_MAC_CATALINA = "macOS 10.15.x (Catalina)";
+    static let SUB_MAC_BIG_SUR = "macOS 11.x (Big Sur)";
+    static let SUB_MAC_MONTEREY = "macOS 12.x (Monterey)";
+    static let SUB_MAC_OS_9 = "Mac OS 9";
+    static let SUB_MAC_OS_8 = "Mac OS 8";
+    static let SUB_SYSTEM_7 = "System 7";
+    static let SUB_SYSTEM_6 = "System 6";
+    static let SUB_SYSTEM_5 = "System 5";
+    static let SUB_SYSTEM_4 = "System 4";
+    static let SUB_SYSTEM_3 = "System 3";
+    static let SUB_SYSTEM_2 = "System 2";
+    static let SUB_SYSTEM_1 = "System 1";
+    static let SUB_WIN_GENERIC = "Generic Windows";
+    static let SUB_WINDOWS_11 = "Windows 11";
+    static let SUB_WINDOWS_11_ARM = "Windows 11 (ARM)";
+    static let SUB_WINDOWS_10 = "Windows 10";
+    static let SUB_WINDOWS_10_ARM = "Windows 10 (ARM)";
+    static let SUB_WINDOWS_8_1 = "Windows 8.1";
+    static let SUB_WINDOWS_8 = "Windows 8";
+    static let SUB_WINDOWS_7 = "Windows 7";
+    static let SUB_WINDOWS_VISTA = "Windows Vista";
+    static let SUB_WINDOWS_XP = "Windows XP";
+    static let SUB_WINDOWS_2000 = "Windows 2000";
+    static let SUB_WINDOWS_ME = "Windows ME";
+    static let SUB_WINDOWS_98 = "Windows 98";
+    static let SUB_WINDOWS_NT = "Windows NT";
+    static let SUB_WINDOWS_95 = "Windows 95";
+    static let SUB_WINDOWS_3 = "Windows 3";
+    static let SUB_WINDOWS_2 = "Windows 2";
+    static let SUB_WINDOWS_1 = "Windows 1";
+    static let SUB_LINUX_GENERIC = "Generic Linux";
+    static let SUB_OTHER_GENERIC = "Generic VM";
+    
     static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
     static let ARCH_PPC64 = "qemu-system-ppc64";
@@ -156,6 +206,59 @@ class QemuConstants {
         QemuConstants.OS_WIN,
         QemuConstants.OS_LINUX,
         QemuConstants.OS_OTHER
+    ]
+    
+    static let vmDefaults = [
+        // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "mac_os_x_tiger", "icon"],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_GENERIC, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MONTEREY, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BIG_SUR, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CATALINA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOJAVE, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_HIGH_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_EL_CAPITAN, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_YOSEMITE, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MAVERICKS, QemuConstants.ARCH_X64, 2, 1024, 16384, 2048, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOUNTAIN_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SNOW_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_TIGER, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PANTHER, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_JAGUAR, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PUMA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CHEETAH, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BETA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_9, QemuConstants.ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_8, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_7, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_6, QemuConstants.ARCH_68K, 1, 16, 256, 32, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_5, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_4, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_3, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_2, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_1, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WIN_GENERIC, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11_ARM, QemuConstants.ARCH_ARM64, 4, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_10_ARM, QemuConstants.ARCH_ARM64, 4, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_10, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_8_1, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_8, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_7, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_VISTA, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_XP, QemuConstants.ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_2000, QemuConstants.ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_ME, QemuConstants.ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_98, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_NT, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_95, QemuConstants.ARCH_X86, 1, 32, 512, 64, 5, 500, 50, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_3, QemuConstants.ARCH_X86, 1, 4, 64, 32, 2, 50, 5, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_2, QemuConstants.ARCH_X86, 1, 1, 64, 32, 2, 50, 5, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_1, QemuConstants.ARCH_X86, 1, 1, 64, 32, 2, 50, 5, QemuConstants.OS_WIN.lowercased()],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
+        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_GENERIC, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_OTHER.lowercased()]
     ]
     
     static let HOST_X86_64 = "x86_64";

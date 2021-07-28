@@ -10,6 +10,7 @@ import Foundation
 class VirtualMachine: Codable, Hashable {
     
     var os: String;
+    var subtype: String?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 5)
     var architecture: String;
     var path: String = ""; // not serialized
     var displayName: String;
@@ -23,17 +24,18 @@ class VirtualMachine: Codable, Hashable {
     var qemuCommand: String?;
     
     private enum CodingKeys: String, CodingKey {
-        case os, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand;
     }
     
-    init(os: String, architecture: String, path: String,  displayName: String, description: String, memory: Int32, displayResolution: String, qemuBootloader: Bool) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, qemuBootloader: Bool) {
         self.os = os;
+        self.subtype = subtype;
         self.architecture = architecture;
         self.path = path;
         self.displayName = displayName;
         self.description = description;
         self.memory = memory;
-        self.cpus = 1;
+        self.cpus = cpus;
         self.displayResolution = displayResolution;
         self.qemuBootLoader = qemuBootloader;
         self.drives = [];
