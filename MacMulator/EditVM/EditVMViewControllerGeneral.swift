@@ -43,6 +43,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     func updateView() {
         if let virtualMachine = self.virtualMachine {
             vmType.selectItem(at: QemuConstants.supportedVMTypes.firstIndex(of: virtualMachine.os)!);
+
             vmSubType.reloadData();
             vmSubType.selectItem(at: Utils.getIndexOfSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0)));
             vmName.stringValue = virtualMachine.displayName;

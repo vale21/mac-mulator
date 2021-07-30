@@ -123,8 +123,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                                 <connections>
-                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="Ljz-0P-2og"/>
-                                    <outlet property="delegate" destination="67A-Mm-B6X" id="6GK-Ld-WmY"/>
+                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="3Ud-EB-hKz"/>
+                                    <outlet property="delegate" destination="67A-Mm-B6X" id="tuc-Nb-C1Y"/>
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
@@ -332,7 +332,7 @@
                         <outlet property="vmDescription" destination="6NK-mS-sgm" id="xis-a6-Y1F"/>
                         <outlet property="vmName" destination="lRI-vi-tcA" id="RGE-aQ-hr9"/>
                         <outlet property="vmSubType" destination="bsO-Gd-aoR" id="KaT-8H-pCw"/>
-                        <outlet property="vmType" destination="kEK-er-2EU" id="WII-Pn-3A2"/>
+                        <outlet property="vmType" destination="kEK-er-2EU" id="WGV-Vz-rxM"/>
                     </connections>
                 </viewController>
                 <customObject id="bZr-4i-A0K" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -364,24 +364,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZXG-j2-bCx">
-                                <rect key="frame" x="115" y="311" width="96" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="512" drawsBackground="YES" id="AKa-HW-jiP">
-                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Mft-IN-vre">
-                                        <real key="minimum" value="32"/>
-                                        <real key="maximum" value="2048"/>
-                                    </numberFormatter>
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <connections>
-                                    <outlet property="delegate" destination="fBa-tq-xkS" id="zU5-xF-olv"/>
-                                </connections>
-                            </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Or2-CQ-Js9">
-                                <rect key="frame" x="68" y="275" width="367" height="28"/>
+                                <rect key="frame" x="113" y="275" width="367" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="8192" doubleValue="512" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="31d-fc-gp0"/>
                                 <connections>
@@ -401,15 +385,6 @@
                                 <rect key="frame" x="18" y="246" width="38" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Disks" id="WIv-I1-c8p">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9W-xr-RhF">
-                                <rect key="frame" x="439" y="283" width="34" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="8 GB" id="rNe-Z2-GIL">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -438,9 +413,9 @@
                                 </connections>
                             </comboBox>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wr5-u2-BeG">
-                                <rect key="frame" x="18" y="283" width="44" height="16"/>
+                                <rect key="frame" x="20" y="283" width="80" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="32 MB" id="9wX-k6-vWC">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="32 MB" id="9wX-k6-vWC">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -736,15 +711,39 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqq-6n-VM7">
+                                <rect key="frame" x="115" y="311" width="96" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2Ik-4k-tBF">
+                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="m4c-1w-EHb"/>
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <outlet property="delegate" destination="fBa-tq-xkS" id="jfT-Zh-NzT"/>
+                                </connections>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9W-xr-RhF">
+                                <rect key="frame" x="484" y="283" width="80" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="8 GB" id="rNe-Z2-GIL">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="architectureComboBox" destination="TgZ-59-ml0" id="BW9-Zz-SYZ"/>
                         <outlet property="cpusComboBox" destination="alY-XH-NeD" id="c1V-fI-wGP"/>
                         <outlet property="drivesTableView" destination="XFF-rf-sSL" id="cg4-qr-ZVO"/>
+                        <outlet property="maxMemoryLabel" destination="M9W-xr-RhF" id="gZK-gh-Bfj"/>
                         <outlet property="memorySlider" destination="Or2-CQ-Js9" id="cur-AD-NEy"/>
                         <outlet property="memoryStepper" destination="Hw3-U6-vgX" id="UE7-io-KWq"/>
-                        <outlet property="memoryTextView" destination="ZXG-j2-bCx" id="LMn-tY-j5k"/>
+                        <outlet property="memoryTextView" destination="Bqq-6n-VM7" id="SuW-Gc-bcH"/>
+                        <outlet property="minMemoryLabel" destination="wr5-u2-BeG" id="6LA-OG-jlc"/>
                     </connections>
                 </viewController>
                 <customObject id="Zzu-lc-Uxm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -977,9 +976,9 @@
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-7X-lcl">
-                                <rect key="frame" x="18" y="141" width="32" height="16"/>
+                                <rect key="frame" x="14" y="141" width="60" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="1 GB" id="iMm-Ju-x4p">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="1 GB" id="iMm-Ju-x4p">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1022,15 +1021,6 @@ Gw
                                     <action selector="cancelButtonPressed:" target="jnj-BN-7iT" id="gO0-45-6sI"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
-                                <rect key="frame" x="395" y="141" width="32" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="2 TB" id="CKc-j7-uhd">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aEd-ol-QxY">
                                 <rect key="frame" x="85" y="166" width="96" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1053,19 +1043,30 @@ Gw
                                 </connections>
                             </stepper>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bNl-Ln-zWW">
-                                <rect key="frame" x="54" y="133" width="337" height="28"/>
+                                <rect key="frame" x="83" y="133" width="279" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="2000" doubleValue="256" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="W8O-bL-uSd"/>
                                 <connections>
                                     <action selector="sliderChanged:" target="jnj-BN-7iT" id="7KV-vD-hWk"/>
                                 </connections>
                             </slider>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
+                                <rect key="frame" x="366" y="141" width="60" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="2 TB" id="CKc-j7-uhd">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="diskSizeSlider" destination="bNl-Ln-zWW" id="KpE-pH-6HV"/>
                         <outlet property="diskSizeStepper" destination="fCN-Je-KJo" id="c8a-vV-QOI"/>
                         <outlet property="diskSizeTextField" destination="aEd-ol-QxY" id="ThD-dI-BIo"/>
+                        <outlet property="maxDiskSizeLabel" destination="Vqw-pb-Mn8" id="HTg-Ky-i0C"/>
+                        <outlet property="minDiskSizeLabel" destination="Bww-7X-lcl" id="SOq-3c-zzf"/>
                         <outlet property="okButton" destination="2gj-pF-841" id="byu-0A-5md"/>
                         <outlet property="titleField" destination="RsM-HF-gGy" id="1wy-L5-1mo"/>
                         <outlet property="useCow" destination="3fZ-xR-idW" id="jXm-nP-0Gb"/>

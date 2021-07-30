@@ -26,18 +26,18 @@ class CreateVMFileViewController : NSViewController {
             let path = computePath();
             let displayName = parentController.vmName.stringValue;
             let description = computeDescription();
-            let memory = computeMemory(os);
+            let memory = Utils.getDefaultMemoryForSubType(os, subtype);
             let cpus = Utils.getCpusForSubType(os, subtype);
             let displayResolution = QemuConstants.RES_1280_800;
             
-            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: memory, cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
+            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
             let virtualHDD = VirtualDrive(
                 path: path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
                 name: QemuConstants.MEDIATYPE_DISK + "-0",
                 format: QemuConstants.FORMAT_QCOW2,
                 mediaType: QemuConstants.MEDIATYPE_DISK,
-                size: 256);
+                size: Int32(Utils.getDefaultDiskSizeForSubType(os, subtype)));
             vm.addVirtualDrive(virtualHDD);
             
             if parentController.installMedia.stringValue != "" {
@@ -100,14 +100,7 @@ class CreateVMFileViewController : NSViewController {
         }
         return "";
     }
-    
-    fileprivate func computeMemory(_ type: String) -> Int32 {
-        if type == QemuConstants.OS_MAC {
-            return 1024;
-        }
-        return 2048;
-    }
-    
+
     fileprivate func createDocumentPackage(_ path: String) throws {
         let fileManager = FileManager.default;
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil);

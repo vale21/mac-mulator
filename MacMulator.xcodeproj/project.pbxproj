@@ -182,7 +182,6 @@
 				3B391EFE25C075F50030E914 /* MacMulatorTests */,
 				3B391F0925C075F50030E914 /* MacMulatorUITests */,
 				3B391EEA25C075F50030E914 /* Products */,
-				3BB10092266F5293005D0E44 /* Qemu */,
 				3B3624FD266F6253007857FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -201,18 +200,19 @@
 			isa = PBXGroup;
 			children = (
 				3B391EEC25C075F50030E914 /* AppDelegate.swift */,
+				3BF8F62125E401D4006E2C1C /* EditVM */,
 				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
+				3BBB473F25CABDD000A4DBA7 /* Model */,
+				3BA3AC1525E6645E00F02B0E /* NewVM */,
 				3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */,
+				3BB10092266F5293005D0E44 /* Qemu */,
+				3BBB473625CABDCB00A4DBA7 /* Resources */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
+				3BBB472F25CABDC600A4DBA7 /* UI */,
+				3BBB471C25CABDAE00A4DBA7 /* Utils */,
 				3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */,
 				3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */,
 				3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */,
-				3BA3AC1525E6645E00F02B0E /* NewVM */,
-				3BF8F62125E401D4006E2C1C /* EditVM */,
-				3BBB473F25CABDD000A4DBA7 /* Model */,
-				3BBB472F25CABDC600A4DBA7 /* UI */,
-				3BBB471C25CABDAE00A4DBA7 /* Utils */,
-				3BBB473625CABDCB00A4DBA7 /* Resources */,
 			);
 			path = MacMulator;
 			sourceTree = "<group>";

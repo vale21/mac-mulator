@@ -18,6 +18,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var diskSizeTextField: NSTextField!
     @IBOutlet weak var diskSizeStepper: NSStepper!
     @IBOutlet weak var diskSizeSlider: NSSlider!
+    @IBOutlet weak var minDiskSizeLabel: NSTextField!
+    @IBOutlet weak var maxDiskSizeLabel: NSTextField!
     @IBOutlet weak var useCow: NSButton!
     @IBOutlet weak var okButton: NSButton!
     
@@ -39,6 +41,42 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     
     func setparentController(_ parentController: EditVMViewControllerHardware) {
         self.parentController = parentController;
+    }
+    
+    fileprivate func updateView() {
+        if let parentController = self.parentController {
+            if let virtualMachine = parentController.virtualMachine {
+                if let newVirtualDrive = self.newVirtualDrive {
+                    diskSizeSlider.intValue = newVirtualDrive.size;
+                    diskSizeStepper.intValue = newVirtualDrive.size;
+                    diskSizeTextField.intValue = newVirtualDrive.size
+
+                    if (newVirtualDrive.format == QemuConstants.FORMAT_QCOW2) {
+                        useCow.intValue = 1;
+                    } else {
+                        useCow.intValue = 0;
+                    }
+                    
+                    if (mode == Mode.ADD) {
+                        titleField.stringValue = "Create new disk";
+                    } else {
+                        titleField.stringValue = "Edit " + newVirtualDrive.name;
+                    }
+                    
+                    
+                    let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
+                    let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, subtype);
+                    let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, subtype);
+                    
+                    minDiskSizeLabel.stringValue = Utils.formatDisk(Int32(minDiskSize));
+                    maxDiskSizeLabel.stringValue = Utils.formatDisk(Int32(maxDiskSize));
+                    diskSizeStepper.minValue = Double(minDiskSize);
+                    diskSizeStepper.maxValue = Double(maxDiskSize);
+                    diskSizeSlider.minValue = Double(minDiskSize);
+                    diskSizeSlider.maxValue = Double(maxDiskSize);
+                }
+            }
+        }
     }
     
     @IBAction func cowCheckboxChanged(_ sender: Any) {
@@ -74,23 +112,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
     
     override func viewWillAppear() {
-        if let newVirtualDrive = self.newVirtualDrive {
-            diskSizeSlider.intValue = newVirtualDrive.size;
-            diskSizeStepper.intValue = newVirtualDrive.size;
-            diskSizeTextField.intValue = newVirtualDrive.size
-
-            if (newVirtualDrive.format == QemuConstants.FORMAT_QCOW2) {
-                useCow.intValue = 1;
-            } else {
-                useCow.intValue = 0;
-            }
-            
-            if (mode == Mode.ADD) {
-                titleField.stringValue = "Create new disk";
-            } else {
-                titleField.stringValue = "Edit " + newVirtualDrive.name;
-            }
-        }
+        updateView();
     }
     
     override func viewDidAppear() {
@@ -100,23 +122,27 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     override func viewDidDisappear() {
         isVisible = false;
     }
-    
-    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-        if control == diskSizeTextField {
-            let size = diskSizeTextField.intValue;
-            if (size >= 1 && size <= 2000) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
+
     func controlTextDidEndEditing(_ notification: Notification) {
         if (notification.object as! NSTextField) == diskSizeTextField && self.isVisible {
             if let newVirtualDrive = self.newVirtualDrive {
-                newVirtualDrive.size = diskSizeTextField.intValue;
-                diskSizeStepper.intValue = diskSizeTextField.intValue;
-                diskSizeSlider.intValue = diskSizeTextField.intValue;
+                let size = diskSizeTextField.intValue;
+                newVirtualDrive.size = size;
+                diskSizeStepper.intValue = size;
+                diskSizeSlider.intValue = size;
+                
+                if let parentController = self.parentController {
+                    if let virtualMachine = parentController.virtualMachine {
+                        let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
+                        if size < Utils.getMinDiskSizeForSubType(virtualMachine.os, subtype) || size > Utils.getMaxDiskSizeForSubType(virtualMachine.os, subtype) {
+                            diskSizeStepper.isEnabled = false;
+                            diskSizeSlider.isEnabled = false;
+                        } else {
+                            diskSizeStepper.isEnabled = true;
+                            diskSizeSlider.isEnabled = true;
+                        }
+                    }
+                }
             }
         }
     }

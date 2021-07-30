@@ -14,13 +14,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet weak var memoryTextView: NSTextField!
     @IBOutlet weak var memoryStepper: NSStepper!
     @IBOutlet weak var memorySlider: NSSlider!
+    @IBOutlet weak var minMemoryLabel: NSTextField!
+    @IBOutlet weak var maxMemoryLabel: NSTextField!
     @IBOutlet weak var drivesTableView: NSTableView!
     
     var virtualMachine: VirtualMachine?;
     
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
-        
         updateView();
     }
     
@@ -116,6 +117,25 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             memorySlider.intValue = virtualMachine.memory;
             memoryTextView.stringValue = String(virtualMachine.memory);
             
+            let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
+            let minMemory = Utils.getMinMemoryForSubType(virtualMachine.os, subtype);
+            let maxMemory = Utils.getMaxMemoryForSubType(virtualMachine.os, subtype);
+            
+            minMemoryLabel.stringValue = Utils.formatMemory(Int32(minMemory));
+            maxMemoryLabel.stringValue = Utils.formatMemory(Int32(maxMemory));
+            memoryStepper.minValue = Double(minMemory);
+            memoryStepper.maxValue = Double(maxMemory);
+            memorySlider.minValue = Double(minMemory);
+            memorySlider.maxValue = Double(maxMemory);
+            
+            if virtualMachine.memory < Utils.getMinMemoryForSubType(virtualMachine.os, subtype) || virtualMachine.memory > Utils.getMaxMemoryForSubType(virtualMachine.os, subtype) {
+                memoryStepper.isEnabled = false;
+                memorySlider.isEnabled = false;
+            } else {
+                memoryStepper.isEnabled = true;
+                memorySlider.isEnabled = true;
+            }
+            
             drivesTableView.reloadData();
         }
     }
@@ -124,7 +144,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if let virtualMachine = self.virtualMachine {
             if (segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE) {
                 let diskName = QemuConstants.MEDIATYPE_DISK + "-" + String(virtualMachine.drives.count);
-                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: 256);
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0))));
                 
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);
@@ -190,19 +210,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         }
     }
     
-    func control(_ control: NSControl, textShouldEndEditing fieldEditor: NSText) -> Bool {
-        if control == memoryTextView {
-            let mem = memoryTextView.stringValue;
-            let mem_num = Utils.toInt32WithAutoLocale(mem);
-            if let memory = mem_num {
-                if (memory >= 32 && memory <= 2048) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
     func controlTextDidEndEditing(_ notification: Notification) {
         if (notification.object as! NSTextField) == memoryTextView {
             if let virtualMachine = self.virtualMachine {
@@ -212,6 +219,15 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     virtualMachine.memory = memory;
                     memoryStepper.intValue = virtualMachine.memory;
                     memorySlider.intValue = virtualMachine.memory;
+                    
+                    let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
+                    if memory < Utils.getMinMemoryForSubType(virtualMachine.os, subtype) || memory > Utils.getMaxMemoryForSubType(virtualMachine.os, subtype) {
+                        memoryStepper.isEnabled = false;
+                        memorySlider.isEnabled = false;
+                    } else {
+                        memoryStepper.isEnabled = true;
+                        memorySlider.isEnabled = true;
+                    }
                 }
             }
         }
