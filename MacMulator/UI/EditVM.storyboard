@@ -123,8 +123,8 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                                 <connections>
-                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="3Ud-EB-hKz"/>
-                                    <outlet property="delegate" destination="67A-Mm-B6X" id="tuc-Nb-C1Y"/>
+                                    <outlet property="dataSource" destination="67A-Mm-B6X" id="25m-TH-KMK"/>
+                                    <outlet property="delegate" destination="67A-Mm-B6X" id="tmr-v4-7HR"/>
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
@@ -332,7 +332,7 @@
                         <outlet property="vmDescription" destination="6NK-mS-sgm" id="xis-a6-Y1F"/>
                         <outlet property="vmName" destination="lRI-vi-tcA" id="RGE-aQ-hr9"/>
                         <outlet property="vmSubType" destination="bsO-Gd-aoR" id="KaT-8H-pCw"/>
-                        <outlet property="vmType" destination="kEK-er-2EU" id="WGV-Vz-rxM"/>
+                        <outlet property="vmType" destination="kEK-er-2EU" id="AKO-9b-xXo"/>
                     </connections>
                 </viewController>
                 <customObject id="bZr-4i-A0K" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
