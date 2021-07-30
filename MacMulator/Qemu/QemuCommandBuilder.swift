@@ -113,7 +113,7 @@ class QemuCommandBuilder {
             cmd += " -L " + bios;
         }
         if let cpus = self.cpus {
-            cmd += " -smp " + String(cpus);
+            cmd += " -smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus);
         }
         if let bootArg = self.bootArg {
             cmd += " -boot " + bootArg;
