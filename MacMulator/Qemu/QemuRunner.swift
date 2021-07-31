@@ -87,6 +87,7 @@ class QemuRunner {
             .withVga(QemuConstants.VGA_VIRTIO)
             //.withCpu(isNativeIntel ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64)
             .withAccel(isNativeIntel ? QemuConstants.ACCEL_HVF : nil)
+            .withSoundHw(QemuConstants.SOUNDHW_HDA)
             .withUsb(QemuConstants.USB_TABLET);
     }
         

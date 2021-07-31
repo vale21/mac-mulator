@@ -352,4 +352,6 @@ class QemuConstants {
     static let ACCEL_HVF = "hvf";
     
     static let USB_TABLET = "usb-tablet";
+    
+    static let SOUNDHW_HDA = "hda"
 }

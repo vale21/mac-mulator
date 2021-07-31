@@ -23,6 +23,7 @@ class QemuCommandBuilder {
     var graphics: String?;
     var autoBoot: Bool?;
     var vgaEnabled: Bool?;
+    var soundHw: String?
     var drives: [String] = [];
     var network: String?;
     var managementPort: Int32?;
@@ -92,6 +93,11 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withSoundHw(_ soundHw: String?) -> QemuCommandBuilder {
+        self.soundHw = soundHw;
+        return self;
+    }
+    
     func withDrive(file: String, format: String, index: Int, media:String)-> QemuCommandBuilder {
         self.drives.append("file=" + Utils.escape(file) + ",format=" + format + ",index=" + String(index) + ",media=" + media);
         return self;
@@ -138,6 +144,9 @@ class QemuCommandBuilder {
         }
         if let graphics = self.graphics {
             cmd += " -g " + graphics;
+        }
+        if let soundHw = self.soundHw {
+            cmd += " -soundhw " + soundHw;
         }
         if let autoBoot = self.autoBoot {
             cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'";
