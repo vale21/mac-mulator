@@ -12,10 +12,12 @@ class QemuRunner {
     let listenPort: Int32;
     let shell = Shell();
     let qemuPath: String;
+    let livePreviewEnabled: Bool;
     let virtualMachine: VirtualMachine;
     
     init(listenPort: Int32, virtualMachine: VirtualMachine) {
         qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+        livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         self.listenPort = listenPort;
         self.virtualMachine = virtualMachine;
     }
@@ -56,8 +58,10 @@ class QemuRunner {
                                         }});
                 }
             }
-            
-            builder = builder.withManagementPort(listenPort);
+            if livePreviewEnabled {
+                builder = builder.withQmpString(true);
+                builder = builder.withManagementPort(listenPort);
+            }
             return builder.build();
         }
     }
