@@ -85,7 +85,7 @@ class QemuRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            //.withCpu(isNativeIntel ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64)
+            .withCpu(isNativeIntel ? QemuConstants.CPU_HOST : nil)
             .withAccel(isNativeIntel ? QemuConstants.ACCEL_HVF : nil)
             .withSoundHw(QemuConstants.SOUNDHW_HDA)
             .withUsb(QemuConstants.USB_TABLET);
