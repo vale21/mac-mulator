@@ -31,6 +31,7 @@
 		3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
 		3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
 		3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */; };
+		3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471D25CABDAE00A4DBA7 /* Shell.swift */; };
 		3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471E25CABDAE00A4DBA7 /* Utils.swift */; };
@@ -45,6 +46,7 @@
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
 		3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */; };
+		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 /* End PBXBuildFile section */
@@ -85,6 +87,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -122,6 +125,7 @@
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
 		3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineTableCellView.swift; sourceTree = "<group>"; };
+		3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QEMU_EFI.fd; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -138,6 +142,7 @@
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
 		3BD9CCF6262DCE5B008341D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MacMulator/UI/Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -202,6 +207,7 @@
 				3B391EEC25C075F50030E914 /* AppDelegate.swift */,
 				3BF8F62125E401D4006E2C1C /* EditVM */,
 				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
+				3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */,
 				3BBB473F25CABDD000A4DBA7 /* Model */,
 				3BA3AC1525E6645E00F02B0E /* NewVM */,
 				3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */,
@@ -293,6 +299,7 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
 				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
@@ -484,6 +491,7 @@
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
+				3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
 				3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */,
 				3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */,

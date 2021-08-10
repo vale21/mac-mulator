@@ -25,6 +25,7 @@ class QemuCommandBuilder {
     var autoBoot: Bool?;
     var vgaEnabled: Bool?;
     var soundHw: String?
+    var efi: String?;
     var drives: [String] = [];
     var network: String?;
     var managementPort: Int32?;
@@ -104,6 +105,11 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withEfi(file: String)-> QemuCommandBuilder {
+        self.efi = file;
+        return self;
+    }
+    
     func withNetwork(name: String, device: String) -> QemuCommandBuilder{
         self.network = "-netdev user,id=" + name + " -device " + device + ",netdev=" + name;
         return self;
@@ -159,6 +165,9 @@ class QemuCommandBuilder {
         }
         if let vgaEnabled = self.vgaEnabled {
             cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'";
+        }
+        if let efi = self.efi {
+            cmd += " -bios " + efi;
         }
         for drive in self.drives {
             cmd += " -drive " + drive;

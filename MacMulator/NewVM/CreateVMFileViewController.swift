@@ -40,6 +40,16 @@ class CreateVMFileViewController : NSViewController {
                 size: Int32(Utils.getDefaultDiskSizeForSubType(os, subtype)));
             vm.addVirtualDrive(virtualHDD);
             
+            if (architecture == QemuConstants.ARCH_ARM64) {
+                let virtualEfi = VirtualDrive(
+                    path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_EFI + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_EFI,
+                    size: 0);
+                vm.addVirtualDrive(virtualEfi)
+            }
+                        
             if parentController.installMedia.stringValue != "" {
                 let virtualCD = VirtualDrive(
                     path: parentController.installMedia.stringValue,
@@ -62,6 +72,10 @@ class CreateVMFileViewController : NSViewController {
                     complete = true;
                     created = true;
                 });
+                if (architecture == QemuConstants.ARCH_ARM64) {
+                    try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
+                }
+                
             } catch {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                 message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {

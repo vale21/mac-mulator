@@ -11,6 +11,7 @@ class MacMulatorConstants {
     
     static let VM_EXTENSION = "qvm";
     static let DISK_EXTENSION = "qvd";
+    static let EFI_EXTENSION = "fd";
     static let INFO_PLIST = "Info.plist";
     
     static let NEW_VM_SEGUE = "newVMSegue";
@@ -21,6 +22,7 @@ class MacMulatorConstants {
     static let CREATE_VM_FILE_SEGUE = "createVmFileSegue";
     static let SHOW_DRIVE_INFO_SEGUE = "showDriveInfoSegue";
     static let PREFERENCES_SEGUE = "preferencesSegue";
+    static let SHOW_CONSOLE_SEGUE = "showConsoleSegue";
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";

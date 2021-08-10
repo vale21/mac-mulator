@@ -64,7 +64,7 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func editVM(_ sender: Any) {
         self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: rootController?.currentVm);
     }
-    
+
     @IBAction
     func startVM(sender: Any) {
         
