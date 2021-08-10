@@ -44,6 +44,10 @@ class RootViewController: NSSplitViewController {
         vmController?.stopVM(sender);
     }
     
+    func showConsoleMenubarClicked(_ sender: Any) {
+        self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_CONSOLE_SEGUE, sender: self);
+    }
+    
     func editVMmenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: currentVm);
     }
@@ -115,6 +119,7 @@ class RootViewController: NSSplitViewController {
     
     func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
         runningVMs[vm] = runner;
+        
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
         
         let appDelegate = NSApp.delegate as! AppDelegate;
@@ -139,6 +144,13 @@ class RootViewController: NSSplitViewController {
     
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {
         return runningVMs[vm];
+    }
+    
+    func getRunnerForCurrentVM() -> QemuRunner? {
+        if let currentVm = self.currentVm {
+            return runningVMs[currentVm];
+        }
+        return nil;
     }
     
     func areThereRunningVMs() -> Bool {

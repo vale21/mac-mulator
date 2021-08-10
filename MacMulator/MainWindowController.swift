@@ -30,5 +30,9 @@ class MainWindowController: NSWindowController {
             let destinationController = dest.contentViewController as! PreferencesViewController;
             destinationController.setRootController(sourceController);
         }
+        if (segue.identifier == MacMulatorConstants.SHOW_CONSOLE_SEGUE) {
+            let destinationController = dest.contentViewController as! ConsoleViewController;
+            destinationController.setRootController(sourceController);
+        }
     }
 }

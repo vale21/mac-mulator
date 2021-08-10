@@ -23,7 +23,7 @@ class QemuRunner {
     }
 
     func runVM(uponCompletion callback: @escaping (Int32, VirtualMachine) -> Void) {
-        shell.runCommand(getQemuCommand(), uponCompletion: { terminationCcode in
+        shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { terminationCcode in
             callback(terminationCcode, self.virtualMachine);
         });
     }
@@ -49,7 +49,11 @@ class QemuRunner {
                         index += 1;
                     }
                     
-                    builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: drive.mediaType);
+                    if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                        builder = builder.withEfi(file: drive.path);
+                    } else {
+                        builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: drive.mediaType);
+                    }
                 } else {
                     Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
                                         response in if response.rawValue == Utils.ALERT_RESP_OK {
@@ -146,5 +150,13 @@ class QemuRunner {
     
     func getStandardError() -> String {
         return shell.readFromStandardError();
+    }
+    
+    func getStandardOutput() -> String {
+        return shell.readFromStandardOutput();
+    }
+    
+    func getConsoleOutput() -> String {
+        return shell.readFromConsole();
     }
 }

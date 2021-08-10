@@ -27,7 +27,7 @@ class DriveInfoViewController: NSViewController {
             driveSize.stringValue = String(virtualDrive.size) + " GB";
             driveFormat.stringValue = virtualDrive.format + " " + QemuUtils.getDriveFormatDescription(virtualDrive.format);
             drivePath.stringValue = Utils.unescape(virtualDrive.path);
-            QemuUtils.getDiskImageInfo(virtualDrive, uponCompletion: {
+            QemuUtils.getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
                 terminationCcode, info in
                 DispatchQueue.main.async {
                     self.infoView.string = info;

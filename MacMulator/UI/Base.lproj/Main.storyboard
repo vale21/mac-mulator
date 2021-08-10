@@ -331,6 +331,13 @@
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Yf2-Qx-Hk7"/>
+                                        <menuItem title="Show Console Output" id="7ko-iP-uk6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -420,7 +427,94 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1942" y="-1257"/>
+            <point key="canvasLocation" x="-2245" y="-1546"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="ca3-oh-WzR">
+            <objects>
+                <windowController showSeguePresentationStyle="single" id="yhg-XN-9MI" sceneMemberID="viewController">
+                    <window key="window" title="Console output" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="y7i-Bf-Ufc">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="227" y="299" width="640" height="480"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
+                        <view key="contentView" id="SUc-oY-H30">
+                            <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="yhg-XN-9MI" id="sct-61-sZA"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="8bN-Go-MC7" kind="relationship" relationship="window.shadowedContentViewController" id="uQe-xd-iIn"/>
+                    </connections>
+                </windowController>
+                <customObject id="CX3-zU-Apc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2808" y="-1104"/>
+        </scene>
+        <!--Console View Controller-->
+        <scene sceneID="1g7-fN-J1v">
+            <objects>
+                <viewController id="8bN-Go-MC7" customClass="ConsoleViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="NE9-Ho-i3v">
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edq-wI-Rtf">
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
+                                <clipView key="contentView" drawsBackground="NO" id="c6g-zY-B4l">
+                                    <rect key="frame" x="0.0" y="0.0" width="625" height="480"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="3L5-IM-BeS">
+                                            <rect key="frame" x="0.0" y="0.0" width="625" height="480"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="625" height="480"/>
+                                            <size key="maxSize" width="625" height="10000000"/>
+                                            <attributedString key="textStorage">
+                                                <fragment content="aaa">
+                                                    <attributes>
+                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                        <font key="NSFont" size="11" name="Menlo-Regular"/>
+                                                        <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                            <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        </textView>
+                                    </subviews>
+                                </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="hWa-Ge-qO2">
+                                    <rect key="frame" x="-100" y="-100" width="225" height="15"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="cXc-JN-xku">
+                                    <rect key="frame" x="625" y="0.0" width="15" height="480"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="edq-wI-Rtf" secondAttribute="trailing" id="Dif-5n-HTe"/>
+                            <constraint firstAttribute="bottom" secondItem="edq-wI-Rtf" secondAttribute="bottom" id="LWM-Ff-tPU"/>
+                            <constraint firstItem="edq-wI-Rtf" firstAttribute="leading" secondItem="NE9-Ho-i3v" secondAttribute="leading" id="MO1-ta-AIw"/>
+                            <constraint firstItem="edq-wI-Rtf" firstAttribute="centerY" secondItem="NE9-Ho-i3v" secondAttribute="centerY" id="YBs-e2-lef"/>
+                            <constraint firstItem="edq-wI-Rtf" firstAttribute="top" secondItem="NE9-Ho-i3v" secondAttribute="top" id="mqT-rR-xs8"/>
+                            <constraint firstItem="edq-wI-Rtf" firstAttribute="centerX" secondItem="NE9-Ho-i3v" secondAttribute="centerX" id="ymH-K8-UMa"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="consoleView" destination="3L5-IM-BeS" id="Gac-ed-Dns"/>
+                    </connections>
+                </viewController>
+                <customObject id="HLm-3g-NyG" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2085" y="-1104"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="a5g-mn-8u4">
@@ -877,7 +971,7 @@
                                         </connections>
                                     </button>
                                     <connections>
-                                        <segue destination="Fkf-Y0-JDu" kind="show" identifier="preferencesSegue" id="VDU-uU-eTD"/>
+                                        <segue destination="yhg-XN-9MI" kind="show" identifier="showConsoleSegue" id="NZA-6H-oRw"/>
                                     </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>

@@ -13,6 +13,10 @@ class Shell {
     let pipe_err = Pipe();
     let pipe_in = Pipe();
     
+    var stdout: String = "";
+    var stderr: String = "";
+    var output: String = "";
+    
     func runAndKillCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
         DispatchQueue.global().async {
             print("Running " + command + " in " + self.task.currentDirectoryPath);
@@ -37,15 +41,41 @@ class Shell {
         }
     }
     
-    func runCommand(_ command: String, uponCompletion callback: @escaping (Int32) -> Void) -> Void {
+    fileprivate func setupStandardOutput() {
+        self.task.standardOutput = self.pipe_out;
+        self.pipe_out.fileHandleForReading.readabilityHandler = { (fileHandle) -> Void in
+            let availableData = fileHandle.availableData
+            let newOutput = String.init(data: availableData, encoding: .utf8);
+            if let out = newOutput, !out.isEmpty {
+                self.stdout.append(contentsOf: out);
+                self.output.append(contentsOf: out);
+            }
+        }
+    }
+    
+    fileprivate func setupStandardError() {
+        self.task.standardError = self.pipe_err;
+        self.pipe_err.fileHandleForReading.readabilityHandler = { (fileHandle) -> Void in
+            let availableData = fileHandle.availableData
+            let newOutput = String.init(data: availableData, encoding: .utf8);
+            if let out = newOutput, !out.isEmpty {
+                self.stdout.append(contentsOf: out);
+                self.output.append(contentsOf: out);
+            }
+        }
+    }
+    
+    func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32) -> Void) -> Void {
         
         DispatchQueue.global().async {
+            self.task.currentDirectoryPath = currentDirectoryPath;
             print("Running " + command + " in " + self.task.currentDirectoryPath);
             do {
                 try ObjC.catchException({
                     if (!self.task.isRunning) {
-                        self.task.standardOutput = self.pipe_out;
-                        self.task.standardError = self.pipe_err;
+                        
+                        self.setupStandardOutput()
+                        self.setupStandardError()
                         
                         self.task.arguments = ["-c", command];
                         self.task.launchPath = "/bin/zsh";
@@ -59,11 +89,7 @@ class Shell {
             }
         }
     }
-    
-    func setWorkingDir(_ path: String) {
-        task.currentDirectoryPath = path;
-    }
-    
+
     func isRunning() -> Bool {
         return task.isRunning;
     }
@@ -83,14 +109,14 @@ class Shell {
     }
     
     func readFromStandardOutput() -> String {
-        let data = pipe_out.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)!
-        return output;
+        return stdout;
     }
     
     func readFromStandardError() -> String {
-        let data = pipe_err.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)!
+        return stderr;
+    }
+    
+    func readFromConsole() -> String {
         return output;
     }
 }

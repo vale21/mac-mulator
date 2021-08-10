@@ -20,9 +20,7 @@ class QemuUtils {
     static func createDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
-        
-        shell.setWorkingDir(path);
-        
+
         let command: String =
             QemuImgCommandBuilder(qemuPath:qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CREATE)
@@ -31,10 +29,10 @@ class QemuUtils {
             .withName(virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
             .build();
         
-        shell.runCommand(command, uponCompletion: callback);
+        shell.runCommand(command, path, uponCompletion: callback);
     }
     
-    static func resizeDiskImage(_ virtualDrive: VirtualDrive, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
         
@@ -45,10 +43,10 @@ class QemuUtils {
             .withShortSize(virtualDrive.size)
             .build();
         
-        shell.runCommand(command, uponCompletion: callback);
+        shell.runCommand(command, path, uponCompletion: callback);
     }
     
-    static func convertDiskImage(_ virtualDrive: VirtualDrive, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
         
@@ -60,19 +58,19 @@ class QemuUtils {
             .withTargetName(virtualDrive.path)
             .build();
         
-        shell.runCommand(command, uponCompletion: callback);
+        shell.runCommand(command, path, uponCompletion: callback);
     }
     
-    static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
         if newVirtualDrive.size != oldVirtualDrive.size {
-            resizeDiskImage(newVirtualDrive, shrink: (newVirtualDrive.size < oldVirtualDrive.size), uponCompletion: callback);
+            resizeDiskImage(newVirtualDrive, path, shrink: (newVirtualDrive.size < oldVirtualDrive.size), uponCompletion: callback);
         }
         if newVirtualDrive.format != oldVirtualDrive.format {
-            convertDiskImage(newVirtualDrive, oldFormat: oldVirtualDrive.format, uponCompletion: callback);
+            convertDiskImage(newVirtualDrive, path, oldFormat: oldVirtualDrive.format, uponCompletion: callback);
         }
     }
     
-    static func getDiskImageInfo(_ virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, String) -> Void) -> Void {
+    static func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) -> Void {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
         
@@ -81,7 +79,7 @@ class QemuUtils {
             .withName(virtualDrive.path)
             .build();
         
-        shell.runCommand(command, uponCompletion: { terminationCcode in
+        shell.runCommand(command, path, uponCompletion: { terminationCcode in
             callback(terminationCcode, shell.readFromStandardOutput());
         });
     }

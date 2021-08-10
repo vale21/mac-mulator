@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
         Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
     }
-    
+        
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
         rootController?.startVMMenuBarClicked(sender);
     }
@@ -40,6 +40,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
         rootController?.editVMmenuBarClicked(sender);
+    }
+    
+    @IBAction func showConsolemenuBarClicked(_ sender: Any) {
+        rootController?.showConsoleMenubarClicked(sender);
     }
     
     func refreshVMMenus() {
