@@ -75,11 +75,17 @@ class Utils {
     
     
     static func escape(_ string: String) -> String {
-        return string.replacingOccurrences(of: " ", with: "\\ ");
+        var replaced =  string.replacingOccurrences(of: " ", with: "\\ ");
+        replaced =  replaced.replacingOccurrences(of: "(", with: "\\(");
+        replaced =  replaced.replacingOccurrences(of: ")", with: "\\)");
+        return replaced;
     }
     
     static func unescape(_ string: String) -> String {
-        return string.replacingOccurrences(of: "\\ ", with: " ");
+        var replaced = string.replacingOccurrences(of: "\\ ", with: " ");
+        replaced = replaced.replacingOccurrences(of: "\\(", with: "(");
+        replaced = replaced.replacingOccurrences(of: "\\)", with: ")");
+        return replaced;
     }
     
     static func cleanFolderPath(_ string: String) -> String {
@@ -303,6 +309,25 @@ class Utils {
     
     static func getDefaultDiskSizeForSubType(_ os: String, _ subtype: String) -> Int {
         return getIntValueForSubType(os, subtype, 9, 250);
+    }
+    
+    static func computeDrivesTableIndex(_ virtualMachine: VirtualMachine?,  _ row: Int) -> Int {
+        var counter = 0;
+        var iterationIndex = 0;
+        
+        if let vm = virtualMachine {
+            for drive in vm.drives {
+                if iterationIndex > row {
+                    // end loop and return
+                    return row + counter;
+                }
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                    counter += 1;
+                }
+                iterationIndex += 1
+            }
+        }
+        return 0;
     }
     
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: String) -> String {
