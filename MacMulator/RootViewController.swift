@@ -110,6 +110,11 @@ class RootViewController: NSSplitViewController {
         }
         
         let virtualMachine = virtualMachines.remove(at: index);
+        if self.isVMRunning(virtualMachine) {
+            let runner = self.runningVMs[virtualMachine];
+            runner?.kill();
+            self.runningVMs.removeValue(forKey: virtualMachine);
+        }
         
         let delegate = NSApp.delegate as! AppDelegate;
         delegate.removeSavedVM(virtualMachine.path);
@@ -128,7 +133,10 @@ class RootViewController: NSSplitViewController {
     
     func unsetRunningVM(_ vm: VirtualMachine) {
         runningVMs.removeValue(forKey: vm);
-        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, false);
+        let index = virtualMachines.firstIndex(of: vm);
+        if let idx = index {
+            listController?.setRunning(idx, false);
+        }
         
         let appDelegate = NSApp.delegate as! AppDelegate;
         appDelegate.refreshVMMenus();
