@@ -59,7 +59,15 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
 
     func numberOfRows(in tableView: NSTableView) -> Int {
         if tableView == bootOrderTable {
-            return (virtualMachine?.drives.count ?? 0) + 1;
+            var size = 0;
+            if let vm = virtualMachine {
+                for drive in vm.drives {
+                    if drive.mediaType != QemuConstants.MEDIATYPE_EFI {
+                        size += 1;
+                    }
+                }
+            }
+            return size;
         }
         if tableView == resolutionTable {
             return QemuConstants.ALL_RESOLUTIONS_DESC.count;
@@ -72,7 +80,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
 
         if let virtualMachine = self.virtualMachine {
             if tableView == bootOrderTable {
-                let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, row));
+                let index = Utils.computeDrivesTableIndex(virtualMachine, row);
+                let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, index));
                 cell.addSubview(view);
                 if (virtualMachine.qemuBootLoader) {
                     view.textColor = NSColor.gray;

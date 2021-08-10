@@ -235,45 +235,48 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self);
+        let index = Utils.computeDrivesTableIndex(virtualMachine, row);
+        
+        let vm = virtualMachine?.drives[index];
         
         if tableColumn?.identifier.rawValue == "Icon" {
             let cellView = cell as! DrivesTableIconCell;
             
-            if virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_DISK {
+            if vm?.mediaType == QemuConstants.MEDIATYPE_DISK {
                 cellView.icon.image = NSImage(named: "HD Icon");
             }
-            if virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_CDROM {
+            if vm?.mediaType == QemuConstants.MEDIATYPE_CDROM {
                 cellView.icon.image = NSImage(named: "CD Icon");
             }
         }
         
         if tableColumn?.identifier.rawValue == "Name" {
             let cellView = cell as! DrivesTableDriveNameCell;
-            cellView.label.stringValue = virtualMachine?.drives[row].name ?? "";
+            cellView.label.stringValue = vm?.name ?? "";
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Type" {
             let cellView = cell as! DrivesTableDriveTypeCell;
-            cellView.label.stringValue = QemuUtils.getDriveTypeDescription(virtualMachine?.drives[row].mediaType ?? "");
+            cellView.label.stringValue = QemuUtils.getDriveTypeDescription(vm?.mediaType ?? "");
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Size" {
             let cellView = cell as! DrivesTableDriveSizeCell;
-            cellView.label.stringValue = Utils.formatDisk(virtualMachine?.drives[row].size ?? 0);
+            cellView.label.stringValue = Utils.formatDisk(vm?.size ?? 0);
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Path" {
             let cellView = cell as! DrivesTableDrivePathCell;
-            cellView.label.stringValue = Utils.unescape(virtualMachine?.drives[row].path ?? "");
+            cellView.label.stringValue = Utils.unescape(vm?.path ?? "");
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if (tableColumn?.identifier.rawValue == "Buttons") {
             let cellView = cell as! DrivesTableButtonsCell;
-            if (virtualMachine?.drives[row].mediaType == QemuConstants.MEDIATYPE_CDROM) {
+            if (vm?.mediaType == QemuConstants.MEDIATYPE_CDROM) {
                 cellView.editButton.isEnabled = false;
                 cellView.infoButton.isEnabled = false;
             } else {
@@ -285,8 +288,18 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         return cell;
     }
     
+
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return virtualMachine?.drives.count ?? 0;
+        var size = 0;
+        if let vm = virtualMachine {
+            for drive in vm.drives {
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI {
+                    size += 1;
+                }
+            }
+        }
+        return size;
     }
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {

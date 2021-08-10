@@ -32,14 +32,6 @@ class CreateVMFileViewController : NSViewController {
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
-            let virtualHDD = VirtualDrive(
-                path: path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
-                name: QemuConstants.MEDIATYPE_DISK + "-0",
-                format: QemuConstants.FORMAT_QCOW2,
-                mediaType: QemuConstants.MEDIATYPE_DISK,
-                size: Int32(Utils.getDefaultDiskSizeForSubType(os, subtype)));
-            vm.addVirtualDrive(virtualHDD);
-            
             if (architecture == QemuConstants.ARCH_ARM64) {
                 let virtualEfi = VirtualDrive(
                     path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
@@ -49,7 +41,15 @@ class CreateVMFileViewController : NSViewController {
                     size: 0);
                 vm.addVirtualDrive(virtualEfi)
             }
-                        
+            
+            let virtualHDD = VirtualDrive(
+                path: path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
+                name: QemuConstants.MEDIATYPE_DISK + "-0",
+                format: QemuConstants.FORMAT_QCOW2,
+                mediaType: QemuConstants.MEDIATYPE_DISK,
+                size: Int32(Utils.getDefaultDiskSizeForSubType(os, subtype)));
+            vm.addVirtualDrive(virtualHDD);
+                                    
             if parentController.installMedia.stringValue != "" {
                 let virtualCD = VirtualDrive(
                     path: parentController.installMedia.stringValue,
