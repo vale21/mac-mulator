@@ -198,6 +198,9 @@ class QemuConstants {
     static let RES_5120_2280 = "5120×2880x32";
     static let RES_6016_3384 = "6016×3384x32";
     
+    // Other
+    static let RES_1280_768 = "1280x768x32";
+    
     static let ALL_RESOLUTIONS = [
         RES_640_480,
         RES_800_600,
@@ -205,6 +208,7 @@ class QemuConstants {
         RES_1280_1024,
         RES_1600_1200,
         RES_1024_600,
+        RES_1280_768,
         RES_1280_800,
         RES_1440_900,
         RES_1680_1050,
@@ -226,6 +230,7 @@ class QemuConstants {
         QemuConstants.RES_1280_1024: "1280 x 1024",
         QemuConstants.RES_1600_1200: "1600 x 1200",
         QemuConstants.RES_1024_600: "1024 x 600",
+        QemuConstants.RES_1280_768: "1280 x 768",
         QemuConstants.RES_1280_800: "1280 x 800",
         QemuConstants.RES_1440_900: "1440 x 900",
         QemuConstants.RES_1680_1050: "1680 x 1050",

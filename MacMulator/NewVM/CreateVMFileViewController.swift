@@ -28,7 +28,7 @@ class CreateVMFileViewController : NSViewController {
             let description = computeDescription();
             let memory = Utils.getDefaultMemoryForSubType(os, subtype);
             let cpus = Utils.getCpusForSubType(os, subtype);
-            let displayResolution = QemuConstants.RES_1280_800;
+            let displayResolution = QemuConstants.RES_1280_768;
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
