@@ -11,7 +11,7 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast"];
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd"];
     
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();
@@ -327,7 +327,7 @@ class Utils {
                 iterationIndex += 1
             }
         }
-        return 0;
+        return row + counter;
     }
     
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: String) -> String {

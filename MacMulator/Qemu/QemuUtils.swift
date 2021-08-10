@@ -71,16 +71,28 @@ class QemuUtils {
     }
     
     static func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) -> Void {
+        getDiskImageInfo(virtualDrive.path, path, uponCompletion: callback);
+    }
+    
+    static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) -> Void {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
         
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_INFO)
-            .withName(virtualDrive.path)
+            .withName(drivePath)
             .build();
         
         shell.runCommand(command, path, uponCompletion: { terminationCcode in
             callback(terminationCcode, shell.readFromStandardOutput());
+        });
+    }
+    
+    static func adjustVirtualDrive(_ virtualDrive: VirtualDrive) {
+        // Read concrete info on disk file and update in-memory image accordingly
+        getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
+            terminationCcode, info in
+            print(info);
         });
     }
     

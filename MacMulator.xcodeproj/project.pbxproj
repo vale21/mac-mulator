@@ -14,8 +14,6 @@
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
-		3B391F0025C075F50030E914 /* MacMulatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EFF25C075F50030E914 /* MacMulatorTests.swift */; };
-		3B391F0B25C075F50030E914 /* MacMulatorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; };
@@ -49,17 +47,11 @@
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
+		3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		3B391EFC25C075F50030E914 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3B391EE125C075F50030E914 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3B391EE825C075F50030E914;
-			remoteInfo = MacMulator;
-		};
-		3B391F0725C075F50030E914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3B391EE125C075F50030E914 /* Project object */;
 			proxyType = 1;
@@ -104,11 +96,7 @@
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B391EFF25C075F50030E914 /* MacMulatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorTests.swift; sourceTree = "<group>"; };
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3B391F0625C075F50030E914 /* MacMulatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorUITests.swift; sourceTree = "<group>"; };
-		3B391F0C25C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
@@ -145,6 +133,8 @@
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
+		3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTest.swift; sourceTree = "<group>"; };
+		3BFF48E226C2D4AF0093408E /* MacMulatorTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulatorTests-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,13 +147,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3B391EF825C075F50030E914 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B391F0325C075F50030E914 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -186,7 +169,6 @@
 				3B3624FD266F6253007857FB /* Frameworks */,
 				3B391EEB25C075F50030E914 /* MacMulator */,
 				3B391EFE25C075F50030E914 /* MacMulatorTests */,
-				3B391F0925C075F50030E914 /* MacMulatorUITests */,
 				3B391EEA25C075F50030E914 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -196,7 +178,6 @@
 			children = (
 				3B391EE925C075F50030E914 /* MacMulator.app */,
 				3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */,
-				3B391F0625C075F50030E914 /* MacMulatorUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -226,19 +207,11 @@
 		3B391EFE25C075F50030E914 /* MacMulatorTests */ = {
 			isa = PBXGroup;
 			children = (
-				3B391EFF25C075F50030E914 /* MacMulatorTests.swift */,
+				3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */,
 				3B391F0125C075F50030E914 /* Info.plist */,
+				3BFF48E226C2D4AF0093408E /* MacMulatorTests-Bridging-Header.h */,
 			);
 			path = MacMulatorTests;
-			sourceTree = "<group>";
-		};
-		3B391F0925C075F50030E914 /* MacMulatorUITests */ = {
-			isa = PBXGroup;
-			children = (
-				3B391F0A25C075F50030E914 /* MacMulatorUITests.swift */,
-				3B391F0C25C075F50030E914 /* Info.plist */,
-			);
-			path = MacMulatorUITests;
 			sourceTree = "<group>";
 		};
 		3B578557266526460003C3C8 /* Libs */ = {
@@ -376,24 +349,6 @@
 			productReference = 3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3B391F0525C075F50030E914 /* MacMulatorUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3B391F1525C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulatorUITests" */;
-			buildPhases = (
-				3B391F0225C075F50030E914 /* Sources */,
-				3B391F0325C075F50030E914 /* Frameworks */,
-				3B391F0425C075F50030E914 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3B391F0825C075F50030E914 /* PBXTargetDependency */,
-			);
-			name = MacMulatorUITests;
-			productName = MacMulatorUITests;
-			productReference = 3B391F0625C075F50030E914 /* MacMulatorUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -408,10 +363,6 @@
 						LastSwiftMigration = 1240;
 					};
 					3B391EFA25C075F50030E914 = {
-						CreatedOnToolsVersion = 12.3;
-						TestTargetID = 3B391EE825C075F50030E914;
-					};
-					3B391F0525C075F50030E914 = {
 						CreatedOnToolsVersion = 12.3;
 						TestTargetID = 3B391EE825C075F50030E914;
 					};
@@ -435,7 +386,6 @@
 			targets = (
 				3B391EE825C075F50030E914 /* MacMulator */,
 				3B391EFA25C075F50030E914 /* MacMulatorTests */,
-				3B391F0525C075F50030E914 /* MacMulatorUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -453,13 +403,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3B391EF925C075F50030E914 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B391F0425C075F50030E914 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -510,15 +453,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B391F0025C075F50030E914 /* MacMulatorTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B391F0225C075F50030E914 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3B391F0B25C075F50030E914 /* MacMulatorUITests.swift in Sources */,
+				3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,11 +464,6 @@
 			isa = PBXTargetDependency;
 			target = 3B391EE825C075F50030E914 /* MacMulator */;
 			targetProxy = 3B391EFC25C075F50030E914 /* PBXContainerItemProxy */;
-		};
-		3B391F0825C075F50030E914 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3B391EE825C075F50030E914 /* MacMulator */;
-			targetProxy = 3B391F0725C075F50030E914 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -679,11 +609,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -709,11 +639,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -736,6 +666,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
@@ -748,6 +679,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator.app/Contents/MacOS/MacMulator";
 			};
@@ -758,6 +690,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
@@ -770,48 +703,9 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.1;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator.app/Contents/MacOS/MacMulator";
-			};
-			name = Release;
-		};
-		3B391F1625C075F50030E914 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 43L3TB7GWV;
-				INFOPLIST_FILE = MacMulatorUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = MacMulator;
-			};
-			name = Debug;
-		};
-		3B391F1725C075F50030E914 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 43L3TB7GWV;
-				INFOPLIST_FILE = MacMulatorUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TEST_TARGET_NAME = MacMulator;
 			};
 			name = Release;
 		};
@@ -841,15 +735,6 @@
 			buildConfigurations = (
 				3B391F1325C075F50030E914 /* Debug */,
 				3B391F1425C075F50030E914 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3B391F1525C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulatorUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3B391F1625C075F50030E914 /* Debug */,
-				3B391F1725C075F50030E914 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

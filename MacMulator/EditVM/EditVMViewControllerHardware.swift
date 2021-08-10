@@ -51,20 +51,38 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 if let virtualMachine = self.virtualMachine {
                     
                     for virtualDrive in virtualMachine.drives {
-                        if virtualDrive.mediaType == QemuConstants.MEDIATYPE_CDROM && virtualDrive.path == path {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "You already have configured image at path " + path + " to be loaded as a virtual CD/DVD drive.");
+                        if virtualDrive.path == path {
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "You already have configured image at path " + path + " to be loaded in MacMulator.");
                             return;
                         }
                     }
                     
-                    // no existing CD drive found
-                    let virtualCD = VirtualDrive(
-                        path: path,
-                        name: QemuConstants.MEDIATYPE_CDROM + "-" + String(virtualMachine.drives.count),
-                        format: QemuConstants.FORMAT_RAW,
-                        mediaType: QemuConstants.MEDIATYPE_CDROM,
-                        size: 0);
-                    virtualMachine.addVirtualDrive(virtualCD);
+                    // no existing drive found
+                    var newDrive: VirtualDrive;
+                    if path.hasSuffix(QemuConstants.FORMAT_QCOW2) || path.hasSuffix(MacMulatorConstants.DISK_EXTENSION) {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_DISK + "-" + String(virtualMachine.drives.count),
+                            format: QemuConstants.FORMAT_QCOW2,
+                            mediaType: QemuConstants.MEDIATYPE_DISK,
+                            size: 200);
+                        QemuUtils.adjustVirtualDrive(newDrive);
+                    } else if path.hasSuffix(MacMulatorConstants.EFI_EXTENSION) {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_EFI + "-" + String(virtualMachine.drives.count),
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_EFI,
+                            size: 0);
+                    } else {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_CDROM + "-" + String(virtualMachine.drives.count),
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_CDROM,
+                            size: 0);
+                    }
+                    virtualMachine.addVirtualDrive(newDrive);
                     virtualMachine.writeToPlist();
                     drivesTableView.reloadData();
                 }
@@ -75,7 +93,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBAction func deleteVirtualDrive(_ sender: Any) {
         if let virtualMachine = self.virtualMachine {
             let row = drivesTableView.row(for: sender as! NSView);
-            let drive = virtualMachine.drives[row];
+            let drive = virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, row)];
             if drive.mediaType == QemuConstants.MEDIATYPE_CDROM {
                 self.removeVirtualDrive(row);
             } else {
@@ -152,15 +170,16 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             }
             if (segue.identifier == MacMulatorConstants.EDIT_DISK_SEGUE) {
                 let destinationController = segue.destinationController as! NewDiskViewController;
-                destinationController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
+                let driveTableRow: Int = drivesTableView.row(for: sender as! NSView)
+                destinationController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)]);
                 destinationController.setparentController(self);
                 destinationController.setMode(NewDiskViewController.Mode.EDIT);
             }
             if (segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE) {
                 let destinationController = segue.destinationController as! NSWindowController;
                 let contentController = destinationController.contentViewController as! DriveInfoViewController;
-                
-                contentController.setVirtualDrive(virtualMachine.drives[drivesTableView.row(for: sender as! NSView)]);
+                let driveTableRow: Int = drivesTableView.row(for: sender as! NSView)
+                contentController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)]);
             }
         }
     }
