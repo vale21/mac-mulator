@@ -59,7 +59,7 @@ class Shell {
             let availableData = fileHandle.availableData
             let newOutput = String.init(data: availableData, encoding: .utf8);
             if let out = newOutput, !out.isEmpty {
-                self.stdout.append(contentsOf: out);
+                self.stderr.append(contentsOf: out);
                 self.output.append(contentsOf: out);
             }
         }
