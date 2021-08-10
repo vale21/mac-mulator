@@ -174,10 +174,12 @@ class QemuCommandBuilder {
             cmd += " -vga " + vga;
         }
         if let display = self.display {
-            cmd += " -display " + display;
-        }
-        if let showCursor = self.showCursor, showCursor {
-            cmd += " -show-cursor";
+            cmd += " -display " + display + ",show-cursor=";
+            if let showCursor = self.showCursor, showCursor {
+                cmd += "on"
+            } else {
+                cmd += "off"
+            }
         }
         if let cpu = self.cpu {
             cmd += " -cpu " + cpu;
