@@ -335,24 +335,39 @@ class QemuConstants {
         [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_M68K, QemuConstants.ARCH_68K, 1, 1, 512, 16, 1, 50, 5, QemuConstants.OS_OTHER.lowercased()]
     ]
     
+    static let HOST_I386 = "i386";
     static let HOST_X86_64 = "x86_64";
+    static let HOST_ARM64 = "arm64";
     
     static let MACHINE_TYPE_MAC99 = "mac99,via=pmu";
     static let MACHINE_TYPE_Q35 = "q35";
+    static let MACHINE_TYPE_PC = "pc";
+    static let MACHINE_TYPE_VIRT = "virt,highmem=off";
+    
+    static let SERIAL_STDIO = "stdio";
     
     static let PC_BIOS = "pc-bios";
     
     static let NETWORK_SUNGEM = "sungem";
+    static let NETWORK_VIRTIO = "virtio-net";
     
     static let VGA_VIRTIO = "virtio";
     static let VGA_VMWARE = "vmware";
     
+    static let DISPLAY_DEFAULT = "default";
+    
     static let CPU_HOST = "host";
     static let CPU_QEMU64 = "qemu64";
+    static let CPU_CORTEX_A72 = "cortex-a72";
     
     static let ACCEL_HVF = "hvf";
     
+    static let USB_KEYBOARD = "usb-kbd";
     static let USB_TABLET = "usb-tablet";
+    static let QEMU_XHCI = "qemu-xhci";
+    static let VIRTIO_GPU_PCI = "virtio-gpu-pci";
     
-    static let SOUNDHW_HDA = "hda"
+    static let SOUND_HDA = "intel-hda"
+    static let SOUND_HDA_DUPLEX = "hda-duplex"
+    static let SOUND_AC97 = "AC97"
 }

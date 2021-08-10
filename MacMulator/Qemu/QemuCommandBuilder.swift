@@ -12,19 +12,23 @@ class QemuCommandBuilder {
     var qemuPath: String;
     var executable: String;
     var addQmpString: Bool?;
+    var showCursor: Bool?
+    var serial: String?;
     var bios: String?;
     var cpus: Int?;
     var accel: String?;
     var vga: String?;
+    var display: String?
     var cpu: String?;
-    var usb: String?;
+    var usb: Bool?;
+    var device: [String] = [];
     var bootArg: String?;
     var machine: String?;
     var memory: Int32?
     var graphics: String?;
     var autoBoot: Bool?;
     var vgaEnabled: Bool?;
-    var soundHw: String?
+    var sound: [String] = [];
     var efi: String?;
     var drives: [String] = [];
     var network: String?;
@@ -33,6 +37,16 @@ class QemuCommandBuilder {
     init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath;
         self.executable = architecture;
+    }
+    
+    func withShowCursor(_ showCursor: Bool) -> QemuCommandBuilder {
+        self.showCursor = showCursor;
+        return self;
+    }
+    
+    func withSerial(_ serial: String?) -> QemuCommandBuilder {
+        self.serial = serial;
+        return self;
     }
     
     func withBios(_ bios: String?) -> QemuCommandBuilder {
@@ -44,7 +58,7 @@ class QemuCommandBuilder {
         self.cpus = cpus;
         return self;
     }
-    
+        
     func withAccel(_ accel: String?) -> QemuCommandBuilder {
         self.accel = accel;
         return self;
@@ -55,13 +69,25 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withDisplay(_ display: String?) -> QemuCommandBuilder {
+        self.display = display;
+        return self;
+    }
+    
     func withCpu(_ cpu: String?) -> QemuCommandBuilder {
         self.cpu = cpu;
         return self;
     }
     
-    func withUsb(_ usb: String?) -> QemuCommandBuilder {
+    func withUsb(_ usb: Bool) -> QemuCommandBuilder {
         self.usb = usb;
+        return self;
+    }
+    
+    func withDevice(_ device: String?) -> QemuCommandBuilder {
+        if let newDevice = device {
+            self.device.append(newDevice);
+        }
         return self;
     }
     
@@ -95,8 +121,10 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withSoundHw(_ soundHw: String?) -> QemuCommandBuilder {
-        self.soundHw = soundHw;
+    func withSound(_ sound: String?) -> QemuCommandBuilder {
+        if let soudHw = sound {
+            self.sound.append(soudHw);
+        }
         return self;
     }
     
@@ -127,6 +155,9 @@ class QemuCommandBuilder {
     
     func build() -> String {
         var cmd = self.qemuPath + "/" + self.executable;
+        if let serial = self.serial {
+            cmd += " -serial " + serial;
+        }
         if let bios = self.bios {
             cmd += " -L " + bios;
         }
@@ -142,11 +173,20 @@ class QemuCommandBuilder {
         if let vga = self.vga {
             cmd += " -vga " + vga;
         }
+        if let display = self.display {
+            cmd += " -display " + display;
+        }
+        if let showCursor = self.showCursor, showCursor {
+            cmd += " -show-cursor";
+        }
         if let cpu = self.cpu {
             cmd += " -cpu " + cpu;
         }
-        if let usb = self.usb {
-            cmd += " -usb -device " + usb;
+        if let usb = self.usb, usb {
+            cmd += " -usb";
+        }
+        for usb in self.device {
+            cmd += " -device " + usb;
         }
         if let machine = self.machine {
             cmd += " -M " + machine;
@@ -157,8 +197,8 @@ class QemuCommandBuilder {
         if let graphics = self.graphics {
             cmd += " -g " + graphics;
         }
-        if let soundHw = self.soundHw {
-            cmd += " -soundhw " + soundHw;
+        for sound in self.sound {
+            cmd += " -device " + sound;
         }
         if let autoBoot = self.autoBoot {
             cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'";

@@ -33,12 +33,24 @@ class QemuRunner {
             return command;
         } else {
             var builder: QemuCommandBuilder;
-            if virtualMachine.architecture == QemuConstants.ARCH_PPC {
+            
+            switch virtualMachine.architecture {
+            case QemuConstants.ARCH_PPC:
                 builder = createBuilderForPPC();
-            } else {
+                break;
+            case QemuConstants.ARCH_X86:
+                builder = createBuilderForI386();
+                break;
+            case QemuConstants.ARCH_X64:
+                builder = createBuilderForX86_64();
+                break;
+            case QemuConstants.ARCH_ARM64:
+                builder = createBuilderForARM64();
+                break;
+            default:
                 builder = createBuilderForX86_64();
             }
-                
+  
             var index = 1;
             for drive in virtualMachine.drives {
                 if (driveExists(drive)) {
@@ -75,6 +87,7 @@ class QemuRunner {
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_MAC99)
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
@@ -83,20 +96,63 @@ class QemuRunner {
             .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
     }
     
-    fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
-        let isNativeIntel = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
+    fileprivate func createBuilderForI386() -> QemuCommandBuilder {
+        let isNative = Utils.hostArchitecture() == QemuConstants.HOST_I386 && !Utils.isRunningInEmulation();
         
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withMachine(QemuConstants.MACHINE_TYPE_PC)
+            .withMemory(virtualMachine.memory)
+            .withVga(QemuConstants.VGA_VIRTIO)
+            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withSound(QemuConstants.SOUND_AC97)
+            .withUsb(true)
+            .withDevice(QemuConstants.USB_KEYBOARD)
+            .withDevice(QemuConstants.USB_TABLET)
+            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_VIRTIO);
+    }
+
+    fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
+        let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
+        
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withBios(QemuConstants.PC_BIOS)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            //.withCpu(isNativeIntel ? QemuConstants.CPU_HOST : nil)
-            .withAccel(isNativeIntel ? QemuConstants.ACCEL_HVF : nil)
-            .withSoundHw(QemuConstants.SOUNDHW_HDA)
-            .withUsb(QemuConstants.USB_TABLET);
+            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
+            .withUsb(true)
+            .withDevice(QemuConstants.USB_KEYBOARD)
+            .withDevice(QemuConstants.USB_TABLET);
+    }
+    
+    fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
+        let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
+        
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withSerial(QemuConstants.SERIAL_STDIO)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withMachine(QemuConstants.MACHINE_TYPE_VIRT)
+            .withCpu(QemuConstants.CPU_CORTEX_A72)
+            .withMemory(virtualMachine.memory)
+            .withDisplay(QemuConstants.DISPLAY_DEFAULT)
+            .withDevice(QemuConstants.VIRTIO_GPU_PCI)
+            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
+            .withDevice(QemuConstants.QEMU_XHCI)
+            .withDevice(QemuConstants.USB_KEYBOARD)
+            .withDevice(QemuConstants.USB_TABLET);
     }
         
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
