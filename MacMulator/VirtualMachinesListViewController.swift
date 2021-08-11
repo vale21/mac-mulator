@@ -55,12 +55,59 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
     
+    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine");
+    
     override func viewDidLoad() {
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
+        table.registerForDraggedTypes([accountPasteboardType]);
+        table.allowsMultipleSelection = false;
     }
+    
+    func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
+        let virtualMachine = rootController?.getVirtualMachineAt(row);
+        if let vm = virtualMachine {
+            let pasteboardItem = NSPasteboardItem()
+            pasteboardItem.setString(vm.displayName, forType: accountPasteboardType)
+            return pasteboardItem
+        }
+        return nil;
+    }
+    
+    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
+        if dropOperation == .above {
+            return .move
+        } else {
+            return []
+        }
+    }
+    
+    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
+         guard
+             let item = info.draggingPasteboard.pasteboardItems?.first,
+             let theString = item.string(forType: accountPasteboardType),
+             let vm = rootController?.getVirtualMachine(name: theString),
+             let originalRow = rootController?.getIndex(of: vm)
+             else { return false }
+
+         var newRow = row
+         // When you drag an item downwards, the "new row" index is actually --1. Remember dragging operation is `.above`.
+         if originalRow < newRow {
+             newRow = row - 1
+         }
+
+         // Animate the rows
+         tableView.beginUpdates()
+         tableView.moveRow(at: originalRow, to: newRow)
+         tableView.endUpdates()
+
+         // Persist the ordering by saving your data model
+        rootController?.moveVm(at: originalRow, to: newRow)
+
+         return true
+     }
     
     @objc func tableViewEditItemClicked(_ sender: AnyObject) {
         guard table.clickedRow >= 0 else { return }

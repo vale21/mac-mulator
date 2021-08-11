@@ -154,6 +154,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
     
+    func moveSavedVm(at originalRow: Int, to newRow: Int) {
+        let vm = savedVMs?.remove(at: originalRow);
+        savedVMs?.insert(vm!, at: newRow);
+        
+        let userDefaults = UserDefaults.standard;
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
+    }
+    
     fileprivate func setupSavedVMs() {
         let filemanager = FileManager.default;
         var toRemove: [Int] = [];

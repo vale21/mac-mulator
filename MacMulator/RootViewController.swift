@@ -94,6 +94,27 @@ class RootViewController: NSSplitViewController {
         return virtualMachines[index];
     }
     
+    func getVirtualMachine(name: String) -> VirtualMachine? {
+        for virtualMachine in virtualMachines {
+            if virtualMachine.displayName == name {
+                return virtualMachine;
+            }
+        }
+        return nil;
+    }
+    
+    func getIndex(of virtualMachine: VirtualMachine) -> Int? {
+        return virtualMachines.firstIndex(of: virtualMachine);
+    }
+    
+    func moveVm(at originalRow: Int, to newRow: Int) {
+        let vm = virtualMachines.remove(at: originalRow);
+        virtualMachines.insert(vm, at: newRow);
+        
+        let appDelegate = NSApp.delegate as! AppDelegate;
+        appDelegate.moveSavedVm(at: originalRow, to: newRow);
+    }
+    
     func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
         self.listController?.refreshList();
         self.vmController?.setVirtualMachine(virtualMachine);
