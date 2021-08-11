@@ -50,9 +50,7 @@ class QemuCommandBuilder {
     }
     
     func withBios(_ bios: String?) -> QemuCommandBuilder {
-        if let _bios = bios {
-            self.bios = Utils.escape(_bios);
-        }
+        self.bios = bios;
         return self;
     }
     
@@ -142,7 +140,7 @@ class QemuCommandBuilder {
     }
     
     func withEfi(file: String)-> QemuCommandBuilder {
-        self.efi = file;
+        self.efi = Utils.escape(file);
         return self;
     }
     
