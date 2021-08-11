@@ -18,8 +18,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemu_img_label: NSTextField!
     @IBOutlet weak var qemu_i386_tick: NSImageView!
     @IBOutlet weak var qemu_x86_64_tick: NSImageView!
-    @IBOutlet weak var qemu_riscv32_tick: NSImageView!
-    @IBOutlet weak var qemu_riscv64_tick: NSImageView!
     @IBOutlet weak var qemu_arm_tick: NSImageView!
     @IBOutlet weak var qemu_arm64_tick: NSImageView!
     @IBOutlet weak var qemu_ppc_tick: NSImageView!
@@ -121,8 +119,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkFile(QemuConstants.QEMU_IMG, qemu_img_tick);
             checkFile(QemuConstants.ARCH_X86, qemu_i386_tick);
             checkFile(QemuConstants.ARCH_X64, qemu_x86_64_tick);
-            checkFile(QemuConstants.ARCH_RISCV64, qemu_riscv32_tick);
-            checkFile(QemuConstants.ARCH_RISCV64, qemu_riscv64_tick);
             checkFile(QemuConstants.ARCH_ARM, qemu_arm_tick);
             checkFile(QemuConstants.ARCH_ARM64, qemu_arm64_tick);
             checkFile(QemuConstants.ARCH_PPC, qemu_ppc_tick);
@@ -133,8 +129,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             setYellowCross(qemu_img_tick);
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
-            setRedCross(qemu_riscv32_tick);
-            setRedCross(qemu_riscv64_tick);
             setRedCross(qemu_arm_tick);
             setRedCross(qemu_arm64_tick);
             setRedCross(qemu_ppc_tick);

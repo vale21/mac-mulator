@@ -341,9 +341,12 @@ class QemuConstants {
     static let HOST_ARM64 = "arm64";
     
     static let MACHINE_TYPE_MAC99 = "mac99,via=pmu";
+    static let MACHINE_TYPE_PSERIES = "pseries";
+    static let MACHINE_TYPE_VERSATILEPB = "versatilepb";
     static let MACHINE_TYPE_Q35 = "q35";
     static let MACHINE_TYPE_PC = "pc";
     static let MACHINE_TYPE_VIRT = "virt,highmem=off";
+    static let MACHINE_TYPE_Q800 = "q800";
     
     static let SERIAL_STDIO = "stdio";
     
@@ -360,6 +363,7 @@ class QemuConstants {
     static let CPU_HOST = "host";
     static let CPU_QEMU64 = "qemu64";
     static let CPU_CORTEX_A72 = "cortex-a72";
+    static let CPU_ARM1176 = "arm1176"
     
     static let ACCEL_HVF = "hvf";
     

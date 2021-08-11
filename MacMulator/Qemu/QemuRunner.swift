@@ -38,14 +38,23 @@ class QemuRunner {
             case QemuConstants.ARCH_PPC:
                 builder = createBuilderForPPC();
                 break;
+            case QemuConstants.ARCH_PPC64:
+                builder = createBuilderForPPC64();
+                break;
             case QemuConstants.ARCH_X86:
                 builder = createBuilderForI386();
                 break;
             case QemuConstants.ARCH_X64:
                 builder = createBuilderForX86_64();
                 break;
+            case QemuConstants.ARCH_ARM:
+                builder = createBuilderForARM();
+                break;
             case QemuConstants.ARCH_ARM64:
                 builder = createBuilderForARM64();
+                break;
+            case QemuConstants.ARCH_68K:
+                builder = createBuilderForM68k();
                 break;
             default:
                 builder = createBuilderForX86_64();
@@ -97,9 +106,20 @@ class QemuRunner {
             .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
     }
     
+    fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withMachine(QemuConstants.MACHINE_TYPE_PSERIES)
+            .withMemory(virtualMachine.memory)
+            .withGraphics(virtualMachine.displayResolution)
+            .withAutoBoot(true)
+            .withVgaEnabled(true)
+            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+    }
+    
     fileprivate func createBuilderForI386() -> QemuCommandBuilder {
-        let isNative = Utils.hostArchitecture() == QemuConstants.HOST_I386 && !Utils.isRunningInEmulation();
-        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -109,7 +129,6 @@ class QemuRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_PC)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
             .withSound(QemuConstants.SOUND_AC97)
             .withUsb(true)
             .withDevice(QemuConstants.USB_KEYBOARD)
@@ -137,6 +156,17 @@ class QemuRunner {
             .withDevice(QemuConstants.USB_TABLET);
     }
     
+    fileprivate func createBuilderForARM() -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withSerial(QemuConstants.SERIAL_STDIO)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB)
+            .withCpu(QemuConstants.CPU_ARM1176)
+            .withMemory(virtualMachine.memory);
+    }
+
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
         
@@ -157,7 +187,16 @@ class QemuRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET);
     }
-        
+
+    fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(computeBootArg(virtualMachine))
+            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withMachine(QemuConstants.MACHINE_TYPE_Q800)
+            .withMemory(virtualMachine.memory);
+    }
+    
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
         
         if vm.qemuBootLoader {

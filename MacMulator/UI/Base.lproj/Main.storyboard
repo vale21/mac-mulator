@@ -427,7 +427,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2245" y="-1546"/>
+            <point key="canvasLocation" x="-2066" y="-1111"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="ca3-oh-WzR">
@@ -453,7 +453,7 @@
                 </windowController>
                 <customObject id="CX3-zU-Apc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2808" y="-1104"/>
+            <point key="canvasLocation" x="-958" y="-532"/>
         </scene>
         <!--Console View Controller-->
         <scene sceneID="1g7-fN-J1v">
@@ -475,12 +475,12 @@
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <size key="minSize" width="625" height="480"/>
-                                            <size key="maxSize" width="625" height="10000000"/>
+                                            <size key="maxSize" width="640" height="10000000"/>
                                             <attributedString key="textStorage">
-                                                <fragment content="aaa">
+                                                <fragment content="Loading...">
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="11" name="Menlo-Regular"/>
+                                                        <font key="NSFont" size="13" name="Menlo-Regular"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                     </attributes>
                                                 </fragment>
@@ -514,7 +514,7 @@
                 </viewController>
                 <customObject id="HLm-3g-NyG" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2085" y="-1104"/>
+            <point key="canvasLocation" x="-170" y="-532"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="a5g-mn-8u4">
@@ -542,7 +542,7 @@
                 </windowController>
                 <customObject id="G1w-JR-X7Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1055" y="-943"/>
+            <point key="canvasLocation" x="-1006" y="-1117"/>
         </scene>
         <!--Preferences View Controller-->
         <scene sceneID="Bs5-Sg-pDv">
@@ -627,19 +627,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2hr-Xf-nOd">
-                                <rect key="frame" x="20" y="244" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="CBh-yf-kzQ"/>
-                                <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
-                            </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BYM-hS-6YR">
-                                <rect key="frame" x="46" y="249" width="138" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-riscv32" id="JUg-ah-ln9">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8O0-SH-CV8">
                                 <rect key="frame" x="224" y="328" width="20" height="26"/>
                                 <constraints>
@@ -685,50 +672,11 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KDU-qN-eAe">
-                                <rect key="frame" x="224" y="244" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="ATc-gH-DIk"/>
-                                <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
-                            </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-uc-Av9">
-                                <rect key="frame" x="250" y="249" width="133" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc64" id="z5E-mC-zk7">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zWK-jv-dcc">
-                                <rect key="frame" x="20" y="214" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="QOZ-g4-UXj"/>
-                                <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
-                            </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ycu-Ns-UMc">
-                                <rect key="frame" x="46" y="219" width="139" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-riscv64" id="QrK-Du-2VZ">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-fD-eqK">
-                                <rect key="frame" x="224" y="214" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="udX-sO-DrE"/>
-                                <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
-                            </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b9j-mm-eoZ">
-                                <rect key="frame" x="250" y="219" width="128" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-m68k" id="Glm-IL-Pfy">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="VSk-jC-MIC">
                                 <rect key="frame" x="107" y="104" width="337" height="5"/>
                             </box>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EZq-aB-jhj">
-                                <rect key="frame" x="107" y="198" width="337" height="5"/>
+                                <rect key="frame" x="107" y="220" width="337" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GGz-Fj-dh8">
                                 <rect key="frame" x="69" y="69" width="228" height="18"/>
@@ -772,7 +720,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
-                                <rect key="frame" x="21" y="162" width="144" height="16"/>
+                                <rect key="frame" x="21" y="184" width="144" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Virtual Machines folder" id="NX3-mj-339">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -780,7 +728,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
-                                <rect key="frame" x="23" y="133" width="440" height="21"/>
+                                <rect key="frame" x="23" y="155" width="440" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="7JJ-SA-RYa">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -791,7 +739,7 @@
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
-                                <rect key="frame" x="471" y="132" width="56" height="23"/>
+                                <rect key="frame" x="471" y="154" width="56" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="56" id="ofK-VS-MwD"/>
                                 </constraints>
@@ -803,11 +751,37 @@
                                     <action selector="searchFolder:" target="cF1-rS-o50" id="0h1-Vc-dDu"/>
                                 </connections>
                             </button>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KDU-qN-eAe">
+                                <rect key="frame" x="224" y="249" width="20" height="16"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="ATc-gH-DIk"/>
+                                <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                            </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-uc-Av9">
+                                <rect key="frame" x="250" y="249" width="133" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc64" id="z5E-mC-zk7">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-fD-eqK">
+                                <rect key="frame" x="20" y="249" width="20" height="16"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="udX-sO-DrE"/>
+                                <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                            </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b9j-mm-eoZ">
+                                <rect key="frame" x="46" y="249" width="128" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-m68k" id="Glm-IL-Pfy">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="0Q2-Tu-83e" firstAttribute="leading" secondItem="t0A-gf-C7u" secondAttribute="trailing" constant="11" id="0QH-aE-Kjv"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="bottom" secondItem="ZSk-8V-9fP" secondAttribute="bottom" id="1VE-VU-TOa"/>
-                            <constraint firstItem="zWK-jv-dcc" firstAttribute="baseline" secondItem="5pp-fD-eqK" secondAttribute="baseline" id="3WI-cd-ml5"/>
+                            <constraint firstItem="5pp-fD-eqK" firstAttribute="baseline" secondItem="b9j-mm-eoZ" secondAttribute="baseline" id="28X-FC-3ju"/>
                             <constraint firstItem="Mno-7U-prL" firstAttribute="top" secondItem="u1x-Fr-N6k" secondAttribute="bottom" constant="8" symbolic="YES" id="3ff-Im-Kxb"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="leading" secondItem="Mno-7U-prL" secondAttribute="leading" id="5cE-q7-xNt"/>
                             <constraint firstItem="ZSk-8V-9fP" firstAttribute="leading" secondItem="u1x-Fr-N6k" secondAttribute="trailing" constant="8" symbolic="YES" id="6OS-VV-iUK"/>
@@ -817,11 +791,9 @@
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="bottom" secondItem="7Ih-Ef-1Mh" secondAttribute="bottom" id="8rb-Hw-6nT"/>
                             <constraint firstItem="GGz-Fj-dh8" firstAttribute="top" secondItem="VSk-jC-MIC" secondAttribute="bottom" constant="20" id="9Ca-OV-HuV"/>
                             <constraint firstAttribute="trailing" secondItem="0Q2-Tu-83e" secondAttribute="trailing" constant="71" id="AZK-rh-7dL"/>
-                            <constraint firstItem="2hr-Xf-nOd" firstAttribute="top" secondItem="0ew-fP-vT5" secondAttribute="bottom" constant="8" symbolic="YES" id="AlK-LV-rKe"/>
                             <constraint firstItem="gSB-28-Ef9" firstAttribute="leading" secondItem="XXE-ml-0zx" secondAttribute="trailing" constant="8" symbolic="YES" id="C28-wZ-wkM"/>
                             <constraint firstItem="Mno-7U-prL" firstAttribute="centerY" secondItem="TbL-Ch-oZB" secondAttribute="centerY" id="DTN-nX-0Ys"/>
-                            <constraint firstItem="ycu-Ns-UMc" firstAttribute="leading" secondItem="zWK-jv-dcc" secondAttribute="trailing" constant="8" symbolic="YES" id="Ewi-DJ-MqX"/>
-                            <constraint firstItem="2hr-Xf-nOd" firstAttribute="baseline" secondItem="KDU-qN-eAe" secondAttribute="baseline" id="Exo-Ml-3bo"/>
+                            <constraint firstItem="b9j-mm-eoZ" firstAttribute="baseline" secondItem="KDU-qN-eAe" secondAttribute="baseline" id="ErG-TD-RWb"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="top" secondItem="SXs-MC-95b" secondAttribute="bottom" constant="8" symbolic="YES" id="G9o-eN-1Ph"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="baseline" secondItem="0Q2-Tu-83e" secondAttribute="baseline" id="Gco-dk-zfp"/>
                             <constraint firstItem="EZq-aB-jhj" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="107" id="Gpy-TA-8E7"/>
@@ -829,38 +801,27 @@
                             <constraint firstItem="Cad-QZ-tB8" firstAttribute="leading" secondItem="gSB-28-Ef9" secondAttribute="leading" id="HBw-10-HUX"/>
                             <constraint firstItem="XXE-ml-0zx" firstAttribute="centerY" secondItem="gSB-28-Ef9" secondAttribute="centerY" id="Hbk-ia-phH"/>
                             <constraint firstItem="lNI-RH-lWM" firstAttribute="leading" secondItem="sEJ-fi-wqq" secondAttribute="trailing" constant="8" symbolic="YES" id="IV0-xS-hMe"/>
-                            <constraint firstItem="twW-NU-sLy" firstAttribute="leading" secondItem="BYM-hS-6YR" secondAttribute="leading" id="It0-Pn-2k0"/>
+                            <constraint firstItem="b9j-mm-eoZ" firstAttribute="top" secondItem="twW-NU-sLy" secondAttribute="bottom" constant="12" id="Jtx-Hg-Kmx"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="top" secondItem="EZq-aB-jhj" secondAttribute="bottom" constant="22" id="KYL-uB-GXa"/>
                             <constraint firstItem="5pp-fD-eqK" firstAttribute="centerY" secondItem="b9j-mm-eoZ" secondAttribute="centerY" id="KnZ-a4-qUi"/>
                             <constraint firstItem="h3K-6a-f4h" firstAttribute="leading" secondItem="XXE-ml-0zx" secondAttribute="leading" id="Lv5-Iq-uKK"/>
-                            <constraint firstItem="twW-NU-sLy" firstAttribute="centerX" secondItem="BYM-hS-6YR" secondAttribute="centerX" id="MUT-ij-6QE"/>
                             <constraint firstItem="TbL-Ch-oZB" firstAttribute="baseline" secondItem="Q6s-7c-wCb" secondAttribute="baseline" id="Nsz-ax-UCc"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="centerY" secondItem="t0A-gf-C7u" secondAttribute="centerY" id="Nto-WS-2nK"/>
-                            <constraint firstItem="zWK-jv-dcc" firstAttribute="top" secondItem="5pp-fD-eqK" secondAttribute="top" id="QcC-XX-7e1"/>
-                            <constraint firstItem="SkS-uc-Av9" firstAttribute="leading" secondItem="b9j-mm-eoZ" secondAttribute="leading" id="RA2-UO-vl3"/>
+                            <constraint firstItem="SkS-uc-Av9" firstAttribute="leading" secondItem="b9j-mm-eoZ" secondAttribute="leading" constant="204" id="RA2-UO-vl3"/>
                             <constraint firstItem="SXs-MC-95b" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="20" symbolic="YES" id="RCL-2h-MaE"/>
                             <constraint firstItem="lNI-RH-lWM" firstAttribute="leading" secondItem="twW-NU-sLy" secondAttribute="leading" id="Rez-fz-QcB"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="leading" secondItem="FWM-lN-Jy4" secondAttribute="leading" id="SMb-zo-e4X"/>
                             <constraint firstItem="8O0-SH-CV8" firstAttribute="leading" secondItem="TbL-Ch-oZB" secondAttribute="trailing" constant="49" id="TaP-7a-Yu0"/>
                             <constraint firstItem="twW-NU-sLy" firstAttribute="top" secondItem="lNI-RH-lWM" secondAttribute="bottom" constant="12" id="Tmn-3l-z1E"/>
-                            <constraint firstItem="BYM-hS-6YR" firstAttribute="leading" secondItem="2hr-Xf-nOd" secondAttribute="trailing" constant="8" symbolic="YES" id="Tw4-Ba-As0"/>
-                            <constraint firstItem="ycu-Ns-UMc" firstAttribute="baseline" secondItem="b9j-mm-eoZ" secondAttribute="baseline" id="U45-6b-3la"/>
                             <constraint firstItem="Q6s-7c-wCb" firstAttribute="leading" secondItem="Cad-QZ-tB8" secondAttribute="leading" id="Uyz-Dh-VfZ"/>
                             <constraint firstItem="EZq-aB-jhj" firstAttribute="leading" secondItem="VSk-jC-MIC" secondAttribute="leading" id="Vgg-7B-m8U"/>
-                            <constraint firstItem="ycu-Ns-UMc" firstAttribute="top" secondItem="BYM-hS-6YR" secondAttribute="bottom" constant="14" id="Wdp-LM-xJx"/>
                             <constraint firstAttribute="trailing" secondItem="EZq-aB-jhj" secondAttribute="trailing" constant="100" id="XcL-1q-Twk"/>
-                            <constraint firstItem="EZq-aB-jhj" firstAttribute="top" secondItem="5pp-fD-eqK" secondAttribute="bottom" constant="16" id="Y2n-8f-jv7"/>
-                            <constraint firstItem="2hr-Xf-nOd" firstAttribute="top" secondItem="KDU-qN-eAe" secondAttribute="top" id="YAu-P4-ynj"/>
+                            <constraint firstItem="EZq-aB-jhj" firstAttribute="top" secondItem="5pp-fD-eqK" secondAttribute="bottom" constant="29" id="Y2n-8f-jv7"/>
                             <constraint firstItem="TbL-Ch-oZB" firstAttribute="top" secondItem="u1x-Fr-N6k" secondAttribute="bottom" constant="10" id="YGJ-Ct-kqQ"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="top" secondItem="3Tr-xq-8xH" secondAttribute="bottom" constant="8" symbolic="YES" id="Z3a-2m-Vgc"/>
-                            <constraint firstItem="BYM-hS-6YR" firstAttribute="baseline" secondItem="SkS-uc-Av9" secondAttribute="baseline" id="ZAP-uQ-Rh1"/>
-                            <constraint firstItem="0ew-fP-vT5" firstAttribute="leading" secondItem="2hr-Xf-nOd" secondAttribute="leading" id="ZMh-ql-QJb"/>
                             <constraint firstItem="Q6s-7c-wCb" firstAttribute="leading" secondItem="8O0-SH-CV8" secondAttribute="trailing" constant="8" symbolic="YES" id="ZWi-lM-cbf"/>
                             <constraint firstItem="GGz-Fj-dh8" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="71" id="ZeJ-Gj-pvw"/>
-                            <constraint firstItem="2hr-Xf-nOd" firstAttribute="leading" secondItem="zWK-jv-dcc" secondAttribute="leading" id="ZlI-lF-Ogc"/>
                             <constraint firstItem="lNI-RH-lWM" firstAttribute="top" secondItem="TbL-Ch-oZB" secondAttribute="bottom" constant="12" id="a16-uJ-bBK"/>
-                            <constraint firstItem="BYM-hS-6YR" firstAttribute="top" secondItem="twW-NU-sLy" secondAttribute="bottom" constant="12" id="a2q-13-dkG"/>
-                            <constraint firstItem="zWK-jv-dcc" firstAttribute="top" secondItem="2hr-Xf-nOd" secondAttribute="bottom" constant="10" id="aMo-9O-2hq"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="baseline" secondItem="ZSk-8V-9fP" secondAttribute="firstBaseline" id="arT-Ud-R2W"/>
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="top" secondItem="wzh-YA-iXF" secondAttribute="bottom" constant="8" symbolic="YES" id="bma-ck-VFo"/>
                             <constraint firstItem="sEJ-fi-wqq" firstAttribute="top" secondItem="Mno-7U-prL" secondAttribute="bottom" constant="8" symbolic="YES" id="cC2-2f-kas"/>
@@ -872,7 +833,7 @@
                             <constraint firstAttribute="bottom" secondItem="t0A-gf-C7u" secondAttribute="bottom" constant="20" symbolic="YES" id="enj-lb-SjI"/>
                             <constraint firstItem="7Ih-Ef-1Mh" firstAttribute="leading" secondItem="FWM-lN-Jy4" secondAttribute="trailing" constant="8" symbolic="YES" id="epj-VT-HV9"/>
                             <constraint firstItem="3Tr-xq-8xH" firstAttribute="top" secondItem="GGz-Fj-dh8" secondAttribute="bottom" constant="8" symbolic="YES" id="fcg-fM-gyY"/>
-                            <constraint firstItem="KDU-qN-eAe" firstAttribute="leading" secondItem="5pp-fD-eqK" secondAttribute="leading" id="fi4-4k-S02"/>
+                            <constraint firstItem="KDU-qN-eAe" firstAttribute="leading" secondItem="5pp-fD-eqK" secondAttribute="leading" constant="204" id="fi4-4k-S02"/>
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="baseline" secondItem="7Ih-Ef-1Mh" secondAttribute="firstBaseline" id="fwo-ky-rAL"/>
                             <constraint firstItem="Mno-7U-prL" firstAttribute="top" secondItem="8O0-SH-CV8" secondAttribute="top" id="gQO-wy-ibd"/>
                             <constraint firstItem="0ew-fP-vT5" firstAttribute="top" secondItem="sEJ-fi-wqq" secondAttribute="bottom" constant="8" symbolic="YES" id="gjV-jI-8LA"/>
@@ -882,12 +843,12 @@
                             <constraint firstItem="XXE-ml-0zx" firstAttribute="leading" secondItem="twW-NU-sLy" secondAttribute="trailing" constant="41" id="inS-Bq-uuY"/>
                             <constraint firstItem="b9j-mm-eoZ" firstAttribute="leading" secondItem="5pp-fD-eqK" secondAttribute="trailing" constant="8" symbolic="YES" id="jbf-te-9Jm"/>
                             <constraint firstItem="Mno-7U-prL" firstAttribute="leading" secondItem="sEJ-fi-wqq" secondAttribute="leading" id="kel-cp-jb4"/>
+                            <constraint firstItem="KDU-qN-eAe" firstAttribute="baseline" secondItem="SkS-uc-Av9" secondAttribute="baseline" id="kxr-Vy-TzU"/>
                             <constraint firstItem="8O0-SH-CV8" firstAttribute="leading" secondItem="h3K-6a-f4h" secondAttribute="leading" id="lHN-mA-aOm"/>
                             <constraint firstItem="sEJ-fi-wqq" firstAttribute="top" secondItem="h3K-6a-f4h" secondAttribute="top" id="lrF-Qf-oHx"/>
                             <constraint firstItem="Mno-7U-prL" firstAttribute="baseline" secondItem="8O0-SH-CV8" secondAttribute="baseline" id="mt2-pK-ETI"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="75" id="mvW-eG-Tcg"/>
                             <constraint firstItem="gSB-28-Ef9" firstAttribute="leading" secondItem="SkS-uc-Av9" secondAttribute="leading" id="pdo-Fi-Oci"/>
-                            <constraint firstItem="BYM-hS-6YR" firstAttribute="leading" secondItem="ycu-Ns-UMc" secondAttribute="leading" id="phJ-tR-msd"/>
                             <constraint firstItem="t0A-gf-C7u" firstAttribute="leading" secondItem="wKF-A0-RM3" secondAttribute="trailing" constant="8" symbolic="YES" id="qFa-DI-VHP"/>
                             <constraint firstItem="sEJ-fi-wqq" firstAttribute="centerY" secondItem="lNI-RH-lWM" secondAttribute="centerY" id="qS2-28-kGe"/>
                             <constraint firstItem="Cad-QZ-tB8" firstAttribute="leading" secondItem="h3K-6a-f4h" secondAttribute="trailing" constant="8" symbolic="YES" id="rHT-tL-Wbb"/>
@@ -915,8 +876,6 @@
                         <outlet property="qemu_img_tick" destination="Mno-7U-prL" id="RO1-Cj-JnR"/>
                         <outlet property="qemu_ppc64_tick" destination="KDU-qN-eAe" id="pFt-mL-r25"/>
                         <outlet property="qemu_ppc_tick" destination="XXE-ml-0zx" id="LMc-WM-ogH"/>
-                        <outlet property="qemu_riscv32_tick" destination="2hr-Xf-nOd" id="hOB-Pk-vvZ"/>
-                        <outlet property="qemu_riscv64_tick" destination="zWK-jv-dcc" id="8iK-Ql-ezV"/>
                         <outlet property="qemu_x86_64_tick" destination="0ew-fP-vT5" id="a1W-2B-hry"/>
                         <outlet property="sixtySecsLabel" destination="0Q2-Tu-83e" id="hUv-ow-Nlw"/>
                         <outlet property="vmFolderButton" destination="7Ih-Ef-1Mh" id="0Dq-hQ-2W8"/>
@@ -924,7 +883,7 @@
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-414" y="-943"/>
+            <point key="canvasLocation" x="-329" y="-1117"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
@@ -957,10 +916,10 @@
                                         </connections>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button" paletteLabel="Dummy Button" title="Button" sizingBehavior="auto" id="REK-Zf-PKp">
+                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button (Console View)" paletteLabel="Dummy Button (Console View)" title="Button" sizingBehavior="auto" id="REK-Zf-PKp">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="G5X-is-yFQ">
-                                        <rect key="frame" x="28" y="14" width="30" height="32"/>
+                                        <rect key="frame" x="69" y="14" width="30" height="32"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" transparent="YES" imageScaling="proportionallyDown" inset="2" id="hfN-Fy-w6b">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -971,13 +930,28 @@
                                         </connections>
                                     </button>
                                     <connections>
-                                        <segue destination="yhg-XN-9MI" kind="show" identifier="showConsoleSegue" id="NZA-6H-oRw"/>
+                                        <segue destination="yhg-XN-9MI" kind="show" identifier="showConsoleSegue" id="Udw-X1-3SD"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="9CBC8438-A8DF-4B4C-9046-686C85D969B6" label="Dummy Button (Preferences)" paletteLabel="Dummy Button (Preferences)" bordered="YES" title="Button" sizingBehavior="auto" id="d3T-L5-Hv7">
+                                    <nil key="toolTip"/>
+                                    <button key="view" verticalHuggingPriority="750" id="ynN-ZP-XcQ">
+                                        <rect key="frame" x="65" y="14" width="30" height="32"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" transparent="YES" imageScaling="proportionallyDown" inset="2" id="s7b-cm-gUJ">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <segue destination="Fkf-Y0-JDu" kind="show" identifier="preferencesSegue" id="Bvl-Km-NWV"/>
                                     </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
                                 <toolbarItem reference="PWA-N2-g1r"/>
                                 <toolbarItem reference="REK-Zf-PKp"/>
+                                <toolbarItem reference="d3T-L5-Hv7"/>
                                 <toolbarItem reference="PWA-N2-g1r"/>
                                 <toolbarItem reference="F8q-EA-dwq"/>
                             </defaultToolbarItems>
@@ -992,7 +966,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1867" y="-540"/>
+            <point key="canvasLocation" x="-2050" y="-447"/>
         </scene>
         <!--Root View Controller-->
         <scene sceneID="mC1-nw-Yn8">
@@ -1542,7 +1516,7 @@
                 <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
                 <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1150" y="-540"/>
+            <point key="canvasLocation" x="-1464" y="-464"/>
         </scene>
         <!--NewVM-->
         <scene sceneID="yBO-JT-jb1">
@@ -1550,7 +1524,7 @@
                 <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
                 <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1151" y="-471"/>
+            <point key="canvasLocation" x="-1462" y="-422"/>
         </scene>
     </scenes>
     <resources>
