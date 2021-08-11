@@ -311,13 +311,25 @@ class Utils {
         return getIntValueForSubType(os, subtype, 9, 250);
     }
     
+    static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
+        var size = 0;
+        if let vm = virtualMachine {
+            for drive in vm.drives {
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI {
+                    size += 1;
+                }
+            }
+        }
+        return size;
+    }
+    
     static func computeDrivesTableIndex(_ virtualMachine: VirtualMachine?,  _ row: Int) -> Int {
         var counter = 0;
         var iterationIndex = 0;
         
         if let vm = virtualMachine {
             for drive in vm.drives {
-                if iterationIndex > row {
+                if iterationIndex > (row + counter) {
                     // end loop and return
                     return row + counter;
                 }
@@ -328,6 +340,21 @@ class Utils {
             }
         }
         return row + counter;
+    }
+    
+    static func computeNextDriveIndex(_ virtualMachine: VirtualMachine?, _ mediaType: String) -> Int {
+        var index = 0;
+        if let vm = virtualMachine {
+            for drive in vm.drives {
+                if drive.mediaType == mediaType {
+                    let driveIndex = Int(drive.name.split(separator: "-")[1])!; // split disk-x at the index of - and take the second part
+                    if driveIndex >= index {
+                        index = driveIndex + 1;
+                    }
+                }
+            }
+        }
+        return index
     }
     
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: String) -> String {

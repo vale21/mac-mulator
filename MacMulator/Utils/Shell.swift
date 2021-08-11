@@ -16,31 +16,7 @@ class Shell {
     var stdout: String = "";
     var stderr: String = "";
     var output: String = "";
-    
-    func runAndKillCommand(_ command: String, uponCompletion callback: @escaping () -> Void) -> Void {
-        DispatchQueue.global().async {
-            print("Running " + command + " in " + self.task.currentDirectoryPath);
-            do {
-                try ObjC.catchException({
-                    if (!self.task.isRunning) {
-                        self.task.standardOutput = self.pipe_out;
-                        self.task.standardError = self.pipe_err;
-                        self.task.standardInput = self.pipe_in;
-                        
-                        self.task.arguments = ["-c", command];
-                        self.task.launchPath = "/bin/zsh";
-                        
-                        self.task.terminationHandler = {process in callback() };
-                        self.task.launch();
-                        self.task.interrupt();
-                    }
-                })
-            } catch {
-                print(error.localizedDescription);
-            }
-        }
-    }
-    
+        
     fileprivate func setupStandardOutput() {
         self.task.standardOutput = self.pipe_out;
         self.pipe_out.fileHandleForReading.readabilityHandler = { (fileHandle) -> Void in
@@ -80,7 +56,12 @@ class Shell {
                         self.task.arguments = ["-c", command];
                         self.task.launchPath = "/bin/zsh";
                         
-                        self.task.terminationHandler = {process in callback(self.task.terminationStatus) };
+                        self.task.terminationHandler = {process in
+                            self.pipe_err.fileHandleForReading.readabilityHandler = nil;
+                            self.pipe_out.fileHandleForReading.readabilityHandler = nil;
+                            self.pipe_in.fileHandleForWriting.writeabilityHandler = nil;
+                            
+                            callback(self.task.terminationStatus) };
                         self.task.launch();
                     }
                 })
