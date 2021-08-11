@@ -356,7 +356,7 @@ class Utils {
         }
         return index
     }
-    
+        
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: String) -> String {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {

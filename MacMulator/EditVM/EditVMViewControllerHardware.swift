@@ -63,10 +63,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                         newDrive = VirtualDrive(
                             path: path,
                             name: QemuConstants.MEDIATYPE_DISK + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_DISK)),
-                            format: QemuConstants.FORMAT_QCOW2,
+                            format: QemuConstants.FORMAT_UNKNOWN,
                             mediaType: QemuConstants.MEDIATYPE_DISK,
-                            size: 200);
-                        QemuUtils.adjustVirtualDrive(newDrive);
+                            size: 0);
                     } else if path.hasSuffix(MacMulatorConstants.EFI_EXTENSION) {
                         newDrive = VirtualDrive(
                             path: path,

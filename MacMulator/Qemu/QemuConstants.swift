@@ -22,11 +22,13 @@ class QemuConstants {
     
     static let FORMAT_QCOW2 = "qcow2";
     static let FORMAT_RAW = "raw";
+    static let FORMAT_UNKNOWN = "unknown";
     
     // Virtual Machine constants
     
     static let CD = "CD/DVD";
     static let HD = "Hard Drive";
+    static let EFI = "EFI Firmware";
     static let NET = "Network";
     
     static let ARG_CD = "d";

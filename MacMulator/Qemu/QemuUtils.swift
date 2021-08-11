@@ -10,11 +10,23 @@ import Foundation
 class QemuUtils {
     
     static func getDriveFormatDescription(_ format: String) -> String {
-        return format == QemuConstants.FORMAT_RAW ? "(Plain data)" : "(Qemu Copy On Write format)"
+        if format == QemuConstants.FORMAT_RAW {
+            return "(Plain data)";
+        } else if format == QemuConstants.FORMAT_QCOW2 {
+            return "(Qemu Copy On Write format)";
+        }
+        
+        return "";
     }
     
     static func getDriveTypeDescription(_ driveType: String) -> String {
-        return driveType == QemuConstants.MEDIATYPE_CDROM ? QemuConstants.CD : QemuConstants.HD;
+        if driveType == QemuConstants.MEDIATYPE_CDROM {
+            return QemuConstants.CD;
+        } else if driveType == QemuConstants.MEDIATYPE_EFI {
+            return QemuConstants.EFI;
+        }
+        
+        return QemuConstants.HD;
     }
     
     static func createDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
@@ -87,15 +99,7 @@ class QemuUtils {
             callback(terminationCcode, shell.readFromStandardOutput());
         });
     }
-    
-    static func adjustVirtualDrive(_ virtualDrive: VirtualDrive) {
-        // Read concrete info on disk file and update in-memory image accordingly
-        getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
-            terminationCcode, info in
-            print(info);
-        });
-    }
-    
+
     static func isBinaryAvailable(_ binary: String) -> Bool {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let fileManager = FileManager.default;
