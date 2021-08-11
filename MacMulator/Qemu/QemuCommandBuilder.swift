@@ -50,7 +50,9 @@ class QemuCommandBuilder {
     }
     
     func withBios(_ bios: String?) -> QemuCommandBuilder {
-        self.bios = bios;
+        if let _bios = bios {
+            self.bios = Utils.escape(_bios);
+        }
         return self;
     }
     
