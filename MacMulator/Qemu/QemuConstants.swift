@@ -147,9 +147,7 @@ class QemuConstants {
         ARCH_PPC64,
         ARCH_ARM,
         ARCH_ARM64,
-        ARCH_68K,
-        ARCH_RISCV32,
-        ARCH_RISCV64
+        ARCH_68K
     ]
     
     static let ALL_ARCHITECTURES_DESC: [String:String] = [
@@ -159,9 +157,7 @@ class QemuConstants {
         QemuConstants.ARCH_PPC64: "PowerPc 64bit",
         QemuConstants.ARCH_ARM: "ARM",
         QemuConstants.ARCH_ARM64: "ARM 64bit",
-        QemuConstants.ARCH_68K: "Motorola 68k",
-        QemuConstants.ARCH_RISCV32: "RISC-V 32bit",
-        QemuConstants.ARCH_RISCV64: "RISC-V 64bit"
+        QemuConstants.ARCH_68K: "Motorola 68k"
     ];
     
     static let MAX_CPUS: [String:Int] = [
@@ -171,9 +167,7 @@ class QemuConstants {
         ARCH_X64: 16,
         ARCH_ARM: 2,
         ARCH_ARM64: 8,
-        ARCH_68K: 1,
-        ARCH_RISCV32: 2,
-        ARCH_RISCV64: 8
+        ARCH_68K: 1
     ]
     
     // 4:3
