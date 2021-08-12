@@ -32,6 +32,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     
     var userDefaults: UserDefaults = UserDefaults.standard;
     var rootController : RootViewController?
+    var dirty = false;
     
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
@@ -48,7 +49,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
                 userDefaults.set(Utils.escape(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
                 checkForQemuBinaries();
             }
-            
+            dirty = true;
         });
     }
     
@@ -68,6 +69,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         }
         
         userDefaults.set(button.state == NSControl.StateValue.on, forKey:MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
+        dirty = true;
     }
     
     @IBAction func sliderChanged(_ sender: Any) {
@@ -77,6 +79,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         livePreviewLabel.stringValue = "Update Live Preview every: (" + String(value) + " seconds)"
         
         userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
+        dirty = true;
     }
     
     override func viewWillAppear() {
@@ -92,10 +95,13 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         livePreviewSlider.intValue = Int32(livePreviewRate);
         
         checkForQemuBinaries();
+        dirty = false;
     }
     
     override func viewDidDisappear() {
-        rootController?.refreshViewForVM(rootController?.currentVm);
+        if dirty {
+            rootController?.refreshViewForVM(rootController?.currentVm);
+        }
     }
     
     func controlTextDidChange(_ obj: Notification) {
@@ -104,6 +110,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         } else if obj.object as? NSObject == qemuFolderField {
             userDefaults.set(Utils.cleanFolderPath(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
         }
+        dirty = true;
     }
     
     func controlTextDidEndEditing(_ obj: Notification) {
