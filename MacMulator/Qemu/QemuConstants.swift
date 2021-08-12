@@ -300,7 +300,6 @@ class QemuConstants {
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_ARM, QemuConstants.ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_RISCV, QemuConstants.ARCH_RISCV64, 1, 128, 32768, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_MX_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
@@ -331,8 +330,6 @@ class QemuConstants {
         [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_ARM, QemuConstants.ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased()],
         [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_PPC_64, QemuConstants.ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased()],
         [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_PPC, QemuConstants.ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased()],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_RISCV_64, QemuConstants.ARCH_RISCV64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased()],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_RISCV, QemuConstants.ARCH_RISCV32, 1, 3072, 512, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased()],
         [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_M68K, QemuConstants.ARCH_68K, 1, 1, 512, 16, 1, 50, 5, QemuConstants.OS_OTHER.lowercased()]
     ]
     
