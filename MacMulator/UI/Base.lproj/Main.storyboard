@@ -1091,7 +1091,7 @@
                 </viewController>
                 <customObject id="gua-la-20l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-839" y="1"/>
+            <point key="canvasLocation" x="-844" y="30"/>
         </scene>
         <!--Virtual Machine View Controller-->
         <scene sceneID="zlr-3i-aCs">
@@ -1225,12 +1225,12 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="gzW-c5-Oke">
-                                            <rect key="frame" x="18" y="304" width="544" height="89"/>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gzW-c5-Oke">
+                                            <rect key="frame" x="17" y="304" width="544" height="89"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="89" id="wMZ-B6-1Y2"/>
                                             </constraints>
-                                            <textFieldCell key="cell" lineBreakMode="charWrapping" truncatesLastVisibleLine="YES" selectable="YES" alignment="center" allowsEditingTextAttributes="YES" id="dQO-9y-TXE">
+                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" alignment="left" allowsEditingTextAttributes="YES" id="dQO-9y-TXE">
                                                 <font key="font" metaFont="system"/>
                                                 <string key="title">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
