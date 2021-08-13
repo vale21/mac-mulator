@@ -14,6 +14,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var vmFolderButton: NSButton!
     @IBOutlet weak var qemuFolderButton: NSButton!
     
+    @IBOutlet weak var qemuVersionLabel: NSTextField!
     @IBOutlet weak var qemu_img_tick: NSImageView!
     @IBOutlet weak var qemu_img_label: NSTextField!
     @IBOutlet weak var qemu_i386_tick: NSImageView!
@@ -32,6 +33,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     
     var userDefaults: UserDefaults = UserDefaults.standard;
     var rootController : RootViewController?
+    var qemuVersion : String?
     var dirty = false;
     
     func setRootController(_ rootController:RootViewController) {
@@ -123,7 +125,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         let fileManager = FileManager.default;
         let path = qemuFolderField.stringValue
         if fileManager.fileExists(atPath: path) {
-            checkFile(QemuConstants.QEMU_IMG, qemu_img_tick);
+            checkFileAndGetVersion(QemuConstants.QEMU_IMG, qemu_img_tick);
             checkFile(QemuConstants.ARCH_X86, qemu_i386_tick);
             checkFile(QemuConstants.ARCH_X64, qemu_x86_64_tick);
             checkFile(QemuConstants.ARCH_ARM, qemu_arm_tick);
@@ -133,6 +135,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkFile(QemuConstants.ARCH_68K, qemu_68k_tick);
         } else {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Attention. Folder " + path + " does not exist.");
+            self.qemuVersionLabel.stringValue = "No Qemu detected. Will just use bundled qemu-img to manage disk images";
             setYellowCross(qemu_img_tick);
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
@@ -152,6 +155,19 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         } else {
             setRedCross(image);
         }
+    }
+    
+    fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
+        checkFile(path, image);
+        QemuUtils.getQemuVersion(uponCompletion: { version in
+            DispatchQueue.main.async {
+                if version == nil {
+                    self.qemuVersionLabel.stringValue = "No Qemu detected. Will just use bundled qemu-img to manage disk images";
+                } else {
+                    self.qemuVersionLabel.stringValue = "Detected Qemu version " + version!;
+                }
+            }
+        });
     }
     
     fileprivate func setGreenTick(_ view: NSImageView) {

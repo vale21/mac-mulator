@@ -19,6 +19,7 @@ class QemuConstants {
     static let IMAGE_CMD_INFO = "info";
     static let IMAGE_CMD_RESIZE = "resize";
     static let IMAGE_CMD_CONVERT = "convert";
+    static let IMAGE_CMD_VERSION = "--version";
     
     static let FORMAT_QCOW2 = "qcow2";
     static let FORMAT_RAW = "raw";
