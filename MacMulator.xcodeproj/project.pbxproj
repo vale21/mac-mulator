@@ -12,15 +12,36 @@
 		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
 		3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */; };
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
+		3B3782EB26C8011A002B2CB2 /* libgio-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782D026C7FFCB002B2CB2 /* libgio-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782EC26C8011A002B2CB2 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782D126C7FFCB002B2CB2 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782ED26C8011A002B2CB2 /* libgmodule-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782D226C7FFCB002B2CB2 /* libgmodule-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782EE26C8011A002B2CB2 /* libgobject-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782CE26C7FFCA002B2CB2 /* libgobject-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782EF26C8011A002B2CB2 /* libgthread-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782CF26C7FFCA002B2CB2 /* libgthread-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782F026C8011A002B2CB2 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782CC26C7FFCA002B2CB2 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782F226C8011A002B2CB2 /* libpixman-1.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782D326C7FFCB002B2CB2 /* libpixman-1.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B3782F326C8011A002B2CB2 /* libusb-1.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3782CA26C7FFCA002B2CB2 /* libusb-1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
-		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
+		3B6F2E0026C7FC5300D0EB8E /* qemu-edid in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47726C7F47700868BAE /* qemu-edid */; };
+		3B6F2E0126C7FC5300D0EB8E /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47226C7F47700868BAE /* qemu-img */; };
+		3B6F2E0226C7FC5300D0EB8E /* qemu-io in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F46F26C7F47700868BAE /* qemu-io */; };
+		3B6F2E0326C7FC5300D0EB8E /* qemu-nbd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47026C7F47700868BAE /* qemu-nbd */; };
+		3B6F2E0426C7FC5300D0EB8E /* qemu-system-aarch64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47326C7F47700868BAE /* qemu-system-aarch64 */; };
+		3B6F2E0526C7FC5300D0EB8E /* qemu-system-arm in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F46E26C7F47700868BAE /* qemu-system-arm */; };
+		3B6F2E0626C7FC5300D0EB8E /* qemu-system-i386 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47426C7F47700868BAE /* qemu-system-i386 */; };
+		3B6F2E0726C7FC5300D0EB8E /* qemu-system-m68k in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47126C7F47700868BAE /* qemu-system-m68k */; };
+		3B6F2E0826C7FC5300D0EB8E /* qemu-system-ppc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47626C7F47700868BAE /* qemu-system-ppc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B6F2E0926C7FC5300D0EB8E /* qemu-system-ppc64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47826C7F47700868BAE /* qemu-system-ppc64 */; };
+		3B6F2E0A26C7FC5300D0EB8E /* qemu-system-x86_64 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B06F47526C7F47700868BAE /* qemu-system-x86_64 */; };
+		3B6F2E1126C7FC7600D0EB8E /* bios-256k.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF426C7FC2500D0EB8E /* bios-256k.bin */; };
+		3B6F2E1226C7FC7600D0EB8E /* efi-e1000e.rom in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF826C7FC2500D0EB8E /* efi-e1000e.rom */; };
+		3B6F2E1326C7FC7600D0EB8E /* efi-virtio.rom in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF526C7FC2500D0EB8E /* efi-virtio.rom */; };
+		3B6F2E1426C7FC7600D0EB8E /* openbios-ppc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF726C7FC2500D0EB8E /* openbios-ppc */; };
+		3B6F2E1526C7FC7600D0EB8E /* vgabios-stdvga.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF626C7FC2500D0EB8E /* vgabios-stdvga.bin */; };
+		3B6F2E1626C7FC7600D0EB8E /* vgabios-virtio.bin in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B6F2DF926C7FC2600D0EB8E /* vgabios-virtio.bin */; };
 		3B6FF876266F791700368BAB /* SocketSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3B6FF875266F791700368BAB /* SocketSwift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
@@ -38,6 +59,8 @@
 		3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */; };
 		3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473025CABDC600A4DBA7 /* Main.storyboard */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
+		3BBF058326C822DF00534FA5 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BBF057E26C8227700534FA5 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3BBF058726C823C300534FA5 /* libffi.7.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BBF058426C8239800534FA5 /* libffi.7.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BD669B425E58080004E129D /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669B325E58080004E129D /* EditVM.storyboard */; };
@@ -61,15 +84,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3B57855C266527400003C3C8 /* CopyFiles */ = {
+		3B3782E926C8010C002B2CB2 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = Libs;
 			dstSubfolderSpec = 7;
 			files = (
-				3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */,
-				3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */,
-				3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */,
+				3BBF058726C823C300534FA5 /* libffi.7.dylib in CopyFiles */,
+				3BBF058326C822DF00534FA5 /* libpcre.1.dylib in CopyFiles */,
+				3B3782EB26C8011A002B2CB2 /* libgio-2.0.0.dylib in CopyFiles */,
+				3B3782EC26C8011A002B2CB2 /* libglib-2.0.0.dylib in CopyFiles */,
+				3B3782ED26C8011A002B2CB2 /* libgmodule-2.0.0.dylib in CopyFiles */,
+				3B3782EE26C8011A002B2CB2 /* libgobject-2.0.0.dylib in CopyFiles */,
+				3B3782EF26C8011A002B2CB2 /* libgthread-2.0.0.dylib in CopyFiles */,
+				3B3782F026C8011A002B2CB2 /* libintl.8.dylib in CopyFiles */,
+				3B3782F226C8011A002B2CB2 /* libpixman-1.0.dylib in CopyFiles */,
+				3B3782F326C8011A002B2CB2 /* libusb-1.0.0.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B57855C266527400003C3C8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "pc-bios";
+			dstSubfolderSpec = 7;
+			files = (
+				3B6F2E1126C7FC7600D0EB8E /* bios-256k.bin in CopyFiles */,
+				3B6F2E1226C7FC7600D0EB8E /* efi-e1000e.rom in CopyFiles */,
+				3B6F2E1326C7FC7600D0EB8E /* efi-virtio.rom in CopyFiles */,
+				3B6F2E1426C7FC7600D0EB8E /* openbios-ppc in CopyFiles */,
+				3B6F2E1526C7FC7600D0EB8E /* vgabios-stdvga.bin in CopyFiles */,
+				3B6F2E1626C7FC7600D0EB8E /* vgabios-virtio.bin in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,19 +124,48 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				3B6F2E0026C7FC5300D0EB8E /* qemu-edid in CopyFiles */,
+				3B6F2E0126C7FC5300D0EB8E /* qemu-img in CopyFiles */,
+				3B6F2E0226C7FC5300D0EB8E /* qemu-io in CopyFiles */,
+				3B6F2E0326C7FC5300D0EB8E /* qemu-nbd in CopyFiles */,
+				3B6F2E0426C7FC5300D0EB8E /* qemu-system-aarch64 in CopyFiles */,
+				3B6F2E0526C7FC5300D0EB8E /* qemu-system-arm in CopyFiles */,
+				3B6F2E0626C7FC5300D0EB8E /* qemu-system-i386 in CopyFiles */,
+				3B6F2E0726C7FC5300D0EB8E /* qemu-system-m68k in CopyFiles */,
+				3B6F2E0826C7FC5300D0EB8E /* qemu-system-ppc in CopyFiles */,
+				3B6F2E0926C7FC5300D0EB8E /* qemu-system-ppc64 in CopyFiles */,
+				3B6F2E0A26C7FC5300D0EB8E /* qemu-system-x86_64 in CopyFiles */,
 				3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */,
-				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B06F46E26C7F47700868BAE /* qemu-system-arm */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-arm"; sourceTree = "<group>"; };
+		3B06F46F26C7F47700868BAE /* qemu-io */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-io"; sourceTree = "<group>"; };
+		3B06F47026C7F47700868BAE /* qemu-nbd */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-nbd"; sourceTree = "<group>"; };
+		3B06F47126C7F47700868BAE /* qemu-system-m68k */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-m68k"; sourceTree = "<group>"; };
+		3B06F47226C7F47700868BAE /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
+		3B06F47326C7F47700868BAE /* qemu-system-aarch64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-aarch64"; sourceTree = "<group>"; };
+		3B06F47426C7F47700868BAE /* qemu-system-i386 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-i386"; sourceTree = "<group>"; };
+		3B06F47526C7F47700868BAE /* qemu-system-x86_64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-x86_64"; sourceTree = "<group>"; };
+		3B06F47626C7F47700868BAE /* qemu-system-ppc */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-ppc"; sourceTree = "<group>"; };
+		3B06F47726C7F47700868BAE /* qemu-edid */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-edid"; sourceTree = "<group>"; };
+		3B06F47826C7F47700868BAE /* qemu-system-ppc64 */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-system-ppc64"; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
 		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
 		3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
+		3B3782CA26C7FFCA002B2CB2 /* libusb-1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libusb-1.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782CC26C7FFCA002B2CB2 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
+		3B3782CE26C7FFCA002B2CB2 /* libgobject-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libgobject-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782CF26C7FFCA002B2CB2 /* libgthread-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libgthread-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782D026C7FFCB002B2CB2 /* libgio-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libgio-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782D126C7FFCB002B2CB2 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782D226C7FFCB002B2CB2 /* libgmodule-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libgmodule-2.0.0.dylib"; sourceTree = "<group>"; };
+		3B3782D326C7FFCB002B2CB2 /* libpixman-1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libpixman-1.0.dylib"; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -99,13 +173,15 @@
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
-		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
-		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
-		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
-		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
 		3B6A9E0925CBFD8300123D6B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulator-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B6A9E1325CBFDDC00123D6B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
+		3B6F2DF426C7FC2500D0EB8E /* bios-256k.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "bios-256k.bin"; sourceTree = "<group>"; };
+		3B6F2DF526C7FC2500D0EB8E /* efi-virtio.rom */ = {isa = PBXFileReference; lastKnownFileType = file; path = "efi-virtio.rom"; sourceTree = "<group>"; };
+		3B6F2DF626C7FC2500D0EB8E /* vgabios-stdvga.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "vgabios-stdvga.bin"; sourceTree = "<group>"; };
+		3B6F2DF726C7FC2500D0EB8E /* openbios-ppc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "openbios-ppc"; sourceTree = "<group>"; };
+		3B6F2DF826C7FC2500D0EB8E /* efi-e1000e.rom */ = {isa = PBXFileReference; lastKnownFileType = file; path = "efi-e1000e.rom"; sourceTree = "<group>"; };
+		3B6F2DF926C7FC2600D0EB8E /* vgabios-virtio.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "vgabios-virtio.bin"; sourceTree = "<group>"; };
 		3B73E41525CAE040004BAA92 /* QemuRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuRunner.swift; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
@@ -124,6 +200,8 @@
 		3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
 		3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
 		3BBC4BB525DE74020001CA02 /* QemuUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuUtils.swift; sourceTree = "<group>"; };
+		3BBF057E26C8227700534FA5 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
+		3BBF058426C8239800534FA5 /* libffi.7.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libffi.7.dylib; sourceTree = "<group>"; };
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BD669B325E58080004E129D /* EditVM.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditVM.storyboard; sourceTree = "<group>"; };
@@ -156,11 +234,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B06F48526C7F4AA00868BAE /* pc-bios */ = {
+			isa = PBXGroup;
+			children = (
+				3B6F2DF426C7FC2500D0EB8E /* bios-256k.bin */,
+				3B6F2DF826C7FC2500D0EB8E /* efi-e1000e.rom */,
+				3B6F2DF526C7FC2500D0EB8E /* efi-virtio.rom */,
+				3B6F2DF726C7FC2500D0EB8E /* openbios-ppc */,
+				3B6F2DF626C7FC2500D0EB8E /* vgabios-stdvga.bin */,
+				3B6F2DF926C7FC2600D0EB8E /* vgabios-virtio.bin */,
+			);
+			path = "pc-bios";
+			sourceTree = "<group>";
+		};
 		3B3624FD266F6253007857FB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B3782C926C7FFBB002B2CB2 /* Libs */ = {
+			isa = PBXGroup;
+			children = (
+				3BBF058426C8239800534FA5 /* libffi.7.dylib */,
+				3BBF057E26C8227700534FA5 /* libpcre.1.dylib */,
+				3B3782D026C7FFCB002B2CB2 /* libgio-2.0.0.dylib */,
+				3B3782D126C7FFCB002B2CB2 /* libglib-2.0.0.dylib */,
+				3B3782D226C7FFCB002B2CB2 /* libgmodule-2.0.0.dylib */,
+				3B3782CE26C7FFCA002B2CB2 /* libgobject-2.0.0.dylib */,
+				3B3782CF26C7FFCA002B2CB2 /* libgthread-2.0.0.dylib */,
+				3B3782CC26C7FFCA002B2CB2 /* libintl.8.dylib */,
+				3B3782D326C7FFCB002B2CB2 /* libpixman-1.0.dylib */,
+				3B3782CA26C7FFCA002B2CB2 /* libusb-1.0.0.dylib */,
+			);
+			path = Libs;
 			sourceTree = "<group>";
 		};
 		3B391EE025C075F50030E914 = {
@@ -214,16 +322,6 @@
 			path = MacMulatorTests;
 			sourceTree = "<group>";
 		};
-		3B578557266526460003C3C8 /* Libs */ = {
-			isa = PBXGroup;
-			children = (
-				3B57857E26652D440003C3C8 /* libintl.8.dylib */,
-				3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */,
-				3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */,
-			);
-			path = Libs;
-			sourceTree = "<group>";
-		};
 		3BA3AC1525E6645E00F02B0E /* NewVM */ = {
 			isa = PBXGroup;
 			children = (
@@ -272,9 +370,20 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B3782C926C7FFBB002B2CB2 /* Libs */,
+				3B06F47726C7F47700868BAE /* qemu-edid */,
+				3B06F47226C7F47700868BAE /* qemu-img */,
+				3B06F46F26C7F47700868BAE /* qemu-io */,
+				3B06F47026C7F47700868BAE /* qemu-nbd */,
+				3B06F47326C7F47700868BAE /* qemu-system-aarch64 */,
+				3B06F46E26C7F47700868BAE /* qemu-system-arm */,
+				3B06F47426C7F47700868BAE /* qemu-system-i386 */,
+				3B06F47126C7F47700868BAE /* qemu-system-m68k */,
+				3B06F47626C7F47700868BAE /* qemu-system-ppc */,
+				3B06F47826C7F47700868BAE /* qemu-system-ppc64 */,
+				3B06F47526C7F47700868BAE /* qemu-system-x86_64 */,
+				3B06F48526C7F4AA00868BAE /* pc-bios */,
 				3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */,
-				3B578557266526460003C3C8 /* Libs */,
-				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
 				3BBB473825CABDCB00A4DBA7 /* MacMulator.entitlements */,
 				3BBB473925CABDCB00A4DBA7 /* Info.plist */,
@@ -318,6 +427,7 @@
 				3B391EE725C075F50030E914 /* Resources */,
 				3B57855E2665275C0003C3C8 /* CopyFiles */,
 				3B57855C266527400003C3C8 /* CopyFiles */,
+				3B3782E926C8010C002B2CB2 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -620,7 +730,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = "1.0.0 Beta 9";
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
@@ -650,7 +763,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/MacMulator/Resources/Libs",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MARKETING_VERSION = "1.0.0 Beta 9";
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;

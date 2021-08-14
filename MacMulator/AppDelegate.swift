@@ -87,6 +87,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         setupSavedVMs();
+        
+        userDefaults.set(Bundle.main.bundlePath + "/Contents/Resources", forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
