@@ -466,15 +466,15 @@
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edq-wI-Rtf">
                                 <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                 <clipView key="contentView" drawsBackground="NO" id="c6g-zY-B4l">
-                                    <rect key="frame" x="0.0" y="0.0" width="625" height="480"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="3L5-IM-BeS">
-                                            <rect key="frame" x="0.0" y="0.0" width="625" height="480"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="625" height="480"/>
+                                            <size key="minSize" width="640" height="480"/>
                                             <size key="maxSize" width="640" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment content="Loading...">
@@ -489,12 +489,12 @@
                                         </textView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="hWa-Ge-qO2">
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="hWa-Ge-qO2">
                                     <rect key="frame" x="-100" y="-100" width="225" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="cXc-JN-xku">
-                                    <rect key="frame" x="625" y="0.0" width="15" height="480"/>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="cXc-JN-xku">
+                                    <rect key="frame" x="624" y="0.0" width="16" height="480"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -667,7 +667,7 @@
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rM6-Gc-oyU">
                                 <rect key="frame" x="18" y="337" width="508" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Detecting Qemu version..." id="agm-Pw-Q2s">
-                                    <font key="font" metaFont="system" size="11"/>
+                                    <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -1048,13 +1048,6 @@
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="QAz-zy-mTK">
-                                                                    <rect key="frame" x="-3" y="8" width="44" height="44"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" id="MCY-un-ad5">
-                                                                        <imageReference key="image" image="windows.small" symbolScale="large"/>
-                                                                    </imageCell>
-                                                                </imageView>
                                                                 <progressIndicator maxValue="100" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="iux-aD-SNu">
                                                                     <rect key="frame" x="3" y="12" width="32" height="32"/>
                                                                     <constraints>
@@ -1062,6 +1055,13 @@
                                                                         <constraint firstAttribute="height" constant="32" id="pyC-6c-vGl"/>
                                                                     </constraints>
                                                                 </progressIndicator>
+                                                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="QAz-zy-mTK">
+                                                                    <rect key="frame" x="-3" y="6" width="44" height="44"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" id="MCY-un-ad5">
+                                                                        <imageReference key="image" image="tiger.small" symbolScale="large"/>
+                                                                    </imageCell>
+                                                                </imageView>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstItem="iux-aD-SNu" firstAttribute="centerY" secondItem="nQd-YO-CSf" secondAttribute="centerY" id="M8j-cc-4f8"/>
@@ -1548,8 +1548,8 @@
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
         <image name="plus" catalog="system" width="15" height="13"/>
         <image name="stop.circle.fill" catalog="system" width="15" height="15"/>
+        <image name="tiger.small" width="44" height="44"/>
         <image name="windows.large" width="90" height="90"/>
-        <image name="windows.small" width="44" height="44"/>
         <image name="xmark.circle.fill" catalog="system" width="15" height="15"/>
         <namedColor name="VM View Background Color">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
