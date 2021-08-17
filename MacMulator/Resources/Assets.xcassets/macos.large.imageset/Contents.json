@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "apple-large.png",
+      "filename" : "tiger.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "apple-large_2.png",
+      "filename" : "tiger_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "apple_large_3.png",
+      "filename" : "tiger_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
