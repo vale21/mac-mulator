@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "macos.png",
+      "filename" : "panther.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "macos_2.png",
+      "filename" : "panther_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "macos_3.png",
+      "filename" : "panther_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

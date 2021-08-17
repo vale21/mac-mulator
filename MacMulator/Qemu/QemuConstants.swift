@@ -130,6 +130,12 @@ class QemuConstants {
     static let SUB_OTHER_RISCV = "Generic RISC-V VM";
     static let SUB_OTHER_M68K = "Generic Motorola 68k VM";
     
+    static let ICON_MAC_CHEETAH = "cheetah";
+    static let ICON_MAC_PUMA = "puma";
+    static let ICON_MAC_JAGUAR = "jaguar";
+    static let ICON_MAC_PANTHER = "panther";
+    static let ICON_MAC_TIGER = "tiger";
+    
     static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
     static let ARCH_PPC64 = "qemu-system-ppc64";
@@ -265,8 +271,8 @@ class QemuConstants {
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SNOW_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_TIGER, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PANTHER, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_TIGER, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.ICON_MAC_TIGER],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PANTHER, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, QemuConstants.ICON_MAC_PANTHER],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_JAGUAR, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PUMA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CHEETAH, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
