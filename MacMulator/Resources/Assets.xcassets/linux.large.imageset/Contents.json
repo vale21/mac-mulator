@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "linux-large.png",
+      "filename" : "linux.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "linux-large_2.png",
+      "filename" : "linux_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "linux-large_3.png",
+      "filename" : "linux_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
