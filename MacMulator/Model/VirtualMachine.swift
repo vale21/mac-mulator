@@ -61,7 +61,7 @@ class VirtualMachine: Codable, Hashable {
     static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
         vm.path = plistFilePath;
         for drive in vm.drives {
-            if drive.size > 0 {
+            if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION;
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
