@@ -90,7 +90,7 @@
                                 </constraints>
                                 <textFieldCell key="cell" selectable="YES" alignment="justified" id="IQb-Iq-IvD">
                                     <font key="font" metaFont="system"/>
-                                    <string key="title">MacMulator is the computer emulator for your Mac! It engages the power of Qemu, together with a nice, easy to use, UI, to let you create any kind of Virtual Machines in a few clicks. Whatever OS you need to run on your Mac, MacMulator is the tool for you!</string>
+                                    <string key="title">MacMulator is the computer emulator for your Mac! It engages the power of Qemu, together with a nice, easy to use UI, to let you create any kind of Virtual Machines in a few clicks. Whatever OS you need to run on your Mac, MacMulator is the tool for you!</string>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -584,7 +584,7 @@ Linux Mint</string>
                                                 <fragment content="u™">
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" metaFont="system" size="12"/>
+                                                        <font key="NSFont" metaFont="cellTitle"/>
                                                         <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                     </attributes>
                                                 </fragment>
