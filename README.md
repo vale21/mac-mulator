@@ -1,5 +1,50 @@
-# mac-mulator
-A VM manager app, based on Qemu, focused on old the emulation of PPC versions on Mac OS X
+# MacMulator
+MacMulator is the computer emulator for your Mac! It engages the power of [Qemu](https://www.qemu.org), together with a nice, easy to use UI, to let you create any kind of Virtual Machines in a few clicks. Whatever OS you need to run on your Mac, MacMulator is the tool for you!
 
-![Screenshot](https://user-images.githubusercontent.com/47688632/129946386-ed9fc944-1efb-42c7-a900-7f4be0f435e1.png)
+MacMulator is a Universal app that works on Intel and Apple Silicon macs. It is able to recognize its host hardware and optimize the guest OS running in the operating system, to run it at almost native speed where possible. It does not bundle Qemu, so it is very light, and lets you use the Qemu version you prefer. You have just to tell it where to find Qemu in your local machine, and you are ready to go.
+
+![Screenshot 2021-08-30 at 16 27 13](https://user-images.githubusercontent.com/47688632/131355136-b78169e9-a401-4b45-b3db-2a57fd4ff748.png)
+
+### Features
+
+- Lets you create and run a VM in a few minutes, and with a few clicks
+- Uses Apple Hypervisor to speed up your VM if the guest architecture is the same as the host one
+- Emulates Intel, ARM, PowerPc and Motorola 68k and lets you install any kind of OS that works on these hardwares
+- Lets you use the Qemu version you prefer, so that you can be very flexible. You can also custoimize the Qemu version for each VM
+- If you are a pro user, lets you customize the Qemu command freely. MacMulator will use your version of the command in place of its own
+- Vms are self contained and portable, very easy to share
+
+### How to use
+
+⚠️⚠️⚠️**WARNING! Beta software. Not all the features have been tested and there are still known bugs and limitations. Feel free to report bugs here if you find them**
+
+1) Download the latest release of MacMulator and install it in your mac. The app is signed with Developer ID and notarized with Apple, so your Mac will accept it with no complain
+2) Launch the application, open the Preferences panel and fill the path of your installation of Qemu. If you used [Homebrew](https://brew.sh) or [MacPorts](https://www.macports.org) to install Qemu you will probably find it already filled with the right path (Need help to install Qemu? Check [The official Qemu page](https://www.qemu.org/download/#macos) or [the E-macmulation forum](https://www.emaculation.com/forum/viewtopic.php?f=34&t=8848), that distributes good images of PowerPc Qemu)
+4) Create your VM and launch it. You just need to specify a name and the OS you are going to install. MacMulator will do the rest
+5) Enjoy your VM
+
+![Screenshot 2021-08-30 at 16 30 30](https://user-images.githubusercontent.com/47688632/131355571-5dc96899-357b-4faa-838d-23e0be8a3904.png)
+
+### Testing Status
+
+Here is a summary of the testing done so far. If an OS is not in this table it means that it has not been tested at all
+
+| Host Mac | Guest OS          | Guest Atchitecture | Status         | Notes                                                                                      |
+| -------- | --------          | ------------------ | ------         | ------                                                                                     |
+| Intel    | Mac OS X Jaguar   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Panther  | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Tiger    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
+| Intel    | macOS High Sierra | x86_64             | 🚫 NOT WORKING | Never had a successful boot. <br> OpenCore is needed but it is not <br> bundled with MacMulator |
+| Intel    | macOS Catalina    | x86_64             | 🚫 NOT WORKING | Never had a successful boot. <br> OpenCore is needed but it is not <br> bundled with MacMulator |
+| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different <br> architecture (32/64 bit). <br> No 3D acceleration  |                  
+| Intel    | Windows 10        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
+| Intel    | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
+| Apple M1 | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
+| Intel    | Ubuntu 21.04      | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
+| Intel    | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works, but no HVF due to different <br> architecture. No 3D acceleration                   | 
+| Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works with HVF support (Custom build of <br> Qemu needed for HVF - [See Here](https://gist.github.com/citruz/9896cd6fb63288ac95f81716756cb9aa)). <br> No 3D acceleration |  
+| Intel    | MX Linux.         | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
+| Intel    | Linux Mint        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
+| Intel    | Elementary OS     | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
+
 
