@@ -49,7 +49,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="90" id="P3r-dc-LxD"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="NSApplicationIcon" id="rz7-IB-pB5"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="rz7-IB-pB5"/>
                             </imageView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jcg-29-BcR">
                                 <rect key="frame" x="116" y="427" width="118" height="26"/>
@@ -114,7 +114,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="1434"/>
+                                            <rect key="frame" x="0.0" y="-1" width="600" height="1435"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1505,7 +1505,7 @@ Raspberry Pi</mutableString>
                                     <rect key="frame" x="-100" y="-100" width="240" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="C2s-qX-0Pe">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00080840743734842356" horizontal="NO" id="C2s-qX-0Pe">
                                     <rect key="frame" x="584" y="0.0" width="16" height="198"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2144,8 +2144,8 @@ Raspberry Pi</mutableString>
                                 <rect key="frame" x="107" y="192" width="337" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GGz-Fj-dh8">
-                                <rect key="frame" x="69" y="69" width="228" height="18"/>
-                                <buttonCell key="cell" type="check" title="Show Live Preview of running VM" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gz8-K2-lQo">
+                                <rect key="frame" x="69" y="69" width="320" height="18"/>
+                                <buttonCell key="cell" type="check" title="Show Live Preview of running VM (Experimental)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gz8-K2-lQo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
