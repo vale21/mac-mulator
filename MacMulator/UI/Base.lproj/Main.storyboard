@@ -69,7 +69,7 @@
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BHS-cg-DeE">
                                 <rect key="frame" x="116" y="382" width="364" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="MacMulator is a free, non-commercial software." id="tx0-XO-Wkr">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="MacMulator is a free, non-commercial software" id="tx0-XO-Wkr">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -83,16 +83,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E7N-rW-Fzz">
-                                <rect key="frame" x="534" y="381" width="88" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="88" id="tyq-Sa-YUt"/>
-                                </constraints>
-                                <buttonCell key="cell" type="inline" title="See License" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y5G-wO-njg">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="smallSystemBold"/>
-                                </buttonCell>
-                            </button>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bNY-9B-VBP">
                                 <rect key="frame" x="20" y="305" width="604" height="59"/>
                                 <constraints>
@@ -105,6 +95,18 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeU-0G-eWl">
+                                <rect key="frame" x="243" y="262" width="156" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="27" id="WUC-l1-6MI"/>
+                                    <constraint firstAttribute="width" constant="152" id="ckl-Nr-b4D"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Credits" id="zMI-W6-w5P">
+                                    <font key="font" textStyle="title2" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pRX-hw-TcC">
                                 <rect key="frame" x="22" y="56" width="600" height="198"/>
                                 <clipView key="contentView" drawsBackground="NO" id="vkB-Zt-ZEO">
@@ -112,7 +114,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="1420"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="1434"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -122,6 +124,7 @@
                                                 <fragment>
                                                     <string key="content">Qemu and Qemu Logo - Copyright ©  Fabrice Bellard and the Qemu project
 SocketSwift library - Copyright © 2018 BiAtoms
+EDK2 Project -  Copyright © TianoCore and contributors.
 
 </string>
                                                     <attributes>
@@ -1507,18 +1510,19 @@ Raspberry Pi</mutableString>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeU-0G-eWl">
-                                <rect key="frame" x="243" y="262" width="156" height="27"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E7N-rW-Fzz">
+                                <rect key="frame" x="469" y="381" width="153" height="18"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="27" id="WUC-l1-6MI"/>
-                                    <constraint firstAttribute="width" constant="152" id="ckl-Nr-b4D"/>
+                                    <constraint firstAttribute="width" constant="153" id="tyq-Sa-YUt"/>
                                 </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Credits" id="zMI-W6-w5P">
-                                    <font key="font" textStyle="title2" name=".SFNS-Regular"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                                <buttonCell key="cell" type="inline" title="View Apache 2.0 License" bezelStyle="inline" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="y5G-wO-njg">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="smallSystemBold"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="openLicense:" target="7e0-Bt-54A" id="s6X-kK-3TI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="bNY-9B-VBP" firstAttribute="top" secondItem="aym-Bj-JQj" secondAttribute="bottom" constant="8" symbolic="YES" id="0WU-An-mtc"/>
@@ -1539,7 +1543,7 @@ Raspberry Pi</mutableString>
                             <constraint firstItem="bNY-9B-VBP" firstAttribute="leading" secondItem="pRX-hw-TcC" secondAttribute="leading" id="VtI-ib-HvK"/>
                             <constraint firstItem="bNY-9B-VBP" firstAttribute="leading" secondItem="KTA-e7-UVy" secondAttribute="leading" constant="22" id="aDf-Yx-ur8"/>
                             <constraint firstItem="bNY-9B-VBP" firstAttribute="trailing" secondItem="pRX-hw-TcC" secondAttribute="trailing" id="bdW-7p-af9"/>
-                            <constraint firstItem="E7N-rW-Fzz" firstAttribute="leading" secondItem="BHS-cg-DeE" secondAttribute="trailing" constant="56" id="bnE-5u-aAZ"/>
+                            <constraint firstItem="E7N-rW-Fzz" firstAttribute="leading" secondItem="BHS-cg-DeE" secondAttribute="trailing" constant="-9" id="bnE-5u-aAZ"/>
                             <constraint firstItem="jcg-29-BcR" firstAttribute="top" secondItem="KTA-e7-UVy" secondAttribute="top" constant="29" id="gvY-xx-nDx"/>
                             <constraint firstItem="jcg-29-BcR" firstAttribute="leading" secondItem="aym-Bj-JQj" secondAttribute="trailing" constant="8" symbolic="YES" id="j0s-H8-Prr"/>
                             <constraint firstItem="pRX-hw-TcC" firstAttribute="top" secondItem="AeU-0G-eWl" secondAttribute="bottom" constant="8" id="lK5-Pe-nA0"/>
