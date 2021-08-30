@@ -112,7 +112,7 @@ class QemuConstants {
     static let SUB_DEEPIN = "Deepin";
     static let SUB_FEDORA = "Fedora";
     static let SUB_ZORIN = "Zorin OS";
-    static let SUB_SLACKWAVE = "Slackwave Linux";
+    static let SUB_SLACKWARE = "Slackware Linux";
     static let SUB_ELEMENTARY = "Elementary OS";
     static let SUB_CENTOS_LINUX = "CentOS Linux";
     static let SUB_ARCH_LINUX = "Arch Linux";
@@ -282,13 +282,13 @@ class QemuConstants {
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BETA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_9, QemuConstants.ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_8, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_7, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_6, QemuConstants.ARCH_68K, 1, 16, 256, 32, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_5, QemuConstants.ARCH_68K, 1, 1, 128, 32, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_4, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_3, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_2, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_1, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_7, QemuConstants.ARCH_68K, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_6, QemuConstants.ARCH_68K, 1, 16, 256, 32, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_5, QemuConstants.ARCH_68K, 1, 1, 128, 32, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_4, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_3, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_2, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
+        //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_1, QemuConstants.ARCH_68K, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_WIN, QemuConstants.SUB_WIN_GENERIC, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased()],
         [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11_ARM, QemuConstants.ARCH_ARM64, 4, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased()],
         [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased()],
@@ -304,9 +304,9 @@ class QemuConstants {
         [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_98, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased()],
         [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_NT, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased()],
         [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_95, QemuConstants.ARCH_X86, 1, 2, 512, 32, 5, 500, 10, QemuConstants.OS_WIN.lowercased()],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_3, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_2, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_1, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
+        //[QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_3, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
+        //[QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_2, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
+        //[QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_1, QemuConstants.ARCH_X86, 1, 1, 128, 16, 1, 500, 5, QemuConstants.OS_WIN.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_ARM, QemuConstants.ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
@@ -329,7 +329,7 @@ class QemuConstants {
         [QemuConstants.OS_LINUX, QemuConstants.SUB_SOLUS, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_DEEPIN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_ZORIN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_SLACKWAVE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_SLACKWARE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_ELEMENTARY, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_REACT_OS, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_RASPBERRY_OS, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],

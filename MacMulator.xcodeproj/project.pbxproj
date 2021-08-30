@@ -42,6 +42,7 @@
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BD669B425E58080004E129D /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669B325E58080004E129D /* EditVM.storyboard */; };
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
+		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
 		3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
@@ -128,6 +129,7 @@
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BD669B325E58080004E129D /* EditVM.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditVM.storyboard; sourceTree = "<group>"; };
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
+		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
 		3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
 		3BD9CCF6262DCE5B008341D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MacMulator/UI/Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				3BBB473F25CABDD000A4DBA7 /* Model */,
 				3BA3AC1525E6645E00F02B0E /* NewVM */,
 				3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */,
+				3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */,
 				3BB10092266F5293005D0E44 /* Qemu */,
 				3BBB473625CABDCB00A4DBA7 /* Resources */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
@@ -422,6 +425,7 @@
 				3B15E94825CD87760046891B /* QemuConstants.swift in Sources */,
 				3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */,
 				3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */,
+				3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */,
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
 				3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */,
 				3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */,
