@@ -105,7 +105,7 @@ class QemuConstants {
     static let SUB_UBUNTU = "Ubuntu Linux";
     static let SUB_UBUNTU_ARM = "Ubuntu Linux (ARM)";
     static let SUB_UBUNTU_PPC = "Ubuntu Linux (PPC)";
-    static let SUB_OPEN_SUSE = "openSUSE";
+    static let SUB_OPENSUSE = "openSUSE";
     static let SUB_MANJARO = "Manjaro Linux";
     static let SUB_RED_HAT = "Red Hat Linux";
     static let SUB_SOLUS = "Solus";
@@ -130,10 +130,13 @@ class QemuConstants {
     static let SUB_OTHER_RISCV = "Generic RISC-V VM";
     static let SUB_OTHER_M68K = "Generic Motorola 68k VM";
     
+    static let ICON_MAC_OS_9 = "mac.os.9";
     static let ICON_MAC_CHEETAH = "cheetah";
     static let ICON_MAC_JAGUAR = "jaguar";
     static let ICON_MAC_PANTHER = "panther";
     static let ICON_MAC_TIGER = "tiger";
+    static let ICON_MAC_LEOPARD = "leopard";
+    static let ICON_MAC_SNOW_LEOPARD = "snow.leopard";
     static let ICON_WINDOWS_XP = "windows.xp";
     static let ICON_WINDOWS_VISTA = "windows.vista";
     static let ICON_WINDOWS_7 = "windows.7";
@@ -141,7 +144,14 @@ class QemuConstants {
     static let ICON_WINDOWS_8_1 = "windows.8.1";
     static let ICON_WINDOWS_10 = "windows.10";
     static let ICON_MX_LINUX = "mx.linux";
+    static let ICON_LINUX_MINT = "linux.mint";
+    static let ICON_DEBIAN = "debian";
     static let ICON_UBUNTU = "ubuntu";
+    static let ICON_OPENSUSE = "opensuse";
+    static let ICON_ARCH_LINUX = "arch.linux";
+    static let ICON_MANJARO = "manjaro";
+    static let ICON_FEDORA = "fedora";
+    
     
     static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
@@ -276,15 +286,15 @@ class QemuConstants {
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MAVERICKS, QemuConstants.ARCH_X64, 2, 1024, 16384, 2048, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOUNTAIN_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SNOW_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SNOW_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.ICON_MAC_SNOW_LEOPARD],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 512, 10, 2048, 50, QemuConstants.ICON_MAC_LEOPARD],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_TIGER, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.ICON_MAC_TIGER],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PANTHER, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, QemuConstants.ICON_MAC_PANTHER],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_JAGUAR, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_JAGUAR],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PUMA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_CHEETAH],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CHEETAH, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_CHEETAH],
         //[QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BETA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.OS_MAC.lowercased()],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_9, QemuConstants.ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_9, QemuConstants.ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, QemuConstants.ICON_MAC_OS_9],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_8, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
         [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_7, QemuConstants.ARCH_68K, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased()],
         //[QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_6, QemuConstants.ARCH_68K, 1, 16, 256, 32, 1, 500, 20, QemuConstants.OS_MAC.lowercased()],
@@ -315,19 +325,19 @@ class QemuConstants {
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_ARM, QemuConstants.ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_MX_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_MX_LINUX],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_DEBIAN],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_DEBIAN],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_DEBIAN],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_UBUNTU],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_UBUNTU],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_UBUNTU],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_OPEN_SUSE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_ARCH_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_MANJARO, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_FEDORA, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_OPENSUSE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_OPENSUSE],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_ARCH_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_ARCH_LINUX],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_MANJARO, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_MANJARO],
+        [QemuConstants.OS_LINUX, QemuConstants.SUB_FEDORA, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_FEDORA],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_RED_HAT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_CENTOS_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
         [QemuConstants.OS_LINUX, QemuConstants.SUB_SOLUS, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased()],
