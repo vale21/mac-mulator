@@ -15,6 +15,7 @@
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
+		3B4574AE26EA6934009E33C6 /* OPENCORE_MODERN.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -28,6 +29,7 @@
 		3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */; };
 		3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
 		3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
+		3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */; };
 		3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */; };
 		3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
@@ -80,6 +82,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */,
 				3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
 			);
@@ -99,6 +102,7 @@
 		3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE_MODERN.zip; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
@@ -113,6 +117,7 @@
 		3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuImgCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
+		3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = MACOS_EFI.fd; sourceTree = "<group>"; };
 		3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineTableCellView.swift; sourceTree = "<group>"; };
 		3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QEMU_EFI.fd; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
@@ -275,6 +280,8 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */,
+				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
 				3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
 				3B578555266523780003C3C8 /* qemu-img */,
@@ -400,6 +407,7 @@
 			files = (
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
+				3B4574AE26EA6934009E33C6 /* OPENCORE_MODERN.zip in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3BD669B425E58080004E129D /* EditVM.storyboard in Resources */,
 			);

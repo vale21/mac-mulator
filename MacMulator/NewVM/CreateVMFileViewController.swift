@@ -32,7 +32,7 @@ class CreateVMFileViewController : NSViewController {
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
-            if (architecture == QemuConstants.ARCH_ARM64) {
+            if (architecture == QemuConstants.ARCH_ARM64 || architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
                 let virtualEfi = VirtualDrive(
                     path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
                     name: QemuConstants.MEDIATYPE_EFI + "-0",
@@ -40,6 +40,15 @@ class CreateVMFileViewController : NSViewController {
                     mediaType: QemuConstants.MEDIATYPE_EFI,
                     size: 0);
                 vm.addVirtualDrive(virtualEfi)
+            }
+            if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+                let openCore = VirtualDrive(
+                    path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-1." + MacMulatorConstants.EFI_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_EFI + "-1",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_DISK, // must be disk, not bios
+                    size: 0);
+                vm.addVirtualDrive(openCore);
             }
             
             let virtualHDD = VirtualDrive(
@@ -74,6 +83,10 @@ class CreateVMFileViewController : NSViewController {
                 });
                 if (architecture == QemuConstants.ARCH_ARM64) {
                     try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
+                }
+                if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+                    try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
+                    try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "OPENCORE_MODERN.img", ofType: nil)!, toPath: path + "/efi-1.fd");
                 }
                 
             } catch {
