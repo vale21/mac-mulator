@@ -311,6 +311,10 @@ class Utils {
         return getIntValueForSubType(os, subtype, 9, 250);
     }
     
+    static func getMachineTypeForSubType(_ os: String, _ subtype: String) -> String {
+        return getStringValueForSubType(os, subtype, 11, QemuConstants.MACHINE_TYPE_Q35);
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {

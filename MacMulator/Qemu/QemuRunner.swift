@@ -98,7 +98,7 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_MAC99)
+            .withMachine(Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0)))
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
