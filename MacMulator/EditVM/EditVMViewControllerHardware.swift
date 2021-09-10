@@ -263,9 +263,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             
             if vm?.mediaType == QemuConstants.MEDIATYPE_DISK {
                 cellView.icon.image = NSImage(named: "HD Icon");
-            }
-            if vm?.mediaType == QemuConstants.MEDIATYPE_CDROM {
+            } else if vm?.mediaType == QemuConstants.MEDIATYPE_CDROM {
                 cellView.icon.image = NSImage(named: "CD Icon");
+            } else if vm?.mediaType == QemuConstants.MEDIATYPE_USB {
+                cellView.icon.image = NSImage(named: "USB Icon");
             }
         }
         
