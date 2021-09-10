@@ -33,7 +33,16 @@ class CreateVMFileViewController : NSViewController {
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false);
             
-            if (architecture == QemuConstants.ARCH_ARM64 || architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+            let virtualHDD = setupVirtualDriveObjects(vm: vm, architecture: architecture, os: os, subtype: subtype, path: path)!;
+            
+            createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, path: path, displayName: displayName, architecture: architecture, os: os);
+        }
+    }
+    
+    fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, architecture: String, os: String, subtype: String, path: String) -> VirtualDrive? {
+        
+        if let parentController = self.parentController {
+            if architecture == QemuConstants.ARCH_ARM64 || architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC {
                 let virtualEfi = VirtualDrive(
                     path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
                     name: QemuConstants.MEDIATYPE_EFI + "-0",
@@ -42,12 +51,12 @@ class CreateVMFileViewController : NSViewController {
                     size: 0);
                 vm.addVirtualDrive(virtualEfi)
             }
-            if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+            if architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC {
                 let openCore = VirtualDrive(
-                    path: path + "/" + QemuConstants.MEDIATYPE_EFI + "-1." + MacMulatorConstants.EFI_EXTENSION,
-                    name: QemuConstants.MEDIATYPE_EFI + "-1",
+                    path: path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
                     format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_DISK, // must be disk, not bios
+                    mediaType: QemuConstants.MEDIATYPE_OPENCORE,
                     size: 0);
                 vm.addVirtualDrive(openCore);
             }
@@ -61,27 +70,73 @@ class CreateVMFileViewController : NSViewController {
             vm.addVirtualDrive(virtualHDD);
             
             if parentController.installMedia.stringValue != "" {
-                let virtualCD = VirtualDrive(
-                    path: parentController.installMedia.stringValue,
-                    name: QemuConstants.MEDIATYPE_CDROM + "-0",
-                    format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_CDROM,
-                    size: 0);
-                virtualCD.setBootDrive(true);
-                vm.addVirtualDrive(virtualCD);
-            } 
+                if architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC {
+                    // Install media is a USB stick
+                    let virtualUSB = VirtualDrive(
+                        path: parentController.installMedia.stringValue,
+                        name: QemuConstants.MEDIATYPE_USB + "-0",
+                        format: QemuConstants.FORMAT_RAW,
+                        mediaType: QemuConstants.MEDIATYPE_USB,
+                        size: 0);
+                    virtualUSB.setBootDrive(true);
+                    vm.addVirtualDrive(virtualUSB);
+                } else {
+                    // Install media is a CD
+                    let virtualCD = VirtualDrive(
+                        path: parentController.installMedia.stringValue,
+                        name: QemuConstants.MEDIATYPE_CDROM + "-0",
+                        format: QemuConstants.FORMAT_RAW,
+                        mediaType: QemuConstants.MEDIATYPE_CDROM,
+                        size: 0);
+                    virtualCD.setBootDrive(true);
+                    vm.addVirtualDrive(virtualCD);
+                }
+            }
             
-            var complete = false;
-            var created = false;
-            
+            return virtualHDD;
+        }
+        
+        return nil;
+    }
+    
+    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, path: String, displayName: String, architecture: String, os: String) {
+        
+        var complete = false;
+        var created = false;
+        
+        do {
+            try createDocumentPackage(path);
+            QemuUtils.createDiskImage(path: path, virtualDrive: virtualHDD, uponCompletion: {
+                terminationCcode in
+                vm.writeToPlist(path + "/" + MacMulatorConstants.INFO_PLIST);
+            });
+        } catch {
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
+                            message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
+                                response in
+                                complete = true;
+                                created = false;
+                            });
+        }
+        
+        DispatchQueue.global().async {
             do {
-                try createDocumentPackage(path);
-                QemuUtils.createDiskImage(path: path, virtualDrive: virtualHDD, uponCompletion: {
-                    terminationCcode in 
-                    vm.writeToPlist(path + "/" + MacMulatorConstants.INFO_PLIST);
-                    complete = true;
-                    created = true;
-                });
+                if (architecture == QemuConstants.ARCH_ARM64) {
+                    try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
+                }
+                if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+                    try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
+                    
+                    let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "OPENCORE_MODERN.zip", ofType: nil)!);
+                    let destinationURL = URL(fileURLWithPath: path);
+                    try FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
+                    
+                    // Rename unzipped image and clean up garbage empty folder
+                    try FileManager.default.moveItem(atPath: path + "/OPENCORE_MODERN.img", toPath: path + "/opencore-0.img");
+                    try FileManager.default.removeItem(at: URL(fileURLWithPath: path + "/__MACOSX"));
+                }
+                complete = true;
+                created = true;
             } catch {
                 Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                 message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
@@ -90,45 +145,21 @@ class CreateVMFileViewController : NSViewController {
                                     created = false;
                                 });
             }
-            
-            DispatchQueue.global().async {
-                do {
-                    if (architecture == QemuConstants.ARCH_ARM64) {
-                        try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
-                    }
-                    if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
-                        try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
-                        let fileManager = FileManager();
-                        let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "OPENCORE_MODERN.zip", ofType: nil)!);
-                        let destinationURL = URL(fileURLWithPath: path);
-                        try fileManager.unzipItem(at: sourceURL, to: destinationURL);
-                        try FileManager.default.moveItem(atPath: path + "/OPENCORE_MODERN.img", toPath: path + "/efi-1.fd");
-                    }
-                } catch {
-                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                    message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
-                                        response in
-                                        complete = true;
-                                        created = false;
-                                    });
-                }
-            }
-            
-            
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                
-                guard !complete else {
-                    timer.invalidate();
-                    self.progressBar.stopAnimation(self);
-                    self.dismiss(self);
-                    
-                    if created {
-                        self.parentController!.vmCreated(vm);
-                    }
-                    return;
-                }
-            });
         }
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+            
+            guard !complete else {
+                timer.invalidate();
+                self.progressBar.stopAnimation(self);
+                self.dismiss(self);
+                
+                if created {
+                    self.parentController!.vmCreated(vm);
+                }
+                return;
+            }
+        });
     }
     
     fileprivate func computePath() -> String {

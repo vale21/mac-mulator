@@ -12,6 +12,7 @@ class MacMulatorConstants {
     static let VM_EXTENSION = "qvm";
     static let DISK_EXTENSION = "qvd";
     static let EFI_EXTENSION = "fd";
+    static let IMG_EXTENSION = "img";
     static let INFO_PLIST = "Info.plist";
     
     static let NEW_VM_SEGUE = "newVMSegue";

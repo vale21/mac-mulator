@@ -24,6 +24,8 @@ class QemuUtils {
             return QemuConstants.CD;
         } else if driveType == QemuConstants.MEDIATYPE_EFI {
             return QemuConstants.EFI;
+        } else if driveType == QemuConstants.MEDIATYPE_USB {
+            return QemuConstants.USB;
         }
         
         return QemuConstants.HD;

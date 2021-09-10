@@ -11,7 +11,7 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd"];
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg"];
     
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();
@@ -319,7 +319,7 @@ class Utils {
         var size = 0;
         if let vm = virtualMachine {
             for drive in vm.drives {
-                if drive.mediaType != QemuConstants.MEDIATYPE_EFI {
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI && drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE {
                     size += 1;
                 }
             }
@@ -337,7 +337,7 @@ class Utils {
                     // end loop and return
                     return row + counter;
                 }
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
                     counter += 1;
                 }
                 iterationIndex += 1

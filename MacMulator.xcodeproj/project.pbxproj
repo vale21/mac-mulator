@@ -16,6 +16,8 @@
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
+		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
+		3B559E6926EB55410071E5B5 /* OPENCORE_MODERN.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -46,8 +48,6 @@
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
 		3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */; };
-		3BE7AD2826EA699500E3F578 /* OPENCORE_MODERN.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */; };
-		3BE7AD2B26EA69E800E3F578 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3BE7AD2A26EA69E800E3F578 /* ZIPFoundation */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
@@ -83,7 +83,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				3BE7AD2826EA699500E3F578 /* OPENCORE_MODERN.zip in CopyFiles */,
+				3B559E6926EB55410071E5B5 /* OPENCORE_MODERN.zip in CopyFiles */,
 				3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */,
 				3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
@@ -104,8 +104,8 @@
 		3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
-		3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE_MODERN.zip; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
+		3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE_MODERN.zip; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
 		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B6FF876266F791700368BAB /* SocketSwift in Frameworks */,
-				3BE7AD2B26EA69E800E3F578 /* ZIPFoundation in Frameworks */,
+				3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,7 +283,7 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				3B4574AD26EA6934009E33C6 /* OPENCORE_MODERN.zip */,
+				3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
 				3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
@@ -339,7 +339,7 @@
 			name = MacMulator;
 			packageProductDependencies = (
 				3B6FF875266F791700368BAB /* SocketSwift */,
-				3BE7AD2A26EA69E800E3F578 /* ZIPFoundation */,
+				3B559E6526EB54730071E5B5 /* ZIPFoundation */,
 			);
 			productName = MacMulator;
 			productReference = 3B391EE925C075F50030E914 /* MacMulator.app */;
@@ -777,15 +777,15 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		3B559E6526EB54730071E5B5 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
 		3B6FF875266F791700368BAB /* SocketSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */;
 			productName = SocketSwift;
-		};
-		3BE7AD2A26EA69E800E3F578 /* ZIPFoundation */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
-			productName = ZIPFoundation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

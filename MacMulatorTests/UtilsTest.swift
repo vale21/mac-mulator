@@ -269,4 +269,17 @@ class UtilsTest: XCTestCase {
         
         XCTAssertEqual(1, Utils.computeNextDriveIndex(vm, QemuConstants.MEDIATYPE_DISK));
     }
+    
+    func testDriveIndexWithOneDriveOneCDOneEfiAndOneOpencore() throws {
+        let drive1 = VirtualDrive(path: "", name: "disk-0", format: QemuConstants.FORMAT_RAW, mediaType: QemuConstants.MEDIATYPE_DISK, size: 0);
+        vm?.drives.append(drive1);
+        let drive2 = VirtualDrive(path: "", name: "cdrom-0", format: QemuConstants.FORMAT_RAW, mediaType: QemuConstants.MEDIATYPE_CDROM, size: 0);
+        vm?.drives.append(drive2);
+        let drive3 = VirtualDrive(path: "", name: "efi-0", format: QemuConstants.FORMAT_RAW, mediaType: QemuConstants.MEDIATYPE_CDROM, size: 0);
+        vm?.drives.append(drive3);
+        let drive4 = VirtualDrive(path: "", name: "opencore-0", format: QemuConstants.FORMAT_RAW, mediaType: QemuConstants.MEDIATYPE_OPENCORE, size: 0);
+        vm?.drives.append(drive4);
+        
+        XCTAssertEqual(1, Utils.computeNextDriveIndex(vm, QemuConstants.MEDIATYPE_DISK));
+    }
 }

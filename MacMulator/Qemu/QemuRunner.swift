@@ -73,7 +73,11 @@ class QemuRunner {
                     if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
                         builder = builder.withEfi(file: drive.path);
                     } else {
-                        builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: drive.mediaType);
+                        var mediaType = drive.mediaType;
+                        if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
+                            mediaType = QemuConstants.MEDIATYPE_DISK;
+                        }
+                        builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: mediaType);
                     }
                 } else {
                     Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
