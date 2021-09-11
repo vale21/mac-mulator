@@ -379,6 +379,7 @@ class QemuConstants {
     
     static let NETWORK_SUNGEM = "sungem";
     static let NETWORK_VIRTIO = "virtio-net";
+    static let NETWORK_VMXNET = "vmxnet3";
     
     static let VGA_VIRTIO = "virtio";
     static let VGA_VMWARE = "vmware";
@@ -386,6 +387,7 @@ class QemuConstants {
     static let DISPLAY_DEFAULT = "default";
     
     static let CPU_HOST = "host";
+    static let CPU_PERYN = "Penryn,+ssse3,+sse4.1,+sse4.2"
     static let CPU_QEMU64 = "qemu64";
     static let CPU_CORTEX_A72 = "cortex-a72";
     static let CPU_ARM1176 = "arm1176"
@@ -395,6 +397,7 @@ class QemuConstants {
     static let USB_KEYBOARD = "usb-kbd";
     static let USB_TABLET = "usb-tablet";
     static let QEMU_XHCI = "qemu-xhci";
+    static let APPLE_SMC = "isa-applesmc,osk=\"ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc\""
     static let VIRTIO_GPU_PCI = "virtio-gpu-pci";
     
     static let SOUND_HDA = "intel-hda"

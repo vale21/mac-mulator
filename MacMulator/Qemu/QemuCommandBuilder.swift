@@ -129,13 +129,18 @@ class QemuCommandBuilder {
     }
     
     func withDrive(file: String, format: String, index: Int, media:String)-> QemuCommandBuilder {
-        var driveString = "file=" + Utils.escape(file);
-        if format != QemuConstants.FORMAT_UNKNOWN {
-            driveString.append(",format=" + format);
+        if media == QemuConstants.MEDIATYPE_USB {
+            var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=false";
+            driveString.append(" -drive \"if=none,media=disk,id=drive" + String(index) + ",file=" + file + ",cache=writethrough\"");
+            self.drives.append(driveString);
+        } else {
+            var driveString = "-drive file=" + Utils.escape(file);
+            if format != QemuConstants.FORMAT_UNKNOWN {
+                driveString.append(",format=" + format);
+            }
+            driveString.append(",index=" + String(index) + ",media=" + media);
+            self.drives.append(driveString);
         }
-        driveString.append(",index=" + String(index) + ",media=" + media);
-        self.drives.append(driveString);
-        
         return self;
     }
     
@@ -218,7 +223,7 @@ class QemuCommandBuilder {
             cmd += " -bios " + efi;
         }
         for drive in self.drives {
-            cmd += " -drive " + drive;
+            cmd += " " + drive;
         }
         if let network = self.network {
             cmd += " " + network;

@@ -142,7 +142,10 @@ class QemuRunner {
 
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
-        
+        if (virtualMachine.os == QemuConstants.OS_MAC) {
+            return createBuilderForMacGuestX86_64(isNative);
+        }
+    
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -158,6 +161,25 @@ class QemuRunner {
             .withUsb(true)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET);
+    }
+    
+    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool) -> QemuCommandBuilder {
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withBios(QemuConstants.PC_BIOS)
+            .withCpu(isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_PERYN)
+            .withCpus(virtualMachine.cpus)
+            .withBootArg(QemuConstants.ARG_BOOTLOADER)
+            .withMachine(QemuConstants.MACHINE_TYPE_Q35)
+            .withMemory(virtualMachine.memory)
+            .withVga(QemuConstants.VGA_VIRTIO)
+            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
+            .withUsb(true)
+            .withDevice(QemuConstants.USB_KEYBOARD)
+            .withDevice(QemuConstants.USB_TABLET)
+            .withDevice(QemuConstants.APPLE_SMC)
+            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_VMXNET)
     }
     
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
