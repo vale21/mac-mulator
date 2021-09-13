@@ -73,6 +73,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_EFI,
                             size: 0);
+                    } else if virtualMachine.architecture == QemuConstants.ARCH_X64 && virtualMachine.os == QemuConstants.OS_MAC {
+                        // Install media is a USB stick
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_USB + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_USB,
+                            size: 0);
                     } else {
                         newDrive = VirtualDrive(
                             path: path,
@@ -82,6 +90,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             size: 0);
                     }
                     virtualMachine.addVirtualDrive(newDrive);
+                
                     virtualMachine.writeToPlist();
                     drivesTableView.reloadData();
                 }

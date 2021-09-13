@@ -73,11 +73,10 @@ class QemuRunner {
                     if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
                         builder = builder.withEfi(file: drive.path);
                     } else {
-                        var mediaType = drive.mediaType;
-                        if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-                            mediaType = QemuConstants.MEDIATYPE_DISK;
-                        }
-                        builder = builder.withDrive(file: drive.path, format: drive.format, index: driveIndex, media: mediaType);
+                        let mediaType = setupMediaType(drive);
+                        let path = setupPath(drive);
+                        
+                        builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
                     }
                 } else {
                     Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
@@ -93,6 +92,23 @@ class QemuRunner {
             }
             return builder.build();
         }
+    }
+    
+    fileprivate func setupMediaType(_ drive: VirtualDrive) -> String {
+        var mediaType = drive.mediaType;
+        if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
+            mediaType = QemuConstants.MEDIATYPE_DISK;
+        }
+        return mediaType;
+    }
+    
+    fileprivate func setupPath(_ drive: VirtualDrive) -> String {
+        var path = drive.path;
+        // if User selected Install xxx.app, we add the sffix to reach BasSystem.dmg
+        if path.hasSuffix(".app") {
+            path = path + "/Contents/SharedSupport/BaseSystem.dmg";
+        }
+        return path;
     }
     
     fileprivate func createBuilderForPPC() -> QemuCommandBuilder {

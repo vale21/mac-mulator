@@ -403,4 +403,7 @@ class QemuConstants {
     static let SOUND_HDA = "intel-hda"
     static let SOUND_HDA_DUPLEX = "hda-duplex"
     static let SOUND_AC97 = "AC97"
+    
+    static let OPENCORE_MODERN = "OPENCORE_MODERN";
+    static let OPENCORE_LEGACY = "OPENCORE_LEGACY";
 }

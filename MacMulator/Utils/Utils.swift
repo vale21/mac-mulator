@@ -11,7 +11,7 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg"];
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app"];
     
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();

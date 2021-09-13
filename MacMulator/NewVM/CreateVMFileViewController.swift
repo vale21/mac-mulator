@@ -35,7 +35,7 @@ class CreateVMFileViewController : NSViewController {
             
             let virtualHDD = setupVirtualDriveObjects(vm: vm, architecture: architecture, os: os, subtype: subtype, path: path)!;
             
-            createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, path: path, displayName: displayName, architecture: architecture, os: os);
+            createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, path: path, displayName: displayName, architecture: architecture, os: os, subtype: subtype);
         }
     }
     
@@ -51,6 +51,7 @@ class CreateVMFileViewController : NSViewController {
                     size: 0);
                 vm.addVirtualDrive(virtualEfi)
             }
+            
             if architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC {
                 let openCore = VirtualDrive(
                     path: path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
@@ -99,7 +100,7 @@ class CreateVMFileViewController : NSViewController {
         return nil;
     }
     
-    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, path: String, displayName: String, architecture: String, os: String) {
+    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, path: String, displayName: String, architecture: String, os: String, subtype: String) {
         
         var complete = false;
         var created = false;
@@ -125,14 +126,21 @@ class CreateVMFileViewController : NSViewController {
                     try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
                 }
                 if (architecture == QemuConstants.ARCH_X64 && os == QemuConstants.OS_MAC) {
+                    var opencore: String = "";
+                    if QemuUtils.isMacModern(subtype) {
+                        opencore = QemuConstants.OPENCORE_MODERN;
+                    } else if QemuUtils.isMacLegacy(subtype) {
+                        opencore = QemuConstants.OPENCORE_LEGACY;
+                    }
+                    
                     try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: path + "/efi-0.fd");
                     
-                    let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "OPENCORE_MODERN.zip", ofType: nil)!);
+                    let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
                     let destinationURL = URL(fileURLWithPath: path);
                     try FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
                     
                     // Rename unzipped image and clean up garbage empty folder
-                    try FileManager.default.moveItem(atPath: path + "/OPENCORE_MODERN.img", toPath: path + "/opencore-0.img");
+                    try FileManager.default.moveItem(atPath: path + "/" + opencore + ".img", toPath: path + "/opencore-0.img");
                     try FileManager.default.removeItem(at: URL(fileURLWithPath: path + "/__MACOSX"));
                 }
                 complete = true;

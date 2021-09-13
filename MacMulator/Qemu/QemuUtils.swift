@@ -131,4 +131,26 @@ class QemuUtils {
             });
         }
     }
+    
+    static func isMacModern(_ subtype: String) -> Bool {
+        let ret =
+        (subtype == QemuConstants.SUB_MAC_MONTEREY ||
+        subtype == QemuConstants.SUB_MAC_BIG_SUR ||
+        subtype == QemuConstants.SUB_MAC_CATALINA);
+        return ret;
+    }
+    
+    static func isMacLegacy(_ subtype: String) -> Bool {
+        let ret =
+        (subtype == QemuConstants.SUB_MAC_MOJAVE ||
+        subtype == QemuConstants.SUB_MAC_HIGH_SIERRA ||
+        subtype == QemuConstants.SUB_MAC_SIERRA ||
+        subtype == QemuConstants.SUB_MAC_EL_CAPITAN ||
+        subtype == QemuConstants.SUB_MAC_YOSEMITE ||
+        subtype == QemuConstants.SUB_MAC_MAVERICKS ||
+        subtype == QemuConstants.SUB_MAC_MOUNTAIN_LION ||
+        subtype == QemuConstants.SUB_MAC_LION ||
+        subtype == QemuConstants.SUB_MAC_SNOW_LEOPARD);
+        return ret;
+    }
 }
