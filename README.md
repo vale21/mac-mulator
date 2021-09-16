@@ -31,11 +31,15 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 
 | Host Mac | Guest OS          | Guest Atchitecture | Status         | Notes                                                                                      |
 | -------- | --------          | ------------------ | ------         | ------                                                                                     |
+| Intel    | Mac OS X Cheetah   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Puma   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
 | Intel    | Mac OS X Jaguar   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
 | Intel    | Mac OS X Panther  | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
 | Intel    | Mac OS X Tiger    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | macOS High Sierra | x86_64             | 🚫 NOT WORKING | Never had a successful boot. <br> OpenCore is needed but it is not <br> bundled with MacMulator |
-| Intel    | macOS Catalina    | x86_64             | 🚫 NOT WORKING | Never had a successful boot. <br> OpenCore is needed but it is not <br> bundled with MacMulator |
+| Intel    | Mac OS X Leopard    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
+| Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
+| Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
 | Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different <br> architecture (32/64 bit). <br> No 3D acceleration  |                  
 | Intel    | Windows 10        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
