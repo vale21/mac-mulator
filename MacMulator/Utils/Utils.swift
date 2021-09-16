@@ -276,11 +276,11 @@ class Utils {
     }
     
     static func getIconForSubType(_ os: String, _ subtype: String) -> String {
-        return getStringValueForSubType(os, subtype, 10, QemuConstants.OS_OTHER.lowercased());
+        return getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OS_OTHER.lowercased();
     }
     
     static func getArchitectureForSubType(_ os: String, _ subtype: String) -> String {
-        return getStringValueForSubType(os, subtype, 2, QemuConstants.ARCH_X64);
+        return getStringValueForSubType(os, subtype, 2) ?? QemuConstants.ARCH_X64;
     }
     
     static func getCpusForSubType(_ os: String, _ subtype: String) -> Int {
@@ -312,7 +312,27 @@ class Utils {
     }
     
     static func getMachineTypeForSubType(_ os: String, _ subtype: String) -> String {
-        return getStringValueForSubType(os, subtype, 11, QemuConstants.MACHINE_TYPE_Q35);
+        return getStringValueForSubType(os, subtype, 11) ?? QemuConstants.MACHINE_TYPE_Q35;
+    }
+    
+    static func getCpuTypeForSubType(_ os: String, _ subtype: String?, _ isNative: Bool) -> String {
+        let subtype: String = subtype ?? Utils.getSubType(os, 0);
+        let definedCpu = getStringValueForSubType(os, subtype, 12);
+        if let cpu = definedCpu {
+            return cpu;
+        } else {
+            return isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64;
+        }
+    }
+    
+    static func getAccelForSubType(_ os: String, _ subtype: String?) -> Bool {
+        let subtype: String = subtype ?? Utils.getSubType(os, 0);
+        return getBoolValueForSubType(os, subtype, 13, true);
+    }
+
+    static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
+        let subtype: String = subtype ?? Utils.getSubType(os, 0);
+        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO;
     }
     
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
@@ -361,19 +381,28 @@ class Utils {
         return index
     }
         
-    fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: String) -> String {
+    fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
-                return vmDefault[index] as! String;
+                return vmDefault[index] as? String;
             }
         }
-        return defaultValue;
+        return nil;
     }
     
     fileprivate static func getIntValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: Int) -> Int {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
                 return vmDefault[index] as! Int;
+            }
+        }
+        return defaultValue;
+    }
+    
+    fileprivate static func getBoolValueForSubType(_ os: String, _ subtype: String, _ index: Int, _ defaultValue: Bool) -> Bool {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[index] as! Bool;
             }
         }
         return defaultValue;

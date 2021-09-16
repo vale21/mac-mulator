@@ -123,7 +123,7 @@ class QemuRunner {
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
     }
     
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
@@ -136,7 +136,7 @@ class QemuRunner {
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_SUNGEM);
+            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
     }
     
     fileprivate func createBuilderForI386() -> QemuCommandBuilder {
@@ -153,7 +153,7 @@ class QemuRunner {
             .withUsb(true)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_VIRTIO);
+            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
     }
 
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
@@ -172,6 +172,7 @@ class QemuRunner {
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative))
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
@@ -182,20 +183,20 @@ class QemuRunner {
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool) -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpu(isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_PERYN)
+            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative))
             .withCpus(virtualMachine.cpus)
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withAccel(isNative && Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
-            .withNetwork(name: "network-0", device: QemuConstants.NETWORK_VMXNET)
+            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype))
     }
     
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
@@ -205,7 +206,7 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB)
-            .withCpu(QemuConstants.CPU_ARM1176)
+            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false))
             .withMemory(virtualMachine.memory);
     }
 
@@ -218,7 +219,7 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VIRT)
-            .withCpu(QemuConstants.CPU_CORTEX_A72)
+            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false))
             .withMemory(virtualMachine.memory)
             .withDisplay(QemuConstants.DISPLAY_DEFAULT)
             .withDevice(QemuConstants.VIRTIO_GPU_PCI)

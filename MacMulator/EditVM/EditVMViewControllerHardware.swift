@@ -103,7 +103,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let row = drivesTableView.row(for: sender as! NSView);
             let index = Utils.computeDrivesTableIndex(virtualMachine, row);
             let drive = virtualMachine.drives[index];
-            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM {
+            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB{
                 self.removeVirtualDrive(row, index);
             } else {
                 Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
