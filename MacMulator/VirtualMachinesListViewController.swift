@@ -61,6 +61,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let menu = NSMenu()
         menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator());
+        menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType]);
         table.allowsMultipleSelection = false;
@@ -119,6 +121,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         deleteVirtualMachine(table.clickedRow);
     }
     
+    @objc func tableViewShowInFinderItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        showVirtualMachineInFinder(table.clickedRow);
+    }
+
     func editVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
             let item = rootController.getVirtualMachineAt(index);
@@ -130,6 +137,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         if let rootController = self.rootController {
             table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
             rootController.removeVirtualMachineAt(index);
+        }
+    }
+    
+    func showVirtualMachineInFinder(_ index: Int) {
+        if let rootController = self.rootController {
+            let vm = rootController.getVirtualMachineAt(index);
+            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)]);
         }
     }
     
