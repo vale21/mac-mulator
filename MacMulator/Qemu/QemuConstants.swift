@@ -140,6 +140,13 @@ class QemuConstants {
     static let ICON_MAC_TIGER = "tiger";
     static let ICON_MAC_LEOPARD = "leopard";
     static let ICON_MAC_SNOW_LEOPARD = "snow.leopard";
+    
+    static let ICON_SIERRA = "sierra";
+    static let ICON_HIGH_SIERRA = "high.sierra";
+    static let ICON_MOJAVE = "mojave";
+    static let ICON_CATALINA = "catalina";
+    static let ICON_BIG_SUR = "big.sur";
+    static let ICON_MONTEREY = "monterey";
     static let ICON_WINDOWS_XP = "windows.xp";
     static let ICON_WINDOWS_VISTA = "windows.vista";
     static let ICON_WINDOWS_7 = "windows.7";
@@ -278,12 +285,12 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "mac_os_x_tiger", "icon", "machine type", "cpu", "hvf", "network"],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_GENERIC, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MONTEREY, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BIG_SUR, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CATALINA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOJAVE, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_HIGH_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MONTEREY, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.ICON_MONTEREY, QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BIG_SUR, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.ICON_BIG_SUR, QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CATALINA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_CATALINA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOJAVE, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_MOJAVE, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_HIGH_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_HIGH_SIERRA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
+        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.ICON_SIERRA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_EL_CAPITAN, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_YOSEMITE, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
         [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MAVERICKS, QemuConstants.ARCH_X64, 2, 1024, 16384, 2048, 50, 4096, 120, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
