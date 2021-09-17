@@ -1,5 +1,5 @@
 //
-//  QemuConstants.swift
+//  swift
 //  MacMulator
 //
 //  Created by Vale on 05/02/21.
@@ -140,7 +140,11 @@ class QemuConstants {
     static let ICON_MAC_TIGER = "tiger";
     static let ICON_MAC_LEOPARD = "leopard";
     static let ICON_MAC_SNOW_LEOPARD = "snow.leopard";
-    
+    static let ICON_LION = "lion";
+    static let ICON_MOUNTAIN_LION = "mountain.lion";
+    static let ICON_MAVERICKS = "mavericks";
+    static let ICON_YOSEMITE = "yosemite";
+    static let ICON_EL_CAPITAN = "el.capitan";
     static let ICON_SIERRA = "sierra";
     static let ICON_HIGH_SIERRA = "high.sierra";
     static let ICON_MOJAVE = "mojave";
@@ -185,13 +189,13 @@ class QemuConstants {
     ]
     
     static let ALL_ARCHITECTURES_DESC: [String:String] = [
-        QemuConstants.ARCH_X64: "Intel/AMD 64bit",
-        QemuConstants.ARCH_X86: "Intel/AMD 32bit",
-        QemuConstants.ARCH_PPC: "PowerPc 32bit",
-        QemuConstants.ARCH_PPC64: "PowerPc 64bit",
-        QemuConstants.ARCH_ARM: "ARM",
-        QemuConstants.ARCH_ARM64: "ARM 64bit",
-        QemuConstants.ARCH_68K: "Motorola 68k"
+        ARCH_X64: "Intel/AMD 64bit",
+        ARCH_X86: "Intel/AMD 32bit",
+        ARCH_PPC: "PowerPc 32bit",
+        ARCH_PPC64: "PowerPc 64bit",
+        ARCH_ARM: "ARM",
+        ARCH_ARM64: "ARM 64bit",
+        ARCH_68K: "Motorola 68k"
     ];
     
     static let MAX_CPUS: [String:Int] = [
@@ -254,107 +258,107 @@ class QemuConstants {
     ]
 
     static let ALL_RESOLUTIONS_DESC: [String:String] = [
-        QemuConstants.RES_640_480: "640 x 480",
-        QemuConstants.RES_800_600: "800 x 600",
-        QemuConstants.RES_1024_768: "1024 x 768",
-        QemuConstants.RES_1280_1024: "1280 x 1024",
-        QemuConstants.RES_1600_1200: "1600 x 1200",
-        QemuConstants.RES_1024_600: "1024 x 600",
-        QemuConstants.RES_1280_768: "1280 x 768",
-        QemuConstants.RES_1280_800: "1280 x 800",
-        QemuConstants.RES_1440_900: "1440 x 900",
-        QemuConstants.RES_1680_1050: "1680 x 1050",
-        QemuConstants.RES_1920_1200: "1920 x 1200",
-        QemuConstants.RES_1280_720: "HD 720p (1280 x 720)",
-        QemuConstants.RES_1920_1080: "HD 1080p (1920 x 1080)",
-        QemuConstants.RES_2048_1152: "2K (2048 x 1152)",
-        QemuConstants.RES_2560_1440: "QHD (2560 x 1440)",
-        QemuConstants.RES_3840_2160: "UHD (3840 x 2160)",
-        QemuConstants.RES_4096_2160: "4K (4096 x 2160)",
-        QemuConstants.RES_5120_2280: "5K (5120 x 2280",
-        QemuConstants.RES_6016_3384: "6K (6016 x 3384)"
+        RES_640_480: "640 x 480",
+        RES_800_600: "800 x 600",
+        RES_1024_768: "1024 x 768",
+        RES_1280_1024: "1280 x 1024",
+        RES_1600_1200: "1600 x 1200",
+        RES_1024_600: "1024 x 600",
+        RES_1280_768: "1280 x 768",
+        RES_1280_800: "1280 x 800",
+        RES_1440_900: "1440 x 900",
+        RES_1680_1050: "1680 x 1050",
+        RES_1920_1200: "1920 x 1200",
+        RES_1280_720: "HD 720p (1280 x 720)",
+        RES_1920_1080: "HD 1080p (1920 x 1080)",
+        RES_2048_1152: "2K (2048 x 1152)",
+        RES_2560_1440: "QHD (2560 x 1440)",
+        RES_3840_2160: "UHD (3840 x 2160)",
+        RES_4096_2160: "4K (4096 x 2160)",
+        RES_5120_2280: "5K (5120 x 2280",
+        RES_6016_3384: "6K (6016 x 3384)"
     ];
     
     static let supportedVMTypes: [String] = [
-        QemuConstants.OS_MAC,
-        QemuConstants.OS_WIN,
-        QemuConstants.OS_LINUX,
-        QemuConstants.OS_OTHER
+        OS_MAC,
+        OS_WIN,
+        OS_LINUX,
+        OS_OTHER
     ]
     
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "mac_os_x_tiger", "icon", "machine type", "cpu", "hvf", "network"],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_GENERIC, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MONTEREY, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.ICON_MONTEREY, QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_BIG_SUR, QemuConstants.ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, QemuConstants.ICON_BIG_SUR, QemuConstants.MACHINE_TYPE_VIRT, nil, true, nil],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CATALINA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_CATALINA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOJAVE, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_MOJAVE, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_HIGH_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_HIGH_SIERRA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SIERRA, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.ICON_SIERRA, QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_EL_CAPITAN, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_YOSEMITE, QemuConstants.ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MAVERICKS, QemuConstants.ARCH_X64, 2, 1024, 16384, 2048, 50, 4096, 120, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_MOUNTAIN_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LION, QemuConstants.ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, QemuConstants.NETWORK_VMXNET],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_SNOW_LEOPARD, QemuConstants.ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, QemuConstants.ICON_MAC_SNOW_LEOPARD, QemuConstants.MACHINE_TYPE_Q35, QemuConstants.CPU_PENRYN, false, QemuConstants.NETWORK_E1000],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_LEOPARD, QemuConstants.ARCH_X86, 2, 512, 3072, 512, 10, 2048, 50, QemuConstants.ICON_MAC_LEOPARD, QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_TIGER, QemuConstants.ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, QemuConstants.ICON_MAC_TIGER, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PANTHER, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, QemuConstants.ICON_MAC_PANTHER, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_JAGUAR, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_JAGUAR, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_PUMA, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_CHEETAH, QemuConstants.MACHINE_TYPE_MAC99, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_CHEETAH, QemuConstants.ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, QemuConstants.ICON_MAC_CHEETAH, QemuConstants.MACHINE_TYPE_MAC99, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_9, QemuConstants.ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, QemuConstants.ICON_MAC_OS_9, QemuConstants.MACHINE_TYPE_MAC99, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_MAC_OS_8, QemuConstants.ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_MAC99, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_MAC, QemuConstants.SUB_SYSTEM_7, QemuConstants.ARCH_68K, 1, 32, 512, 32, 5, 500, 30, QemuConstants.OS_MAC.lowercased(), QemuConstants.MACHINE_TYPE_Q800, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WIN_GENERIC, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11_ARM, QemuConstants.ARCH_ARM64, 4, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, true, QemuConstants.CPU_CORTEX_A72, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_11, QemuConstants.ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_10_ARM, QemuConstants.ARCH_ARM64, 4, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_10, QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_10, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_10, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_8_1, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_8_1, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_8, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_8, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_7, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_7, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_VISTA, QemuConstants.ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, QemuConstants.ICON_WINDOWS_VISTA, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_XP, QemuConstants.ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, QemuConstants.ICON_WINDOWS_XP, QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_2000, QemuConstants.ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_ME, QemuConstants.ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_98, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_NT, QemuConstants.ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_WIN, QemuConstants.SUB_WINDOWS_95, QemuConstants.ARCH_X86, 1, 2, 512, 32, 5, 500, 10, QemuConstants.OS_WIN.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_ARM, QemuConstants.ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_GENERIC_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_MX_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_MX_LINUX, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT, QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_LINUX_MINT_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_LINUX_MINT, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_DEBIAN, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_DEBIAN, QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEBIAN_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_DEBIAN, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_UBUNTU, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU_ARM, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_UBUNTU, QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_UBUNTU_PPC, QemuConstants.ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, QemuConstants.ICON_UBUNTU, QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_OPENSUSE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_OPENSUSE, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_ARCH_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_ARCH_LINUX, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_MANJARO, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_MANJARO, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_FEDORA, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.ICON_FEDORA, QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_RED_HAT, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_CENTOS_LINUX, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_SOLUS, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_DEEPIN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_ZORIN, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_SLACKWARE, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_ELEMENTARY, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_REACT_OS, QemuConstants.ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_LINUX, QemuConstants.SUB_RASPBERRY_OS, QemuConstants.ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, QemuConstants.OS_LINUX.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_GENERIC, QemuConstants.ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_x64, QemuConstants.ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_Q35, nil, true, nil],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_x86, QemuConstants.ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_PC, nil, true, QemuConstants.NETWORK_VIRTIO],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_ARM_64, QemuConstants.ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_CORTEX_A72, true, nil],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_ARM, QemuConstants.ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_VIRT, QemuConstants.CPU_ARM1176, true, nil],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_PPC_64, QemuConstants.ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_PPC, QemuConstants.ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_MAC99_PMU, nil, true, QemuConstants.NETWORK_SUNGEM],
-        [QemuConstants.OS_OTHER, QemuConstants.SUB_OTHER_M68K, QemuConstants.ARCH_68K, 1, 1, 512, 16, 1, 50, 5, QemuConstants.OS_OTHER.lowercased(), QemuConstants.MACHINE_TYPE_Q800, nil, true, nil]
+        [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_MONTEREY, ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_MONTEREY, MACHINE_TYPE_VIRT, nil, true, nil],
+        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_VIRT, nil, true, nil],
+        [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_SIERRA, ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, ICON_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_EL_CAPITAN, ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, ICON_EL_CAPITAN, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_YOSEMITE, ARCH_X64, 2, 2048, 16384, 2048, 120, 8192, 250, ICON_YOSEMITE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_MAVERICKS, ARCH_X64, 2, 1024, 16384, 2048, 50, 4096, 120, ICON_MAVERICKS, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_LION, ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, nil, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000],
+        [OS_MAC, SUB_MAC_LEOPARD, ARCH_X86, 2, 512, 3072, 512, 10, 2048, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_PUMA, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_CHEETAH, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_OS_9, ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, ICON_MAC_OS_9, MACHINE_TYPE_MAC99, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, true, NETWORK_SUNGEM],
+        [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, true, nil],
+        [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_11_ARM, ARCH_ARM64, 4, 2048, 32768, 2048, 250, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_VIRT, true, CPU_CORTEX_A72, nil],
+        [OS_WIN, SUB_WINDOWS_11, ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_10_ARM, ARCH_ARM64, 4, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_WIN, SUB_WINDOWS_2000, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_WIN, SUB_WINDOWS_ME, ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_LINUX, SUB_LINUX_GENERIC, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_LINUX_GENERIC_ARM, ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_LINUX, SUB_LINUX_GENERIC_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_LINUX_MINT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_LINUX_MINT_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_LINUX, SUB_LINUX_MINT_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_LINUX, SUB_DEBIAN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_DEBIAN_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_LINUX, SUB_DEBIAN_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_LINUX, SUB_UBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_UBUNTU_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_LINUX, SUB_UBUNTU_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_LINUX, SUB_OPENSUSE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_OPENSUSE, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_ARCH_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ARCH_LINUX, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_MANJARO, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MANJARO, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_FEDORA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_FEDORA, MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
+        [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT, CPU_ARM1176, true, nil],
+        [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
+        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OS_OTHER.lowercased(), MACHINE_TYPE_Q800, nil, true, nil]
     ]
     
     static let HOST_I386 = "i386";
