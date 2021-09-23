@@ -289,8 +289,8 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "mac_os_x_tiger", "icon", "machine type", "cpu", "hvf", "network"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
-        [OS_MAC, SUB_MAC_MONTEREY, ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_MONTEREY, MACHINE_TYPE_VIRT, nil, true, nil],
-        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_ARM64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_VIRT, nil, true, nil],
+        [OS_MAC, SUB_MAC_MONTEREY, ARCH_X64, 2, 4096, 32768, 4096, 120, 8192, 250, ICON_MONTEREY, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
+        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 2, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
         [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
         [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
         [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 2, 2048, 32768, 2048, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
