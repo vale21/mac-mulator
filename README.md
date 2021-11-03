@@ -40,6 +40,8 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 | Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
 | Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
 | Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
+| Intel    | macOS Big Sur     | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
+| Intel    | macOS Monterey    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 with no audio and fixed screen resolution     |
 | Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different <br> architecture (32/64 bit). <br> No 3D acceleration  |                  
 | Intel    | Windows 10        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
