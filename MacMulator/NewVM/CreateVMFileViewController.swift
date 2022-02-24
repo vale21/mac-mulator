@@ -170,6 +170,26 @@ class CreateVMFileViewController : NSViewController {
         });
     }
     
+    func getMacSerialNumber() -> String {
+        var serialNumber: String? {
+            let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice") )
+            
+            guard platformExpert > 0 else {
+                return nil
+            }
+            
+            guard let serialNumber = (IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue() as? String)?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else {
+                return nil
+            }
+            
+            IOObjectRelease(platformExpert)
+
+            return serialNumber
+        }
+        
+        return serialNumber ?? "Unknown"
+    }
+    
     fileprivate func computePath() -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;

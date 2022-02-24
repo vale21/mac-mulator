@@ -380,6 +380,10 @@ class Utils {
         }
         return index
     }
+    
+    static func getResolutionOnly(_ resolutionWithDepth: String) -> String {
+        return resolutionWithDepth.replacingOccurrences(of: "x32", with: "");
+    }
         
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {

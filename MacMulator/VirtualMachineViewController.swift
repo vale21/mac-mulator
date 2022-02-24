@@ -78,12 +78,20 @@ class VirtualMachineViewController: NSViewController {
                                 message: "Virtual Machine " + vm.displayName + " is already running!");
             } else {
                 self.setRunningStatus(true);
+                if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                    QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
+                }
+                
                 runner.runVM(uponCompletion: {
                     terminationCcode, virtualMachine in
                     DispatchQueue.main.async {
                         self.rootController?.unsetRunningVM(virtualMachine);
                         if self.rootController?.currentVm == virtualMachine {
                             self.setRunningStatus(false);
+                        }
+                        
+                        if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                            QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
                         }
                         
                         if (terminationCcode != 0) {

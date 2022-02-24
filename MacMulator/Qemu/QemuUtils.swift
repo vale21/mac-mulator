@@ -153,4 +153,61 @@ class QemuUtils {
         subtype == QemuConstants.SUB_MAC_SNOW_LEOPARD);
         return ret;
     }
+    
+    static func populateOpenCoreConfig(virtualMachine: VirtualMachine) {
+        let shell = Shell();
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
+            
+            let shell2 = Shell();
+            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode in
+                let json = shell2.stdout;
+                print(json)
+                let jsonData = json.data(using: .utf8)!
+                
+                var systemProfilerData : SystemProfilerData? = nil;
+                do {
+                    systemProfilerData = try JSONDecoder().decode(SystemProfilerData.self, from: jsonData);
+                } catch {
+                    print("ERROR while reading System Profiler data: " + error.localizedDescription);
+                }
+                
+                let machineDetails = systemProfilerData!.SPHardwareDataType[0];
+                    
+                let shell3 = Shell();
+                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode in
+                    do {
+                        var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template");
+                            
+                        plistContent = plistContent.replacingOccurrences(of: "{screenResolution}", with: Utils.getResolutionOnly(virtualMachine.displayResolution));
+                        plistContent = plistContent.replacingOccurrences(of: "{macProductName}", with: machineDetails.machine_model ?? "MacPro7,1")
+                        plistContent = plistContent.replacingOccurrences(of: "{serialNumber}", with: machineDetails.serial_number ?? "ABCDEFG");
+                        plistContent = plistContent.replacingOccurrences(of: "{hardwareUUID}", with: machineDetails.platform_UUID ?? "000-000");
+                            
+                        try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8);
+                            
+                        let shell4 = Shell();
+                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
+                            print("Done");
+                        });
+                    } catch {
+                        print("ERROR while reading/writing OpenCore config.plist: " + error.localizedDescription);
+                    }
+                });
+            });
+        }
+    }
+    
+    static func restoreOpenCoreConfigTemplate(virtualMachine: VirtualMachine) {
+        let shell = Shell();
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
+            
+            let shell2 = Shell();
+            shell2.runCommand("mv /Volumes/OPENCORE/EFI/OC/config.plist.template /Volumes/OPENCORE/EFI/OC/config.plist", virtualMachine.path, uponCompletion: { terminationCode in
+                let shell3 = Shell();
+                shell3.runCommand("hdiutil detach /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
+                    print("Done");
+                });
+            });
+        }
+    }
 }
