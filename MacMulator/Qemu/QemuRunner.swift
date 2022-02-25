@@ -118,14 +118,14 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0)))
+            .withMachine(sanitizeMachineTypeForPPC())
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
             .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
     }
-    
+        
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
@@ -172,7 +172,7 @@ class QemuRunner {
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
-            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative))
+            .withCpu(sanitizeCPUTypeForIntel(isNative))
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
@@ -206,7 +206,7 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB)
-            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false))
+            .withCpu(sanitizeCPUTypeForARM())
             .withMemory(virtualMachine.memory);
     }
 
@@ -219,7 +219,7 @@ class QemuRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VIRT)
-            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false))
+            .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(virtualMachine.memory)
             .withDisplay(QemuConstants.DISPLAY_DEFAULT)
             .withDevice(QemuConstants.VIRTIO_GPU_PCI)
@@ -275,6 +275,41 @@ class QemuRunner {
             return filemanager.fileExists(atPath: drive.path);
         }
         return true;
+    }
+    
+    fileprivate func sanitizeMachineTypeForPPC() -> String {
+        var machineType = Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0));
+        if (machineType != QemuConstants.MACHINE_TYPE_MAC99 && machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU) {
+            machineType = QemuConstants.MACHINE_TYPE_MAC99_PMU;
+        }
+        return machineType
+    }
+    
+    fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
+        if (cpuType != QemuConstants.CPU_PENRYN &&
+            cpuType != QemuConstants.CPU_PENRYN_SSE &&
+            cpuType != QemuConstants.CPU_IVY_BRIDGE &&
+            cpuType != QemuConstants.CPU_QEMU64 ) {
+            cpuType = QemuConstants.CPU_QEMU64;
+        }
+        return cpuType
+    }
+    
+    fileprivate func sanitizeCPUTypeForARM() -> String {
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), false);
+        if (cpuType != QemuConstants.CPU_ARM1176 ) {
+            cpuType = QemuConstants.CPU_ARM1176;
+        }
+        return cpuType
+    }
+    
+    fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
+        if (cpuType != QemuConstants.CPU_CORTEX_A72 ) {
+            cpuType = QemuConstants.CPU_CORTEX_A72;
+        }
+        return cpuType
     }
     
     func waitForCompletion() {
