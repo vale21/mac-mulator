@@ -287,7 +287,7 @@ class QemuConstants {
     ]
     
     static let vmDefaults = [
-        // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "mac_os_x_tiger", "icon", "machine type", "cpu", "hvf", "network"],
+        // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
         [OS_MAC, SUB_MAC_MONTEREY, ARCH_X64, 2, 4096, 32768, 4096, 120, 8192, 250, ICON_MONTEREY, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
         [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 2, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
@@ -301,7 +301,7 @@ class QemuConstants {
         [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET],
         [OS_MAC, SUB_MAC_LION, ARCH_X64, 2, 1024, 16384, 1024, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000],
         [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000],
-        [OS_MAC, SUB_MAC_LEOPARD, ARCH_X86, 2, 512, 3072, 512, 10, 2048, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
+        [OS_MAC, SUB_MAC_LEOPARD, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
         [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
         [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
         [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
@@ -326,7 +326,7 @@ class QemuConstants {
         [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
         [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO],
         [OS_LINUX, SUB_LINUX_GENERIC, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC_ARM, ARCH_ARM64, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
+        [OS_LINUX, SUB_LINUX_GENERIC_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_CORTEX_A72, true, nil],
         [OS_LINUX, SUB_LINUX_GENERIC_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, true, NETWORK_SUNGEM],
         [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil],
         [OS_LINUX, SUB_LINUX_MINT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_Q35, nil, true, nil],
