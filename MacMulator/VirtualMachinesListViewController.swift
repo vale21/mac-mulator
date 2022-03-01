@@ -63,6 +63,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator());
         menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Clone", action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType]);
         table.allowsMultipleSelection = false;
@@ -125,6 +126,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         guard table.clickedRow >= 0 else { return }
         showVirtualMachineInFinder(table.clickedRow);
     }
+    
+    @objc func tableViewCloneItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        cloneVirtualMachine(table.clickedRow);
+    }
 
     func editVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
@@ -145,6 +151,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             let vm = rootController.getVirtualMachineAt(index);
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)]);
         }
+    }
+    
+    func cloneVirtualMachine(_ index: Int) {
+        rootController?.cloneVirtualMachineAt(index);
     }
     
     func selectElement(_ index: Int) {

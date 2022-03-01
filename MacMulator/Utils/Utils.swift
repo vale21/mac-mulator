@@ -96,6 +96,14 @@ class Utils {
         return ret;
     }
     
+    static func extractVMRootPath(_ vm: VirtualMachine) -> String {
+        return String(
+            vm.path
+                .replacingOccurrences(of: "." + MacMulatorConstants.VM_EXTENSION, with: "")
+                .replacingOccurrences(of: vm.displayName, with: "")
+                .dropLast());
+    }
+    
     fileprivate static func toDecimalWithAutoLocale(_ string: String) -> Decimal? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal

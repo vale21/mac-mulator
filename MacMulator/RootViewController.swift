@@ -143,6 +143,22 @@ class RootViewController: NSSplitViewController {
         return virtualMachine;
     }
     
+    func cloneVirtualMachineAt(_ index: Int) {
+        let vmToClone = virtualMachines[index];
+        let newVMPath = Utils.extractVMRootPath(vmToClone) + "/Clone of " + vmToClone.displayName + "." + MacMulatorConstants.VM_EXTENSION;
+        let shell = Shell();
+        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { terminationCode in
+            let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist");
+            if let tempVm = temp {
+                tempVm.displayName = "Clone of " + tempVm.displayName;
+                tempVm.writeToPlist();
+                DispatchQueue.main.async {
+                    self.addVirtualMachineFromFile(newVMPath);
+                }
+            }
+        })
+    }
+    
     func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
         runningVMs[vm] = runner;
         
