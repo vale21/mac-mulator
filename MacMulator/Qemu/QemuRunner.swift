@@ -74,7 +74,7 @@ class QemuRunner {
                         builder = builder.withEfi(file: drive.path);
                     } else {
                         let mediaType = setupMediaType(drive);
-                        let path = setupPath(drive);
+                        let path = setupPath(drive, virtualMachine);
                         
                         builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
                     }
@@ -102,11 +102,11 @@ class QemuRunner {
         return mediaType;
     }
     
-    fileprivate func setupPath(_ drive: VirtualDrive) -> String {
+    fileprivate func setupPath(_ drive: VirtualDrive, _ vm: VirtualMachine) -> String {
         var path = drive.path;
         // if User selected Install xxx.app, we add the sffix to reach BasSystem.dmg
-        if path.hasSuffix(".app") {
-            path = path + "/Contents/SharedSupport/BaseSystem.dmg";
+        if path.hasSuffix(".app") && vm.os == QemuConstants.OS_MAC {
+            path = extendPathForMacOSInstaller(path, vm.subtype);
         }
         return path;
     }
@@ -289,6 +289,7 @@ class QemuRunner {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
         if (cpuType != QemuConstants.CPU_PENRYN &&
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
+            cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
             cpuType != QemuConstants.CPU_QEMU64 ) {
             cpuType = QemuConstants.CPU_QEMU64;
@@ -310,6 +311,18 @@ class QemuRunner {
             cpuType = QemuConstants.CPU_CORTEX_A72;
         }
         return cpuType
+    }
+    
+    fileprivate func extendPathForMacOSInstaller(_ path: String, _ subtype: String?) -> String {
+        var installDMGFile: String = "";
+        if (subtype == QemuConstants.SUB_MAC_LION ||
+            subtype == QemuConstants.SUB_MAC_MOUNTAIN_LION ||
+            subtype == QemuConstants.SUB_MAC_MAVERICKS) {
+            installDMGFile = "/Contents/SharedSupport/InstallESD.dmg";
+        } else {
+            installDMGFile = "/Contents/SharedSupport/BaseSystem.dmg";
+        }
+        return path + installDMGFile;
     }
     
     func waitForCompletion() {

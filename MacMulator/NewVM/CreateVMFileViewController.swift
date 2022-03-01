@@ -146,12 +146,14 @@ class CreateVMFileViewController : NSViewController {
                 complete = true;
                 created = true;
             } catch {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
-                                    response in
-                                    complete = true;
-                                    created = false;
-                                });
+                DispatchQueue.main.async {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
+                                    message: "Unable to create Virtual Machine " + displayName + ": " + error.localizedDescription, completionHandler: {
+                                        response in
+                                        complete = true;
+                                        created = false;
+                                    });
+                }
             }
         }
         
@@ -169,27 +171,7 @@ class CreateVMFileViewController : NSViewController {
             }
         });
     }
-    
-    func getMacSerialNumber() -> String {
-        var serialNumber: String? {
-            let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice") )
-            
-            guard platformExpert > 0 else {
-                return nil
-            }
-            
-            guard let serialNumber = (IORegistryEntryCreateCFProperty(platformExpert, kIOPlatformSerialNumberKey as CFString, kCFAllocatorDefault, 0).takeUnretainedValue() as? String)?.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) else {
-                return nil
-            }
-            
-            IOObjectRelease(platformExpert)
-
-            return serialNumber
-        }
         
-        return serialNumber ?? "Unknown"
-    }
-    
     fileprivate func computePath() -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;

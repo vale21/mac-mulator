@@ -204,7 +204,7 @@ class QemuUtils {
             let shell2 = Shell();
             shell2.runCommand("mv /Volumes/OPENCORE/EFI/OC/config.plist.template /Volumes/OPENCORE/EFI/OC/config.plist", virtualMachine.path, uponCompletion: { terminationCode in
                 let shell3 = Shell();
-                shell3.runCommand("hdiutil detach /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
+                shell3.runCommand("hdiutil detach -force /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
                     print("Done");
                 });
             });
