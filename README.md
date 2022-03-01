@@ -31,25 +31,25 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 
 | Host Mac | Guest OS          | Guest Atchitecture | Status         | Notes                                                                                      |
 | -------- | --------          | ------------------ | ------         | ------                                                                                     |
-| Intel    | Mac OS X Cheetah   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Puma   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Jaguar   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Panther  | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Tiger    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Leopard    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew <br> and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | Mac OS X Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Big Sur     | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Monterey    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, The reoltion selected in MacMulator is applied to the VM.     |
-| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different <br> architecture (32/64 bit). <br> No 3D acceleration  |                  
+| Intel    | Mac OS X Cheetah   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Puma   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Jaguar   | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Panther  | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Tiger    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Leopard    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
+| Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
+| Intel    | Mac OS X Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 12 with no audio and fixed screen resolution. The resolution selected in MacMulator is applied to the VM.     |
+| Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
+| Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
+| Intel    | macOS Big Sur     | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 and 12 with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
+| Intel    | macOS Monterey    | x86_64             | 🚫 NOT WORKING  | 12.2 Does not boot. Maybe 12.0 Does, if installed via an update to Big Sur  |
+| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different architecture (32/64 bit). No 3D acceleration  |                  
 | Intel    | Windows 10        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
 | Apple M1 | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
 | Intel    | Ubuntu 21.04      | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
-| Intel    | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works, but no HVF due to different <br> architecture. No 3D acceleration                   | 
-| Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works with HVF support (Custom build <br>of Qemu needed for HVF - [See Here](https://gist.github.com/citruz/9896cd6fb63288ac95f81716756cb9aa)). <br> No 3D acceleration |  
+| Intel    | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works, but no HVF due to different architecture. No 3D acceleration                   | 
+| Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works with HVF support if using Qemu 6.2 or later. No 3D acceleration |  
 | Intel    | MX Linux.         | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Linux Mint        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Elementary OS     | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
