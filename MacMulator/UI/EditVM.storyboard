@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="18122"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1147,36 +1147,18 @@ Gw
                                     <action selector="findButtonClicked:" target="oyc-lN-MJc" id="tkb-eP-oEk"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2O7-0C-bGw">
-                                <rect key="frame" x="20" y="293" width="129" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Full Qemu command" id="8h1-0K-9rT">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j79-Dl-JMY">
-                                <rect key="frame" x="18" y="243" width="564" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" id="jNu-lL-BoJ">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. To reset it to default you can just wipe the text box.</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uCJ-jy-7mR">
-                                <rect key="frame" x="20" y="45" width="560" height="190"/>
+                                <rect key="frame" x="20" y="20" width="560" height="180"/>
                                 <clipView key="contentView" drawsBackground="NO" id="Cvf-YQ-SRh">
-                                    <rect key="frame" x="0.0" y="0.0" width="560" height="190"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="560" height="180"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="De0-qt-r8X">
-                                            <rect key="frame" x="0.0" y="0.0" width="560" height="190"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="560" height="180"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="560" height="190"/>
+                                            <size key="minSize" width="560" height="180"/>
                                             <size key="maxSize" width="560" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment content="Lorem ipsur">
@@ -1199,31 +1181,64 @@ Gw
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BYb-BO-6ga">
-                                    <rect key="frame" x="544" y="0.0" width="16" height="190"/>
+                                    <rect key="frame" x="544" y="0.0" width="16" height="180"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5zY-4N-sHl">
+                                <rect key="frame" x="20" y="300" width="284" height="18"/>
+                                <buttonCell key="cell" type="check" title="Accelerate the VM Using Apple Hypervisor" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gP1-d1-FJp">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="accelerateToggleChanged:" target="oyc-lN-MJc" id="Z3e-mK-149"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2O7-0C-bGw">
+                                <rect key="frame" x="20" y="258" width="129" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Full Qemu command" id="8h1-0K-9rT">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="j79-Dl-JMY">
+                                <rect key="frame" x="18" y="208" width="564" height="42"/>
+                                <textFieldCell key="cell" selectable="YES" id="jNu-lL-BoJ">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <string key="title">If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. To reset it to default you can just wipe the text box.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="sY4-Cv-rAg" firstAttribute="top" secondItem="x9R-jH-kS8" secondAttribute="top" constant="20" symbolic="YES" id="8k1-36-WgU"/>
                             <constraint firstItem="tro-ha-CHN" firstAttribute="trailing" secondItem="uCJ-jy-7mR" secondAttribute="trailing" id="9Ap-Yh-3vM"/>
                             <constraint firstItem="FOk-0b-UQ4" firstAttribute="bottom" secondItem="tro-ha-CHN" secondAttribute="bottom" id="AEG-Sf-Stv"/>
                             <constraint firstItem="uCJ-jy-7mR" firstAttribute="top" secondItem="2O7-0C-bGw" secondAttribute="bottom" constant="58" id="DDp-Fd-jO5"/>
+                            <constraint firstItem="j79-Dl-JMY" firstAttribute="trailing" secondItem="tro-ha-CHN" secondAttribute="trailing" id="Hyv-Wm-ecj"/>
                             <constraint firstItem="FOk-0b-UQ4" firstAttribute="leading" secondItem="2O7-0C-bGw" secondAttribute="leading" id="JjH-MH-EXw"/>
+                            <constraint firstItem="5zY-4N-sHl" firstAttribute="leading" secondItem="FOk-0b-UQ4" secondAttribute="leading" id="McA-nO-3Aq"/>
+                            <constraint firstItem="j79-Dl-JMY" firstAttribute="top" secondItem="2O7-0C-bGw" secondAttribute="bottom" constant="8" symbolic="YES" id="ND6-S6-Rtr"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2O7-0C-bGw" secondAttribute="trailing" constant="20" symbolic="YES" id="Oyd-Z6-cYE"/>
-                            <constraint firstAttribute="bottom" secondItem="uCJ-jy-7mR" secondAttribute="bottom" constant="45" id="PYK-jX-PqZ"/>
+                            <constraint firstAttribute="bottom" secondItem="uCJ-jy-7mR" secondAttribute="bottom" constant="20" id="PYK-jX-PqZ"/>
                             <constraint firstItem="sY4-Cv-rAg" firstAttribute="leading" secondItem="FOk-0b-UQ4" secondAttribute="leading" id="V1Z-sd-zSX"/>
                             <constraint firstItem="FOk-0b-UQ4" firstAttribute="baseline" secondItem="tro-ha-CHN" secondAttribute="firstBaseline" id="Wgm-tE-bu8"/>
                             <constraint firstItem="sY4-Cv-rAg" firstAttribute="leading" secondItem="x9R-jH-kS8" secondAttribute="leading" constant="22" id="cTy-9k-Dc6"/>
                             <constraint firstItem="FOk-0b-UQ4" firstAttribute="top" secondItem="sY4-Cv-rAg" secondAttribute="bottom" constant="8" symbolic="YES" id="eQ1-Ga-IGx"/>
                             <constraint firstAttribute="trailing" secondItem="tro-ha-CHN" secondAttribute="trailing" constant="20" symbolic="YES" id="jJZ-wc-GcN"/>
-                            <constraint firstItem="2O7-0C-bGw" firstAttribute="top" secondItem="FOk-0b-UQ4" secondAttribute="bottom" constant="16" id="mSj-xz-d79"/>
+                            <constraint firstItem="2O7-0C-bGw" firstAttribute="top" secondItem="FOk-0b-UQ4" secondAttribute="bottom" constant="51" id="mSj-xz-d79"/>
                             <constraint firstItem="uCJ-jy-7mR" firstAttribute="leading" secondItem="x9R-jH-kS8" secondAttribute="leading" constant="20" symbolic="YES" id="myN-x2-qKO"/>
+                            <constraint firstItem="5zY-4N-sHl" firstAttribute="top" secondItem="FOk-0b-UQ4" secondAttribute="bottom" constant="8" symbolic="YES" id="uaw-Gv-StD"/>
+                            <constraint firstItem="j79-Dl-JMY" firstAttribute="leading" secondItem="uCJ-jy-7mR" secondAttribute="leading" id="vId-MO-D23"/>
                             <constraint firstItem="tro-ha-CHN" firstAttribute="leading" secondItem="FOk-0b-UQ4" secondAttribute="trailing" constant="8" symbolic="YES" id="xTP-z9-MDL"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="sY4-Cv-rAg" secondAttribute="trailing" constant="20" symbolic="YES" id="yd9-2H-r8l"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="accelerateVM" destination="5zY-4N-sHl" id="e8p-HG-KLz"/>
                         <outlet property="fullCommandView" destination="De0-qt-r8X" id="uGA-ju-eBp"/>
                         <outlet property="qemuPathButton" destination="tro-ha-CHN" id="o3M-zd-EYW"/>
                         <outlet property="qemuPathView" destination="FOk-0b-UQ4" id="1FF-NT-JTq"/>

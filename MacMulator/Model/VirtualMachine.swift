@@ -22,12 +22,13 @@ class VirtualMachine: Codable, Hashable {
     var drives: [VirtualDrive];
     var qemuPath: String?;
     var qemuCommand: String?;
+    var hvf: Bool?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand, hvf;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, qemuBootloader: Bool) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, qemuBootloader: Bool, hvf: Bool) {
         self.os = os;
         self.subtype = subtype;
         self.architecture = architecture;
@@ -38,6 +39,7 @@ class VirtualMachine: Codable, Hashable {
         self.cpus = cpus;
         self.displayResolution = displayResolution;
         self.qemuBootLoader = qemuBootloader;
+        self.hvf = hvf;
         self.drives = [];
     }
     

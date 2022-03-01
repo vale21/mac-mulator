@@ -10,6 +10,7 @@ import Cocoa
 class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
     
     @IBOutlet weak var qemuPathView: NSTextField!
+    @IBOutlet weak var accelerateVM: NSButton!
     @IBOutlet weak var qemuPathButton: NSButton!
     @IBOutlet var fullCommandView: NSTextView!
 
@@ -31,6 +32,11 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         });
     }
     
+    @IBAction func accelerateToggleChanged(_ sender: Any) {
+        if let virtualMachine = self.virtualMachine {
+            virtualMachine.hvf = self.accelerateVM.state == NSButton.StateValue.on;
+        }
+    }
     
     override func viewWillAppear() {
         updateView();
@@ -44,6 +50,11 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
                 qemuPathView.stringValue = qemuPath;
             } else {
                 qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+            }
+            if let hvf = virtualMachine.hvf {
+                self.accelerateVM.state = (hvf ? NSButton.StateValue.on : NSButton.StateValue.off);
+            } else {
+                self.accelerateVM.state = NSButton.StateValue.on;
             }
         }
     }
