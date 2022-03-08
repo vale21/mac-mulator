@@ -158,8 +158,10 @@ class QemuRunner {
 
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
+        let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
+        
         if (virtualMachine.os == QemuConstants.OS_MAC) {
-            return createBuilderForMacGuestX86_64(isNative);
+            return createBuilderForMacGuestX86_64(isNative, hvfConfigured);
         }
     
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
@@ -171,8 +173,8 @@ class QemuRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
-            .withCpu(sanitizeCPUTypeForIntel(isNative))
+            .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
+            .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
@@ -180,16 +182,16 @@ class QemuRunner {
             .withDevice(QemuConstants.USB_TABLET);
     }
     
-    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool) -> QemuCommandBuilder {
+    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool) -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative))
+            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
             .withCpus(virtualMachine.cpus)
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withAccel(isNative && Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
+            .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
@@ -212,6 +214,7 @@ class QemuRunner {
 
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
+        let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
         
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withSerial(QemuConstants.SERIAL_STDIO)
@@ -223,7 +226,7 @@ class QemuRunner {
             .withMemory(virtualMachine.memory)
             .withDisplay(QemuConstants.DISPLAY_DEFAULT)
             .withDevice(QemuConstants.VIRTIO_GPU_PCI)
-            .withAccel(isNative ? QemuConstants.ACCEL_HVF : nil)
+            .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withDevice(QemuConstants.QEMU_XHCI)
@@ -287,7 +290,8 @@ class QemuRunner {
     
     fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
-        if (cpuType != QemuConstants.CPU_PENRYN &&
+        if (cpuType != QemuConstants.CPU_HOST &&
+            cpuType != QemuConstants.CPU_PENRYN &&
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
@@ -307,7 +311,8 @@ class QemuRunner {
     
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
-        if (cpuType != QemuConstants.CPU_CORTEX_A72 ) {
+        if (cpuType != QemuConstants.CPU_HOST &&
+            cpuType != QemuConstants.CPU_CORTEX_A72 ) {
             cpuType = QemuConstants.CPU_CORTEX_A72;
         }
         return cpuType
@@ -317,7 +322,10 @@ class QemuRunner {
         var installDMGFile: String = "";
         if (subtype == QemuConstants.SUB_MAC_LION ||
             subtype == QemuConstants.SUB_MAC_MOUNTAIN_LION ||
-            subtype == QemuConstants.SUB_MAC_MAVERICKS) {
+            subtype == QemuConstants.SUB_MAC_MAVERICKS ||
+            subtype == QemuConstants.SUB_MAC_YOSEMITE ||
+            subtype == QemuConstants.SUB_MAC_EL_CAPITAN ||
+            subtype == QemuConstants.SUB_MAC_SIERRA) {
             installDMGFile = "/Contents/SharedSupport/InstallESD.dmg";
         } else {
             installDMGFile = "/Contents/SharedSupport/BaseSystem.dmg";

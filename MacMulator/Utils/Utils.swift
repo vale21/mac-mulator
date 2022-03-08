@@ -234,6 +234,31 @@ class Utils {
         return false;
     }
     
+    static func getMachineArchitecture(_ qemuExecutable: String) -> String {
+        switch qemuExecutable {
+        case QemuConstants.ARCH_X86:
+            return QemuConstants.HOST_I386;
+        case QemuConstants.ARCH_X64:
+            return QemuConstants.HOST_X86_64;
+        case QemuConstants.ARCH_ARM:
+            return QemuConstants.HOST_ARM;
+        case QemuConstants.ARCH_ARM64:
+            return QemuConstants.HOST_ARM64;
+        case QemuConstants.ARCH_PPC:
+            return QemuConstants.HOST_PPC;
+        case QemuConstants.ARCH_PPC64:
+            return QemuConstants.HOST_PPC64;
+        case QemuConstants.ARCH_RISCV32:
+            return QemuConstants.HOST_RISCV32;
+        case QemuConstants.ARCH_RISCV64:
+            return QemuConstants.HOST_RISCV64;
+        case QemuConstants.ARCH_68K:
+            return QemuConstants.HOST_68K;
+        default:
+            return qemuExecutable;
+        }
+    }
+    
     static func directoryExists(_ path: String) -> Bool {
         var isDir : ObjCBool = true
         return FileManager.default.fileExists(atPath: path, isDirectory:&isDir);

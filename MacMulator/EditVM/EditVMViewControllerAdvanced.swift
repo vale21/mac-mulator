@@ -35,6 +35,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     @IBAction func accelerateToggleChanged(_ sender: Any) {
         if let virtualMachine = self.virtualMachine {
             virtualMachine.hvf = self.accelerateVM.state == NSButton.StateValue.on;
+            updateQemuCommand(virtualMachine);
         }
     }
     
@@ -42,19 +43,37 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         updateView();
     }
     
+    fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
+        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
+        fullCommandView.string = runner.getQemuCommand();
+        if let qemuPath = virtualMachine.qemuPath {
+            qemuPathView.stringValue = qemuPath;
+        } else {
+            qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+        }
+    }
+    
     fileprivate func updateView() {
         if let virtualMachine = self.virtualMachine {
-            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
-            fullCommandView.string = runner.getQemuCommand();
-            if let qemuPath = virtualMachine.qemuPath {
-                qemuPathView.stringValue = qemuPath;
+            updateQemuCommand(virtualMachine)
+            
+            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture);
+            
+            if (Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation()) {
+                self.accelerateVM.state = NSButton.StateValue.off;
+                self.accelerateVM.isEnabled = false;
+                if (Utils.hostArchitecture() != vmArchitecture) {
+                    self.accelerateVM.toolTip = "This feature is not available because the VM has architecture " + vmArchitecture + " which is different from the architecture of your mac (" + Utils.hostArchitecture()! + ")";
+                } else {
+                    self.accelerateVM.toolTip = "This feature is not available because MacMulator is running under Rosetta";
+                }
             } else {
-                qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
-            }
-            if let hvf = virtualMachine.hvf {
-                self.accelerateVM.state = (hvf ? NSButton.StateValue.on : NSButton.StateValue.off);
-            } else {
-                self.accelerateVM.state = NSButton.StateValue.on;
+                self.accelerateVM.isEnabled = true;
+                if let hvf = virtualMachine.hvf {
+                    self.accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off;
+                } else {
+                    self.accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off;
+                }
             }
         }
     }
