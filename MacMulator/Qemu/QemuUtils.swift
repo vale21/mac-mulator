@@ -171,7 +171,7 @@ class QemuUtils {
                     print("ERROR while reading System Profiler data: " + error.localizedDescription);
                 }
                 
-                let machineDetails = systemProfilerData!.SPHardwareDataType[0];
+                let machineDetails = systemProfilerData?.SPHardwareDataType[0];
                     
                 let shell3 = Shell();
                 shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode in
@@ -179,9 +179,9 @@ class QemuUtils {
                         var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template");
                             
                         plistContent = plistContent.replacingOccurrences(of: "{screenResolution}", with: Utils.getResolutionOnly(virtualMachine.displayResolution));
-                        plistContent = plistContent.replacingOccurrences(of: "{macProductName}", with: machineDetails.machine_model ?? "MacPro7,1")
-                        plistContent = plistContent.replacingOccurrences(of: "{serialNumber}", with: machineDetails.serial_number ?? "ABCDEFG");
-                        plistContent = plistContent.replacingOccurrences(of: "{hardwareUUID}", with: machineDetails.platform_UUID ?? "000-000");
+                        plistContent = plistContent.replacingOccurrences(of: "{macProductName}", with: machineDetails?.machine_model ?? "MacPro7,1")
+                        plistContent = plistContent.replacingOccurrences(of: "{serialNumber}", with: machineDetails?.serial_number ?? "ABCDEFG");
+                        plistContent = plistContent.replacingOccurrences(of: "{hardwareUUID}", with: machineDetails?.platform_UUID ?? "000-000");
                             
                         try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8);
                             
