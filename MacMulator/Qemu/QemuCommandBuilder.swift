@@ -150,7 +150,7 @@ class QemuCommandBuilder {
     }
     
     func withNetwork(name: String, device: String) -> QemuCommandBuilder{
-        self.network = "-netdev user,id=" + name + " -device " + device + ",netdev=" + name;
+        self.network = "-netdev user,id=" + name + ",hostfwd=tcp::222-:22 -device " + device + ",netdev=" + name;
         return self;
     }
     
