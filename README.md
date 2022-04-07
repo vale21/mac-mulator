@@ -40,6 +40,7 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 | Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio, no HVF and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
 | Intel    | Mac OS X Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 12 or later with no audio, no HVF and fixed screen resolution.  |
 | Intel    | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF and fixed screen resolution.   |
+| Apple M1    | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF and fixed screen resolution. Performances are as good as if the same VM is executed on Intel hardware.  |
 | Intel    | OS X Mavericks | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF, no networking and fixed screen resolution. |
 | Intel    | OS X Yosemite | x86_64             | 🚫 NOT WORKING | Installs on Beta 13 or later, but with no networking and no HVF. It is too slow to be usable, even on powerful hardware. |
 | Intel    | OS X El Capitan | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio and fixed screen resolution. |
