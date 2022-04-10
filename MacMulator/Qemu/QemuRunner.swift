@@ -281,7 +281,7 @@ class QemuRunner {
     }
     
     fileprivate func sanitizeMachineTypeForPPC() -> String {
-        var machineType = Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0));
+        var machineType = Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype);
         if (machineType != QemuConstants.MACHINE_TYPE_MAC99 && machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU) {
             machineType = QemuConstants.MACHINE_TYPE_MAC99_PMU;
         }
@@ -289,7 +289,7 @@ class QemuRunner {
     }
     
     fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative);
         if (cpuType != QemuConstants.CPU_HOST &&
             cpuType != QemuConstants.CPU_PENRYN &&
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
@@ -302,7 +302,7 @@ class QemuRunner {
     }
     
     fileprivate func sanitizeCPUTypeForARM() -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), false);
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false);
         if (cpuType != QemuConstants.CPU_ARM1176 ) {
             cpuType = QemuConstants.CPU_ARM1176;
         }
@@ -310,7 +310,7 @@ class QemuRunner {
     }
     
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0), isNative);
+        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative);
         if (cpuType != QemuConstants.CPU_HOST &&
             cpuType != QemuConstants.CPU_CORTEX_A72 ) {
             cpuType = QemuConstants.CPU_CORTEX_A72;

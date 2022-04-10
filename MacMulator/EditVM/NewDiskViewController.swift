@@ -64,9 +64,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                     }
                     
                     
-                    let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
-                    let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, subtype);
-                    let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, subtype);
+                    let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype);
+                    let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype);
                     
                     minDiskSizeLabel.stringValue = Utils.formatDisk(Int32(minDiskSize));
                     maxDiskSizeLabel.stringValue = Utils.formatDisk(Int32(maxDiskSize));
@@ -133,8 +132,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                 
                 if let parentController = self.parentController {
                     if let virtualMachine = parentController.virtualMachine {
-                        let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
-                        if size < Utils.getMinDiskSizeForSubType(virtualMachine.os, subtype) || size > Utils.getMaxDiskSizeForSubType(virtualMachine.os, subtype) {
+                        if size < Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) || size > Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) {
                             diskSizeStepper.isEnabled = false;
                             diskSizeSlider.isEnabled = false;
                         } else {

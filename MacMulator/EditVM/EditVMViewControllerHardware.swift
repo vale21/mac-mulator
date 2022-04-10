@@ -144,9 +144,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             memorySlider.intValue = virtualMachine.memory;
             memoryTextView.stringValue = String(virtualMachine.memory);
             
-            let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
-            let minMemory = Utils.getMinMemoryForSubType(virtualMachine.os, subtype);
-            let maxMemory = Utils.getMaxMemoryForSubType(virtualMachine.os, subtype);
+            let minMemory = Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype);
+            let maxMemory = Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype);
             
             minMemoryLabel.stringValue = Utils.formatMemory(Int32(minMemory));
             maxMemoryLabel.stringValue = Utils.formatMemory(Int32(maxMemory));
@@ -155,7 +154,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             memorySlider.minValue = Double(minMemory);
             memorySlider.maxValue = Double(maxMemory);
             
-            if virtualMachine.memory < Utils.getMinMemoryForSubType(virtualMachine.os, subtype) || virtualMachine.memory > Utils.getMaxMemoryForSubType(virtualMachine.os, subtype) {
+            if virtualMachine.memory < Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype) || virtualMachine.memory > Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype) {
                 memoryStepper.isEnabled = false;
                 memorySlider.isEnabled = false;
             } else {
@@ -171,7 +170,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if let virtualMachine = self.virtualMachine {
             if (segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE) {
                 let diskName = QemuConstants.MEDIATYPE_DISK + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_DISK));
-                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0))));
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)));
                 
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);
@@ -248,8 +247,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     memoryStepper.intValue = virtualMachine.memory;
                     memorySlider.intValue = virtualMachine.memory;
                     
-                    let subtype: String = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
-                    if memory < Utils.getMinMemoryForSubType(virtualMachine.os, subtype) || memory > Utils.getMaxMemoryForSubType(virtualMachine.os, subtype) {
+                    if memory < Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype) || memory > Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype) {
                         memoryStepper.isEnabled = false;
                         memorySlider.isEnabled = false;
                     } else {

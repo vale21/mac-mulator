@@ -11,6 +11,9 @@
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
 		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
 		3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */; };
+		3B200DA52802E58200F7159E /* QemuVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA42802E58200F7159E /* QemuVMCreator.swift */; };
+		3B200DA72802EEDE00F7159E /* VMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA62802EEDE00F7159E /* VMCreator.swift */; };
+		3B200DA92802EF8500F7159E /* VMCreatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */; };
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
@@ -101,6 +104,9 @@
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
 		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
 		3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
+		3B200DA42802E58200F7159E /* QemuVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuVMCreator.swift; sourceTree = "<group>"; };
+		3B200DA62802EEDE00F7159E /* VMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMCreator.swift; sourceTree = "<group>"; };
+		3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMCreatorFactory.swift; sourceTree = "<group>"; };
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -247,6 +253,9 @@
 			children = (
 				3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */,
 				3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */,
+				3B200DA42802E58200F7159E /* QemuVMCreator.swift */,
+				3B200DA62802EEDE00F7159E /* VMCreator.swift */,
+				3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */,
 			);
 			path = NewVM;
 			sourceTree = "<group>";
@@ -445,6 +454,7 @@
 				3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */,
 				3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */,
 				3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */,
+				3B200DA92802EF8500F7159E /* VMCreatorFactory.swift in Sources */,
 				3B15E94825CD87760046891B /* QemuConstants.swift in Sources */,
 				3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */,
 				3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */,
@@ -462,8 +472,10 @@
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
+				3B200DA72802EEDE00F7159E /* VMCreator.swift in Sources */,
 				3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
+				3B200DA52802E58200F7159E /* QemuVMCreator.swift in Sources */,
 				3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */,
 				3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */,
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,

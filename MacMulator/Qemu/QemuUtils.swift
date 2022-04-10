@@ -132,7 +132,7 @@ class QemuUtils {
         }
     }
     
-    static func isMacModern(_ subtype: String) -> Bool {
+    static func isMacModern(_ subtype: String?) -> Bool {
         let ret =
         (subtype == QemuConstants.SUB_MAC_MONTEREY ||
         subtype == QemuConstants.SUB_MAC_BIG_SUR ||
@@ -140,7 +140,7 @@ class QemuUtils {
         return ret;
     }
     
-    static func isMacLegacy(_ subtype: String) -> Bool {
+    static func isMacLegacy(_ subtype: String?) -> Bool {
         let ret =
         (subtype == QemuConstants.SUB_MAC_MOJAVE ||
         subtype == QemuConstants.SUB_MAC_HIGH_SIERRA ||

@@ -136,7 +136,7 @@ class VirtualMachineViewController: NSViewController {
     
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
-            vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype ?? Utils.getSubType(vm.os, 0)) + ".large"));
+            vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"));
             vmName.stringValue = vm.displayName;
             vmDescription.stringValue = vm.description;
             vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
