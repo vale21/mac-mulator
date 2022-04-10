@@ -70,7 +70,7 @@ class VirtualMachineViewController: NSViewController {
         
         if let vm = rootController?.currentVm {
             boxContentView = centralBox.contentView;
-            let runner = QemuRunner(listenPort: listenPort, virtualMachine: vm);
+            let runner: VirtualmachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
             rootController?.setRunningVM(vm, runner);
             listenPort += 1;
             if (runner.isRunning()) {
@@ -167,15 +167,15 @@ class VirtualMachineViewController: NSViewController {
         }
     }
     
-    fileprivate func livePreviewTimerLogic(_ timer: Timer, _ runner: QemuRunner) {
-        let imageName = self.temporaryPath + String(runner.virtualMachine.displayName).lowercased().replacingOccurrences(of: " ", with: "_") + "_scr.ppm";
+    fileprivate func livePreviewTimerLogic(_ timer: Timer, _ runner: VirtualmachineRunner) {
+        let imageName = self.temporaryPath + String(runner.getVirtualMachine().displayName).lowercased().replacingOccurrences(of: " ", with: "_") + "_scr.ppm";
         
         let currentFrequency = Double(UserDefaults.standard.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE));
         if timer.timeInterval != currentFrequency {
             print("Stopping timer. Frequency changed.");
             timer.invalidate();
         } else {
-            if !runner.isRunning() || rootController?.currentVm != runner.virtualMachine {
+            if !runner.isRunning() || rootController?.currentVm != runner.getVirtualMachine() {
                 print("Stopping timer");
                 timer.invalidate();
                 
@@ -188,7 +188,7 @@ class VirtualMachineViewController: NSViewController {
             } else {
                 DispatchQueue.global().async {
                     if runner.isRunning() {
-                        let monitor = QemuMonitor(runner.listenPort);
+                        let monitor = QemuMonitor(runner.getListenPort());
                         monitor.takeScreenshot(path: imageName);
                         monitor.close();
                     }
@@ -198,7 +198,7 @@ class VirtualMachineViewController: NSViewController {
         }
     }
     
-    fileprivate func setupScreenshotTimer(_ runnerIn: QemuRunner?) {
+    fileprivate func setupScreenshotTimer(_ runnerIn: VirtualmachineRunner?) {
         
         if let runner = runnerIn {
 

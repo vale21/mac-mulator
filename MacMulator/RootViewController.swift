@@ -15,7 +15,7 @@ class RootViewController: NSSplitViewController {
     
     var currentVm: VirtualMachine?
     var virtualMachines: [VirtualMachine] = [];
-    var runningVMs: [VirtualMachine : QemuRunner] = [:];
+    var runningVMs: [VirtualMachine : VirtualmachineRunner] = [:];
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -159,7 +159,7 @@ class RootViewController: NSSplitViewController {
         })
     }
     
-    func setRunningVM(_ vm: VirtualMachine, _ runner: QemuRunner) {
+    func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualmachineRunner) {
         runningVMs[vm] = runner;
         
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
@@ -187,11 +187,11 @@ class RootViewController: NSSplitViewController {
         return vm != nil && runningVMs[vm!] != nil;
     }
     
-    func getRunnerForRunningVM(_ vm: VirtualMachine) -> QemuRunner? {
+    func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualmachineRunner? {
         return runningVMs[vm];
     }
     
-    func getRunnerForCurrentVM() -> QemuRunner? {
+    func getRunnerForCurrentVM() -> VirtualmachineRunner? {
         if let currentVm = self.currentVm {
             return runningVMs[currentVm];
         }

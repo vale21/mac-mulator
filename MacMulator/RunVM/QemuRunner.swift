@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class QemuRunner {
+class QemuRunner : VirtualmachineRunner {
     
     let listenPort: Int32;
     let shell = Shell();
@@ -26,6 +26,14 @@ class QemuRunner {
         shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { terminationCcode in
             callback(terminationCcode, self.virtualMachine);
         });
+    }
+    
+    func getVirtualMachine() -> VirtualMachine {
+        return virtualMachine;
+    }
+    
+    func getListenPort() -> Int32 {
+        return listenPort;
     }
     
     func getQemuCommand() -> String {
