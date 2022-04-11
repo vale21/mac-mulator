@@ -38,7 +38,7 @@ class MacOSRestoreImage: NSObject {
                 fatalError("Download failed. \(error.localizedDescription).")
             }
 
-            let installerURL = URL(fileURLWithPath: path + "/maOSInstaller.ipsw");
+            let installerURL = URL(fileURLWithPath: path + "/macOSInstaller.ipsw");
             guard (try? FileManager.default.moveItem(at: localURL!, to: installerURL)) != nil else {
                 fatalError("Failed to move downloaded restore image to \(installerURL).")
             }

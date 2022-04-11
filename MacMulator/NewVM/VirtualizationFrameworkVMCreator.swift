@@ -12,9 +12,9 @@ import Virtualization
 class VirtualizationFrameworkVMCreator : VMCreator {
     
     var complete = false;
-            
+    
     func createVM(vm: VirtualMachine, installMedia: String) throws {
-        #if arch(arm64)
+#if arch(arm64)
         
         do {
             try Utils.createDocumentPackage(vm.path);
@@ -28,7 +28,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             }
         } catch {}
         
-        #endif
+#endif
     }
     
     func isComplete() -> Bool {
@@ -36,42 +36,32 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine) throws {
-        do {
-            let virtualHDD = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
-                name: QemuConstants.MEDIATYPE_DISK + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_DISK,
-                size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
-            vm.addVirtualDrive(virtualHDD);
-            
-            do {
-                QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                    terminationCcode in
-                    vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-                });
-            } catch {
-                complete = true;
-                throw error;
-            }
-            
-            complete = true;
-        } catch {
-            complete = true;
-            throw error;
-        }
+        let virtualHDD = VirtualDrive(
+            path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
+            name: QemuConstants.MEDIATYPE_DISK + "-0",
+            format: QemuConstants.FORMAT_RAW,
+            mediaType: QemuConstants.MEDIATYPE_DISK,
+            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
+        vm.addVirtualDrive(virtualHDD);
+        
+        QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+            terminationCcode in
+            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+        });
+        
+        complete = true;
     }
     
-    #if arch(arm64)
+#if arch(arm64)
     
     fileprivate func installOS(vm: VirtualMachine, ipswURL: URL) {
         print("Attempting to install from IPSW at \(ipswURL).")
         VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
             switch result {
-                case let .failure(error):
-                    fatalError(error.localizedDescription)
-
-                case let .success(restoreImage):
+            case let .failure(error):
+                fatalError(error.localizedDescription)
+                
+            case let .success(restoreImage):
                 installOS(vm: vm, restoreImage: restoreImage)
             }
         })
@@ -81,41 +71,39 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
         }
-
+        
         if !macOSConfiguration.hardwareModel.isSupported {
             fatalError("macOSConfiguration configuration is not supported on the current host.")
         }
-
+        
         let virtualMachine: VZVirtualMachine = setupVirtualMachine(vm: vm, macOSConfiguration: macOSConfiguration)
         startInstallation(virtualMachine: virtualMachine, restoreImageURL: restoreImage.url)
     }
     
     // MARK: Create the Virtual Machine Configuration and instantiate the Virtual Machine
-
+    
     fileprivate func setupVirtualMachine(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) -> VZVirtualMachine {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
-
+        
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
-        virtualMachineConfiguration.cpuCount = MacOSVirtualMachineConfigurationHelper.computeCPUCount()
-        if virtualMachineConfiguration.cpuCount < macOSConfiguration.minimumSupportedCPUCount {
-            fatalError("CPUCount is not supported by the macOS configuration.")
-        }
-
-        virtualMachineConfiguration.memorySize = MacOSVirtualMachineConfigurationHelper.computeMemorySize()
+        virtualMachineConfiguration.cpuCount = vm.cpus;
+        virtualMachineConfiguration.memorySize = vm.memory * 1024;
         if virtualMachineConfiguration.memorySize < macOSConfiguration.minimumSupportedMemorySize {
             fatalError("memorySize is not supported by the macOS configuration.")
         }
-
+        
         virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
-        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration()]
+        
+        let resolution = Utils.getResolutionElements(vm.displayResolution);
+        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(resolution[0], resolution[1], 80)]
         virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-
+        
         try! virtualMachineConfiguration.validate()
-
+        
         let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration)
         return virtualMachine;
     }
@@ -125,29 +113,29 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
         let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/MachineIdentifier")
         let hardwareModelURL = URL(fileURLWithPath: vm.path + "/HardwareModel")
-
+        
         guard let auxiliaryStorage = try? VZMacAuxiliaryStorage(creatingStorageAt: auxiliaryStorageURL,
-                                                                    hardwareModel: macOSConfiguration.hardwareModel,
-                                                                          options: []) else {
+                                                                hardwareModel: macOSConfiguration.hardwareModel,
+                                                                options: []) else {
             fatalError("Failed to create auxiliary storage.")
         }
         macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
         macPlatformConfiguration.hardwareModel = macOSConfiguration.hardwareModel
         macPlatformConfiguration.machineIdentifier = VZMacMachineIdentifier()
-
+        
         // Store the hardware model and machine identifier to disk so that we can retrieve them for subsequent boots.
         try! macPlatformConfiguration.hardwareModel.dataRepresentation.write(to: hardwareModelURL)
         try! macPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: machineIdentifierURL)
-
+        
         return macPlatformConfiguration
     }
-
+    
     // MARK: Begin macOS installation
-
+    
     fileprivate func startInstallation(virtualMachine: VZVirtualMachine, restoreImageURL: URL) {
         DispatchQueue.main.async {
             let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
-
+            
             print("Starting installation.")
             installer.install(completionHandler: { (result: Result<Void, Error>) in
                 if case let .failure(error) = result {
@@ -156,7 +144,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     print("Installation succeeded.")
                 }
             })
-
+            
             // Observe installation progress
             _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
                 print("Installation progress: \(change.newValue! * 100).")
@@ -164,5 +152,5 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         }
     }
     
-    #endif
+#endif
 }

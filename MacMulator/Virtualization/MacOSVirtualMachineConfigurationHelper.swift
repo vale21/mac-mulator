@@ -12,34 +12,15 @@ import Virtualization
 
 @available(macOS 12.0, *)
 struct MacOSVirtualMachineConfigurationHelper {
-    static func computeCPUCount() -> Int {
-        let totalAvailableCPUs = ProcessInfo.processInfo.processorCount
-
-        var virtualCPUCount = totalAvailableCPUs <= 1 ? 1 : totalAvailableCPUs - 1
-        virtualCPUCount = max(virtualCPUCount, VZVirtualMachineConfiguration.minimumAllowedCPUCount)
-        virtualCPUCount = min(virtualCPUCount, VZVirtualMachineConfiguration.maximumAllowedCPUCount)
-
-        return virtualCPUCount
-    }
-
-    static func computeMemorySize() -> UInt64 {
-        // We arbitrarily choose 4GB.
-        var memorySize = (4 * 1024 * 1024 * 1024) as UInt64
-        memorySize = max(memorySize, VZVirtualMachineConfiguration.minimumAllowedMemorySize)
-        memorySize = min(memorySize, VZVirtualMachineConfiguration.maximumAllowedMemorySize)
-
-        return memorySize
-    }
 
     static func createBootLoader() -> VZMacOSBootLoader {
         return VZMacOSBootLoader()
     }
 
-    static func createGraphicsDeviceConfiguration() -> VZMacGraphicsDeviceConfiguration {
+    static func createGraphicsDeviceConfiguration(witdh: Int, height: Int, ppi: Int) -> VZMacGraphicsDeviceConfiguration {
         let graphicsConfiguration = VZMacGraphicsDeviceConfiguration()
         graphicsConfiguration.displays = [
-            // We abitrarily choose the resolution of the display to be 1920 x 1200.
-            VZMacGraphicsDisplayConfiguration(widthInPixels: 1920, heightInPixels: 1200, pixelsPerInch: 80)
+            VZMacGraphicsDisplayConfiguration(widthInPixels: witdh, heightInPixels: height, pixelsPerInch: ppi)
         ]
 
         return graphicsConfiguration

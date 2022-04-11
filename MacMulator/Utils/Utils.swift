@@ -419,6 +419,16 @@ class Utils {
     static func getResolutionOnly(_ resolutionWithDepth: String) -> String {
         return resolutionWithDepth.replacingOccurrences(of: "x32", with: "");
     }
+    
+    static func getResolutionElements(_ resolutionWithDepth: String) -> [Int] {
+        let stringElements:[Substring] = resolutionWithDepth.split(separator: "x");
+        var ret: [Int] = [];
+        ret[0] = Int(stringElements[0])!;
+        ret[1] = Int(stringElements[1])!;
+        ret[2] = Int(stringElements[2])!;
+        
+        return ret;
+    }
         
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
