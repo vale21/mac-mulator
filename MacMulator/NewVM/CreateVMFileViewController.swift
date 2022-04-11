@@ -33,6 +33,8 @@ class CreateVMFileViewController : NSViewController {
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false, hvf: Utils.getAccelForSubType(os, subtype));
             
+            var foundError: Bool = false;
+            
             if let parentController = self.parentController {
                 
                 let vmCreator: VMCreator = VMCreatorFactory().create(vm: vm);
@@ -44,7 +46,7 @@ class CreateVMFileViewController : NSViewController {
                         self.progressBar.stopAnimation(self);
                         self.dismiss(self);
                         
-                        if vmCreator.isCreated() {
+                        if !foundError {
                             self.parentController!.vmCreated(vm);
                         }
                         return;
@@ -56,6 +58,7 @@ class CreateVMFileViewController : NSViewController {
                     do {
                         try vmCreator.createVM(vm: vm, installMedia: installMedia);
                     } catch {
+                        foundError = true;
                         DispatchQueue.main.async {
                             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                             message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);

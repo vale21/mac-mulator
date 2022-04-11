@@ -11,8 +11,7 @@ import ZIPFoundation
 class QemuVMCreator: VMCreator {
     
     var complete = false;
-    var created = false;
-    
+
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)!;
         try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD);
@@ -20,10 +19,6 @@ class QemuVMCreator: VMCreator {
     
     func isComplete() -> Bool {
         return complete;
-    }
-    
-    func isCreated() -> Bool {
-        return created;
     }
     
     fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {
@@ -86,14 +81,13 @@ class QemuVMCreator: VMCreator {
     fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive) throws {
         
         do {
-            try createDocumentPackage(vm.path);
+            try Utils.createDocumentPackage(vm.path);
             QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
             });
         } catch {
             complete = true;
-            created = false;
             throw error;
         }
         
@@ -120,17 +114,12 @@ class QemuVMCreator: VMCreator {
                 try FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"));
             }
             self.complete = true;
-            self.created = true;
         } catch {
             self.complete = true;
-            self.created = false;
             throw error;
         }
     }
     
-    fileprivate func createDocumentPackage(_ path: String) throws {
-        let fileManager = FileManager.default;
-        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil);
-    }
+
 }
 
