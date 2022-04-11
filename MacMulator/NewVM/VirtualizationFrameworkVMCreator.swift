@@ -87,7 +87,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
         virtualMachineConfiguration.cpuCount = vm.cpus;
-        virtualMachineConfiguration.memorySize = vm.memory * 1024;
+        virtualMachineConfiguration.memorySize = UInt64(vm.memory * 1024);
         if virtualMachineConfiguration.memorySize < macOSConfiguration.minimumSupportedMemorySize {
             fatalError("memorySize is not supported by the macOS configuration.")
         }
@@ -95,7 +95,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
         
         let resolution = Utils.getResolutionElements(vm.displayResolution);
-        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(resolution[0], resolution[1], 80)]
+        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(witdh: resolution[0], height: resolution[1], ppi: 80)]
         virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
