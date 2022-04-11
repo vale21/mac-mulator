@@ -10,6 +10,7 @@ import Virtualization
 
 #if arch(arm64)
 
+@available(macOS 12.0, *)
 struct MacOSVirtualMachineConfigurationHelper {
     static func computeCPUCount() -> Int {
         let totalAvailableCPUs = ProcessInfo.processInfo.processorCount
@@ -44,8 +45,8 @@ struct MacOSVirtualMachineConfigurationHelper {
         return graphicsConfiguration
     }
 
-    static func createBlockDeviceConfiguration() -> VZVirtioBlockDeviceConfiguration {
-        guard let diskImageAttachment = try? VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: diskImagePath), readOnly: false) else {
+    static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
+        guard let diskImageAttachment = try? VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false) else {
             fatalError("Failed to create Disk image.")
         }
         let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)

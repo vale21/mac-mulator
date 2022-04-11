@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import Virtualization
 
+@available(macOS 12.0, *)
 class VirtualizationFrameworkVMCreator : VMCreator {
     
     var complete = false;
@@ -14,13 +16,17 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         #if arch(arm64)
         
-        let restoreImage = MacOSRestoreImage;
-        restoreImage.download {
-            createVMFilesOnDisk(vm);
-            installOS(restoreImageURL);
-        }
-        
-        
+        do {
+            try Utils.createDocumentPackage(vm.path);
+            let restoreImage = MacOSRestoreImage();
+            restoreImage.download(path: vm.path) {
+                url in
+                do {
+                    try self.createVMFilesOnDisk(vm);
+                    self.installOS(vm: vm, ipswURL: url);
+                } catch {}
+            }
+        } catch {}
         
         #endif
     }
@@ -40,7 +46,6 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             vm.addVirtualDrive(virtualHDD);
             
             do {
-                try Utils.createDocumentPackage(vm.path);
                 QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                     terminationCcode in
                     vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
@@ -59,7 +64,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
     #if arch(arm64)
     
-    fileprivate func installOS(ipswURL: URL) {
+    fileprivate func installOS(vm: VirtualMachine, ipswURL: URL) {
         print("Attempting to install from IPSW at \(ipswURL).")
         VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
             switch result {
@@ -67,12 +72,12 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     fatalError(error.localizedDescription)
 
                 case let .success(restoreImage):
-                    installOS(restoreImage: restoreImage)
+                installOS(vm: vm, restoreImage: restoreImage)
             }
         })
     }
     
-    fileprivate func installMacOS(restoreImage: VZMacOSRestoreImage) {
+    fileprivate func installOS(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
         }
@@ -81,12 +86,45 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             fatalError("macOSConfiguration configuration is not supported on the current host.")
         }
 
-        setupVirtualMachine(macOSConfiguration: macOSConfiguration)
-        startInstallation(restoreImageURL: restoreImage.url)
+        let virtualMachine: VZVirtualMachine = setupVirtualMachine(vm: vm, macOSConfiguration: macOSConfiguration)
+        startInstallation(virtualMachine: virtualMachine, restoreImageURL: restoreImage.url)
     }
     
-    fileprivate func createMacPlatformConfiguration(macOSConfiguration: VZMacOSConfigurationRequirements) -> VZMacPlatformConfiguration {
+    // MARK: Create the Virtual Machine Configuration and instantiate the Virtual Machine
+
+    fileprivate func setupVirtualMachine(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) -> VZVirtualMachine {
+        let virtualMachineConfiguration = VZVirtualMachineConfiguration()
+
+        virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
+        virtualMachineConfiguration.cpuCount = MacOSVirtualMachineConfigurationHelper.computeCPUCount()
+        if virtualMachineConfiguration.cpuCount < macOSConfiguration.minimumSupportedCPUCount {
+            fatalError("CPUCount is not supported by the macOS configuration.")
+        }
+
+        virtualMachineConfiguration.memorySize = MacOSVirtualMachineConfigurationHelper.computeMemorySize()
+        if virtualMachineConfiguration.memorySize < macOSConfiguration.minimumSupportedMemorySize {
+            fatalError("memorySize is not supported by the macOS configuration.")
+        }
+
+        virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
+        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration()]
+        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
+        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+        virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
+        virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
+        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
+
+        try! virtualMachineConfiguration.validate()
+
+        let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration)
+        return virtualMachine;
+    }
+    
+    fileprivate func createMacPlatformConfiguration(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) -> VZMacPlatformConfiguration {
         let macPlatformConfiguration = VZMacPlatformConfiguration()
+        let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
+        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/MachineIdentifier")
+        let hardwareModelURL = URL(fileURLWithPath: vm.path + "/HardwareModel")
 
         guard let auxiliaryStorage = try? VZMacAuxiliaryStorage(creatingStorageAt: auxiliaryStorageURL,
                                                                     hardwareModel: macOSConfiguration.hardwareModel,
@@ -104,44 +142,10 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         return macPlatformConfiguration
     }
 
-    // MARK: Create the Virtual Machine Configuration and instantiate the Virtual Machine
-
-    fileprivate func setupVirtualMachine(macOSConfiguration: VZMacOSConfigurationRequirements) {
-        let virtualMachineConfiguration = VZVirtualMachineConfiguration()
-
-        virtualMachineConfiguration.platform = createMacPlatformConfiguration(macOSConfiguration: macOSConfiguration)
-        virtualMachineConfiguration.cpuCount = MacOSVirtualMachineConfigurationHelper.computeCPUCount()
-        if virtualMachineConfiguration.cpuCount < macOSConfiguration.minimumSupportedCPUCount {
-            fatalError("CPUCount is not supported by the macOS configuration.")
-        }
-
-        virtualMachineConfiguration.memorySize = MacOSVirtualMachineConfigurationHelper.computeMemorySize()
-        if virtualMachineConfiguration.memorySize < macOSConfiguration.minimumSupportedMemorySize {
-            fatalError("memorySize is not supported by the macOS configuration.")
-        }
-
-        // Create a 64 GB disk image.
-        createDiskImage()
-
-        virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
-        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration()]
-        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration()]
-        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
-        virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
-        virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
-        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-
-        try! virtualMachineConfiguration.validate()
-
-        virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration)
-        virtualMachineResponder = MacOSVirtualMachineDelegate()
-        virtualMachine.delegate = virtualMachineResponder
-    }
-
     // MARK: Begin macOS installation
 
-    fileprivate func startInstallation(restoreImageURL: URL) {
-        DispatchQueue.main.async { [self] in
+    fileprivate func startInstallation(virtualMachine: VZVirtualMachine, restoreImageURL: URL) {
+        DispatchQueue.main.async {
             let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
 
             print("Starting installation.")
@@ -154,7 +158,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             })
 
             // Observe installation progress
-            installationObserver = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
+            _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
                 print("Installation progress: \(change.newValue! * 100).")
             }
         }
