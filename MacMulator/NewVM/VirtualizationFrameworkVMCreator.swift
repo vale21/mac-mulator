@@ -16,17 +16,14 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     func createVM(vm: VirtualMachine, installMedia: String) throws {
 #if arch(arm64)
         
-        do {
-            try Utils.createDocumentPackage(vm.path);
-            let restoreImage = MacOSRestoreImage();
-            restoreImage.download(path: vm.path) {
-                url in
-                do {
-                    try self.createVMFilesOnDisk(vm);
-                    self.installOS(vm: vm, ipswURL: url);
-                } catch {}
-            }
-        } catch {}
+        try! Utils.createDocumentPackage(vm.path);
+        let restoreImage = MacOSRestoreImage();
+        restoreImage.download(path: vm.path) {
+            url in
+            try! self.createVMFilesOnDisk(vm);
+            self.installOS(vm: vm, ipswURL: url);
+            complete = true;
+        }
         
 #endif
     }
@@ -48,8 +45,6 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             terminationCcode in
             vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
         });
-        
-        complete = true;
     }
     
 #if arch(arm64)
@@ -68,6 +63,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     fileprivate func installOS(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
+        
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
         }

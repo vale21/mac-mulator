@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class QemuRunner : VirtualmachineRunner {
+class QemuRunner : VirtualMachineRunner {
     
     let listenPort: Int32;
     let shell = Shell();
@@ -22,13 +22,13 @@ class QemuRunner : VirtualmachineRunner {
         self.virtualMachine = virtualMachine;
     }
 
-    func runVM(uponCompletion callback: @escaping (Int32, VirtualMachine) -> Void) {
-        shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { terminationCcode in
-            callback(terminationCcode, self.virtualMachine);
+    func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
+        shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { result in
+            callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
         });
     }
     
-    func getVirtualMachine() -> VirtualMachine {
+    func getManagedVM() -> VirtualMachine {
         return virtualMachine;
     }
     
@@ -345,12 +345,15 @@ class QemuRunner : VirtualmachineRunner {
         shell.waitForCommand();
     }
     
-    func isRunning() -> Bool {
+    func isVMRunning() -> Bool {
         return shell.isRunning();
     }
     
-    func kill() {
+    func stopVM() {
         shell.kill();
+    }
+    
+    func pauseVM() {
     }
     
     func getStandardError() -> String {

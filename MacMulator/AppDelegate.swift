@@ -77,6 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        
         let userDefaults = UserDefaults.standard;
 
         setupDefaultsPreferences(userDefaults)
@@ -89,10 +90,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         setupSavedVMs();
     }
     
+    
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if let rootController = self.rootController {
             if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
                 if response.rawValue != Utils.ALERT_RESP_OK {
                     return NSApplication.TerminateReply.terminateCancel;
                 } else {
@@ -108,7 +110,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         
-        //resetDefaults();
+        // Useful in Development to replicate the startup of a clean installation of MacMulator
+        // resetDefaults();
     }
     
     fileprivate func resetDefaults() {

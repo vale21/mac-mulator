@@ -423,9 +423,9 @@ class Utils {
     static func getResolutionElements(_ resolutionWithDepth: String) -> [Int] {
         let stringElements:[Substring] = resolutionWithDepth.split(separator: "x");
         var ret: [Int] = [];
-        ret[0] = Int(stringElements[0])!;
-        ret[1] = Int(stringElements[1])!;
-        ret[2] = Int(stringElements[2])!;
+        ret.append(Int(stringElements[0])!);
+        ret.append(Int(stringElements[1])!);
+        ret.append(Int(stringElements[2])!);
         
         return ret;
     }

@@ -7,21 +7,33 @@
 
 import Foundation
 
-protocol VirtualmachineRunner {
+class VMExecutionResult {
     
-    func getVirtualMachine() -> VirtualMachine;
+    let exitCode: Int32;
+    let error: String?
     
-    func getListenPort() -> Int32;
+    init(exitCode: Int32) {
+        self.exitCode = exitCode;
+        error = nil;
+    }
     
-    func isRunning() -> Bool;
+    init(exitCode: Int32, error: String) {
+        self.exitCode = exitCode;
+        self.error = error;
+    }
+}
+
+protocol VirtualMachineRunner {
     
-    func runVM(uponCompletion callback: @escaping (Int32, VirtualMachine) -> Void);
+    func getManagedVM() -> VirtualMachine;
+            
+    func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void);
     
-    func kill();
+    func isVMRunning() -> Bool;
     
-    func getStandardError() -> String;
+    func stopVM();
     
-    func getStandardOutput() -> String;
+    func pauseVM();
     
-    func getConsoleOutput() -> String;
+    func getConsoleOutput() -> String
 }

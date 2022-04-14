@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -2005,7 +2005,7 @@ Raspberry Pi</mutableString>
                 </windowController>
                 <customObject id="CX3-zU-Apc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-729" y="-926"/>
+            <point key="canvasLocation" x="-786" y="-1168"/>
         </scene>
         <!--Console View Controller-->
         <scene sceneID="1g7-fN-J1v">
@@ -2066,7 +2066,7 @@ Raspberry Pi</mutableString>
                 </viewController>
                 <customObject id="HLm-3g-NyG" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="39" y="-919"/>
+            <point key="canvasLocation" x="53" y="-1168"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="a5g-mn-8u4">
@@ -2094,7 +2094,7 @@ Raspberry Pi</mutableString>
                 </windowController>
                 <customObject id="G1w-JR-X7Q" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-777" y="-367"/>
+            <point key="canvasLocation" x="-160" y="-144"/>
         </scene>
         <!--Preferences View Controller-->
         <scene sceneID="Bs5-Sg-pDv">
@@ -2447,7 +2447,7 @@ Raspberry Pi</mutableString>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="-9" y="-341"/>
+            <point key="canvasLocation" x="526" y="-144"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
@@ -2551,7 +2551,7 @@ Raspberry Pi</mutableString>
                 </splitViewController>
                 <customObject id="quT-cv-XYJ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1870" y="544"/>
+            <point key="canvasLocation" x="-1049" y="551"/>
         </scene>
         <!--Virtual Machines List View Controller-->
         <scene sceneID="2N4-O2-zee">
@@ -2655,7 +2655,7 @@ Raspberry Pi</mutableString>
                 </viewController>
                 <customObject id="gua-la-20l" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-960" y="233"/>
+            <point key="canvasLocation" x="-223" y="470"/>
         </scene>
         <!--Virtual Machine View Controller-->
         <scene sceneID="zlr-3i-aCs">
@@ -3068,11 +3068,25 @@ Raspberry Pi</mutableString>
                         <outlet property="vmProcessorsDesc" destination="bJS-UN-Auk" id="7Op-CZ-ipK"/>
                         <outlet property="vmType" destination="R79-YR-ULi" id="fCH-wy-aA4"/>
                         <outlet property="vmTypeDesc" destination="Xaw-fC-Wcz" id="aCd-x2-2kJ"/>
+                        <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-780" y="805"/>
+            <point key="canvasLocation" x="8" y="1051"/>
+        </scene>
+        <!--Virtual Machine Container View Controller-->
+        <scene sceneID="EIf-4K-aeP">
+            <objects>
+                <viewController id="xWp-Ke-TzW" customClass="VirtualMachineContainerViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="uzr-BD-qWX">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="gDK-sg-7Zg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="680" y="912"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">
@@ -3080,7 +3094,7 @@ Raspberry Pi</mutableString>
                 <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
                 <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1422" y="-683"/>
+            <point key="canvasLocation" x="-1371" y="-645"/>
         </scene>
         <!--NewVM-->
         <scene sceneID="yBO-JT-jb1">
@@ -3088,7 +3102,7 @@ Raspberry Pi</mutableString>
                 <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
                 <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1471" y="-747"/>
+            <point key="canvasLocation" x="-1355" y="-211"/>
         </scene>
     </scenes>
     <resources>
