@@ -35,13 +35,6 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         return complete;
     }
     
-    fileprivate func installFromIPSW(vm: VirtualMachine, url: URL) {
-        try! self.createVMFilesOnDisk(vm, uponCompletion: {
-            terminationCode in
-            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-            self.installOS(vm: vm, ipswURL: url);
-        });
-    }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) throws {
         let virtualHDD = VirtualDrive(
@@ -59,6 +52,14 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
 #if arch(arm64)
+    
+    fileprivate func installFromIPSW(vm: VirtualMachine, url: URL) {
+        try! self.createVMFilesOnDisk(vm, uponCompletion: {
+            terminationCode in
+            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+            self.installOS(vm: vm, ipswURL: url);
+        });
+    }
     
     fileprivate func installOS(vm: VirtualMachine, ipswURL: URL) {
         print("Attempting to install from IPSW at \(ipswURL).")
