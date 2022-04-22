@@ -27,11 +27,13 @@ struct MacOSVirtualMachineConfigurationHelper {
     }
 
     static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
-        guard let diskImageAttachment = try? VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false) else {
-            fatalError("Failed to create Disk image.")
+        do {
+            let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false);
+            let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)
+            return disk
+        } catch {
+            fatalError("Failed to create Disk image: " + error.localizedDescription)
         }
-        let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)
-        return disk
     }
 
     static func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {

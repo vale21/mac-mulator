@@ -17,14 +17,17 @@ class VirtualizationFrameworkVMCreator : VMCreator {
 #if arch(arm64)
         
         try! Utils.createDocumentPackage(vm.path);
-        let restoreImage = MacOSRestoreImage();
-        restoreImage.download(path: vm.path) {
-            url in
-            try! self.createVMFilesOnDisk(vm);
-            self.installOS(vm: vm, ipswURL: url);
-            complete = true;
+        if (installMedia != "" && installMedia.hasSuffix(".ipsw")) {
+            print("IPSW specified. Installing...");
+            self.installFromIPSW(vm: vm, url: URL.init(fileURLWithPath: installMedia));
+        } else {
+            print("IPSW Not specified. Downloading...");
+            let restoreImage = MacOSRestoreImage();
+            restoreImage.download(path: vm.path) {
+                url in
+                self.installFromIPSW(vm: vm, url: url);
+            }
         }
-        
 #endif
     }
     
@@ -32,7 +35,15 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         return complete;
     }
     
-    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine) throws {
+    fileprivate func installFromIPSW(vm: VirtualMachine, url: URL) {
+        try! self.createVMFilesOnDisk(vm, uponCompletion: {
+            terminationCode in
+            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+            self.installOS(vm: vm, ipswURL: url);
+        });
+    }
+    
+    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) throws {
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
@@ -43,7 +54,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         
         QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
             terminationCcode in
-            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+            callback(terminationCcode);
         });
     }
     
@@ -57,7 +68,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 fatalError(error.localizedDescription)
                 
             case let .success(restoreImage):
-                installOS(vm: vm, restoreImage: restoreImage)
+                installOS(vm: vm, restoreImage: restoreImage);
             }
         })
     }
@@ -83,11 +94,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
         virtualMachineConfiguration.cpuCount = vm.cpus;
-        virtualMachineConfiguration.memorySize = UInt64(vm.memory * 1024);
-        if virtualMachineConfiguration.memorySize < macOSConfiguration.minimumSupportedMemorySize {
-            fatalError("memorySize is not supported by the macOS configuration.")
-        }
-        
+        virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
         virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
         
         let resolution = Utils.getResolutionElements(vm.displayResolution);
@@ -138,13 +145,21 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     fatalError(error.localizedDescription)
                 } else {
                     print("Installation succeeded.")
+                    self.complete = true;
                 }
             })
             
-            // Observe installation progress
-            _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-                print("Installation progress: \(change.newValue! * 100).")
-            }
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+                
+                _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
+                    print("Installation progress: \(change.newValue! * 100).")
+                }
+                
+                guard !self.complete else {
+                    timer.invalidate();
+                    return;
+                }
+            });
         }
     }
     

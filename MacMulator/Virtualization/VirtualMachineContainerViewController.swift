@@ -6,12 +6,15 @@
 //
 
 import Cocoa
+import Virtualization
 
+@available(macOS 12.0, *)
 class VirtualMachineContainerViewController : NSViewController, VirtualMachineObserver, NSWindowDelegate {
     
     var virtualMachine: VirtualMachine?
     var vmController: VirtualMachineViewController?
     var runner: VirtualizationFrameworkVirtualMachineRunner?;
+    var vmView: VZVirtualMachineView?;
     
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
@@ -28,6 +31,8 @@ class VirtualMachineContainerViewController : NSViewController, VirtualMachineOb
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution);
             self.view.window?.setContentSize(CGSize(width: resolution[0], height: resolution[1]));
             self.view.window?.setFrameOrigin(NSPoint(x: 200, y: 200));
+            self.vmView = VZVirtualMachineView();
+            self.view = vmView!;
             
             runner = vmController?.rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner;
             runner?.addObserver(self);
@@ -44,15 +49,15 @@ class VirtualMachineContainerViewController : NSViewController, VirtualMachineOb
         }
     }
     
-    func virtualMachineStarted() {
+    func virtualMachineStarted(_ vm: VZVirtualMachine) {
+        vmView?.virtualMachine = vm;
+    }
+    
+    func virtualmachinePaused(_ vm: VZVirtualMachine) {
         
     }
     
-    func virtualmachinePaused() {
-        
-    }
-    
-    func virtualMachineStopped() {
+    func virtualMachineStopped(_ vm: VZVirtualMachine) {
         self.view.window?.close();
     }
 }

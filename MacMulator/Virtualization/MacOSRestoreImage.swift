@@ -13,8 +13,6 @@ import Virtualization
 @available(macOS 12.0, *)
 class MacOSRestoreImage: NSObject {
     
-    private var downloadObserver: NSKeyValueObservation?
-
     // MARK: Observe the download progress
 
     public func download(path: String, completionHandler: @escaping (URL) -> Void) {
@@ -33,6 +31,9 @@ class MacOSRestoreImage: NSObject {
     // MARK: Download the Restore Image from the network
 
     private func downloadRestoreImage(path: String, restoreImage: VZMacOSRestoreImage, completionHandler: @escaping (URL) -> Void) {
+        
+        var downloaded = false;
+        
         let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, response, error in
             if let error = error {
                 fatalError("Download failed. \(error.localizedDescription).")
@@ -43,12 +44,22 @@ class MacOSRestoreImage: NSObject {
                 fatalError("Failed to move downloaded restore image to \(installerURL).")
             }
 
+            downloaded = true;
             completionHandler(installerURL)
         }
 
-        downloadObserver = downloadTask.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-            NSLog("Restore image download progress: \(change.newValue! * 100).")
-        }
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+            
+            _ = downloadTask.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
+                NSLog("Restore image download progress: \(change.newValue! * 100).")
+            }
+            
+            guard !downloaded else {
+                timer.invalidate();
+                return;
+            }
+        });
+        
         downloadTask.resume()
     }
 }

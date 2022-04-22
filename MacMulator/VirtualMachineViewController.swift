@@ -101,9 +101,13 @@ class VirtualMachineViewController: NSViewController {
                 });
             }
             
+            #if arch(arm64)
+            
             if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
                 self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
             }
+            
+            #endif
         }
     }
     
@@ -117,18 +121,24 @@ class VirtualMachineViewController: NSViewController {
         });
     }
     
+    #if arch(arm64)
+    
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
-        let source = segue.sourceController as! VirtualMachineViewController;
-        let dest = segue.destinationController as! VirtualMachineContainerViewController;
-        
-        if (segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE) {
-            let vmToEdit = sender as! VirtualMachine;
+        if #available(macOS 12.0, *) {
+            let source = segue.sourceController as! VirtualMachineViewController;
+            let dest = segue.destinationController as! VirtualMachineContainerViewController;
             
-            dest.setVirtualMachine(vmToEdit);
-            dest.setVmController(source);
+            if (segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE) {
+                let vmToEdit = sender as! VirtualMachine;
+                
+                dest.setVirtualMachine(vmToEdit);
+                dest.setVmController(source);
+            }
         }
     }
+    
+    #endif
     
     override func viewWillAppear() {
         startVMButton.toolTip = "Start this VM";

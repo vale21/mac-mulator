@@ -6,28 +6,33 @@
 //
 
 import Foundation
+import Virtualization
 
+@available(macOS 11.0, *)
 protocol VirtualMachineObserver {
     
-    func virtualMachineStarted();
+    func virtualMachineStarted(_ vm: VZVirtualMachine);
     
-    func virtualmachinePaused();
+    func virtualmachinePaused(_ vm: VZVirtualMachine);
     
-    func virtualMachineStopped();
+    func virtualMachineStopped(_ vm: VZVirtualMachine);
 }
 
+@available(macOS 11.0, *)
 extension VirtualMachineObserver {
     
-    func virtualMachineStarted() {};
+    func virtualMachineStarted(_ vm: VZVirtualMachine) {};
     
-    func virtualmachinePaused() {};
+    func virtualmachinePaused(_ vm: VZVirtualMachine) {};
     
-    func virtualMachineStopped() {};
+    func virtualMachineStopped(_ vm: VZVirtualMachine) {};
 }
 
-class VirtualizationFrameworkVirtualMachineRunner : VirtualMachineRunner {
+@available(macOS 12.0, *)
+class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
     
     let managedVm: VirtualMachine;
+    var vzVirtualMachine: VZVirtualMachine?;
     var running: Bool = false;
     var callback: (VMExecutionResult, VirtualMachine) -> Void = { result, vm in };
     var observers: [VirtualMachineObserver] = [];
@@ -44,9 +49,26 @@ class VirtualizationFrameworkVirtualMachineRunner : VirtualMachineRunner {
         running = true;
         self.callback = callback;
         
+        #if arch(arm64)
+        
+        vzVirtualMachine = createVirtualMachine(vm: managedVm);
+        vzVirtualMachine!.delegate = self;
+        
         observers.forEach { observer in
-            observer.virtualMachineStarted();
+            observer.virtualMachineStarted(vzVirtualMachine!);
         }
+        
+        vzVirtualMachine!.start(completionHandler: { (result) in
+                    switch result {
+                        case let .failure(error):
+                            fatalError("Virtual machine failed to start \(error)")
+
+                        default:
+                        self.stopVM();
+                    }
+                })
+        
+        #endif
     }
     
     func isVMRunning() -> Bool {
@@ -58,13 +80,13 @@ class VirtualizationFrameworkVirtualMachineRunner : VirtualMachineRunner {
         callback(VMExecutionResult(exitCode: 0), managedVm);
         
         observers.forEach { observer in
-            observer.virtualMachineStopped();
+            observer.virtualMachineStopped(vzVirtualMachine!);
         }
     }
     
     func pauseVM() {
         observers.forEach { observer in
-            observer.virtualmachinePaused();
+            observer.virtualmachinePaused(vzVirtualMachine!);
         }
     }
     
@@ -75,4 +97,72 @@ class VirtualizationFrameworkVirtualMachineRunner : VirtualMachineRunner {
     func addObserver(_ observer: VirtualMachineObserver) {
         observers.append(observer);
     }
+    
+#if arch(arm64)
+    
+    fileprivate func createVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
+        let virtualMachineConfiguration = VZVirtualMachineConfiguration()
+        
+        virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm);
+        virtualMachineConfiguration.cpuCount = vm.cpus;
+        virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
+        virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
+        
+        let resolution = Utils.getResolutionElements(vm.displayResolution);
+        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(witdh: resolution[0], height: resolution[1], ppi: 80)]
+        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
+        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+        virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
+        virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
+        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
+        
+        try! virtualMachineConfiguration.validate()
+        
+        let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration)
+        return virtualMachine;
+    }
+    
+    fileprivate func createMacPlatformConfiguration(vm: VirtualMachine) -> VZMacPlatformConfiguration {
+        let macPlatformConfiguration = VZMacPlatformConfiguration()
+        let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
+        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/MachineIdentifier")
+        let hardwareModelURL = URL(fileURLWithPath: vm.path + "/HardwareModel")
+        
+        let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: auxiliaryStorageURL);
+        macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
+        
+        guard let hardwareModelData = try? Data(contentsOf: hardwareModelURL) else {
+            fatalError("Failed to retrieve hardware model data.")
+        }
+
+        guard let hardwareModel = VZMacHardwareModel(dataRepresentation: hardwareModelData) else {
+            fatalError("Failed to create hardware model.")
+        }
+        
+        macPlatformConfiguration.hardwareModel = hardwareModel;
+
+        guard let machineIdentifierData = try? Data(contentsOf: machineIdentifierURL) else {
+            fatalError("Failed to retrieve machine identifier data.")
+        }
+
+        guard let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
+            fatalError("Failed to create machine identifier.")
+        }
+        macPlatformConfiguration.machineIdentifier = machineIdentifier
+        
+        return macPlatformConfiguration
+    }
+    
+    func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: Error) {
+            NSLog("Virtual machine did stop with error: \(error.localizedDescription)")
+            exit(-1)
+        }
+
+        func guestDidStop(_ virtualMachine: VZVirtualMachine) {
+            NSLog("Guest did stop virtual machine.")
+            exit(0)
+        }
+
+#endif
+    
 }

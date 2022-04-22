@@ -11,7 +11,7 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app"];
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw"];
     
     static func createDocumentPackage(_ path: String) throws {
         let fileManager = FileManager.default;
