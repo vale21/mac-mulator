@@ -34,6 +34,19 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual machine called " + vmName.stringValue + " already exists. Please choose a different name.");
         } else {
+#if arch(arm64)
+            
+            if (Utils.isRunningWithVirtualizationFramework(vmType.stringValue, vmSubType.stringValue) && !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
+                let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest version from Apple. Do you agree?");
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+                } else {
+                    return;
+                }
+            }
+            
+#endif
+            
             performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
         }
     }

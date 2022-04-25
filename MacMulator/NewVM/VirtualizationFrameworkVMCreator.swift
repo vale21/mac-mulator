@@ -17,7 +17,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
 #if arch(arm64)
         
         try! Utils.createDocumentPackage(vm.path);
-        if (installMedia != "" && installMedia.hasSuffix(".ipsw")) {
+        if Utils.isIpswInstallMediaProvided(installMedia) {
             print("IPSW specified. Installing...");
             self.installFromIPSW(vm: vm, url: URL.init(fileURLWithPath: installMedia));
         } else {
@@ -45,10 +45,27 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
         vm.addVirtualDrive(virtualHDD);
         
-        QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-            terminationCcode in
-            callback(terminationCcode);
-        });
+        createDiskImage(virtualHDD.path);
+        callback(0);
+    }
+    
+    // Create an empty disk image for the Virtual Machine
+    private func createDiskImage(_ diskImagePath: String) {
+        let diskFd = open(diskImagePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)
+        if diskFd == -1 {
+            fatalError("Cannot create disk image.")
+        }
+
+        // 64GB disk space.
+        var result = ftruncate(diskFd, 64 * 1024 * 1024 * 1024)
+        if result != 0 {
+            fatalError("ftruncate() failed.")
+        }
+
+        result = close(diskFd)
+        if result != 0 {
+            fatalError("Failed to close the disk image.")
+        }
     }
     
 #if arch(arm64)

@@ -69,6 +69,15 @@ class VirtualMachineViewController: NSViewController {
     func startVM(sender: Any) {
         
         if let vm = rootController?.currentVm {
+            
+#if arch(arm64)
+
+            if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
+                self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
+            }
+            
+#else
+            
             boxContentView = centralBox.contentView;
             let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
             rootController?.setRunningVM(vm, runner);
@@ -101,13 +110,8 @@ class VirtualMachineViewController: NSViewController {
                 });
             }
             
-            #if arch(arm64)
+#endif
             
-            if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
-                self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
-            }
-            
-            #endif
         }
     }
     

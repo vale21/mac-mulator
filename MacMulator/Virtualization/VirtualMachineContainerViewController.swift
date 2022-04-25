@@ -13,8 +13,7 @@ class VirtualMachineContainerViewController : NSViewController, VirtualMachineOb
     
     var virtualMachine: VirtualMachine?
     var vmController: VirtualMachineViewController?
-    var runner: VirtualizationFrameworkVirtualMachineRunner?;
-    var vmView: VZVirtualMachineView?;
+    @IBOutlet weak var vmView: VZVirtualMachineView!
     
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
@@ -24,18 +23,30 @@ class VirtualMachineContainerViewController : NSViewController, VirtualMachineOb
         vmController = controller;
     }
     
-    override func viewWillAppear() {
+    override func viewDidAppear() {
         self.view.window?.delegate = self;
         
         if let virtualMachine = virtualMachine {
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution);
             self.view.window?.setContentSize(CGSize(width: resolution[0], height: resolution[1]));
             self.view.window?.setFrameOrigin(NSPoint(x: 200, y: 200));
-            self.vmView = VZVirtualMachineView();
-            self.view = vmView!;
             
-            runner = vmController?.rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner;
-            runner?.addObserver(self);
+            
+            let vmRunner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner;
+            //runner = vmController?.rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner;
+            //runner?.addObserver(self);
+            vmRunner.setVmView(vmView);
+            vmRunner.runVM(uponCompletion: {
+                result, virtualMachine in
+                DispatchQueue.main.async {
+                    if (result.exitCode != 0) {
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Qemu execution failed with error: " + result.error!);
+                    }
+                    else {
+                        self.view.window?.close();
+                    }
+                }
+            });
         }
     }
     
@@ -44,7 +55,7 @@ class VirtualMachineContainerViewController : NSViewController, VirtualMachineOb
         if response.rawValue != Utils.ALERT_RESP_OK {
             return false;
         } else {
-            runner?.stopVM();
+            //runner?.stopVM();
             return true;
         }
     }

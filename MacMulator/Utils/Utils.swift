@@ -429,6 +429,14 @@ class Utils {
         
         return ret;
     }
+    
+    static func isRunningWithVirtualizationFramework(_ type: String, _ subType: String) -> Bool {
+        return type == QemuConstants.OS_MAC && subType == QemuConstants.SUB_MAC_MONTEREY;
+    }
+    
+    static func isIpswInstallMediaProvided(_ installMedia: String) -> Bool {
+        return installMedia != "" && installMedia.hasSuffix(".ipsw");
+    }
         
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
