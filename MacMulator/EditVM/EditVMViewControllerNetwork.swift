@@ -7,7 +7,10 @@
 
 import Cocoa
 
-class EditVMViewControllerNetwork : NSViewController {
+class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+    
+    @IBOutlet weak var networkAdapterComboBox: NSComboBox!
+    @IBOutlet weak var mappingsTableView: NSTableView!
     
     var virtualMachine: VirtualMachine?;
  
@@ -22,7 +25,8 @@ class EditVMViewControllerNetwork : NSViewController {
     
     func updateView() {
         if let virtualMachine = self.virtualMachine {
-            
+            networkAdapterComboBox.reloadData();
+            mappingsTableView.reloadData();
         }
     }
 }

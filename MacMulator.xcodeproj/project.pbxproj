@@ -342,15 +342,15 @@
 		3BF8F62125E401D4006E2C1C /* EditVM */ = {
 			isa = PBXGroup;
 			children = (
+				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
+				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
 				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
 				3B477A9425D69525008685BE /* EditVMViewController.swift */,
 				3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */,
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
-				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
-				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
-				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
 				3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */,
+				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 			);
 			path = EditVM;
 			sourceTree = "<group>";

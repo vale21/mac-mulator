@@ -1260,20 +1260,20 @@ Gw
                         <rect key="frame" x="0.0" y="0.0" width="600" height="390"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AoB-Bv-bEf">
-                                <rect key="frame" x="20" y="39" width="548" height="213"/>
+                            <scrollView misplaced="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AoB-Bv-bEf">
+                                <rect key="frame" x="20" y="39" width="560" height="216"/>
                                 <clipView key="contentView" id="M7t-zB-fci">
-                                    <rect key="frame" x="1" y="1" width="546" height="211"/>
+                                    <rect key="frame" x="1" y="1" width="558" height="214"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="8rE-Ul-n3M" viewBased="YES" id="Ypw-Ld-ZcT">
-                                            <rect key="frame" x="0.0" y="0.0" width="546" height="183"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="558" height="186"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="250" minWidth="40" maxWidth="1000" id="EP5-q0-frc">
+                                                <tableColumn width="255" minWidth="40" maxWidth="1000" id="EP5-q0-frc">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Mapping name">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1286,11 +1286,11 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Tjs-rh-ma1">
-                                                            <rect key="frame" x="8" y="0.0" width="248" height="24"/>
+                                                            <rect key="frame" x="8" y="0.0" width="253" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-7P-40p">
-                                                                    <rect key="frame" x="0.0" y="4" width="248" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="4" width="253" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="EE9-ED-3yw">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1322,7 +1322,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="5A0-IO-Y5j">
-                                                            <rect key="frame" x="273" y="0.0" width="122" height="24"/>
+                                                            <rect key="frame" x="278" y="0.0" width="122" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="QCJ-E5-jLx">
@@ -1358,7 +1358,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="kvA-W5-Oy4">
-                                                            <rect key="frame" x="412" y="0.0" width="119" height="24"/>
+                                                            <rect key="frame" x="417" y="0.0" width="119" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Uyp-Wz-0dz">
@@ -1382,6 +1382,10 @@ Gw
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <outlet property="dataSource" destination="CC8-R8-wkI" id="ZYs-pf-EtV"/>
+                                                <outlet property="delegate" destination="CC8-R8-wkI" id="Fq9-75-xg8"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                 </clipView>
@@ -1394,12 +1398,12 @@ Gw
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="8rE-Ul-n3M">
-                                    <rect key="frame" x="0.0" y="0.0" width="546" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="558" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="JBt-Ob-AVo">
-                                <rect key="frame" x="398" y="18" width="171" height="23"/>
+                                <rect key="frame" x="410" y="18" width="171" height="23"/>
                                 <buttonCell key="cell" type="roundTextured" title="Create new mapping..." bezelStyle="texturedRounded" image="plus.app.fill" catalog="system" imagePosition="left" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IoL-jf-KvD">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -1409,7 +1413,7 @@ Gw
                                 </connections>
                             </button>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hB9-iJ-8qQ">
-                                <rect key="frame" x="18" y="351" width="106" height="16"/>
+                                <rect key="frame" x="18" y="354" width="106" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Network adapter" id="2MO-Yv-1uB">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1419,7 +1423,7 @@ Gw
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4rw-kc-jK7">
                                 <rect key="frame" x="130" y="347" width="140" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="137" id="fgE-vE-WdU"/>
+                                    <constraint firstAttribute="width" constant="137" id="9dv-7W-PW5"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="c9g-cr-2dM">
                                     <font key="font" metaFont="system"/>
@@ -1427,12 +1431,12 @@ Gw
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                                 <connections>
-                                    <outlet property="dataSource" destination="fBa-tq-xkS" id="83E-Of-vhr"/>
-                                    <outlet property="delegate" destination="fBa-tq-xkS" id="V3F-4d-FHB"/>
+                                    <outlet property="dataSource" destination="CC8-R8-wkI" id="bfe-C5-T2r"/>
+                                    <outlet property="delegate" destination="CC8-R8-wkI" id="IDK-fp-c3z"/>
                                 </connections>
                             </comboBox>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Lyi-nL-Kpe">
-                                <rect key="frame" x="18" y="310" width="93" height="16"/>
+                                <rect key="frame" x="18" y="313" width="93" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Port mappings" id="BY0-my-4Wx">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1440,7 +1444,7 @@ Gw
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fUP-27-CUF">
-                                <rect key="frame" x="18" y="260" width="552" height="42"/>
+                                <rect key="frame" x="18" y="263" width="564" height="42"/>
                                 <textFieldCell key="cell" selectable="YES" id="Qed-DU-zAe">
                                     <font key="font" metaFont="smallSystem"/>
                                     <string key="title">In the table below you will be able to define port mappings between the Virtual Machine and the Host Mac. The port defined in the "Virtual Machine Port" column will be mapped to the corresponding "Host Mac Port" on the host Mac.</string>
@@ -1450,27 +1454,29 @@ Gw
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="AoB-Bv-bEf" secondAttribute="bottom" constant="39" id="2kH-3I-CA2"/>
-                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="leading" secondItem="fUP-27-CUF" secondAttribute="leading" id="E5q-dF-Gdf"/>
-                            <constraint firstAttribute="bottom" secondItem="JBt-Ob-AVo" secondAttribute="bottom" constant="20" symbolic="YES" id="FMD-V8-C9C"/>
-                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="top" secondItem="hB9-iJ-8qQ" secondAttribute="bottom" constant="25" id="MeG-31-XNs"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="leading" secondItem="AoB-Bv-bEf" secondAttribute="leading" id="NcO-zM-V3R"/>
-                            <constraint firstItem="4rw-kc-jK7" firstAttribute="leading" secondItem="hB9-iJ-8qQ" secondAttribute="trailing" constant="8" symbolic="YES" id="R8W-TF-vUo"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="bottom" secondItem="4rw-kc-jK7" secondAttribute="bottom" id="XQs-eY-TMF"/>
-                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="top" secondItem="fUP-27-CUF" secondAttribute="bottom" constant="8" symbolic="YES" id="c8o-xF-eWx"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="y98-j5-A4b" secondAttribute="leading" constant="20" symbolic="YES" id="fxr-2J-C4q"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="trailing" secondItem="AoB-Bv-bEf" secondAttribute="trailing" id="jJ3-S0-a0G"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="top" secondItem="Lyi-nL-Kpe" secondAttribute="bottom" constant="8" symbolic="YES" id="kaI-ss-B1V"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="Lyi-nL-Kpe" secondAttribute="leading" id="qaA-B9-j9m"/>
-                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="trailing" secondItem="JBt-Ob-AVo" secondAttribute="trailing" id="rci-bl-BqY"/>
-                            <constraint firstItem="4rw-kc-jK7" firstAttribute="top" secondItem="y98-j5-A4b" secondAttribute="top" constant="20" symbolic="YES" id="uSv-TW-ns5"/>
-                            <constraint firstAttribute="trailing" secondItem="fUP-27-CUF" secondAttribute="trailing" constant="32" id="uuu-Ur-7aQ"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="4rw-kc-jK7" secondAttribute="top" id="1Gt-qM-AHZ"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="y98-j5-A4b" secondAttribute="top" constant="20" symbolic="YES" id="3qw-bc-sSa"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="top" secondItem="fUP-27-CUF" secondAttribute="bottom" constant="8" symbolic="YES" id="4lk-iP-vdc"/>
+                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="leading" secondItem="fUP-27-CUF" secondAttribute="leading" id="5GG-yj-5MC"/>
+                            <constraint firstItem="fUP-27-CUF" firstAttribute="top" secondItem="Lyi-nL-Kpe" secondAttribute="bottom" constant="8" symbolic="YES" id="7Z4-rV-EgI"/>
+                            <constraint firstItem="4rw-kc-jK7" firstAttribute="leading" secondItem="hB9-iJ-8qQ" secondAttribute="trailing" constant="8" symbolic="YES" id="MXp-h0-i71"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="trailing" secondItem="JBt-Ob-AVo" secondAttribute="trailing" id="hCc-Gp-u16"/>
+                            <constraint firstItem="fUP-27-CUF" firstAttribute="trailing" secondItem="AoB-Bv-bEf" secondAttribute="trailing" id="k6E-JI-D4n"/>
+                            <constraint firstItem="fUP-27-CUF" firstAttribute="leading" secondItem="AoB-Bv-bEf" secondAttribute="leading" id="pxf-Da-Xaz"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="Lyi-nL-Kpe" secondAttribute="leading" id="qI3-6j-ms6"/>
+                            <constraint firstAttribute="bottom" secondItem="JBt-Ob-AVo" secondAttribute="bottom" constant="20" symbolic="YES" id="qnj-5x-wlJ"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="y98-j5-A4b" secondAttribute="leading" constant="20" symbolic="YES" id="s2A-CQ-ogG"/>
+                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="top" secondItem="hB9-iJ-8qQ" secondAttribute="bottom" constant="25" id="xXc-RM-1Gm"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="mappingsTableView" destination="Ypw-Ld-ZcT" id="o25-Iy-vvL"/>
+                        <outlet property="networkAdapterComboBox" destination="4rw-kc-jK7" id="pei-PG-tme"/>
+                    </connections>
                 </viewController>
                 <customObject id="y6h-iQ-VQL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="-997"/>
+            <point key="canvasLocation" x="1636" y="-999"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
