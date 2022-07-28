@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
 		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
@@ -108,6 +109,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineDelegate.swift; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
 		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 		3BA3AC1525E6645E00F02B0E /* NewVM */ = {
 			isa = PBXGroup;
 			children = (
+				3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */,
 				3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */,
 				3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */,
 				3B200DA42802E58200F7159E /* QemuVMCreator.swift */,
@@ -521,6 +524,7 @@
 				3B200DA72802EEDE00F7159E /* VMCreator.swift in Sources */,
 				3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
+				3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */,
 				3B200DAC2802F2B400F7159E /* VirtualMachineRunner.swift in Sources */,
 				3B200DA52802E58200F7159E /* QemuVMCreator.swift in Sources */,
 				3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */,

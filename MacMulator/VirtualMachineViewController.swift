@@ -71,11 +71,15 @@ class VirtualMachineViewController: NSViewController {
         if let vm = rootController?.currentVm {
             
 #if arch(arm64)
-
-            if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
-                self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
+            if #available(macOS 12.0, *) {
+                if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
+                    let runner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm) as! VirtualizationFrameworkVirtualMachineRunner;
+                    self.setRunningStatus(true);
+                    rootController?.setRunningVM(vm, runner);
+                    
+                    self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
+                }
             }
-            
 #else
             
             boxContentView = centralBox.contentView;
@@ -94,10 +98,7 @@ class VirtualMachineViewController: NSViewController {
                 runner.runVM(uponCompletion: {
                     result, virtualMachine in
                     DispatchQueue.main.async {
-                        self.rootController?.unsetRunningVM(virtualMachine);
-                        if self.rootController?.currentVm == virtualMachine {
-                            self.setRunningStatus(false);
-                        }
+                        self.cleanupStoppedVM(virtualMachine)
                         
                         if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                             QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
@@ -138,11 +139,19 @@ class VirtualMachineViewController: NSViewController {
                 
                 dest.setVirtualMachine(vmToEdit);
                 dest.setVmController(source);
+                dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
             }
         }
     }
     
     #endif
+    
+    func cleanupStoppedVM(_ vm: VirtualMachine) {
+        rootController?.unsetRunningVM(vm);
+        if self.rootController?.currentVm == vm {
+            self.setRunningStatus(false);
+        }
+    }
     
     override func viewWillAppear() {
         startVMButton.toolTip = "Start this VM";

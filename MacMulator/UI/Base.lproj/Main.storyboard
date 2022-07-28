@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -3079,24 +3079,10 @@ Raspberry Pi</mutableString>
         <scene sceneID="EIf-4K-aeP">
             <objects>
                 <viewController id="xWp-Ke-TzW" customClass="VirtualMachineContainerViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="uzr-BD-qWX">
+                    <view key="view" id="uzr-BD-qWX" customClass="VZVirtualMachineView">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="W9e-np-HiF" customClass="VZVirtualMachineView">
-                                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                            </customView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="W9e-np-HiF" firstAttribute="leading" secondItem="uzr-BD-qWX" secondAttribute="leading" id="2H3-qi-Qy8"/>
-                            <constraint firstItem="W9e-np-HiF" firstAttribute="top" secondItem="uzr-BD-qWX" secondAttribute="top" id="IVt-ht-Bzk"/>
-                            <constraint firstAttribute="bottom" secondItem="W9e-np-HiF" secondAttribute="bottom" id="aLr-6u-SiJ"/>
-                            <constraint firstAttribute="trailing" secondItem="W9e-np-HiF" secondAttribute="trailing" id="dVf-oI-TEb"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="vmView" destination="W9e-np-HiF" id="DRT-f9-WBN"/>
-                    </connections>
                 </viewController>
                 <customObject id="gDK-sg-7Zg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

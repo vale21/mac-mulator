@@ -8,35 +8,14 @@
 import Foundation
 import Virtualization
 
-@available(macOS 11.0, *)
-protocol VirtualMachineObserver {
-    
-    func virtualMachineStarted(_ vm: VZVirtualMachine);
-    
-    func virtualmachinePaused(_ vm: VZVirtualMachine);
-    
-    func virtualMachineStopped(_ vm: VZVirtualMachine);
-}
-
-@available(macOS 11.0, *)
-extension VirtualMachineObserver {
-    
-    func virtualMachineStarted(_ vm: VZVirtualMachine) {};
-    
-    func virtualmachinePaused(_ vm: VZVirtualMachine) {};
-    
-    func virtualMachineStopped(_ vm: VZVirtualMachine) {};
-}
-
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
     
     let managedVm: VirtualMachine;
     var vzVirtualMachine: VZVirtualMachine?;
     var running: Bool = false;
-    var callback: (VMExecutionResult, VirtualMachine) -> Void = { result, vm in };
     var vmView: VZVirtualMachineView?;
-    var observers: [VirtualMachineObserver] = [];
+    var vmViewController: VirtualMachineContainerViewController?;
     
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
@@ -50,31 +29,38 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         self.vmView = vmView;
     }
     
+    func setVmViewController(_ vmViewController: VirtualMachineContainerViewController) {
+        self.vmViewController = vmViewController;
+    }
+    
     func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         running = true;
-        self.callback = callback;
-        
+
         #if arch(arm64)
         
         vzVirtualMachine = createVirtualMachine(vm: managedVm);
         
         if let vzVirtualMachine = self.vzVirtualMachine {
             vzVirtualMachine.delegate = self;
-            
             vmView?.virtualMachine = vzVirtualMachine;
             
             vzVirtualMachine.start(completionHandler: { (result) in
                 switch result {
                     case let .failure(error):
-                        fatalError("Virtual machine failed to start \(error)")
-
+                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                    break;
                     default:
-                        self.stopVM();
+                        print(result)
                 }
             })
         }
         
         #endif
+    }
+    
+    func guestDidStop(_ virtualMachine: VZVirtualMachine) {
+        print("Stopped")
+        stopVM()
     }
     
     func isVMRunning() -> Bool {
@@ -83,51 +69,50 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func stopVM() {
         running = false;
-        callback(VMExecutionResult(exitCode: 0), managedVm);
-        
-        observers.forEach { observer in
-            observer.virtualMachineStopped(vzVirtualMachine!);
+        do {
+            try vzVirtualMachine?.requestStop()
+        } catch {
+            vzVirtualMachine?.stop(completionHandler: { err in })
         }
+        vmViewController?.stopVM();
     }
     
     func pauseVM() {
-        observers.forEach { observer in
-            observer.virtualmachinePaused(vzVirtualMachine!);
-        }
     }
     
     func getConsoleOutput() -> String {
         return "";
     }
     
-    func addObserver(_ observer: VirtualMachineObserver) {
-        observers.append(observer);
-        if (running) {
-            observer.virtualMachineStarted(vzVirtualMachine!);
-        }
-    }
-    
 #if arch(arm64)
     
     fileprivate func createVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
-        
+
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm);
         virtualMachineConfiguration.cpuCount = vm.cpus;
         virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
         virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
         
         let resolution = Utils.getResolutionElements(vm.displayResolution);
-        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(witdh: resolution[0], height: resolution[1], ppi: 220)]
+        if let mainScreen = NSScreen.main {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: Int(mainScreen.backingScaleFactor * CGFloat(resolution[0])),
+                height: Int(mainScreen.backingScaleFactor * CGFloat(resolution[1])),
+                ppi: Int(mainScreen.backingScaleFactor * 110))]
+        } else {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: resolution[0],
+                height: resolution[1],
+                ppi: 110)]
+        }
+        
         virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-        virtualMachineConfiguration.entropyDevices = [VZVirtioEntropyDeviceConfiguration()]
-        
-        
-        
+
         try! virtualMachineConfiguration.validate()
         
         let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration, queue: .main)
@@ -150,11 +135,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
         macPlatformConfiguration.hardwareModel = hardwareModel;
         
-        let auxiliaryStorage = try? VZMacAuxiliaryStorage(
-                    creatingStorageAt: auxiliaryStorageURL,
-                    hardwareModel: hardwareModel,
-                    options: [.allowOverwrite]
-                )
+        let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: auxiliaryStorageURL)
         macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
     
 
@@ -169,17 +150,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
         return macPlatformConfiguration
     }
-    
-    func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: Error) {
-        NSLog("Virtual machine did stop with error: \(error.localizedDescription)")
-        exit(-1)
-    }
-
-    func guestDidStop(_ virtualMachine: VZVirtualMachine) {
-        NSLog("Guest did stop virtual machine.")
-        exit(0)
-    }
-
 #endif
     
 }

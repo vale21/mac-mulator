@@ -12,6 +12,7 @@ import Virtualization
 class VirtualizationFrameworkVMCreator : VMCreator {
     
     var complete = false;
+    private var virtualMachineResponder: MacOSVirtualMachineDelegate?
     
     func createVM(vm: VirtualMachine, installMedia: String) throws {
 #if arch(arm64)
@@ -45,19 +46,19 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
         vm.addVirtualDrive(virtualHDD);
         
-        createDiskImage(virtualHDD.path);
+        createDiskImage(virtualHDD.size, virtualHDD.path);
         callback(0);
     }
     
-    // Create an empty disk image for the Virtual Machine
-    private func createDiskImage(_ diskImagePath: String) {
+    // Create an empty disk image for the Virtual Machine.
+    private func createDiskImage(_ size: Int32, _ diskImagePath: String) {
         let diskFd = open(diskImagePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)
         if diskFd == -1 {
             fatalError("Cannot create disk image.")
         }
 
         // 64GB disk space.
-        var result = ftruncate(diskFd, 64 * 1024 * 1024 * 1024)
+        var result = ftruncate(diskFd, Int64(size) * 1024 * 1024 * 1024)
         if result != 0 {
             fatalError("ftruncate() failed.")
         }
@@ -115,8 +116,19 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
         virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
         
-        let resolution = Utils.getResolutionElements(vm.displayResolution);
-        virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(witdh: resolution[0], height: resolution[1], ppi: 80)]
+        let resolution = Utils.getResolutionElements(vm.displayResolution)
+        if let mainScreen = NSScreen.main {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: Int(mainScreen.backingScaleFactor * CGFloat(resolution[0])),
+                height: Int(mainScreen.backingScaleFactor * CGFloat(resolution[1])),
+                ppi: Int(mainScreen.backingScaleFactor * 110))]
+        } else {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: resolution[0],
+                height: resolution[1],
+                ppi: 110)]
+        }
+        
         virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
@@ -135,9 +147,8 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/MachineIdentifier")
         let hardwareModelURL = URL(fileURLWithPath: vm.path + "/HardwareModel")
         
-        guard let auxiliaryStorage = try? VZMacAuxiliaryStorage(creatingStorageAt: auxiliaryStorageURL,
-                                                                hardwareModel: macOSConfiguration.hardwareModel,
-                                                                options: []) else {
+        guard let auxiliaryStorage = try? VZMacAuxiliaryStorage(creatingStorageAt: auxiliaryStorageURL, hardwareModel: macOSConfiguration.hardwareModel, options: [])
+        else {
             fatalError("Failed to create auxiliary storage.")
         }
         macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
