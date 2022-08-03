@@ -1345,7 +1345,7 @@ Gw
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn width="122" minWidth="40" maxWidth="1000" id="bLb-0f-8eJ" userLabel="Host Mac Port">
+                                                <tableColumn width="107" minWidth="40" maxWidth="1000" id="bLb-0f-8eJ" userLabel="Host Mac Port">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Host Mac Port">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1358,11 +1358,11 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="kvA-W5-Oy4">
-                                                            <rect key="frame" x="417" y="0.0" width="119" height="24"/>
+                                                            <rect key="frame" x="417" y="0.0" width="104" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Uyp-Wz-0dz">
-                                                                    <rect key="frame" x="0.0" y="4" width="119" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="4" width="104" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="XiB-kc-cQ8">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1423,7 +1423,7 @@ Gw
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4rw-kc-jK7">
                                 <rect key="frame" x="130" y="347" width="140" height="25"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="137" id="9dv-7W-PW5"/>
+                                    <constraint firstAttribute="width" constant="137" id="Cv9-cQ-51m"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" enabled="NO" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="c9g-cr-2dM">
                                     <font key="font" metaFont="system"/>
@@ -1454,19 +1454,19 @@ Gw
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="4rw-kc-jK7" secondAttribute="top" id="1Gt-qM-AHZ"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="y98-j5-A4b" secondAttribute="top" constant="20" symbolic="YES" id="3qw-bc-sSa"/>
-                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="top" secondItem="fUP-27-CUF" secondAttribute="bottom" constant="8" symbolic="YES" id="4lk-iP-vdc"/>
-                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="leading" secondItem="fUP-27-CUF" secondAttribute="leading" id="5GG-yj-5MC"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="top" secondItem="Lyi-nL-Kpe" secondAttribute="bottom" constant="8" symbolic="YES" id="7Z4-rV-EgI"/>
-                            <constraint firstItem="4rw-kc-jK7" firstAttribute="leading" secondItem="hB9-iJ-8qQ" secondAttribute="trailing" constant="8" symbolic="YES" id="MXp-h0-i71"/>
-                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="trailing" secondItem="JBt-Ob-AVo" secondAttribute="trailing" id="hCc-Gp-u16"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="trailing" secondItem="AoB-Bv-bEf" secondAttribute="trailing" id="k6E-JI-D4n"/>
-                            <constraint firstItem="fUP-27-CUF" firstAttribute="leading" secondItem="AoB-Bv-bEf" secondAttribute="leading" id="pxf-Da-Xaz"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="Lyi-nL-Kpe" secondAttribute="leading" id="qI3-6j-ms6"/>
-                            <constraint firstAttribute="bottom" secondItem="JBt-Ob-AVo" secondAttribute="bottom" constant="20" symbolic="YES" id="qnj-5x-wlJ"/>
-                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="y98-j5-A4b" secondAttribute="leading" constant="20" symbolic="YES" id="s2A-CQ-ogG"/>
-                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="top" secondItem="hB9-iJ-8qQ" secondAttribute="bottom" constant="25" id="xXc-RM-1Gm"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="trailing" secondItem="fUP-27-CUF" secondAttribute="trailing" id="1L4-n9-tDg"/>
+                            <constraint firstItem="fUP-27-CUF" firstAttribute="leading" secondItem="Lyi-nL-Kpe" secondAttribute="leading" id="3wV-9h-jhF"/>
+                            <constraint firstAttribute="bottom" secondItem="JBt-Ob-AVo" secondAttribute="bottom" constant="20" symbolic="YES" id="6rT-2e-TeW"/>
+                            <constraint firstItem="Lyi-nL-Kpe" firstAttribute="top" secondItem="hB9-iJ-8qQ" secondAttribute="bottom" constant="25" id="9C9-8S-zL6"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="trailing" secondItem="JBt-Ob-AVo" secondAttribute="trailing" id="Q98-0x-48Y"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="y98-j5-A4b" secondAttribute="top" constant="20" symbolic="YES" id="a1z-lT-O0I"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="Lyi-nL-Kpe" secondAttribute="leading" id="cKF-Os-hQp"/>
+                            <constraint firstItem="4rw-kc-jK7" firstAttribute="leading" secondItem="hB9-iJ-8qQ" secondAttribute="trailing" constant="8" symbolic="YES" id="cLw-57-Xmc"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="top" secondItem="fUP-27-CUF" secondAttribute="bottom" constant="8" symbolic="YES" id="kA0-Of-TxJ"/>
+                            <constraint firstItem="fUP-27-CUF" firstAttribute="top" secondItem="Lyi-nL-Kpe" secondAttribute="bottom" constant="8" symbolic="YES" id="qSE-OC-asK"/>
+                            <constraint firstItem="AoB-Bv-bEf" firstAttribute="leading" secondItem="fUP-27-CUF" secondAttribute="leading" id="rLc-Du-vVq"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="leading" secondItem="y98-j5-A4b" secondAttribute="leading" constant="20" symbolic="YES" id="rQb-xA-ck1"/>
+                            <constraint firstItem="hB9-iJ-8qQ" firstAttribute="top" secondItem="4rw-kc-jK7" secondAttribute="top" id="wJk-Bl-yDU"/>
                         </constraints>
                     </view>
                     <connections>

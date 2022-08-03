@@ -23,6 +23,7 @@ class VirtualMachine: Codable, Hashable {
     var qemuPath: String?;
     var qemuCommand: String?;
     var hvf: Bool?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
+    var portMappings: [PortMapping]?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
     
     private enum CodingKeys: String, CodingKey {
         case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand, hvf;
@@ -41,10 +42,15 @@ class VirtualMachine: Codable, Hashable {
         self.qemuBootLoader = qemuBootloader;
         self.hvf = hvf;
         self.drives = [];
+        self.portMappings = [];
     }
     
     func addVirtualDrive(_ drive: VirtualDrive){
         drives.append(drive);
+    }
+    
+    func addPortMapping(_ portMapping: PortMapping){
+        portMappings?.append(portMapping);
     }
     
     static func readFromPlist(_ plistFilePath: String, _ plistFileName: String) -> VirtualMachine? {
