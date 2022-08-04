@@ -26,7 +26,7 @@ class VirtualMachine: Codable, Hashable {
     var portMappings: [PortMapping]?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand, hvf;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand, hvf, portMappings;
     }
     
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, qemuBootloader: Bool, hvf: Bool) {
@@ -42,7 +42,7 @@ class VirtualMachine: Codable, Hashable {
         self.qemuBootLoader = qemuBootloader;
         self.hvf = hvf;
         self.drives = [];
-        self.portMappings = [];
+        self.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))];
     }
     
     func addVirtualDrive(_ drive: VirtualDrive){

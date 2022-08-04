@@ -24,6 +24,8 @@ class MacMulatorConstants {
     static let SHOW_DRIVE_INFO_SEGUE = "showDriveInfoSegue";
     static let PREFERENCES_SEGUE = "preferencesSegue";
     static let SHOW_CONSOLE_SEGUE = "showConsoleSegue";
+    static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
+    static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";

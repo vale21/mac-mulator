@@ -131,6 +131,7 @@ class QemuRunner : VirtualmachineRunner {
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
+            .withPortMappings(virtualMachine.portMappings)
             .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
     }
         
@@ -159,6 +160,7 @@ class QemuRunner : VirtualmachineRunner {
             .withVga(QemuConstants.VGA_VIRTIO)
             .withSound(QemuConstants.SOUND_AC97)
             .withUsb(true)
+            .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
@@ -186,6 +188,7 @@ class QemuRunner : VirtualmachineRunner {
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
+            .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET);
     }
@@ -203,6 +206,7 @@ class QemuRunner : VirtualmachineRunner {
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
+            .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
