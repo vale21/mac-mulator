@@ -11,15 +11,13 @@ class VirtualMachineRunnerFactory {
     
     func create(listenPort: Int32, vm: VirtualMachine) -> VirtualMachineRunner {
         
-#if arch(arm64)
-        
-        if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
+        #if arch(arm64)
+        if Utils.isVirtualizationFrameworkPreferred(vm) {
             if #available(macOS 12.0, *) {
                 return VirtualizationFrameworkVirtualMachineRunner(virtualMachine: vm);
             }
         }
-        
-#endif
+        #endif
         
         return QemuRunner(listenPort: listenPort, virtualMachine: vm);
     }

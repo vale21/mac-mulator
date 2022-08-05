@@ -120,6 +120,9 @@ class QemuVMCreator: VMCreator {
         }
     }
     
+    func creationProgress() -> Double {
+        return -1.0;
+    }
 
 }
 

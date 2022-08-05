@@ -34,18 +34,20 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual machine called " + vmName.stringValue + " already exists. Please choose a different name.");
         } else {
-#if arch(arm64)
-            
-            if (Utils.isRunningWithVirtualizationFramework(vmType.stringValue, vmSubType.stringValue) && !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
-                let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest version from Apple. Do you agree?");
-                if response.rawValue == Utils.ALERT_RESP_OK {
-                    performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
-                } else {
-                    return;
+            #if arch(arm64)
+            if #available(macOS 12.0, *) {
+                if (vmType.stringValue == QemuConstants.OS_MAC &&
+                    vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
+                    !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
+                    let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple. Do you agree?");
+                    if response.rawValue == Utils.ALERT_RESP_OK {
+                        performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+                    } else {
+                        return;
+                    }
                 }
             }
-            
-#endif
+            #endif
             
             performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
         }

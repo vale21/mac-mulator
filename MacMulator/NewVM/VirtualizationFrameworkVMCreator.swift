@@ -11,9 +11,9 @@ import Virtualization
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVMCreator : VMCreator {
     
-    var complete = false;
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
-    
+    private var progress: Double = 0.0
+        
     func createVM(vm: VirtualMachine, installMedia: String) throws {
 #if arch(arm64)
         
@@ -33,9 +33,12 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     func isComplete() -> Bool {
-        return complete;
+        return progress >= 100.0;
     }
     
+    func creationProgress() -> Double {
+        return progress
+    }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) throws {
         let virtualHDD = VirtualDrive(
@@ -46,27 +49,10 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
         vm.addVirtualDrive(virtualHDD);
         
-        createDiskImage(virtualHDD.size, virtualHDD.path);
-        callback(0);
-    }
-    
-    // Create an empty disk image for the Virtual Machine.
-    private func createDiskImage(_ size: Int32, _ diskImagePath: String) {
-        let diskFd = open(diskImagePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)
-        if diskFd == -1 {
-            fatalError("Cannot create disk image.")
-        }
-
-        // 64GB disk space.
-        var result = ftruncate(diskFd, Int64(size) * 1024 * 1024 * 1024)
-        if result != 0 {
-            fatalError("ftruncate() failed.")
-        }
-
-        result = close(diskFd)
-        if result != 0 {
-            fatalError("Failed to close the disk image.")
-        }
+        QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+            terminationCcode in
+            callback(0);
+        });
     }
     
 #if arch(arm64)
@@ -174,23 +160,24 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     fatalError(error.localizedDescription)
                 } else {
                     print("Installation succeeded.")
-                    self.complete = true;
                 }
             })
             
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
                 
                 _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-                    print("Installation progress: \(change.newValue! * 100).")
+                    self.progress = change.newValue! * 100
+                    print("Installation progress: \(self.progress).")
                 }
                 
-                guard !self.complete else {
+                guard !self.isComplete() else {
                     timer.invalidate();
                     return;
                 }
             });
         }
     }
+    
     
 #endif
 }

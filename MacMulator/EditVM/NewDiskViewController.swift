@@ -25,6 +25,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
+    var isVirtualizaionFrameworkInUse: Bool = false
     
     var parentController: EditVMViewControllerHardware?;
     var isVisible: Bool = false;
@@ -55,6 +56,10 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                         useCow.intValue = 1;
                     } else {
                         useCow.intValue = 0;
+                    }
+                    if (isVirtualizaionFrameworkInUse) {
+                        useCow.isEnabled = false
+                        useCow.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported."
                     }
                     
                     if (mode == Mode.ADD) {

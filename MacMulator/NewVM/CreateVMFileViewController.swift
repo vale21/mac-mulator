@@ -11,10 +11,22 @@ import ZIPFoundation
 class CreateVMFileViewController : NSViewController {
     
     @IBOutlet weak var progressBar: NSProgressIndicator!
+    @IBOutlet weak var descriptionLabel: NSTextField!
+    
     var parentController: NewVMViewController?;
     
     func setParentController(_ parentController: NewVMViewController) {
         self.parentController = parentController;
+    }
+    
+    fileprivate func creationComplete(_ timer: Timer, _ foundError: Bool, _ vm: VirtualMachine) {
+        timer.invalidate();
+        self.progressBar.stopAnimation(self);
+        self.dismiss(self);
+        
+        if !foundError {
+            self.parentController!.vmCreated(vm);
+        }
     }
     
     override func viewDidAppear() {
@@ -33,6 +45,13 @@ class CreateVMFileViewController : NSViewController {
             
             let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false, hvf: Utils.getAccelForSubType(os, subtype));
             
+            if Utils.isVirtualizationFrameworkPreferred(vm) {
+                progressBar.isIndeterminate = false
+                progressBar.doubleValue = 0
+                progressBar.minValue = 0
+                progressBar.maxValue = 100
+            }
+            
             var foundError: Bool = false;
             
             if let parentController = self.parentController {
@@ -41,15 +60,22 @@ class CreateVMFileViewController : NSViewController {
                 
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
                     
-                    guard !vmCreator.isComplete() else {
-                        timer.invalidate();
-                        self.progressBar.stopAnimation(self);
-                        self.dismiss(self);
-                        
-                        if !foundError {
-                            self.parentController!.vmCreated(vm);
+                    if (Utils.isVirtualizationFrameworkPreferred(vm)) {
+                        let currentValue = self.progressBar.doubleValue
+                        let newValue = vmCreator.creationProgress()
+                        self.descriptionLabel.stringValue = "Creating new Virtual Machine (" + String(Int(newValue)) + "%)..."
+                        if (newValue > currentValue) {
+                            let delta = newValue - currentValue;
+                            self.progressBar.increment(by: delta)
                         }
-                        return;
+                        if (vmCreator.isComplete()) {
+                            self.creationComplete(timer, foundError, vm)
+                        }
+                    } else {
+                        guard !vmCreator.isComplete() else {
+                            self.creationComplete(timer, foundError, vm)
+                            return;
+                        }
                     }
                 });
                 
