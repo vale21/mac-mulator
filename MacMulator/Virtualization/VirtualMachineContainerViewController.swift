@@ -29,7 +29,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
     
     override func viewDidAppear() {
         self.view.window?.delegate = self;
-        self.view.window?.title = virtualMachine?.displayName ?? "MacMulator"
+        self.view.window?.title = (virtualMachine?.displayName ?? "") + " - MacMulator"
         
         if let virtualMachine = virtualMachine {
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution);
