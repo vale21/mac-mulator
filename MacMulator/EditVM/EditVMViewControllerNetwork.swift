@@ -13,7 +13,7 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet weak var mappingsTableView: NSTableView!
     
     var virtualMachine: VirtualMachine?;
- 
+    
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
         updateView();
@@ -54,7 +54,6 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
             if let portMappings = virtualMachine.portMappings {
                 if (segue.identifier == MacMulatorConstants.NEW_PORT_MAPPING_SEGUE) {
                     destinationController.setMode(NewPortMappingViewController.Mode.ADD);
-                    destinationController.setPortmapping(PortMapping(name: "", vmPort: Utils.random(digits: 4), hostPort: Utils.random(digits: 4)))
                 }
                 if (segue.identifier == MacMulatorConstants.EDIT_PORT_MAPPING_SEGUE) {
                     destinationController.setMode(NewPortMappingViewController.Mode.EDIT);
@@ -64,7 +63,7 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
             }
         }
     }
-
+    
     func numberOfRows(in tableView: NSTableView) -> Int {
         return virtualMachine?.portMappings?.count ?? 0
     }
@@ -98,5 +97,13 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         return 30.0;
+    }
+    
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        return 0
+    }
+    
+    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        return nil
     }
 }

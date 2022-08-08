@@ -1566,19 +1566,6 @@ Gw
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S0u-Ra-smg">
-                                <rect key="frame" x="229" y="130" width="175" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bAJ-yG-YUc">
-                                    <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="pYs-oD-UVj"/>
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                                <connections>
-                                    <outlet property="delegate" destination="1eC-yS-8bW" id="J1N-oq-icL"/>
-                                </connections>
-                            </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sW1-IW-q8b">
                                 <rect key="frame" x="18" y="99" width="150" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1604,7 +1591,7 @@ Gw
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HAG-ms-929">
                                 <rect key="frame" x="323" y="92" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="2000" doubleValue="256" id="Ss0-Pr-qEe"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="65535" doubleValue="256" id="Ss0-Pr-qEe"/>
                                 <connections>
                                     <action selector="stepperChanged:" target="1eC-yS-8bW" id="R8n-8J-q0K"/>
                                 </connections>
@@ -1634,17 +1621,29 @@ Gw
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TsY-n8-M1V">
                                 <rect key="frame" x="323" y="61" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="2000" doubleValue="256" id="Zas-ys-rWe"/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="65535" doubleValue="256" id="Zas-ys-rWe"/>
                                 <connections>
                                     <action selector="stepperChanged:" target="1eC-yS-8bW" id="Gzq-dx-fWe"/>
                                 </connections>
                             </stepper>
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kAh-2V-3MW">
+                                <rect key="frame" x="229" y="130" width="175" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cCb-aK-nOT">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <outlet property="delegate" destination="1eC-yS-8bW" id="jy9-QO-4gZ"/>
+                                </connections>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="hostMacPortField" destination="Lpg-nq-LG1" id="Ctx-yU-m6T"/>
                         <outlet property="hostMacPortStepper" destination="TsY-n8-M1V" id="NIr-GW-Ny0"/>
-                        <outlet property="mappingNameField" destination="S0u-Ra-smg" id="fQH-oB-06w"/>
+                        <outlet property="nameField" destination="kAh-2V-3MW" id="PTa-M2-irj"/>
                         <outlet property="titleField" destination="OoN-qe-aI3" id="a79-RN-MvQ"/>
                         <outlet property="virtualMachinePortField" destination="5zo-EJ-dBF" id="8t2-06-R9Y"/>
                         <outlet property="virtualMachinePortStepper" destination="HAG-ms-929" id="kEf-Hd-oSP"/>

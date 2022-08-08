@@ -151,9 +151,9 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 var i = 0;
                 for drive in virtualMachine.drives {
                     if row == i {
-                        drive.setBootDrive(true);
+                        drive.isBootDrive = true
                     } else {
-                        drive.setBootDrive(false);
+                        drive.isBootDrive = false
                     }
                     i += 1;
                 }

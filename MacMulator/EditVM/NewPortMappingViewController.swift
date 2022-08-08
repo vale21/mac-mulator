@@ -14,15 +14,16 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         case EDIT
     }
     
+    @IBOutlet weak var nameField: NSTextField!
     @IBOutlet weak var titleField: NSTextField!
-    @IBOutlet weak var mappingNameField: NSTextField!
     @IBOutlet weak var virtualMachinePortField: NSTextField!
     @IBOutlet weak var virtualMachinePortStepper: NSStepper!
     @IBOutlet weak var hostMacPortField: NSTextField!
     @IBOutlet weak var hostMacPortStepper: NSStepper!
     
     var parentController: EditVMViewControllerNetwork?
-    var portMapping: PortMapping?
+    var portMapping: PortMapping = PortMapping(name: "", vmPort: Utils.random(digits: 4), hostPort: Utils.random(digits: 4))
+    var origPortMapping: PortMapping?
     var mode: Mode = Mode.ADD
     
     func setParentController(_ parentController: EditVMViewControllerNetwork) {
@@ -30,7 +31,11 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
     
     func setPortmapping(_ portMapping: PortMapping) {
-        self.portMapping = portMapping
+        self.origPortMapping = portMapping
+        
+        self.portMapping.name = origPortMapping!.name
+        self.portMapping.vmPort = origPortMapping!.vmPort
+        self.portMapping.hostPort = origPortMapping!.hostPort
     }
     
     func setMode(_ mode: Mode) {
@@ -38,45 +43,50 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
     
     override func viewWillAppear() {
+        let portNumberFormatter = NumberFormatter()
+        portNumberFormatter.hasThousandSeparators = false
+        
+        hostMacPortField.formatter = portNumberFormatter
+        virtualMachinePortField.formatter = portNumberFormatter
+        
         updateView()
     }
     
     fileprivate func updateView() {
-        if let portMapping = self.portMapping {
-            
-            mappingNameField.stringValue = portMapping.name
-            virtualMachinePortStepper.intValue = portMapping.vmPort
-            virtualMachinePortField.intValue = portMapping.vmPort
-            hostMacPortStepper.intValue = portMapping.hostPort
-            hostMacPortField.intValue = portMapping.hostPort
-            
-            if (mode == Mode.ADD) {
-                titleField.stringValue = "Create new port mapping";
-            } else {
-                titleField.stringValue = "Edit " + portMapping.name + " mapping";
-            }
+        nameField.stringValue = portMapping.name
+        virtualMachinePortStepper.intValue = portMapping.vmPort
+        virtualMachinePortField.intValue = portMapping.vmPort
+        hostMacPortStepper.intValue = portMapping.hostPort
+        hostMacPortField.intValue = portMapping.hostPort
+        
+        if (mode == Mode.ADD) {
+            titleField.stringValue = "Create new port mapping";
+        } else {
+            titleField.stringValue = "Edit port mapping - " + portMapping.name;
         }
     }
     
     @IBAction func stepperChanged(_ sender: Any) {
         if (sender as? NSObject == virtualMachinePortStepper) {
-            portMapping?.vmPort = virtualMachinePortStepper.intValue
+            portMapping.vmPort = virtualMachinePortStepper.intValue
             virtualMachinePortField.intValue = virtualMachinePortStepper.intValue
         }
         if (sender as? NSObject == hostMacPortStepper) {
-            portMapping?.hostPort = hostMacPortStepper.intValue
+            portMapping.hostPort = hostMacPortStepper.intValue
             hostMacPortField.intValue = hostMacPortStepper.intValue
         }
     }
     
     @IBAction func okButtonPressed(_ sender: Any) {
-        if let portMapping = self.portMapping {
-            if mode == Mode.ADD {
-                parentController?.addPortmapping(portMapping);
-            }
-            else {
-                parentController?.reloadPortMappings()
-            }
+        if mode == Mode.ADD {
+            parentController?.addPortmapping(portMapping);
+        }
+        else {
+            origPortMapping?.name = portMapping.name
+            origPortMapping?.vmPort = portMapping.vmPort
+            origPortMapping?.hostPort = portMapping.hostPort
+            
+            parentController?.reloadPortMappings()
         }
         self.dismiss(self);
     }
@@ -86,15 +96,15 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
     
     func controlTextDidEndEditing(_ notification: Notification) {
-        if (notification.object as! NSTextField) == mappingNameField {
-            portMapping?.name = mappingNameField.stringValue
+        if (notification.object as! NSTextField) === nameField {
+            portMapping.name = nameField.stringValue
         }
-        if (notification.object as! NSTextField) == virtualMachinePortField {
-            portMapping?.vmPort = virtualMachinePortField.intValue
+        else if (notification.object as! NSTextField) === virtualMachinePortField {
+            portMapping.vmPort = virtualMachinePortField.intValue
             virtualMachinePortStepper.intValue = virtualMachinePortField.intValue
         }
-        if (notification.object as! NSTextField) == hostMacPortField {
-            portMapping?.hostPort = hostMacPortField.intValue
+        else if (notification.object as! NSTextField) === hostMacPortField {
+            portMapping.hostPort = hostMacPortField.intValue
             hostMacPortStepper.intValue = hostMacPortField.intValue
         }
     }

@@ -120,6 +120,8 @@ class QemuRunner : VirtualmachineRunner {
     }
     
     fileprivate func createBuilderForPPC() -> QemuCommandBuilder {
+        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
+       
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -132,10 +134,12 @@ class QemuRunner : VirtualmachineRunner {
             .withAutoBoot(true)
             .withVgaEnabled(true)
             .withPortMappings(virtualMachine.portMappings)
-            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
+            .withNetwork(name: "network-0", device: networkDevice);
     }
         
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
+        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
@@ -145,10 +149,12 @@ class QemuRunner : VirtualmachineRunner {
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
+            .withNetwork(name: "network-0", device: networkDevice);
     }
     
     fileprivate func createBuilderForI386() -> QemuCommandBuilder {
+        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -163,15 +169,16 @@ class QemuRunner : VirtualmachineRunner {
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype));
+            .withNetwork(name: "network-0", device: networkDevice);
     }
 
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
+        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
         
         if (virtualMachine.os == QemuConstants.OS_MAC) {
-            return createBuilderForMacGuestX86_64(isNative, hvfConfigured);
+            return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice);
         }
     
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
@@ -193,7 +200,7 @@ class QemuRunner : VirtualmachineRunner {
             .withDevice(QemuConstants.USB_TABLET);
     }
     
-    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool) -> QemuCommandBuilder {
+    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
@@ -210,7 +217,7 @@ class QemuRunner : VirtualmachineRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
-            .withNetwork(name: "network-0", device: Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype))
+            .withNetwork(name: "network-0", device: networkDevice)
     }
     
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
