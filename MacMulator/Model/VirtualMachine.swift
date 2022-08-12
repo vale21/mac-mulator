@@ -61,6 +61,9 @@ class VirtualMachine: Codable, Hashable {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName);
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
             setupPaths(vm, plistFilePath);
+            if vm.portMappings == nil {
+                vm.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+            }
             return vm;
         } catch {
             print("ERROR while reading Info.plist: " + error.localizedDescription);

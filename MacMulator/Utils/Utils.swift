@@ -362,7 +362,7 @@ class Utils {
     }
 
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO;
+        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI;
     }
     
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {

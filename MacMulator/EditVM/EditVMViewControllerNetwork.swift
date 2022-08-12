@@ -24,8 +24,12 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
     }
     
     func updateView() {
-        networkAdapterComboBox.reloadData();
-        mappingsTableView.reloadData();
+        if let virtualMachine = virtualMachine {
+            networkAdapterComboBox.reloadData();
+            networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1);
+            
+            mappingsTableView.reloadData();
+        }
     }
     
     func reloadPortMappings() {
@@ -100,10 +104,21 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
-        return 0
+        return QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
     }
     
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        return nil
+        if (comboBox == networkAdapterComboBox) {
+            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : "";
+        }
+        return (index + 1);
+    }
+    
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        if (notification.object as! NSComboBox) == networkAdapterComboBox {
+            if let virtualMachine = self.virtualMachine {
+                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem];
+            }
+        }
     }
 }
