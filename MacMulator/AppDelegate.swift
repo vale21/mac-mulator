@@ -12,6 +12,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var savedVMs: [String]? = [];
     private var rootController: RootViewController?;
+    private var fileName: String?
 
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
@@ -67,7 +68,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
         if (performSanityCheck(filename)) {
-            rootController?.addVirtualMachineFromFile(filename);
+            self.fileName = filename
             return true;
         } else {
             Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning,
@@ -87,6 +88,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         setupSavedVMs();
+        
+        if let fileName = fileName {
+            rootController?.addVirtualMachineFromFile(fileName);
+        }
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {

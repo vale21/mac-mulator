@@ -362,7 +362,7 @@ class Utils {
     }
 
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO;
+        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI;
     }
     
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
@@ -413,6 +413,23 @@ class Utils {
     
     static func getResolutionOnly(_ resolutionWithDepth: String) -> String {
         return resolutionWithDepth.replacingOccurrences(of: "x32", with: "");
+    }
+    
+    static func random(digits:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        return Int32(number) ?? 0
+    }
+    
+    static func random(digits:Int, suffix:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        number += String(suffix)
+        return Int32(number) ?? 0
     }
         
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {

@@ -32,6 +32,7 @@ class QemuCommandBuilder {
     var efi: String?;
     var drives: [String] = [];
     var network: String?;
+    var portMappings: [PortMapping] = []
     var managementPort: Int32?;
     
     init(qemuPath: String, architecture: String) {
@@ -149,8 +150,21 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withPortMappings(_ portMappings: [PortMapping]?) -> QemuCommandBuilder {
+        if let mappings = portMappings {
+            self.portMappings = mappings
+        }
+        return self;
+    }
+    
     func withNetwork(name: String, device: String) -> QemuCommandBuilder{
-        self.network = "-netdev user,id=" + name + ",hostfwd=tcp::222-:22 -device " + device + ",netdev=" + name;
+        self.network = "-netdev user,id=" + name
+        
+        for mapping in portMappings {
+            self.network = self.network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
+        }
+        
+        self.network = self.network! + " -device " + device + ",netdev=" + name;
         return self;
     }
     

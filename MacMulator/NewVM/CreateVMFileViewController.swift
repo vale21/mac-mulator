@@ -30,8 +30,9 @@ class CreateVMFileViewController : NSViewController {
             let memory = Utils.getDefaultMemoryForSubType(os, subtype);
             let cpus = Utils.getCpusForSubType(os, subtype);
             let displayResolution = QemuConstants.RES_1280_768;
+            let networkDevice = Utils.getNetworkForSubType(os, subtype)
             
-            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, qemuBootloader: false, hvf: Utils.getAccelForSubType(os, subtype));
+            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: Utils.getAccelForSubType(os, subtype));
             
             if let parentController = self.parentController {
                 

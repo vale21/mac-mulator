@@ -9,42 +9,50 @@ import Foundation
 
 class VirtualMachine: Codable, Hashable {
     
-    var os: String;
-    var subtype: String?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 5)
-    var architecture: String;
-    var path: String = ""; // not serialized
-    var displayName: String;
-    var description: String;
-    var cpus: Int;
-    var memory: Int32;
-    var displayResolution: String;
-    var qemuBootLoader: Bool;
-    var drives: [VirtualDrive];
-    var qemuPath: String?;
-    var qemuCommand: String?;
-    var hvf: Bool?; // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
+    var os: String
+    var subtype: String
+    var architecture: String
+    var path: String = ""
+    var displayName: String
+    var description: String
+    var cpus: Int
+    var memory: Int32
+    var displayResolution: String
+    var qemuBootLoader: Bool
+    var networkDevice: String? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
+    var drives: [VirtualDrive]
+    var qemuPath: String?
+    var qemuCommand: String?
+    var hvf: Bool? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
+    var portMappings: [PortMapping]? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, drives, qemuPath, qemuCommand, hvf;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, qemuBootloader: Bool, hvf: Bool) {
-        self.os = os;
-        self.subtype = subtype;
-        self.architecture = architecture;
-        self.path = path;
-        self.displayName = displayName;
-        self.description = description;
-        self.memory = memory;
-        self.cpus = cpus;
-        self.displayResolution = displayResolution;
-        self.qemuBootLoader = qemuBootloader;
-        self.hvf = hvf;
-        self.drives = [];
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool) {
+        self.os = os
+        self.subtype = subtype
+        self.architecture = architecture
+        self.path = path
+        self.displayName = displayName
+        self.description = description
+        self.memory = memory
+        self.cpus = cpus
+        self.displayResolution = displayResolution
+        self.networkDevice = networkDevice
+        self.qemuBootLoader = qemuBootloader
+        self.hvf = hvf
+        self.drives = []
+        self.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
     }
     
     func addVirtualDrive(_ drive: VirtualDrive){
         drives.append(drive);
+    }
+    
+    func addPortMapping(_ portMapping: PortMapping){
+        portMappings?.append(portMapping);
     }
     
     static func readFromPlist(_ plistFilePath: String, _ plistFileName: String) -> VirtualMachine? {
@@ -53,6 +61,9 @@ class VirtualMachine: Codable, Hashable {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName);
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
             setupPaths(vm, plistFilePath);
+            if vm.portMappings == nil {
+                vm.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+            }
             return vm;
         } catch {
             print("ERROR while reading Info.plist: " + error.localizedDescription);
