@@ -16,6 +16,7 @@ class QemuConstants {
     static let MEDIATYPE_USB = "usb";
     static let MEDIATYPE_EFI = "efi";
     static let MEDIATYPE_OPENCORE = "opencore";
+    static let MEDIATYPE_IPSW = "ipsw";
     
     static let IMAGE_CMD_CREATE = "create";
     static let IMAGE_CMD_INFO = "info";
@@ -32,6 +33,7 @@ class QemuConstants {
     static let CD = "CD/DVD";
     static let HD = "Hard Drive";
     static let USB = "USB Drive";
+    static let IPSW = "IPSW Install Image";
     static let EFI = "EFI Firmware";
     static let NET = "Network";
     

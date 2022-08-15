@@ -258,7 +258,7 @@ class QemuRunner : VirtualMachineRunner {
         }
         
         for drive in vm.drives {
-            if drive.isBootDrive          {
+            if drive.isBootDrive {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
                     return QemuConstants.ARG_HD
                 }

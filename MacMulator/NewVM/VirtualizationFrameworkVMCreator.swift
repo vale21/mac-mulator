@@ -12,7 +12,7 @@ import Virtualization
 class VirtualizationFrameworkVMCreator : VMCreator {
     
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
-    private var progress: Double = 0.0
+    private var complete: Bool = false
         
     func createVM(vm: VirtualMachine, installMedia: String) throws {
 #if arch(arm64)
@@ -20,34 +20,38 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         try! Utils.createDocumentPackage(vm.path);
         if Utils.isIpswInstallMediaProvided(installMedia) {
             print("IPSW specified. Installing...");
-            self.installFromIPSW(vm: vm, url: URL.init(fileURLWithPath: installMedia));
+            self.createVM(vm: vm, url: URL.init(fileURLWithPath: installMedia));
         } else {
             print("IPSW Not specified. Downloading...");
             let restoreImage = MacOSRestoreImage();
             restoreImage.download(path: vm.path) {
                 url in
-                self.installFromIPSW(vm: vm, url: url);
+                self.createVM(vm: vm, url: url);
             }
         }
 #endif
     }
     
     func isComplete() -> Bool {
-        return progress >= 100.0;
+        return complete
     }
     
-    func creationProgress() -> Double {
-        return progress
-    }
-    
-    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) throws {
+    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ ipswUrl: URL, uponCompletion callback: @escaping (Int32) -> Void) throws {
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
             format: QemuConstants.FORMAT_RAW,
             mediaType: QemuConstants.MEDIATYPE_DISK,
-            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
+            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)))
         vm.addVirtualDrive(virtualHDD);
+        
+        let installMedia = VirtualDrive(
+            path: ipswUrl.path,
+            name: QemuConstants.MEDIATYPE_IPSW,
+            format: QemuConstants.FORMAT_RAW,
+            mediaType: QemuConstants.MEDIATYPE_IPSW,
+            size: 0)
+        vm.addVirtualDrive(installMedia);
         
         QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
             terminationCcode in
@@ -57,28 +61,27 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
 #if arch(arm64)
     
-    fileprivate func installFromIPSW(vm: VirtualMachine, url: URL) {
-        try! self.createVMFilesOnDisk(vm, uponCompletion: {
+    fileprivate func createVM(vm: VirtualMachine, url: URL) {
+        try! self.createVMFilesOnDisk(vm, url, uponCompletion: {
             terminationCode in
             vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-            self.installOS(vm: vm, ipswURL: url);
+            self.setupVirtualMachine(vm: vm, ipswURL: url);
         });
     }
     
-    fileprivate func installOS(vm: VirtualMachine, ipswURL: URL) {
-        print("Attempting to install from IPSW at \(ipswURL).")
+    fileprivate func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
         VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
             switch result {
             case let .failure(error):
                 fatalError(error.localizedDescription)
                 
             case let .success(restoreImage):
-                installOS(vm: vm, restoreImage: restoreImage);
+                setupVirtualMachine(vm: vm, restoreImage: restoreImage);
             }
         })
     }
     
-    fileprivate func installOS(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
+    fileprivate func setupVirtualMachine(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
         
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
@@ -88,13 +91,13 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             fatalError("macOSConfiguration configuration is not supported on the current host.")
         }
         
-        let virtualMachine: VZVirtualMachine = setupVirtualMachine(vm: vm, macOSConfiguration: macOSConfiguration)
-        startInstallation(virtualMachine: virtualMachine, restoreImageURL: restoreImage.url)
+        setupVirtualMachine(vm: vm, macOSConfiguration: macOSConfiguration)
+        complete = true
     }
     
     // MARK: Create the Virtual Machine Configuration and instantiate the Virtual Machine
     
-    fileprivate func setupVirtualMachine(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) -> VZVirtualMachine {
+    fileprivate func setupVirtualMachine(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
@@ -122,9 +125,6 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
         
         try! virtualMachineConfiguration.validate()
-        
-        let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration)
-        return virtualMachine;
     }
     
     fileprivate func createMacPlatformConfiguration(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements) -> VZMacPlatformConfiguration {
@@ -149,35 +149,6 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     // MARK: Begin macOS installation
-    
-    fileprivate func startInstallation(virtualMachine: VZVirtualMachine, restoreImageURL: URL) {
-        DispatchQueue.main.async {
-            let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
-            
-            print("Starting installation.")
-            installer.install(completionHandler: { (result: Result<Void, Error>) in
-                if case let .failure(error) = result {
-                    fatalError(error.localizedDescription)
-                } else {
-                    print("Installation succeeded.")
-                }
-            })
-            
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                
-                _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-                    self.progress = change.newValue! * 100
-                    print("Installation progress: \(self.progress).")
-                }
-                
-                guard !self.isComplete() else {
-                    timer.invalidate();
-                    return;
-                }
-            });
-        }
-    }
-    
     
 #endif
 }

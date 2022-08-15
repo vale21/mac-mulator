@@ -283,7 +283,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 cellView.icon.image = NSImage(named: "HD Icon");
             } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM {
                 cellView.icon.image = NSImage(named: "CD Icon");
-            } else if drive?.mediaType == QemuConstants.MEDIATYPE_USB {
+            } else if drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 cellView.icon.image = NSImage(named: "USB Icon");
             }
         }
@@ -314,7 +314,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         
         if (tableColumn?.identifier.rawValue == "Buttons") {
             let cellView = cell as! DrivesTableButtonsCell;
-            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM) {
+            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW) {
                 cellView.editButton.isEnabled = false;
                 cellView.infoButton.isEnabled = false;
             } else {

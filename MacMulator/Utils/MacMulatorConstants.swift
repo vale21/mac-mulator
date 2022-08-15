@@ -25,6 +25,7 @@ class MacMulatorConstants {
     static let PREFERENCES_SEGUE = "preferencesSegue";
     static let SHOW_CONSOLE_SEGUE = "showConsoleSegue";
     static let SHOW_VM_VIEW_SEGUE = "showVMViewSegue";
+    static let SHOW_INSTALLING_OS_SEGUE = "showInstallingOSSegue";
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";

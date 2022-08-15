@@ -194,6 +194,24 @@ class Utils {
         return hdds[0];
     }
     
+    static func findInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non IPSW drives
+        var ipsws: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
+                ipsws.append(drive);
+            }
+        }
+        
+        if ipsws.count == 0 {
+            return nil;
+        }
+        if ipsws.count == 1 {
+            return ipsws[0];
+        }
+        return ipsws[0];
+    }
+    
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/"}) else { return path };
         return path.substring(to: lastSlash);

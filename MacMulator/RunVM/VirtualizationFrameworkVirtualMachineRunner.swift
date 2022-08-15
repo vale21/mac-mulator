@@ -16,6 +16,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     var running: Bool = false;
     var vmView: VZVirtualMachineView?;
     var vmViewController: VirtualMachineContainerViewController?;
+    var progress: Double = 0.0
     
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
@@ -40,20 +41,21 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
         vzVirtualMachine = createVirtualMachine(vm: managedVm);
         
-        if let vzVirtualMachine = self.vzVirtualMachine {
-            vzVirtualMachine.delegate = self;
-            vmView?.virtualMachine = vzVirtualMachine;
-            
-            vzVirtualMachine.start(completionHandler: { (result) in
-                switch result {
-                    case let .failure(error):
-                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
-                    break;
-                    default:
-                        print(result)
+        let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank
+        //if isDriveBlank != nil && isDriveBlank! == false {
+        if isDriveBlank {
+            self.startInstallation(virtualMachine: vzVirtualMachine!, restoreImageURL: URL(fileURLWithPath: Utils.findInstallDrive(managedVm.drives)!.path), uponCompletion: {result in
+                if case let .failure(error) = result {
+                    Utils.showAlert(window: self.vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription )
+                } else {
+                    Utils.findMainDrive(self.managedVm.drives)!.isBlank = false
+                    self.startVM();
                 }
             })
+        } else {
+            startVM()
         }
+    
         
         #endif
     }
@@ -65,6 +67,23 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func isVMRunning() -> Bool {
         return running;
+    }
+    
+    func startVM() {
+        if let vzVirtualMachine = self.vzVirtualMachine {
+            vzVirtualMachine.delegate = self;
+            self.vmView?.virtualMachine = vzVirtualMachine;
+
+            vzVirtualMachine.start(completionHandler: { (result) in
+                switch result {
+                    case let .failure(error):
+                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                    break;
+                    default:
+                        print(result)
+                }
+            })
+        }
     }
     
     func stopVM() {
@@ -119,6 +138,10 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         return virtualMachine;
     }
     
+    fileprivate func isComplete() -> Bool {
+        return progress >= 100.0
+    }
+    
     fileprivate func createMacPlatformConfiguration(vm: VirtualMachine) -> VZMacPlatformConfiguration {
         let macPlatformConfiguration = VZMacPlatformConfiguration()
         let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
@@ -150,6 +173,39 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
         return macPlatformConfiguration
     }
+    
+    fileprivate func startInstallation(virtualMachine: VZVirtualMachine, restoreImageURL: URL, uponCompletion callback: @escaping (Result<Void, Error>) -> Void ) {
+        self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
+        DispatchQueue.main.async {
+            let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
+            
+            print("Starting installation.")
+            installer.install(completionHandler: { (result: Result<Void, Error>) in
+                if case let .failure(error) = result {
+                    print("Installation failed with error: " + error.localizedDescription)
+                } else {
+                    print("Installation succeeded.")
+                }
+                virtualMachine.stop(completionHandler: { err in
+                    callback(result)
+                })
+            })
+            
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+                
+                _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
+                    self.progress = change.newValue! * 100
+                    print("Installation progress: \(self.progress).")
+                }
+                
+                guard !self.isComplete() else {
+                    timer.invalidate();
+                    return
+                }
+            });
+        }
+        }
+    
 #endif
     
 }

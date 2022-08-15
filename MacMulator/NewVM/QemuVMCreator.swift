@@ -60,7 +60,7 @@ class QemuVMCreator: VMCreator {
                     format: QemuConstants.FORMAT_RAW,
                     mediaType: QemuConstants.MEDIATYPE_USB,
                     size: 0);
-                virtualUSB.setBootDrive(true);
+                virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB);
             } else {
                 // Install media is a CD
@@ -70,7 +70,7 @@ class QemuVMCreator: VMCreator {
                     format: QemuConstants.FORMAT_RAW,
                     mediaType: QemuConstants.MEDIATYPE_CDROM,
                     size: 0);
-                virtualCD.setBootDrive(true);
+                virtualCD.isBootDrive = true
                 vm.addVirtualDrive(virtualCD);
             }
         }
@@ -119,10 +119,5 @@ class QemuVMCreator: VMCreator {
             throw error;
         }
     }
-    
-    func creationProgress() -> Double {
-        return -1.0;
-    }
-
 }
 
