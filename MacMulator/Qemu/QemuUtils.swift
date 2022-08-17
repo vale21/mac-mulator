@@ -134,7 +134,8 @@ class QemuUtils {
     
     static func isMacModern(_ subtype: String?) -> Bool {
         let ret =
-        (subtype == QemuConstants.SUB_MAC_MONTEREY ||
+        (subtype == QemuConstants.SUB_MAC_VENTURA ||
+        subtype == QemuConstants.SUB_MAC_MONTEREY ||
         subtype == QemuConstants.SUB_MAC_BIG_SUR ||
         subtype == QemuConstants.SUB_MAC_CATALINA);
         return ret;
