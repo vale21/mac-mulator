@@ -30,6 +30,7 @@ class EditVMViewController: NSTabViewController {
         advanced.setVirtualMachine(vm);
         
         if Utils.isVirtualizationFrameworkPreferred(vm) {
+            removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
         }
     }
