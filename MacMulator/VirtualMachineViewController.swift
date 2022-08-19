@@ -72,7 +72,7 @@ class VirtualMachineViewController: NSViewController {
             
 #if arch(arm64)
             if #available(macOS 12.0, *) {
-                if (vm.os == QemuConstants.OS_MAC && vm.subtype == QemuConstants.SUB_MAC_MONTEREY) {
+                if (Utils.isVirtualizationFrameworkPreferred(vm)) {
                     let runner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm) as! VirtualizationFrameworkVirtualMachineRunner;
                     self.setRunningStatus(true);
                     rootController?.setRunningVM(vm, runner);

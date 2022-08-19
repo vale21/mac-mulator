@@ -37,7 +37,8 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
             #if arch(arm64)
             if #available(macOS 12.0, *) {
                 if (vmType.stringValue == QemuConstants.OS_MAC &&
-                    vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
+                    (vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY ||
+                     vmSubType.stringValue == QemuConstants.SUB_MAC_VENTURA) && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
                     !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
                     let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple. Do you agree?");
                     if response.rawValue == Utils.ALERT_RESP_OK {

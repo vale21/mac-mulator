@@ -462,6 +462,14 @@ class Utils {
         return false
     }
     
+    static func getPreferredArchitecture() -> String {
+        #if arch(arm64)
+        return QemuConstants.ARCH_ARM64
+        #else
+        return QemuConstants.ARCH_X64
+        #endif
+    }
+    
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
