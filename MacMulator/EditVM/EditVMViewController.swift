@@ -21,10 +21,12 @@ class EditVMViewController: NSTabViewController {
         
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
-        let advanced = tabViewItems[2].viewController as! EditVMViewControllerAdvanced
+        let network = tabViewItems[2].viewController as! EditVMViewControllerNetwork
+        let advanced = tabViewItems[3].viewController as! EditVMViewControllerAdvanced
         
         general.setVirtualMachine(vm);
         hardware.setVirtualMachine(vm);
+        network.setVirtualMachine(vm);
         advanced.setVirtualMachine(vm);
         
         if Utils.isVirtualizationFrameworkPreferred(vm) {

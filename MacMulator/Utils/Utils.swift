@@ -385,7 +385,7 @@ class Utils {
     }
 
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO;
+        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI;
     }
     
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
@@ -444,7 +444,7 @@ class Utils {
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
         ret.append(Int(stringElements[2])!);
-        
+
         return ret;
     }
     
@@ -487,5 +487,22 @@ class Utils {
             }
         }
         return defaultValue;
+    }
+    
+    static func random(digits:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        return Int32(number) ?? 0
+    }
+    
+    static func random(digits:Int, suffix:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        number += String(suffix)
+        return Int32(number) ?? 0
     }
 }

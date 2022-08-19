@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
+		3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */; };
+		3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07C284A4FCE002D465F /* PortMapping.swift */; };
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
 		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
@@ -58,6 +60,7 @@
 		3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
+		3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */; };
 		3BD669B425E58080004E129D /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669B325E58080004E129D /* EditVM.storyboard */; };
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
@@ -66,6 +69,7 @@
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
+		3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 		3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */; };
 /* End PBXBuildFile section */
@@ -111,6 +115,8 @@
 
 /* Begin PBXFileReference section */
 		3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineDelegate.swift; sourceTree = "<group>"; };
+		3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetwork.swift; sourceTree = "<group>"; };
+		3B03B07C284A4FCE002D465F /* PortMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortMapping.swift; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
 		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
@@ -166,6 +172,7 @@
 		3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVirtualMachineRunner.swift; sourceTree = "<group>"; };
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
+		3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPortMappingViewController.swift; sourceTree = "<group>"; };
 		3BD669B325E58080004E129D /* EditVM.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditVM.storyboard; sourceTree = "<group>"; };
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +181,7 @@
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
+		3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMappingsTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 		3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTest.swift; sourceTree = "<group>"; };
 		3BFF48E226C2D4AF0093408E /* MacMulatorTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulatorTests-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -366,6 +374,7 @@
 				3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */,
 				3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */,
 				3B672E6627C788AE00732C46 /* SystemProfilerData.swift */,
+				3B03B07C284A4FCE002D465F /* PortMapping.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -373,14 +382,17 @@
 		3BF8F62125E401D4006E2C1C /* EditVM */ = {
 			isa = PBXGroup;
 			children = (
+				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
+				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
 				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
 				3B477A9425D69525008685BE /* EditVMViewController.swift */,
 				3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */,
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
+				3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
-				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
-				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
+				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
+				3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */,
 			);
 			path = EditVM;
 			sourceTree = "<group>";
@@ -498,6 +510,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */,
+				3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */,
 				3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */,
 				3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */,
 				3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */,
@@ -517,11 +530,14 @@
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,
+				3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */,
+				3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */,
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
+				3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
 				3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */,
