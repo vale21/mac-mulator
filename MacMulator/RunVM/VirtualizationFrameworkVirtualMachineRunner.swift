@@ -16,7 +16,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     var running: Bool = false;
     var vmView: VZVirtualMachineView?;
     var vmViewController: VirtualMachineContainerViewController?;
-    var progress: Double = 0.0
     
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
@@ -33,7 +32,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     func setVmViewController(_ vmViewController: VirtualMachineContainerViewController) {
         self.vmViewController = vmViewController;
     }
-    
+        
     func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         running = true;
 
@@ -44,20 +43,22 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank
         //if isDriveBlank != nil && isDriveBlank! == false {
         if isDriveBlank {
-            self.startInstallation(virtualMachine: vzVirtualMachine!, restoreImageURL: URL(fileURLWithPath: Utils.findInstallDrive(managedVm.drives)!.path), uponCompletion: {result in
-                if case let .failure(error) = result {
-                    Utils.showAlert(window: self.vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription )
-                } else {
-                    Utils.findMainDrive(self.managedVm.drives)!.isBlank = false
-                    self.startVM();
-                }
-            })
+            installAndStartVM()
         } else {
             startVM()
         }
     
         
         #endif
+    }
+    
+    func instllationComplete(_ result: Result<Void, Error>) {
+        if case let .failure(error) = result {
+            Utils.showAlert(window: self.vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription )
+        } else {
+            Utils.findMainDrive(self.managedVm.drives)!.isBlank = false
+            startVM();
+        }
     }
     
     func guestDidStop(_ virtualMachine: VZVirtualMachine) {
@@ -103,6 +104,10 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         return "";
     }
     
+    func stopInstallation() {
+        
+    }
+    
 #if arch(arm64)
     
     fileprivate func createVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
@@ -126,7 +131,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 ppi: 110)]
         }
         
-        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: vm.drives[0].path)]
+        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
@@ -137,11 +142,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration, queue: .main)
         return virtualMachine;
     }
-    
-    fileprivate func isComplete() -> Bool {
-        return progress >= 100.0
-    }
-    
+        
     fileprivate func createMacPlatformConfiguration(vm: VirtualMachine) -> VZMacPlatformConfiguration {
         let macPlatformConfiguration = VZMacPlatformConfiguration()
         let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
@@ -174,37 +175,9 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         return macPlatformConfiguration
     }
     
-    fileprivate func startInstallation(virtualMachine: VZVirtualMachine, restoreImageURL: URL, uponCompletion callback: @escaping (Result<Void, Error>) -> Void ) {
+    fileprivate func installAndStartVM() {
         self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
-        DispatchQueue.main.async {
-            let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
-            
-            print("Starting installation.")
-            installer.install(completionHandler: { (result: Result<Void, Error>) in
-                if case let .failure(error) = result {
-                    print("Installation failed with error: " + error.localizedDescription)
-                } else {
-                    print("Installation succeeded.")
-                }
-                virtualMachine.stop(completionHandler: { err in
-                    callback(result)
-                })
-            })
-            
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                
-                _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-                    self.progress = change.newValue! * 100
-                    print("Installation progress: \(self.progress).")
-                }
-                
-                guard !self.isComplete() else {
-                    timer.invalidate();
-                    return
-                }
-            });
-        }
-        }
+    }
     
 #endif
     

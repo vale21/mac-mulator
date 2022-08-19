@@ -52,14 +52,18 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                     diskSizeStepper.intValue = newVirtualDrive.size;
                     diskSizeTextField.intValue = newVirtualDrive.size
 
-                    if (newVirtualDrive.format == QemuConstants.FORMAT_QCOW2) {
-                        useCow.intValue = 1;
-                    } else {
-                        useCow.intValue = 0;
-                    }
                     if (isVirtualizaionFrameworkInUse) {
+                        newVirtualDrive.format = QemuConstants.FORMAT_RAW;
+                        
+                        useCow.intValue = 0
                         useCow.isEnabled = false
                         useCow.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported."
+                    } else {
+                        if (newVirtualDrive.format == QemuConstants.FORMAT_QCOW2) {
+                            useCow.intValue = 1;
+                        } else {
+                            useCow.intValue = 0;
+                        }
                     }
                     
                     if (mode == Mode.ADD) {

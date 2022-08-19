@@ -3157,12 +3157,16 @@ Raspberry Pi</mutableString>
 Gw
 </string>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" target="fRs-dN-enQ" id="y8C-sp-f3C"/>
+                                </connections>
                             </button>
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="descriptionLabel" destination="gTY-U4-JTa" id="abf-X7-IxI"/>
-                        <outlet property="progressBar" destination="GQX-lg-RAO" id="dsE-6t-IPM"/>
+                        <outlet property="descriptionLabel" destination="gTY-U4-JTa" id="8fb-XC-80K"/>
+                        <outlet property="estimateTimeRemainingLabel" destination="7rW-oK-SaX" id="e2T-34-uVy"/>
+                        <outlet property="progressBar" destination="GQX-lg-RAO" id="rKm-ta-DnO"/>
                     </connections>
                 </viewController>
             </objects>

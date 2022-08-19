@@ -72,4 +72,15 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
         }
         self.view.window?.close();
     }
+    
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if (segue.identifier == MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE) {
+            let destinationController = segue.destinationController as! VirtualizationFrameworkInstallVMViewController;
+            if let vmRunner = self.vmRunner {
+                destinationController.setParentRunner(vmRunner)
+                destinationController.setVirtualMachine(vmRunner.vzVirtualMachine!)
+                destinationController.setRestoreImageURL(URL(fileURLWithPath: Utils.findInstallDrive(vmRunner.managedVm.drives)!.path))
+            }
+        }
+    }
 }

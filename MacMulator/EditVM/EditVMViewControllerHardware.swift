@@ -166,9 +166,12 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             
             drivesTableView.reloadData();
             
-            if Utils.isVirtualizationFrameworkPreferred(virtualMachine) {
+            if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
                 openImageButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+            }
+            
+            if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
                 createNewDiskButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
             }
