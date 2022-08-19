@@ -14,8 +14,8 @@ class VirtualDrive: Codable {
     var format: String
     var mediaType: String
     var size: Int32
-    var isBootDrive: Bool
-    var isBlank: Bool
+    var isBootDrive: Bool = false
+    var blank: Int? = 1 // TODO Review why on earth Bool? does not work and we have to do this crap with Int?
 
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
         self.path = path
@@ -23,14 +23,20 @@ class VirtualDrive: Codable {
         self.format = format
         self.mediaType = mediaType
         self.size = size
-        self.isBootDrive = false
-        self.isBlank = true
+    }
+    
+    func isBlank() -> Bool {
+        return blank != nil && blank == 1
+    }
+    
+    func setBlank(blank: Bool) {
+        self.blank = blank ? 1 : 0
     }
     
     func clone() -> VirtualDrive {
         let drive = VirtualDrive(path: self.path, name: self.name, format: self.format, mediaType: self.mediaType, size: self.size);
         drive.isBootDrive = self.isBootDrive
-        drive.isBlank = self.isBlank
+        drive.blank = self.blank
         
         return drive;
     }

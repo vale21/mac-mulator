@@ -40,7 +40,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
         vzVirtualMachine = createVirtualMachine(vm: managedVm);
         
-        let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank
+        let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
         //if isDriveBlank != nil && isDriveBlank! == false {
         if isDriveBlank {
             installAndStartVM()
@@ -56,7 +56,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if case let .failure(error) = result {
             Utils.showAlert(window: self.vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription )
         } else {
-            Utils.findMainDrive(self.managedVm.drives)!.isBlank = false
+            Utils.findMainDrive(self.managedVm.drives)!.setBlank(blank: false)
+            managedVm.writeToPlist()
             startVM();
         }
     }
