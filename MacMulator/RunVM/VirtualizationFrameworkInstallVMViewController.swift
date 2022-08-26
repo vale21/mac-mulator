@@ -33,6 +33,9 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     }
     
     override func viewDidLoad() {
+        self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
+        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+        
         progressBar.isIndeterminate = false
         progressBar.doubleValue = 0
         progressBar.minValue = 0
@@ -65,6 +68,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                         })
                     })
                     
+                    let startTime = Int64(Date().timeIntervalSince1970)
                     Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
                         
                         _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
@@ -72,8 +76,15 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                             print("Installation progress: \(self.progress).")
                         }
                         
+                        
                         let currentValue = self.progressBar.doubleValue
-                        self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
+                        if (currentValue <= 0) {
+                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                        } else {
+                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: self.progress)
+                        }
                         if (self.progress > currentValue) {
                             let delta = self.progress - currentValue;
                             self.progressBar.increment(by: delta)

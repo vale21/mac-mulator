@@ -3116,10 +3116,6 @@ Raspberry Pi</mutableString>
                         <rect key="frame" x="0.0" y="0.0" width="591" height="260"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="GQX-lg-RAO">
-                                <rect key="frame" x="20" y="197" width="551" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTY-U4-JTa">
                                 <rect key="frame" x="18" y="224" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3130,9 +3126,9 @@ Raspberry Pi</mutableString>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7rW-oK-SaX">
-                                <rect key="frame" x="18" y="180" width="555" height="16"/>
+                                <rect key="frame" x="18" y="200" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimated time remaining: 10 minutes" id="PWu-dz-l5q">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="PWu-dz-l5q">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3161,6 +3157,10 @@ Gw
                                     <action selector="cancelButtonPressed:" target="fRs-dN-enQ" id="y8C-sp-f3C"/>
                                 </connections>
                             </button>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="GQX-lg-RAO">
+                                <rect key="frame" x="36" y="120" width="519" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
                         </subviews>
                     </view>
                     <connections>

@@ -513,4 +513,38 @@ class Utils {
         number += String(suffix)
         return Int32(number) ?? 0
     }
+    
+    static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
+        let currentTime = Int64(Date().timeIntervalSince1970)
+        
+        let timeDelta = Double(currentTime - startTime)
+        let factor = timeDelta / progress
+        let totalTime = 100 * factor
+        let remainingTime = totalTime - timeDelta
+        
+        return formatTime(remainingTime)
+    }
+    
+    static func formatTime(_ secs: Double) -> String {
+        if secs < 30 {
+            return String(Int(secs)) + " seconds"
+        } else if secs > 30 && secs < 60 {
+            return "less than a minute"
+        } else if secs < (60 * 5) {
+            let minutes = Int(secs / 60)
+            let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
+            if seconds > 0 {
+                return String(minutes) + " minutes, " + String(seconds) + " seconds"
+            } else {
+                return String(minutes) + " minutes"
+            }
+        } else if secs < (3600) {
+            let minutes = Int(secs / 60)
+            return String(minutes) + " minutes"
+        } else {
+            let hours = Int(secs / 3600)
+            let minutes = Int(secs.truncatingRemainder(dividingBy: 3600))
+            return String(hours) + " hours, " + String(minutes) + " minutes"
+        }
+    }
 }
