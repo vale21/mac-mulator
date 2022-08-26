@@ -40,7 +40,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
                     (vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY ||
                      vmSubType.stringValue == QemuConstants.SUB_MAC_VENTURA) && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
                     !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
-                    let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple. Do you agree?");
+                    let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple at the first start of the VM. Do you agree?");
                     if response.rawValue == Utils.ALERT_RESP_OK {
                         performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
                     } else {

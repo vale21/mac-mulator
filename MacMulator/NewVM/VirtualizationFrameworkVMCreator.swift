@@ -18,17 +18,17 @@ class VirtualizationFrameworkVMCreator : VMCreator {
 #if arch(arm64)
         
         try! Utils.createDocumentPackage(vm.path);
-        if Utils.isIpswInstallMediaProvided(installMedia) {
+//        if Utils.isIpswInstallMediaProvided(installMedia) {
             print("IPSW specified. Installing...");
             self.createVM(vm: vm, url: URL.init(fileURLWithPath: installMedia));
-        } else {
-            print("IPSW Not specified. Downloading...");
-            let restoreImage = MacOSRestoreImage();
-            restoreImage.download(path: vm.path) {
-                url in
-                self.createVM(vm: vm, url: url);
-            }
-        }
+//        } else {
+//            print("IPSW Not specified. Downloading...");
+//            let restoreImage = MacOSRestoreImage();
+//            restoreImage.download(path: vm.path) {
+//                url in
+//                self.createVM(vm: vm, url: url);
+//            }
+//        }
 #endif
     }
     

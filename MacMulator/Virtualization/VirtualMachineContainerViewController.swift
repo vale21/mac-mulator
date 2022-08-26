@@ -79,7 +79,10 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             if let vmRunner = self.vmRunner {
                 destinationController.setParentRunner(vmRunner)
                 destinationController.setVirtualMachine(vmRunner.vzVirtualMachine!)
-                destinationController.setRestoreImageURL(URL(fileURLWithPath: Utils.findInstallDrive(vmRunner.managedVm.drives)!.path))
+                let installDrive = Utils.findInstallDrive(vmRunner.managedVm.drives)
+                if installDrive != nil {
+                    destinationController.setRestoreImageURL(URL(fileURLWithPath: installDrive!.path))
+                }
             }
         }
     }

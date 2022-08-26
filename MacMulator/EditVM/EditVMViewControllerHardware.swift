@@ -83,6 +83,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_USB,
                             size: 0);
+                    } else if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && virtualMachine.os == QemuConstants.OS_MAC {
+                        // Install media is a IPSW image
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_IPSW + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_IPSW,
+                            size: 0);
                     } else {
                         newDrive = VirtualDrive(
                             path: path,
@@ -94,7 +102,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     virtualMachine.addVirtualDrive(newDrive);
                 
                     virtualMachine.writeToPlist();
-                    drivesTableView.reloadData();
+                    updateView()
                 }
             }
         });
@@ -105,7 +113,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let row = drivesTableView.row(for: sender as! NSView);
             let index = Utils.computeDrivesTableIndex(virtualMachine, row);
             let drive = virtualMachine.drives[index];
-            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB{
+            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 self.removeVirtualDrive(row, index);
             } else {
                 Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
@@ -127,6 +135,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
             virtualMachine.drives.remove(at: index);
             virtualMachine.writeToPlist();
+            self.updateView()
         }
     }
     
@@ -169,11 +178,15 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
                 openImageButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+            } else {
+                openImageButton.isEnabled = true
             }
             
             if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
                 createNewDiskButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+            } else {
+                createNewDiskButton.isEnabled = true
             }
         }
     }
@@ -208,7 +221,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func addVirtualDrive(_ virtualDrive: VirtualDrive) {
         virtualMachine?.drives.append(virtualDrive);
-        reloadDrives();
+        updateView()
     }
     
     func reloadDrives() {

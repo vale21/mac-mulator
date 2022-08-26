@@ -41,7 +41,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         vzVirtualMachine = createVirtualMachine(vm: managedVm);
         
         let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
-        //if isDriveBlank != nil && isDriveBlank! == false {
         if isDriveBlank {
             installAndStartVM()
         } else {
