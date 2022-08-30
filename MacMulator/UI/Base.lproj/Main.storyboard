@@ -3113,11 +3113,11 @@ Raspberry Pi</mutableString>
                 <customObject id="ucI-Le-sMd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
                 <viewController id="fRs-dN-enQ" customClass="VirtualizationFrameworkInstallVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="J1c-8e-uSE">
-                        <rect key="frame" x="0.0" y="0.0" width="591" height="260"/>
+                        <rect key="frame" x="0.0" y="0.0" width="591" height="202"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTY-U4-JTa">
-                                <rect key="frame" x="18" y="224" width="555" height="16"/>
+                                <rect key="frame" x="18" y="166" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Installing macOS on the Virtual Machine (0%)..." id="dgV-br-cwK">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -3126,7 +3126,7 @@ Raspberry Pi</mutableString>
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7rW-oK-SaX">
-                                <rect key="frame" x="18" y="200" width="555" height="16"/>
+                                <rect key="frame" x="18" y="116" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="PWu-dz-l5q">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -3135,7 +3135,7 @@ Raspberry Pi</mutableString>
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UEz-Mu-Opo">
-                                <rect key="frame" x="30" y="48" width="498" height="28"/>
+                                <rect key="frame" x="46" y="48" width="498" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" title="Your macOS VM will be available soon. This step is performed just at the very first boot of the Virtual machine." id="MBp-LI-zmU">
                                     <font key="font" metaFont="smallSystem"/>
@@ -3143,6 +3143,10 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="GQX-lg-RAO">
+                                <rect key="frame" x="36" y="139" width="519" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LwH-nB-tWI">
                                 <rect key="frame" x="257" y="13" width="76" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3157,10 +3161,6 @@ Gw
                                     <action selector="cancelButtonPressed:" target="fRs-dN-enQ" id="y8C-sp-f3C"/>
                                 </connections>
                             </button>
-                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="GQX-lg-RAO">
-                                <rect key="frame" x="36" y="120" width="519" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            </progressIndicator>
                         </subviews>
                     </view>
                     <connections>
@@ -3170,7 +3170,7 @@ Gw
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1287.5" y="1001"/>
+            <point key="canvasLocation" x="1287.5" y="972"/>
         </scene>
     </scenes>
     <resources>
