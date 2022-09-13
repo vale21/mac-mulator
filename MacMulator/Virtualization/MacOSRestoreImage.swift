@@ -12,10 +12,18 @@ import Virtualization
 
 @available(macOS 12.0, *)
 class MacOSRestoreImage: NSObject {
+    private var downloadObserver: NSKeyValueObservation?
+    private var vmCreator: VMCreator
+    private var vm: VirtualMachine
+
+    init(_ vmCreator: VMCreator, _ vm: VirtualMachine) {
+        self.vmCreator = vmCreator
+        self.vm = vm
+    }
     
     // MARK: Observe the download progress
 
-    public func download(path: String, completionHandler: @escaping (URL) -> Void) {
+    public func download(completionHandler: @escaping () -> Void) {
         NSLog("Attempting to download latest available restore image.")
         VZMacOSRestoreImage.fetchLatestSupported { [self](result: Result<VZMacOSRestoreImage, Error>) in
             switch result {
@@ -23,43 +31,30 @@ class MacOSRestoreImage: NSObject {
                     fatalError(error.localizedDescription)
 
                 case let .success(restoreImage):
-                downloadRestoreImage(path: path, restoreImage: restoreImage, completionHandler: completionHandler)
+                    downloadRestoreImage(restoreImage: restoreImage, completionHandler: completionHandler)
             }
         }
     }
 
     // MARK: Download the Restore Image from the network
 
-    private func downloadRestoreImage(path: String, restoreImage: VZMacOSRestoreImage, completionHandler: @escaping (URL) -> Void) {
-        
-        var downloaded = false;
-        
+    private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping () -> Void) {
         let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, response, error in
             if let error = error {
                 fatalError("Download failed. \(error.localizedDescription).")
             }
 
-            let installerURL = URL(fileURLWithPath: path + "/macOSInstaller.ipsw");
-            guard (try? FileManager.default.moveItem(at: localURL!, to: installerURL)) != nil else {
-                fatalError("Failed to move downloaded restore image to \(installerURL).")
+            guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/RestoreImage.ipsw"))) != nil else {
+                fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/RestoreImage.ipsw")).")
             }
 
-            downloaded = true;
-            completionHandler(installerURL)
+            completionHandler()
         }
 
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-            
-            _ = downloadTask.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
-                NSLog("Restore image download progress: \(change.newValue! * 100).")
-            }
-            
-            guard !downloaded else {
-                timer.invalidate();
-                return;
-            }
-        });
-        
+        downloadObserver = downloadTask.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
+            NSLog("Restore image download progress: \(change.newValue! * 100).")
+            self.vmCreator.setProgress(change.newValue! * 100)
+        }
         downloadTask.resume()
     }
 }

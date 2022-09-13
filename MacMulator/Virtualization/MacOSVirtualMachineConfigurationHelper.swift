@@ -41,6 +41,7 @@ struct MacOSVirtualMachineConfigurationHelper {
 
         let networkAttachment = VZNATNetworkDeviceAttachment()
         networkDevice.attachment = networkAttachment
+        networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
         return networkDevice
     }
 

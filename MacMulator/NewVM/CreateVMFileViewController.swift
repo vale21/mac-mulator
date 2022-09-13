@@ -12,6 +12,7 @@ class CreateVMFileViewController : NSViewController {
     
     @IBOutlet weak var progressBar: NSProgressIndicator!
     @IBOutlet weak var descriptionLabel: NSTextField!
+    @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
     
     var parentController: NewVMViewController?;
     
@@ -48,32 +49,55 @@ class CreateVMFileViewController : NSViewController {
             
             var foundError: Bool = false;
             
-            if let parentController = self.parentController {
-                
-                let vmCreator: VMCreator = VMCreatorFactory().create(vm: vm);
-                
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                    
-                    guard !vmCreator.isComplete() else {
-                        self.creationComplete(timer, foundError, vm)
-                        return;
+            let installMedia = parentController.installMedia.stringValue;
+            if !Utils.isIpswInstallMediaProvided(installMedia) {
+                progressBar.isIndeterminate = false
+                progressBar.minValue = 0
+                progressBar.maxValue = 100
+                progressBar.doubleValue = 0.0
+                descriptionLabel.stringValue = "Preparing to download macOS Installer..."
+                estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+            }
+            
+            let vmCreator: VMCreator = VMCreatorFactory().create(vm: vm);
+            
+            let startTime = Int64(Date().timeIntervalSince1970)
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+
+                if !Utils.isIpswInstallMediaProvided(installMedia) {
+                    let progress = vmCreator.getProgress()
+                    self.progressBar.doubleValue = progress
+                    let currentValue = self.progressBar.doubleValue
+                    if (currentValue <= 0) {
+                        self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
+                        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                    }  else {
+                        self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
+                        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
                     }
-                });
+                }
                 
-                let installMedia = parentController.installMedia.stringValue;
-                DispatchQueue.global().async {
-                    do {
-                        try vmCreator.createVM(vm: vm, installMedia: installMedia);
-                    } catch {
-                        foundError = true;
-                        DispatchQueue.main.async {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                            message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
-                        }
+                guard !vmCreator.isComplete() else {
+                    self.creationComplete(timer, foundError, vm)
+                    return;
+                }
+            });
+            
+            DispatchQueue.global().async {
+                do {
+                    try vmCreator.createVM(vm: vm, installMedia: installMedia);
+                } catch {
+                    foundError = true;
+                    DispatchQueue.main.async {
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
+                                        message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
                     }
                 }
             }
         }
+    }
+    
+    @IBAction func cancelButtonPressed(_ sender: Any) {
     }
     
     fileprivate func computePath() -> String {

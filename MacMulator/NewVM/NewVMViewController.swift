@@ -46,11 +46,13 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
                     } else {
                         return;
                     }
+                } else {
+                    performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
                 }
             }
             #endif
             
-            performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+            
         }
     }
     

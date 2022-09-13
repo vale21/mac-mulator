@@ -10,7 +10,8 @@ import ZIPFoundation
 
 class QemuVMCreator: VMCreator {
     
-    var complete = false;
+    var complete = false
+    var progress: Double = 0.0
 
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)!;
@@ -19,6 +20,14 @@ class QemuVMCreator: VMCreator {
     
     func isComplete() -> Bool {
         return complete;
+    }
+    
+    func setProgress(_ progress: Double) {
+        self.progress = progress
+    }
+    
+    func getProgress() -> Double {
+        return self.progress
     }
     
     fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {

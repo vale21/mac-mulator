@@ -13,6 +13,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
     private var complete: Bool = false
+    private var progress: Double = 0.0
         
     func createVM(vm: VirtualMachine, installMedia: String) throws {
 #if arch(arm64)
@@ -23,10 +24,9 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             self.createVM(vm: vm, url: URL.init(fileURLWithPath: installMedia));
         } else {
             print("IPSW Not specified. Downloading...");
-            let restoreImage = MacOSRestoreImage();
-            restoreImage.download(path: vm.path) {
-                url in
-                self.createVM(vm: vm, url: url);
+            let restoreImage = MacOSRestoreImage(self, vm);
+            restoreImage.download {
+                self.createVM(vm: vm, url: URL.init(fileURLWithPath: vm.path + "/RestoreImage.ipsw"));
             }
         }
 #endif
@@ -34,6 +34,14 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
     func isComplete() -> Bool {
         return complete
+    }
+    
+    func setProgress(_ progress: Double) {
+        self.progress = progress
+    }
+    
+    func getProgress() -> Double {
+        return progress
     }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ ipswUrl: URL, uponCompletion callback: @escaping (Int32) -> Void) throws {
