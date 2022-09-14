@@ -24,7 +24,7 @@ class CreateVMFileViewController : NSViewController {
             let os = parentController.vmType.stringValue;
             let subtype = parentController.vmSubType.stringValue;
             let architecture = Utils.getArchitectureForSubType(os, subtype);
-            let path = computePath();
+            let path = Utils.computeVMPath(vmName: parentController.vmName.stringValue)
             let displayName = parentController.vmName.stringValue;
             let description = computeDescription();
             let memory = Utils.getDefaultMemoryForSubType(os, subtype);
@@ -66,13 +66,7 @@ class CreateVMFileViewController : NSViewController {
             }
         }
     }
-    
-    fileprivate func computePath() -> String {
-        let userDefaults = UserDefaults.standard;
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
-        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
-    }
-    
+        
     fileprivate func computeDescription() -> String {
         let description = parentController?.vmDescription.string;
         if description != NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {

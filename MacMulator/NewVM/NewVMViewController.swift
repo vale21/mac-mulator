@@ -32,7 +32,9 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         if (vmType.stringValue == "" || vmName.stringValue == "") {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "You did not provide values for VM type or VM name. These fields are required to create a new Virtual Machine. Please provide a value for them and try again.");
         } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual machine called " + vmName.stringValue + " already exists. Please choose a different name.");
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual Machine called " + vmName.stringValue + " already exists. Please choose a different name.");
+        } else if (FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: vmName.stringValue))) {
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A file called " + Utils.computeVMPath(vmName: vmName.stringValue) + " already exists. Please choose a different name for the Virtual Machine.");
         } else {
             performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
         }
