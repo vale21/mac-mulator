@@ -72,7 +72,7 @@ class VirtualMachineViewController: NSViewController {
             
 #if arch(arm64)
             if #available(macOS 12.0, *) {
-                if (Utils.isVirtualizationFrameworkPreferred(vm)) {
+                if (vm.type == MacMulatorConstants.APPLE_VM) {
                     let runner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm) as! VirtualizationFrameworkVirtualMachineRunner;
                     self.setRunningStatus(true);
                     rootController?.setRunningVM(vm, runner);
@@ -194,13 +194,21 @@ class VirtualMachineViewController: NSViewController {
                 setRunningStatus(false);
             }
             
-            if QemuUtils.isBinaryAvailable(vm.architecture) {
-                startVMButton.isEnabled = true;
-                qemuUnavailableLabel.isHidden = true;
+            if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
+                if QemuUtils.isBinaryAvailable(vm.architecture) {
+                    startVMButton.isEnabled = true;
+                    qemuUnavailableLabel.isHidden = true;
+                } else {
+                    startVMButton.isEnabled = false;
+                    qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
+                    qemuUnavailableLabel.isHidden = false;
+                }
             } else {
-                startVMButton.isEnabled = false;
-                qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
-                qemuUnavailableLabel.isHidden = false;
+                if Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && Utils.isVirtualizationFrameworkPreferred(vm)  {
+                    startVMButton.isEnabled = false;
+                    qemuUnavailableLabel.stringValue = "The VM cannot be started because it can run only on Apple Silicon hardware."
+                    qemuUnavailableLabel.isHidden = false;
+                }
             }
         } else {
             showNoVmsLayout();

@@ -29,7 +29,7 @@ class EditVMViewController: NSTabViewController {
         network.setVirtualMachine(vm);
         advanced.setVirtualMachine(vm);
         
-        if Utils.isVirtualizationFrameworkPreferred(vm) {
+        if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
         }

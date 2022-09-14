@@ -12,7 +12,7 @@ class VirtualMachineRunnerFactory {
     func create(listenPort: Int32, vm: VirtualMachine) -> VirtualMachineRunner {
         
         #if arch(arm64)
-        if Utils.isVirtualizationFrameworkPreferred(vm) {
+        if vm.type == MacMulatorConstants.APPLE_VM {
             if #available(macOS 12.0, *) {
                 return VirtualizationFrameworkVirtualMachineRunner(virtualMachine: vm);
             }

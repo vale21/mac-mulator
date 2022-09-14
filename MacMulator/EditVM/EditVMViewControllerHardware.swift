@@ -83,7 +83,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_USB,
                             size: 0);
-                    } else if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && virtualMachine.os == QemuConstants.OS_MAC {
+                    } else if virtualMachine.type == MacMulatorConstants.APPLE_VM && virtualMachine.os == QemuConstants.OS_MAC {
                         // Install media is a IPSW image
                         newDrive = VirtualDrive(
                             path: path,
@@ -175,14 +175,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             
             drivesTableView.reloadData();
             
-            if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findInstallDrive(virtualMachine.drives) != nil {
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
                 openImageButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
             } else {
                 openImageButton.isEnabled = true
             }
             
-            if Utils.isVirtualizationFrameworkPreferred(virtualMachine) && Utils.findMainDrive(virtualMachine.drives) != nil {
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
                 createNewDiskButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
             } else {
@@ -200,7 +200,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);
                 destinationController.setparentController(self);
-                destinationController.isVirtualizaionFrameworkInUse = Utils.isVirtualizationFrameworkPreferred(virtualMachine)
+                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if (segue.identifier == MacMulatorConstants.EDIT_DISK_SEGUE) {
                 let destinationController = segue.destinationController as! NewDiskViewController;
@@ -208,7 +208,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 destinationController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)]);
                 destinationController.setparentController(self);
                 destinationController.setMode(NewDiskViewController.Mode.EDIT);
-                destinationController.isVirtualizaionFrameworkInUse = Utils.isVirtualizationFrameworkPreferred(virtualMachine)
+                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if (segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE) {
                 let destinationController = segue.destinationController as! NSWindowController;

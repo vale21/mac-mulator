@@ -44,27 +44,33 @@ class CreateVMFileViewController : NSViewController {
             let cpus = Utils.getCpusForSubType(os, subtype);
             let displayResolution = QemuConstants.RES_1280_768;
             let networkDevice = Utils.getNetworkForSubType(os, subtype)
+            let hvf = Utils.getAccelForSubType(os, subtype)
+            let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             
-            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: Utils.getAccelForSubType(os, subtype));
+            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
             
             var foundError: Bool = false;
             
             let installMedia = parentController.installMedia.stringValue;
-            if !Utils.isIpswInstallMediaProvided(installMedia) {
+            if vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia) {
                 progressBar.isIndeterminate = false
                 progressBar.minValue = 0
                 progressBar.maxValue = 100
                 progressBar.doubleValue = 0.0
                 descriptionLabel.stringValue = "Preparing to download macOS Installer..."
                 estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+            } else {
+                descriptionLabel.stringValue = "Creating Virtual Machine..."
+                estimateTimeRemainingLabel.isHidden = true
             }
+            
             
             let vmCreator: VMCreator = VMCreatorFactory().create(vm: vm);
             
             let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-
-                if !Utils.isIpswInstallMediaProvided(installMedia) {
+                
+                if vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia) {
                     let progress = vmCreator.getProgress()
                     self.progressBar.doubleValue = progress
                     let currentValue = self.progressBar.doubleValue

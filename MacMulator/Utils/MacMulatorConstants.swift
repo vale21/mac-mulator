@@ -34,5 +34,8 @@ class MacMulatorConstants {
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath";
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate";
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled";
+    
+    static let QEMU_VM = "qemu"
+    static let APPLE_VM = "apple"
 
 }

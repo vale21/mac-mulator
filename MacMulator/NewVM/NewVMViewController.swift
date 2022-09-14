@@ -35,8 +35,9 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual machine called " + vmName.stringValue + " already exists. Please choose a different name.");
         } else {
             #if arch(arm64)
+            
             if #available(macOS 12.0, *) {
-                if (vmType.stringValue == QemuConstants.OS_MAC &&
+                if (type.stringValue == QemuConstants.OS_MAC &&
                     (vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY ||
                      vmSubType.stringValue == QemuConstants.SUB_MAC_VENTURA) && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
                     !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {
@@ -50,9 +51,11 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
                     performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
                 }
             }
+            #else
+            
+            performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+            
             #endif
-            
-            
         }
     }
     
