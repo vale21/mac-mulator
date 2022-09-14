@@ -7,10 +7,9 @@
 
 import Cocoa
 
-class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate {
      
     @IBOutlet weak var table: NSTableView!
-    @IBOutlet weak var rightClickmenu: NSMenu!
     
     var rootController: RootViewController?;
     
@@ -59,6 +58,12 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     override func viewDidLoad() {
         let menu = NSMenu()
+        menu.autoenablesItems = false
+        menu.delegate = self
+        menu.addItem(NSMenuItem(title: "Start", action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Start in Recovery Mode", action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Stop", action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator());
         menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator());
@@ -67,6 +72,22 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType]);
         table.allowsMultipleSelection = false;
+    }
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        let row = table.clickedRow
+        if let rootController = self.rootController {
+            let vm = rootController.getVirtualMachineAt(row)
+            if rootController.isVMRunning(vm) {
+                menu.item(withTitle: "Start")?.isEnabled = false;
+                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false;
+                menu.item(withTitle: "Stop")?.isEnabled = true;
+            } else {
+                menu.item(withTitle: "Start")?.isEnabled = true;
+                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = (vm.type == MacMulatorConstants.APPLE_VM);
+                menu.item(withTitle: "Stop")?.isEnabled = false;
+            }
+        }
     }
     
     func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
@@ -131,6 +152,21 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         guard table.clickedRow >= 0 else { return }
         cloneVirtualMachine(table.clickedRow);
     }
+    
+    @objc func tableViewStartItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        startVirtualMachine(table.clickedRow);
+    }
+    
+    @objc func tableViewStartRecoveryItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        startVirtualMachineInRecovery(table.clickedRow);
+    }
+    
+    @objc func tableViewStopItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        stopVirtualMachine(table.clickedRow);
+    }
 
     func editVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
@@ -153,6 +189,31 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
     
+    func startVirtualMachine(_ index: Int) {
+        if let rootController = self.rootController {
+            let vm = rootController.getVirtualMachineAt(index);
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.startVMMenuBarClicked(self)
+        }
+    }
+    
+    func startVirtualMachineInRecovery(_ index: Int) {
+        if let rootController = self.rootController {
+            let vm = rootController.getVirtualMachineAt(index);
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.startVMInRecoveryMenuBarClicked(self)
+        }
+    }
+
+    
+    func stopVirtualMachine(_ index: Int) {
+        if let rootController = self.rootController {
+            let vm = rootController.getVirtualMachineAt(index);
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.stopVMMenubarClicked(self)
+        }
+    }
+        
     func cloneVirtualMachine(_ index: Int) {
         rootController?.cloneVirtualMachineAt(index);
     }

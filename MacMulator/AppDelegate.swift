@@ -14,7 +14,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var rootController: RootViewController?;
     private var fileName: String?
 
+    @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
+    @IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
@@ -35,6 +37,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.startVMMenuBarClicked(sender);
     }
     
+    @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
+        rootController?.startVMInRecoveryMenuBarClicked(sender)
+    }
+    
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
         rootController?.stopVMMenubarClicked(sender);
     }
@@ -48,19 +54,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func refreshVMMenus() {
-        pauseVMMenuItem.isEnabled = false;
+        pauseVMMenuItem.isEnabled = false
         if let rootController = self.rootController {
             if rootController.currentVm == nil {
-                startVMMenuItem.isEnabled = false;
-                stopVMMenuItem.isEnabled = false;
-                editVMMenuItem.isEnabled = false;
+                startVMMenuItem.isEnabled = false
+                startVMInRecoveryMenuItem.isEnabled = false
+                stopVMMenuItem.isEnabled = false
+                editVMMenuItem.isEnabled = false
             } else {
                 if rootController.isCurrentVMRunning() {
-                    startVMMenuItem.isEnabled = false;
-                    stopVMMenuItem.isEnabled = true;
+                    startVMMenuItem.isEnabled = false
+                    startVMInRecoveryMenuItem.isEnabled = false
+                    stopVMMenuItem.isEnabled = true
                 } else {
-                    startVMMenuItem.isEnabled = true;
-                    stopVMMenuItem.isEnabled = false;
+                    startVMMenuItem.isEnabled = true
+                    startVMInRecoveryMenuItem.isEnabled = (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
+                    stopVMMenuItem.isEnabled = false
                 }
             }
         }

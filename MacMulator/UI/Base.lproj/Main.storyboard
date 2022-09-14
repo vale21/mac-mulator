@@ -1867,6 +1867,12 @@ Raspberry Pi</mutableString>
                                                 <action selector="startVMMenuBarClicked:" target="Voe-Tx-rLC" id="Mzs-wT-he4"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Start in Recovery Mode" id="zdP-iy-Qa3">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="startVMInRecoveryMenuBarClicked:" target="Voe-Tx-rLC" id="sNm-qp-we2"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Stop" keyEquivalent="S" id="Q3F-uG-aFl">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
@@ -1972,8 +1978,10 @@ Raspberry Pi</mutableString>
                     <connections>
                         <outlet property="editVMMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qd7-pB-hJx"/>
+                        <outlet property="startVMInRecoveryMenuItem" destination="zdP-iy-Qa3" id="GpW-yC-dKx"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
+                        <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
