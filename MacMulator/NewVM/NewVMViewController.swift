@@ -37,7 +37,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
             #if arch(arm64)
             
             if #available(macOS 12.0, *) {
-                if (type.stringValue == QemuConstants.OS_MAC &&
+                if (vmType.stringValue == QemuConstants.OS_MAC &&
                     (vmSubType.stringValue == QemuConstants.SUB_MAC_MONTEREY ||
                      vmSubType.stringValue == QemuConstants.SUB_MAC_VENTURA) && // TODO fix this to use Utils.isVirtualizationFrameworkPreferred method
                     !Utils.isIpswInstallMediaProvided(installMedia.stringValue)) {

@@ -208,6 +208,9 @@ class VirtualMachineViewController: NSViewController {
                     startVMButton.isEnabled = false;
                     qemuUnavailableLabel.stringValue = "The VM cannot be started because it can run only on Apple Silicon hardware."
                     qemuUnavailableLabel.isHidden = false;
+                } else {
+                    startVMButton.isEnabled = true;
+                    qemuUnavailableLabel.isHidden = true;
                 }
             }
         } else {
