@@ -80,11 +80,11 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             if #available(macOS 13, *) {
                 let options = VZMacOSVirtualMachineStartOptions()
                 options.startUpFromMacOSRecovery = configuration.bootIntoMacOSRecovery
-                populateFromConfiguration(unsafeBitCast(options, to: _VZVirtualMachineStartOptions.self))
+                //populateFromConfiguration(unsafeBitCast(options, to: _VZVirtualMachineStartOptions.self))
                 //try await virtualMachine.start(options: options)
             } else {
                 let options = unsafeBitCast(NSClassFromString("_VZVirtualMachineStartOptions")!, to: _VZVirtualMachineStartOptions.Type.self).init()
-                populateFromConfiguration(options)
+                //populateFromConfiguration(options)
                 options.bootMacOSRecovery = configuration.bootIntoMacOSRecovery
                 //try await unsafeBitCast(virtualMachine, to: _VZVirtualMachine.self)._start(with: options)
             }
