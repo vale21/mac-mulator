@@ -550,4 +550,12 @@ class Utils {
             return String(hours) + " hours, " + String(minutes) + " minutes"
         }
     }
+    
+    static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
+        if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
+            return QemuUtils.isBinaryAvailable(vm.architecture)
+        } else {
+            return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
+        }
+    }
 }

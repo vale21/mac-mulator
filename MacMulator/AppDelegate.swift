@@ -62,14 +62,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
             } else {
-                if rootController.isCurrentVMRunning() {
-                    startVMMenuItem.isEnabled = false
-                    startVMInRecoveryMenuItem.isEnabled = false
-                    stopVMMenuItem.isEnabled = true
-                } else {
-                    startVMMenuItem.isEnabled = true
-                    startVMInRecoveryMenuItem.isEnabled = (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
-                    stopVMMenuItem.isEnabled = false
+                let vm = rootController.currentVm
+                if let vm = vm {
+                    if rootController.isCurrentVMRunning() {
+                        startVMMenuItem.isEnabled = false
+                        startVMInRecoveryMenuItem.isEnabled = false
+                        stopVMMenuItem.isEnabled = true
+                    } else {
+                        startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
+                        startVMInRecoveryMenuItem.isEnabled = Utils.isVMAvailable(vm) && (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
+                        stopVMMenuItem.isEnabled = false
+                    }
                 }
             }
         }

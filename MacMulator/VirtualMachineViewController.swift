@@ -64,54 +64,14 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func editVM(_ sender: Any) {
         self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: rootController?.currentVm);
     }
+    
+    func startVMInRecovery(sender: Any) {
+        startVM(sender: sender, inRecovery: true)
+    }
 
     @IBAction
     func startVM(sender: Any) {
-        
-        if let vm = rootController?.currentVm {
-            
-            if vm.type == MacMulatorConstants.APPLE_VM {
-                if #available(macOS 12.0, *) {
-                    if (vm.type == MacMulatorConstants.APPLE_VM) {
-                        let runner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm) as! VirtualizationFrameworkVirtualMachineRunner;
-                        self.setRunningStatus(true);
-                        rootController?.setRunningVM(vm, runner);
-                        
-                        self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
-                    }
-                }
-            } else {
-                
-                boxContentView = centralBox.contentView;
-                let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
-                rootController?.setRunningVM(vm, runner);
-                listenPort += 1;
-                if (runner.isVMRunning()) {
-                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                    message: "Virtual Machine " + vm.displayName + " is already running!");
-                } else {
-                    self.setRunningStatus(true);
-                    if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
-                    }
-                    
-                    runner.runVM(uponCompletion: {
-                        result, virtualMachine in
-                        DispatchQueue.main.async {
-                            self.cleanupStoppedVM(virtualMachine)
-                            
-                            if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                                QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
-                            }
-                            
-                            if (result.exitCode != 0) {
-                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Qemu execution failed with error: " + result.error!);
-                            }
-                        }
-                    });
-                }
-            }
-        }
+        startVM(sender: sender, inRecovery: false)
     }
     
     @IBAction func stopVM(_ sender: Any) {
@@ -193,7 +153,7 @@ class VirtualMachineViewController: NSViewController {
             }
             
             if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
-                if QemuUtils.isBinaryAvailable(vm.architecture) {
+                if Utils.isVMAvailable(vm) {
                     startVMButton.isEnabled = true;
                     qemuUnavailableLabel.isHidden = true;
                 } else {
@@ -202,13 +162,13 @@ class VirtualMachineViewController: NSViewController {
                     qemuUnavailableLabel.isHidden = false;
                 }
             } else {
-                if Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && Utils.isVirtualizationFrameworkPreferred(vm)  {
+                if Utils.isVMAvailable(vm) {
+                    startVMButton.isEnabled = true;
+                    qemuUnavailableLabel.isHidden = true;
+                } else {
                     startVMButton.isEnabled = false;
                     qemuUnavailableLabel.stringValue = "The VM cannot be started because it can run only on Apple Silicon hardware."
                     qemuUnavailableLabel.isHidden = false;
-                } else {
-                    startVMButton.isEnabled = true;
-                    qemuUnavailableLabel.isHidden = true;
                 }
             }
         } else {
@@ -336,5 +296,53 @@ class VirtualMachineViewController: NSViewController {
         centralBox.isHidden = false;
         startVMButton.isHidden = false;
         qemuUnavailableLabel.isHidden = false;
+    }
+    
+    fileprivate func startVM(sender: Any, inRecovery: Bool) {
+        if let vm = rootController?.currentVm {
+            
+            if vm.type == MacMulatorConstants.APPLE_VM {
+                if #available(macOS 12.0, *) {
+                    if (vm.type == MacMulatorConstants.APPLE_VM) {
+                        let runner = VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm) as! VirtualizationFrameworkVirtualMachineRunner;
+                        runner.recoveryMode = inRecovery
+                        self.setRunningStatus(true);
+                        rootController?.setRunningVM(vm, runner);
+                        
+                        self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: vm);
+                    }
+                }
+            } else {
+                
+                boxContentView = centralBox.contentView;
+                let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
+                rootController?.setRunningVM(vm, runner);
+                listenPort += 1;
+                if (runner.isVMRunning()) {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
+                                    message: "Virtual Machine " + vm.displayName + " is already running!");
+                } else {
+                    self.setRunningStatus(true);
+                    if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
+                    }
+                    
+                    runner.runVM(uponCompletion: {
+                        result, virtualMachine in
+                        DispatchQueue.main.async {
+                            self.cleanupStoppedVM(virtualMachine)
+                            
+                            if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                                QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
+                            }
+                            
+                            if (result.exitCode != 0) {
+                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Qemu execution failed with error: " + result.error!);
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 }

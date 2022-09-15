@@ -57,7 +57,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func startVMInRecoveryMenuBarClicked(_ sender: Any) {
-        vmController?.startVM(sender: sender);
+        vmController?.startVMInRecovery(sender: sender);
     }
     
     func stopVMMenubarClicked(_ sender: Any) {
