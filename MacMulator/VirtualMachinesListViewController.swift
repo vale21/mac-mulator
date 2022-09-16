@@ -61,7 +61,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.autoenablesItems = false
         menu.delegate = self
         menu.addItem(NSMenuItem(title: "Start", action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Start in Recovery Mode", action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
+        //menu.addItem(NSMenuItem(title: "Start in Recovery Mode", action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Stop", action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator());
         menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
@@ -80,11 +80,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             let vm = rootController.getVirtualMachineAt(row)
             if rootController.isVMRunning(vm) {
                 menu.item(withTitle: "Start")?.isEnabled = false;
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false;
+                //menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false;
                 menu.item(withTitle: "Stop")?.isEnabled = true;
             } else {
                 menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm);
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = (Utils.isVMAvailable(vm) && vm.type == MacMulatorConstants.APPLE_VM);
+                //menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = (Utils.isVMAvailable(vm) && vm.type == MacMulatorConstants.APPLE_VM);
                 menu.item(withTitle: "Stop")?.isEnabled = false;
             }
         }

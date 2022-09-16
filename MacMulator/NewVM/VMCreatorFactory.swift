@@ -22,7 +22,7 @@ class VMCreatorFactory {
     
     func getVMType(os: String, subtype: String, architecture: String) -> String {
         #if arch(arm64)
-        if Utils.isAppleSiliconOnlyVM(os: os, subtype: subtype, architecture: architecture) {
+        if Utils.isVirtualizationFrameworkPreferred(os: os, subtype: subtype, architecture: architecture) {
             if #available(macOS 12.0, *) {
                 return MacMulatorConstants.APPLE_VM
             }

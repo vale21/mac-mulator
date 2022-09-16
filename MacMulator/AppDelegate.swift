@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
-    @IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
+    //@IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
@@ -58,7 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let rootController = self.rootController {
             if rootController.currentVm == nil {
                 startVMMenuItem.isEnabled = false
-                startVMInRecoveryMenuItem.isEnabled = false
+                //startVMInRecoveryMenuItem.isEnabled = false
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
             } else {
@@ -66,11 +66,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = vm {
                     if rootController.isCurrentVMRunning() {
                         startVMMenuItem.isEnabled = false
-                        startVMInRecoveryMenuItem.isEnabled = false
+                        //startVMInRecoveryMenuItem.isEnabled = false
                         stopVMMenuItem.isEnabled = true
                     } else {
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
-                        startVMInRecoveryMenuItem.isEnabled = Utils.isVMAvailable(vm) && (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
+                        //startVMInRecoveryMenuItem.isEnabled = Utils.isVMAvailable(vm) && (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
                         stopVMMenuItem.isEnabled = false
                     }
                 }

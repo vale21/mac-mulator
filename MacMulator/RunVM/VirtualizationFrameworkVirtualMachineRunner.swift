@@ -76,21 +76,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             vzVirtualMachine.delegate = self;
             self.vmView?.virtualMachine = vzVirtualMachine;
             
-            #if arch(arm64)
-            if #available(macOS 13, *) {
-                let options = VZMacOSVirtualMachineStartOptions()
-                options.startUpFromMacOSRecovery = configuration.bootIntoMacOSRecovery
-                //populateFromConfiguration(unsafeBitCast(options, to: _VZVirtualMachineStartOptions.self))
-                //try await virtualMachine.start(options: options)
-            } else {
-                let options = unsafeBitCast(NSClassFromString("_VZVirtualMachineStartOptions")!, to: _VZVirtualMachineStartOptions.Type.self).init()
-                //populateFromConfiguration(options)
-                options.bootMacOSRecovery = configuration.bootIntoMacOSRecovery
-                //try await unsafeBitCast(virtualMachine, to: _VZVirtualMachine.self)._start(with: options)
-            }
-            #endif
-            
-
             vzVirtualMachine.start(completionHandler: { (result) in
                 switch result {
                     case let .failure(error):
