@@ -460,7 +460,16 @@ class Utils {
     static func isVirtualizationFrameworkPreferred(os: String, subtype: String, architecture: String) -> Bool
     {
         if #available(macOS 12.0, *) {
-            return os == QemuConstants.OS_MAC && architecture == QemuConstants.ARCH_ARM64 && (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+            return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
+        }
+        return false
+    }
+    
+    static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
+        if #available(macOS 12.0, *) {
+            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 &&
+            os == QemuConstants.OS_MAC &&
+            (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
         }
         return false
     }

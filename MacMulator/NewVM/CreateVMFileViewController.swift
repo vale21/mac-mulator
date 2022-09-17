@@ -20,16 +20,6 @@ class CreateVMFileViewController : NSViewController {
         self.parentController = parentController;
     }
     
-    fileprivate func creationComplete(_ timer: Timer, _ foundError: Bool, _ vm: VirtualMachine) {
-        timer.invalidate();
-        self.progressBar.stopAnimation(self);
-        self.dismiss(self);
-        
-        if !foundError {
-            self.parentController!.vmCreated(vm);
-        }
-    }
-    
     override func viewDidAppear() {
         progressBar.startAnimation(self);
         
@@ -52,7 +42,8 @@ class CreateVMFileViewController : NSViewController {
             var foundError: Bool = false;
             
             let installMedia = parentController.installMedia.stringValue;
-            if vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia) {
+            if shouldDownloadIpsw(vm, installMedia) {
+                // Downloading IPSW
                 progressBar.isIndeterminate = false
                 progressBar.minValue = 0
                 progressBar.maxValue = 100
@@ -70,16 +61,18 @@ class CreateVMFileViewController : NSViewController {
             let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
                 
-                if vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia) {
+                if self.shouldDownloadIpsw(vm, installMedia) {
                     let progress = vmCreator.getProgress()
                     self.progressBar.doubleValue = progress
                     let currentValue = self.progressBar.doubleValue
                     if (currentValue <= 0) {
                         self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
                         self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
-                    }  else {
+                    }  else if (currentValue < 100) {
                         self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
                         self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
+                    } else {
+                        self.descriptionLabel.stringValue = "Creating Virtual Machine..."
                     }
                 }
                 
@@ -118,5 +111,19 @@ class CreateVMFileViewController : NSViewController {
             return description!;
         }
         return "";
+    }
+    
+    fileprivate func creationComplete(_ timer: Timer, _ foundError: Bool, _ vm: VirtualMachine) {
+        timer.invalidate();
+        self.progressBar.stopAnimation(self);
+        self.dismiss(self);
+        
+        if !foundError {
+            self.parentController!.vmCreated(vm);
+        }
+    }
+    
+    fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
+        return vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }
