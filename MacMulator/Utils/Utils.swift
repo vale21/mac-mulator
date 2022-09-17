@@ -557,6 +557,7 @@ class Utils {
         } else {
             return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
         }
+    }
 
     static func computeVMPath(vmName: String) -> String {
         let userDefaults = UserDefaults.standard;
