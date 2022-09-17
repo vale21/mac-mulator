@@ -15,7 +15,8 @@ class VirtualizationFrameworkUtils {
     static let AUXILIARY_STORAGE_NAME = "auxiliary-storage"
     static let MACHINE_IDENTIFIER_NAME = "machine-identifier"
     static let HARDWARE_MODEL_NAME = "hardware-model"
-    
+
+    #if arch(arm64)
 
     static func createVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
         
@@ -115,4 +116,6 @@ class VirtualizationFrameworkUtils {
         
         return macPlatformConfiguration
     }
+    
+    #endif
 }
