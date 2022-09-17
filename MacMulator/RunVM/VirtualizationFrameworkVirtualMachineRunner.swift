@@ -34,12 +34,13 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         self.vmViewController = vmViewController;
     }
         
-    func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
+        self.recoveryMode = recoveryMode
         running = true;
 
         #if arch(arm64)
         
-        vzVirtualMachine = createVirtualMachine(vm: managedVm);
+        vzVirtualMachine = VirtualizationFrameworkUtils.decodeVirtualMachine(vm: managedVm);
         
         let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
         if isDriveBlank {
@@ -109,77 +110,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         
     }
     
-#if arch(arm64)
-    
-    fileprivate func createVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
-        let virtualMachineConfiguration = VZVirtualMachineConfiguration()
-
-        virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm);
-        virtualMachineConfiguration.cpuCount = vm.cpus;
-        virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
-        virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
-        
-        let resolution = Utils.getResolutionElements(vm.displayResolution);
-        if let mainScreen = NSScreen.main {
-            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
-                witdh: Int(mainScreen.backingScaleFactor * CGFloat(resolution[0])),
-                height: Int(mainScreen.backingScaleFactor * CGFloat(resolution[1])),
-                ppi: Int(mainScreen.backingScaleFactor * 110))]
-        } else {
-            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
-                witdh: resolution[0],
-                height: resolution[1],
-                ppi: 110)]
-        }
-        
-        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
-        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
-        virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
-        virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
-        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-
-        try! virtualMachineConfiguration.validate()
-        
-        let virtualMachine = VZVirtualMachine(configuration: virtualMachineConfiguration, queue: .main)
-        return virtualMachine;
-    }
-        
-    fileprivate func createMacPlatformConfiguration(vm: VirtualMachine) -> VZMacPlatformConfiguration {
-        let macPlatformConfiguration = VZMacPlatformConfiguration()
-        let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/AuxiliaryStorage")
-        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/MachineIdentifier")
-        let hardwareModelURL = URL(fileURLWithPath: vm.path + "/HardwareModel")
-        
-        guard let hardwareModelData = try? Data(contentsOf: hardwareModelURL) else {
-            fatalError("Failed to retrieve hardware model data.")
-        }
-
-        guard let hardwareModel = VZMacHardwareModel(dataRepresentation: hardwareModelData) else {
-            fatalError("Failed to create hardware model.")
-        }
-        
-        macPlatformConfiguration.hardwareModel = hardwareModel;
-        
-        let auxiliaryStorage = VZMacAuxiliaryStorage(contentsOf: auxiliaryStorageURL)
-        macPlatformConfiguration.auxiliaryStorage = auxiliaryStorage
-    
-
-        guard let machineIdentifierData = try? Data(contentsOf: machineIdentifierURL) else {
-            fatalError("Failed to retrieve machine identifier data.")
-        }
-
-        guard let machineIdentifier = VZMacMachineIdentifier(dataRepresentation: machineIdentifierData) else {
-            fatalError("Failed to create machine identifier.")
-        }
-        macPlatformConfiguration.machineIdentifier = machineIdentifier
-        
-        return macPlatformConfiguration
-    }
-    
     fileprivate func installAndStartVM() {
         self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
     }
-    
-#endif
-    
 }

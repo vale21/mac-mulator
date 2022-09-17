@@ -12,18 +12,23 @@ import Virtualization
 class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate {
     
     var virtualMachine: VirtualMachine?
+    var recoveryMode: Bool = false
     var vmController: VirtualMachineViewController?
-    var vmRunner: VirtualizationFrameworkVirtualMachineRunner?
+    var vmRunner: VirtualMachineRunner?
  
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
+    }
+    
+    func setRecoveryMode(_ recoveryMode: Bool) {
+        self.recoveryMode = recoveryMode
     }
     
     func setVmController(_ controller: VirtualMachineViewController) {
         vmController = controller;
     }
     
-    func setVmRunner(_ runner: VirtualizationFrameworkVirtualMachineRunner) {
+    func setVmRunner(_ runner: VirtualMachineRunner) {
         vmRunner = runner
     }
     
@@ -37,9 +42,10 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             self.view.window?.setFrameOrigin(NSPoint(x: 200, y: 200));
             
             if let vmRunner = self.vmRunner {
-                vmRunner.setVmView(self.view as! VZVirtualMachineView);
-                vmRunner.setVmViewController(self);
-                vmRunner.runVM(uponCompletion: {
+                let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
+                runner.setVmView(self.view as! VZVirtualMachineView);
+                runner.setVmViewController(self);
+                runner.runVM(recoveryMode: self.recoveryMode, uponCompletion: {
                     result, virtualMachine in
                     DispatchQueue.main.async {
                         if (result.exitCode != 0) {
@@ -77,9 +83,10 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
         if (segue.identifier == MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE) {
             let destinationController = segue.destinationController as! VirtualizationFrameworkInstallVMViewController;
             if let vmRunner = self.vmRunner {
-                destinationController.setParentRunner(vmRunner)
-                destinationController.setVirtualMachine(vmRunner.vzVirtualMachine!)
-                let installDrive = Utils.findInstallDrive(vmRunner.managedVm.drives)
+                let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
+                destinationController.setParentRunner(runner)
+                destinationController.setVirtualMachine(runner.vzVirtualMachine!)
+                let installDrive = Utils.findInstallDrive(runner.managedVm.drives)
                 if installDrive != nil {
                     destinationController.setRestoreImageURL(URL(fileURLWithPath: installDrive!.path))
                 }

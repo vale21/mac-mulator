@@ -22,7 +22,7 @@ class QemuRunner : VirtualMachineRunner {
         self.virtualMachine = virtualMachine;
     }
 
-    func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { result in
             callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
         });

@@ -27,7 +27,7 @@ protocol VirtualMachineRunner {
     
     func getManagedVM() -> VirtualMachine;
             
-    func runVM(uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void);
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void);
     
     func isVMRunning() -> Bool;
     

@@ -86,7 +86,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 fatalError(error.localizedDescription)
                 
             case let .success(restoreImage):
-                VirtualizationFrameworkUtils.setupVirtualMachine(vm: vm, restoreImage: restoreImage);
+                VirtualizationFrameworkUtils.createVirtualMachineData(vm: vm, restoreImage: restoreImage);
                 complete = true
             }
         })
