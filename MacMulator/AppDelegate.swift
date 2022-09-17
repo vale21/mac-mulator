@@ -15,7 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var fileName: String?
     private var initialized = false
 
+    @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
+    //@IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
@@ -36,6 +38,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.startVMMenuBarClicked(sender);
     }
     
+    @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
+        rootController?.startVMInRecoveryMenuBarClicked(sender)
+    }
+    
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
         rootController?.stopVMMenubarClicked(sender);
     }
@@ -49,19 +55,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func refreshVMMenus() {
-        pauseVMMenuItem.isEnabled = false;
+        pauseVMMenuItem.isEnabled = false
         if let rootController = self.rootController {
             if rootController.currentVm == nil {
-                startVMMenuItem.isEnabled = false;
-                stopVMMenuItem.isEnabled = false;
-                editVMMenuItem.isEnabled = false;
+                startVMMenuItem.isEnabled = false
+                //startVMInRecoveryMenuItem.isEnabled = false
+                stopVMMenuItem.isEnabled = false
+                editVMMenuItem.isEnabled = false
             } else {
-                if rootController.isCurrentVMRunning() {
-                    startVMMenuItem.isEnabled = false;
-                    stopVMMenuItem.isEnabled = true;
-                } else {
-                    startVMMenuItem.isEnabled = true;
-                    stopVMMenuItem.isEnabled = false;
+                let vm = rootController.currentVm
+                if let vm = vm {
+                    if rootController.isCurrentVMRunning() {
+                        startVMMenuItem.isEnabled = false
+                        //startVMInRecoveryMenuItem.isEnabled = false
+                        stopVMMenuItem.isEnabled = true
+                    } else {
+                        startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
+                        //startVMInRecoveryMenuItem.isEnabled = Utils.isVMAvailable(vm) && (rootController.currentVm?.type == MacMulatorConstants.APPLE_VM)
+                        stopVMMenuItem.isEnabled = false
+                    }
                 }
             }
         }
@@ -83,6 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        
         let userDefaults = UserDefaults.standard;
 
         setupDefaultsPreferences(userDefaults)
@@ -101,10 +114,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if let rootController = self.rootController {
             if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
                 if response.rawValue != Utils.ALERT_RESP_OK {
                     return NSApplication.TerminateReply.terminateCancel;
                 } else {
@@ -120,7 +134,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         
-        //resetDefaults();
+        // Useful in Development to replicate the startup of a clean installation of MacMulator
+        // resetDefaults();
     }
     
     fileprivate func resetDefaults() {

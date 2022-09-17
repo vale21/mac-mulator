@@ -19,7 +19,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     var rootController : RootViewController?
     
     static let DESCRIPTION_DEFAULT_MESSAGE = "You can type here to write a description of your VM...";
-        
+    
     @IBAction func findInstallMedia(_ sender: Any) {
         Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
             if let path = panel.url?.path {
@@ -29,14 +29,18 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     }
     
     @IBAction func createVM(_ sender: Any) {
-        if (vmType.stringValue == "" || vmName.stringValue == "") {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "You did not provide values for VM type or VM name. These fields are required to create a new Virtual Machine. Please provide a value for them and try again.");
-        } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual Machine called " + vmName.stringValue + " already exists. Please choose a different name.");
-        } else if (FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: vmName.stringValue))) {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A file called " + Utils.computeVMPath(vmName: vmName.stringValue) + " already exists. Please choose a different name for the Virtual Machine.");
-        } else {
-            performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+        if (validateInput()) {
+            if Utils.isMacVMWithOSVirtualizationFramework(os: vmType.stringValue, subtype: vmSubType.stringValue) && !Utils.isIpswInstallMediaProvided(installMedia.stringValue) {
+                let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple at the first start of the VM. Do you agree?");
+                
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+                } else {
+                    return;
+                }
+            } else {
+                performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
+            }
         }
     }
     
@@ -75,7 +79,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
             vmSubType.reloadData();
         }
     }
-        
+    
     func textViewDidChangeSelection(_ notification: Notification) {
         if (vmDescription.string == NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE) {
             vmDescription.string = "";
@@ -88,5 +92,20 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
             rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: vm);
         }
         self.view.window?.close();
+    }
+    
+    fileprivate func validateInput() -> Bool {
+        if (vmType.stringValue == "" || vmName.stringValue == "") {
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "You did not provide values for VM type or VM name. These fields are required to create a new Virtual Machine. Please provide a value for them and try again.");
+            return false
+        } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual Machine called " + vmName.stringValue + " already exists. Please choose a different name.");
+            return false
+        } else if (FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: vmName.stringValue))) {
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A file called " + Utils.computeVMPath(vmName: vmName.stringValue) + " already exists. Please choose a different name for the Virtual Machine.");
+            return false
+        } else {
+            return true
+        }
     }
 }

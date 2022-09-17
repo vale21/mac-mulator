@@ -11,7 +11,12 @@ import Cocoa
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app"];
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw"];
+    
+    static func createDocumentPackage(_ path: String) throws {
+        let fileManager = FileManager.default;
+        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil);
+    }
     
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();
@@ -187,6 +192,24 @@ class Utils {
             }
         }
         return hdds[0];
+    }
+    
+    static func findInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non IPSW drives
+        var ipsws: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
+                ipsws.append(drive);
+            }
+        }
+        
+        if ipsws.count == 0 {
+            return nil;
+        }
+        if ipsws.count == 1 {
+            return ipsws[0];
+        }
+        return ipsws[0];
     }
     
     static func getParentDir(_ path: String) -> String {
@@ -415,23 +438,50 @@ class Utils {
         return resolutionWithDepth.replacingOccurrences(of: "x32", with: "");
     }
     
-    static func random(digits:Int32) -> Int32 {
-        var number = String()
-        for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
-        }
-        return Int32(number) ?? 0
+    static func getResolutionElements(_ resolutionWithDepth: String) -> [Int] {
+        let stringElements:[Substring] = resolutionWithDepth.split(separator: "x");
+        var ret: [Int] = [];
+        ret.append(Int(stringElements[0])!);
+        ret.append(Int(stringElements[1])!);
+        ret.append(Int(stringElements[2])!);
+
+        return ret;
     }
     
-    static func random(digits:Int, suffix:Int32) -> Int32 {
-        var number = String()
-        for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
-        }
-        number += String(suffix)
-        return Int32(number) ?? 0
+    static func isIpswInstallMediaProvided(_ installMedia: String) -> Bool {
+        return installMedia != "" && installMedia.hasSuffix(".ipsw");
     }
-        
+    
+    static func isVirtualizationFrameworkPreferred(_ vm: VirtualMachine) -> Bool
+    {
+        return Utils.isVirtualizationFrameworkPreferred(os: vm.os, subtype: vm.subtype, architecture: vm.architecture)
+    }
+    
+    static func isVirtualizationFrameworkPreferred(os: String, subtype: String, architecture: String) -> Bool
+    {
+        if #available(macOS 12.0, *) {
+            return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
+        }
+        return false
+    }
+    
+    static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
+        if #available(macOS 12.0, *) {
+            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 &&
+            os == QemuConstants.OS_MAC &&
+            (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+        }
+        return false
+    }
+    
+    static func getPreferredArchitecture() -> String {
+        #if arch(arm64)
+        return QemuConstants.ARCH_ARM64
+        #else
+        return QemuConstants.ARCH_X64
+        #endif
+    }
+    
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
@@ -459,6 +509,65 @@ class Utils {
         return defaultValue;
     }
     
+    static func random(digits:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        return Int32(number) ?? 0
+    }
+    
+    static func random(digits:Int, suffix:Int32) -> Int32 {
+        var number = String()
+        for _ in 1...digits {
+           number += "\(Int.random(in: 1...9))"
+        }
+        number += String(suffix)
+        return Int32(number) ?? 0
+    }
+    
+    static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
+        let currentTime = Int64(Date().timeIntervalSince1970)
+        
+        let timeDelta = Double(currentTime - startTime)
+        let factor = timeDelta / progress
+        let totalTime = 100 * factor
+        let remainingTime = totalTime - timeDelta
+        
+        return formatTime(remainingTime)
+    }
+    
+    static func formatTime(_ secs: Double) -> String {
+        if secs < 30 {
+            return String(Int(secs)) + " seconds"
+        } else if secs > 30 && secs < 60 {
+            return "less than a minute"
+        } else if secs < (60 * 5) {
+            let minutes = Int(secs / 60)
+            let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
+            if seconds > 0 {
+                return String(minutes) + " minutes, " + String(seconds) + " seconds"
+            } else {
+                return String(minutes) + " minutes"
+            }
+        } else if secs < (3600) {
+            let minutes = Int(secs / 60)
+            return String(minutes) + " minutes"
+        } else {
+            let hours = Int(secs / 3600)
+            let minutes = Int(secs.truncatingRemainder(dividingBy: 3600))
+            return String(hours) + " hours, " + String(minutes) + " minutes"
+        }
+    }
+    
+    static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
+        if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
+            return QemuUtils.isBinaryAvailable(vm.architecture)
+        } else {
+            return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
+        }
+    }
+
     static func computeVMPath(vmName: String) -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;

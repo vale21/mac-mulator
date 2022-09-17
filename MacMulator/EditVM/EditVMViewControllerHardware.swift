@@ -17,6 +17,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet weak var minMemoryLabel: NSTextField!
     @IBOutlet weak var maxMemoryLabel: NSTextField!
     @IBOutlet weak var drivesTableView: NSTableView!
+    @IBOutlet weak var openImageButton: NSButton!
+    @IBOutlet weak var createNewDiskButton: NSButton!
     
     var virtualMachine: VirtualMachine?;
     
@@ -81,6 +83,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_USB,
                             size: 0);
+                    } else if virtualMachine.type == MacMulatorConstants.APPLE_VM && virtualMachine.os == QemuConstants.OS_MAC {
+                        // Install media is a IPSW image
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_IPSW + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_IPSW,
+                            size: 0);
                     } else {
                         newDrive = VirtualDrive(
                             path: path,
@@ -92,7 +102,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     virtualMachine.addVirtualDrive(newDrive);
                 
                     virtualMachine.writeToPlist();
-                    drivesTableView.reloadData();
+                    updateView()
                 }
             }
         });
@@ -103,7 +113,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let row = drivesTableView.row(for: sender as! NSView);
             let index = Utils.computeDrivesTableIndex(virtualMachine, row);
             let drive = virtualMachine.drives[index];
-            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB{
+            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 self.removeVirtualDrive(row, index);
             } else {
                 Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
@@ -125,6 +135,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
             virtualMachine.drives.remove(at: index);
             virtualMachine.writeToPlist();
+            self.updateView()
         }
     }
     
@@ -163,6 +174,20 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             }
             
             drivesTableView.reloadData();
+            
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findInstallDrive(virtualMachine.drives) != nil {
+                openImageButton.isEnabled = false
+                openImageButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+            } else {
+                openImageButton.isEnabled = true
+            }
+            
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findMainDrive(virtualMachine.drives) != nil {
+                createNewDiskButton.isEnabled = false
+                createNewDiskButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+            } else {
+                createNewDiskButton.isEnabled = true
+            }
         }
     }
     
@@ -175,6 +200,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);
                 destinationController.setparentController(self);
+                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if (segue.identifier == MacMulatorConstants.EDIT_DISK_SEGUE) {
                 let destinationController = segue.destinationController as! NewDiskViewController;
@@ -182,6 +208,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 destinationController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)]);
                 destinationController.setparentController(self);
                 destinationController.setMode(NewDiskViewController.Mode.EDIT);
+                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if (segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE) {
                 let destinationController = segue.destinationController as! NSWindowController;
@@ -194,7 +221,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     
     func addVirtualDrive(_ virtualDrive: VirtualDrive) {
         virtualMachine?.drives.append(virtualDrive);
-        reloadDrives();
+        updateView()
     }
     
     func reloadDrives() {
@@ -263,47 +290,47 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self);
         let index = Utils.computeDrivesTableIndex(virtualMachine, row);
         
-        let vm = virtualMachine?.drives[index];
+        let drive = virtualMachine?.drives[index];
         
         if tableColumn?.identifier.rawValue == "Icon" {
             let cellView = cell as! DrivesTableIconCell;
             
-            if vm?.mediaType == QemuConstants.MEDIATYPE_DISK {
+            if drive?.mediaType == QemuConstants.MEDIATYPE_DISK {
                 cellView.icon.image = NSImage(named: "HD Icon");
-            } else if vm?.mediaType == QemuConstants.MEDIATYPE_CDROM {
+            } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM {
                 cellView.icon.image = NSImage(named: "CD Icon");
-            } else if vm?.mediaType == QemuConstants.MEDIATYPE_USB {
+            } else if drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 cellView.icon.image = NSImage(named: "USB Icon");
             }
         }
         
         if tableColumn?.identifier.rawValue == "Name" {
             let cellView = cell as! DrivesTableDriveNameCell;
-            cellView.label.stringValue = vm?.name ?? "";
+            cellView.label.stringValue = drive?.name ?? "";
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Type" {
             let cellView = cell as! DrivesTableDriveTypeCell;
-            cellView.label.stringValue = QemuUtils.getDriveTypeDescription(vm?.mediaType ?? "");
+            cellView.label.stringValue = QemuUtils.getDriveTypeDescription(drive?.mediaType ?? "");
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Size" {
             let cellView = cell as! DrivesTableDriveSizeCell;
-            cellView.label.stringValue = Utils.formatDisk(vm?.size ?? 0);
+            cellView.label.stringValue = Utils.formatDisk(drive?.size ?? 0);
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if tableColumn?.identifier.rawValue == "Path" {
             let cellView = cell as! DrivesTableDrivePathCell;
-            cellView.label.stringValue = Utils.unescape(vm?.path ?? "");
+            cellView.label.stringValue = Utils.unescape(drive?.path ?? "");
             cellView.toolTip = cellView.label.stringValue;
         }
         
         if (tableColumn?.identifier.rawValue == "Buttons") {
             let cellView = cell as! DrivesTableButtonsCell;
-            if (vm?.mediaType == QemuConstants.MEDIATYPE_CDROM) {
+            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW) {
                 cellView.editButton.isEnabled = false;
                 cellView.infoButton.isEnabled = false;
             } else {

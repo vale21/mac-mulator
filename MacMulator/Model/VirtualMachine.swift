@@ -25,12 +25,13 @@ class VirtualMachine: Codable, Hashable {
     var qemuCommand: String?
     var hvf: Bool? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
     var portMappings: [PortMapping]? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
+    var type: String?
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, type;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, type: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -45,6 +46,7 @@ class VirtualMachine: Codable, Hashable {
         self.hvf = hvf
         self.drives = []
         self.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        self.type = type
     }
     
     func addVirtualDrive(_ drive: VirtualDrive){

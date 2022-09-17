@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class RootViewController: NSSplitViewController {
+class RootViewController: NSSplitViewController, NSWindowDelegate {
 
   
     private var listController: VirtualMachinesListViewController?;
@@ -15,11 +15,11 @@ class RootViewController: NSSplitViewController {
     
     var currentVm: VirtualMachine?
     var virtualMachines: [VirtualMachine] = [];
-    var runningVMs: [VirtualMachine : VirtualmachineRunner] = [:];
+    var runningVMs: [VirtualMachine : VirtualMachineRunner] = [:];
     
     override func viewDidLoad() {
         super.viewDidLoad();
-    
+            
         let children = self.children;
         
         listController = children[0] as? VirtualMachinesListViewController;
@@ -35,9 +35,29 @@ class RootViewController: NSSplitViewController {
         let delegate = NSApp.delegate as! AppDelegate;
         delegate.rootControllerDidFinishLoading(self);
     }
+    
+    override func viewWillAppear() {
+        self.view.window?.delegate = self;
+    }
+    
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
+        if areThereRunningVMs() {
+            let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+            if response.rawValue != Utils.ALERT_RESP_OK {
+                return false;
+            } else {
+                killAllRunningVMs();
+            }
+        }
+        return true;
+    }
 
     func startVMMenuBarClicked(_ sender: Any) {
         vmController?.startVM(sender: sender);
+    }
+    
+    func startVMInRecoveryMenuBarClicked(_ sender: Any) {
+        vmController?.startVMInRecovery(sender: sender);
     }
     
     func stopVMMenubarClicked(_ sender: Any) {
@@ -133,7 +153,7 @@ class RootViewController: NSSplitViewController {
         let virtualMachine = virtualMachines.remove(at: index);
         if self.isVMRunning(virtualMachine) {
             let runner = self.runningVMs[virtualMachine];
-            runner?.kill();
+            runner?.stopVM()
             self.runningVMs.removeValue(forKey: virtualMachine);
         }
         
@@ -159,7 +179,7 @@ class RootViewController: NSSplitViewController {
         })
     }
     
-    func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualmachineRunner) {
+    func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualMachineRunner) {
         runningVMs[vm] = runner;
         
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
@@ -187,11 +207,11 @@ class RootViewController: NSSplitViewController {
         return vm != nil && runningVMs[vm!] != nil;
     }
     
-    func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualmachineRunner? {
+    func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualMachineRunner? {
         return runningVMs[vm];
     }
     
-    func getRunnerForCurrentVM() -> VirtualmachineRunner? {
+    func getRunnerForCurrentVM() -> VirtualMachineRunner? {
         if let currentVm = self.currentVm {
             return runningVMs[currentVm];
         }
@@ -204,7 +224,7 @@ class RootViewController: NSSplitViewController {
     
     func killAllRunningVMs() {
         for runner in runningVMs.values {
-            runner.kill();
+            runner.stopVM()
         }
     }
 }

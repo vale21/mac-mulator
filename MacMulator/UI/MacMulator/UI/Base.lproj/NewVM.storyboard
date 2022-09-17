@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -282,35 +282,58 @@ DQ
             <objects>
                 <viewController id="Tqa-YD-Kdm" customClass="CreateVMFileViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="qJp-Fk-Y4f">
-                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="108"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="bso-Cc-Epo">
-                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <rect key="frame" x="25" y="44" width="302" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyV-iQ-kJO">
-                                <rect key="frame" x="92" y="46" width="194" height="16"/>
+                                <rect key="frame" x="18" y="72" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Creating new Virtual Machine..." id="zoH-ZF-BQj">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Creating new Virtual Machine..." id="zoH-ZF-BQj">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yd8-mu-GEg">
+                                <rect key="frame" x="328" y="41" width="25" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSStopProgressFreestandingTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="5dC-Yv-H6X">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" target="Tqa-YD-Kdm" id="vGo-XM-70k"/>
+                                </connections>
+                            </button>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdN-2B-gFS">
+                                <rect key="frame" x="18" y="20" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="GQ5-cq-QpX">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="descriptionLabel" destination="oyV-iQ-kJO" id="HBy-cC-10g"/>
+                        <outlet property="estimateTimeRemainingLabel" destination="jdN-2B-gFS" id="6Yf-dd-9eU"/>
                         <outlet property="progressBar" destination="bso-Cc-Epo" id="pOH-xs-K8N"/>
                     </connections>
                 </viewController>
                 <customObject id="Gkt-7J-oh7" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4" y="-333"/>
+            <point key="canvasLocation" x="-4.5" y="-320"/>
         </scene>
     </scenes>
     <resources>
         <image name="CD Icon" width="25" height="25"/>
         <image name="NSAddTemplate" width="15" height="13"/>
+        <image name="NSStopProgressFreestandingTemplate" width="15" height="15"/>
     </resources>
 </document>

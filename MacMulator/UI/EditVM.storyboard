@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -742,12 +742,14 @@
                     <connections>
                         <outlet property="architectureComboBox" destination="TgZ-59-ml0" id="BW9-Zz-SYZ"/>
                         <outlet property="cpusComboBox" destination="alY-XH-NeD" id="c1V-fI-wGP"/>
+                        <outlet property="createNewDiskButton" destination="Bub-6U-mRr" id="Q4q-hK-Ms8"/>
                         <outlet property="drivesTableView" destination="XFF-rf-sSL" id="cg4-qr-ZVO"/>
                         <outlet property="maxMemoryLabel" destination="M9W-xr-RhF" id="gZK-gh-Bfj"/>
                         <outlet property="memorySlider" destination="Or2-CQ-Js9" id="cur-AD-NEy"/>
                         <outlet property="memoryStepper" destination="Hw3-U6-vgX" id="UE7-io-KWq"/>
                         <outlet property="memoryTextView" destination="Bqq-6n-VM7" id="SuW-Gc-bcH"/>
                         <outlet property="minMemoryLabel" destination="wr5-u2-BeG" id="6LA-OG-jlc"/>
+                        <outlet property="openImageButton" destination="0Sa-qf-AbG" id="sh3-iZ-vLQ"/>
                     </connections>
                 </viewController>
                 <customObject id="Zzu-lc-Uxm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

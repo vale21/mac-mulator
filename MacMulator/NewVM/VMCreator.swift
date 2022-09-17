@@ -13,5 +13,7 @@ protocol VMCreator {
     
     func isComplete() -> Bool;
     
-    func isCreated() -> Bool;
+    func setProgress(_ progress: Double);
+    
+    func getProgress() -> Double;
 }

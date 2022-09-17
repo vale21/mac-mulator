@@ -24,6 +24,8 @@ class MacMulatorConstants {
     static let SHOW_DRIVE_INFO_SEGUE = "showDriveInfoSegue";
     static let PREFERENCES_SEGUE = "preferencesSegue";
     static let SHOW_CONSOLE_SEGUE = "showConsoleSegue";
+    static let SHOW_VM_VIEW_SEGUE = "showVMViewSegue";
+    static let SHOW_INSTALLING_OS_SEGUE = "showInstallingOSSegue";
     static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     
@@ -32,5 +34,8 @@ class MacMulatorConstants {
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath";
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate";
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled";
+    
+    static let QEMU_VM = "qemu"
+    static let APPLE_VM = "apple"
 
 }

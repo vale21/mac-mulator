@@ -26,6 +26,8 @@ class QemuUtils {
             return QemuConstants.EFI;
         } else if driveType == QemuConstants.MEDIATYPE_USB {
             return QemuConstants.USB;
+        } else if driveType == QemuConstants.MEDIATYPE_IPSW {
+            return QemuConstants.IPSW;
         }
         
         return QemuConstants.HD;
