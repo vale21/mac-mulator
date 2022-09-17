@@ -37,7 +37,7 @@ class CreateVMFileViewController : NSViewController {
             let os = parentController.vmType.stringValue;
             let subtype = parentController.vmSubType.stringValue;
             let architecture = Utils.getArchitectureForSubType(os, subtype);
-            let path = computePath();
+            let path = Utils.computeVMPath(vmName: parentController.vmName.stringValue)
             let displayName = parentController.vmName.stringValue;
             let description = computeDescription();
             let memory = Utils.getDefaultMemoryForSubType(os, subtype);

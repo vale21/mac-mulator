@@ -557,5 +557,10 @@ class Utils {
         } else {
             return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
         }
+
+    static func computeVMPath(vmName: String) -> String {
+        let userDefaults = UserDefaults.standard;
+        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
+        return Utils.unescape(path) + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION;
     }
 }
