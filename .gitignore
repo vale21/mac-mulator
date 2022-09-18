@@ -89,5 +89,5 @@ fastlane/test_output
 
 iOSInjectionProject/
 .DS_Store
-MacMulator.xcworkspace/xcshareddata/swiftpm/Package.resolved
+# MacMulator.xcworkspace/xcshareddata/swiftpm/Package.resolved
 
