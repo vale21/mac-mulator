@@ -122,9 +122,9 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withSound(_ sound: String?) -> QemuCommandBuilder {
+    func withSound(_ sound: [String]?) -> QemuCommandBuilder {
         if let soudHw = sound {
-            self.sound.append(soudHw);
+            self.sound.append(contentsOf: soudHw);
         }
         return self;
     }

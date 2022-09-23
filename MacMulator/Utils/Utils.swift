@@ -388,6 +388,10 @@ class Utils {
         return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI;
     }
     
+    static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 15) ?? QemuConstants.SOUND_HDA;
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {
