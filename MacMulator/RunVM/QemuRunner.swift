@@ -164,7 +164,7 @@ class QemuRunner : VirtualMachineRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_PC)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_AC97)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
@@ -192,12 +192,12 @@ class QemuRunner : VirtualMachineRunner {
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
-            .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice)
+            .withDevice(QemuConstants.USB_TABLET);
     }
     
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
@@ -210,7 +210,8 @@ class QemuRunner : VirtualMachineRunner {
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
@@ -245,7 +246,8 @@ class QemuRunner : VirtualMachineRunner {
             .withDisplay(QemuConstants.DISPLAY_DEFAULT)
             .withDevice(QemuConstants.VIRTIO_GPU_PCI)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withDevice(QemuConstants.QEMU_XHCI)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET);
@@ -348,13 +350,6 @@ class QemuRunner : VirtualMachineRunner {
             installDMGFile = "/Contents/SharedSupport/BaseSystem.dmg";
         }
         return path + installDMGFile;
-    }
-    
-    fileprivate func getSoundDevices(_ device: String) -> [String] {
-        if device == QemuConstants.SOUND_HDA {
-            return [QemuConstants.SOUND_HDA, QemuConstants.SOUND_HDA_DUPLEX]
-        }
-        return [device]
     }
     
     func waitForCompletion() {
