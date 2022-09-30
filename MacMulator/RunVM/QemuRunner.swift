@@ -331,7 +331,8 @@ class QemuRunner : VirtualMachineRunner {
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative);
         if (cpuType != QemuConstants.CPU_HOST &&
-            cpuType != QemuConstants.CPU_CORTEX_A72 ) {
+            cpuType != QemuConstants.CPU_CORTEX_A72 &&
+            cpuType != QemuConstants.CPU_MAX) {
             cpuType = QemuConstants.CPU_CORTEX_A72;
         }
         return cpuType

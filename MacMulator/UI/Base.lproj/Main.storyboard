@@ -2454,7 +2454,7 @@ Raspberry Pi</mutableString>
         <scene sceneID="qnX-XH-1U0">
             <objects>
                 <windowController id="xsA-Pr-uKN" customClass="MainWindowController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="zD6-kL-rGm">
+                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="zD6-kL-rGm">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="254" y="390" width="800" height="500"/>
@@ -2464,13 +2464,13 @@ Raspberry Pi</mutableString>
                             <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
-                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="small" id="LRO-Wk-yyP">
+                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
                                 <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" catalog="system" sizingBehavior="auto" id="F8q-EA-dwq">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
-                                        <rect key="frame" x="18" y="14" width="15" height="13"/>
+                                        <rect key="frame" x="18" y="14.5" width="14.5" height="13"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
