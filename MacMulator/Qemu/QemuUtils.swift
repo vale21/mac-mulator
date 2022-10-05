@@ -111,8 +111,7 @@ class QemuUtils {
         return fileManager.fileExists(atPath: qemuPath + "/" + binary);
     }
     
-    static func getQemuVersion(uponCompletion callback: @escaping (String?) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+    static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
         if !isBinaryAvailable(QemuConstants.QEMU_IMG) {
             callback(nil);
         } else {
@@ -121,15 +120,15 @@ class QemuUtils {
                 .withCommand(QemuConstants.IMAGE_CMD_VERSION)
                 .build();
             shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
-                    if terminationCode == 0 {
-                        let result = shell.readFromStandardOutput();
-                        if result.count > 22 {
-                            let version = result[result.index(result.startIndex, offsetBy: 17)..<result.index(result.startIndex, offsetBy: 22)];
-                            callback(String(version));
-                        } else {
-                            callback(nil);
-                        }
+                if terminationCode == 0 {
+                    let result = shell.readFromStandardOutput();
+                    if result.count > 22 {
+                        let version = result[result.index(result.startIndex, offsetBy: 17)..<result.index(result.startIndex, offsetBy: 22)];
+                        callback(String(version));
                     }
+                } else {
+                    callback(nil);
+                }
             });
         }
     }

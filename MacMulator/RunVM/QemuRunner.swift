@@ -22,10 +22,22 @@ class QemuRunner : VirtualMachineRunner {
         self.virtualMachine = virtualMachine;
     }
 
-    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
-        shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { result in
-            callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
-        });
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
+        let command = getQemuCommand()
+        do {
+            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: virtualMachine.qemuPath) {
+                validationResult, error in
+                if validationResult {
+                    self.shell.runCommand(command, self.virtualMachine.path, uponCompletion: { result in
+                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
+                    });
+                } else {
+                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.virtualMachine);
+                }
+            }
+        } catch {
+            throw error
+        }
     }
     
     func getManagedVM() -> VirtualMachine {
@@ -102,6 +114,59 @@ class QemuRunner : VirtualMachineRunner {
         }
     }
     
+    static func validateQemuCommand(command: String, globalQemuPath: String, configuredQemuPath: String?, uponCompletion callback: @escaping (Bool, ValidationError?) -> Void) throws {
+        if command.starts(with: "sudo") {
+            throw ValidationError.sudoNotAllowed
+        }
+        
+        let qemuPath = configuredQemuPath != nil ? configuredQemuPath! : globalQemuPath
+        if !command.starts(with: qemuPath) {
+            throw ValidationError.workingPathError(qemuPath: qemuPath, command: command)
+        }
+        
+        let allowedExecutables: [String] =  [
+            String(qemuPath + "/" + QemuConstants.ARCH_PPC),
+            String(qemuPath + "/" + QemuConstants.ARCH_PPC64),
+            String(qemuPath + "/" + QemuConstants.ARCH_X86),
+            String(qemuPath + "/" + QemuConstants.ARCH_X64),
+            String(qemuPath + "/" + QemuConstants.ARCH_ARM),
+            String(qemuPath + "/" + QemuConstants.ARCH_ARM64),
+            String(qemuPath + "/" + QemuConstants.ARCH_68K),
+            String(qemuPath + "/" + QemuConstants.ARCH_RISCV32),
+            String(qemuPath + "/" + QemuConstants.ARCH_RISCV64)
+        ]
+        
+        var matched = false
+        for executable in allowedExecutables {
+            if command.starts(with: executable) {
+                matched = true
+                break
+            }
+        }
+        
+        if !matched {
+            throw ValidationError.executableError(allowed: allowedExecutables.joined(separator: ",\n"), command: command)
+        }
+        
+        
+        QemuUtils.getQemuVersion(qemuPath: qemuPath, uponCompletion: {
+            version in
+            if let version = version {
+                let versionRegexp = try! NSRegularExpression(pattern: "[0-9]\\.[0.9]\\.[0-9]")
+                let range = NSRange(location: 0, length: version.utf16.count)
+                if versionRegexp.firstMatch(in: version, range: range) != nil {
+                    callback(true, nil)
+                } else {
+                    callback(false, ValidationError.genericError)
+                    print("Received version: " + version)
+                }
+            } else {
+                callback(false, ValidationError.genericError)
+                print("Received no version.")
+            }
+        })
+    }
+    
     fileprivate func setupMediaType(_ drive: VirtualDrive) -> String {
         var mediaType = drive.mediaType;
         if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
@@ -164,7 +229,7 @@ class QemuRunner : VirtualMachineRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_PC)
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_AC97)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
@@ -192,12 +257,12 @@ class QemuRunner : VirtualMachineRunner {
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
-            .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice)
+            .withDevice(QemuConstants.USB_TABLET);
     }
     
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
@@ -210,7 +275,8 @@ class QemuRunner : VirtualMachineRunner {
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
@@ -245,7 +311,8 @@ class QemuRunner : VirtualMachineRunner {
             .withDisplay(QemuConstants.DISPLAY_DEFAULT)
             .withDevice(QemuConstants.VIRTIO_GPU_PCI)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
-            .withSound(getSoundDevices(Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)))
+            .withSound(QemuConstants.SOUND_HDA)
+            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withDevice(QemuConstants.QEMU_XHCI)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET);
@@ -312,6 +379,7 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
+            cpuType != QemuConstants.CPU_SKYLAKE_CLIENT && 
             cpuType != QemuConstants.CPU_QEMU64 ) {
             cpuType = QemuConstants.CPU_QEMU64;
         }
@@ -329,7 +397,8 @@ class QemuRunner : VirtualMachineRunner {
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative);
         if (cpuType != QemuConstants.CPU_HOST &&
-            cpuType != QemuConstants.CPU_CORTEX_A72 ) {
+            cpuType != QemuConstants.CPU_CORTEX_A72 &&
+            cpuType != QemuConstants.CPU_MAX) {
             cpuType = QemuConstants.CPU_CORTEX_A72;
         }
         return cpuType
@@ -348,13 +417,6 @@ class QemuRunner : VirtualMachineRunner {
             installDMGFile = "/Contents/SharedSupport/BaseSystem.dmg";
         }
         return path + installDMGFile;
-    }
-    
-    fileprivate func getSoundDevices(_ device: String) -> [String] {
-        if device == QemuConstants.SOUND_HDA {
-            return [QemuConstants.SOUND_HDA, QemuConstants.SOUND_HDA_DUPLEX]
-        }
-        return [device]
     }
     
     func waitForCompletion() {

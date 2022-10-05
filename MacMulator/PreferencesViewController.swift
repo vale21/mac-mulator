@@ -159,7 +159,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     
     fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
         checkFile(path, image);
-        QemuUtils.getQemuVersion(uponCompletion: { version in
+        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
+        QemuUtils.getQemuVersion(qemuPath: qemuPath!, uponCompletion: { version in
             DispatchQueue.main.async {
                 if version == nil {
                     self.qemuVersionLabel.stringValue = "No Qemu detected. Will just use bundled qemu-img to manage disk images";

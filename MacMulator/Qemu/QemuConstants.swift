@@ -386,8 +386,8 @@ class QemuConstants {
         [OS_WIN, SUB_WINDOWS_11, ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_WIN, SUB_WINDOWS_10_ARM, ARCH_ARM64, 4, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_VIRT, nil, true, nil, nil],
         [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, nil, true, nil, nil],
+        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
+        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
         [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
         [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_E1000, SOUND_AC97],
         [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, false, NETWORK_RTL8139, SOUND_AC97],
@@ -449,7 +449,7 @@ class QemuConstants {
     static let MACHINE_TYPE_VERSATILEPB = "versatilepb";
     static let MACHINE_TYPE_Q35 = "q35";
     static let MACHINE_TYPE_PC = "pc";
-    static let MACHINE_TYPE_VIRT = "virt,highmem=on";
+    static let MACHINE_TYPE_VIRT = "virt,highmem=off";
     static let MACHINE_TYPE_Q800 = "q800";
     
     static let SERIAL_STDIO = "stdio";
@@ -495,10 +495,12 @@ class QemuConstants {
     static let DISPLAY_DEFAULT = "default";
     
     static let CPU_HOST = "host";
+    static let CPU_MAX = "max";
     static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2"
     static let CPU_PENRYN = "Penryn"
     static let CPU_SANDY_BRIDGE = "SandyBridge"
     static let CPU_IVY_BRIDGE = "IvyBridge"
+    static let CPU_SKYLAKE_CLIENT = "Skylake-Client"
     static let CPU_QEMU64 = "qemu64";
     static let CPU_CORTEX_A72 = "cortex-a72";
     static let CPU_ARM1176 = "arm1176"

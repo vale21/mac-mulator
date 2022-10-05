@@ -334,22 +334,36 @@ class VirtualMachineViewController: NSViewController {
                             QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
                         }
                         
-                        runner.runVM(recoveryMode: inRecovery, uponCompletion: {
-                            result, virtualMachine in
-                            DispatchQueue.main.async {
-                                self.cleanupStoppedVM(virtualMachine)
-                                
-                                if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                                    QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
-                                }
-                                
-                                if (result.exitCode != 0) {
-                                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Qemu execution failed with error: " + result.error!);
-                                }
-                            }
-                        });
+                        do {
+                            try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
+                                result, virtualMachine in
+                                self.completionhandler(result: result, virtualMachine: virtualMachine)
+                            });
+                        } catch let error as ValidationError {
+                            completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
+                        } catch {
+                            print (error.localizedDescription)
+                        }
                     }
                 }
+            }
+        }
+    }
+    
+    fileprivate func completionhandler(result: VMExecutionResult, virtualMachine: VirtualMachine) {
+        DispatchQueue.main.async {
+            self.cleanupStoppedVM(virtualMachine)
+            
+            if let rootController = self.rootController {
+                if let vm = rootController.currentVm {
+                    if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                        QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
+                    }
+                }
+            }
+            
+            if (result.exitCode != 0) {
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "VM execution failed with error: " + result.error!);
             }
         }
     }

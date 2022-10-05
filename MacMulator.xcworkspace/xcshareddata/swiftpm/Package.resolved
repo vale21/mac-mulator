@@ -1,25 +1,23 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "SocketSwift",
-        "repositoryURL": "https://github.com/BiAtoms/Socket.swift.git",
-        "state": {
-          "branch": null,
-          "revision": "36911c13adfe12859ed43dcba878052b1897fcd3",
-          "version": "2.4.0"
-        }
-      },
-      {
-        "package": "ZIPFoundation",
-        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
-        "state": {
-          "branch": null,
-          "revision": "7254c74b49cec2cb81520523ba993c671f71b066",
-          "version": "0.9.14"
-        }
+  "pins" : [
+    {
+      "identity" : "socket.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BiAtoms/Socket.swift.git",
+      "state" : {
+        "revision" : "36911c13adfe12859ed43dcba878052b1897fcd3",
+        "version" : "2.4.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "zipfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/weichsel/ZIPFoundation.git",
+      "state" : {
+        "revision" : "7254c74b49cec2cb81520523ba993c671f71b066",
+        "version" : "0.9.14"
+      }
+    }
+  ],
+  "version" : 2
 }
