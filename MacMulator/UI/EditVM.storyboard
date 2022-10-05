@@ -1213,7 +1213,7 @@ Gw
                                 <rect key="frame" x="18" y="208" width="564" height="42"/>
                                 <textFieldCell key="cell" selectable="YES" id="jNu-lL-BoJ">
                                     <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. To reset it to default you can just wipe the text box.</string>
+                                    <string key="title">If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. If you are changing the executable, be sure that it is trusted. To reset it to default you can just wipe the text box.</string>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
