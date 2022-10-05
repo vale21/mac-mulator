@@ -152,7 +152,7 @@ class QemuRunner : VirtualMachineRunner {
         QemuUtils.getQemuVersion(qemuPath: qemuPath, uponCompletion: {
             version in
             if let version = version {
-                let versionRegexp = try! NSRegularExpression(pattern: "[0-9]\\.[0.9]\\.[0-9]")
+                let versionRegexp = try! NSRegularExpression(pattern: "[0-9]\\.[0-9]\\.[0-9]")
                 let range = NSRange(location: 0, length: version.utf16.count)
                 if versionRegexp.firstMatch(in: version, range: range) != nil {
                     callback(true, nil)
