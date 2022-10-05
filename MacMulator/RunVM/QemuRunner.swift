@@ -22,10 +22,22 @@ class QemuRunner : VirtualMachineRunner {
         self.virtualMachine = virtualMachine;
     }
 
-    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
-        shell.runCommand(getQemuCommand(), virtualMachine.path, uponCompletion: { result in
-            callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
-        });
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
+        let command = getQemuCommand()
+        do {
+            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: virtualMachine.qemuPath) {
+                validationResult, error in
+                if validationResult {
+                    self.shell.runCommand(command, self.virtualMachine.path, uponCompletion: { result in
+                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine);
+                    });
+                } else {
+                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.virtualMachine);
+                }
+            }
+        } catch {
+            throw error
+        }
     }
     
     func getManagedVM() -> VirtualMachine {
@@ -100,6 +112,59 @@ class QemuRunner : VirtualMachineRunner {
             }
             return builder.build();
         }
+    }
+    
+    static func validateQemuCommand(command: String, globalQemuPath: String, configuredQemuPath: String?, uponCompletion callback: @escaping (Bool, ValidationError?) -> Void) throws {
+        if command.starts(with: "sudo") {
+            throw ValidationError.sudoNotAllowed
+        }
+        
+        let qemuPath = configuredQemuPath != nil ? configuredQemuPath! : globalQemuPath
+        if !command.starts(with: qemuPath) {
+            throw ValidationError.workingPathError(qemuPath: qemuPath, command: command)
+        }
+        
+        let allowedExecutables: [String] =  [
+            String(qemuPath + "/" + QemuConstants.ARCH_PPC),
+            String(qemuPath + "/" + QemuConstants.ARCH_PPC64),
+            String(qemuPath + "/" + QemuConstants.ARCH_X86),
+            String(qemuPath + "/" + QemuConstants.ARCH_X64),
+            String(qemuPath + "/" + QemuConstants.ARCH_ARM),
+            String(qemuPath + "/" + QemuConstants.ARCH_ARM64),
+            String(qemuPath + "/" + QemuConstants.ARCH_68K),
+            String(qemuPath + "/" + QemuConstants.ARCH_RISCV32),
+            String(qemuPath + "/" + QemuConstants.ARCH_RISCV64)
+        ]
+        
+        var matched = false
+        for executable in allowedExecutables {
+            if command.starts(with: executable) {
+                matched = true
+                break
+            }
+        }
+        
+        if !matched {
+            throw ValidationError.executableError(allowed: allowedExecutables.joined(separator: ",\n"), command: command)
+        }
+        
+        
+        QemuUtils.getQemuVersion(qemuPath: qemuPath, uponCompletion: {
+            version in
+            if let version = version {
+                let versionRegexp = try! NSRegularExpression(pattern: "[0-9]\\.[0.9]\\.[0-9]")
+                let range = NSRange(location: 0, length: version.utf16.count)
+                if versionRegexp.firstMatch(in: version, range: range) != nil {
+                    callback(true, nil)
+                } else {
+                    callback(false, ValidationError.genericError)
+                    print("Received version: " + version)
+                }
+            } else {
+                callback(false, ValidationError.genericError)
+                print("Received no version.")
+            }
+        })
     }
     
     fileprivate func setupMediaType(_ drive: VirtualDrive) -> String {
@@ -314,6 +379,7 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
+            cpuType != QemuConstants.CPU_SKYLAKE_CLIENT && 
             cpuType != QemuConstants.CPU_QEMU64 ) {
             cpuType = QemuConstants.CPU_QEMU64;
         }

@@ -8,6 +8,26 @@
 import Foundation
 import Cocoa
 
+enum ValidationError: Error, CustomStringConvertible {
+    case sudoNotAllowed
+    case workingPathError(qemuPath: String, command: String)
+    case executableError(allowed: String, command: String)
+    case genericError
+    
+    var description: String {
+        switch self {
+        case .sudoNotAllowed:
+            return "Incorrect Qemu command provided: The usage of sudo command is not allowed."
+        case .workingPathError(let qemuPath, let command):
+            return "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"" + qemuPath + "\".\n\nProvided command was: " + Utils.truncateString(command, 25)
+        case .executableError(let allowed, let command):
+            return "Incorrect Qemu command provided: The provided executable Is not a Qemu Executable. \n\nAllowed executables are: " + allowed + ".\n\nProvided command was: " + Utils.truncateString(command, 50)
+        case .genericError:
+            return "The provided Qemu executable is broken or unsupported"
+        }
+    }
+}
+
 class Utils {
     
     static let ALERT_RESP_OK = 1000;
@@ -572,5 +592,13 @@ class Utils {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
         return Utils.unescape(path) + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION;
+    }
+    
+    static func truncateString(_ string: String, _ length: Int) -> String {
+        if string.count <= length {
+            return string
+        } else {
+            return string.prefix(length) + "..."
+        }
     }
 }
