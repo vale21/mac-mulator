@@ -79,10 +79,7 @@ class QemuConstants {
     static let SUB_SYSTEM_1 = "System 1";
     
     static let SUB_WIN_GENERIC = "Generic Windows";
-    static let SUB_WINDOWS_11 = "Windows 11";
-    static let SUB_WINDOWS_11_ARM = "Windows 11 (ARM)";
     static let SUB_WINDOWS_10 = "Windows 10";
-    static let SUB_WINDOWS_10_ARM = "Windows 10 (ARM)";
     static let SUB_WINDOWS_8_1 = "Windows 8.1";
     static let SUB_WINDOWS_8 = "Windows 8";
     static let SUB_WINDOWS_7 = "Windows 7";
@@ -97,20 +94,11 @@ class QemuConstants {
     static let SUB_WINDOWS_2 = "Windows 2";
     static let SUB_WINDOWS_1 = "Windows 1";
     
-    static let SUB_LINUX_GENERIC = "Generic Linux (x64)";
-    static let SUB_LINUX_GENERIC_ARM = "Generic Linux (ARM)";
-    static let SUB_LINUX_GENERIC_PPC = "Generic Linux (PPC)";
-    static let SUB_LINUX_GENERIC_RISCV = "Generic Linux (RISC-V)";
+    static let SUB_LINUX_GENERIC = "Generic Linux";
     static let SUB_MX_LINUX = "MX Linux";
     static let SUB_LINUX_MINT = "Linux Mint";
-    static let SUB_LINUX_MINT_ARM = "Linux Mint (ARM)";
-    static let SUB_LINUX_MINT_PPC = "Linux Mint (PPC)";
     static let SUB_DEBIAN = "Debian GNU/Linux";
-    static let SUB_DEBIAN_ARM = "Debian GNU/Linux (ARM)";
-    static let SUB_DEBIAN_PPC = "Debian GNU/Linux (PPC)";
     static let SUB_UBUNTU = "Ubuntu Linux";
-    static let SUB_UBUNTU_ARM = "Ubuntu Linux (ARM)";
-    static let SUB_UBUNTU_PPC = "Ubuntu Linux (PPC)";
     static let SUB_OPENSUSE = "openSUSE";
     static let SUB_MANJARO = "Manjaro Linux";
     static let SUB_RED_HAT = "Red Hat Linux";
@@ -359,8 +347,8 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
-        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_VENTURA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil],
-        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_MONTEREY, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil],
+        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil],
+        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil],
         [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil],
         [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil],
         [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil],
@@ -382,10 +370,7 @@ class QemuConstants {
         [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil],
         [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil],
         [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_11_ARM, ARCH_ARM64, 4, 2048, 32768, 2048, 250, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_VIRT, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_11, ARCH_X64, 2, 2048, 32768, 2048, 250, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_10_ARM, ARCH_ARM64, 4, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_VIRT, nil, true, nil, nil],
-        [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
+        [OS_WIN, SUB_WINDOWS_10, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, Utils.getPreferredMachineType(), Utils.getPreferredCPU(), true, NETWORK_E1000, nil],
         [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
         [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
         [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil],
@@ -396,19 +381,11 @@ class QemuConstants {
         [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil],
         [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil],
         [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
+        [OS_LINUX, SUB_LINUX_GENERIC, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil],
         [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_LINUX_MINT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_LINUX_MINT_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
-        [OS_LINUX, SUB_LINUX_MINT_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_LINUX_MINT, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
-        [OS_LINUX, SUB_DEBIAN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_DEBIAN_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
-        [OS_LINUX, SUB_DEBIAN_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_DEBIAN, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
-        [OS_LINUX, SUB_UBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_UBUNTU_ARM, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
-        [OS_LINUX, SUB_UBUNTU_PPC, ARCH_PPC, 1, 128, 2048, 512, 30, 8192, 250, ICON_UBUNTU, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
+        [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil],
+        [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil],
+        [OS_LINUX, SUB_UBUNTU, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, Utils.getPreferredMachineType(), nil, true, nil, nil],
         [OS_LINUX, SUB_OPENSUSE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_OPENSUSE, MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_ARCH_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ARCH_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_MANJARO, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MANJARO, MACHINE_TYPE_Q35, nil, true, nil, nil],

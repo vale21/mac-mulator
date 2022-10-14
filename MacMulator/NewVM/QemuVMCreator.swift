@@ -102,7 +102,7 @@ class QemuVMCreator: VMCreator {
         
         do {
             if (vm.architecture == QemuConstants.ARCH_ARM64) {
-                try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+                try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
             }
             if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
                 var opencore: String = "";

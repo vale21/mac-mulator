@@ -262,7 +262,8 @@ class QemuRunner : VirtualMachineRunner {
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
-            .withDevice(QemuConstants.USB_TABLET);
+            .withDevice(QemuConstants.USB_TABLET)
+            .withNetwork(name: "network-0", device: networkDevice);
     }
     
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {

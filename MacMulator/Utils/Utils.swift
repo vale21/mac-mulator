@@ -502,31 +502,20 @@ class Utils {
         #endif
     }
     
-    fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
-        for vmDefault in QemuConstants.vmDefaults {
-            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
-                return vmDefault[index] as? String;
-            }
-        }
-        return nil;
+    static func getPreferredMachineType() -> String {
+        #if arch(arm64)
+        return QemuConstants.MACHINE_TYPE_VIRT
+        #else
+        return QemuConstants.MACHINE_TYPE_Q35
+        #endif
     }
     
-    fileprivate static func getIntValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Int) -> Int {
-        for vmDefault in QemuConstants.vmDefaults {
-            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
-                return vmDefault[index] as! Int;
-            }
-        }
-        return defaultValue;
-    }
-    
-    fileprivate static func getBoolValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Bool) -> Bool {
-        for vmDefault in QemuConstants.vmDefaults {
-            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
-                return vmDefault[index] as! Bool;
-            }
-        }
-        return defaultValue;
+    static func getPreferredCPU() -> String {
+        #if arch(arm64)
+        return QemuConstants.CPU_IVY_BRIDGE
+        #else
+        return QemuConstants.CPU_MAX
+        #endif
     }
     
     static func random(digits:Int32) -> Int32 {
@@ -600,5 +589,32 @@ class Utils {
         } else {
             return string.prefix(length) + "..."
         }
+    }
+    
+    fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[index] as? String;
+            }
+        }
+        return nil;
+    }
+    
+    fileprivate static func getIntValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Int) -> Int {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[index] as! Int;
+            }
+        }
+        return defaultValue;
+    }
+    
+    fileprivate static func getBoolValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Bool) -> Bool {
+        for vmDefault in QemuConstants.vmDefaults {
+            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+                return vmDefault[index] as! Bool;
+            }
+        }
+        return defaultValue;
     }
 }

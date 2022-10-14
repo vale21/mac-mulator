@@ -49,7 +49,7 @@
 		3B9D7C5B2804638900C9510B /* MacOSRestoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */; };
 		3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
 		3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9E42A72806178500981297 /* Virtualization.framework */; };
-		3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */; };
+		3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471D25CABDAE00A4DBA7 /* Shell.swift */; };
 		3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471E25CABDAE00A4DBA7 /* Utils.swift */; };
@@ -107,7 +107,7 @@
 				3B3E56E226EF59E400D79C92 /* OPENCORE_LEGACY.zip in CopyFiles */,
 				3B559E6926EB55410071E5B5 /* OPENCORE_MODERN.zip in CopyFiles */,
 				3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */,
-				3BA985FC26C2804B00D2C5DB /* QEMU_EFI.fd in CopyFiles */,
+				3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -160,7 +160,7 @@
 		3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSRestoreImage.swift; sourceTree = "<group>"; };
 		3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3B9E42A72806178500981297 /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
-		3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = QEMU_EFI.fd; sourceTree = "<group>"; };
+		3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = ARM_QEMU_EFI.fd; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -360,7 +360,7 @@
 				3B3E56E026EF59C900D79C92 /* OPENCORE_LEGACY.zip */,
 				3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
-				3BA985FB26C27F2600D2C5DB /* QEMU_EFI.fd */,
+				3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
 				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
@@ -728,7 +728,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
@@ -758,7 +758,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 19;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;

@@ -245,6 +245,7 @@ class QemuCommandBuilder {
         if self.addQmpString == true, let managementPort = self.managementPort{
             cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait";
         }
+        cmd += " -rtc base=localtime,clock=host"
         
         return cmd;
     }
