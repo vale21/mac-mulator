@@ -226,10 +226,22 @@ class Utils {
         if ipsws.count == 0 {
             return nil;
         }
-        if ipsws.count == 1 {
-            return ipsws[0];
-        }
         return ipsws[0];
+    }
+    
+    static func findNvramDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non NVRAM drives
+        var nvrams: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                nvrams.append(drive);
+            }
+        }
+        
+        if nvrams.count == 0 {
+            return nil;
+        }
+        return nvrams[0];
     }
     
     static func getParentDir(_ path: String) -> String {

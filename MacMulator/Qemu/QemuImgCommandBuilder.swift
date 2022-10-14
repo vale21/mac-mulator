@@ -14,11 +14,11 @@ class QemuImgCommandBuilder {
     var command: String?;
     var format: String?;
     var targetFormat: String?;
-    var size: Int32?;
+    var size: String?;
     var name: String?;
     var targetName: String?;
     var shrinkArg: Bool?;
-    var shortSize: Int32?;
+    var shortSize: String?;
     
     init(qemuPath: String) {
         self.qemuPath = qemuPath;
@@ -39,7 +39,7 @@ class QemuImgCommandBuilder {
         return self;
     }
     
-    func withSize(_ size: Int32) -> QemuImgCommandBuilder {
+    func withSize(_ size: String) -> QemuImgCommandBuilder {
         self.size = size;
         return self;
     }
@@ -59,7 +59,7 @@ class QemuImgCommandBuilder {
         return self;
     }
     
-    func withShortSize(_ shortSize: Int32) -> QemuImgCommandBuilder {
+    func withShortSize(_ shortSize: String) -> QemuImgCommandBuilder {
         self.shortSize = shortSize;
         return self;
     }
@@ -82,7 +82,7 @@ class QemuImgCommandBuilder {
             cmd += " -O " + targetFormat;
         }
         if let size = self.size {
-            cmd += " -o size=" + String(size) + "G";
+            cmd += " -o size=" + size;
         }
         if let name = self.name {
             cmd += " " + name;
@@ -94,7 +94,7 @@ class QemuImgCommandBuilder {
             cmd += shrinkArg ? " --shrink" : "";
         }
         if let shortSize = self.shortSize {
-            cmd += " " + String(shortSize) + "G";
+            cmd += " " + shortSize
         }
         
         return cmd;

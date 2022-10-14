@@ -15,6 +15,7 @@ class QemuConstants {
     static let MEDIATYPE_CDROM = "cdrom";
     static let MEDIATYPE_USB = "usb";
     static let MEDIATYPE_EFI = "efi";
+    static let MEDIATYPE_NVRAM = "nvram";
     static let MEDIATYPE_OPENCORE = "opencore";
     static let MEDIATYPE_IPSW = "ipsw";
     

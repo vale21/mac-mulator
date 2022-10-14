@@ -40,6 +40,17 @@ class QemuVMCreator: VMCreator {
                 mediaType: QemuConstants.MEDIATYPE_EFI,
                 size: 0);
             vm.addVirtualDrive(virtualEfi)
+            
+            if vm.architecture == QemuConstants.ARCH_ARM64 {
+                
+                let virtualNvram = VirtualDrive(
+                    path: vm.path + "/nvram-0",
+                    name: "nvram-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_NVRAM,
+                    size: 0);
+                vm.addVirtualDrive(virtualNvram)
+            }
         }
         
         if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
@@ -103,6 +114,10 @@ class QemuVMCreator: VMCreator {
         do {
             if (vm.architecture == QemuConstants.ARCH_ARM64) {
                 try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+                let nvramDrive = Utils.findNvramDrive(vm.drives)
+                if let nvramDrive = nvramDrive {
+                    QemuUtils.createDiskImage(path: vm.path, name: nvramDrive.name, format: nvramDrive.format, size: "67108864", uponCompletion: { result in })
+                }
             }
             if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
                 var opencore: String = "";
@@ -113,7 +128,6 @@ class QemuVMCreator: VMCreator {
                 }
                 
                 try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
-                
                 let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
                 let destinationURL = URL(fileURLWithPath: vm.path);
                 try FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);

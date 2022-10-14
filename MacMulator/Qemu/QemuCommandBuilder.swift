@@ -134,6 +134,13 @@ class QemuCommandBuilder {
             var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=false";
             driveString.append(" -drive \"if=none,media=disk,id=drive" + String(index) + ",file=" + file + ",cache=writethrough\"");
             self.drives.append(driveString);
+        } else if media == QemuConstants.MEDIATYPE_NVRAM {
+            var driveString = "-drive file=" + Utils.escape(file);
+            if format != QemuConstants.FORMAT_UNKNOWN {
+                driveString.append(",format=" + format);
+            }
+            driveString.append(",if=pflash,index=0");
+            self.drives.append(driveString);
         } else {
             var driveString = "-drive file=" + Utils.escape(file);
             if format != QemuConstants.FORMAT_UNKNOWN {

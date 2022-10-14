@@ -34,15 +34,19 @@ class QemuUtils {
     }
     
     static func createDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
+        createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
+    }
+    
+    static func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         let shell = Shell();
 
         let command: String =
             QemuImgCommandBuilder(qemuPath:qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CREATE)
-            .withFormat(virtualDrive.format)
-            .withSize(virtualDrive.size)
-            .withName(virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
+            .withFormat(format)
+            .withSize(size)
+            .withName(name)
             .build();
         
         shell.runCommand(command, path, uponCompletion: callback);
@@ -56,7 +60,7 @@ class QemuUtils {
             .withCommand(QemuConstants.IMAGE_CMD_RESIZE)
             .withName(virtualDrive.path)
             .withShrinkArg(shrink)
-            .withShortSize(virtualDrive.size)
+            .withShortSize(String(virtualDrive.size) + "G")
             .build();
         
         shell.runCommand(command, path, uponCompletion: callback);
