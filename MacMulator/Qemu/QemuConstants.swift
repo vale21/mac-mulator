@@ -12,6 +12,7 @@ class QemuConstants {
     // Disk image constants
     
     static let MEDIATYPE_DISK = "disk";
+    static let MEDIATYPE_NVME = "nvme";
     static let MEDIATYPE_CDROM = "cdrom";
     static let MEDIATYPE_USB = "usb";
     static let MEDIATYPE_EFI = "efi";
@@ -399,12 +400,12 @@ class QemuConstants {
         [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
-        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
+        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil],
         [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil],
-        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT, CPU_MAX, true, nil, nil],
-        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT, CPU_ARM1176, false, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil],
         [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
         [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil],
         [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OS_OTHER.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil]
@@ -427,7 +428,8 @@ class QemuConstants {
     static let MACHINE_TYPE_VERSATILEPB = "versatilepb";
     static let MACHINE_TYPE_Q35 = "q35";
     static let MACHINE_TYPE_PC = "pc";
-    static let MACHINE_TYPE_VIRT = "virt,highmem=on";
+    static let MACHINE_TYPE_VIRT = "virt,highmem=no";
+    static let MACHINE_TYPE_VIRT_HIGHMEM = "virt,highmem=on";
     static let MACHINE_TYPE_Q800 = "q800";
     
     static let SERIAL_STDIO = "stdio";
@@ -489,6 +491,7 @@ class QemuConstants {
     static let USB_KEYBOARD = "usb-kbd";
     static let USB_TABLET = "usb-tablet";
     static let QEMU_XHCI = "qemu-xhci";
+    static let RAMFB = "ramfb";
     static let APPLE_SMC = "isa-applesmc,osk=\"ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc\""
     static let VIRTIO_GPU_PCI = "virtio-gpu-pci";
     

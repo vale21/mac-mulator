@@ -300,23 +300,22 @@ class QemuRunner : VirtualMachineRunner {
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
+        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
         
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-            .withSerial(QemuConstants.SERIAL_STDIO)
             .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VIRT)
             .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(virtualMachine.memory)
-            .withDisplay(QemuConstants.DISPLAY_DEFAULT)
-            .withDevice(QemuConstants.VIRTIO_GPU_PCI)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withDevice(QemuConstants.QEMU_XHCI)
             .withDevice(QemuConstants.USB_KEYBOARD)
-            .withDevice(QemuConstants.USB_TABLET);
+            .withDevice(QemuConstants.USB_TABLET)
+            .withDevice(QemuConstants.RAMFB)
+            .withNic(QemuConstants.VGA_VIRTIO)
+            .withNetwork(name: "network-0", device: networkDevice)
     }
 
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
@@ -400,7 +399,7 @@ class QemuRunner : VirtualMachineRunner {
         if (cpuType != QemuConstants.CPU_HOST &&
             cpuType != QemuConstants.CPU_CORTEX_A72 &&
             cpuType != QemuConstants.CPU_MAX) {
-            cpuType = QemuConstants.CPU_CORTEX_A72;
+            cpuType = QemuConstants.CPU_MAX;
         }
         return cpuType
     }

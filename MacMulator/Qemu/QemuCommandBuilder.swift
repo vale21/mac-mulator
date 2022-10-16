@@ -34,6 +34,7 @@ class QemuCommandBuilder {
     var network: String?;
     var portMappings: [PortMapping] = []
     var managementPort: Int32?;
+    var nic: String?
     
     init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath;
@@ -134,12 +135,17 @@ class QemuCommandBuilder {
             var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=false";
             driveString.append(" -drive \"if=none,media=disk,id=drive" + String(index) + ",file=" + file + ",cache=writethrough\"");
             self.drives.append(driveString);
+        } else if media == QemuConstants.MEDIATYPE_NVME {
+            var driveString = "-drive file=" + Utils.escape(file);
+            driveString.append(",if=none,id=boot,cache=writethrough");
+            driveString.append(" -device nvme,drive=boot,serial=boot");
+            self.drives.append(driveString);
         } else if media == QemuConstants.MEDIATYPE_NVRAM {
             var driveString = "-drive file=" + Utils.escape(file);
             if format != QemuConstants.FORMAT_UNKNOWN {
                 driveString.append(",format=" + format);
             }
-            driveString.append(",if=pflash,index=0");
+            driveString.append(",if=pflash,index=1");
             self.drives.append(driveString);
         } else {
             var driveString = "-drive file=" + Utils.escape(file);
@@ -185,6 +191,11 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withNic(_ nic: String) -> QemuCommandBuilder {
+        self.nic = nic;
+        return self;
+    }
+    
     func build() -> String {
         var cmd = self.qemuPath + "/" + self.executable;
         if let serial = self.serial {
@@ -219,8 +230,11 @@ class QemuCommandBuilder {
         if let usb = self.usb, usb {
             cmd += " -usb";
         }
-        for usb in self.device {
-            cmd += " -device " + usb;
+        if let nic = self.nic {
+            cmd += " -nic user,model=" + nic
+        }
+        for device in self.device {
+            cmd += " -device " + device;
         }
         if let machine = self.machine {
             cmd += " -M " + machine;

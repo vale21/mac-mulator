@@ -516,7 +516,7 @@ class Utils {
     
     static func getPreferredMachineType() -> String {
         #if arch(arm64)
-        return QemuConstants.MACHINE_TYPE_VIRT
+        return QemuConstants.MACHINE_TYPE_VIRT_HIGHMEM
         #else
         return QemuConstants.MACHINE_TYPE_Q35
         #endif
