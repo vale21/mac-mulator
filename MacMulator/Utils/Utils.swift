@@ -129,6 +129,22 @@ class Utils {
                 .dropLast());
     }
     
+    static func extractDriveSize(_ driveInfo: String) -> String? {
+        if let range: Range<String.Index> = driveInfo.range(of: "virtual size: ")  {
+            let index: Int = driveInfo.distance(from: driveInfo.startIndex, to: range.lowerBound) + "virtual size: ".count
+            print("index: ", index)
+            
+            if let range: Range<String.Index> = driveInfo.range(of: " GiB") {
+                let index2: Int = driveInfo.distance(from: driveInfo.startIndex, to: range.lowerBound)
+                print("index2: ", index2)
+                
+                return driveInfo.substring(with: String.Index(encodedOffset: index)..<String.Index(encodedOffset: index2))
+            }
+        }
+            
+        return nil
+    }
+    
     fileprivate static func toDecimalWithAutoLocale(_ string: String) -> Decimal? {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -195,7 +211,7 @@ class Utils {
         // purge non HDD drives
         var hdds: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
-            if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
                 hdds.append(drive);
             }
         }
@@ -424,7 +440,7 @@ class Utils {
         var size = 0;
         if let vm = virtualMachine {
             for drive in vm.drives {
-                if drive.mediaType != QemuConstants.MEDIATYPE_EFI && drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE {
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI && drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE && drive.mediaType != QemuConstants.MEDIATYPE_NVRAM {
                     size += 1;
                 }
             }
@@ -442,7 +458,7 @@ class Utils {
                     // end loop and return
                     return row + counter;
                 }
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
                     counter += 1;
                 }
                 iterationIndex += 1
@@ -510,7 +526,7 @@ class Utils {
         #if arch(arm64)
         return QemuConstants.ARCH_ARM64
         #else
-        return QemuConstants.ARCH_X64
+        return QemuConstants.ARCH_ARM64
         #endif
     }
     

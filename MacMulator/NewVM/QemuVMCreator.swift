@@ -15,7 +15,7 @@ class QemuVMCreator: VMCreator {
 
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)!;
-        try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD);
+        try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia);
     }
     
     func isComplete() -> Bool {
@@ -40,17 +40,16 @@ class QemuVMCreator: VMCreator {
                 mediaType: QemuConstants.MEDIATYPE_EFI,
                 size: 0);
             vm.addVirtualDrive(virtualEfi)
-            
-            if vm.architecture == QemuConstants.ARCH_ARM64 {
-                
-                let virtualNvram = VirtualDrive(
-                    path: vm.path + "/nvram-0",
-                    name: "nvram-0",
-                    format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_NVRAM,
-                    size: 0);
-                vm.addVirtualDrive(virtualNvram)
-            }
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_ARM64 {
+            let virtualNvram = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_NVRAM + "-0",
+                name: QemuConstants.MEDIATYPE_NVRAM + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_NVRAM,
+                size: 0);
+            vm.addVirtualDrive(virtualNvram)
         }
         
         if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
@@ -62,15 +61,8 @@ class QemuVMCreator: VMCreator {
                 size: 0);
             vm.addVirtualDrive(openCore);
         }
-        
-        let virtualHDD = VirtualDrive(
-            path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
-            name: QemuConstants.MEDIATYPE_DISK + "-0",
-            format: QemuConstants.FORMAT_QCOW2,
-            mediaType: QemuConstants.MEDIATYPE_DISK,
-            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
-        vm.addVirtualDrive(virtualHDD);
-        
+            
+        var virtualHDD: VirtualDrive? = nil
         if installMedia != "" {
             if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
                 // Install media is a USB stick
@@ -82,6 +74,16 @@ class QemuVMCreator: VMCreator {
                     size: 0);
                 virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB);
+            } else if installMedia.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased()) { // Case insensitive check for vhdx extension
+                // Install media is a VHDX drive. We create a VirtualDrive of type NVME
+                virtualHDD = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_DISK + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_NVME,
+                    size: 0); // Size is zero because we don't know it at this stage. We will upadte it after the conversion to qvd
+                virtualHDD!.isBootDrive = true
+                vm.addVirtualDrive(virtualHDD!);
             } else {
                 // Install media is a CD
                 let virtualCD = VirtualDrive(
@@ -95,17 +97,35 @@ class QemuVMCreator: VMCreator {
             }
         }
         
-        return virtualHDD;
+        if virtualHDD == nil {
+            virtualHDD = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
+                name: QemuConstants.MEDIATYPE_DISK + "-0",
+                format: QemuConstants.FORMAT_QCOW2,
+                mediaType: QemuConstants.MEDIATYPE_DISK,
+                size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
+            vm.addVirtualDrive(virtualHDD!);
+        }
+        
+        return virtualHDD! // Safe to do this because the virtualHDD object is created above, it was found nil
     }
     
-    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive) throws {
+    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, installMedia: String) throws {
         
         do {
             try Utils.createDocumentPackage(vm.path);
-            QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                terminationCcode in
-                vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-            });
+            if virtualHDD.mediaType != QemuConstants.MEDIATYPE_NVME {
+                QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                    terminationCcode in
+                    vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                });
+            } else {
+                QemuUtils.convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                    terminationCode, driveSize in
+                    virtualHDD.size = driveSize
+                    vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                })
+            }
         } catch {
             complete = true;
             throw error;

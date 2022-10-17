@@ -28,6 +28,10 @@ class QemuUtils {
             return QemuConstants.USB;
         } else if driveType == QemuConstants.MEDIATYPE_IPSW {
             return QemuConstants.IPSW;
+        } else if driveType == QemuConstants.MEDIATYPE_NVRAM {
+            return QemuConstants.NVRAM;
+        } else if driveType == QemuConstants.MEDIATYPE_NVME {
+            return QemuConstants.NVME;
         }
         
         return QemuConstants.HD;
@@ -79,6 +83,42 @@ class QemuUtils {
             .build();
         
         shell.runCommand(command, path, uponCompletion: callback);
+    }
+    
+    static func convertVHDXToDiskImage(vhdxPath: String, vmPath: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
+        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
+        let shell = Shell();
+        
+        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+            .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
+            .withName(vhdxPath)
+            .withTargetName(virtualDrive.path)
+            .build();
+        
+        shell.runCommand(command, vmPath, uponCompletion: {
+            terminationCode in
+            var completed = false
+            
+            if terminationCode == 0 {
+                QemuUtils.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {
+                    infoCode, output in
+                    if infoCode == 0 {
+                        let driveSize = Utils.extractDriveSize(output)
+                        if let driveSize = driveSize {
+                            let size = Int32(driveSize)
+                            if let size = size {
+                                completed = true
+                                callback(infoCode, size)
+                            }
+                        }
+                    }
+                })
+            }
+            
+            if !completed {
+                callback(-1, -1)
+            }
+        })
     }
     
     static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {

@@ -29,6 +29,7 @@ class QemuConstants {
     static let FORMAT_QCOW2 = "qcow2";
     static let FORMAT_RAW = "raw";
     static let FORMAT_UNKNOWN = "unknown";
+    static let FORMAT_VHDX = "vhdx";
     
     // Virtual Machine constants
     
@@ -38,6 +39,8 @@ class QemuConstants {
     static let IPSW = "IPSW Install Image";
     static let EFI = "EFI Firmware";
     static let NET = "Network";
+    static let NVRAM = "Nvram"
+    static let NVME = "NVMe Drive"
     
     static let ARG_CD = "d";
     static let ARG_HD = "c";
