@@ -117,6 +117,7 @@ class QemuConstants {
     static let SUB_ARCH_LINUX = "Arch Linux";
     static let SUB_REACT_OS = "ReactOS";
     static let SUB_RASPBERRY_OS = "Raspberry Pi OS";
+    static let SUB_KALI_LINUX = "Kali Linux";
     
     static let SUB_OTHER_GENERIC = "Generic VM";
     static let SUB_OTHER_x64 = "Generic x86_64 VM";
@@ -162,6 +163,7 @@ class QemuConstants {
     static let ICON_ARCH_LINUX = "arch.linux";
     static let ICON_MANJARO = "manjaro";
     static let ICON_FEDORA = "fedora";
+    static let ICON_KALI_LINUX = "kali.linux";
     
     
     static let QEMU_IMG = "qemu-img";
@@ -401,6 +403,7 @@ class QemuConstants {
         [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
+        [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil],
         [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil],
         [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil],
