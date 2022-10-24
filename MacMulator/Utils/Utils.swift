@@ -424,7 +424,7 @@ class Utils {
         if let cpu = definedCpu {
             return cpu;
         } else {
-            return isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64;
+            return isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64
         }
     }
     
@@ -433,7 +433,11 @@ class Utils {
     }
 
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI;
+        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
+    }
+    
+    static func getIUrlForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 16) ?? QemuConstants.URL_APPLE_COM
     }
     
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {

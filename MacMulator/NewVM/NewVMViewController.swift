@@ -28,6 +28,11 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         });
     }
     
+    @IBAction func downloadInstallMedia(_ sender: Any) {
+        let url = URL(string: Utils.getIUrlForSubType(vmType.stringValue, vmSubType.stringValue))!
+        NSWorkspace.shared.open(url)
+    }
+    
     @IBAction func createVM(_ sender: Any) {
         if (validateInput()) {
             if Utils.isMacVMWithOSVirtualizationFramework(os: vmType.stringValue, subtype: vmSubType.stringValue) && !Utils.isIpswInstallMediaProvided(installMedia.stringValue) {
