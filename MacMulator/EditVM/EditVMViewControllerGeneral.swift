@@ -15,7 +15,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet weak var bootOrderTable: NSTableView!
     @IBOutlet weak var resolutionTable: NSTableView!
-    
+
     var virtualMachine: VirtualMachine?;
     let accountPasteboardType = NSPasteboard.PasteboardType.string;
         
@@ -42,17 +42,17 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     
     func updateView() {
         if let virtualMachine = self.virtualMachine {
-            vmType.stringValue = virtualMachine.os;
-            vmSubType.stringValue = virtualMachine.subtype ?? Utils.getSubType(virtualMachine.os, 0);
-            
-            vmName.stringValue = virtualMachine.displayName;
-            vmDescription.string = virtualMachine.description;
+            vmType.stringValue = virtualMachine.os
+            vmSubType.stringValue = virtualMachine.subtype
+
+            vmName.stringValue = virtualMachine.displayName
+            vmDescription.string = virtualMachine.description
             
             let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution)!
-            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false);
+            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false)
             
-            bootOrderTable.reloadData();
-            selectBootDrive(virtualMachine);
+            bootOrderTable.reloadData()
+            selectBootDrive(virtualMachine)
             
         }
     }
@@ -126,9 +126,12 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         if notification.object as? NSComboBox == vmType {
             vmSubType.stringValue = Utils.getSubType(comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as? String, 0);
             vmSubType.reloadData();
-            virtualMachine?.os = QemuConstants.supportedVMTypes[vmType.indexOfSelectedItem];
+            
+            virtualMachine?.os = QemuConstants.supportedVMTypes[vmType.indexOfSelectedItem]
+            virtualMachine?.subtype = Utils.getSubType(virtualMachine?.os, 0);
+             
         } else {
-            virtualMachine?.subtype = Utils.getSubType(comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as? String, vmSubType.indexOfSelectedItem);
+            virtualMachine?.subtype = Utils.getSubType(virtualMachine?.os, vmSubType.indexOfSelectedItem);
         }
     }
     
