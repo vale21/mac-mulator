@@ -37,22 +37,22 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 | Intel    | Mac OS X Panther  | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
 | Intel    | Mac OS X Tiger    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.0.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
 | Intel    | Mac OS X Leopard    | PowerPc            | ✅ WORKING     | Tested with Qemu 6.1.0 via Homebrew and Qemu 5.2 from E-Macmulation                   |
-| Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio, no HVF and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
-| Intel    | Mac OS X Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 12 or later with no audio, no HVF and fixed screen resolution.  |
-| Intel    | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF and fixed screen resolution.   |
-| Apple M1    | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF and fixed screen resolution. Performances are as good as if the same VM is executed on Intel hardware.  |
-| Intel    | OS X Mavericks | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio, no HVF, no networking and fixed screen resolution. |
+| Intel    | Mac OS X Snow Leopard | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio and no HVF |
+| Intel    | Mac OS X Lion | x86_64             | ⚠️ WORKING WITH ISSUES |  Works in Beta 12 or later with no audio and no HVF |
+| Intel    | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio and no HVF |
+| Apple Silicon | OS X Mountain Lion | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio |
+| Intel    | OS X Mavericks | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 14 or later with no audio and no HVF |
 | Intel    | OS X Yosemite | x86_64             | 🚫 NOT WORKING | Installs on Beta 13 or later, but with no networking and no HVF. It is too slow to be usable, even on powerful hardware. |
-| Intel    | OS X El Capitan | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio and fixed screen resolution. |
+| Intel    | OS X El Capitan | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 13 or later with no audio |
 | Intel    | macOS Sierra | x86_64             | 🚫 NOT WORKING | Did not have a successful boot. |
-| Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Big Sur     | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio and fixed screen resolution. As of Beta 12, the resolution selected in MacMulator is applied to the VM.     |
-| Intel    | macOS Monterey    | x86_64             | 🚫 NOT WORKING  | 12.2 Does not boot. Maybe 12.0 Does, if installed via an update to Big Sur  |
-| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different architecture (32/64 bit). No 3D acceleration  |                  
+| Intel    | macOS High Sierra | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio |
+| Intel    | macOS Catalina    | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio |
+| Intel    | macOS Big Sur     | x86_64             | ⚠️ WORKING WITH ISSUES | Works in Beta 11 or later with no audio |
+| Intel    | macOS Monterey    | x86_64             | 🚫 NOT WORKING  | 12.2 Does not boot. 12.0 and 12.1 do, if installed via an update to Big Sur |
+| Apple Silicon | macOS Monterey    | aarch64             | ✅ WORKING  | Works in Beta 14 or later using Apple Virtualization Framework |
+| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different architecture (32/64 bit). No 3D acceleration  |             
 | Intel    | Windows 10        | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
-| Intel    | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
-| Apple M1 | Windows 10 ARM    | aarch64            | 🚫 NOT WORKING | Never had a successful boot.                                                               |
+| Apple M1 | Windows 10 ARM    | aarch64            | ⚠️ WORKING WITH ISSUES | Works in Beta 15 or later with no networking, only if booted from a VHDX image                                                         |
 | Intel    | Ubuntu 21.04      | x86_64             | ✅ WORKING     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works, but no HVF due to different architecture. No 3D acceleration                   | 
 | Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ✅ WORKING     | Works with HVF support if using Qemu 6.2 or later. No 3D acceleration |  
