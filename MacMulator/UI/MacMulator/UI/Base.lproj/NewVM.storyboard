@@ -64,13 +64,13 @@
                                 </connections>
                             </button>
                             <box title="Essential information" translatesAutoresizingMaskIntoConstraints="NO" id="MKc-8o-Spu">
-                                <rect key="frame" x="17" y="246" width="513" height="106"/>
+                                <rect key="frame" x="17" y="243" width="513" height="109"/>
                                 <view key="contentView" id="sVp-sP-rw6">
-                                    <rect key="frame" x="3" y="3" width="507" height="88"/>
+                                    <rect key="frame" x="4" y="5" width="505" height="89"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
-                                            <rect key="frame" x="18" y="52" width="61" height="16"/>
+                                            <rect key="frame" x="18" y="53" width="61" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="VM name" id="ufg-Q8-INQ">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -78,7 +78,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0SJ-fj-RZf">
-                                            <rect key="frame" x="85" y="52" width="402" height="21"/>
+                                            <rect key="frame" x="85" y="53" width="400" height="21"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="tWV-Kd-eiT">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +86,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
-                                            <rect key="frame" x="85" y="14" width="108" height="25"/>
+                                            <rect key="frame" x="84" y="16" width="109" height="23"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="105" id="SDE-4s-t9s"/>
                                             </constraints>
@@ -101,7 +101,7 @@
                                             </connections>
                                         </comboBox>
                                         <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
-                                            <rect key="frame" x="285" y="14" width="205" height="25"/>
+                                            <rect key="frame" x="284" y="16" width="204" height="23"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="15" id="FWM-R2-PIQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -113,7 +113,7 @@
                                             </connections>
                                         </comboBox>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
-                                            <rect key="frame" x="202" y="18" width="77" height="16"/>
+                                            <rect key="frame" x="202" y="19" width="77" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="VM subtype" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -121,7 +121,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
-                                            <rect key="frame" x="18" y="18" width="55" height="16"/>
+                                            <rect key="frame" x="18" y="19" width="55" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -283,6 +283,7 @@ DQ
                     <connections>
                         <outlet property="fullConfiguration" destination="KND-mb-4GG" id="yHD-x3-ueL"/>
                         <outlet property="installMedia" destination="CSW-rW-Lt7" id="EeF-il-Nwr"/>
+                        <outlet property="obtainOSButton" destination="Hyj-Oh-hZP" id="Qgf-1K-pgu"/>
                         <outlet property="vmDescription" destination="xiH-rE-LV3" id="cyW-US-sTi"/>
                         <outlet property="vmName" destination="0SJ-fj-RZf" id="i0K-t6-rah"/>
                         <outlet property="vmSubType" destination="lYf-G3-fke" id="ZKv-Qb-GWw"/>
@@ -349,7 +350,7 @@ DQ
     </scenes>
     <resources>
         <image name="CD Icon" width="25" height="25"/>
-        <image name="NSAddTemplate" width="15" height="13"/>
-        <image name="NSStopProgressFreestandingTemplate" width="15" height="15"/>
+        <image name="NSAddTemplate" width="18" height="16"/>
+        <image name="NSStopProgressFreestandingTemplate" width="19" height="19"/>
     </resources>
 </document>

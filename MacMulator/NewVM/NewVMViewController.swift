@@ -14,6 +14,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet weak var installMedia: NSTextField!
+    @IBOutlet weak var obtainOSButton: NSButton!
     @IBOutlet weak var fullConfiguration: NSButton!
     
     var rootController : RootViewController?
@@ -82,6 +83,12 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         if notification.object as? NSComboBox == vmType {
             vmSubType.stringValue = Utils.getSubType(comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as? String, 0);
             vmSubType.reloadData();
+            
+            if comboBox(vmType, objectValueForItemAt: vmType.indexOfSelectedItem) as! String == QemuConstants.OS_OTHER {
+                obtainOSButton.isEnabled = false
+            } else {
+                obtainOSButton.isEnabled = true
+            }
         }
     }
     

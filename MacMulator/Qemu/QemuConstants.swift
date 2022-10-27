@@ -104,6 +104,10 @@ class QemuConstants {
     static let SUB_LINUX_MINT = "Linux Mint";
     static let SUB_DEBIAN = "Debian GNU/Linux";
     static let SUB_UBUNTU = "Ubuntu Linux";
+    static let SUB_XUBUNTU = "Xubuntu Linux";
+    static let SUB_KUBUNTU = "Kubuntu Linux";
+    static let SUB_LUBUNTU = "Lubuntu Linux";
+    static let SUB_UBUNTU_MATE = "Ubuntu MATE";
     static let SUB_OPENSUSE = "openSUSE";
     static let SUB_MANJARO = "Manjaro Linux";
     static let SUB_RED_HAT = "Red Hat Linux";
@@ -118,6 +122,13 @@ class QemuConstants {
     static let SUB_REACT_OS = "ReactOS";
     static let SUB_RASPBERRY_OS = "Raspberry Pi OS";
     static let SUB_KALI_LINUX = "Kali Linux";
+    static let SUB_SLACKEL = "Slackel Linux"
+    static let SUB_PURE_OS = "Pure OS"
+    static let SUB_MAGEIA = "Mageia Linux"
+    static let SUB_PUPPY = "Puppy Linux"
+    static let SUB_BODHI = "Bodhi Linux"
+    static let SUB_NETRUNNER = "Netrunner"
+    static let SUB_NEPTUNE = "Neptune Linux"
     
     static let SUB_OTHER_GENERIC = "Generic VM";
     static let SUB_OTHER_x64 = "Generic x86_64 VM";
@@ -181,9 +192,72 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
     
     static let URL_APPLE_COM = "https://www.apple.com"
-    static let URL_MONTEREY_APP_STORE = "https://apps.apple.com/it/app/macos-monterey/id1576738294"
-    static let URL_BIG_SUR_APP_STORE = "https://apps.apple.com/it/app/macos-big-sur/id1526878132"
-    static let URL_UBUNTU = "https://www.ubuntu-it.org/download"
+    static let URL_MAC_VENTURA = "https://apps.apple.com/us/app/macos-ventura/id1638787999"
+    static let URL_MAC_MONTEREY = "https://apps.apple.com/it/app/macos-monterey/id1576738294"
+    static let URL_MAC_BIG_SUR = "https://apps.apple.com/it/app/macos-big-sur/id1526878132"
+    static let URL_MAC_CATALINA = "https://apps.apple.com/it/app/macos-catalina/id1466841314"
+    static let URL_MAC_MOJAVE = "https://apps.apple.com/us/app/macos-mojave/id1398502828"
+    static let URL_MAC_HIGH_SIERRA = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_SIERRA = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_EL_CAPITAN = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_YOSEMITE = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_MAVERICKS = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_MOUNTAIN_LION = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_LION = "https://support.apple.com/it-it/HT211683"
+    static let URL_MAC_SNOW_LEOPARD = "https://www.macintoshrepository.org"
+    static let URL_MAC_LEOPARD = "https://www.macintoshrepository.org"
+    static let URL_MAC_TIGER = "https://www.macintoshrepository.org"
+    static let URL_MAC_PANTHER = "https://www.macintoshrepository.org"
+    static let URL_MAC_JAGUAR = "https://www.macintoshrepository.org"
+    static let URL_MAC_PUMA = "https://www.macintoshrepository.org"
+    static let URL_MAC_CHEETAH = "https://www.macintoshrepository.org"
+    static let URL_MAC_OS_9 = "https://www.macintoshrepository.org"
+    static let URL_MAC_OS_8 = "https://www.macintoshrepository.org"
+    static let URL_SYSTEM_7 = "https://www.macintoshrepository.org"
+    
+    static let URL_MICROSOFT_COM = "https://www.microsoft.com"
+    static let URL_WINDOWS_10 = "https://www.microsoft.com/software-download/windows10ISO"
+    static let URL_WINDOWS_8_1 = "https://www.microsoft.com/software-download/windows8ISO"
+    static let URL_WINDOWS_8 = "https://www.microsoft.com/software-download/windows8ISO"
+    static let URL_WINDOWS_7 = "https://www.amazon.com/s?k=windows+7"
+    static let URL_WINDOWS_VISTA = "https://www.amazon.com/s?k=windows+Vista"
+    static let URL_WINDOWS_XP = "https://www.amazon.com/s?k=windows+xp"
+    static let URL_WINDOWS_2000 = "https://www.amazon.com/s?k=windows+2000"
+    static let URL_WINDOWS_ME = "https://isoriver.com/windows-me-iso-download/"
+    static let URL_WINDOWS_98 = "https://isoriver.com/windows-98-iso-download/"
+    static let URL_WINDOWS_NT = "https://isoriver.com/category/windows-server/windows-nt-4-0/"
+    static let URL_WINDOWS_95 = "https://isoriver.com/windows-95-iso-download/"
+    
+    static let URL_LINUX_ORG = "https://www.linux.org"
+    static let URL_MX_LINUX = "https://mxlinux.org/download-links/"
+    static let URL_LINUX_MINT = "https://www.linuxmint.com/download.php"
+    static let URL_DEBIAN = "https://www.debian.org/distrib/ftplist"
+    static let URL_UBUNTU = "https://ubuntu.com/download"
+    static let URL_XUBUNTU = "https://xubuntu.org/download/"
+    static let URL_KUBUNTU = "https://kubuntu.org/getkubuntu/"
+    static let URL_LUBUNTU = "https://lubuntu.me/downloads/"
+    static let URL_UBUNTU_MATE = "https://ubuntu-mate.org/download/"
+    static let URL_OPENSUSE = "https://get.opensuse.org"
+    static let URL_ARCH_LINUX = "https://archlinux.org/download/"
+    static let URL_MANJARO = "https://manjaro.org/download/"
+    static let URL_FEDORA = "https://getfedora.org"
+    static let URL_RED_HAT = "https://access.redhat.com/downloads"
+    static let URL_CENTOS_LINUX = "https://www.centos.org/download/"
+    static let URL_SOLUS = "https://getsol.us/download/"
+    static let URL_DEEPIN = "https://www.deepin.org/en/download/"
+    static let URL_ZORIN = "https://zorin.com/os/download/"
+    static let URL_SLACKEL = "https://sourceforge.net/projects/slackel/files/?source=navbar"
+    static let URL_PURE_OS = "https://pureos.net/download/"
+    static let URL_MAGEIA = "https://www.mageia.org/en/downloads/"
+    static let URL_PUPPY = "https://puppylinux-woof-ce.github.io/index.html#download"
+    static let URL_BODHI = "https://www.bodhilinux.com/download/"
+    static let URL_NETRUNNER = "https://www.netrunner.com/download/"
+    static let URL_NEPTUNE = "https://neptuneos.com/en/download.html"
+    static let URL_SLACKWARE = "http://www.slackware.com/getslack/"
+    static let URL_KALI_LINUX = "https://www.kali.org/get-kali/"
+    static let URL_ELEMENTARY = "https://elementary.io"
+    static let URL_REACT_OS = "https://reactos.org/download/"
+    static let URL_RASPBERRY_OS = "https://www.raspberrypi.com/software/operating-systems/"
     
     static let ALL_ARCHITECTURES = [
         ARCH_X64,
@@ -362,59 +436,70 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM],
-        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MONTEREY_APP_STORE],
-        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_BIG_SUR_APP_STORE],
-        [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_SIERRA, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_SIERRA, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_EL_CAPITAN, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_EL_CAPITAN, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_YOSEMITE, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_YOSEMITE, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_VMXNET3, nil, nil],
-        [OS_MAC, SUB_MAC_MAVERICKS, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MAVERICKS, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000_82545EM, nil, nil],
-        [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, nil],
-        [OS_MAC, SUB_MAC_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, nil],
-        [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, nil],
-        [OS_MAC, SUB_MAC_LEOPARD, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_PUMA, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_CHEETAH, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_OS_9, ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, ICON_MAC_OS_9, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, nil],
-        [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_WIN, SUB_WINDOWS_10, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, Utils.getPreferredMachineType(), Utils.getPreferredCPU(), true, NETWORK_E1000, nil, nil],
-        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, nil],
-        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, nil],
-        [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, nil],
-        [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_E1000, SOUND_AC97, nil],
-        [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, false, NETWORK_RTL8139, SOUND_AC97, nil],
-        [OS_WIN, SUB_WINDOWS_2000, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, nil],
-        [OS_WIN, SUB_WINDOWS_ME, ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, nil],
-        [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, nil],
-        [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, nil],
-        [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil, nil],
+        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA],
+        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_MONTEREY],
+        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_BIG_SUR],
+        [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_CATALINA],
+        [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_MOJAVE],
+        [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_HIGH_SIERRA],
+        [OS_MAC, SUB_MAC_SIERRA, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_SIERRA, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, true, NETWORK_VMXNET3, nil, URL_MAC_SIERRA],
+        [OS_MAC, SUB_MAC_EL_CAPITAN, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_EL_CAPITAN, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_VMXNET3, nil, URL_MAC_EL_CAPITAN],
+        [OS_MAC, SUB_MAC_YOSEMITE, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_YOSEMITE, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_VMXNET3, nil, URL_MAC_YOSEMITE],
+        [OS_MAC, SUB_MAC_MAVERICKS, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MAVERICKS, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000_82545EM, nil, URL_MAC_MAVERICKS],
+        [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_MOUNTAIN_LION],
+        [OS_MAC, SUB_MAC_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_LION],
+        [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_SNOW_LEOPARD],
+        [OS_MAC, SUB_MAC_LEOPARD, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_LEOPARD],
+        [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_TIGER],
+        [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PANTHER],
+        [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_JAGUAR],
+        [OS_MAC, SUB_MAC_PUMA, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PUMA],
+        [OS_MAC, SUB_MAC_CHEETAH, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_CHEETAH],
+        [OS_MAC, SUB_MAC_OS_9, ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, ICON_MAC_OS_9, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_9],
+        [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_8],
+        [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, URL_SYSTEM_7],
+        [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MICROSOFT_COM],
+        [OS_WIN, SUB_WINDOWS_10, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, Utils.getPreferredMachineType(), Utils.getPreferredCPU(), true, NETWORK_E1000, nil, URL_WINDOWS_10],
+        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8_1],
+        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8],
+        [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_7],
+        [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_E1000, SOUND_AC97, URL_WINDOWS_VISTA],
+        [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, false, NETWORK_RTL8139, SOUND_AC97, URL_WINDOWS_XP],
+        [OS_WIN, SUB_WINDOWS_2000, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_2000],
+        [OS_WIN, SUB_WINDOWS_ME, ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_ME],
+        [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_98],
+        [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_NT],
+        [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_95],
+        [OS_LINUX, SUB_LINUX_GENERIC, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_ORG],
+        [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MX_LINUX],
+        [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_MINT],
+        [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_DEBIAN],
         [OS_LINUX, SUB_UBUNTU, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU],
-        [OS_LINUX, SUB_OPENSUSE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_OPENSUSE, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_ARCH_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ARCH_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_MANJARO, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MANJARO, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_FEDORA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_FEDORA, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_CENTOS, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, nil],
+        [OS_LINUX, SUB_XUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_XUBUNTU],
+        [OS_LINUX, SUB_KUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_KUBUNTU],
+        [OS_LINUX, SUB_LUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_LUBUNTU],
+        [OS_LINUX, SUB_UBUNTU_MATE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU_MATE],
+        [OS_LINUX, SUB_OPENSUSE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_OPENSUSE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OPENSUSE],
+        [OS_LINUX, SUB_ARCH_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ARCH_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ARCH_LINUX],
+        [OS_LINUX, SUB_MANJARO, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MANJARO, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MANJARO],
+        [OS_LINUX, SUB_FEDORA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_FEDORA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_FEDORA],
+        [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_RED_HAT],
+        [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_CENTOS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CENTOS_LINUX],
+        [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS],
+        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN],
+        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN],
+        [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL],
+        [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS],
+        [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA],
+        [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY],
+        [OS_LINUX, SUB_BODHI, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_BODHI],
+        [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER],
+        [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE],
+        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE],
+        [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_KALI_LINUX],
+        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY],
+        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS],
+        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS],
         [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil],
