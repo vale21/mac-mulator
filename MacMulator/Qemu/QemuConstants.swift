@@ -160,16 +160,22 @@ class QemuConstants {
     static let ICON_BIG_SUR = "big.sur";
     static let ICON_MONTEREY = "monterey";
     static let ICON_VENTURA = "ventura";
+    
     static let ICON_WINDOWS_XP = "windows.xp";
     static let ICON_WINDOWS_VISTA = "windows.vista";
     static let ICON_WINDOWS_7 = "windows.7";
     static let ICON_WINDOWS_8 = "windows.8";
     static let ICON_WINDOWS_8_1 = "windows.8.1";
     static let ICON_WINDOWS_10 = "windows.10";
+    
     static let ICON_MX_LINUX = "mx.linux";
     static let ICON_LINUX_MINT = "linux.mint";
     static let ICON_DEBIAN = "debian";
     static let ICON_UBUNTU = "ubuntu";
+    static let ICON_XUBUNTU = "xubuntu";
+    static let ICON_KUBUNTU = "kubuntu";
+    static let ICON_LUBUNTU = "lubuntu";
+    static let ICON_UBUNTU_MATE = "ubuntu.mate";
     static let ICON_OPENSUSE = "opensuse";
     static let ICON_ARCH_LINUX = "arch.linux";
     static let ICON_MANJARO = "manjaro";
@@ -178,6 +184,19 @@ class QemuConstants {
     static let ICON_REDHAT = "redhat.linux";
     static let ICON_CENTOS = "centos.linux";
     static let ICON_SOLUS = "solus.linux";
+    static let ICON_DEEPIN = "deepin";
+    static let ICON_ZORIN = "zorin.os";
+    static let ICON_SLACKEL = "slackel"
+    static let ICON_PURE_OS = "pure.os"
+    static let ICON_MAGEIA = "mageia"
+    static let ICON_PUPPY = "puppy"
+    static let ICON_BODHI = "bodhi"
+    static let ICON_NETRUNNER = "netrunner"
+    static let ICON_NEPTUNE = "neptune"
+    static let ICON_SLACKWARE = "slackware"
+    static let ICON_ELEMENTARY = "elementary"
+    static let ICON_REACT_OS = "react.os"
+    static let ICON_RASPBERRY_OS = "raspberry.os"
     
     
     static let QEMU_IMG = "qemu-img";
@@ -475,10 +494,10 @@ class QemuConstants {
         [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_MINT],
         [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_DEBIAN],
         [OS_LINUX, SUB_UBUNTU, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU],
-        [OS_LINUX, SUB_XUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_XUBUNTU],
-        [OS_LINUX, SUB_KUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_KUBUNTU],
-        [OS_LINUX, SUB_LUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_LUBUNTU],
-        [OS_LINUX, SUB_UBUNTU_MATE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU_MATE],
+        [OS_LINUX, SUB_XUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_XUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_XUBUNTU],
+        [OS_LINUX, SUB_KUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_KUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_KUBUNTU],
+        [OS_LINUX, SUB_LUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_LUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_LUBUNTU],
+        [OS_LINUX, SUB_UBUNTU_MATE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_UBUNTU_MATE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU_MATE],
         [OS_LINUX, SUB_OPENSUSE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_OPENSUSE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OPENSUSE],
         [OS_LINUX, SUB_ARCH_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ARCH_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ARCH_LINUX],
         [OS_LINUX, SUB_MANJARO, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MANJARO, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MANJARO],
@@ -486,20 +505,20 @@ class QemuConstants {
         [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_RED_HAT],
         [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_CENTOS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CENTOS_LINUX],
         [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS],
-        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN],
-        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN],
-        [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL],
-        [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS],
-        [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA],
-        [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY],
-        [OS_LINUX, SUB_BODHI, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_BODHI],
-        [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER],
-        [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE],
-        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE],
+        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_DEEPIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN],
+        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ZORIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN],
+        [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_SLACKEL, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL],
+        [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_PURE_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS],
+        [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_MAGEIA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA],
+        [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_PUPPY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY],
+        [OS_LINUX, SUB_BODHI, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_BODHI, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_BODHI],
+        [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_NETRUNNER, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER],
+        [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_NEPTUNE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE],
+        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_SLACKWARE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE],
         [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 250, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_KALI_LINUX],
-        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY],
-        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS],
-        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, OS_LINUX.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS],
+        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_ELEMENTARY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY],
+        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS],
+        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 250, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS],
         [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil],
