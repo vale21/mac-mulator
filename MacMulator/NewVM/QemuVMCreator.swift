@@ -12,7 +12,7 @@ class QemuVMCreator: VMCreator {
     
     var complete = false
     var progress: Double = 0.0
-
+    
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)!;
         try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia);
@@ -61,7 +61,7 @@ class QemuVMCreator: VMCreator {
                 size: 0);
             vm.addVirtualDrive(openCore);
         }
-            
+        
         var virtualHDD: VirtualDrive? = nil
         if installMedia != "" {
             if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
@@ -74,7 +74,7 @@ class QemuVMCreator: VMCreator {
                     size: 0);
                 virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB);
-            } else if installMedia.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased()) { // Case insensitive check for vhdx extension
+            } else if Utils.isVHDXImage(installMedia) {
                 // Install media is a VHDX drive. We create a VirtualDrive of type NVME
                 virtualHDD = VirtualDrive(
                     path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
@@ -109,57 +109,64 @@ class QemuVMCreator: VMCreator {
         
         return virtualHDD! // Safe to do this because the virtualHDD object is created above, it was found nil
     }
-    
-    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, installMedia: String) throws {
         
+    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, installMedia: String) throws {
         do {
             try Utils.createDocumentPackage(vm.path);
-            if virtualHDD.mediaType != QemuConstants.MEDIATYPE_NVME {
+            if !Utils.isVHDXImage(installMedia) {
                 QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                     terminationCcode in
                     vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                    do {
+                        try self.createAuxiliaryDriveFilesOnDisk(vm)
+                    } catch {
+                        print("Error while creating drives")
+                    }
+                    self.complete = true
                 });
             } else {
                 QemuUtils.convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                     terminationCode, driveSize in
                     virtualHDD.size = driveSize
                     vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                    do {
+                        try self.createAuxiliaryDriveFilesOnDisk(vm)
+                    } catch {
+                        print("Error while creating drives")
+                    }
+                    self.complete = true
                 })
             }
         } catch {
             complete = true;
             throw error;
         }
-        
-        do {
-            if (vm.architecture == QemuConstants.ARCH_ARM64) {
-                try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
-                let nvramDrive = Utils.findNvramDrive(vm.drives)
-                if let nvramDrive = nvramDrive {
-                    QemuUtils.createDiskImage(path: vm.path, name: nvramDrive.name, format: nvramDrive.format, size: "67108864", uponCompletion: { result in })
-                }
+    }
+    
+    fileprivate func createAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) throws {
+        if (vm.architecture == QemuConstants.ARCH_ARM64) {
+            try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+            let nvramDrive = Utils.findNvramDrive(vm.drives)
+            if let nvramDrive = nvramDrive {
+                QemuUtils.createDiskImage(path: vm.path, name: nvramDrive.name, format: nvramDrive.format, size: "67108864", uponCompletion: { result in })
             }
-            if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
-                var opencore: String = "";
-                if QemuUtils.isMacModern(vm.subtype) {
-                    opencore = QemuConstants.OPENCORE_MODERN;
-                } else if QemuUtils.isMacLegacy(vm.subtype) {
-                    opencore = QemuConstants.OPENCORE_LEGACY;
-                }
-                
-                try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
-                let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
-                let destinationURL = URL(fileURLWithPath: vm.path);
-                try FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
-                
-                // Rename unzipped image and clean up garbage empty folder
-                try FileManager.default.moveItem(atPath: vm.path + "/" + opencore + ".img", toPath: vm.path + "/opencore-0.img");
-                try FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"));
+        }
+        if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
+            var opencore: String = "";
+            if QemuUtils.isMacModern(vm.subtype) {
+                opencore = QemuConstants.OPENCORE_MODERN;
+            } else if QemuUtils.isMacLegacy(vm.subtype) {
+                opencore = QemuConstants.OPENCORE_LEGACY;
             }
-            self.complete = true;
-        } catch {
-            self.complete = true;
-            throw error;
+            
+            try FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
+            let destinationURL = URL(fileURLWithPath: vm.path);
+            try FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
+            
+            // Rename unzipped image and clean up garbage empty folder
+            try FileManager.default.moveItem(atPath: vm.path + "/" + opencore + ".img", toPath: vm.path + "/opencore-0.img");
+            try FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"));
         }
     }
 }

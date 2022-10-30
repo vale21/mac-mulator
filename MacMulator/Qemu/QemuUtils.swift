@@ -92,12 +92,11 @@ class QemuUtils {
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
             .withName(vhdxPath)
-            .withTargetName(virtualDrive.path)
+            .withTargetName(Utils.escape(virtualDrive.path))
             .build();
         
         shell.runCommand(command, vmPath, uponCompletion: {
             terminationCode in
-            var completed = false
             
             if terminationCode == 0 {
                 QemuUtils.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {
@@ -107,17 +106,21 @@ class QemuUtils {
                         if let driveSize = driveSize {
                             let size = Int32(driveSize)
                             if let size = size {
-                                completed = true
                                 callback(infoCode, size)
+                            } else {
+                                callback(infoCode, -1)
                             }
+                        } else {
+                            callback(infoCode, -1)
                         }
+                    } else {
+                        callback(infoCode, -1)
                     }
                 })
+            } else {
+                callback(terminationCode, -1)
             }
             
-            if !completed {
-                callback(-1, -1)
-            }
         })
     }
     

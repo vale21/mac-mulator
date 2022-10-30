@@ -530,7 +530,7 @@ class Utils {
         #if arch(arm64)
         return QemuConstants.ARCH_ARM64
         #else
-        return QemuConstants.ARCH_ARM64
+        return QemuConstants.ARCH_X64
         #endif
     }
     
@@ -621,6 +621,11 @@ class Utils {
         } else {
             return string.prefix(length) + "..."
         }
+    }
+    
+    static func isVHDXImage(_ path: String) -> Bool {
+        // Case insensitive check for vhdx extension
+        return path.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased())
     }
     
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
