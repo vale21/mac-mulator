@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -350,7 +350,7 @@ DQ
     </scenes>
     <resources>
         <image name="CD Icon" width="25" height="25"/>
-        <image name="NSAddTemplate" width="18" height="16"/>
-        <image name="NSStopProgressFreestandingTemplate" width="19" height="19"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
     </resources>
 </document>

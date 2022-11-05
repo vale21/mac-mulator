@@ -77,15 +77,26 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             vzVirtualMachine.delegate = self;
             self.vmView?.virtualMachine = vzVirtualMachine;
             
-            vzVirtualMachine.start(completionHandler: { (result) in
-                switch result {
-                    case let .failure(error):
-                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
-                    break;
-                    default:
-                        print(result)
-                }
-            })
+            if #available(macOS 13.0, *) {
+                let options = VZMacOSVirtualMachineStartOptions()
+                options.startUpFromMacOSRecovery = self.recoveryMode
+                
+                vzVirtualMachine.start(options: options, completionHandler: { error in
+                    if let error = error {
+                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                    }
+                })
+            } else {
+                vzVirtualMachine.start(completionHandler: { (result) in
+                    switch result {
+                        case let .failure(error):
+                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                        break;
+                        default:
+                            print(result)
+                    }
+                })
+            }
         }
     }
     

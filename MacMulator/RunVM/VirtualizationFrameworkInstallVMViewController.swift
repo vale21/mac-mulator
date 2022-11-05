@@ -14,6 +14,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     @IBOutlet weak var descriptionLabel: NSTextField!
     @IBOutlet weak var progressBar: NSProgressIndicator!
     @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
+    @IBOutlet weak var vmIcon: NSImageView!
     
     var progress: Double = 0.0
     var virtualMachine: VZVirtualMachine?
@@ -33,13 +34,18 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     }
     
     override func viewDidLoad() {
-        self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
-        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
         
-        progressBar.isIndeterminate = false
-        progressBar.doubleValue = 0
-        progressBar.minValue = 0
-        progressBar.maxValue = 100
+        let vm = parentRunner?.managedVm
+        if let vm = vm {
+            self.vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"));
+            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
+            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+            
+            progressBar.isIndeterminate = false
+            progressBar.doubleValue = 0
+            progressBar.minValue = 0
+            progressBar.maxValue = 100
+        }
     }
     
 #if arch(arm64)

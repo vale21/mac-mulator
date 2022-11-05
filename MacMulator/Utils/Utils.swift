@@ -628,6 +628,14 @@ class Utils {
         return path.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased())
     }
     
+    static func isRecoveryModeSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 13.0, *) {
+            return Utils.isVMAvailable(vm) && vm.type == MacMulatorConstants.APPLE_VM
+        } else {
+            return false
+        }
+    }
+    
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
