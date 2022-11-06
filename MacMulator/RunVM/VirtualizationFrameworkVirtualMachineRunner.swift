@@ -91,6 +91,9 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             self.vmView?.virtualMachine = vzVirtualMachine;
             
             if #available(macOS 13.0, *) {
+                
+                #if arch(arm64)
+                
                 let options = VZMacOSVirtualMachineStartOptions()
                 options.startUpFromMacOSRecovery = self.recoveryMode
                 
@@ -99,6 +102,9 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                         Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
                     }
                 })
+                
+                #endif
+                
             } else {
                 vzVirtualMachine.start(completionHandler: { (result) in
                     switch result {
