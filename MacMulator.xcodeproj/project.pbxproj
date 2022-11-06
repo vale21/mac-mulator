@@ -67,6 +67,7 @@
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
 		3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */; };
+		3BE7CD802918103F009A9283 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE7CD7F2918103F009A9283 /* LinuxVirtualMachineConfigurationHelper.swift */; };
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
@@ -180,6 +181,7 @@
 		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
 		3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
 		3BD9CCF6262DCE5B008341D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MacMulator/UI/Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3BE7CD7F2918103F009A9283 /* LinuxVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinuxVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */,
 				3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */,
 				3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */,
+				3BE7CD7F2918103F009A9283 /* LinuxVirtualMachineConfigurationHelper.swift */,
 			);
 			path = Virtualization;
 			sourceTree = "<group>";
@@ -555,6 +558,7 @@
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
 				3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */,
+				3BE7CD802918103F009A9283 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
 				3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */,
 				3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */,
 				3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */,

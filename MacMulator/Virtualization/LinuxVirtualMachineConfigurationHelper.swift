@@ -1,22 +1,16 @@
-/*
-See LICENSE folder for this sample’s licensing information.
-
-Abstract:
-Helper that creates various configuration objects exposed in the `VZVirtualMachineConfiguration`.
-*/
+//
+//  LinuxVirtualMachineConfigurationHelper.swift
+//  MacMulator
+//
+//  Created by Vale on 06/11/22.
+//
 
 import Foundation
 import Virtualization
 
-#if arch(arm64)
-
-@available(macOS 12.0, *)
-class MacOSVirtualMachineConfigurationHelper {
-
-    static func createBootLoader() -> VZMacOSBootLoader {
-        return VZMacOSBootLoader()
-    }
-
+@available(macOS 13.0, *)
+class LinuxVirtualMachineConfigurationHelper {
+    
     static func createGraphicsDeviceConfiguration(witdh: Int, height: Int, ppi: Int) -> VZMacGraphicsDeviceConfiguration {
         let graphicsConfiguration = VZMacGraphicsDeviceConfiguration()
         graphicsConfiguration.displays = [
@@ -25,7 +19,7 @@ class MacOSVirtualMachineConfigurationHelper {
 
         return graphicsConfiguration
     }
-
+    
     static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
         do {
             let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false);
@@ -35,7 +29,7 @@ class MacOSVirtualMachineConfigurationHelper {
             fatalError("Failed to create Disk image: " + error.localizedDescription)
         }
     }
-
+    
     static func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
@@ -44,7 +38,7 @@ class MacOSVirtualMachineConfigurationHelper {
         networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
         return networkDevice
     }
-
+    
     static func createPointingDeviceConfiguration() -> VZUSBScreenCoordinatePointingDeviceConfiguration {
         return VZUSBScreenCoordinatePointingDeviceConfiguration()
     }
@@ -65,6 +59,24 @@ class MacOSVirtualMachineConfigurationHelper {
         audioConfiguration.streams = [inputStream, outputStream]
         return audioConfiguration
     }
-}
+    
+    static func createSpiceAgentConsoleDeviceConfiguration() -> VZVirtioConsoleDeviceConfiguration {
+        let consoleDevice = VZVirtioConsoleDeviceConfiguration()
 
-#endif
+        let spiceAgentPort = VZVirtioConsolePortConfiguration()
+        spiceAgentPort.name = VZSpiceAgentPortAttachment.spiceAgentPortName
+        spiceAgentPort.attachment = VZSpiceAgentPortAttachment()
+        consoleDevice.ports[0] = spiceAgentPort
+
+        return consoleDevice
+    }
+    
+    static func createEFIVariableStore(path: String) -> VZEFIVariableStore {
+        guard let efiVariableStore = try? VZEFIVariableStore(creatingVariableStoreAt: URL(fileURLWithPath: path)) else {
+            fatalError("Failed to create the EFI variable store.")
+        }
+
+        return efiVariableStore
+    }
+    
+}

@@ -15,10 +15,11 @@ class VirtualizationFrameworkUtils {
     static let AUXILIARY_STORAGE_NAME = "auxiliary-storage"
     static let MACHINE_IDENTIFIER_NAME = "machine-identifier"
     static let HARDWARE_MODEL_NAME = "hardware-model"
+    static let EFI_VARIABLE_STORE_NAME = "efi-var-store"
 
     #if arch(arm64)
 
-    static func createVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
+    static func createMacOSVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
         
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
@@ -31,14 +32,25 @@ class VirtualizationFrameworkUtils {
         _ = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
     }
     
+    #endif
+    
+    @available(macOS 13.0, *)
+    static func createLinuxVirtualMachineData(vm: VirtualMachine) {
+        
+        _ = createLinuxPlatformConfiguration(vm: vm)
+        _ = createLinuxBootloader(vm: vm)
+    }
+    
     static func decodeVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
-        let configuration = setupVirtualMachine(vm: vm)
+        let configuration = setupMacOSVirtualMachine(vm: vm)
         
         let virtualMachine = VZVirtualMachine(configuration: configuration, queue: .main)
         return virtualMachine;
     }
     
-    fileprivate static func setupVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
+    #if arch(arm64)
+    
+    fileprivate static func setupMacOSVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: nil)
         
@@ -116,6 +128,29 @@ class VirtualizationFrameworkUtils {
         
         return macPlatformConfiguration
     }
-    
+        
     #endif
+    
+    @available(macOS 13.0, *)
+    fileprivate static func createLinuxPlatformConfiguration(vm: VirtualMachine)  -> VZGenericPlatformConfiguration {
+        let linuxPlatformConfiguration = VZGenericPlatformConfiguration()
+        
+        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.MACHINE_IDENTIFIER_NAME + "-0")
+        linuxPlatformConfiguration.machineIdentifier = VZGenericMachineIdentifier()
+ 
+        // Store the machine identifier to disk so that we can retrieve it for subsequent boots.
+        try! linuxPlatformConfiguration.machineIdentifier.dataRepresentation.write(to: machineIdentifierURL)
+        
+        return linuxPlatformConfiguration
+    }
+    
+    @available(macOS 13.0, *)
+    fileprivate static func createLinuxBootloader(vm: VirtualMachine)  -> VZEFIBootLoader {
+        let bootloader = VZEFIBootLoader()
+        
+        let efiVariableStoreURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.EFI_VARIABLE_STORE_NAME + "-0")
+        bootloader.variableStore = LinuxVirtualMachineConfigurationHelper.createEFIVariableStore(path: efiVariableStoreURL.path)
+
+        return bootloader
+    }
 }

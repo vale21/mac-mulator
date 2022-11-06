@@ -87,11 +87,14 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     fatalError(error.localizedDescription)
                     
                 case let .success(restoreImage):
-                    VirtualizationFrameworkUtils.createVirtualMachineData(vm: vm, restoreImage: restoreImage);
+                    VirtualizationFrameworkUtils.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage);
                     complete = true
                 }
             })
         } else {
+            if #available(macOS 13.0, *) {
+                VirtualizationFrameworkUtils.createLinuxVirtualMachineData(vm: vm)
+            } 
             complete = true
         }
     }
