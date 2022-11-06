@@ -511,6 +511,9 @@ class Utils {
     
     static func isVirtualizationFrameworkPreferred(os: String, subtype: String, architecture: String) -> Bool
     {
+        if #available(macOS 13.0, *) {
+            return os == QemuConstants.OS_LINUX || isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
+        }
         if #available(macOS 12.0, *) {
             return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
         }
@@ -605,7 +608,7 @@ class Utils {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             return QemuUtils.isBinaryAvailable(vm.architecture)
         } else {
-            return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
+            return isVirtualizationFrameworkPreferred(vm)
         }
     }
 

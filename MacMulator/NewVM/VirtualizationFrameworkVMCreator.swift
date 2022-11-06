@@ -20,7 +20,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         #if arch(arm64)
         
         try! Utils.createDocumentPackage(vm.path);
-        if Utils.isIpswInstallMediaProvided(installMedia) {
+        if !shouldDownloadIpsw(vm, installMedia) {
             print("IPSW specified. Installing...");
             self.createVM(vm: vm, url: URL.init(fileURLWithPath: installMedia));
         } else {
@@ -80,16 +80,24 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     fileprivate func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
-        VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
-            switch result {
-            case let .failure(error):
-                fatalError(error.localizedDescription)
-                
-            case let .success(restoreImage):
-                VirtualizationFrameworkUtils.createVirtualMachineData(vm: vm, restoreImage: restoreImage);
-                complete = true
-            }
-        })
+        if (Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)) {
+            VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
+                switch result {
+                case let .failure(error):
+                    fatalError(error.localizedDescription)
+                    
+                case let .success(restoreImage):
+                    VirtualizationFrameworkUtils.createVirtualMachineData(vm: vm, restoreImage: restoreImage);
+                    complete = true
+                }
+            })
+        } else {
+            complete = true
+        }
+    }
+    
+    fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
+        return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
     
 #endif
