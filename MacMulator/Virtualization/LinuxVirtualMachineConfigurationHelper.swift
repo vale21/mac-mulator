@@ -11,10 +11,10 @@ import Virtualization
 @available(macOS 13.0, *)
 class LinuxVirtualMachineConfigurationHelper {
     
-    static func createGraphicsDeviceConfiguration(witdh: Int, height: Int, ppi: Int) -> VZMacGraphicsDeviceConfiguration {
-        let graphicsConfiguration = VZMacGraphicsDeviceConfiguration()
-        graphicsConfiguration.displays = [
-            VZMacGraphicsDisplayConfiguration(widthInPixels: witdh, heightInPixels: height, pixelsPerInch: ppi)
+    static func createGraphicsDeviceConfiguration(witdh: Int, height: Int) -> VZVirtioGraphicsDeviceConfiguration {
+        let graphicsConfiguration = VZVirtioGraphicsDeviceConfiguration()
+        graphicsConfiguration.scanouts = [
+            VZVirtioGraphicsScanoutConfiguration(widthInPixels: witdh, heightInPixels: height)
         ]
 
         return graphicsConfiguration
@@ -79,4 +79,11 @@ class LinuxVirtualMachineConfigurationHelper {
         return efiVariableStore
     }
     
+    static func createUSBMassStorageDeviceConfiguration(_ installMedia: String) -> VZUSBMassStorageDeviceConfiguration {
+        guard let intallerDiskAttachment = try? VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: installMedia), readOnly: true) else {
+            fatalError("Failed to create installer's disk attachment.")
+        }
+
+        return VZUSBMassStorageDeviceConfiguration(attachment: intallerDiskAttachment)
+    }
 }

@@ -17,21 +17,22 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         
     func createVM(vm: VirtualMachine, installMedia: String) throws {
     
-        #if arch(arm64)
-        
         try! Utils.createDocumentPackage(vm.path);
         if !shouldDownloadIpsw(vm, installMedia) {
-            print("IPSW specified. Installing...");
-            self.createVM(vm: vm, url: URL.init(fileURLWithPath: installMedia));
+            print("Install media specified. Installing...");
+            self.createVM_int(vm: vm, installMedia: installMedia);
         } else {
-            print("IPSW Not specified. Downloading...");
+            
+            #if arch(arm64)
+            
+            print("Detected macOS with IPSW Not specified. Downloading...");
             let restoreImage = MacOSRestoreImage(self, vm);
             restoreImage.download {
-                self.createVM(vm: vm, url: URL.init(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.RESTORE_IMAGE_NAME));
+                self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkUtils.RESTORE_IMAGE_NAME);
             }
+            
+            #endif
         }
-        
-        #endif
     }
     
     func isComplete() -> Bool {
@@ -46,7 +47,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         return progress
     }
     
-    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ ipswUrl: URL, uponCompletion callback: @escaping (Int32) -> Void) throws {
+    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
@@ -55,32 +56,43 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)))
         vm.addVirtualDrive(virtualHDD);
         
-        let installMedia = VirtualDrive(
-            path: ipswUrl.path,
-            name: QemuConstants.MEDIATYPE_IPSW,
-            format: QemuConstants.FORMAT_RAW,
-            mediaType: QemuConstants.MEDIATYPE_IPSW,
-            size: 0)
-        vm.addVirtualDrive(installMedia);
+        if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+            let installMedia = VirtualDrive(
+                path: installMediaPath,
+                name: QemuConstants.MEDIATYPE_IPSW,
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_IPSW,
+                size: 0)
+            vm.addVirtualDrive(installMedia);
+        } else if installMediaPath != ""{
+            let installMedia = VirtualDrive(
+                path: installMediaPath,
+                name: QemuConstants.MEDIATYPE_USB + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_USB,
+                size: 0)
+            vm.addVirtualDrive(installMedia);
+        }
         
         QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
             terminationCcode in
             callback(0);
         });
     }
-    
-#if arch(arm64)
-    
-    fileprivate func createVM(vm: VirtualMachine, url: URL) {
-        try! self.createVMFilesOnDisk(vm, url, uponCompletion: {
+        
+    fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {
+        try! self.createVMFilesOnDisk(vm, installMedia, uponCompletion: {
             terminationCode in
             vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-            self.setupVirtualMachine(vm: vm, ipswURL: url);
+            self.setupVirtualMachine(vm: vm, ipswURL: URL(fileURLWithPath: installMedia));
         });
     }
     
     fileprivate func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
         if (Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)) {
+            
+            #if arch(arm64)
+            
             VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
                 switch result {
                 case let .failure(error):
@@ -91,10 +103,13 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     complete = true
                 }
             })
+            
+            #endif
+            
         } else {
             if #available(macOS 13.0, *) {
                 VirtualizationFrameworkUtils.createLinuxVirtualMachineData(vm: vm)
-            } 
+            }
             complete = true
         }
     }
@@ -102,6 +117,5 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
         return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
-    
-#endif
+
 }

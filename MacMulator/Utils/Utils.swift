@@ -230,7 +230,7 @@ class Utils {
         return hdds[0];
     }
     
-    static func findInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+    static func findIPSWInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
         // purge non IPSW drives
         var ipsws: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
@@ -243,6 +243,21 @@ class Utils {
             return nil;
         }
         return ipsws[0];
+    }
+    
+    static func findUSBInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non USB drives
+        var installers: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                installers.append(drive);
+            }
+        }
+        
+        if installers.count == 0 {
+            return nil;
+        }
+        return installers[0];
     }
     
     static func findNvramDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
