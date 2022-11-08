@@ -357,7 +357,7 @@ class QemuRunner : VirtualMachineRunner {
     }
     
     fileprivate func driveExists(_ drive: VirtualDrive) -> Bool {
-        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM) {
+        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW) {
             let filemanager = FileManager.default;
             return filemanager.fileExists(atPath: drive.path);
         }

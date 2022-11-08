@@ -39,7 +39,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
         if let virtualMachine = virtualMachine {
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution);
             self.view.window?.setContentSize(CGSize(width: resolution[0], height: resolution[1]));
-            self.view.window?.setFrameOrigin(NSPoint(x: 200, y: 200));
+            self.view.window?.center()
             
             if let vmRunner = self.vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner

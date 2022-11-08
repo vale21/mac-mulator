@@ -345,6 +345,31 @@ class Utils {
         }
     }
     
+    static func describeArchitecture(_ architecture: String?) -> String {
+        switch architecture {
+        case QemuConstants.HOST_I386:
+            return QemuConstants.HOST_DESC_I386
+        case QemuConstants.HOST_X86_64:
+            return QemuConstants.HOST_DESC_X86_64
+        case QemuConstants.HOST_ARM:
+            return QemuConstants.HOST_DESC_ARM
+        case QemuConstants.HOST_ARM64:
+            return QemuConstants.HOST_DESC_ARM64
+        case QemuConstants.HOST_PPC:
+            return QemuConstants.HOST_DESC_PPC
+        case QemuConstants.HOST_PPC64:
+            return QemuConstants.HOST_DESC_PPC64
+        case QemuConstants.HOST_RISCV32:
+            return QemuConstants.HOST_DESC_RISCV32
+        case QemuConstants.HOST_RISCV64:
+            return QemuConstants.HOST_DESC_RISCV64
+        case QemuConstants.HOST_68K:
+            return QemuConstants.HOST_DESC_68K
+        default:
+            return ""
+        }
+    }
+    
     static func directoryExists(_ path: String) -> Bool {
         var isDir : ObjCBool = true
         return FileManager.default.fileExists(atPath: path, isDirectory:&isDir);

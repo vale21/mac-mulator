@@ -65,7 +65,9 @@ class LinuxVirtualMachineConfigurationHelper {
 
         let spiceAgentPort = VZVirtioConsolePortConfiguration()
         spiceAgentPort.name = VZSpiceAgentPortAttachment.spiceAgentPortName
-        spiceAgentPort.attachment = VZSpiceAgentPortAttachment()
+        let spice = VZSpiceAgentPortAttachment()
+        spice.sharesClipboard = true
+        spiceAgentPort.attachment = spice
         consoleDevice.ports[0] = spiceAgentPort
 
         return consoleDevice
