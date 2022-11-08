@@ -95,9 +95,7 @@ class VirtualMachineViewController: NSViewController {
             }
         });
     }
-    
-#if arch(arm64)
-    
+        
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
         if #available(macOS 12.0, *) {
@@ -115,9 +113,7 @@ class VirtualMachineViewController: NSViewController {
             }
         }
     }
-    
-#endif
-    
+        
     func cleanupStoppedVM(_ vm: VirtualMachine) {
         rootController?.unsetRunningVM(vm);
         if self.rootController?.currentVm == vm {

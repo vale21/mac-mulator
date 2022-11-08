@@ -38,8 +38,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         self.recoveryMode = recoveryMode
         running = true;
 
-        
-        
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
             #if arch(arm64)
             
@@ -89,8 +87,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if let vzVirtualMachine = self.vzVirtualMachine {
             vzVirtualMachine.delegate = self;
             self.vmView?.virtualMachine = vzVirtualMachine;
-            
-            if #available(macOS 13.0, *) {
+
+            if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 
                 #if arch(arm64)
                 

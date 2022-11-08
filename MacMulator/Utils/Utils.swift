@@ -648,7 +648,7 @@ class Utils {
     
     static func isRecoveryModeSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 13.0, *) {
-            return Utils.isVMAvailable(vm) && vm.type == MacMulatorConstants.APPLE_VM
+            return Utils.isVMAvailable(vm) && Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
         } else {
             return false
         }
