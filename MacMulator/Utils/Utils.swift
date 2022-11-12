@@ -141,7 +141,7 @@ class Utils {
                 return driveInfo.substring(with: String.Index(encodedOffset: index)..<String.Index(encodedOffset: index2))
             }
         }
-            
+        
         return nil
     }
     
@@ -197,7 +197,7 @@ class Utils {
         if value == 0 {
             return "N/A";
         }
-
+        
         if value < 1024 {
             return String(value) + " GB";
         } else {
@@ -471,7 +471,7 @@ class Utils {
     static func getAccelForSubType(_ os: String, _ subtype: String?) -> Bool {
         return getBoolValueForSubType(os, subtype, 13, true);
     }
-
+    
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
         return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
@@ -536,7 +536,7 @@ class Utils {
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
         ret.append(Int(stringElements[2])!);
-
+        
         return ret;
     }
     
@@ -560,43 +560,67 @@ class Utils {
         return false
     }
     
+    
+    
     static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
         if #available(macOS 12.0, *) {
-            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 &&
-            os == QemuConstants.OS_MAC &&
-            (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
         }
         return false
     }
     
+    static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
+        if #available(macOS 13.0, *) {
+            let hostArchitecture = Utils.hostArchitecture()
+            let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
+            if hostArchitecture != vmArchitecture {
+                return "The VM cannot be started because it is an " + Utils.describeArchitecture(vmArchitecture) + " VM and cannot run on an " + Utils.describeArchitecture(hostArchitecture) + " Mac."
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+            } else {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+            }
+        } else if #available(macOS 12.0, *) {
+            if vm.os == QemuConstants.OS_LINUX {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with Linux VMs on macOS Monterey."
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+            } else {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+            }
+        } else {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on this version of macOS."
+        }
+    }
+    
     static func getPreferredArchitecture() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.ARCH_ARM64
-        #else
+#else
         return QemuConstants.ARCH_X64
-        #endif
+#endif
     }
     
     static func getPreferredMachineType() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.MACHINE_TYPE_VIRT_HIGHMEM
-        #else
+#else
         return QemuConstants.MACHINE_TYPE_Q35
-        #endif
+#endif
     }
     
     static func getPreferredCPU() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.CPU_IVY_BRIDGE
-        #else
+#else
         return QemuConstants.CPU_MAX
-        #endif
+#endif
     }
     
     static func random(digits:Int32) -> Int32 {
         var number = String()
         for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
+            number += "\(Int.random(in: 1...9))"
         }
         return Int32(number) ?? 0
     }
@@ -604,7 +628,7 @@ class Utils {
     static func random(digits:Int, suffix:Int32) -> Int32 {
         var number = String()
         for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
+            number += "\(Int.random(in: 1...9))"
         }
         number += String(suffix)
         return Int32(number) ?? 0
@@ -651,7 +675,7 @@ class Utils {
             return isVirtualizationFrameworkPreferred(vm)
         }
     }
-
+    
     static func computeVMPath(vmName: String) -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
@@ -704,5 +728,10 @@ class Utils {
             }
         }
         return defaultValue;
+    }
+    
+    fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
+        return os == QemuConstants.OS_MAC &&
+        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
     }
 }

@@ -178,12 +178,7 @@ class VirtualMachineViewController: NSViewController {
                 } else {
                     startVMButton.isEnabled = false;
                     qemuUnavailableLabel.isHidden = false;
-                    
-                    if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
-                        qemuUnavailableLabel.stringValue = "The VM cannot be started because it can run only on Apple Silicon hardware."
-                    } else {
-                        qemuUnavailableLabel.stringValue = "The VM cannot be started because it is an " + Utils.describeArchitecture(Utils.getMachineArchitecture(vm.architecture)) + " VM and cannot run on an " + Utils.describeArchitecture(Utils.hostArchitecture()) + " Mac."
-                    }
+                    qemuUnavailableLabel.stringValue = Utils.getUnavailabilityMessage(vm)
                 }
             }
         } else {
