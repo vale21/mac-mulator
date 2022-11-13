@@ -589,7 +589,7 @@ class Utils {
                 return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
             }
         } else {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on this version of macOS."
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on " + NSProcessInfo.processInfo().operatingSystemVersionString + "."
         }
     }
     
