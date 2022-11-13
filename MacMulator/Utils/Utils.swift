@@ -588,8 +588,16 @@ class Utils {
             } else {
                 return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
             }
+        } else if #available(macOS 11.0, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Big Sur."
+        } else if #available(macOS 10.15, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Catalina."
+        } else if #available(macOS 10.14, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Mojave."
+        } else if #available(macOS 10.13, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS High Sierra."
         } else {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on " + ProcessInfo.processInfo.operatingSystemVersionString + "."
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on this Mac."
         }
     }
     
