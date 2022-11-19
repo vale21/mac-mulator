@@ -711,6 +711,28 @@ class Utils {
         }
     }
     
+    static func removeUnexistingDrives(_ virtualMachine: VirtualMachine) {
+        if let window = NSApp.mainWindow {
+            for drive in virtualMachine.drives {
+                if !Utils.driveExists(drive) {
+                    Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
+                        response in if response.rawValue == Utils.ALERT_RESP_OK {
+                            virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
+                            virtualMachine.writeToPlist();
+                        }});
+                }
+            }
+        }
+    }
+    
+    fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
+        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW) {
+            let filemanager = FileManager.default;
+            return filemanager.fileExists(atPath: drive.path);
+        }
+        return true;
+    }
+    
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {

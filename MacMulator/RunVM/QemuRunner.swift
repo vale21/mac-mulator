@@ -21,7 +21,7 @@ class QemuRunner : VirtualMachineRunner {
         self.listenPort = listenPort;
         self.virtualMachine = virtualMachine;
     }
-
+    
     func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
         let command = getQemuCommand()
         do {
@@ -79,31 +79,24 @@ class QemuRunner : VirtualMachineRunner {
             default:
                 builder = createBuilderForX86_64();
             }
-  
+            
             var index = 1;
+            Utils.removeUnexistingDrives(virtualMachine)
+            
             for drive in virtualMachine.drives {
-                if (driveExists(drive)) {
-                    
-                    var driveIndex = 0;
-                    if !drive.isBootDrive {
-                        driveIndex = index;
-                        index += 1;
-                    }
-                    
-                    if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
-                        builder = builder.withEfi(file: drive.path);
-                    } else {
-                        let mediaType = setupMediaType(drive);
-                        let path = setupPath(drive, virtualMachine);
-                        
-                        builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
-                    }
+                var driveIndex = 0;
+                if !drive.isBootDrive {
+                    driveIndex = index;
+                    index += 1;
+                }
+                
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                    builder = builder.withEfi(file: drive.path);
                 } else {
-                    Utils.showPrompt(window: NSApp.mainWindow!, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
-                                        response in if response.rawValue == Utils.ALERT_RESP_OK {
-                                            self.virtualMachine.drives.remove(at: self.virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
-                                            self.virtualMachine.writeToPlist();
-                                        }});
+                    let mediaType = setupMediaType(drive);
+                    let path = setupPath(drive, virtualMachine);
+                    
+                    builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
                 }
             }
             if livePreviewEnabled {
@@ -186,7 +179,7 @@ class QemuRunner : VirtualMachineRunner {
     
     fileprivate func createBuilderForPPC() -> QemuCommandBuilder {
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
-       
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -201,7 +194,7 @@ class QemuRunner : VirtualMachineRunner {
             .withPortMappings(virtualMachine.portMappings)
             .withNetwork(name: "network-0", device: networkDevice);
     }
-        
+    
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
         
@@ -236,7 +229,7 @@ class QemuRunner : VirtualMachineRunner {
             .withDevice(QemuConstants.USB_TABLET)
             .withNetwork(name: "network-0", device: networkDevice);
     }
-
+    
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
@@ -245,7 +238,7 @@ class QemuRunner : VirtualMachineRunner {
         if (virtualMachine.os == QemuConstants.OS_MAC) {
             return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice);
         }
-    
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
@@ -296,7 +289,7 @@ class QemuRunner : VirtualMachineRunner {
             .withCpu(sanitizeCPUTypeForARM())
             .withMemory(virtualMachine.memory);
     }
-
+    
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
@@ -317,7 +310,7 @@ class QemuRunner : VirtualMachineRunner {
             .withNic(QemuConstants.VGA_VIRTIO)
             .withNetwork(name: "network-0", device: networkDevice)
     }
-
+    
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
@@ -343,7 +336,7 @@ class QemuRunner : VirtualMachineRunner {
                 }
             }
         }
-         
+        
         return QemuConstants.ARG_NET;
     }
     
@@ -354,14 +347,6 @@ class QemuRunner : VirtualMachineRunner {
             }
         }
         return false;
-    }
-    
-    fileprivate func driveExists(_ drive: VirtualDrive) -> Bool {
-        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW) {
-            let filemanager = FileManager.default;
-            return filemanager.fileExists(atPath: drive.path);
-        }
-        return true;
     }
     
     fileprivate func sanitizeMachineTypeForPPC() -> String {
@@ -379,7 +364,7 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
-            cpuType != QemuConstants.CPU_SKYLAKE_CLIENT && 
+            cpuType != QemuConstants.CPU_SKYLAKE_CLIENT &&
             cpuType != QemuConstants.CPU_QEMU64 ) {
             cpuType = QemuConstants.CPU_QEMU64;
         }
