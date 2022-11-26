@@ -141,7 +141,7 @@ class Utils {
                 return driveInfo.substring(with: String.Index(encodedOffset: index)..<String.Index(encodedOffset: index2))
             }
         }
-            
+        
         return nil
     }
     
@@ -197,7 +197,7 @@ class Utils {
         if value == 0 {
             return "N/A";
         }
-
+        
         if value < 1024 {
             return String(value) + " GB";
         } else {
@@ -230,7 +230,7 @@ class Utils {
         return hdds[0];
     }
     
-    static func findInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+    static func findIPSWInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
         // purge non IPSW drives
         var ipsws: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
@@ -243,6 +243,21 @@ class Utils {
             return nil;
         }
         return ipsws[0];
+    }
+    
+    static func findUSBInstallDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non USB drives
+        var installers: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                installers.append(drive);
+            }
+        }
+        
+        if installers.count == 0 {
+            return nil;
+        }
+        return installers[0];
     }
     
     static func findNvramDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
@@ -327,6 +342,31 @@ class Utils {
             return QemuConstants.HOST_68K;
         default:
             return qemuExecutable;
+        }
+    }
+    
+    static func describeArchitecture(_ architecture: String?) -> String {
+        switch architecture {
+        case QemuConstants.HOST_I386:
+            return QemuConstants.HOST_DESC_I386
+        case QemuConstants.HOST_X86_64:
+            return QemuConstants.HOST_DESC_X86_64
+        case QemuConstants.HOST_ARM:
+            return QemuConstants.HOST_DESC_ARM
+        case QemuConstants.HOST_ARM64:
+            return QemuConstants.HOST_DESC_ARM64
+        case QemuConstants.HOST_PPC:
+            return QemuConstants.HOST_DESC_PPC
+        case QemuConstants.HOST_PPC64:
+            return QemuConstants.HOST_DESC_PPC64
+        case QemuConstants.HOST_RISCV32:
+            return QemuConstants.HOST_DESC_RISCV32
+        case QemuConstants.HOST_RISCV64:
+            return QemuConstants.HOST_DESC_RISCV64
+        case QemuConstants.HOST_68K:
+            return QemuConstants.HOST_DESC_68K
+        default:
+            return ""
         }
     }
     
@@ -431,7 +471,7 @@ class Utils {
     static func getAccelForSubType(_ os: String, _ subtype: String?) -> Bool {
         return getBoolValueForSubType(os, subtype, 13, true);
     }
-
+    
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
         return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
@@ -496,7 +536,7 @@ class Utils {
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
         ret.append(Int(stringElements[2])!);
-
+        
         return ret;
     }
     
@@ -511,49 +551,84 @@ class Utils {
     
     static func isVirtualizationFrameworkPreferred(os: String, subtype: String, architecture: String) -> Bool
     {
+        if #available(macOS 13.0, *) {
+            return (os == QemuConstants.OS_LINUX && Utils.hostArchitecture() == Utils.getMachineArchitecture(architecture)) || isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
+        }
         if #available(macOS 12.0, *) {
             return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
         }
         return false
     }
     
+    
+    
     static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
         if #available(macOS 12.0, *) {
-            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 &&
-            os == QemuConstants.OS_MAC &&
-            (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
         }
         return false
     }
     
+    static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
+        if #available(macOS 13.0, *) {
+            let hostArchitecture = Utils.hostArchitecture()
+            let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
+            if hostArchitecture != vmArchitecture {
+                return "The VM cannot be started because it is an " + Utils.describeArchitecture(vmArchitecture) + " VM and cannot run on an " + Utils.describeArchitecture(hostArchitecture) + " Mac."
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+            } else {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+            }
+        } else if #available(macOS 12.0, *) {
+            if vm.os == QemuConstants.OS_LINUX {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with Linux VMs on macOS Monterey."
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+            } else {
+                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+            }
+        } else if #available(macOS 11.0, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Big Sur."
+        } else if #available(macOS 10.15, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Catalina."
+        } else if #available(macOS 10.14, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Mojave."
+        } else if #available(macOS 10.13, *) {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS High Sierra."
+        } else {
+            return "The VM cannot be started because Apple Virtualization Framework is not supported on this Mac."
+        }
+    }
+    
     static func getPreferredArchitecture() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.ARCH_ARM64
-        #else
+#else
         return QemuConstants.ARCH_X64
-        #endif
+#endif
     }
     
     static func getPreferredMachineType() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.MACHINE_TYPE_VIRT_HIGHMEM
-        #else
+#else
         return QemuConstants.MACHINE_TYPE_Q35
-        #endif
+#endif
     }
     
     static func getPreferredCPU() -> String {
-        #if arch(arm64)
+#if arch(arm64)
         return QemuConstants.CPU_IVY_BRIDGE
-        #else
+#else
         return QemuConstants.CPU_MAX
-        #endif
+#endif
     }
     
     static func random(digits:Int32) -> Int32 {
         var number = String()
         for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
+            number += "\(Int.random(in: 1...9))"
         }
         return Int32(number) ?? 0
     }
@@ -561,7 +636,7 @@ class Utils {
     static func random(digits:Int, suffix:Int32) -> Int32 {
         var number = String()
         for _ in 1...digits {
-           number += "\(Int.random(in: 1...9))"
+            number += "\(Int.random(in: 1...9))"
         }
         number += String(suffix)
         return Int32(number) ?? 0
@@ -605,10 +680,10 @@ class Utils {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             return QemuUtils.isBinaryAvailable(vm.architecture)
         } else {
-            return Utils.hostArchitecture() != QemuConstants.HOST_X86_64 || isVirtualizationFrameworkPreferred(vm)
+            return isVirtualizationFrameworkPreferred(vm)
         }
     }
-
+    
     static func computeVMPath(vmName: String) -> String {
         let userDefaults = UserDefaults.standard;
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
@@ -630,10 +705,32 @@ class Utils {
     
     static func isRecoveryModeSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 13.0, *) {
-            return Utils.isVMAvailable(vm) && vm.type == MacMulatorConstants.APPLE_VM
+            return Utils.isVMAvailable(vm) && Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
         } else {
             return false
         }
+    }
+    
+    static func removeUnexistingDrives(_ virtualMachine: VirtualMachine) {
+        if let window = NSApp.mainWindow {
+            for drive in virtualMachine.drives {
+                if !Utils.driveExists(drive) {
+                    Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
+                        response in if response.rawValue == Utils.ALERT_RESP_OK {
+                            virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
+                            virtualMachine.writeToPlist();
+                        }});
+                }
+            }
+        }
+    }
+    
+    fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
+        if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW) {
+            let filemanager = FileManager.default;
+            return filemanager.fileExists(atPath: drive.path);
+        }
+        return true;
     }
     
     fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
@@ -661,5 +758,10 @@ class Utils {
             }
         }
         return defaultValue;
+    }
+    
+    fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
+        return os == QemuConstants.OS_MAC &&
+        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
     }
 }

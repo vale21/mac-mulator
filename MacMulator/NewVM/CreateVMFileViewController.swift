@@ -124,6 +124,6 @@ class CreateVMFileViewController : NSViewController {
     }
     
     fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
-        return vm.type == MacMulatorConstants.APPLE_VM && !Utils.isIpswInstallMediaProvided(installMedia)
+        return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

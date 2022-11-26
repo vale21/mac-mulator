@@ -38,19 +38,30 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         self.recoveryMode = recoveryMode
         running = true;
 
-        #if arch(arm64)
-        
-        vzVirtualMachine = VirtualizationFrameworkUtils.decodeVirtualMachine(vm: managedVm);
-        
-        let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
-        if isDriveBlank {
-            installAndStartVM()
-        } else {
+        if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
+            #if arch(arm64)
+            
+            vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
+            
+            let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
+            if isDriveBlank {
+                installAndStartVM()
+            } else {
+                startVM()
+            }
+            
+            #endif
+        } else if #available(macOS 13.0, *) {
+            let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
+            var installPath: String? = nil
+            if let installMedia = installMedia {
+                installPath = installMedia.path
+            } else {
+                installPath = ""
+            }
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
             startVM()
         }
-    
-        
-        #endif
     }
     
     func instllationComplete(_ result: Result<Void, Error>) {
@@ -76,8 +87,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if let vzVirtualMachine = self.vzVirtualMachine {
             vzVirtualMachine.delegate = self;
             self.vmView?.virtualMachine = vzVirtualMachine;
-            
-            if #available(macOS 13.0, *) {
+
+            if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 
                 #if arch(arm64)
                 

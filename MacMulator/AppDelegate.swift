@@ -57,9 +57,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func refreshVMMenus() {
         pauseVMMenuItem.isEnabled = false
         if let rootController = self.rootController {
+            
+            #if arch(x86_64)
+            startVMInRecoveryMenuItem.isHidden = true
+            #endif
+            
             if rootController.currentVm == nil {
                 startVMMenuItem.isEnabled = false
+                #if arch(arm64)
                 startVMInRecoveryMenuItem.isEnabled = false
+                #endif
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
             } else {
@@ -67,11 +74,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = vm {
                     if rootController.isCurrentVMRunning() {
                         startVMMenuItem.isEnabled = false
+                        #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = false
+                        #endif
                         stopVMMenuItem.isEnabled = true
                     } else {
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
+                        #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = Utils.isRecoveryModeSupported(vm)
+                        #endif
                         stopVMMenuItem.isEnabled = false
                     }
                 }

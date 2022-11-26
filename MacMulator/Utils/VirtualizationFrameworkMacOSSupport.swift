@@ -9,16 +9,17 @@ import Foundation
 import Virtualization
 
 @available(macOS 12.0, *)
-class VirtualizationFrameworkUtils {
+class VirtualizationFrameworkMacOSSupport {
     
     static let RESTORE_IMAGE_NAME = "macos-restore-image.ipsw"
     static let AUXILIARY_STORAGE_NAME = "auxiliary-storage"
     static let MACHINE_IDENTIFIER_NAME = "machine-identifier"
     static let HARDWARE_MODEL_NAME = "hardware-model"
-
-    #if arch(arm64)
-
-    static func createVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
+    static let EFI_VARIABLE_STORE_NAME = "efi-var-store"
+    
+#if arch(arm64)
+    
+    static func createMacOSVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
         
         guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
             fatalError("No supported configuration available.")
@@ -31,50 +32,49 @@ class VirtualizationFrameworkUtils {
         _ = createMacPlatformConfiguration(vm: vm, macOSConfiguration: macOSConfiguration)
     }
     
-    static func decodeVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
-        let configuration = setupVirtualMachine(vm: vm)
+    static func decodeMacOSVirtualMachine(vm: VirtualMachine) -> VZVirtualMachine {
+        let configuration = setupMacOSVirtualMachine(vm: vm)
         
         let virtualMachine = VZVirtualMachine(configuration: configuration, queue: .main)
         return virtualMachine;
     }
     
-    fileprivate static func setupVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
+    fileprivate static func setupMacOSVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: nil)
+        virtualMachineConfiguration.cpuCount = vm.cpus;
+        virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
+        virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
         
-            virtualMachineConfiguration.cpuCount = vm.cpus;
-            virtualMachineConfiguration.memorySize = UInt64(vm.memory) * (1024 * 1024);
-            virtualMachineConfiguration.bootLoader = MacOSVirtualMachineConfigurationHelper.createBootLoader()
-            
-            let resolution = Utils.getResolutionElements(vm.displayResolution)
-            if let mainScreen = NSScreen.main {
-                virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
-                    witdh: Int(mainScreen.backingScaleFactor * CGFloat(resolution[0])),
-                    height: Int(mainScreen.backingScaleFactor * CGFloat(resolution[1])),
-                    ppi: Int(mainScreen.backingScaleFactor * 110))]
-            } else {
-                virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
-                    witdh: resolution[0],
-                    height: resolution[1],
-                    ppi: 110)]
-            }
-            
-            virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
-            virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
-            virtualMachineConfiguration.pointingDevices = [MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
-            virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
-            virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-            
-            try! virtualMachineConfiguration.validate()
+        let resolution = Utils.getResolutionElements(vm.displayResolution)
+        if let mainScreen = NSScreen.main {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: Int(mainScreen.backingScaleFactor * CGFloat(resolution[0])),
+                height: Int(mainScreen.backingScaleFactor * CGFloat(resolution[1])),
+                ppi: Int(mainScreen.backingScaleFactor * 110))]
+        } else {
+            virtualMachineConfiguration.graphicsDevices = [MacOSVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
+                witdh: resolution[0],
+                height: resolution[1],
+                ppi: 110)]
+        }
+        
+        virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
+        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+        virtualMachineConfiguration.pointingDevices = MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfigurations()
+        virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
+        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
+        
+        try! virtualMachineConfiguration.validate()
         
         return virtualMachineConfiguration
     }
     
     fileprivate static func createMacPlatformConfiguration(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements?) -> VZMacPlatformConfiguration {
         let macPlatformConfiguration = VZMacPlatformConfiguration()
-        let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.AUXILIARY_STORAGE_NAME + "-0")
-        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.MACHINE_IDENTIFIER_NAME + "-0")
-        let hardwareModelURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkUtils.HARDWARE_MODEL_NAME + "-0")
+        let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkMacOSSupport.AUXILIARY_STORAGE_NAME + "-0")
+        let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkMacOSSupport.MACHINE_IDENTIFIER_NAME + "-0")
+        let hardwareModelURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkMacOSSupport.HARDWARE_MODEL_NAME + "-0")
         
         if macOSConfiguration != nil {
             // Create resources using provided configuration
@@ -103,8 +103,8 @@ class VirtualizationFrameworkUtils {
                 fatalError("Failed to create hardware model.")
             }
             macPlatformConfiguration.hardwareModel = hardwareModel;
-                    
-
+            
+            
             guard let machineIdentifierData = try? Data(contentsOf: machineIdentifierURL) else {
                 fatalError("Failed to retrieve machine identifier data.")
             }
@@ -117,5 +117,6 @@ class VirtualizationFrameworkUtils {
         return macPlatformConfiguration
     }
     
-    #endif
+#endif
+    
 }

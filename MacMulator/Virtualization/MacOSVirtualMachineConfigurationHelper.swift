@@ -11,7 +11,7 @@ import Virtualization
 #if arch(arm64)
 
 @available(macOS 12.0, *)
-struct MacOSVirtualMachineConfigurationHelper {
+class MacOSVirtualMachineConfigurationHelper {
 
     static func createBootLoader() -> VZMacOSBootLoader {
         return VZMacOSBootLoader()
@@ -45,8 +45,12 @@ struct MacOSVirtualMachineConfigurationHelper {
         return networkDevice
     }
 
-    static func createPointingDeviceConfiguration() -> VZUSBScreenCoordinatePointingDeviceConfiguration {
-        return VZUSBScreenCoordinatePointingDeviceConfiguration()
+    static func createPointingDeviceConfigurations() -> [ VZPointingDeviceConfiguration ] {
+        if #available(macOS 13.0, *) {
+            return [ VZUSBScreenCoordinatePointingDeviceConfiguration(), VZMacTrackpadConfiguration() ]
+        } else {
+            return [ VZUSBScreenCoordinatePointingDeviceConfiguration() ]
+        }
     }
 
     static func createKeyboardConfiguration() -> VZUSBKeyboardConfiguration {

@@ -74,6 +74,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
         if let vm = currentVm {
+            Utils.removeUnexistingDrives(vm)
             vmController?.setVirtualMachine(vm);
             listController?.selectElement(virtualMachines.firstIndex(of: vm) ?? -1);
         } else {
