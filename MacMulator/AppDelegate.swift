@@ -31,7 +31,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in _ = self.application(NSApp, openFile: String(panel.url!.path)) });
+    }
+    
+    @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in _ = self.application(NSApp, openFile: String(panel.url!.path)) });
+    }
+    
+    @IBAction func importVMFromParallelsMenuBarClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in _ = self.application(NSApp, openFile: String(panel.url!.path)) });
     }
         
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
