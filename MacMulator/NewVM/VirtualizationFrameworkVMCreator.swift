@@ -28,7 +28,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             print("Detected macOS with IPSW Not specified. Downloading...");
             let restoreImage = MacOSRestoreImage(self, vm);
             restoreImage.download {
-                self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkUtils.RESTORE_IMAGE_NAME);
+                self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME);
             }
             
             #endif
@@ -99,7 +99,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     fatalError(error.localizedDescription)
                     
                 case let .success(restoreImage):
-                    VirtualizationFrameworkUtils.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage);
+                    VirtualizationFrameworkMacOSSupport.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage);
                     complete = true
                 }
             })
@@ -108,7 +108,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             
         } else {
             if #available(macOS 13.0, *) {
-                VirtualizationFrameworkUtils.createLinuxVirtualMachineData(vm: vm)
+                VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: vm)
             }
             complete = true
         }

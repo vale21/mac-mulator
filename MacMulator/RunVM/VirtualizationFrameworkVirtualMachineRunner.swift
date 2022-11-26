@@ -41,7 +41,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
             #if arch(arm64)
             
-            vzVirtualMachine = VirtualizationFrameworkUtils.decodeMacOSVirtualMachine(vm: managedVm)
+            vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
             
             let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
             if isDriveBlank {
@@ -59,7 +59,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             } else {
                 installPath = ""
             }
-            vzVirtualMachine = VirtualizationFrameworkUtils.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
             startVM()
         }
     }

@@ -40,8 +40,8 @@ class MacOSRestoreImage: NSObject {
                 fatalError("Download failed. \(error.localizedDescription).")
             }
 
-            guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkUtils.RESTORE_IMAGE_NAME))) != nil else {
-                fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkUtils.RESTORE_IMAGE_NAME)).")
+            guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME))) != nil else {
+                fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)).")
             }
 
             completionHandler()

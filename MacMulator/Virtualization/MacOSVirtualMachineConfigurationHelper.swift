@@ -45,8 +45,12 @@ class MacOSVirtualMachineConfigurationHelper {
         return networkDevice
     }
 
-    static func createPointingDeviceConfiguration() -> VZUSBScreenCoordinatePointingDeviceConfiguration {
-        return VZUSBScreenCoordinatePointingDeviceConfiguration()
+    static func createPointingDeviceConfigurations() -> [ VZPointingDeviceConfiguration ] {
+        if #available(macOS 13.0, *) {
+            return [ VZUSBScreenCoordinatePointingDeviceConfiguration(), VZMacTrackpadConfiguration() ]
+        } else {
+            return [ VZUSBScreenCoordinatePointingDeviceConfiguration() ]
+        }
     }
 
     static func createKeyboardConfiguration() -> VZUSBKeyboardConfiguration {
