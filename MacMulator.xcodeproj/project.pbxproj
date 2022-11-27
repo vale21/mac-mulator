@@ -40,9 +40,11 @@
 		3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */; };
 		3B6FF876266F791700368BAB /* SocketSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3B6FF875266F791700368BAB /* SocketSwift */; };
 		3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */; };
+		3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
+		3B7F3C2429326F9900F1396D /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
 		3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */; };
 		3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
 		3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
@@ -153,9 +155,11 @@
 		3B6A9E1325CBFDDC00123D6B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
 		3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostMachineDetails.swift; sourceTree = "<group>"; };
+		3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportHerlper.swift; sourceTree = "<group>"; };
 		3B73E41525CAE040004BAA92 /* QemuRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuRunner.swift; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
+		3B7F3C2329326F9900F1396D /* parallels_template */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = parallels_template; sourceTree = "<group>"; };
 		3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuImgCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
@@ -346,6 +350,7 @@
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
 				3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */,
 				3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */,
+				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -363,6 +368,7 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B7F3C2329326F9900F1396D /* parallels_template */,
 				3B3E56E026EF59C900D79C92 /* OPENCORE_LEGACY.zip */,
 				3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
@@ -501,6 +507,7 @@
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3BD669B425E58080004E129D /* EditVM.storyboard in Resources */,
+				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +528,7 @@
 				3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */,
 				3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */,
 				3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */,
+				3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */,
 				3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */,
 				3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */,
 				3B9D7C5B2804638900C9510B /* MacOSRestoreImage.swift in Sources */,
