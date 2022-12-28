@@ -9,14 +9,8 @@ import Foundation
 import Virtualization
 
 @available(macOS 12.0, *)
-class VirtualizationFrameworkLinuxSupport {
-    
-    static let RESTORE_IMAGE_NAME = "macos-restore-image.ipsw"
-    static let AUXILIARY_STORAGE_NAME = "auxiliary-storage"
-    static let MACHINE_IDENTIFIER_NAME = "machine-identifier"
-    static let HARDWARE_MODEL_NAME = "hardware-model"
-    static let EFI_VARIABLE_STORE_NAME = "efi-var-store"
-        
+class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
+      
     @available(macOS 13.0, *)
     static func createLinuxVirtualMachineData(vm: VirtualMachine) {
         

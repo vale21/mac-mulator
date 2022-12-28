@@ -21,6 +21,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    @IBOutlet weak var exportMenuItem: NSMenuItem!
+    @IBOutlet weak var exportToParallelsMenuItem: NSMenuItem!
+    @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -39,6 +42,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Utils.showDirectorySelector(uponSelection: { panel in
             if let vm = rootController?.currentVm {
                 ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
+                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export complete")
             }
         })
     }
@@ -78,11 +82,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             if rootController.currentVm == nil {
                 startVMMenuItem.isEnabled = false
-                #if arch(arm64)
                 startVMInRecoveryMenuItem.isEnabled = false
-                #endif
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
+                exportMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
                 if let vm = vm {
@@ -177,6 +180,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func rootControllerDidFinishLoading(_ rootController: RootViewController) {
         self.rootController = rootController;
+        self.refreshVMMenus()
     }
     
     func addSavedVM(_ savedVM: String) {

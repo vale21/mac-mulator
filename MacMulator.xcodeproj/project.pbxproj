@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */; };
 		3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07C284A4FCE002D465F /* PortMapping.swift */; };
+		3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */; };
 		3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
@@ -121,6 +122,7 @@
 /* Begin PBXFileReference section */
 		3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetwork.swift; sourceTree = "<group>"; };
 		3B03B07C284A4FCE002D465F /* PortMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortMapping.swift; sourceTree = "<group>"; };
+		3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkSupport.swift; sourceTree = "<group>"; };
 		3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineDelegate.swift; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				3BBB471D25CABDAE00A4DBA7 /* Shell.swift */,
 				3BBB471E25CABDAE00A4DBA7 /* Utils.swift */,
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
+				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
 				3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */,
 				3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */,
 				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
@@ -570,6 +573,7 @@
 				3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */,
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
+				3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */,
 				3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */,
 				3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */,
 				3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */,

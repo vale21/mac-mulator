@@ -2004,6 +2004,9 @@ Raspberry Pi</mutableString>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
                         <outlet property="editVMMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
+                        <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
+                        <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
+                        <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="SUm-X6-wZL"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qd7-pB-hJx"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>

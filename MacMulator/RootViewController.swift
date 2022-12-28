@@ -85,7 +85,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         self.currentVm = currentVm;
         
         let appDelegate = NSApp.delegate as! AppDelegate;
-        appDelegate.refreshVMMenus();
+        appDelegate.refreshVMMenus()
     }
     
     func addVirtualMachineFromFile(_ fileName: String) {
@@ -186,7 +186,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
         
         let appDelegate = NSApp.delegate as! AppDelegate;
-        appDelegate.refreshVMMenus();
+        appDelegate.refreshVMMenus()
     }
     
     func unsetRunningVM(_ vm: VirtualMachine) {
@@ -197,7 +197,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
         
         let appDelegate = NSApp.delegate as! AppDelegate;
-        appDelegate.refreshVMMenus();
+        appDelegate.refreshVMMenus()
     }
     
     func isCurrentVMRunning() -> Bool {
