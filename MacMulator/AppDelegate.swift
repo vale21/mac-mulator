@@ -21,6 +21,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    @IBOutlet weak var exportMenuItem: NSMenuItem!
+    @IBOutlet weak var exportToParallelsMenuItem: NSMenuItem!
+    @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -31,7 +34,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in self.application(NSApp, openFile: String(panel.url!.path)) });
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in
+            _ = self.application(NSApp, openFile: String(panel.url!.path)) });
+    }
+    
+    @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
+        Utils.showDirectorySelector(uponSelection: { panel in
+            if let vm = rootController?.currentVm {
+                do {
+                    try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
+                } catch {
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+                }
+            }
+        })
+    }
+    
+    @IBAction func importVMFromParallelsMenuBarClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
+            do {
+                let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
+                rootController?.addVirtualMachine(vm)
+            } catch {
+                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
+            }
+        })
     }
         
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
@@ -64,11 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             if rootController.currentVm == nil {
                 startVMMenuItem.isEnabled = false
-                #if arch(arm64)
                 startVMInRecoveryMenuItem.isEnabled = false
-                #endif
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
+                exportMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
                 if let vm = vm {
@@ -81,10 +108,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     } else {
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
                         #if arch(arm64)
-                        startVMInRecoveryMenuItem.isEnabled = Utils.isRecoveryModeSupported(vm)
+                        startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
                         #endif
                         stopVMMenuItem.isEnabled = false
                     }
+                    
+                    #if arch(arm64)
+                        importFromParallelsMenuItem.isEnabled = true
+                        if Utils.isFullFeaturedMacOSVM(vm) {
+                            exportMenuItem.isEnabled = true
+                            exportToParallelsMenuItem.isEnabled = true
+                        } else {
+                            exportMenuItem.isEnabled = false
+                            exportToParallelsMenuItem.isEnabled = false
+                        }
+                    #else
+                        exportMenuItem.isEnabled = false
+                        exportToParallelsMenuItem.isEnabled = false
+                        importFromParallelsMenuItem.isEnabled = true
+                    #endif
+                    
                 }
             }
         }
@@ -163,6 +206,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func rootControllerDidFinishLoading(_ rootController: RootViewController) {
         self.rootController = rootController;
+        self.refreshVMMenus()
     }
     
     func addSavedVM(_ savedVM: String) {
