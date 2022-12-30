@@ -89,7 +89,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             } else {
                 menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm);
                 #if arch(arm64)
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = Utils.isRecoveryModeSupported(vm)
+                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
                 #endif
                 menu.item(withTitle: "Stop")?.isEnabled = false;
             }

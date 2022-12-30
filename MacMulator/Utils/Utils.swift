@@ -129,7 +129,23 @@ class Utils {
                 .dropLast());
     }
     
-    static func extractDriveSize(_ driveInfo: String) -> String? {
+    static func computeSizeOfPhysicalDrive(_ path: String, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
+        QemuUtils.getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
+            infoCode, output in
+            if infoCode == 0 {
+                let driveSize = Utils.extractDriveSize(output)
+                if let driveSize = driveSize {
+                    callback(infoCode, driveSize)
+                } else {
+                    callback(infoCode, -1)
+                }
+            } else {
+                callback(infoCode, -1)
+            }
+        })
+    }
+    
+    static func extractDriveSize(_ driveInfo: String) -> Int32? {
         if let range: Range<String.Index> = driveInfo.range(of: "virtual size: ")  {
             let index: Int = driveInfo.distance(from: driveInfo.startIndex, to: range.lowerBound) + "virtual size: ".count
             print("index: ", index)
@@ -138,7 +154,7 @@ class Utils {
                 let index2: Int = driveInfo.distance(from: driveInfo.startIndex, to: range.lowerBound)
                 print("index2: ", index2)
                 
-                return driveInfo.substring(with: String.Index(encodedOffset: index)..<String.Index(encodedOffset: index2))
+                return Int32(driveInfo.substring(with: String.Index(encodedOffset: index)..<String.Index(encodedOffset: index2)))
             }
         }
         
@@ -703,7 +719,7 @@ class Utils {
         return path.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased())
     }
     
-    static func isRecoveryModeSupported(_ vm: VirtualMachine) -> Bool {
+    static func isFullFeaturedMacOSVM(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 13.0, *) {
             return Utils.isVMAvailable(vm) && Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
         } else {

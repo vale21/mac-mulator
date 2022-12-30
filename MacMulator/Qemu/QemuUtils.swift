@@ -104,12 +104,7 @@ class QemuUtils {
                     if infoCode == 0 {
                         let driveSize = Utils.extractDriveSize(output)
                         if let driveSize = driveSize {
-                            let size = Int32(driveSize)
-                            if let size = size {
-                                callback(infoCode, size)
-                            } else {
-                                callback(infoCode, -1)
-                            }
+                            callback(infoCode, driveSize)
                         } else {
                             callback(infoCode, -1)
                         }

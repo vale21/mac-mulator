@@ -2776,7 +2776,7 @@ Raspberry Pi</mutableString>
                                                             <constraint firstAttribute="height" constant="20" id="H9I-nw-w9m"/>
                                                             <constraint firstAttribute="width" constant="138" id="IwK-U3-WID"/>
                                                         </constraints>
-                                                        <buttonCell key="cell" type="bevel" title="Import existing VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="aSL-cT-buY">
+                                                        <buttonCell key="cell" type="bevel" title="Open existing VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="aSL-cT-buY">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="systemLight" size="16"/>
                                                         </buttonCell>
@@ -2832,7 +2832,7 @@ Raspberry Pi</mutableString>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="89" id="wMZ-B6-1Y2"/>
                                             </constraints>
-                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" alignment="left" allowsEditingTextAttributes="YES" id="dQO-9y-TXE">
+                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" alignment="center" allowsEditingTextAttributes="YES" id="dQO-9y-TXE">
                                                 <font key="font" metaFont="system"/>
                                                 <string key="title">Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisci elit, sed do eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullamco laboriosam, nisi ut aliquid ex ea commodi consequatur. Duis aute irure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
