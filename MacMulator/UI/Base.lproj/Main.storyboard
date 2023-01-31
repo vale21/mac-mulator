@@ -2183,7 +2183,7 @@ Raspberry Pi</mutableString>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GGz-Fj-dh8">
                                 <rect key="frame" x="69" y="69" width="320" height="18"/>
-                                <buttonCell key="cell" type="check" title="Show Live Preview of running VM (Experimental)" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gz8-K2-lQo">
+                                <buttonCell key="cell" type="check" title="Show Live Preview of running VM (Experimental)" bezelStyle="regularSquare" imagePosition="left" enabled="NO" state="on" inset="2" id="gz8-K2-lQo">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
