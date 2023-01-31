@@ -14,6 +14,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
     private var complete: Bool = false
     private var progress: Double = 0.0
+    private var restoreImage: MacOSRestoreImage?
         
     func createVM(vm: VirtualMachine, installMedia: String) throws {
     
@@ -26,8 +27,8 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             #if arch(arm64)
             
             print("Detected macOS with IPSW Not specified. Downloading...");
-            let restoreImage = MacOSRestoreImage(self, vm);
-            restoreImage.download {
+            self.restoreImage = MacOSRestoreImage(self, vm);
+            restoreImage!.download {
                 self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME);
             }
             
@@ -45,6 +46,19 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
     func getProgress() -> Double {
         return progress
+    }
+    
+    func cancelVMCreation(vm: VirtualMachine) {
+        if let restoreImage = self.restoreImage {
+            restoreImage.cancelDownload()
+            
+            let fileManager = FileManager.default;
+            do {
+                try fileManager.removeItem(at: URL(fileURLWithPath: vm.path));
+            } catch {
+                print("ERROR while deleting" + vm.path + ": " + error.localizedDescription);
+            }
+        }
     }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {

@@ -14,7 +14,10 @@ class CreateVMFileViewController : NSViewController {
     @IBOutlet weak var descriptionLabel: NSTextField!
     @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
     
-    var parentController: NewVMViewController?;
+    private var parentController: NewVMViewController?
+    private var vmCreator: VMCreator?
+    private var timer: Timer?
+    private var vm: VirtualMachine?
     
     func setParentController(_ parentController: NewVMViewController) {
         self.parentController = parentController;
@@ -37,59 +40,61 @@ class CreateVMFileViewController : NSViewController {
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             
-            let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
+            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
             
-            var foundError: Bool = false;
-            
-            let installMedia = parentController.installMedia.stringValue;
-            if shouldDownloadIpsw(vm, installMedia) {
-                // Downloading IPSW
-                progressBar.isIndeterminate = false
-                progressBar.minValue = 0
-                progressBar.maxValue = 100
-                progressBar.doubleValue = 0.0
-                descriptionLabel.stringValue = "Preparing to download macOS Installer..."
-                estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
-            } else {
-                descriptionLabel.stringValue = "Creating Virtual Machine..."
-                estimateTimeRemainingLabel.isHidden = true
-            }
-            
-            
-            let vmCreator: VMCreator = VMCreatorFactory().create(vm: vm);
-            
-            let startTime = Int64(Date().timeIntervalSince1970)
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+            if let vm = self.vm {
+                var foundError: Bool = false;
                 
-                if self.shouldDownloadIpsw(vm, installMedia) {
-                    let progress = vmCreator.getProgress()
-                    self.progressBar.doubleValue = progress
-                    let currentValue = self.progressBar.doubleValue
-                    if (currentValue <= 0) {
-                        self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
-                        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
-                    }  else if (currentValue < 100) {
-                        self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
-                        self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
-                    } else {
-                        self.descriptionLabel.stringValue = "Creating Virtual Machine..."
+                let installMedia = parentController.installMedia.stringValue;
+                if shouldDownloadIpsw(vm, installMedia) {
+                    // Downloading IPSW
+                    progressBar.isIndeterminate = false
+                    progressBar.minValue = 0
+                    progressBar.maxValue = 100
+                    progressBar.doubleValue = 0.0
+                    descriptionLabel.stringValue = "Preparing to download macOS Installer..."
+                    estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                } else {
+                    descriptionLabel.stringValue = "Creating Virtual Machine..."
+                    estimateTimeRemainingLabel.isHidden = true
+                }
+                
+                
+                self.vmCreator = VMCreatorFactory().create(vm: vm);
+                
+                let startTime = Int64(Date().timeIntervalSince1970)
+                self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+                    
+                    if self.shouldDownloadIpsw(vm, installMedia) {
+                        let progress = self.vmCreator!.getProgress()
+                        self.progressBar.doubleValue = progress
+                        let currentValue = self.progressBar.doubleValue
+                        if (currentValue <= 0) {
+                            self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                        }  else if (currentValue < 100) {
+                            self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
+                        } else {
+                            self.descriptionLabel.stringValue = "Creating Virtual Machine..."
+                        }
                     }
-                }
+                    
+                    guard !self.vmCreator!.isComplete() else {
+                        self.creationComplete(timer, foundError, vm)
+                        return;
+                    }
+                });
                 
-                guard !vmCreator.isComplete() else {
-                    self.creationComplete(timer, foundError, vm)
-                    return;
-                }
-            });
-            
-            DispatchQueue.global().async {
-                do {
-                    try vmCreator.createVM(vm: vm, installMedia: installMedia);
-                } catch {
-                    foundError = true;
-                    DispatchQueue.main.async {
-                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                        message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
+                DispatchQueue.global().async {
+                    do {
+                        try self.vmCreator!.createVM(vm: vm, installMedia: installMedia);
+                    } catch {
+                        foundError = true;
+                        DispatchQueue.main.async {
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
+                                            message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
+                        }
                     }
                 }
             }
@@ -97,6 +102,18 @@ class CreateVMFileViewController : NSViewController {
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
+        if let vmCreator = self.vmCreator {
+            if let vm = self.vm {
+                vmCreator.cancelVMCreation(vm: vm)
+            }
+            
+            if let timer = self.timer {
+                timer.invalidate();
+            }
+            
+            self.progressBar.stopAnimation(self);
+            self.dismiss(self);
+        }
     }
     
     fileprivate func computePath() -> String {

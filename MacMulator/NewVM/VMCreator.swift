@@ -9,11 +9,13 @@ import Foundation
 
 protocol VMCreator {
     
-    func createVM(vm: VirtualMachine, installMedia: String) throws;
+    func createVM(vm: VirtualMachine, installMedia: String) throws
     
-    func isComplete() -> Bool;
+    func isComplete() -> Bool
     
-    func setProgress(_ progress: Double);
+    func setProgress(_ progress: Double)
     
-    func getProgress() -> Double;
+    func getProgress() -> Double
+    
+    func cancelVMCreation(vm: VirtualMachine)
 }

@@ -30,6 +30,10 @@ class QemuVMCreator: VMCreator {
         return self.progress
     }
     
+    func cancelVMCreation(vm: VirtualMachine) {
+        
+    }
+    
     fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {
         
         if vm.architecture == QemuConstants.ARCH_ARM64 || vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {

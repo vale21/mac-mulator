@@ -13,6 +13,7 @@ class MacOSRestoreImage: NSObject {
     private var downloadObserver: NSKeyValueObservation?
     private var vmCreator: VMCreator
     private var vm: VirtualMachine
+    private var canceled = false
 
     init(_ vmCreator: VMCreator, _ vm: VirtualMachine) {
         self.vmCreator = vmCreator
@@ -33,6 +34,10 @@ class MacOSRestoreImage: NSObject {
             }
         }
     }
+    
+    public func cancelDownload() {
+        canceled = true
+    }
 
     private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping () -> Void) {
         let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, response, error in
@@ -40,11 +45,18 @@ class MacOSRestoreImage: NSObject {
                 fatalError("Download failed. \(error.localizedDescription).")
             }
 
-            guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME))) != nil else {
-                fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)).")
+            if !self.canceled {
+                guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME))) != nil else {
+                    fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)).")
+                }
+                
+                completionHandler()
+            } else {
+                NSLog("Operation aborted.")
+                guard (try? FileManager.default.removeItem(at: localURL!)) != nil else {
+                    fatalError("Failed to clean up restore image")
+                }
             }
-
-            completionHandler()
         }
 
         downloadObserver = downloadTask.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
