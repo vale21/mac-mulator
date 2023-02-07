@@ -49,6 +49,9 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
     
     func cancelVMCreation(vm: VirtualMachine) {
+        
+        #if arch(arm64)
+        
         if let restoreImage = self.restoreImage {
             restoreImage.cancelDownload()
             
@@ -59,6 +62,8 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 print("ERROR while deleting" + vm.path + ": " + error.localizedDescription);
             }
         }
+        
+        #endif
     }
     
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
