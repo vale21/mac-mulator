@@ -12,7 +12,7 @@
 				<string>qvm</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>Qemu Virtual Machine Bundle</string>
+			<string>MacMulator VM</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
