@@ -101,7 +101,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                                 self.progressBar.isIndeterminate = false
                                 self.progressBar.stopAnimation(self)
                             }
-                            
+
                             self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: self.progress)
                         }

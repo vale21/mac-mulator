@@ -660,10 +660,11 @@ class Utils {
     
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
         let currentTime = Int64(Date().timeIntervalSince1970)
-        
+        let weigth = (6 * progress) < 500 ? 500 - (6 * progress) : 0
+ 
         let timeDelta = Double(currentTime - startTime)
-        let factor = timeDelta / progress
-        let totalTime = 100 * factor
+        let factor = (timeDelta / progress)
+        let totalTime = (100 * factor) + weigth
         let remainingTime = totalTime - timeDelta
         
         return formatTime(remainingTime)
@@ -674,7 +675,7 @@ class Utils {
             return String(Int(secs)) + " seconds"
         } else if secs > 30 && secs < 60 {
             return "less than a minute"
-        } else if secs < (60 * 5) {
+        } else if secs < (60 * 3) {
             let minutes = Int(secs / 60)
             let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
             if seconds > 0 {

@@ -183,8 +183,16 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         
     func deleteVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
-            table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
-            rootController.removeVirtualMachineAt(index);
+            if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "The VM you are trying to remove is running. Do you want to continue?");
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
+                    _ = rootController.removeVirtualMachineAt(index);
+                }
+            } else {
+                table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
+                _ = rootController.removeVirtualMachineAt(index);
+            }
         }
     }
     
@@ -197,7 +205,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func startVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
-            let vm = rootController.getVirtualMachineAt(index);
+            _ = rootController.getVirtualMachineAt(index);
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMMenuBarClicked(self)
         }
@@ -205,7 +213,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func startVirtualMachineInRecovery(_ index: Int) {
         if let rootController = self.rootController {
-            let vm = rootController.getVirtualMachineAt(index);
+            _ = rootController.getVirtualMachineAt(index);
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMInRecoveryMenuBarClicked(self)
         }
@@ -214,7 +222,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func stopVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
-            let vm = rootController.getVirtualMachineAt(index);
+            _ = rootController.getVirtualMachineAt(index);
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.stopVMMenubarClicked(self)
         }
