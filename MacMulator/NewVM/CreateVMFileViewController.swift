@@ -13,6 +13,7 @@ class CreateVMFileViewController : NSViewController {
     @IBOutlet weak var progressBar: NSProgressIndicator!
     @IBOutlet weak var descriptionLabel: NSTextField!
     @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
+    @IBOutlet weak var cancelButton: NSButton!
     
     private var parentController: NewVMViewController?
     private var vmCreator: VMCreator?
@@ -54,9 +55,15 @@ class CreateVMFileViewController : NSViewController {
                     progressBar.doubleValue = 0.0
                     descriptionLabel.stringValue = "Preparing to download macOS Installer..."
                     estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                    cancelButton.isHidden = false
                 } else {
                     descriptionLabel.stringValue = "Creating Virtual Machine..."
                     estimateTimeRemainingLabel.isHidden = true
+                    cancelButton.isHidden = true
+                    
+                    let currentFrame = self.view.window?.frame
+                    let size = CGSize(width: currentFrame!.width - 25, height: currentFrame!.height - 25)
+                    self.view.window?.setContentSize(size)
                 }
                 
                 

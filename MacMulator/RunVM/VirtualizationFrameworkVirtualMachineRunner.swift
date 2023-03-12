@@ -76,7 +76,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func guestDidStop(_ virtualMachine: VZVirtualMachine) {
         print("Stopped")
-        stopVM()
+        stopVM(guestStopped: true)
     }
     
     func isVMRunning() -> Bool {
@@ -97,7 +97,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 
                 vzVirtualMachine.start(options: options, completionHandler: { error in
                     if let error = error {
-                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
                     }
                 })
                 
@@ -107,7 +107,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 vzVirtualMachine.start(completionHandler: { (result) in
                     switch result {
                         case let .failure(error):
-                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM()});
+                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
                         break;
                         default:
                             print(result)
@@ -117,17 +117,27 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         }
     }
     
-    func stopVM() {
+    func stopVM(guestStopped: Bool) {
+        running = false;
+        vzVirtualMachine?.stop(completionHandler: { err in })
+        vmViewController?.stopVM(guestStopped);
+    }
+    
+    func stopVMGracefully() {
         running = false;
         do {
             try vzVirtualMachine?.requestStop()
         } catch {
-            vzVirtualMachine?.stop(completionHandler: { err in })
+            self.stopVM(guestStopped: false)
         }
-        vmViewController?.stopVM();
+        vmViewController?.stopVM(false);
     }
     
     func pauseVM() {
+    }
+    
+    func abort() {
+        vmViewController?.view.window?.close()
     }
     
     func getConsoleOutput() -> String {

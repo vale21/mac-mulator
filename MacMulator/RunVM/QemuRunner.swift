@@ -412,11 +412,18 @@ class QemuRunner : VirtualMachineRunner {
         return shell.isRunning();
     }
     
-    func stopVM() {
+    func stopVM(guestStopped: Bool) {
         shell.kill();
     }
     
+    func stopVMGracefully() {
+        self.stopVM(guestStopped: false)
+    }
+    
     func pauseVM() {
+    }
+    
+    func abort() {
     }
     
     func getStandardError() -> String {

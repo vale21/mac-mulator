@@ -62,23 +62,25 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
         if response.rawValue != Utils.ALERT_RESP_OK {
             return false;
         } else {
-            stopVM()
+            stopVM(false)
             return true;
         }
     }
         
-    func stopVM() {
+    func stopVM(_ closeWindow: Bool) {
         if let vmRunner = self.vmRunner {
-            if (vmRunner.isVMRunning()) {
-                vmRunner.stopVM();
+            if vmRunner.isVMRunning() {
+                vmRunner.stopVM(guestStopped: closeWindow)
             }
         }
         if let virtualMachine = virtualMachine {
             vmController?.cleanupStoppedVM(virtualMachine)
         }
-        self.view.window?.close();
+        if closeWindow {
+            self.view.window?.close();
+        }
     }
-    
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if (segue.identifier == MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE) {
             let destinationController = segue.destinationController as! VirtualizationFrameworkInstallVMViewController;

@@ -16,6 +16,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
     @IBOutlet weak var vmIcon: NSImageView!
     
+    var canceled: Bool = false
     var progress: Double = 0.0
     var virtualMachine: VZVirtualMachine?
     var restoreImageURL: URL?
@@ -38,10 +39,11 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
         let vm = parentRunner?.managedVm
         if let vm = vm {
             self.vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"));
-            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
+            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a few seconds..."
             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
             
-            progressBar.isIndeterminate = false
+            progressBar.isIndeterminate = true
+            progressBar.startAnimation(self)
             progressBar.doubleValue = 0
             progressBar.minValue = 0
             progressBar.maxValue = 100
@@ -64,14 +66,18 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                     installer.install(completionHandler: { (result: Result<Void, Error>) in
                         if case let .failure(error) = result {
                             print("Installation failed with error: " + error.localizedDescription)
+                            self.dismiss(self)
+                            self.parentRunner?.abort()
                         } else {
                             print("Installation succeeded.")
                         }
                         
-                        virtualMachine.stop(completionHandler: { err in
-                            self.dismiss(self)
-                            self.parentRunner?.instllationComplete(result)
-                        })
+                        if !self.canceled {
+                            virtualMachine.stop(completionHandler: { err in
+                                self.dismiss(self)
+                                self.parentRunner?.instllationComplete(result)
+                            })
+                        }
                     })
                     
                     let startTime = Int64(Date().timeIntervalSince1970)
@@ -84,18 +90,26 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                         
                         
                         let currentValue = self.progressBar.doubleValue
-                        if (currentValue <= 0) {
-                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a moment..."
+                        if self.canceled {
+                            self.descriptionLabel.stringValue = "Aborting installation. Please wait..."
+                            self.estimateTimeRemainingLabel.stringValue = ""
+                        } else if (currentValue <= 0) {
+                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a few seconds..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
                         } else {
+                            if self.progressBar.isIndeterminate {
+                                self.progressBar.isIndeterminate = false
+                                self.progressBar.stopAnimation(self)
+                            }
+                            
                             self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: self.progress)
                         }
-                        if (self.progress > currentValue) {
+                        if self.progress > currentValue {
                             let delta = self.progress - currentValue;
                             self.progressBar.increment(by: delta)
                         }
-                        if (self.isComplete()) {
+                        if self.isComplete() || self.canceled {
                             timer.invalidate()
                         }
                     });
@@ -108,8 +122,16 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
         self.progress = 100.0
+        self.canceled = true
         
-        self.dismiss(self)
-        self.parentRunner?.stopVM()
+        self.descriptionLabel.stringValue = "Aborting installation. Please wait..."
+        self.estimateTimeRemainingLabel.stringValue = ""
+        self.progressBar.isIndeterminate = true
+        self.progressBar.minValue = 0
+        self.progressBar.maxValue = 0
+        self.progressBar.doubleValue = 0
+        self.progressBar.startAnimation(self)
+        
+        self.parentRunner?.stopVM(guestStopped: false)
     }
 }

@@ -90,7 +90,7 @@ class VirtualMachineViewController: NSViewController {
         Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
             if response.rawValue == Utils.ALERT_RESP_OK {
                 if let vm = self.rootController?.currentVm {
-                    self.rootController?.getRunnerForRunningVM(vm)?.stopVM();
+                    self.rootController?.getRunnerForRunningVM(vm)?.stopVM(guestStopped: false)
                 }
             }
         });

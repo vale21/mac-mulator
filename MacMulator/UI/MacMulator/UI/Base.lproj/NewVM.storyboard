@@ -338,6 +338,7 @@ DQ
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="cancelButton" destination="yd8-mu-GEg" id="Q7d-MN-7rD"/>
                         <outlet property="descriptionLabel" destination="oyV-iQ-kJO" id="HBy-cC-10g"/>
                         <outlet property="estimateTimeRemainingLabel" destination="jdN-2B-gFS" id="6Yf-dd-9eU"/>
                         <outlet property="progressBar" destination="bso-Cc-Epo" id="pOH-xs-K8N"/>

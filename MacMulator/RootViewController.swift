@@ -42,7 +42,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         if areThereRunningVMs() {
-            let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+            let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
             if response.rawValue != Utils.ALERT_RESP_OK {
                 return false;
             } else {
@@ -154,7 +154,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         let virtualMachine = virtualMachines.remove(at: index);
         if self.isVMRunning(virtualMachine) {
             let runner = self.runningVMs[virtualMachine];
-            runner?.stopVM()
+            runner?.stopVM(guestStopped: false)
             self.runningVMs.removeValue(forKey: virtualMachine);
         }
         
@@ -225,7 +225,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func killAllRunningVMs() {
         for runner in runningVMs.values {
-            runner.stopVM()
+            runner.stopVM(guestStopped: false)
         }
     }
 }

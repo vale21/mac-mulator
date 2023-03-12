@@ -31,9 +31,13 @@ protocol VirtualMachineRunner {
     
     func isVMRunning() -> Bool;
     
-    func stopVM();
+    func stopVM(guestStopped: Bool);
+    
+    func stopVMGracefully();
     
     func pauseVM();
+    
+    func abort();
     
     func getConsoleOutput() -> String
 }
