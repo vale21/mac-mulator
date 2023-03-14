@@ -44,8 +44,6 @@ class CreateVMFileViewController : NSViewController {
             self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
             
             if let vm = self.vm {
-                var foundError: Bool = false;
-                
                 let installMedia = parentController.installMedia.stringValue;
                 if shouldDownloadIpsw(vm, installMedia) {
                     // Downloading IPSW
@@ -70,16 +68,23 @@ class CreateVMFileViewController : NSViewController {
                 self.vmCreator = VMCreatorFactory().create(vm: vm);
                 
                 let startTime = Int64(Date().timeIntervalSince1970)
-                self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+                var error: Error? = nil
+                
+                self.timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer in
                     
                     if self.shouldDownloadIpsw(vm, installMedia) {
                         let progress = self.vmCreator!.getProgress()
+                        error = self.vmCreator?.getError()
+                        
                         self.progressBar.doubleValue = progress
                         let currentValue = self.progressBar.doubleValue
                         if (currentValue <= 0) {
                             self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
-                        }  else if (currentValue < 100) {
+                        } else if (currentValue < 10) {
+                            self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                        } else if (currentValue < 100) {
                             self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
                         } else {
@@ -88,7 +93,7 @@ class CreateVMFileViewController : NSViewController {
                     }
                     
                     guard !self.vmCreator!.isComplete() else {
-                        self.creationComplete(timer, foundError, vm)
+                        self.creationComplete(timer, error, vm)
                         return;
                     }
                 });
@@ -97,7 +102,6 @@ class CreateVMFileViewController : NSViewController {
                     do {
                         try self.vmCreator!.createVM(vm: vm, installMedia: installMedia);
                     } catch {
-                        foundError = true;
                         DispatchQueue.main.async {
                             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
                                             message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
@@ -137,13 +141,15 @@ class CreateVMFileViewController : NSViewController {
         return "";
     }
     
-    fileprivate func creationComplete(_ timer: Timer, _ foundError: Bool, _ vm: VirtualMachine) {
+    fileprivate func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
         timer.invalidate();
         self.progressBar.stopAnimation(self);
         self.dismiss(self);
         
-        if !foundError {
-            self.parentController!.vmCreated(vm);
+        if error == nil {
+            self.parentController!.vmCreated(vm)
+        } else {
+            self.parentController!.vmCreationfFailed(vm, error!)
         }
     }
     

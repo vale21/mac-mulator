@@ -17,5 +17,7 @@ protocol VMCreator {
     
     func getProgress() -> Double
     
+    func getError() -> Error?
+    
     func cancelVMCreation(vm: VirtualMachine)
 }

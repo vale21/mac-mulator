@@ -87,10 +87,21 @@ class VirtualMachineViewController: NSViewController {
     }
     
     @IBAction func stopVM(_ sender: Any) {
-        Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
+        var window = self.view.window!
+        
+        if #available(macOS 12.0, *) {
+            if let vm = self.rootController?.currentVm  {
+                if sender as? String == "MainMenu" && vm.type == MacMulatorConstants.APPLE_VM {
+                    let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
+                    window = runner.vmView!.window!
+                }
+            }
+        }
+        
+        Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
             if response.rawValue == Utils.ALERT_RESP_OK {
                 if let vm = self.rootController?.currentVm {
-                    self.rootController?.getRunnerForRunningVM(vm)?.stopVM(guestStopped: false)
+                    self.rootController?.getRunnerForRunningVM(vm)?.stopVM(guestStopped: true)
                 }
             }
         });

@@ -118,9 +118,9 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     func stopVM(guestStopped: Bool) {
-        running = false;
+        running = false
         vzVirtualMachine?.stop(completionHandler: { err in })
-        vmViewController?.stopVM(guestStopped);
+        vmViewController?.stopVM(guestStopped)
     }
     
     func stopVMGracefully() {

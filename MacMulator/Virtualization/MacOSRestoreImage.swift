@@ -22,12 +22,12 @@ class MacOSRestoreImage: NSObject {
     
     #if arch(arm64)
 
-    public func download(completionHandler: @escaping () -> Void) {
+    public func download(completionHandler: @escaping (Error?) -> Void) {
         NSLog("Attempting to download latest available restore image.")
         VZMacOSRestoreImage.fetchLatestSupported { [self](result: Result<VZMacOSRestoreImage, Error>) in
             switch result {
                 case let .failure(error):
-                    fatalError(error.localizedDescription)
+                    completionHandler(error)
 
                 case let .success(restoreImage):
                     downloadRestoreImage(restoreImage: restoreImage, completionHandler: completionHandler)
@@ -39,10 +39,12 @@ class MacOSRestoreImage: NSObject {
         canceled = true
     }
 
-    private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping () -> Void) {
+    private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping (Error?) -> Void) {
         let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, response, error in
             if let error = error {
-                fatalError("Download failed. \(error.localizedDescription).")
+                NSLog("Download failed. \(error.localizedDescription).")
+                completionHandler(error)
+                return
             }
 
             if !self.canceled {
@@ -50,11 +52,12 @@ class MacOSRestoreImage: NSObject {
                     fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)).")
                 }
                 
-                completionHandler()
+                completionHandler(nil)
             } else {
                 NSLog("Operation aborted.")
                 guard (try? FileManager.default.removeItem(at: localURL!)) != nil else {
-                    fatalError("Failed to clean up restore image")
+                    NSLog("Failed to clean up restore image")
+                    return
                 }
             }
         }

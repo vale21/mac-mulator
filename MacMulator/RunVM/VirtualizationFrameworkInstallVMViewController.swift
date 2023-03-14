@@ -96,12 +96,15 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                         } else if (currentValue <= 0) {
                             self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a few seconds..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
-                        } else {
+                        } else if (currentValue <= 10) {
                             if self.progressBar.isIndeterminate {
                                 self.progressBar.isIndeterminate = false
                                 self.progressBar.stopAnimation(self)
                             }
 
+                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
+                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                        } else {
                             self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
                             self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: self.progress)
                         }

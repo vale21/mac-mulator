@@ -13,6 +13,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
     private var complete: Bool = false
+    private var error: Error? = nil
     private var progress: Double = 0.0
     private var restoreImage: MacOSRestoreImage?
         
@@ -28,8 +29,20 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             
             print("Detected macOS with IPSW Not specified. Downloading...");
             self.restoreImage = MacOSRestoreImage(self, vm);
-            restoreImage!.download {
-                self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME);
+            restoreImage!.download {error in
+                if error != nil {
+                    self.error = error
+                    
+                    do {
+                        try Utils.removeDocumentPackage(vm.path);
+                    } catch {
+                        print("Error while deleting" + vm.path + ": " + error.localizedDescription);
+                    }
+                    
+                    self.complete = true
+                } else {
+                    self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME);
+                }
             }
             
             #endif
@@ -48,6 +61,10 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         return progress
     }
     
+    func getError() -> Error? {
+        return error
+    }
+    
     func cancelVMCreation(vm: VirtualMachine) {
         
         #if arch(arm64)
@@ -55,11 +72,10 @@ class VirtualizationFrameworkVMCreator : VMCreator {
         if let restoreImage = self.restoreImage {
             restoreImage.cancelDownload()
             
-            let fileManager = FileManager.default;
             do {
-                try fileManager.removeItem(at: URL(fileURLWithPath: vm.path));
+                try Utils.removeDocumentPackage(vm.path);
             } catch {
-                print("ERROR while deleting" + vm.path + ": " + error.localizedDescription);
+                print("Error while deleting" + vm.path + ": " + error.localizedDescription);
             }
         }
         

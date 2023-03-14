@@ -106,6 +106,10 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
         self.view.window?.close();
     }
     
+    func vmCreationfFailed(_ vm: VirtualMachine, _ error: Error) {
+        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "VM creation failed: " + error.localizedDescription, completionHandler: {resp in self.view.window?.close()})
+    }
+    
     fileprivate func validateInput() -> Bool {
         if (vmType.stringValue == "" || vmName.stringValue == "") {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "You did not provide values for VM type or VM name. These fields are required to create a new Virtual Machine. Please provide a value for them and try again.");

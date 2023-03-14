@@ -63,23 +63,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
         
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
-        rootController?.startVMMenuBarClicked(sender);
+        rootController?.startVMMenuBarClicked("MainMenu");
     }
     
     @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
-        rootController?.startVMInRecoveryMenuBarClicked(sender)
+        rootController?.startVMInRecoveryMenuBarClicked("MainMenu")
     }
     
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
-        rootController?.stopVMMenubarClicked(sender);
+        rootController?.stopVMMenubarClicked("MainMenu");
     }
     
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked(sender);
+        rootController?.editVMmenuBarClicked("MainMenu");
     }
     
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
-        rootController?.showConsoleMenubarClicked(sender);
+        rootController?.showConsoleMenubarClicked("MainMenu");
     }
     
     func refreshVMMenus() {

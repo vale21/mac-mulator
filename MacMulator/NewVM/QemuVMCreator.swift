@@ -30,6 +30,10 @@ class QemuVMCreator: VMCreator {
         return self.progress
     }
     
+    func getError() -> Error? {
+        return nil
+    }
+    
     func cancelVMCreation(vm: VirtualMachine) {
         
     }

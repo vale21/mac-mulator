@@ -38,6 +38,11 @@ class Utils {
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil);
     }
     
+    static func removeDocumentPackage(_ path: String) throws {
+        let fileManager = FileManager.default;
+        try fileManager.removeItem(at: URL(fileURLWithPath: path));
+    }
+    
     static func showFileSelector(fileTypes: [String], uponSelection: (NSOpenPanel) -> Void ) -> Void {
         let panel = NSOpenPanel();
         panel.canChooseFiles = true;
@@ -660,11 +665,10 @@ class Utils {
     
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
         let currentTime = Int64(Date().timeIntervalSince1970)
-        let weigth = (6 * progress) < 500 ? 500 - (6 * progress) : 0
  
         let timeDelta = Double(currentTime - startTime)
-        let factor = (timeDelta / progress)
-        let totalTime = (100 * factor) + weigth
+        let factor = timeDelta / progress
+        let totalTime = 100.0 * factor
         let remainingTime = totalTime - timeDelta
         
         return formatTime(remainingTime)
