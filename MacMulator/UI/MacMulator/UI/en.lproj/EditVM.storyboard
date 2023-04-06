@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21225"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,7 @@
         <scene sceneID="bwL-Fa-0OI">
             <objects>
                 <windowController id="sJi-6Q-Gmn" sceneMemberID="viewController">
-                    <window key="window" title="Edit Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="84f-BE-UCM">
+                    <window key="window" title="Configure Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="84f-BE-UCM">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -82,7 +82,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sDH-bT-UFA">
-                                <rect key="frame" x="18" y="315" width="61" height="16"/>
+                                <rect key="frame" x="18" y="314" width="61" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="VM name" id="XJb-JQ-e2y">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -90,7 +90,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ncg-hL-CsH">
-                                <rect key="frame" x="18" y="351" width="55" height="16"/>
+                                <rect key="frame" x="18" y="350" width="55" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="uGA-Zq-Szq">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -98,7 +98,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q4Z-4h-oHK">
-                                <rect key="frame" x="18" y="281" width="88" height="16"/>
+                                <rect key="frame" x="18" y="280" width="88" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Description" id="RlF-NZ-Syg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -106,7 +106,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lRI-vi-tcA">
-                                <rect key="frame" x="113" y="315" width="467" height="21"/>
+                                <rect key="frame" x="113" y="314" width="467" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="I5t-Ia-qr4">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -117,7 +117,7 @@
                                 </connections>
                             </textField>
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kEK-er-2EU">
-                                <rect key="frame" x="113" y="347" width="131" height="25"/>
+                                <rect key="frame" x="112" y="348" width="132" height="23"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="128" id="aMD-sa-Q70"/>
                                 </constraints>
@@ -132,17 +132,17 @@
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
-                                <rect key="frame" x="113" y="204" width="467" height="93"/>
+                                <rect key="frame" x="113" y="204" width="467" height="92"/>
                                 <clipView key="contentView" drawsBackground="NO" id="wJp-Vh-QSF">
-                                    <rect key="frame" x="1" y="1" width="465" height="91"/>
+                                    <rect key="frame" x="1" y="1" width="465" height="90"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="6NK-mS-sgm">
-                                            <rect key="frame" x="0.0" y="0.0" width="465" height="91"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="465" height="90"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="465" height="91"/>
+                                            <size key="minSize" width="465" height="90"/>
                                             <size key="maxSize" width="467" height="10000000"/>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
@@ -156,7 +156,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Yu4-v9-rNq">
-                                    <rect key="frame" x="450" y="1" width="16" height="91"/>
+                                    <rect key="frame" x="450" y="1" width="16" height="90"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -274,7 +274,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bsO-Gd-aoR">
-                                <rect key="frame" x="345" y="347" width="238" height="25"/>
+                                <rect key="frame" x="344" y="348" width="239" height="23"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="15" id="sui-gZ-vTB">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -286,7 +286,7 @@
                                 </connections>
                             </comboBox>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="37M-Tq-FH2">
-                                <rect key="frame" x="262" y="351" width="77" height="16"/>
+                                <rect key="frame" x="262" y="350" width="77" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="VM subtype" id="tfe-YT-kPF">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1662,15 +1662,15 @@ Gw
     </inferredMetricsTieBreakers>
     <resources>
         <image name="HD Icon" width="25" height="25"/>
-        <image name="NSAddTemplate" width="15" height="13"/>
-        <image name="cpu" catalog="system" width="17" height="15"/>
-        <image name="folder.fill" catalog="system" width="19" height="14"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="cpu" catalog="system" width="16" height="15"/>
+        <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gear" catalog="system" width="17" height="17"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="network" catalog="system" width="15" height="15"/>
-        <image name="plus.app.fill" catalog="system" width="16" height="14"/>
+        <image name="plus.app.fill" catalog="system" width="15" height="14"/>
         <image name="rays" catalog="system" width="16" height="16"/>
-        <image name="square.and.pencil" catalog="system" width="16" height="15"/>
+        <image name="square.and.pencil" catalog="system" width="17" height="15"/>
         <image name="trash" catalog="system" width="15" height="17"/>
     </resources>
 </document>

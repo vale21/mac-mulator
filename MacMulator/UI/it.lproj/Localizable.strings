@@ -1,0 +1,7 @@
+"NewVMViewController.defaultMessage" = "Puoi digitare qui per aggiungere una descrizione della VM...";
+"NewVMController.noMediaProvided" = "Non hai specificato un installer di macOS. MacMulator scaricherà l'ultima versione supportata di macOS da Apple al primo avvio della VM. Sei d'accordo?";
+"NewVMController.vmCreationFailed" = "Creazione della VM fallita: ";
+"NewVMController.errorFeldsMissing" = "Non hai fornito un valore per Nome VM o Tipo VM. Questi campi sono nesessari per creare una Macchina Virtuale. Per favore fornisci un valore per entrambi e riprova.";
+"NewVMController.errorVMExisting" = "Una VM chiamata %@ esiste già. Per favore, scegli un nome diverso.";
+"NewVMController.errorFileExisting" = "Un file chiamato %@ esiste già. Per favore, scegli un nome diverso per la Macchina Virtuale.";
+"ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
