@@ -37,5 +37,7 @@ class MacMulatorConstants {
     
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
+    
+    static let mainMenuSender = "MainMenu"
 
 }

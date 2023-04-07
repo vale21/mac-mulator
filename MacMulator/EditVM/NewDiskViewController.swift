@@ -57,7 +57,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                         
                         useCow.intValue = 0
                         useCow.isEnabled = false
-                        useCow.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported."
+                        useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
                     } else {
                         if (newVirtualDrive.format == QemuConstants.FORMAT_QCOW2) {
                             useCow.intValue = 1;
@@ -67,9 +67,9 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                     }
                     
                     if (mode == Mode.ADD) {
-                        titleField.stringValue = "Create new disk";
+                        titleField.stringValue = NSLocalizedString("NewDiskViewController.createDisk", comment: "")
                     } else {
-                        titleField.stringValue = "Edit " + newVirtualDrive.name;
+                        titleField.stringValue = String(format: NSLocalizedString("NewDiskViewController.editDisk", comment: ""), newVirtualDrive.name)
                     }
                     
                     
