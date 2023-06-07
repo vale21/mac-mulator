@@ -73,6 +73,7 @@ class QemuConstants {
     static let SUB_MAC_BIG_SUR = "macOS 11.x (Big Sur)";
     static let SUB_MAC_MONTEREY = "macOS 12.x (Monterey)";
     static let SUB_MAC_VENTURA = "macOS 13.x (Ventura)";
+    static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)";
     static let SUB_MAC_OS_9 = "Mac OS 9";
     static let SUB_MAC_OS_8 = "Mac OS 8";
     static let SUB_SYSTEM_7 = "System 7";
@@ -160,6 +161,7 @@ class QemuConstants {
     static let ICON_BIG_SUR = "big.sur";
     static let ICON_MONTEREY = "monterey";
     static let ICON_VENTURA = "ventura";
+    static let ICON_SONOMA = "sonoma";
     
     static let ICON_WINDOWS_XP = "windows.xp";
     static let ICON_WINDOWS_VISTA = "windows.vista";
@@ -211,6 +213,7 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
     
     static let URL_APPLE_COM = "https://www.apple.com"
+    static let URL_MAC_SONOMA = "https://developer.apple.com"
     static let URL_MAC_VENTURA = "https://apps.apple.com/us/app/macos-ventura/id1638787999"
     static let URL_MAC_MONTEREY = "https://apps.apple.com/it/app/macos-monterey/id1576738294"
     static let URL_MAC_BIG_SUR = "https://apps.apple.com/it/app/macos-big-sur/id1526878132"
@@ -457,6 +460,7 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM],
+        [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA],
         [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA],
         [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, 120, ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_MONTEREY],
         [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_BIG_SUR],

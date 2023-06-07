@@ -799,6 +799,6 @@ class Utils {
     
     fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
         return os == QemuConstants.OS_MAC &&
-        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA || subtype == QemuConstants.SUB_MAC_SONOMA)
     }
 }
