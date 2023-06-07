@@ -769,6 +769,22 @@ class Utils {
         }
     }
     
+    static func getMainScreenSize() -> String {
+        if #available(macOS 12, *) {
+            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+        } else {
+            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+        }
+    }
+    
+    static func getMainScreenSizeDesc() -> String {
+        if #available(macOS 12, *) {
+            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+        } else {
+            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+        }
+    }
+    
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
         if (drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW) {
             let filemanager = FileManager.default;
