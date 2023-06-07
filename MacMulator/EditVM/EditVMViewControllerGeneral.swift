@@ -48,7 +48,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             vmName.stringValue = virtualMachine.displayName
             vmDescription.string = virtualMachine.description
             
-            let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution)!
+            let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution) ?? 0
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false)
             
             bootOrderTable.reloadData()
