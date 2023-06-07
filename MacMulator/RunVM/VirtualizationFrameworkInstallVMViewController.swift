@@ -39,8 +39,8 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
         let vm = parentRunner?.managedVm
         if let vm = vm {
             self.vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"));
-            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a few seconds..."
-            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+            self.descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: "")
+            self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating", comment: "")
             
             progressBar.isIndeterminate = true
             progressBar.startAnimation(self)
@@ -62,14 +62,14 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                 DispatchQueue.main.async {
                     let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
                     
-                    print("Starting installation.")
+                    print(NSLocalizedString("VirtualizationFrameworkInstallVMViewController.starting", comment: ""))
                     installer.install(completionHandler: { (result: Result<Void, Error>) in
                         if case let .failure(error) = result {
-                            print("Installation failed with error: " + error.localizedDescription)
+                            print(String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installFailed", comment: ""), error.localizedDescription))
                             self.dismiss(self)
                             self.parentRunner?.abort()
                         } else {
-                            print("Installation succeeded.")
+                            print(NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installSucceeded", comment: ""))
                         }
                         
                         if !self.canceled {
@@ -85,28 +85,28 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                         
                         _ = installer.progress.observe(\.fractionCompleted, options: [.initial, .new]) { (progress, change) in
                             self.progress = change.newValue! * 100
-                            print("Installation progress: \(self.progress).")
+                            print(String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installProgress", comment: ""), self.progress))
                         }
                         
                         
                         let currentValue = self.progressBar.doubleValue
                         if self.canceled {
-                            self.descriptionLabel.stringValue = "Aborting installation. Please wait..."
+                            self.descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installAbort", comment: "")
                             self.estimateTimeRemainingLabel.stringValue = ""
                         } else if (currentValue <= 0) {
-                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine. The process will start in a few seconds..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                            self.descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: "")
+                            self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating", comment: "")
                         } else if (currentValue <= 10) {
                             if self.progressBar.isIndeterminate {
                                 self.progressBar.isIndeterminate = false
                                 self.progressBar.stopAnimation(self)
                             }
 
-                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: ""), self.progress)
+                            self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating", comment: "")
                         } else {
-                            self.descriptionLabel.stringValue = "Installing macOS on the Virtual Machine (" + String(Int(self.progress)) + "%)..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: self.progress)
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: ""), self.progress)
+                            self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progress))
                         }
                         if self.progress > currentValue {
                             let delta = self.progress - currentValue;
@@ -127,7 +127,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
         self.progress = 100.0
         self.canceled = true
         
-        self.descriptionLabel.stringValue = "Aborting installation. Please wait..."
+        self.descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installAbort", comment: "")
         self.estimateTimeRemainingLabel.stringValue = ""
         self.progressBar.isIndeterminate = true
         self.progressBar.minValue = 0

@@ -11,12 +11,12 @@ import Virtualization
 @available(macOS 12.0, *)
 class MacOSVirtualMachineDelegate: NSObject, VZVirtualMachineDelegate {
     func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: Error) {
-        NSLog("Virtual machine did stop with error: \(error.localizedDescription)")
+        NSLog(String(format: NSLocalizedString("MacOSVirtualMachineDelegate.stoppedWithError", comment: ""), error.localizedDescription))
         exit(-1)
     }
 
     func guestDidStop(_ virtualMachine: VZVirtualMachine) {
-        NSLog("Guest did stop virtual machine.")
+        NSLog(NSLocalizedString("MacOSVirtualMachineDelegate.stoppedByGuest", comment: ""))
         exit(0)
     }
 }

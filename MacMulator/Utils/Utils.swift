@@ -17,13 +17,13 @@ enum ValidationError: Error, CustomStringConvertible {
     var description: String {
         switch self {
         case .sudoNotAllowed:
-            return "Incorrect Qemu command provided: The usage of sudo command is not allowed."
+            return NSLocalizedString("Utils.sudoNotAllowed", comment: "")
         case .workingPathError(let qemuPath, let command):
-            return "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"" + qemuPath + "\".\n\nProvided command was: " + Utils.truncateString(command, 25)
+            return String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25)) 
         case .executableError(let allowed, let command):
-            return "Incorrect Qemu command provided: The provided executable Is not a Qemu Executable. \n\nAllowed executables are: " + allowed + ".\n\nProvided command was: " + Utils.truncateString(command, 50)
+            return String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
         case .genericError:
-            return "The provided Qemu executable is broken or unsupported"
+            return NSLocalizedString("Utils.genericError", comment: "")
         }
     }
 }
@@ -73,7 +73,7 @@ class Utils {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
         alert.messageText = message;
-        alert.addButton(withTitle: "OK");
+        alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""));
         alert.beginSheetModal(for: window);
     }
     
@@ -81,7 +81,7 @@ class Utils {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
         alert.messageText = message;
-        alert.addButton(withTitle: "OK");
+        alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""));
         alert.beginSheetModal(for: window, completionHandler: handler);
     }
     
@@ -89,8 +89,8 @@ class Utils {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
         alert.messageText = message;
-        alert.addButton(withTitle: "OK");
-        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""));
+        alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
         alert.beginSheetModal(for: window, completionHandler: handler);
     }
     
@@ -98,8 +98,8 @@ class Utils {
         let alert: NSAlert = NSAlert();
         alert.alertStyle = style;
         alert.messageText = message;
-        alert.addButton(withTitle: "OK");
-        alert.addButton(withTitle: "Cancel");
+        alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""));
+        alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""));
         return alert.runModal();
     }
     
@@ -441,7 +441,7 @@ class Utils {
     }
     
     static func getIconForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OS_OTHER.lowercased();
+        return getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OTHER;
     }
     
     static func getArchitectureForSubType(_ os: String, _ subtype: String?) -> String {
@@ -595,30 +595,30 @@ class Utils {
             let hostArchitecture = Utils.hostArchitecture()
             let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
             if hostArchitecture != vmArchitecture {
-                return "The VM cannot be started because it is an " + Utils.describeArchitecture(vmArchitecture) + " VM and cannot run on an " + Utils.describeArchitecture(hostArchitecture) + " Mac."
+                return String(format: NSLocalizedString("Utils.hostArchitectureNotGood", comment: ""), Utils.describeArchitecture(vmArchitecture), Utils.describeArchitecture(hostArchitecture))
             } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
-                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+                return NSLocalizedString("Utils.appleSiliconOnly", comment: "")
             } else {
-                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+                return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
         } else if #available(macOS 12.0, *) {
             if vm.os == QemuConstants.OS_LINUX {
-                return "The VM cannot be started because Apple Virtualization Framework is not supported with Linux VMs on macOS Monterey."
+                return NSLocalizedString("Utils.linuxMonterey", comment: "")
             } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
-                return "The VM cannot be started because it can run only on Apple Silicon hardware."
+                return NSLocalizedString("Utils.appleSiliconOnly", comment: "")
             } else {
-                return "The VM cannot be started because Apple Virtualization Framework is not supported with this VM."
+                return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
         } else if #available(macOS 11.0, *) {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Big Sur."
+            return NSLocalizedString("Utils.virtualizationBigSur", comment: "")
         } else if #available(macOS 10.15, *) {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Catalina."
+            return NSLocalizedString("Utils.virtualizationCatalina", comment: "")
         } else if #available(macOS 10.14, *) {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Mojave."
+            return NSLocalizedString("Utils.virtualizationMojave", comment: "")
         } else if #available(macOS 10.13, *) {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on macOS High Sierra."
+            return NSLocalizedString("Utils.virtualizationHighSierra", comment: "")
         } else {
-            return "The VM cannot be started because Apple Virtualization Framework is not supported on this Mac."
+            return NSLocalizedString("Utils.virtualizationGeneric", comment: "")
         }
     }
     
@@ -676,24 +676,24 @@ class Utils {
     
     static func formatTime(_ secs: Double) -> String {
         if secs < 30 {
-            return String(Int(secs)) + " seconds"
+            return String(Int(secs)) + " " + NSLocalizedString("Utils.seconds", comment: "")
         } else if secs > 30 && secs < 60 {
-            return "less than a minute"
+            return NSLocalizedString("Utils.lessThanAMinute", comment: "")
         } else if secs < (60 * 3) {
             let minutes = Int(secs / 60)
             let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
             if seconds > 0 {
-                return String(minutes) + " minutes, " + String(seconds) + " seconds"
+                return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.seconds", comment: "")
             } else {
-                return String(minutes) + " minutes"
+                return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
             }
         } else if secs < (3600) {
             let minutes = Int(secs / 60)
-            return String(minutes) + " minutes"
+            return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
         } else {
             let hours = Int(secs / 3600)
             let minutes = Int(secs.truncatingRemainder(dividingBy: 3600))
-            return String(hours) + " hours, " + String(minutes) + " minutes"
+            return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
         }
     }
     
@@ -736,7 +736,7 @@ class Utils {
         if let window = NSApp.mainWindow {
             for drive in virtualMachine.drives {
                 if !Utils.driveExists(drive) {
-                    Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: "Drive " + drive.path + " was not found. Do you want to remove it?", completionHandler: {
+                    Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("Utils.unexistingDrive", comment: ""), drive.path), completionHandler: {
                         response in if response.rawValue == Utils.ALERT_RESP_OK {
                             virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(where: { vd in return vd.name == drive.name })!);
                             virtualMachine.writeToPlist();
