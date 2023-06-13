@@ -66,8 +66,11 @@
 "Utils.virtualizationMojave" = "La VM non può essere avviata perché  Apple Virtualization Framework non è supportato su macOS Mojave.";
 "Utils.virtualizationHighSierra" = "La VM non può essere avviata perché  Apple Virtualization Framework non è supportato su macOS High Sierra.";
 "Utils.virtualizationGeneric" = "La VM non può essere avviata perché  Apple Virtualization Framework non è supportato su questo Mac.";
+"Utils.hour" = "ora";
 "Utils.hours" = "ore";
+"Utils.minute" = "minuto";
 "Utils.minutes" = "minuti";
+"Utils.second" = "secondo";
 "Utils.seconds" = "secondi";
 "Utils.lessThanAMinute" = "meno di un minuto";
 "Utils.unexistingDrive" = "Il disco %@ non è stato trovato. Lo vuoi rimuovere?";
@@ -76,9 +79,9 @@
 "VirtualizationFrameworkInstallVMViewController.starting" = "Avvio l'installazione.";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installazione fallita con errore: %@";
 "VirtualizationFrameworkInstallVMViewController.installSucceeded" = "Installazione completata con successo.";
-"VirtualizationFrameworkInstallVMViewController.installProgress" = "Installazione: %@";
+"VirtualizationFrameworkInstallVMViewController.installProgress" = "Installazione: %f%%";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Annullo l'installazione. Per favore attendi...";
-"VirtualizationFrameworkInstallVMViewController.installing" = "Installo macOS sulla Macchina Virtuale (%d%%)...";
+"VirtualizationFrameworkInstallVMViewController.installProgressLong" = "Installo macOS sulla Macchina Virtuale (%d%%)...";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Tempo stimato rimanente: %@";
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";

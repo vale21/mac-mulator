@@ -675,17 +675,29 @@ class Utils {
     }
     
     static func formatTime(_ secs: Double) -> String {
-        if secs < 30 {
+        if Int(secs) == 1 {
+            return String(Int(secs)) + " " + NSLocalizedString("Utils.second", comment: "")
+        } else if secs < 40 {
             return String(Int(secs)) + " " + NSLocalizedString("Utils.seconds", comment: "")
-        } else if secs > 30 && secs < 60 {
+        } else if secs > 40 && secs < 60 {
             return NSLocalizedString("Utils.lessThanAMinute", comment: "")
+        } else if secs == 60 {
+            let minutes = Int(secs / 60)
+            return String(Int(minutes)) + " " + NSLocalizedString("Utils.minute", comment: "")
         } else if secs < (60 * 3) {
             let minutes = Int(secs / 60)
             let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
-            if seconds > 0 {
+            
+            if seconds > 0  && minutes > 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.seconds", comment: "")
-            } else {
+            } else if seconds > 0  && minutes == 1 {
+                return String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.seconds", comment: "")
+            } else if seconds == 1  && minutes == 1 {
+                return String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.second", comment: "")
+            } else if minutes > 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
+            } else {
+                return String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "")
             }
         } else if secs < (3600) {
             let minutes = Int(secs / 60)
@@ -693,7 +705,18 @@ class Utils {
         } else {
             let hours = Int(secs / 3600)
             let minutes = Int(secs.truncatingRemainder(dividingBy: 3600))
-            return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
+            
+            if minutes > 0  && hours > 1 {
+                return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
+            } else if minutes > 0  && hours == 1 {
+                return String(hours) + " " + NSLocalizedString("Utils.hour", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
+            } else if minutes == 1  && hours == 1 {
+                return String(hours) + " " + NSLocalizedString("Utils.hour", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "")
+            } else if hours > 1 {
+                return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "")
+            } else {
+                return String(hours) + " " + NSLocalizedString("Utils.hour", comment: "")
+            }
         }
     }
     

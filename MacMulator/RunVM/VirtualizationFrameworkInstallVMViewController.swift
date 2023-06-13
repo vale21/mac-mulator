@@ -102,10 +102,10 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                                 self.progressBar.stopAnimation(self)
                             }
 
-                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: ""), self.progress)
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installProgressLong", comment: ""), Int(self.progress))
                             self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating", comment: "")
                         } else {
-                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: ""), self.progress)
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installProgressLong", comment: ""), Int(self.progress))
                             self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progress))
                         }
                         if self.progress > currentValue {

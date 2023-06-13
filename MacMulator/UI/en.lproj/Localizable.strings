@@ -10,7 +10,7 @@
 "CreateVMFileViewController.preparingDownload" = "Preparing to download macOS Installer...";
 "CreateVMFileViewController.timeRemainingCalculating" = "Estimate time remaining: Calculating...";
 "CreateVMFileViewController.creatingVM" = "Creating Virtual Machine...";
-"CreateVMFileViewController.downloading" = "Downloading macOS Installer (%d%)...";
+"CreateVMFileViewController.downloading" = "Downloading macOS Installer (%d%%)...";
 "CreateVMFileViewController.estimateTimeRemaining" = "Estimate time remaining: %@";
 "CreateVMFileViewController.unableToCreate" = "Unable to create Virtual Machine %@: %@";
 "EditVMViewControllerAdvanced.featureNotAvailable" = "This feature is not available because the VM has architecture %@, which is different from the architecture of your Mac (%@)";
@@ -66,8 +66,11 @@
 "Utils.virtualizationMojave" = "The VM cannot be started because Apple Virtualization Framework is not supported on macOS Mojave.";
 "Utils.virtualizationHighSierra" = "The VM cannot be started because Apple Virtualization Framework is not supported on macOS High Sierra.";
 "Utils.virtualizationGeneric" = "The VM cannot be started because Apple Virtualization Framework is not supported on this Mac.";
+"Utils.hour" = "hour";
 "Utils.hours" = "hours";
+"Utils.minute" = "minute";
 "Utils.minutes" = "minutes";
+"Utils.second" = "second";
 "Utils.seconds" = "seconds";
 "Utils.lessThanAMinute" = "less than a minute";
 "Utils.unexistingDrive" = "Drive %@ was not found. Do you want to remove it?";
@@ -76,9 +79,9 @@
 "VirtualizationFrameworkInstallVMViewController.starting" = "Starting installation.";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installation failed with error: %@";
 "VirtualizationFrameworkInstallVMViewController.installSucceeded" = "Installation succeeded.";
-"VirtualizationFrameworkInstallVMViewController.installProgress" = "Installation progress: %@";
+"VirtualizationFrameworkInstallVMViewController.installProgress" = "Installation progress: %f%%";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Aborting installation. Please wait...";
-"VirtualizationFrameworkInstallVMViewController.installing" = "Installing macOS on the Virtual Machine (%d%%)...";
+"VirtualizationFrameworkInstallVMViewController.installProgressLong" = "Installing macOS on the Virtual Machine (%d%%)...";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Estimate time remaining: %@";
 "VirtualMachine.sshPortMapping" = "SSH port mapping";
 "VirtualMachine.infoPlistReadError" = "Error while reading Info.plist: %@";
