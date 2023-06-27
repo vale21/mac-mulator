@@ -27,7 +27,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     func setVmView(_ vmView: VZVirtualMachineView) {
-        self.vmView = vmView;
+        self.vmView = vmView
     }
     
     func setVmViewController(_ vmViewController: VirtualMachineContainerViewController) {
@@ -85,9 +85,13 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func startVM() {
         if let vzVirtualMachine = self.vzVirtualMachine {
-            vzVirtualMachine.delegate = self;
-            self.vmView?.virtualMachine = vzVirtualMachine;
-
+            vzVirtualMachine.delegate = self
+            self.vmView?.virtualMachine = vzVirtualMachine
+            if #available(macOS 14.0, *) {
+                self.vmView?.automaticallyReconfiguresDisplay = true
+            }
+            self.vmView?.capturesSystemKeys = true
+            
             if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 
                 #if arch(arm64)

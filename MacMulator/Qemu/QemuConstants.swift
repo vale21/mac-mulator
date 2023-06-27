@@ -312,33 +312,36 @@ class QemuConstants {
     ]
     
     // 4:3
-    static let RES_640_480 = "640x480x32";
-    static let RES_800_600 = "800x600x32";
-    static let RES_1024_768 = "1024x768x32";
-    static let RES_1280_1024 = "1280x1024x32";
-    static let RES_1600_1200 = "1600x1200x32";
+    static let RES_640_480 = "640x480x32"
+    static let RES_800_600 = "800x600x32"
+    static let RES_1024_768 = "1024x768x32"
+    static let RES_1280_1024 = "1280x1024x32"
+    static let RES_1600_1200 = "1600x1200x32"
     
     // 11:10
-    static let RES_1024_600 = "1024x600x32";
-    static let RES_1280_800 = "1280x800x32";
-    static let RES_1440_900 = "1440x900x32";
-    static let RES_1680_1050 = "1680x1050x32";
-    static let RES_1920_1200 = "1920x1200x32";
+    static let RES_1024_600 = "1024x600x32"
+    static let RES_1280_800 = "1280x800x32"
+    static let RES_1440_900 = "1440x900x32"
+    static let RES_1680_1050 = "1680x1050x32"
+    static let RES_1920_1200 = "1920x1200x32"
     
     // 11:9
-    static let RES_1280_720 = "1280x720x32";
-    static let RES_1920_1080 = "1920x1080x32";
-    static let RES_2048_1152 = "2048x1152x32";
-    static let RES_2560_1440 = "2560x1440x32";
-    static let RES_3840_2160 = "3840x2160x32";
-    static let RES_4096_2160 = "4096x2160x32";
-    static let RES_5120_2280 = "5120×2880x32";
-    static let RES_6016_3384 = "6016×3384x32";
+    static let RES_1280_720 = "1280x720x32"
+    static let RES_1920_1080 = "1920x1080x32"
+    static let RES_2048_1152 = "2048x1152x32"
+    static let RES_2560_1440 = "2560x1440x32"
+    static let RES_3840_2160 = "3840x2160x32"
+    static let RES_4096_2160 = "4096x2160x32"
+    static let RES_5120_2280 = "5120×2880x32"
+    static let RES_6016_3384 = "6016×3384x32"
     
     // Other
-    static let RES_1280_768 = "1280x768x32";
+    static let RES_1280_768 = "1280x768x32"
+    
+    static let ORIGIN = "c;c"
     
     static let ALL_RESOLUTIONS = [
+        Utils.getMainScreenSize(),
         RES_640_480,
         RES_800_600,
         RES_1024_768,
@@ -348,7 +351,6 @@ class QemuConstants {
         RES_1280_768,
         RES_1280_800,
         RES_1440_900,
-        Utils.getMainScreenSize(),
         RES_1680_1050,
         RES_1920_1200,
         RES_1280_720,
@@ -362,6 +364,7 @@ class QemuConstants {
     ]
 
     static let ALL_RESOLUTIONS_DESC: [String:String] = [
+        Utils.getMainScreenSize(): Utils.getMainScreenSizeDesc(),
         RES_640_480: "640 x 480",
         RES_800_600: "800 x 600",
         RES_1024_768: "1024 x 768",
@@ -371,7 +374,6 @@ class QemuConstants {
         RES_1280_768: "1280 x 768",
         RES_1280_800: "1280 x 800",
         RES_1440_900: "1440 x 900",
-        Utils.getMainScreenSize(): Utils.getMainScreenSizeDesc(),
         RES_1680_1050: "1680 x 1050",
         RES_1920_1200: "1920 x 1200",
         RES_1280_720: "HD 720p (1280 x 720)",

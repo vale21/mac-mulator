@@ -18,6 +18,7 @@ class VirtualMachine: Codable, Hashable {
     var cpus: Int
     var memory: Int32
     var displayResolution: String
+    var displayOrigin: String?
     var qemuBootLoader: Bool
     var networkDevice: String? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
     var drives: [VirtualDrive]
@@ -28,10 +29,10 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, type;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, type;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, type: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, type: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -41,6 +42,7 @@ class VirtualMachine: Codable, Hashable {
         self.memory = memory
         self.cpus = cpus
         self.displayResolution = displayResolution
+        self.displayOrigin = displayOrigin
         self.networkDevice = networkDevice
         self.qemuBootLoader = qemuBootloader
         self.hvf = hvf

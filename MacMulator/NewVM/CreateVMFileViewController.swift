@@ -28,20 +28,21 @@ class CreateVMFileViewController : NSViewController {
         progressBar.startAnimation(self);
         
         if let parentController = self.parentController {
-            let os = parentController.vmType.stringValue;
-            let subtype = parentController.vmSubType.stringValue;
-            let architecture = Utils.getArchitectureForSubType(os, subtype);
+            let os = parentController.vmType.stringValue
+            let subtype = parentController.vmSubType.stringValue
+            let architecture = Utils.getArchitectureForSubType(os, subtype)
             let path = Utils.computeVMPath(vmName: parentController.vmName.stringValue)
-            let displayName = parentController.vmName.stringValue;
-            let description = computeDescription();
-            let memory = Utils.getDefaultMemoryForSubType(os, subtype);
-            let cpus = Utils.getCpusForSubType(os, subtype);
-            let displayResolution = QemuConstants.RES_1280_768;
+            let displayName = parentController.vmName.stringValue
+            let description = computeDescription()
+            let memory = Utils.getDefaultMemoryForSubType(os, subtype)
+            let cpus = Utils.getCpusForSubType(os, subtype)
+            let displayResolution = QemuConstants.RES_1280_768
+            let displayOrigin = QemuConstants.ORIGIN
             let networkDevice = Utils.getNetworkForSubType(os, subtype)
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             
-            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
+            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, type: vmType);
             
             if let vm = self.vm {
                 let installMedia = parentController.installMedia.stringValue;

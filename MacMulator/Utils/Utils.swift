@@ -119,11 +119,11 @@ class Utils {
     }
     
     static func cleanFolderPath(_ string: String) -> String {
-        var ret = escape(string);
+        var ret = string
         if ret.hasSuffix("/") {
-            ret = String(ret.dropLast());
+            ret = String(ret.dropLast())
         }
-        return ret;
+        return ret
     }
     
     static func extractVMRootPath(_ vm: VirtualMachine) -> String {
@@ -561,6 +561,15 @@ class Utils {
         return ret;
     }
     
+    static func getOriginElements(_ origin: String) -> [String] {
+        let stringElements:[Substring] = origin.split(separator: ";");
+        var ret: [String] = [];
+        ret.append(String(stringElements[0]))
+        ret.append(String(stringElements[1]))
+        
+        return ret;
+    }
+    
     static func isIpswInstallMediaProvided(_ installMedia: String) -> Bool {
         return installMedia != "" && installMedia.hasSuffix(".ipsw");
     }
@@ -756,10 +765,14 @@ class Utils {
     
     static func getMainScreenSizeDesc() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
         } else {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
+    }
+    
+    static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
+            return String(format: "%d x %d (Last Used)", width, heigh)
     }
     
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {

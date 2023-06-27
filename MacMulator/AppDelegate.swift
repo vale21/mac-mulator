@@ -189,7 +189,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         
         // Useful in Development to replicate the startup of a clean installation of MacMulator
-        // resetDefaults();
+        //resetDefaults();
     }
     
     fileprivate func resetDefaults() {
