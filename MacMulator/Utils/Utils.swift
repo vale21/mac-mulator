@@ -757,7 +757,8 @@ class Utils {
     
     static func getMainScreenSize() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
             return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
@@ -765,7 +766,8 @@ class Utils {
     
     static func getMainScreenSizeDesc() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
             return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
