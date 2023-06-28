@@ -556,7 +556,6 @@ class Utils {
         var ret: [Int] = [];
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
-        ret.append(Int(stringElements[2])!);
         
         return ret;
     }
@@ -758,9 +757,9 @@ class Utils {
     static func getMainScreenSize() -> String {
         if #available(macOS 12, *) {
             let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
     }
     
