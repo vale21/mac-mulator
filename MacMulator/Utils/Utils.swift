@@ -598,6 +598,13 @@ class Utils {
         return false
     }
     
+    static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 14.0, *) {
+            return isVirtualizationFrameworkPreferred(vm)
+        }
+        return false
+    }
+    
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()

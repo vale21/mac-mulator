@@ -82,9 +82,10 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
     }
     
     func windowWillClose(_ notification: Notification) {
-        let bounds = self.view.window!.contentView!.frame
-        let resolution = "\(Int(bounds.width))x\(Int(bounds.height))x32"
-        let origin = isFullScreen ? "f;f" : "\(Int(bounds.origin.x));\(Int(bounds.origin.y))"
+        let content = self.view.window!.contentView!.frame
+        let window = self.view.window!.frame
+        let resolution = "\(Int(content.width))x\(Int(content.height))x32"
+        let origin = isFullScreen ? "f;f" : "\(Int(window.origin.x));\(Int(window.origin.y))"
         
         virtualMachine?.displayResolution = resolution
         virtualMachine?.displayOrigin = origin

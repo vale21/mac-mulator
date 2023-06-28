@@ -86,6 +86,11 @@ class VirtualMachineViewController: NSViewController {
         startVM(sender: sender, inRecovery: false)
     }
     
+    @IBAction
+    func pauseVM(sender: Any) {
+        stopVM(sender)
+    }
+    
     @IBAction func stopVM(_ sender: Any) {
         var window = self.view.window!
         
@@ -128,7 +133,7 @@ class VirtualMachineViewController: NSViewController {
     func cleanupStoppedVM(_ vm: VirtualMachine) {
         rootController?.unsetRunningVM(vm);
         if self.rootController?.currentVm == vm {
-            self.setRunningStatus(false);
+            self.setRunningStatus(vm, false);
         }
     }
     
@@ -137,12 +142,17 @@ class VirtualMachineViewController: NSViewController {
         pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
         stopVMButton.toolTip = "Stop the execution of this VM";
         
-        self.setRunningStatus(false);
+        self.setRunningStatus(nil, false);
         if rootController?.currentVm != nil {
-            showVMAvailableLayout();
+            showVMAvailableLayout()
             
             if !QemuUtils.isBinaryAvailable(rootController!.currentVm!.architecture) {
-                startVMButton.isEnabled = false;
+                startVMButton.isEnabled = false
+            }
+            if Utils.isPauseSupported(rootController!.currentVm!) {
+                pauseVMButton.isEnabled = true
+            } else {
+                pauseVMButton.isEnabled = true
             }
         } else {
             showNoVmsLayout();
@@ -168,9 +178,9 @@ class VirtualMachineViewController: NSViewController {
             showVMAvailableLayout();
             
             if rootController?.getRunnerForRunningVM(vm) != nil {
-                setRunningStatus(true);
+                setRunningStatus(vm, true);
             } else {
-                setRunningStatus(false);
+                setRunningStatus(vm, false);
             }
             
             if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
@@ -242,11 +252,19 @@ class VirtualMachineViewController: NSViewController {
         }
     }
     
-    fileprivate func setRunningStatus(_ running: Bool) {
+    fileprivate func setRunningStatus(_ vm: VirtualMachine?, _ running: Bool) {
         self.startVMButton.isHidden = running;
         self.stopVMButton.isHidden = !running;
         self.pauseVMButton.isHidden = !running;
         
+        if let vm = vm {
+            if Utils.isPauseSupported(vm) {
+                pauseVMButton.isEnabled = true
+            } else {
+                pauseVMButton.isEnabled = false
+            }
+        }
+                
         let livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         
         resizeCentralBox(running && livePreviewEnabled);
@@ -255,7 +273,7 @@ class VirtualMachineViewController: NSViewController {
             centralBox.title = running ? "Live preview" : "Virtual machine features";
         }
         
-        if running, livePreviewEnabled, let vm = rootController?.currentVm {
+        if running, livePreviewEnabled, let vm = vm {
             let imagefile = NSImage.init(named: NSImage.Name("preview-loading"));
             if let image = imagefile {
                 self.screenshotView = NSImageView(image: image);
@@ -330,7 +348,7 @@ class VirtualMachineViewController: NSViewController {
                     listenPort += 1;
                     let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
                     
-                    self.setRunningStatus(true);
+                    self.setRunningStatus(vm, true);
                     rootController.setRunningVM(vm, runner);
                     
                     if vm.type == MacMulatorConstants.APPLE_VM {
