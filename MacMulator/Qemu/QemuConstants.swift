@@ -368,7 +368,7 @@ class QemuConstants {
         RES_1280_768: "1280 x 768",
         RES_1280_800: "1280 x 800",
         RES_1440_900: "1440 x 900",
-        Utils.getMainScreenSize(): Utils.getMainScreenSizeDesc(),
+        // Utils.getMainScreenSize(): Utils.getMainScreenSizeDesc(),
         RES_1680_1050: "1680 x 1050",
         RES_1920_1200: "1920 x 1200",
         RES_1280_720: "HD 720p (1280 x 720)",
