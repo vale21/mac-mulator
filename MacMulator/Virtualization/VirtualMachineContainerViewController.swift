@@ -110,7 +110,14 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             vmController?.cleanupStoppedVM(virtualMachine)
         }
         if closeWindow {
-            self.view.window?.close();
+            self.view.window?.close()
+        }
+    }
+    
+    func pauseVM() {
+        if let virtualMachine = virtualMachine {
+            vmController?.cleanupPausedVM(virtualMachine)
+            self.view.window?.close()
         }
     }
 

@@ -88,7 +88,16 @@ class VirtualMachineViewController: NSViewController {
     
     @IBAction
     func pauseVM(sender: Any) {
-        stopVM(sender)
+        if #available(macOS 14.0, *) {
+            if let vm = self.rootController?.currentVm  {
+                if vm.type == MacMulatorConstants.APPLE_VM {
+                    let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
+                    runner.pauseVM()
+                }
+            }
+        } else {
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Pausing is not supported for this VM.")
+        }
     }
     
     @IBAction func stopVM(_ sender: Any) {
@@ -137,6 +146,13 @@ class VirtualMachineViewController: NSViewController {
         }
     }
     
+    func cleanupPausedVM(_ vm: VirtualMachine) {
+        rootController?.unsetRunningVM(vm);
+        if self.rootController?.currentVm == vm {
+            self.setRunningStatus(vm, false);
+        }
+    }
+    
     override func viewWillAppear() {
         startVMButton.toolTip = "Start this VM";
         pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
@@ -169,7 +185,7 @@ class VirtualMachineViewController: NSViewController {
             vmName.stringValue = vm.displayName;
             vmDescription.stringValue = vm.description;
             vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
-            vmType.stringValue = vm.subtype ?? Utils.getSubType(vm.os, 0);
+            vmType.stringValue = vm.subtype
             vmProcessors.intValue = Int32(vm.cpus);
             vmMemory.stringValue = Utils.formatMemory(vm.memory);
             

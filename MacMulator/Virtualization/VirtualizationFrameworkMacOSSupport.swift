@@ -57,9 +57,12 @@ class VirtualizationFrameworkMacOSSupport : VirtualizationFrameworkSupport {
         virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfigurations()
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
-        virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
+        //virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
         
         try! virtualMachineConfiguration.validate()
+        if #available(macOS 14.0, *) {
+            try! virtualMachineConfiguration.validateSaveRestoreSupport()
+        }
         
         return virtualMachineConfiguration
     }

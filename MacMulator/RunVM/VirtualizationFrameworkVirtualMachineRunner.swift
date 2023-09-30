@@ -11,15 +11,17 @@ import Virtualization
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
     
-    let managedVm: VirtualMachine;
-    var vzVirtualMachine: VZVirtualMachine?;
-    var running: Bool = false;
-    var vmView: VZVirtualMachineView?;
-    var vmViewController: VirtualMachineContainerViewController?;
+    let managedVm: VirtualMachine
+    let saveFileURL: URL
+    var vzVirtualMachine: VZVirtualMachine?
+    var running: Bool = false
+    var vmView: VZVirtualMachineView?
+    var vmViewController: VirtualMachineContainerViewController?
     var recoveryMode: Bool = false
     
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
+        saveFileURL = URL(fileURLWithPath: self.managedVm.path).appendingPathComponent("SaveFile.vzvmsave")
     }
     
     func getManagedVM() -> VirtualMachine {
@@ -33,13 +35,13 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     func setVmViewController(_ vmViewController: VirtualMachineContainerViewController) {
         self.vmViewController = vmViewController;
     }
-        
+    
     func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
         running = true;
-
+        
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
-            #if arch(arm64)
+#if arch(arm64)
             
             vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
             
@@ -47,10 +49,10 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             if isDriveBlank {
                 installAndStartVM()
             } else {
-                startVM()
+                startOrResumeVM()
             }
             
-            #endif
+#endif
         } else if #available(macOS 13.0, *) {
             let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
             var installPath: String? = nil
@@ -60,7 +62,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 installPath = ""
             }
             vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
-            startVM()
+            startOrResumeVM()
         }
     }
     
@@ -94,7 +96,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             
             if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 
-                #if arch(arm64)
+#if arch(arm64)
                 
                 let options = VZMacOSVirtualMachineStartOptions()
                 options.startUpFromMacOSRecovery = self.recoveryMode
@@ -105,19 +107,28 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                     }
                 })
                 
-                #endif
+#endif
                 
             } else {
                 vzVirtualMachine.start(completionHandler: { (result) in
                     switch result {
-                        case let .failure(error):
+                    case let .failure(error):
                         Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
                         break;
-                        default:
-                            print(result)
+                    default:
+                        print(result)
                     }
                 })
             }
+        }
+    }
+    
+    @available(macOS 14.0, *)
+    func resumeVM() {
+        if let vzVirtualMachine = self.vzVirtualMachine {
+            vzVirtualMachine.resume(completionHandler: { error in
+                Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
+            })
         }
     }
     
@@ -138,6 +149,22 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     func pauseVM() {
+        if #available(macOS 14.0, *) {
+            running = false
+            vzVirtualMachine?.pause(completionHandler: { (result) in
+                if case let .failure(error) = result {
+                    fatalError("Virtual machine failed to pause with \(error)")
+                }
+                
+                self.vzVirtualMachine?.saveMachineStateTo(url: self.saveFileURL, completionHandler: { (error) in
+                    guard error == nil else {
+                        fatalError("Virtual machine failed to save with \(error!)")
+                    }
+                    //self.vmViewController?.pauseVM()
+                    self.stopVM(guestStopped: true)
+                })
+            })
+        }
     }
     
     func abort() {
@@ -148,11 +175,34 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         return "";
     }
     
-    func stopInstallation() {
-        
+    fileprivate func startOrResumeVM() {
+        if #available(macOS 14.0, *) {
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: saveFileURL.path) {
+                resumeVM()
+            } else {
+                startVM()
+            }
+        } else {
+            startVM()
+        }
     }
     
     fileprivate func installAndStartVM() {
         self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
+    }
+    
+    @available(macOS 14.0, *)
+    fileprivate func restoreVirtualMachine() {
+        vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { [self] (error) in
+            let fileManager = FileManager.default
+            try! fileManager.removeItem(at: saveFileURL)
+            
+            if error == nil {
+                self.resumeVM()
+            } else {
+                self.startVM()
+            }
+        })
     }
 }
