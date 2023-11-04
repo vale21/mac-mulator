@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22113.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22113.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -2163,7 +2163,7 @@ Raspberry Pi</mutableString>
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZSk-8V-9fP">
-                                <rect key="frame" x="468" y="358" width="56" height="20"/>
+                                <rect key="frame" x="468" y="358" width="56" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eGS-Xf-CRr">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -2242,7 +2242,7 @@ Raspberry Pi</mutableString>
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
-                                <rect key="frame" x="468" y="128" width="56" height="20"/>
+                                <rect key="frame" x="468" y="128" width="56" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0Kf-o9-ZUv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -3126,6 +3126,7 @@ Raspberry Pi</mutableString>
                     </view>
                     <connections>
                         <segue destination="fRs-dN-enQ" kind="sheet" identifier="showInstallingOSSegue" id="cnb-kh-wTL"/>
+                        <segue destination="q1t-Ya-d4e" kind="sheet" identifier="showPauseResumeVMSegue" id="6aE-PG-93S"/>
                     </connections>
                 </viewController>
                 <customObject id="gDK-sg-7Zg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -3147,6 +3148,44 @@ Raspberry Pi</mutableString>
                 <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1355" y="-211"/>
+        </scene>
+        <!--Virtualization Framework Pause ResumeVM View Controller-->
+        <scene sceneID="R36-g7-VFt">
+            <objects>
+                <viewController id="q1t-Ya-d4e" customClass="VirtualizationFrameworkPauseResumeVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="J6d-pI-dCM">
+                        <rect key="frame" x="0.0" y="0.0" width="412" height="196"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator fixedFrame="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="c7K-mz-bVX">
+                                <rect key="frame" x="32" y="19" width="348" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aEZ-I0-6KV">
+                                <rect key="frame" x="161" y="86" width="90" height="90"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="monterey.large" id="6Vp-3F-Pg5"/>
+                            </imageView>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UVW-ar-dwd">
+                                <rect key="frame" x="30" y="46" width="352" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Pausing VM..." id="6bp-pc-a1M">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="descriptionLabel" destination="UVW-ar-dwd" id="kbR-sR-Lve"/>
+                        <outlet property="progressSpinner" destination="c7K-mz-bVX" id="4XJ-1u-heN"/>
+                        <outlet property="vmIcon" destination="aEZ-I0-6KV" id="ryE-u9-UBt"/>
+                    </connections>
+                </viewController>
+                <customObject id="fha-py-gAQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1198" y="698"/>
         </scene>
         <!--Virtualization Framework InstallVM View Controller-->
         <scene sceneID="dcz-GQ-DoE">

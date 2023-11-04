@@ -70,10 +70,30 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             }
         }
     }
-        
+    
+    func showPausingView() {
+        self.performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Pausing")
+    }
+    
+    func showResumingView() {
+        self.performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Resuming")
+    }
+      
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        self.pauseVM()
-        return true
+        if Utils.isPauseSupported(vmRunner!.getManagedVM()) {
+            self.pauseVM()
+            
+            // Window will be closed by the VM runner after the pausing will be complete
+            return false
+        } else {
+            let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+            if response.rawValue != Utils.ALERT_RESP_OK {
+                return false;
+            } else {
+                stopVM(false)
+                return true;
+            }
+        }
     }
     
     func windowWillClose(_ notification: Notification) {
@@ -124,6 +144,13 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
                 if installDrive != nil {
                     destinationController.setRestoreImageURL(URL(fileURLWithPath: installDrive!.path))
                 }
+            }
+        } else if (segue.identifier == MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE) {
+            let destinationController = segue.destinationController as! VirtualizationFrameworkPauseResumeVMViewController
+            if let vmRunner = self.vmRunner {
+                let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
+                destinationController.setParentRunner(runner)
+                destinationController.setOperation(sender as! String)
             }
         }
     }

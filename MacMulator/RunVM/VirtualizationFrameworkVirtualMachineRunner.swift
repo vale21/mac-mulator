@@ -14,7 +14,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     let managedVm: VirtualMachine
     let saveFileURL: URL
     var vzVirtualMachine: VZVirtualMachine?
-    var running: Bool = false
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
     var recoveryMode: Bool = false
@@ -38,7 +37,6 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
-        running = true;
         
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
 #if arch(arm64)
@@ -82,7 +80,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     func isVMRunning() -> Bool {
-        return running;
+        return vzVirtualMachine != nil && vzVirtualMachine!.state == VZVirtualMachine.State.running
     }
     
     func startVM() {
@@ -141,13 +139,11 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     func stopVM(guestStopped: Bool) {
-        running = false
         vzVirtualMachine?.stop(completionHandler: { err in })
         vmViewController?.stopVM(guestStopped)
     }
     
     func stopVMGracefully() {
-        running = false;
         do {
             try vzVirtualMachine?.requestStop()
         } catch {
@@ -160,6 +156,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
+                    vmViewController?.showPausingView()
                     pauseAndSaveVirtualMachine(completionHandler: {
                         self.stopVM(guestStopped: true)
                     })
@@ -195,6 +192,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     @available(macOS 14.0, *)
     fileprivate func restoreVirtualMachine() {
+        vmViewController?.showResumingView()
         vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { [self] (error) in
             let fileManager = FileManager.default
             try! fileManager.removeItem(at: saveFileURL)
