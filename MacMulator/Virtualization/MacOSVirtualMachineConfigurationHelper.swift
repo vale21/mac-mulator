@@ -41,7 +41,7 @@ class MacOSVirtualMachineConfigurationHelper {
 
         let networkAttachment = VZNATNetworkDeviceAttachment()
         networkDevice.attachment = networkAttachment
-        networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
+        networkDevice.macAddress = VZMACAddress(string: "d6:a7:58:8e:78:d4")!
         return networkDevice
     }
 

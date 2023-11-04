@@ -72,13 +72,8 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
     }
         
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
-        if response.rawValue != Utils.ALERT_RESP_OK {
-            return false;
-        } else {
-            stopVM(false)
-            return true;
-        }
+        self.pauseVM()
+        return true
     }
     
     func windowWillClose(_ notification: Notification) {
@@ -115,10 +110,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
     }
     
     func pauseVM() {
-        if let virtualMachine = virtualMachine {
-            vmController?.cleanupPausedVM(virtualMachine)
-            self.view.window?.close()
-        }
+        vmRunner?.pauseVM()
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {

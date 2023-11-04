@@ -44,7 +44,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
 #if arch(arm64)
             
             vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
-            
+
             let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
             if isDriveBlank {
                 installAndStartVM()
@@ -126,8 +126,16 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     @available(macOS 14.0, *)
     func resumeVM() {
         if let vzVirtualMachine = self.vzVirtualMachine {
-            vzVirtualMachine.resume(completionHandler: { error in
-                Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
+            vzVirtualMachine.delegate = self
+            self.vmView?.virtualMachine = vzVirtualMachine
+            self.vmView?.automaticallyReconfiguresDisplay = true
+            self.vmView?.capturesSystemKeys = true
+            
+            vzVirtualMachine.resume(completionHandler: { (result) in
+                if case let .failure(error) = result {
+                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
+                }
+                NSLog(String(vzVirtualMachine.state.rawValue))
             })
         }
     }
@@ -150,20 +158,13 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func pauseVM() {
         if #available(macOS 14.0, *) {
-            running = false
-            vzVirtualMachine?.pause(completionHandler: { (result) in
-                if case let .failure(error) = result {
-                    fatalError("Virtual machine failed to pause with \(error)")
+            if let vzVirtualMachine = self.vzVirtualMachine {
+                if vzVirtualMachine.state == .running {
+                    pauseAndSaveVirtualMachine(completionHandler: {
+                        self.stopVM(guestStopped: true)
+                    })
                 }
-                
-                self.vzVirtualMachine?.saveMachineStateTo(url: self.saveFileURL, completionHandler: { (error) in
-                    guard error == nil else {
-                        fatalError("Virtual machine failed to save with \(error!)")
-                    }
-                    //self.vmViewController?.pauseVM()
-                    self.stopVM(guestStopped: true)
-                })
-            })
+            }
         }
     }
     
@@ -179,7 +180,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if #available(macOS 14.0, *) {
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: saveFileURL.path) {
-                resumeVM()
+                restoreVirtualMachine()
             } else {
                 startVM()
             }
@@ -205,4 +206,30 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         })
     }
+    
+    #if arch(arm64)
+    
+    @available(macOS 14.0, *)
+    func saveVirtualMachine(completionHandler: @escaping () -> Void) {
+        vzVirtualMachine?.saveMachineStateTo(url: saveFileURL, completionHandler: { (error) in
+            guard error == nil else {
+                fatalError("Virtual machine failed to save with \(error!)")
+            }
+
+            completionHandler()
+        })
+    }
+
+    @available(macOS 14.0, *)
+    func pauseAndSaveVirtualMachine(completionHandler: @escaping () -> Void) {
+        vzVirtualMachine?.pause(completionHandler: { (result) in
+            if case let .failure(error) = result {
+                fatalError("Virtual machine failed to pause with \(error)")
+            }
+
+            self.saveVirtualMachine(completionHandler: completionHandler)
+        })
+    }
+    
+#endif
 }
