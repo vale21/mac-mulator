@@ -147,7 +147,7 @@ class VirtualMachineViewController: NSViewController {
     override func viewWillAppear() {
         boxContentView = centralBox.contentView
         startVMButton.toolTip = "Start this VM";
-        pauseVMButton.toolTip = "Pause feature is not supported yet in MacMulator.";
+        pauseVMButton.toolTip = "Pause feature is supported only for Apple Silicon macOS Guests";
         stopVMButton.toolTip = "Stop the execution of this VM";
         
         self.setRunningStatus(nil, false);
