@@ -600,7 +600,7 @@ class Utils {
     
     static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 14.0, *) {
-            return isVirtualizationFrameworkPreferred(vm)
+            return isVirtualizationFrameworkPreferred(vm) && vm.pauseSupported == true
         }
         return false
     }

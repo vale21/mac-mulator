@@ -89,7 +89,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false
                 #endif
                 menu.item(withTitle: "Stop")?.isEnabled = true
-                menu.item(withTitle: "Pause")?.isEnabled = true
+                menu.item(withTitle: "Pause")?.isEnabled = Utils.isPauseSupported(vm)
             } else {
                 menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)

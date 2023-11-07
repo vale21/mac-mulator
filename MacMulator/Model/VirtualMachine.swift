@@ -28,6 +28,7 @@ class VirtualMachine: Codable, Hashable {
     var portMappings: [PortMapping]?
     var macAddress: String?
     var type: String?
+    var pauseSupported: Bool? = false
     
     private enum CodingKeys: String, CodingKey {
         case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type;
