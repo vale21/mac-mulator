@@ -36,12 +36,12 @@ class MacOSVirtualMachineConfigurationHelper {
         }
     }
 
-    static func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {
+    static func createNetworkDeviceConfiguration(macAddress: String) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
         let networkAttachment = VZNATNetworkDeviceAttachment()
         networkDevice.attachment = networkAttachment
-        networkDevice.macAddress = VZMACAddress(string: "d6:a7:58:8e:78:d4")!
+        networkDevice.macAddress = VZMACAddress(string: macAddress)!
         return networkDevice
     }
 
