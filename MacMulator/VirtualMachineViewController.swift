@@ -173,7 +173,7 @@ class VirtualMachineViewController: NSViewController {
     
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
-            vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"));
+            vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
             
             if let rootController = rootController {
                 if rootController.isVMPaused(vm) {
@@ -184,13 +184,13 @@ class VirtualMachineViewController: NSViewController {
             }
             
             vmDescription.stringValue = vm.description;
-            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified";
+            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified"
             vmType.stringValue = vm.subtype
             vmProcessors.intValue = Int32(vm.cpus);
             vmMemory.stringValue = Utils.formatMemory(vm.memory);
             
             let mainDrive = Utils.findMainDrive(vm.drives);
-            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified";
+            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified"
             showVMAvailableLayout();
             
             if rootController?.getRunnerForRunningVM(vm) != nil {
