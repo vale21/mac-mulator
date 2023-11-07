@@ -11,7 +11,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
      
     @IBOutlet weak var table: NSTableView!
     
-    var rootController: RootViewController?;
+    var rootController: RootViewController?
     
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
@@ -28,6 +28,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView;
         if let rootController = self.rootController {
+            cell.rootController = rootController
+            
             let vm: VirtualMachine = rootController.getVirtualMachineAt(row);
             cell.setVirtualMachine(virtualMachine: vm);
             cell.setRunning(rootController.isVMRunning(vm));

@@ -20,7 +20,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
-        saveFileURL = URL(fileURLWithPath: self.managedVm.path).appendingPathComponent("SaveFile.vzvmsave")
+        saveFileURL = URL(fileURLWithPath: self.managedVm.path).appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
     }
     
     func getManagedVM() -> VirtualMachine {

@@ -14,8 +14,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     private var vmController: VirtualMachineViewController?;
     
     var currentVm: VirtualMachine?
-    var virtualMachines: [VirtualMachine] = [];
-    var runningVMs: [VirtualMachine : VirtualMachineRunner] = [:];
+    var virtualMachines: [VirtualMachine] = []
+    var runningVMs: [VirtualMachine : VirtualMachineRunner] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -61,7 +61,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func stopVMMenubarClicked(_ sender: Any) {
-        vmController?.stopVM(sender);
+        vmController?.stopVM(sender)
+    }
+    
+    func pauseVMMenuBarClicked(_ sender: Any) {
+        vmController?.pauseVM(sender: sender)
     }
     
     func showConsoleMenubarClicked(_ sender: Any) {
@@ -181,31 +185,45 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualMachineRunner) {
-        runningVMs[vm] = runner;
+        runningVMs[vm] = runner
         
-        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
+        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true)
         
-        let appDelegate = NSApp.delegate as! AppDelegate;
+        let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
     }
     
     func unsetRunningVM(_ vm: VirtualMachine) {
-        runningVMs.removeValue(forKey: vm);
-        let index = virtualMachines.firstIndex(of: vm);
+        runningVMs.removeValue(forKey: vm)
+        let index = virtualMachines.firstIndex(of: vm)
         if let idx = index {
-            listController?.setRunning(idx, false);
+            listController?.setRunning(idx, false)
         }
         
-        let appDelegate = NSApp.delegate as! AppDelegate;
+        let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
     }
-    
+
     func isCurrentVMRunning() -> Bool {
-        return isVMRunning(currentVm);
+        return isVMRunning(currentVm)
     }
     
     func isVMRunning(_ vm: VirtualMachine?) -> Bool {
-        return vm != nil && runningVMs[vm!] != nil;
+        return vm != nil && runningVMs[vm!] != nil
+    }
+    
+    func isVMPaused(_ vm: VirtualMachine?) -> Bool {
+        if let vm = vm {
+            if #available(macOS 14.0, *), vm.type == MacMulatorConstants.APPLE_VM {
+                let filemanager = FileManager.default
+                if filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SAVE_FILE_NAME) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+        return false
     }
     
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualMachineRunner? {
