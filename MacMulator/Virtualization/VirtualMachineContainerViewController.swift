@@ -115,6 +115,21 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
         self.isFullScreen = false
     }
     
+    func takeScreenshot() {
+        let win = self.view.window
+        if let window = win {
+            do {
+                let inf = CGFloat(FP_INFINITE)
+                let null = CGRect(x: inf, y: inf, width: 0, height: 0)
+                let cgImage = CGWindowListCreateImage(null, .optionIncludingWindow, CGWindowID(window.windowNumber), .bestResolution)
+                let image = NSImage(cgImage: cgImage!, size: view.bounds.size)
+                let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)
+                let pngData = imageRep?.representation(using: .png, properties: [:])
+                try pngData?.write(to: URL(fileURLWithPath: virtualMachine!.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
+            } catch {}
+        }
+    }
+    
     func stopVM(_ closeWindow: Bool) {
         if let vmRunner = self.vmRunner {
             if vmRunner.isVMRunning() {

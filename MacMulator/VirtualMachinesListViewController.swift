@@ -67,10 +67,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem(title: "Start in Recovery Mode", action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
         #endif
         menu.addItem(NSMenuItem(title: "Stop", action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem.separator());
+        menu.addItem(NSMenuItem(title: "Pause", action: #selector(tableViewPauseItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem.separator());
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: "Clone", action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
@@ -83,17 +84,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         if let rootController = self.rootController {
             let vm = rootController.getVirtualMachineAt(row)
             if rootController.isVMRunning(vm) {
-                menu.item(withTitle: "Start")?.isEnabled = false;
+                menu.item(withTitle: "Start")?.isEnabled = false
                 #if arch(arm64)
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false;
+                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false
                 #endif
-                menu.item(withTitle: "Stop")?.isEnabled = true;
+                menu.item(withTitle: "Stop")?.isEnabled = true
+                menu.item(withTitle: "Pause")?.isEnabled = true
             } else {
-                menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm);
+                menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
+                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
                 #endif
-                menu.item(withTitle: "Stop")?.isEnabled = false;
+                menu.item(withTitle: "Stop")?.isEnabled = false
+                menu.item(withTitle: "Pause")?.isEnabled = false
             }
         }
     }
@@ -175,6 +178,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         guard table.clickedRow >= 0 else { return }
         stopVirtualMachine(table.clickedRow);
     }
+    
+    @objc func tableViewPauseItemClicked(_ sender: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        pauseVirtualMachine(table.clickedRow);
+    }
 
     func editVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
@@ -221,12 +229,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    
     func stopVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
             _ = rootController.getVirtualMachineAt(index);
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.stopVMMenubarClicked(self)
+        }
+    }
+    
+    func pauseVirtualMachine(_ index: Int) {
+        if let rootController = self.rootController {
+            _ = rootController.getVirtualMachineAt(index);
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.pauseVMMenuBarClicked(self)
         }
     }
         

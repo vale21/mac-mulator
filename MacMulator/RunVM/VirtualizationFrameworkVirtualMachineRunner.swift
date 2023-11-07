@@ -156,6 +156,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
+                    vmViewController?.takeScreenshot()
                     vmViewController?.showPausingView()
                     pauseAndSaveVirtualMachine(completionHandler: {
                         self.stopVM(guestStopped: true)
@@ -195,7 +196,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         vmViewController?.showResumingView()
         vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { [self] (error) in
             let fileManager = FileManager.default
-            try! fileManager.removeItem(at: saveFileURL)
+            try? fileManager.removeItem(at: saveFileURL)
+            try? fileManager.removeItem(at: URL(fileURLWithPath: managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
             
             if error == nil {
                 self.resumeVM()

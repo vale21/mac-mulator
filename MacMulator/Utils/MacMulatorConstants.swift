@@ -15,6 +15,7 @@ class MacMulatorConstants {
     static let IMG_EXTENSION = "img";
     static let INFO_PLIST = "Info.plist";
     static let SAVE_FILE_NAME = "SaveFile.qvs"
+    static let SCREENSHOT_FILE_NAME = "Screenshot.qvs"
     
     static let NEW_VM_SEGUE = "newVMSegue";
     static let EDIT_VM_SEGUE = "editVMSegue";

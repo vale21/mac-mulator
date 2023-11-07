@@ -1908,6 +1908,9 @@ Raspberry Pi</mutableString>
                                         </menuItem>
                                         <menuItem title="Pause" id="ETl-HI-ZzZ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="pauseVMMenuBarClicked:" target="Voe-Tx-rLC" id="s59-NA-j1r"/>
+                                            </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
                                         <menuItem title="Edit" id="Qce-a5-l81">
@@ -2007,7 +2010,7 @@ Raspberry Pi</mutableString>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="SUm-X6-wZL"/>
-                        <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qd7-pB-hJx"/>
+                        <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
