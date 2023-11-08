@@ -57,6 +57,19 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
         try! virtualMachineConfiguration.validate()
+        if #available(macOS 14.0, *) {
+#if arch(arm64)
+            do {
+                try virtualMachineConfiguration.validateSaveRestoreSupport()
+                vm.pauseSupported = true
+            } catch {
+                NSLog("VM Pause is not supported: " + error.localizedDescription)
+                vm.pauseSupported = false
+            }
+#else
+        vm.pauseSupported = false
+#endif
+        }
         
         return virtualMachineConfiguration
     }

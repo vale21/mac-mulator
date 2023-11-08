@@ -6,6 +6,7 @@
 //
 
 import Cocoa
+import Virtualization
 
 class QemuRunner : VirtualMachineRunner {
     
@@ -192,12 +193,12 @@ class QemuRunner : VirtualMachineRunner {
             .withAutoBoot(true)
             .withVgaEnabled(true)
             .withPortMappings(virtualMachine.portMappings)
-            .withNetwork(name: "network-0", device: networkDevice);
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
-        
+       
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
@@ -207,7 +208,7 @@ class QemuRunner : VirtualMachineRunner {
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withNetwork(name: "network-0", device: networkDevice);
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForI386() -> QemuCommandBuilder {
@@ -227,7 +228,7 @@ class QemuRunner : VirtualMachineRunner {
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice);
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
@@ -256,7 +257,7 @@ class QemuRunner : VirtualMachineRunner {
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice);
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
@@ -276,7 +277,7 @@ class QemuRunner : VirtualMachineRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
-            .withNetwork(name: "network-0", device: networkDevice)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
@@ -308,7 +309,7 @@ class QemuRunner : VirtualMachineRunner {
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.RAMFB)
             .withNic(QemuConstants.VGA_VIRTIO)
-            .withNetwork(name: "network-0", device: networkDevice)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
     }
     
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {

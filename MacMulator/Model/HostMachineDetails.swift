@@ -8,9 +8,7 @@
 import Foundation
 
 class HostMachineDetails: Decodable {
-    
-    let machine_model: String?;
-    let platform_UUID: String?;
-    let serial_number: String?;
-    
+    let machine_model: String?
+    let platform_UUID: String?
+    let serial_number: String?
 }

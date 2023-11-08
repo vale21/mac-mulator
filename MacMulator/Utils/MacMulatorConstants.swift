@@ -14,6 +14,8 @@ class MacMulatorConstants {
     static let EFI_EXTENSION = "fd";
     static let IMG_EXTENSION = "img";
     static let INFO_PLIST = "Info.plist";
+    static let SAVE_FILE_NAME = "SaveFile.qvs"
+    static let SCREENSHOT_FILE_NAME = "Screenshot.qvs"
     
     static let NEW_VM_SEGUE = "newVMSegue";
     static let EDIT_VM_SEGUE = "editVMSegue";
@@ -28,6 +30,7 @@ class MacMulatorConstants {
     static let SHOW_INSTALLING_OS_SEGUE = "showInstallingOSSegue";
     static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
+    static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";

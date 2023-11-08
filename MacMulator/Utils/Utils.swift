@@ -119,11 +119,11 @@ class Utils {
     }
     
     static func cleanFolderPath(_ string: String) -> String {
-        var ret = escape(string);
+        var ret = string
         if ret.hasSuffix("/") {
-            ret = String(ret.dropLast());
+            ret = String(ret.dropLast())
         }
-        return ret;
+        return ret
     }
     
     static func extractVMRootPath(_ vm: VirtualMachine) -> String {
@@ -556,7 +556,15 @@ class Utils {
         var ret: [Int] = [];
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
-        ret.append(Int(stringElements[2])!);
+        
+        return ret;
+    }
+    
+    static func getOriginElements(_ origin: String) -> [String] {
+        let stringElements:[Substring] = origin.split(separator: ";");
+        var ret: [String] = [];
+        ret.append(String(stringElements[0]))
+        ret.append(String(stringElements[1]))
         
         return ret;
     }
@@ -586,6 +594,13 @@ class Utils {
     static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
         if #available(macOS 12.0, *) {
             return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
+        }
+        return false
+    }
+    
+    static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 14.0, *) {
+            return isVirtualizationFrameworkPreferred(vm) && vm.pauseSupported == true
         }
         return false
     }
@@ -748,18 +763,24 @@ class Utils {
     
     static func getMainScreenSize() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
     }
     
     static func getMainScreenSizeDesc() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
+    }
+    
+    static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
+            return String(format: "%d x %d (Last Used)", width, heigh)
     }
     
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
@@ -799,6 +820,6 @@ class Utils {
     
     fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
         return os == QemuConstants.OS_MAC &&
-        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA || subtype == QemuConstants.SUB_MAC_SONOMA)
     }
 }

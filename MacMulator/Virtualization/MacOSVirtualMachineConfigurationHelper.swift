@@ -36,25 +36,29 @@ class MacOSVirtualMachineConfigurationHelper {
         }
     }
 
-    static func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {
+    static func createNetworkDeviceConfiguration(macAddress: String) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
         let networkAttachment = VZNATNetworkDeviceAttachment()
         networkDevice.attachment = networkAttachment
-        networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
+        networkDevice.macAddress = VZMACAddress(string: macAddress)!
         return networkDevice
     }
 
     static func createPointingDeviceConfigurations() -> [ VZPointingDeviceConfiguration ] {
         if #available(macOS 13.0, *) {
-            return [ VZUSBScreenCoordinatePointingDeviceConfiguration(), VZMacTrackpadConfiguration() ]
+            return [ VZMacTrackpadConfiguration() ]
         } else {
             return [ VZUSBScreenCoordinatePointingDeviceConfiguration() ]
         }
     }
 
-    static func createKeyboardConfiguration() -> VZUSBKeyboardConfiguration {
-        return VZUSBKeyboardConfiguration()
+    static func createKeyboardConfiguration() -> VZKeyboardConfiguration {
+        if #available(macOS 14.0, *) {
+            return VZMacKeyboardConfiguration()
+        } else {
+            return VZUSBKeyboardConfiguration()
+        }
     }
 
     static func createAudioDeviceConfiguration() -> VZVirtioSoundDeviceConfiguration {

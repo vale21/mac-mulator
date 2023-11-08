@@ -54,12 +54,24 @@ class VirtualizationFrameworkMacOSSupport : VirtualizationFrameworkSupport {
         }
         
         virtualMachineConfiguration.storageDevices = [MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
-        virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+        if let macAddress = vm.macAddress {
+            virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(macAddress: macAddress)]
+        } else {
+            virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(macAddress: VZMACAddress.randomLocallyAdministered().string)]
+        }
         virtualMachineConfiguration.pointingDevices = MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfigurations()
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
         
         try! virtualMachineConfiguration.validate()
+        if #available(macOS 14.0, *) {
+            do {
+                try virtualMachineConfiguration.validateSaveRestoreSupport()
+                vm.pauseSupported = true
+            } catch {
+                vm.pauseSupported = false
+            }
+        }
         
         return virtualMachineConfiguration
     }

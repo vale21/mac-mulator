@@ -109,10 +109,17 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             vm.addVirtualDrive(installMedia);
         }
         
-        QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-            terminationCcode in
-            callback(0);
-        });
+        if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {
+            QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                terminationCcode in
+                callback(terminationCcode)
+            })
+        } else {
+            VirtualizationFrameworkUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                terminationCcode in
+                callback(terminationCcode)
+            })
+        }
     }
         
     fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {

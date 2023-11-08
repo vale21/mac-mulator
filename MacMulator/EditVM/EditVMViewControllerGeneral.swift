@@ -18,10 +18,13 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
 
     var virtualMachine: VirtualMachine?;
     let accountPasteboardType = NSPasteboard.PasteboardType.string;
+    var updating = false
+    var currentResolution:[Int] = []
         
     func setVirtualMachine(_ vm: VirtualMachine) {
-        virtualMachine = vm;
-        updateView();
+        virtualMachine = vm
+        updateView()
+        currentResolution = Utils.getResolutionElements(vm.displayResolution)
     }
     
     override func viewWillAppear() {
@@ -42,18 +45,19 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     
     func updateView() {
         if let virtualMachine = self.virtualMachine {
+            updating = true
             vmType.stringValue = virtualMachine.os
             vmSubType.stringValue = virtualMachine.subtype
 
             vmName.stringValue = virtualMachine.displayName
             vmDescription.string = virtualMachine.description
-            
-            let rowIndex: Array<String>.Index = QemuConstants.ALL_RESOLUTIONS.firstIndex(of: virtualMachine.displayResolution) ?? 0
-            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(rowIndex)), byExtendingSelection: false)
-            
+                        
             bootOrderTable.reloadData()
-            selectBootDrive(virtualMachine)
+            resolutionTable.reloadData()
+            updating = false
             
+            selectBootDrive(virtualMachine)
+            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
         }
     }
 
@@ -62,14 +66,18 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             return Utils.computeDrivesTableSize(virtualMachine);
         }
         if tableView == resolutionTable {
-            return QemuConstants.ALL_RESOLUTIONS_DESC.count;
+            if self.virtualMachine != nil {
+                return QemuConstants.ALL_RESOLUTIONS_DESC.count + 1
+            } else {
+                return 0
+            }
         }
         return 0;
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = NSView();
-
+        
         if let virtualMachine = self.virtualMachine {
             if tableView == bootOrderTable {
                 let index = Utils.computeDrivesTableIndex(virtualMachine, row);
@@ -81,10 +89,14 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                     view.textColor = NSColor.labelColor;
                 }
             }
-        }
-        
-        if tableView == resolutionTable {
-            cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_RESOLUTIONS_DESC[QemuConstants.ALL_RESOLUTIONS[row]]!));
+            
+            if tableView == resolutionTable {
+                if row == 0 {
+                    cell.addSubview(NSTextField(labelWithString: Utils.getCustomScreenSizeDesc(width: currentResolution[0], heigh: currentResolution[1])))
+                } else {
+                    cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_RESOLUTIONS_DESC[QemuConstants.ALL_RESOLUTIONS[row-1]]!));
+                }
+            }
         }
         
         return cell;
@@ -148,23 +160,28 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        if ((notification.object as! NSTableView) == bootOrderTable) {
-            if let virtualMachine = self.virtualMachine {
-                let row = bootOrderTable.selectedRow;
-                var i = 0;
-                for drive in virtualMachine.drives {
-                    if row == i {
-                        drive.isBootDrive = true
-                    } else {
-                        drive.isBootDrive = false
+        if !updating {
+            if ((notification.object as! NSTableView) == bootOrderTable) {
+                if let virtualMachine = self.virtualMachine {
+                    let row = bootOrderTable.selectedRow;
+                    var i = 0;
+                    for drive in virtualMachine.drives {
+                        if row == i {
+                            drive.isBootDrive = true
+                        } else {
+                            drive.isBootDrive = false
+                        }
+                        i += 1;
                     }
-                    i += 1;
+                }
+                
+            }
+            if ((notification.object as! NSTableView) == resolutionTable) {
+                if resolutionTable.selectedRow > 0 {
+                    virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow - 1]
+                    virtualMachine?.displayOrigin = QemuConstants.ORIGIN
                 }
             }
-            
-        }
-        if ((notification.object as! NSTableView) == resolutionTable) {
-            virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow];
         }
     }
 }

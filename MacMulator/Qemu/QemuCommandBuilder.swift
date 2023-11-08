@@ -170,14 +170,18 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withNetwork(name: String, device: String) -> QemuCommandBuilder{
+    func withNetwork(name: String, device: String, macAddress: String?) -> QemuCommandBuilder{
         self.network = "-netdev user,id=" + name
         
         for mapping in portMappings {
             self.network = self.network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
         }
         
-        self.network = self.network! + " -device " + device + ",netdev=" + name;
+        if let macAddress = macAddress {
+            self.network = self.network! + " -device " + device + ",netdev=" + name + ",mac=" + macAddress
+        } else {
+            self.network = self.network! + " -device " + device + ",netdev=" + name
+        }
         return self;
     }
     

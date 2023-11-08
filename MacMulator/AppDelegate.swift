@@ -39,31 +39,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
-        Utils.showDirectorySelector(uponSelection: { panel in
-            if let vm = rootController?.currentVm {
-                do {
-                    try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
-                } catch {
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+        if #available(macOS 11.0, *) {
+            Utils.showDirectorySelector(uponSelection: { panel in
+                if let vm = rootController?.currentVm {
+                    do {
+                        try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
+                    } catch {
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     
     @IBAction func importVMFromParallelsMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
-            do {
-                let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
-                rootController?.addVirtualMachine(vm)
-            } catch {
-                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
-            }
-        })
+        if #available(macOS 11.0, *) {
+            Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
+                do {
+                    let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
+                    rootController?.addVirtualMachine(vm)
+                } catch {
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
+                }
+            })
+        }
     }
         
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
-        rootController?.startVMMenuBarClicked("MainMenu");
+        rootController?.startVMMenuBarClicked("MainMenu")
     }
     
     @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
@@ -71,19 +75,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
-        rootController?.stopVMMenubarClicked("MainMenu");
+        rootController?.stopVMMenubarClicked("MainMenu")
+    }
+    
+    @IBAction func pauseVMMenuBarClicked(_ sender: Any) {
+        rootController?.pauseVMMenuBarClicked("MainMenu")
     }
     
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked("MainMenu");
+        rootController?.editVMmenuBarClicked("MainMenu")
     }
     
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
-        rootController?.showConsoleMenubarClicked("MainMenu");
+        rootController?.showConsoleMenubarClicked("MainMenu")
     }
     
     func refreshVMMenus() {
-        pauseVMMenuItem.isEnabled = false
         if let rootController = self.rootController {
             
             #if arch(x86_64)
@@ -100,6 +107,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 let vm = rootController.currentVm
                 if let vm = vm {
                     if rootController.isCurrentVMRunning() {
+                        pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
                         startVMMenuItem.isEnabled = false
                         #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = false
@@ -181,7 +189,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        return NSApplication.TerminateReply.terminateNow;
+        if #available(macOS 14.0, *) {
+            sender.reply(toApplicationShouldTerminate: true)
+            return .terminateLater
+        } else {
+            return .terminateNow
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -189,7 +202,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         
         // Useful in Development to replicate the startup of a clean installation of MacMulator
-        // resetDefaults();
+        //resetDefaults();
     }
     
     fileprivate func resetDefaults() {
@@ -245,13 +258,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     fileprivate func setupSavedVMs() {
-        let filemanager = FileManager.default;
-        var toRemove: [Int] = [];
+        let filemanager = FileManager.default
+        var toRemove: [Int] = []
         for savedVM in savedVMs! {
             if filemanager.fileExists(atPath: savedVM) && performSanityCheck(savedVM) {
-                rootController?.addVirtualMachineFromFile(savedVM);
+                rootController?.addVirtualMachineFromFile(savedVM)
             } else {
-                toRemove.append((savedVMs?.lastIndex(of: savedVM))!);
+                toRemove.append((savedVMs?.lastIndex(of: savedVM))!)
             }
         }
         
