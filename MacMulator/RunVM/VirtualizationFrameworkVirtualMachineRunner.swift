@@ -204,8 +204,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         vmViewController?.showResumingView()
         vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { error in
             let fileManager = FileManager.default
-            try? fileManager.removeItem(at: saveFileURL)
-            try? fileManager.removeItem(at: URL(fileURLWithPath: managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
+            try? fileManager.removeItem(at: self.saveFileURL)
+            try? fileManager.removeItem(at: URL(fileURLWithPath: self.managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
             
             if error == nil {
                 self.resumeVM()
