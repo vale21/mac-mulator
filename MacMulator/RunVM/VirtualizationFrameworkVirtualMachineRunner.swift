@@ -158,9 +158,11 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 if vzVirtualMachine.state == .running {
                     vmViewController?.takeScreenshot()
                     vmViewController?.showPausingView()
+#if arch(arm64)
                     pauseAndSaveVirtualMachine(completionHandler: {
                         self.stopVM(guestStopped: true)
                     })
+#endif
                 }
             }
         }
@@ -176,12 +178,16 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     fileprivate func startOrResumeVM() {
         if #available(macOS 14.0, *) {
+#if arch(arm64)
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: saveFileURL.path) {
                 restoreVirtualMachine()
             } else {
                 startVM()
             }
+#else
+            startVM()
+#endif
         } else {
             startVM()
         }
@@ -191,10 +197,12 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
     }
     
+#if arch(arm64)
+    
     @available(macOS 14.0, *)
     fileprivate func restoreVirtualMachine() {
         vmViewController?.showResumingView()
-        vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { [self] (error) in
+        vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { error in
             let fileManager = FileManager.default
             try? fileManager.removeItem(at: saveFileURL)
             try? fileManager.removeItem(at: URL(fileURLWithPath: managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
@@ -206,9 +214,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         })
     }
-    
-    #if arch(arm64)
-    
+        
     @available(macOS 14.0, *)
     func saveVirtualMachine(completionHandler: @escaping () -> Void) {
         vzVirtualMachine?.saveMachineStateTo(url: saveFileURL, completionHandler: { (error) in

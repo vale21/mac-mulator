@@ -58,6 +58,7 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         
         try! virtualMachineConfiguration.validate()
         if #available(macOS 14.0, *) {
+#if arch(arm64)
             do {
                 try virtualMachineConfiguration.validateSaveRestoreSupport()
                 vm.pauseSupported = true
@@ -65,6 +66,9 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
                 NSLog("VM Pause is not supported: " + error.localizedDescription)
                 vm.pauseSupported = false
             }
+#else
+        vm.pauseSupported = false
+#endif
         }
         
         return virtualMachineConfiguration
