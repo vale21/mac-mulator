@@ -21,9 +21,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    @IBOutlet weak var cloneVMMemuItem: NSMenuItem!
+    @IBOutlet weak var showVMInFinderMenuItem: NSMenuItem!
     @IBOutlet weak var exportMenuItem: NSMenuItem!
     @IBOutlet weak var exportToParallelsMenuItem: NSMenuItem!
     @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
+    @IBOutlet weak var convertToQemuMenuItem: NSMenuItem!
+    @IBOutlet weak var convertToAppleMenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -65,7 +69,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             })
         }
     }
-        
+    
+    @IBAction func convertToQemuMenuBarClicked(_ sender: Any) {
+        if #available(macOS 13.0, *) {
+            rootController?.convertToQemuMenuBarClicked("MainMenu")
+            refreshVMMenus()
+        }
+    }
+    
+    @IBAction func convertToAppleMenuBarClicked(_ sender: Any) {
+        if #available(macOS 13.0, *) {
+            rootController?.convertToAppleMenuBarClicked("MainMenu")
+            refreshVMMenus()
+        }
+    }
+    
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
         rootController?.startVMMenuBarClicked("MainMenu")
     }
@@ -86,11 +104,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.editVMmenuBarClicked("MainMenu")
     }
     
+    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
+        rootController?.cloneVMMenuBarClicked("MainMenu")
+    }
+    
+    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
+        rootController?.showVMInFinderMenuBarClicked("MainMenu")
+    }
+    
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
         rootController?.showConsoleMenubarClicked("MainMenu")
     }
     
     func refreshVMMenus() {
+        vmMenu.autoenablesItems = false
+        
         if let rootController = self.rootController {
             
             #if arch(x86_64)
@@ -98,14 +126,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             #endif
             
             if rootController.currentVm == nil {
+                pauseVMMenuItem.isEnabled = false
                 startVMMenuItem.isEnabled = false
                 startVMInRecoveryMenuItem.isEnabled = false
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
+                cloneVMMemuItem.isEnabled = false
+                showVMInFinderMenuItem.isEnabled = false
                 exportMenuItem.isEnabled = false
+                convertToQemuMenuItem.isEnabled = false
+                convertToAppleMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
                 if let vm = vm {
+                    cloneVMMemuItem.isEnabled = true
+                    showVMInFinderMenuItem.isEnabled = true
+                    
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
                         startVMMenuItem.isEnabled = false
@@ -114,6 +150,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         #endif
                         stopVMMenuItem.isEnabled = true
                     } else {
+                        pauseVMMenuItem.isEnabled = false
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
                         #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
@@ -135,7 +172,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         exportToParallelsMenuItem.isEnabled = false
                         importFromParallelsMenuItem.isEnabled = true
                     #endif
-                    
+
+                    if vm.type == MacMulatorConstants.APPLE_VM {
+                        convertToQemuMenuItem.isEnabled = !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+                        convertToAppleMenuItem.isEnabled = false
+                    } else {
+                        convertToQemuMenuItem.isEnabled = false
+                        convertToAppleMenuItem.isEnabled = vm.os == QemuConstants.OS_LINUX
+                    }
+
                 }
             }
         }
@@ -202,7 +247,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         
         // Useful in Development to replicate the startup of a clean installation of MacMulator
-        //resetDefaults();
+        // resetDefaults();
     }
     
     fileprivate func resetDefaults() {

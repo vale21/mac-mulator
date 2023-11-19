@@ -209,7 +209,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func showVirtualMachineInFinder(_ index: Int) {
         if let rootController = self.rootController {
             let vm = rootController.getVirtualMachineAt(index);
-            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)]);
+            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)])
         }
     }
     
