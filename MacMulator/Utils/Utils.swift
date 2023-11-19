@@ -126,14 +126,6 @@ class Utils {
         return ret
     }
     
-    static func extractVMRootPath(_ vm: VirtualMachine) -> String {
-        return String(
-            vm.path
-                .replacingOccurrences(of: "." + MacMulatorConstants.VM_EXTENSION, with: "")
-                .replacingOccurrences(of: vm.displayName, with: "")
-                .dropLast());
-    }
-    
     static func computeSizeOfPhysicalDrive(_ path: String, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
         QemuUtils.getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
             infoCode, output in
@@ -286,6 +278,21 @@ class Utils {
         var nvrams: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
             if drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                nvrams.append(drive);
+            }
+        }
+        
+        if nvrams.count == 0 {
+            return nil;
+        }
+        return nvrams[0];
+    }
+    
+    static func findEfiDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non EFI drives
+        var nvrams: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
                 nvrams.append(drive);
             }
         }
@@ -605,6 +612,14 @@ class Utils {
         return false
     }
     
+    static func isTrackpadSupported(_ vm: VirtualMachine) -> Bool {
+        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
+    }
+    
+    static func isMacKeyboardSupported(_ vm: VirtualMachine) -> Bool {
+        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SONOMA)
+    }
+    
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()
@@ -680,7 +695,7 @@ class Utils {
     
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
         let currentTime = Int64(Date().timeIntervalSince1970)
- 
+        
         let timeDelta = Double(currentTime - startTime)
         let factor = timeDelta / progress
         let totalTime = 100.0 * factor
@@ -780,7 +795,7 @@ class Utils {
     }
     
     static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
-            return String(format: "%d x %d (Last Used)", width, heigh)
+        return String(format: "%d x %d (Last Used)", width, heigh)
     }
     
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
@@ -819,7 +834,43 @@ class Utils {
     }
     
     fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
-        return os == QemuConstants.OS_MAC &&
-        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA || subtype == QemuConstants.SUB_MAC_SONOMA)
+        return os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
+    }
+    
+    fileprivate static func isMacVersionGreaterOrEqualThan(subtype: String, target: String) -> Bool {
+        let versions = [
+            QemuConstants.SUB_MAC_OS_8,
+            QemuConstants.SUB_MAC_OS_9,
+            QemuConstants.SUB_MAC_BETA,
+            QemuConstants.SUB_MAC_CHEETAH,
+            QemuConstants.SUB_MAC_PUMA,
+            QemuConstants.SUB_MAC_JAGUAR,
+            QemuConstants.SUB_MAC_PANTHER,
+            QemuConstants.SUB_MAC_TIGER,
+            QemuConstants.SUB_MAC_LEOPARD,
+            QemuConstants.SUB_MAC_SNOW_LEOPARD,
+            QemuConstants.SUB_MAC_LION,
+            QemuConstants.SUB_MAC_MOUNTAIN_LION,
+            QemuConstants.SUB_MAC_MAVERICKS,
+            QemuConstants.SUB_MAC_YOSEMITE,
+            QemuConstants.SUB_MAC_EL_CAPITAN,
+            QemuConstants.SUB_MAC_SIERRA,
+            QemuConstants.SUB_MAC_HIGH_SIERRA,
+            QemuConstants.SUB_MAC_MOJAVE,
+            QemuConstants.SUB_MAC_CATALINA,
+            QemuConstants.SUB_MAC_BIG_SUR,
+            QemuConstants.SUB_MAC_MONTEREY,
+            QemuConstants.SUB_MAC_VENTURA,
+            QemuConstants.SUB_MAC_SONOMA
+        ]
+        
+        let version = versions.firstIndex(of: subtype)
+        let targetVersion = versions.firstIndex(of: target)
+        
+        if let version = version, let targetVersion = targetVersion {
+            return version >= targetVersion
+        } else {
+            return false
+        }
     }
 }

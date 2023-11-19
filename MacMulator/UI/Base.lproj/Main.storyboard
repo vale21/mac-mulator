@@ -1629,23 +1629,10 @@ Raspberry Pi</mutableString>
                                                 <action selector="openVMMenuBarClicked:" target="Voe-Tx-rLC" id="R1l-9m-Y15"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Export as" id="cZp-mO-IqY">
+                                        <menuItem isSeparatorItem="YES" id="deE-4G-lIz"/>
+                                        <menuItem title="Import VM from" id="wy3-tx-Ofd">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Export as" id="3Ko-t4-AGP">
-                                                <items>
-                                                    <menuItem title="Parallels VM" id="FzN-3M-7zL">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                        <connections>
-                                                            <action selector="exportVMToParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="FXO-G3-Gh1"/>
-                                                        </connections>
-                                                    </menuItem>
-                                                </items>
-                                            </menu>
-                                        </menuItem>
-                                        <menuItem title="Import from" id="wy3-tx-Ofd">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Import from" id="OGd-wn-S60">
+                                            <menu key="submenu" title="Import VM from" id="OGd-wn-S60">
                                                 <items>
                                                     <menuItem title="Parallels VM" id="BlF-ys-fL5">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -1656,7 +1643,7 @@ Raspberry Pi</mutableString>
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
+                                        <menuItem isSeparatorItem="YES" id="yNP-ow-gwT"/>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
@@ -1919,7 +1906,47 @@ Raspberry Pi</mutableString>
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="VMT-mp-0Y3"/>
+                                        <menuItem title="Clone" id="HJ6-jY-EPi">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="cloneVMMenuBarClicked:" target="Voe-Tx-rLC" id="6cZ-Az-kca"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Show in Finder" id="kcm-AV-ZBa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="showVMInFinderMenuBarClicked:" target="Voe-Tx-rLC" id="Ln8-pD-taY"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Yf2-Qx-Hk7"/>
+                                        <menuItem title="Export as" id="cZp-mO-IqY">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Export as" id="3Ko-t4-AGP">
+                                                <items>
+                                                    <menuItem title="Parallels VM" id="FzN-3M-7zL">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="exportVMToParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="FXO-G3-Gh1"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Convert to QEMU VM" id="R2R-CL-gW6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToQemuMenuBarClicked:" target="Voe-Tx-rLC" id="dX9-Ns-BmD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Convert to Apple VM" id="lrY-sV-Nll">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
                                         <menuItem title="Show Console Output" id="7ko-iP-uk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -2006,11 +2033,15 @@ Raspberry Pi</mutableString>
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
+                        <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
+                        <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
+                        <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
                         <outlet property="editVMMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="SUm-X6-wZL"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
@@ -2020,7 +2051,7 @@ Raspberry Pi</mutableString>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2458" y="-895"/>
+            <point key="canvasLocation" x="-2604" y="-951"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="ca3-oh-WzR">

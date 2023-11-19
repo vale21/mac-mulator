@@ -45,16 +45,16 @@ class MacOSVirtualMachineConfigurationHelper {
         return networkDevice
     }
 
-    static func createPointingDeviceConfigurations() -> [ VZPointingDeviceConfiguration ] {
-        if #available(macOS 13.0, *) {
+    static func createPointingDeviceConfigurations(vm: VirtualMachine) -> [ VZPointingDeviceConfiguration ] {
+        if #available(macOS 13.0, *), Utils.isTrackpadSupported(vm) {
             return [ VZMacTrackpadConfiguration() ]
         } else {
             return [ VZUSBScreenCoordinatePointingDeviceConfiguration() ]
         }
     }
 
-    static func createKeyboardConfiguration() -> VZKeyboardConfiguration {
-        if #available(macOS 14.0, *) {
+    static func createKeyboardConfiguration(vm: VirtualMachine) -> VZKeyboardConfiguration {
+        if #available(macOS 14.0, *), Utils.isMacKeyboardSupported(vm) {
             return VZMacKeyboardConfiguration()
         } else {
             return VZUSBKeyboardConfiguration()

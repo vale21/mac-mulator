@@ -76,6 +76,44 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: currentVm);
     }
     
+    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            if let vmIndex = getIndex(of: currentVm) {
+                self.cloneVirtualMachineAt(vmIndex)
+            }
+        }
+    }
+    
+    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: currentVm.path, isDirectory: false)])
+        }
+    }
+    
+    @available(macOS 13.0, *)
+    func convertToQemuMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
+            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
+            currentVm.type = MacMulatorConstants.QEMU_VM
+            currentVm.writeToPlist()
+            vmController?.setVirtualMachine(currentVm)
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to QEMU format.")
+        }
+    }
+    
+    @available(macOS 13.0, *)
+    func convertToAppleMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
+            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
+            currentVm.type = MacMulatorConstants.APPLE_VM
+            currentVm.writeToPlist()
+            vmController?.setVirtualMachine(currentVm)
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to Apple format.")
+        }
+    }
+    
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
         if let vm = currentVm {
             Utils.removeUnexistingDrives(vm)
@@ -170,7 +208,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func cloneVirtualMachineAt(_ index: Int) {
         let vmToClone = virtualMachines[index];
-        let newVMPath = Utils.extractVMRootPath(vmToClone) + "/Clone of " + vmToClone.displayName + "." + MacMulatorConstants.VM_EXTENSION;
+        let newVMPath = Utils.computeVMPath(vmName: "Clone of " + vmToClone.displayName)
         let shell = Shell();
         shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { terminationCode in
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist");

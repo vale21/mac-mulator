@@ -119,6 +119,88 @@ class QemuUtils {
         })
     }
     
+    static func createAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
+        if vm.architecture == QemuConstants.ARCH_ARM64 || vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
+            let virtualEfi = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI,
+                size: 0);
+            vm.addVirtualDrive(virtualEfi)
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_ARM64 {
+            let virtualNvram = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_NVRAM + "-0",
+                name: QemuConstants.MEDIATYPE_NVRAM + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_NVRAM,
+                size: 0);
+            vm.addVirtualDrive(virtualNvram)
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
+            let openCore = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
+                size: 0);
+            vm.addVirtualDrive(openCore);
+        }
+        
+        if (vm.architecture == QemuConstants.ARCH_ARM64) {
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+            let nvramDrive = Utils.findNvramDrive(vm.drives)
+            if let nvramDrive = nvramDrive {
+                QemuUtils.createDiskImage(path: vm.path, name: nvramDrive.name, format: nvramDrive.format, size: "67108864", uponCompletion: { result in })
+            }
+        }
+        
+        if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
+            var opencore: String = "";
+            if QemuUtils.isMacModern(vm.subtype) {
+                opencore = QemuConstants.OPENCORE_MODERN;
+            } else if QemuUtils.isMacLegacy(vm.subtype) {
+                opencore = QemuConstants.OPENCORE_LEGACY;
+            }
+            
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
+            let destinationURL = URL(fileURLWithPath: vm.path);
+            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
+            
+            // Rename unzipped image and clean up garbage empty folder
+            try? FileManager.default.moveItem(atPath: vm.path + "/" + opencore + ".img", toPath: vm.path + "/opencore-0.img");
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"));
+        }
+    }
+    
+    static func deleteAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
+        if (vm.architecture == QemuConstants.ARCH_ARM64) {
+            try? FileManager.default.removeItem(atPath: vm.path + "/efi-0.fd")
+            let efiDrive = Utils.findEfiDrive(vm.drives)
+            if let efiDrive = efiDrive {
+                if let index = vm.drives.firstIndex(of: efiDrive) {
+                    vm.drives.remove(at: index)
+                }
+            }
+            
+            try? FileManager.default.removeItem(atPath: vm.path + "/nvram-0")
+            let nvramDrive = Utils.findNvramDrive(vm.drives)
+            if let nvramDrive = nvramDrive {
+                if let index = vm.drives.firstIndex(of: nvramDrive) {
+                    vm.drives.remove(at: index)
+                }
+            }
+        }
+        if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
+            try? FileManager.default.removeItem(atPath: vm.path + "/efi-0.fd")
+            try? FileManager.default.removeItem(atPath: vm.path + "/opencore-0")
+        }
+    }
+    
     static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
         if newVirtualDrive.size != oldVirtualDrive.size {
             resizeDiskImage(newVirtualDrive, path, shrink: (newVirtualDrive.size < oldVirtualDrive.size), uponCompletion: callback);

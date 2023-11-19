@@ -7,8 +7,8 @@
 
 import Foundation
 
-class VirtualDrive: Codable {
-    
+class VirtualDrive: Codable, Equatable {
+
     var path: String // this value is serialized, but is ignored for media type different from CDROM
     var name: String
     var format: String
@@ -39,5 +39,15 @@ class VirtualDrive: Codable {
         drive.blank = self.blank
         
         return drive;
+    }
+    
+    static func == (lhs: VirtualDrive, rhs: VirtualDrive) -> Bool {
+        return lhs.path == rhs.path &&
+        lhs.name == rhs.name &&
+        lhs.format == rhs.format &&
+        lhs.mediaType == rhs.mediaType &&
+        lhs.size == rhs.size &&
+        lhs.isBootDrive == rhs.isBootDrive &&
+        lhs.blank == rhs.blank
     }
 }
