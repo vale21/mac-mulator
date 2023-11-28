@@ -612,7 +612,7 @@ class QemuConstants {
     static let CPU_HOST = "host";
     static let CPU_MAX = "max";
     static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2"
-    static let CPU_PENRYN = "Penryn"
+    static let CPU_PENRYN = "Penryn,vendor=GenuineIntel"
     static let CPU_SANDY_BRIDGE = "SandyBridge"
     static let CPU_IVY_BRIDGE = "IvyBridge"
     static let CPU_SKYLAKE_CLIENT = "Skylake-Client"
