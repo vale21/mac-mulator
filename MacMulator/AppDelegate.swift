@@ -234,12 +234,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        if #available(macOS 14.0, *) {
-            sender.reply(toApplicationShouldTerminate: true)
-            return .terminateLater
-        } else {
-            return .terminateNow
-        }
+        return .terminateNow
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
