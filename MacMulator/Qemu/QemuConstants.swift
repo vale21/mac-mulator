@@ -611,8 +611,9 @@ class QemuConstants {
     
     static let CPU_HOST = "host";
     static let CPU_MAX = "max";
-    static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2"
+    static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2,vendor=GenuineIntel"
     static let CPU_PENRYN = "Penryn,vendor=GenuineIntel"
+    static let CPU_CORE_2_DUO = "core2duo-v1,vendor=GenuineIntel"
     static let CPU_SANDY_BRIDGE = "SandyBridge"
     static let CPU_IVY_BRIDGE = "IvyBridge"
     static let CPU_SKYLAKE_CLIENT = "Skylake-Client"
@@ -633,6 +634,7 @@ class QemuConstants {
     static let SOUND_HDA = "intel-hda"
     static let SOUND_HDA_DUPLEX = "hda-duplex"
     static let SOUND_AC97 = "AC97"
+    static let SOUND_USB = "usb-audio"
     
     static let OPENCORE_MODERN = "OPENCORE_MODERN";
     static let OPENCORE_LEGACY = "OPENCORE_LEGACY";
