@@ -6,6 +6,9 @@
 "AppDelegate.errorDeleting" = "Error while deleting %@: %@";
 "AppDelegate.errorReading" = "Error while reading %@: %@";
 "AppDelegate.couldNotFindExistingVMs" = "Could not find some Virtual Machines that were configured in MacMulator: %@";
+"AppDelegate.exportToParallelsComplete" = "Export to Parallels complete.";
+"AppDelegate.exportFailed" = "Export failed with error: %@";
+"AppDelegate.importFailed" = "Import failed with error: %@";
 "ConsoleViewController.vmNotRunning" = "Current VM is not running";
 "CreateVMFileViewController.preparingDownload" = "Preparing to download macOS Installer...";
 "CreateVMFileViewController.timeRemainingCalculating" = "Estimate time remaining: Calculating...";
@@ -86,3 +89,14 @@
 "VirtualMachine.sshPortMapping" = "SSH port mapping";
 "VirtualMachine.infoPlistReadError" = "Error while reading Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Error while writing Info.plist: %@";
+"VirtualMachineViewController.forciblyClosing" = "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
+"VirtualMachineViewController.startVM" = "Start this VM";
+"VirtualMachineViewController.pauseNotSupported" = "Pause feature is supported only for Apple Silicon macOS Guests";
+"VirtualMachineViewController.pauseVM" = "Pause this VM";
+"VirtualMachineViewController.stopVM" = "Stop the execution of this VM";
+"VirtualMachineViewController.pausedVMName" = "%@ (Paused)";
+"VirtualMachineViewController.notSpecified" = "Not specified";
+"VirtualMachineViewController.binaryNotAvaiable" ="The VM cannot be started because Qemu binary for artchitecture %@ is not available.";
+"VirtualMachineViewController.vmPaused" = "VM paused";
+"VirtualMachineViewController.vmFeatures" = "Virtual Machine Features";
+"VirtualMachineViewController.vmExecutionFailed" = "VM execution failed with error: %@";

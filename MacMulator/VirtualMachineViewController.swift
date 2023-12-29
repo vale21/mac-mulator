@@ -70,7 +70,7 @@ class VirtualMachineViewController: NSViewController {
     }
     
     @IBAction func importVM(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
+        Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in _ = NSApp.delegate?.application!(NSApp, openFile: String(panel.url!.path)) });
     }
     
     @IBAction func editVM(_ sender: Any) {
@@ -103,14 +103,14 @@ class VirtualMachineViewController: NSViewController {
         
         if #available(macOS 12.0, *) {
             if let vm = self.rootController?.currentVm  {
-                if sender as? String == "MainMenu" && vm.type == MacMulatorConstants.APPLE_VM {
+                if sender as? String == MacMulatorConstants.mainMenuSender && vm.type == MacMulatorConstants.APPLE_VM {
                     let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
                     window = runner.vmView!.window!
                 }
             }
         }
         
-        Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?", completionHandler:{ response in
+        Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.forciblyClosing", comment: ""), completionHandler:{ response in
             if response.rawValue == Utils.ALERT_RESP_OK {
                 if let vm = self.rootController?.currentVm {
                     self.rootController?.getRunnerForRunningVM(vm)?.stopVM(guestStopped: true)
@@ -118,7 +118,7 @@ class VirtualMachineViewController: NSViewController {
             }
         });
     }
-        
+    
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
         if #available(macOS 12.0, *) {
@@ -136,7 +136,7 @@ class VirtualMachineViewController: NSViewController {
             }
         }
     }
-        
+    
     func cleanupStoppedVM(_ vm: VirtualMachine) {
         rootController?.unsetRunningVM(vm)
         if self.rootController?.currentVm == vm {
@@ -146,9 +146,9 @@ class VirtualMachineViewController: NSViewController {
     
     override func viewWillAppear() {
         boxContentView = centralBox.contentView
-        startVMButton.toolTip = "Start this VM";
-        pauseVMButton.toolTip = "Pause feature is supported only for Apple Silicon macOS Guests";
-        stopVMButton.toolTip = "Stop the execution of this VM";
+        startVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.startVM", comment: "")
+        pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseNotSupported", comment: "")
+        stopVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.stopVM", comment: "")
         
         self.setRunningStatus(nil, false);
         if rootController?.currentVm != nil {
@@ -159,8 +159,10 @@ class VirtualMachineViewController: NSViewController {
             }
             if Utils.isPauseSupported(rootController!.currentVm!) {
                 pauseVMButton.isEnabled = true
+                pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseVM", comment: "")
             } else {
-                pauseVMButton.isEnabled = true
+                pauseVMButton.isEnabled = false
+                pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseNotSupported", comment: "")
             }
         } else {
             showNoVmsLayout();
@@ -177,20 +179,20 @@ class VirtualMachineViewController: NSViewController {
             
             if let rootController = rootController {
                 if rootController.isVMPaused(vm) {
-                    vmName.stringValue = vm.displayName + " (Paused)"
+                    vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
                 } else {
                     vmName.stringValue = vm.displayName
                 }
             }
             
             vmDescription.stringValue = vm.description;
-            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? "Not Specified"
+            vmArchitecture.stringValue = QemuConstants.ALL_ARCHITECTURES_DESC[vm.architecture] ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")
             vmType.stringValue = vm.subtype
             vmProcessors.intValue = Int32(vm.cpus);
             vmMemory.stringValue = Utils.formatMemory(vm.memory);
             
             let mainDrive = Utils.findMainDrive(vm.drives);
-            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : "Not Specified"
+            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")
             showVMAvailableLayout();
             
             if rootController?.getRunnerForRunningVM(vm) != nil {
@@ -205,7 +207,7 @@ class VirtualMachineViewController: NSViewController {
                     qemuUnavailableLabel.isHidden = true;
                 } else {
                     startVMButton.isEnabled = false;
-                    qemuUnavailableLabel.stringValue = "The VM cannot be started because Qemu binary for artchitecture " + vmArchitecture.stringValue + " is not available."
+                    qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.binaryNotAvaiable", comment: ""), vmArchitecture.stringValue)
                     qemuUnavailableLabel.isHidden = false;
                 }
             } else {
@@ -222,7 +224,7 @@ class VirtualMachineViewController: NSViewController {
             showNoVmsLayout();
         }
     }
-
+    
     fileprivate func setRunningStatus(_ vm: VirtualMachine?, _ running: Bool) {
         self.startVMButton.isHidden = running
         self.stopVMButton.isHidden = !running
@@ -238,14 +240,18 @@ class VirtualMachineViewController: NSViewController {
             if let rootController = rootController {
                 let filemanager = FileManager.default
                 let screenshotExists = filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
-                    
-                vmName.stringValue = vm.displayName
+                
+                if rootController.isVMPaused(vm) {
+                    vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
+                } else {
+                    vmName.stringValue = vm.displayName
+                }
                 
                 if rootController.isVMPaused(vm) && screenshotExists {
                     resizeCentralBox(true)
                     hideBoxControls(true)
-                
-                    centralBox.title = "VM paused"
+                    
+                    centralBox.title = NSLocalizedString("VirtualMachineViewController.vmPaused", comment: "")
                     let imagefile = NSImage.init(contentsOfFile: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
                     if let image = imagefile {
                         screenshotView = NSImageView(image: image)
@@ -255,7 +261,7 @@ class VirtualMachineViewController: NSViewController {
                     resizeCentralBox(false)
                     hideBoxControls(false)
                     
-                    centralBox.title = "Virtual Machine Features"
+                    centralBox.title = NSLocalizedString("VirtualMachineViewController.vmFeatures", comment: "")
                     centralBox.contentView = boxContentView
                 }
             }
@@ -317,34 +323,28 @@ class VirtualMachineViewController: NSViewController {
     fileprivate func startVM(sender: Any, inRecovery: Bool) {
         if let rootController = self.rootController {
             if let vm = rootController.currentVm {
+                listenPort += 1;
+                let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
                 
-                if (rootController.isVMRunning(vm)) {
-                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                    message: "Virtual Machine " + vm.displayName + " is already running!");
+                self.setRunningStatus(vm, true);
+                rootController.setRunningVM(vm, runner);
+                
+                if vm.type == MacMulatorConstants.APPLE_VM {
+                    self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
-                    listenPort += 1;
-                    let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm);
+                    if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
+                    }
                     
-                    self.setRunningStatus(vm, true);
-                    rootController.setRunningVM(vm, runner);
-                    
-                    if vm.type == MacMulatorConstants.APPLE_VM {
-                        self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
-                    } else {
-                        if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                            QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
-                        }
-                        
-                        do {
-                            try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
-                                result, virtualMachine in
-                                self.completionhandler(result: result, virtualMachine: virtualMachine)
-                            });
-                        } catch let error as ValidationError {
-                            completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
-                        } catch {
-                            print (error.localizedDescription)
-                        }
+                    do {
+                        try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
+                            result, virtualMachine in
+                            self.completionhandler(result: result, virtualMachine: virtualMachine)
+                        });
+                    } catch let error as ValidationError {
+                        completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
+                    } catch {
+                        print (error.localizedDescription)
                     }
                 }
             }
@@ -364,7 +364,7 @@ class VirtualMachineViewController: NSViewController {
             }
             
             if (result.exitCode != 0) {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "VM execution failed with error: " + result.error!);
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")))
             }
         }
     }

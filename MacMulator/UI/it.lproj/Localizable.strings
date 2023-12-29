@@ -6,6 +6,9 @@
 "AppDelegate.errorDeleting" = "Errore durante la cancellazione di %@: %@";
 "AppDelegate.errorReading" = "Errore durante la lettura di %@: %@";
 "AppDelegate.couldNotFindExistingVMs" = "Le seguenti VM che erano configurate in MacMulator non sono state trovate: %@";
+"AppDelegate.exportToParallelsComplete" = "Esportazione in formato Parallels VM completata con successo.";
+"AppDelegate.exportFailed" = "Esportazione fallita con il seguente errore: %@";
+"AppDelegate.importFailed" = "Importazione fallita con il seguente errore: %@";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "CreateVMFileViewController.preparingDownload" = "Preparo il download dell'installer di macOS...";
 "CreateVMFileViewController.timeRemainingCalculating" = "Tempo stimato rimanente: Calcolo...";
@@ -86,3 +89,14 @@
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Errore nella scrittura di Info.plist: %@";
+"VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggerimao di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
+"VirtualMachineViewController.startVM" = "Avvia questa VM";
+"VirtualMachineViewController.pauseNotSupported" = "La pausa è supportata solo da VM Apple Silicon con guest macOS";
+"VirtualMachineViewController.pauseVM" = "Metti in pausa questa VM";
+"VirtualMachineViewController.stopVM" = "Arresta l'esecuzione di questa VM";
+"VirtualMachineViewController.pausedVMName" = "%@ (In pausa)";
+"VirtualMachineViewController.notSpecified" ="Non specificato";
+"VirtualMachineViewController.binaryNotAvaiable" ="La VM non può essere avviata perché l'eseguibile QEMU per l'architettura %@ non è disponibile.";
+"VirtualMachineViewController.vmPaused" = "VM in pausa";
+"VirtualMachineViewController.vmFeatures" = "Caratteristiche Macchina Virtuale";
+"VirtualMachineViewController.vmExecutionFailed" = "L'esecuzione della VM è fallita con questo errore: %@";

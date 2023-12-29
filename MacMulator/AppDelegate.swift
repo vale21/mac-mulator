@@ -48,9 +48,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = rootController?.currentVm {
                     do {
                         try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: NSLocalizedString("AppDelegate.exportToParallelsComplete", comment: ""))
                     } catch {
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.exportFailed", comment: ""), error.localizedDescription))
                     }
                 }
             })
@@ -64,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
                     rootController?.addVirtualMachine(vm)
                 } catch {
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.importFailed", comment: ""), error.localizedDescription))
                 }
             })
         }
@@ -72,14 +72,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func convertToQemuMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
-            rootController?.convertToQemuMenuBarClicked("MainMenu")
+            rootController?.convertToQemuMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
     
     @IBAction func convertToAppleMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
-            rootController?.convertToAppleMenuBarClicked("MainMenu")
+            rootController?.convertToAppleMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
