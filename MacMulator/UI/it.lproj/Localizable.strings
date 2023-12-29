@@ -77,6 +77,8 @@
 "Utils.seconds" = "secondi";
 "Utils.lessThanAMinute" = "meno di un minuto";
 "Utils.unexistingDrive" = "Il disco %@ non è stato trovato. Lo vuoi rimuovere?";
+"Utils.macMainScreen" = "%d x %d (Schermo Mac)";
+"Utils.lastUsed" = "%d x %d (Ultima utilizzata)";
 "VirtualizationFrameworkInstallVMViewController.installing" = "Installo macOS sulla Macchina Virtuale. La procedura inizierà tra pochi secondi...";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Tempo stimato rimanente: Calcolo...";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Avvio l'installazione.";

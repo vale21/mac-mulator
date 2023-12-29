@@ -77,6 +77,8 @@
 "Utils.seconds" = "seconds";
 "Utils.lessThanAMinute" = "less than a minute";
 "Utils.unexistingDrive" = "Drive %@ was not found. Do you want to remove it?";
+"Utils.macMainScreen" = "%d x %d (Mac Main Screen)";
+"Utils.lastUsed" = "%d x %d (Last used)";
 "VirtualizationFrameworkInstallVMViewController.installing" = "Installing macOS on the Virtual Machine. The process will start in a few seconds...";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Estimate time remaining: Calculating...";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Starting installation.";

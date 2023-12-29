@@ -811,14 +811,14 @@ class Utils {
     static func getMainScreenSizeDesc() -> String {
         if #available(macOS 12, *) {
             let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
-            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
+            return String(format: NSLocalizedString("Utils.macMainScreen", comment: ""), Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: NSLocalizedString("Utils.macMainScreen", comment: ""), Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
     }
     
     static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
-        return String(format: "%d x %d (Last Used)", width, heigh)
+        return String(format: NSLocalizedString("Utils.lastUsed", comment: ""), width, heigh)
     }
     
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
