@@ -21,9 +21,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
     @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    @IBOutlet weak var cloneVMMemuItem: NSMenuItem!
+    @IBOutlet weak var showVMInFinderMenuItem: NSMenuItem!
     @IBOutlet weak var exportMenuItem: NSMenuItem!
     @IBOutlet weak var exportToParallelsMenuItem: NSMenuItem!
     @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
+    @IBOutlet weak var convertToQemuMenuItem: NSMenuItem!
+    @IBOutlet weak var convertToAppleMenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -39,29 +43,47 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
-        Utils.showDirectorySelector(uponSelection: { panel in
-            if let vm = rootController?.currentVm {
-                do {
-                    try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: NSLocalizedString("AppDelegate.exportToParallelsComplete", comment: ""))
-                } catch {
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.exportToParallelsFailed", comment: ""),  error.localizedDescription))
+        if #available(macOS 11.0, *) {
+            Utils.showDirectorySelector(uponSelection: { panel in
+                if let vm = rootController?.currentVm {
+                    do {
+                        try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
+                    } catch {
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     
     @IBAction func importVMFromParallelsMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
-            do {
-                let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
-                rootController?.addVirtualMachine(vm)
-            } catch {
-                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.importFromParallelsFailed", comment: ""),  error.localizedDescription))
-            }
-        })
+        if #available(macOS 11.0, *) {
+            Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
+                do {
+                    let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
+                    rootController?.addVirtualMachine(vm)
+                } catch {
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
+                }
+            })
+        }
     }
-        
+    
+    @IBAction func convertToQemuMenuBarClicked(_ sender: Any) {
+        if #available(macOS 13.0, *) {
+            rootController?.convertToQemuMenuBarClicked("MainMenu")
+            refreshVMMenus()
+        }
+    }
+    
+    @IBAction func convertToAppleMenuBarClicked(_ sender: Any) {
+        if #available(macOS 13.0, *) {
+            rootController?.convertToAppleMenuBarClicked("MainMenu")
+            refreshVMMenus()
+        }
+    }
+    
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
         rootController?.startVMMenuBarClicked(MacMulatorConstants.mainMenuSender);
     }
@@ -82,8 +104,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender);
     }
     
+    @IBAction func pauseVMMenuBarClicked(_ sender: Any) {
+        rootController?.pauseVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+    
+    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
+        rootController?.cloneVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+    
+    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
+        rootController?.showVMInFinderMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
     func refreshVMMenus() {
-        pauseVMMenuItem.isEnabled = false
+        vmMenu.autoenablesItems = false
+        
         if let rootController = self.rootController {
             
             #if arch(x86_64)
@@ -91,21 +126,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             #endif
             
             if rootController.currentVm == nil {
+                pauseVMMenuItem.isEnabled = false
                 startVMMenuItem.isEnabled = false
                 startVMInRecoveryMenuItem.isEnabled = false
                 stopVMMenuItem.isEnabled = false
                 editVMMenuItem.isEnabled = false
+                cloneVMMemuItem.isEnabled = false
+                showVMInFinderMenuItem.isEnabled = false
                 exportMenuItem.isEnabled = false
+                convertToQemuMenuItem.isEnabled = false
+                convertToAppleMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
                 if let vm = vm {
+                    cloneVMMemuItem.isEnabled = true
+                    showVMInFinderMenuItem.isEnabled = true
+                    
                     if rootController.isCurrentVMRunning() {
+                        pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
                         startVMMenuItem.isEnabled = false
                         #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = false
                         #endif
                         stopVMMenuItem.isEnabled = true
                     } else {
+                        pauseVMMenuItem.isEnabled = false
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
                         #if arch(arm64)
                         startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
@@ -127,7 +172,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         exportToParallelsMenuItem.isEnabled = false
                         importFromParallelsMenuItem.isEnabled = true
                     #endif
-                    
+
+                    if vm.type == MacMulatorConstants.APPLE_VM {
+                        convertToQemuMenuItem.isEnabled = !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+                        convertToAppleMenuItem.isEnabled = false
+                    } else {
+                        convertToQemuMenuItem.isEnabled = false
+                        convertToAppleMenuItem.isEnabled = vm.os == QemuConstants.OS_LINUX
+                    }
+
                 }
             }
         }
@@ -180,7 +233,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        return NSApplication.TerminateReply.terminateNow;
+        return .terminateNow
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -244,13 +297,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     fileprivate func setupSavedVMs() {
-        let filemanager = FileManager.default;
-        var toRemove: [Int] = [];
+        let filemanager = FileManager.default
+        var toRemove: [Int] = []
         for savedVM in savedVMs! {
             if filemanager.fileExists(atPath: savedVM) && performSanityCheck(savedVM) {
-                rootController?.addVirtualMachineFromFile(savedVM);
+                rootController?.addVirtualMachineFromFile(savedVM)
             } else {
-                toRemove.append((savedVMs?.lastIndex(of: savedVM))!);
+                toRemove.append((savedVMs?.lastIndex(of: savedVM))!)
             }
         }
         

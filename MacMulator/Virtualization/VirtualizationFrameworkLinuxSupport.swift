@@ -19,6 +19,13 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
     }
     
     @available(macOS 13.0, *)
+    static func deleteLinuxVirtualMachineData(vm: VirtualMachine) {
+        
+        _ = deleteLinuxPlatformConfiguration(vm: vm)
+        _ = deleteLinuxBootloader(vm: vm)
+    }
+    
+    @available(macOS 13.0, *)
     static func decodeLinuxVirtualMachine(vm: VirtualMachine, installMedia: String) -> VZVirtualMachine {
         let configuration = setupLinuxVirtualMachine(vm: vm, installMedia: installMedia)
         
@@ -57,6 +64,19 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
         try! virtualMachineConfiguration.validate()
+        if #available(macOS 14.0, *) {
+#if arch(arm64)
+            do {
+                try virtualMachineConfiguration.validateSaveRestoreSupport()
+                vm.pauseSupported = true
+            } catch {
+                NSLog("VM Pause is not supported: " + error.localizedDescription)
+                vm.pauseSupported = false
+            }
+#else
+        vm.pauseSupported = false
+#endif
+        }
         
         return virtualMachineConfiguration
     }
@@ -100,5 +120,17 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         }
         
         return bootloader
+    }
+    
+    @available(macOS 13.0, *)
+    fileprivate static func deleteLinuxPlatformConfiguration(vm: VirtualMachine) {
+        let machineIdentifierPath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.MACHINE_IDENTIFIER_NAME + "-0"
+        try? FileManager.default.removeItem(atPath: machineIdentifierPath)
+    }
+    
+    @available(macOS 13.0, *)
+    fileprivate static func deleteLinuxBootloader(vm: VirtualMachine) {
+        let efiVariableStorePath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.EFI_VARIABLE_STORE_NAME + "-0"
+        try? FileManager.default.removeItem(atPath: efiVariableStorePath)
     }
 }

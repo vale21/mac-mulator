@@ -14,8 +14,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     private var vmController: VirtualMachineViewController?;
     
     var currentVm: VirtualMachine?
-    var virtualMachines: [VirtualMachine] = [];
-    var runningVMs: [VirtualMachine : VirtualMachineRunner] = [:];
+    var virtualMachines: [VirtualMachine] = []
+    var runningVMs: [VirtualMachine : VirtualMachineRunner] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -61,7 +61,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func stopVMMenubarClicked(_ sender: Any) {
-        vmController?.stopVM(sender);
+        vmController?.stopVM(sender)
+    }
+    
+    func pauseVMMenuBarClicked(_ sender: Any) {
+        vmController?.pauseVM(sender: sender)
     }
     
     func showConsoleMenubarClicked(_ sender: Any) {
@@ -70,6 +74,44 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func editVMmenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: currentVm);
+    }
+    
+    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            if let vmIndex = getIndex(of: currentVm) {
+                self.cloneVirtualMachineAt(vmIndex)
+            }
+        }
+    }
+    
+    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: currentVm.path, isDirectory: false)])
+        }
+    }
+    
+    @available(macOS 13.0, *)
+    func convertToQemuMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
+            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
+            currentVm.type = MacMulatorConstants.QEMU_VM
+            currentVm.writeToPlist()
+            vmController?.setVirtualMachine(currentVm)
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to QEMU format.")
+        }
+    }
+    
+    @available(macOS 13.0, *)
+    func convertToAppleMenuBarClicked(_ sender: Any) {
+        if let currentVm = self.currentVm {
+            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
+            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
+            currentVm.type = MacMulatorConstants.APPLE_VM
+            currentVm.writeToPlist()
+            vmController?.setVirtualMachine(currentVm)
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to Apple format.")
+        }
     }
     
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
@@ -166,7 +208,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     
     func cloneVirtualMachineAt(_ index: Int) {
         let vmToClone = virtualMachines[index];
-        let newVMPath = Utils.extractVMRootPath(vmToClone) + "/Clone of " + vmToClone.displayName + "." + MacMulatorConstants.VM_EXTENSION;
+        let newVMPath = Utils.computeVMPath(vmName: "Clone of " + vmToClone.displayName)
         let shell = Shell();
         shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { terminationCode in
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist");
@@ -181,31 +223,45 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualMachineRunner) {
-        runningVMs[vm] = runner;
+        runningVMs[vm] = runner
         
-        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true);
+        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true)
         
-        let appDelegate = NSApp.delegate as! AppDelegate;
+        let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
     }
     
     func unsetRunningVM(_ vm: VirtualMachine) {
-        runningVMs.removeValue(forKey: vm);
-        let index = virtualMachines.firstIndex(of: vm);
+        runningVMs.removeValue(forKey: vm)
+        let index = virtualMachines.firstIndex(of: vm)
         if let idx = index {
-            listController?.setRunning(idx, false);
+            listController?.setRunning(idx, false)
         }
         
-        let appDelegate = NSApp.delegate as! AppDelegate;
+        let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
     }
-    
+
     func isCurrentVMRunning() -> Bool {
-        return isVMRunning(currentVm);
+        return isVMRunning(currentVm)
     }
     
     func isVMRunning(_ vm: VirtualMachine?) -> Bool {
-        return vm != nil && runningVMs[vm!] != nil;
+        return vm != nil && runningVMs[vm!] != nil
+    }
+    
+    func isVMPaused(_ vm: VirtualMachine?) -> Bool {
+        if let vm = vm {
+            if #available(macOS 14.0, *), vm.type == MacMulatorConstants.APPLE_VM {
+                let filemanager = FileManager.default
+                if filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SAVE_FILE_NAME) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+        return false
     }
     
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualMachineRunner? {

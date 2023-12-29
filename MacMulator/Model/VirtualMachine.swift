@@ -18,20 +18,23 @@ class VirtualMachine: Codable, Hashable {
     var cpus: Int
     var memory: Int32
     var displayResolution: String
+    var displayOrigin: String?
     var qemuBootLoader: Bool
-    var networkDevice: String? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
+    var networkDevice: String?
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
-    var hvf: Bool? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 12)
-    var portMappings: [PortMapping]? // This is optional because we don't want to break VMs created with previous versions (Up to 1.0.0 Beta 13)
+    var hvf: Bool?
+    var portMappings: [PortMapping]?
+    var macAddress: String?
     var type: String?
+    var pauseSupported: Bool? = false
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, type;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, type: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, macAddress: String?, type: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -41,11 +44,13 @@ class VirtualMachine: Codable, Hashable {
         self.memory = memory
         self.cpus = cpus
         self.displayResolution = displayResolution
+        self.displayOrigin = displayOrigin
         self.networkDevice = networkDevice
         self.qemuBootLoader = qemuBootloader
         self.hvf = hvf
         self.drives = []
         self.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        self.macAddress = macAddress
         self.type = type
     }
     

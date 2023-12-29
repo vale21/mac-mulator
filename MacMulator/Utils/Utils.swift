@@ -119,19 +119,11 @@ class Utils {
     }
     
     static func cleanFolderPath(_ string: String) -> String {
-        var ret = escape(string);
+        var ret = string
         if ret.hasSuffix("/") {
-            ret = String(ret.dropLast());
+            ret = String(ret.dropLast())
         }
-        return ret;
-    }
-    
-    static func extractVMRootPath(_ vm: VirtualMachine) -> String {
-        return String(
-            vm.path
-                .replacingOccurrences(of: "." + MacMulatorConstants.VM_EXTENSION, with: "")
-                .replacingOccurrences(of: vm.displayName, with: "")
-                .dropLast());
+        return ret
     }
     
     static func computeSizeOfPhysicalDrive(_ path: String, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
@@ -286,6 +278,21 @@ class Utils {
         var nvrams: [VirtualDrive] = [];
         for drive: VirtualDrive in drives {
             if drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                nvrams.append(drive);
+            }
+        }
+        
+        if nvrams.count == 0 {
+            return nil;
+        }
+        return nvrams[0];
+    }
+    
+    static func findEfiDrive(_ drives: [VirtualDrive]) -> VirtualDrive? {
+        // purge non EFI drives
+        var nvrams: [VirtualDrive] = [];
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
                 nvrams.append(drive);
             }
         }
@@ -556,7 +563,15 @@ class Utils {
         var ret: [Int] = [];
         ret.append(Int(stringElements[0])!);
         ret.append(Int(stringElements[1])!);
-        ret.append(Int(stringElements[2])!);
+        
+        return ret;
+    }
+    
+    static func getOriginElements(_ origin: String) -> [String] {
+        let stringElements:[Substring] = origin.split(separator: ";");
+        var ret: [String] = [];
+        ret.append(String(stringElements[0]))
+        ret.append(String(stringElements[1]))
         
         return ret;
     }
@@ -588,6 +603,21 @@ class Utils {
             return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
         }
         return false
+    }
+    
+    static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 14.0, *) {
+            return vm.type == MacMulatorConstants.APPLE_VM && vm.pauseSupported == true
+        }
+        return false
+    }
+    
+    static func isTrackpadSupported(_ vm: VirtualMachine) -> Bool {
+        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
+    }
+    
+    static func isMacKeyboardSupported(_ vm: VirtualMachine) -> Bool {
+        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SONOMA)
     }
     
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
@@ -665,7 +695,7 @@ class Utils {
     
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
         let currentTime = Int64(Date().timeIntervalSince1970)
- 
+        
         let timeDelta = Double(currentTime - startTime)
         let factor = timeDelta / progress
         let totalTime = 100.0 * factor
@@ -771,18 +801,24 @@ class Utils {
     
     static func getMainScreenSize() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%dx%dx32", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%dx%d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
     }
     
     static func getMainScreenSizeDesc() -> String {
         if #available(macOS 12, *) {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - NSScreen.main!.safeAreaInsets.top))
+            let topInset = NSScreen.main!.safeAreaInsets.top > 0 ? NSApplication.shared.mainMenu!.menuBarHeight : 0
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height - topInset))
         } else {
-            return String(format: "%d x %d", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
+            return String(format: "%d x %d (Mac Main Screen)", Int32(NSScreen.main!.frame.size.width), Int32(NSScreen.main!.frame.size.height))
         }
+    }
+    
+    static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
+        return String(format: "%d x %d (Last Used)", width, heigh)
     }
     
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
@@ -821,7 +857,43 @@ class Utils {
     }
     
     fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
-        return os == QemuConstants.OS_MAC &&
-        (subtype == QemuConstants.SUB_MAC_MONTEREY || subtype == QemuConstants.SUB_MAC_VENTURA)
+        return os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
+    }
+    
+    fileprivate static func isMacVersionGreaterOrEqualThan(subtype: String, target: String) -> Bool {
+        let versions = [
+            QemuConstants.SUB_MAC_OS_8,
+            QemuConstants.SUB_MAC_OS_9,
+            QemuConstants.SUB_MAC_BETA,
+            QemuConstants.SUB_MAC_CHEETAH,
+            QemuConstants.SUB_MAC_PUMA,
+            QemuConstants.SUB_MAC_JAGUAR,
+            QemuConstants.SUB_MAC_PANTHER,
+            QemuConstants.SUB_MAC_TIGER,
+            QemuConstants.SUB_MAC_LEOPARD,
+            QemuConstants.SUB_MAC_SNOW_LEOPARD,
+            QemuConstants.SUB_MAC_LION,
+            QemuConstants.SUB_MAC_MOUNTAIN_LION,
+            QemuConstants.SUB_MAC_MAVERICKS,
+            QemuConstants.SUB_MAC_YOSEMITE,
+            QemuConstants.SUB_MAC_EL_CAPITAN,
+            QemuConstants.SUB_MAC_SIERRA,
+            QemuConstants.SUB_MAC_HIGH_SIERRA,
+            QemuConstants.SUB_MAC_MOJAVE,
+            QemuConstants.SUB_MAC_CATALINA,
+            QemuConstants.SUB_MAC_BIG_SUR,
+            QemuConstants.SUB_MAC_MONTEREY,
+            QemuConstants.SUB_MAC_VENTURA,
+            QemuConstants.SUB_MAC_SONOMA
+        ]
+        
+        let version = versions.firstIndex(of: subtype)
+        let targetVersion = versions.firstIndex(of: target)
+        
+        if let version = version, let targetVersion = targetVersion {
+            return version >= targetVersion
+        } else {
+            return false
+        }
     }
 }

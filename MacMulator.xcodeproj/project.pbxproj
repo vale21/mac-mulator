@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -57,7 +57,9 @@
 		3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
 		3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9E42A72806178500981297 /* Virtualization.framework */; };
 		3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */; };
+		3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
+		3BB2A73E2AF68E260043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */; };
 		3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471D25CABDAE00A4DBA7 /* Shell.swift */; };
 		3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471E25CABDAE00A4DBA7 /* Utils.swift */; };
 		3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */; };
@@ -180,7 +182,9 @@
 		3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3B9E42A72806178500981297 /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = ARM_QEMU_EFI.fd; sourceTree = "<group>"; };
+		3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkUtils.swift; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
+		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -233,7 +237,6 @@
 				3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */,
 				3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */,
 				3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */,
-				3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */,
 			);
 			path = RunVM;
 			sourceTree = "<group>";
@@ -314,8 +317,14 @@
 			isa = PBXGroup;
 			children = (
 				3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */,
-				3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */,
 				3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */,
+				3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */,
+				3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */,
+				3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */,
+				3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */,
+				3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */,
+				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
+				3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */,
 				3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */,
 			);
 			path = Virtualization;
@@ -356,9 +365,6 @@
 				3BBB471D25CABDAE00A4DBA7 /* Shell.swift */,
 				3BBB471E25CABDAE00A4DBA7 /* Utils.swift */,
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
-				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
-				3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */,
-				3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */,
 				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
 			);
 			path = Utils;
@@ -549,6 +555,7 @@
 				3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */,
 				3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */,
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
+				3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */,
 				3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */,
 				3B1BDFC5280804A000E353CE /* VirtualMachineContainerViewController.swift in Sources */,
 				3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */,
@@ -582,6 +589,7 @@
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
 				3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */,
+				3BB2A73E2AF68E260043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */,
 				3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */,
 				3BBB471F25CABDAE00A4DBA7 /* Shell.swift in Sources */,
 				3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */,
@@ -778,7 +786,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
@@ -788,7 +796,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = "1.0.0 Beta 19";
+				MARKETING_VERSION = "1.0.0 Beta 20";
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -808,7 +816,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
@@ -818,7 +826,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = "1.0.0 Beta 19";
+				MARKETING_VERSION = "1.0.0 Beta 20";
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
