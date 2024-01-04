@@ -60,9 +60,9 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         hostMacPortField.intValue = portMapping.hostPort
         
         if (mode == Mode.ADD) {
-            titleField.stringValue = "Create new port mapping";
+            titleField.stringValue = NSLocalizedString("NewPortMappingViewController.createMapping", comment: "")
         } else {
-            titleField.stringValue = "Edit port mapping - " + portMapping.name;
+            titleField.stringValue = String(format: NSLocalizedString("NewPortMappingViewController.editMapping", comment: ""), portMapping.name)
         }
     }
     

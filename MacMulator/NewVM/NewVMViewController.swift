@@ -19,7 +19,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     
     var rootController : RootViewController?
     
-    static let DESCRIPTION_DEFAULT_MESSAGE = "You can type here to write a description of your VM...";
+    static let DESCRIPTION_DEFAULT_MESSAGE = NSLocalizedString("NewVMViewController.defaultMessage", comment: "")
     
     @IBAction func findInstallMedia(_ sender: Any) {
         Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
@@ -37,7 +37,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     @IBAction func createVM(_ sender: Any) {
         if (validateInput()) {
             if Utils.isMacVMWithOSVirtualizationFramework(os: vmType.stringValue, subtype: vmSubType.stringValue) && !Utils.isIpswInstallMediaProvided(installMedia.stringValue) {
-                let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: "You did not specify an install media for macOS. MacMulator will download the latest supported version of macOS from Apple at the first start of the VM. Do you agree?");
+                let response = Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("NewVMController.noMediaProvided", comment: ""));
                 
                 if response.rawValue == Utils.ALERT_RESP_OK {
                     performSegue(withIdentifier: MacMulatorConstants.CREATE_VM_FILE_SEGUE, sender: self);
@@ -107,18 +107,18 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     }
     
     func vmCreationfFailed(_ vm: VirtualMachine, _ error: Error) {
-        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "VM creation failed: " + error.localizedDescription, completionHandler: {resp in self.view.window?.close()})
+        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.vmCreationFailed", comment: "") + error.localizedDescription, completionHandler: {resp in self.view.window?.close()})
     }
     
     fileprivate func validateInput() -> Bool {
         if (vmType.stringValue == "" || vmName.stringValue == "") {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "You did not provide values for VM type or VM name. These fields are required to create a new Virtual Machine. Please provide a value for them and try again.");
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.errorFeldsMissing", comment: ""));
             return false
         } else if (rootController?.getVirtualMachine(name: vmName.stringValue) != nil) {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A Virtual Machine called " + vmName.stringValue + " already exists. Please choose a different name.");
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorVMExisting", comment: ""), vmName.stringValue));
             return false
         } else if (FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: vmName.stringValue))) {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "A file called " + Utils.computeVMPath(vmName: vmName.stringValue) + " already exists. Please choose a different name for the Virtual Machine.");
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorFileExisting", comment: ""), Utils.computeVMPath(vmName: vmName.stringValue)));
             return false
         } else {
             return true

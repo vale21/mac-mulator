@@ -62,10 +62,10 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
             if (Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation()) {
                 self.accelerateVM.state = NSButton.StateValue.off;
                 self.accelerateVM.isEnabled = false;
-                if (Utils.hostArchitecture() != vmArchitecture) {
-                    self.accelerateVM.toolTip = "This feature is not available because the VM has architecture " + vmArchitecture + " which is different from the architecture of your mac (" + Utils.hostArchitecture()! + ")";
+                if Utils.isRunningInEmulation() {
+                    self.accelerateVM.toolTip = NSLocalizedString("EditVMViewControllerAdvanced.rosettaNotAvailable", comment: "")
                 } else {
-                    self.accelerateVM.toolTip = "This feature is not available because MacMulator is running under Rosetta";
+                    self.accelerateVM.toolTip = String(format: NSLocalizedString("EditVMViewControllerAdvanced.featureNotAvailable", comment: ""), vmArchitecture, Utils.hostArchitecture() ?? "")
                 }
             } else {
                 self.accelerateVM.isEnabled = true;

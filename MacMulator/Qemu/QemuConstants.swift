@@ -11,118 +11,118 @@ class QemuConstants {
 
     // Disk image constants
     
-    static let MEDIATYPE_DISK = "disk";
-    static let MEDIATYPE_NVME = "nvme";
-    static let MEDIATYPE_CDROM = "cdrom";
-    static let MEDIATYPE_USB = "usb";
-    static let MEDIATYPE_EFI = "efi";
-    static let MEDIATYPE_NVRAM = "nvram";
-    static let MEDIATYPE_OPENCORE = "opencore";
-    static let MEDIATYPE_IPSW = "ipsw";
+    static let MEDIATYPE_DISK = "disk"
+    static let MEDIATYPE_NVME = "nvme"
+    static let MEDIATYPE_CDROM = "cdrom"
+    static let MEDIATYPE_USB = "usb"
+    static let MEDIATYPE_EFI = "efi"
+    static let MEDIATYPE_NVRAM = "nvram"
+    static let MEDIATYPE_OPENCORE = "opencore"
+    static let MEDIATYPE_IPSW = "ipsw"
     
-    static let IMAGE_CMD_CREATE = "create";
-    static let IMAGE_CMD_INFO = "info";
-    static let IMAGE_CMD_RESIZE = "resize";
-    static let IMAGE_CMD_CONVERT = "convert";
-    static let IMAGE_CMD_VERSION = "--version";
+    static let IMAGE_CMD_CREATE = "create"
+    static let IMAGE_CMD_INFO = "info"
+    static let IMAGE_CMD_RESIZE = "resize"
+    static let IMAGE_CMD_CONVERT = "convert"
+    static let IMAGE_CMD_VERSION = "--version"
     
-    static let FORMAT_QCOW2 = "qcow2";
-    static let FORMAT_RAW = "raw";
-    static let FORMAT_UNKNOWN = "unknown";
-    static let FORMAT_VHDX = "vhdx";
+    static let FORMAT_QCOW2 = "qcow2"
+    static let FORMAT_RAW = "raw"
+    static let FORMAT_UNKNOWN = "unknown"
+    static let FORMAT_VHDX = "vhdx"
     
     // Virtual Machine constants
     
-    static let CD = "CD/DVD";
-    static let HD = "Hard Drive";
-    static let USB = "USB Drive";
-    static let IPSW = "IPSW Install Image";
-    static let EFI = "EFI Firmware";
-    static let NET = "Network";
+    static let CD = "CD/DVD"
+    static let HD = NSLocalizedString("QemuConstants.hd", comment: "")
+    static let USB = NSLocalizedString("QemuConstants.usb", comment: "")
+    static let IPSW = NSLocalizedString("QemuConstants.ipsw", comment: "")
+    static let EFI = NSLocalizedString("QemuConstants.efi", comment: "")
+    static let NET = NSLocalizedString("QemuConstants.network", comment: "")
     static let NVRAM = "Nvram"
-    static let NVME = "NVMe Drive"
+    static let NVME = NSLocalizedString("QemuConstants.nvme", comment: "")
     
-    static let ARG_CD = "d";
-    static let ARG_HD = "c";
-    static let ARG_NET = "n";
-    static let ARG_BOOTLOADER = "menu=on";
+    static let ARG_CD = "d"
+    static let ARG_HD = "c"
+    static let ARG_NET = "n"
+    static let ARG_BOOTLOADER = "menu=on"
     
-    static let OS_MAC = "macOS";
-    static let OS_WIN = "Windows";
-    static let OS_LINUX = "Linux";
-    static let OS_OTHER = "Other";
+    static let OS_MAC = "macOS"
+    static let OS_WIN = "Windows"
+    static let OS_LINUX = "Linux"
+    static let OS_OTHER = NSLocalizedString("QemuConstants.other", comment: "")
     
-    static let SUB_MAC_GENERIC = "Generic macOS";
-    static let SUB_MAC_BETA = "Mac OS X Public Beta";
-    static let SUB_MAC_CHEETAH = "Mac OS X 10.0.x (Cheetah)";
-    static let SUB_MAC_PUMA = "Mac OS X 10.1.x (Puma)";
-    static let SUB_MAC_JAGUAR = "Mac OS X 10.2.x (Jaguar)";
-    static let SUB_MAC_PANTHER = "Mac OS X 10.3.x (Panther)";
-    static let SUB_MAC_TIGER = "Mac OS X 10.4.x (Tiger)";
-    static let SUB_MAC_LEOPARD = "Mac OS X 10.5.x (Leopard)";
-    static let SUB_MAC_SNOW_LEOPARD = "Mac OS X 10.6.x (Snow Leopard)";
-    static let SUB_MAC_LION = "Mac OS X 10.7.x (Lion)";
-    static let SUB_MAC_MOUNTAIN_LION = "OS X 10.8.x (Mountain Lion)";
-    static let SUB_MAC_MAVERICKS = "OS X 10.9.x (Mavericks)";
-    static let SUB_MAC_YOSEMITE = "OS X 10.10.x (Yosemite)";
-    static let SUB_MAC_EL_CAPITAN = "OS X 10.11.x (El Capitan)";
-    static let SUB_MAC_SIERRA = "macOS 10.12.x (Sierra)";
-    static let SUB_MAC_HIGH_SIERRA = "macOS 10.13.x (High Sierra)";
-    static let SUB_MAC_MOJAVE = "macOS 10.14.x (Mojave)";
-    static let SUB_MAC_CATALINA = "macOS 10.15.x (Catalina)";
-    static let SUB_MAC_BIG_SUR = "macOS 11.x (Big Sur)";
-    static let SUB_MAC_MONTEREY = "macOS 12.x (Monterey)";
-    static let SUB_MAC_VENTURA = "macOS 13.x (Ventura)";
+    static let SUB_MAC_GENERIC = NSLocalizedString("QemuConstants.macos", comment: "")
+    static let SUB_MAC_BETA = "Mac OS X Public Beta"
+    static let SUB_MAC_CHEETAH = "Mac OS X 10.0.x (Cheetah)"
+    static let SUB_MAC_PUMA = "Mac OS X 10.1.x (Puma)"
+    static let SUB_MAC_JAGUAR = "Mac OS X 10.2.x (Jaguar)"
+    static let SUB_MAC_PANTHER = "Mac OS X 10.3.x (Panther)"
+    static let SUB_MAC_TIGER = "Mac OS X 10.4.x (Tiger)"
+    static let SUB_MAC_LEOPARD = "Mac OS X 10.5.x (Leopard)"
+    static let SUB_MAC_SNOW_LEOPARD = "Mac OS X 10.6.x (Snow Leopard)"
+    static let SUB_MAC_LION = "Mac OS X 10.7.x (Lion)"
+    static let SUB_MAC_MOUNTAIN_LION = "OS X 10.8.x (Mountain Lion)"
+    static let SUB_MAC_MAVERICKS = "OS X 10.9.x (Mavericks)"
+    static let SUB_MAC_YOSEMITE = "OS X 10.10.x (Yosemite)"
+    static let SUB_MAC_EL_CAPITAN = "OS X 10.11.x (El Capitan)"
+    static let SUB_MAC_SIERRA = "macOS 10.12.x (Sierra)"
+    static let SUB_MAC_HIGH_SIERRA = "macOS 10.13.x (High Sierra)"
+    static let SUB_MAC_MOJAVE = "macOS 10.14.x (Mojave)"
+    static let SUB_MAC_CATALINA = "macOS 10.15.x (Catalina)"
+    static let SUB_MAC_BIG_SUR = "macOS 11.x (Big Sur)"
+    static let SUB_MAC_MONTEREY = "macOS 12.x (Monterey)"
+    static let SUB_MAC_VENTURA = "macOS 13.x (Ventura)"
     static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)";
-    static let SUB_MAC_OS_9 = "Mac OS 9";
-    static let SUB_MAC_OS_8 = "Mac OS 8";
-    static let SUB_SYSTEM_7 = "System 7";
-    static let SUB_SYSTEM_6 = "System 6";
-    static let SUB_SYSTEM_5 = "System 5";
-    static let SUB_SYSTEM_4 = "System 4";
-    static let SUB_SYSTEM_3 = "System 3";
-    static let SUB_SYSTEM_2 = "System 2";
-    static let SUB_SYSTEM_1 = "System 1";
+    static let SUB_MAC_OS_9 = "Mac OS 9"
+    static let SUB_MAC_OS_8 = "Mac OS 8"
+    static let SUB_SYSTEM_7 = "System 7"
+    static let SUB_SYSTEM_6 = "System 6"
+    static let SUB_SYSTEM_5 = "System 5"
+    static let SUB_SYSTEM_4 = "System 4"
+    static let SUB_SYSTEM_3 = "System 3"
+    static let SUB_SYSTEM_2 = "System 2"
+    static let SUB_SYSTEM_1 = "System 1"
     
-    static let SUB_WIN_GENERIC = "Generic Windows";
-    static let SUB_WINDOWS_10 = "Windows 10";
-    static let SUB_WINDOWS_8_1 = "Windows 8.1";
-    static let SUB_WINDOWS_8 = "Windows 8";
-    static let SUB_WINDOWS_7 = "Windows 7";
-    static let SUB_WINDOWS_VISTA = "Windows Vista";
-    static let SUB_WINDOWS_XP = "Windows XP";
-    static let SUB_WINDOWS_2000 = "Windows 2000";
-    static let SUB_WINDOWS_ME = "Windows ME";
-    static let SUB_WINDOWS_98 = "Windows 98";
-    static let SUB_WINDOWS_NT = "Windows NT";
-    static let SUB_WINDOWS_95 = "Windows 95";
-    static let SUB_WINDOWS_3 = "Windows 3";
-    static let SUB_WINDOWS_2 = "Windows 2";
-    static let SUB_WINDOWS_1 = "Windows 1";
+    static let SUB_WIN_GENERIC = NSLocalizedString("QemuConstants.windows", comment: "")
+    static let SUB_WINDOWS_10 = "Windows 10"
+    static let SUB_WINDOWS_8_1 = "Windows 8.1"
+    static let SUB_WINDOWS_8 = "Windows 8"
+    static let SUB_WINDOWS_7 = "Windows 7"
+    static let SUB_WINDOWS_VISTA = "Windows Vista"
+    static let SUB_WINDOWS_XP = "Windows XP"
+    static let SUB_WINDOWS_2000 = "Windows 2000"
+    static let SUB_WINDOWS_ME = "Windows ME"
+    static let SUB_WINDOWS_98 = "Windows 98"
+    static let SUB_WINDOWS_NT = "Windows NT"
+    static let SUB_WINDOWS_95 = "Windows 95"
+    static let SUB_WINDOWS_3 = "Windows 3"
+    static let SUB_WINDOWS_2 = "Windows 2"
+    static let SUB_WINDOWS_1 = "Windows 1"
     
-    static let SUB_LINUX_GENERIC = "Generic Linux";
-    static let SUB_MX_LINUX = "MX Linux";
-    static let SUB_LINUX_MINT = "Linux Mint";
-    static let SUB_DEBIAN = "Debian GNU/Linux";
-    static let SUB_UBUNTU = "Ubuntu Linux";
-    static let SUB_XUBUNTU = "Xubuntu Linux";
-    static let SUB_KUBUNTU = "Kubuntu Linux";
-    static let SUB_LUBUNTU = "Lubuntu Linux";
-    static let SUB_UBUNTU_MATE = "Ubuntu MATE";
-    static let SUB_OPENSUSE = "openSUSE";
-    static let SUB_MANJARO = "Manjaro Linux";
-    static let SUB_RED_HAT = "Red Hat Linux";
-    static let SUB_SOLUS = "Solus";
-    static let SUB_DEEPIN = "Deepin";
-    static let SUB_FEDORA = "Fedora";
-    static let SUB_ZORIN = "Zorin OS";
-    static let SUB_SLACKWARE = "Slackware Linux";
-    static let SUB_ELEMENTARY = "Elementary OS";
-    static let SUB_CENTOS_LINUX = "CentOS Linux";
-    static let SUB_ARCH_LINUX = "Arch Linux";
-    static let SUB_REACT_OS = "ReactOS";
-    static let SUB_RASPBERRY_OS = "Raspberry Pi OS";
-    static let SUB_KALI_LINUX = "Kali Linux";
+    static let SUB_LINUX_GENERIC = NSLocalizedString("QemuConstants.linux", comment: "")
+    static let SUB_MX_LINUX = "MX Linux"
+    static let SUB_LINUX_MINT = "Linux Mint"
+    static let SUB_DEBIAN = "Debian GNU/Linux"
+    static let SUB_UBUNTU = "Ubuntu Linux"
+    static let SUB_XUBUNTU = "Xubuntu Linux"
+    static let SUB_KUBUNTU = "Kubuntu Linux"
+    static let SUB_LUBUNTU = "Lubuntu Linux"
+    static let SUB_UBUNTU_MATE = "Ubuntu MATE"
+    static let SUB_OPENSUSE = "openSUSE"
+    static let SUB_MANJARO = "Manjaro Linux"
+    static let SUB_RED_HAT = "Red Hat Linux"
+    static let SUB_SOLUS = "Solus"
+    static let SUB_DEEPIN = "Deepin"
+    static let SUB_FEDORA = "Fedora"
+    static let SUB_ZORIN = "Zorin OS"
+    static let SUB_SLACKWARE = "Slackware Linux"
+    static let SUB_ELEMENTARY = "Elementary OS"
+    static let SUB_CENTOS_LINUX = "CentOS Linux"
+    static let SUB_ARCH_LINUX = "Arch Linux"
+    static let SUB_REACT_OS = "ReactOS"
+    static let SUB_RASPBERRY_OS = "Raspberry Pi OS"
+    static let SUB_KALI_LINUX = "Kali Linux"
     static let SUB_SLACKEL = "Slackel Linux"
     static let SUB_PURE_OS = "Pure OS"
     static let SUB_MAGEIA = "Mageia Linux"
@@ -131,16 +131,16 @@ class QemuConstants {
     static let SUB_NETRUNNER = "Netrunner"
     static let SUB_NEPTUNE = "Neptune Linux"
     
-    static let SUB_OTHER_GENERIC = "Generic VM";
-    static let SUB_OTHER_x64 = "Generic x86_64 VM";
-    static let SUB_OTHER_x86 = "Generic x86 VM";
-    static let SUB_OTHER_ARM_64 = "Generic ARM 64 VM";
-    static let SUB_OTHER_ARM = "Generic ARM VM";
-    static let SUB_OTHER_PPC_64 = "Generic PowerPc 64 VM";
-    static let SUB_OTHER_PPC = "Generic PowerPc VM";
-    static let SUB_OTHER_RISCV_64 = "Generic RISC-V 64 VM";
-    static let SUB_OTHER_RISCV = "Generic RISC-V VM";
-    static let SUB_OTHER_M68K = "Generic Motorola 68k VM";
+    static let SUB_OTHER_GENERIC = NSLocalizedString("QemuConstants.generic", comment: "")
+    static let SUB_OTHER_x64 = NSLocalizedString("QemuConstants.x64", comment: "")
+    static let SUB_OTHER_x86 = NSLocalizedString("QemuConstants.x86", comment: "")
+    static let SUB_OTHER_ARM_64 = NSLocalizedString("QemuConstants.arm64", comment: "")
+    static let SUB_OTHER_ARM = NSLocalizedString("QemuConstants.arm", comment: "")
+    static let SUB_OTHER_PPC_64 = NSLocalizedString("QemuConstants.ppc64", comment: "")
+    static let SUB_OTHER_PPC = NSLocalizedString("QemuConstants.ppc", comment: "")
+    static let SUB_OTHER_RISCV_64 = NSLocalizedString("QemuConstants.riscv64", comment: "")
+    static let SUB_OTHER_RISCV = NSLocalizedString("QemuConstants.riscv", comment: "")
+    static let SUB_OTHER_M68K = NSLocalizedString("QemuConstants.m68k", comment: "")
     
     static let ICON_MAC_OS_9 = "mac.os.9";
     static let ICON_MAC_CHEETAH = "cheetah";
@@ -382,7 +382,7 @@ class QemuConstants {
         RES_2560_1440: "QHD (2560 x 1440)",
         RES_3840_2160: "UHD (3840 x 2160)",
         RES_4096_2160: "4K (4096 x 2160)",
-        RES_5120_2280: "5K (5120 x 2280",
+        RES_5120_2280: "5K (5120 x 2280)s",
         RES_6016_3384: "6K (6016 x 3384)"
     ];
     
@@ -527,14 +527,14 @@ class QemuConstants {
         [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ELEMENTARY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY],
         [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS],
         [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS],
-        [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
-        [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil],
-        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, nil],
-        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil, nil],
-        [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OS_OTHER.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
-        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OS_OTHER.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, nil]
+        [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
+        [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil],
+        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OTHER, MACHINE_TYPE_Q800, nil, false, nil, nil, nil]
     ]
     
     static let HOST_I386 = "i386";
@@ -602,8 +602,6 @@ class QemuConstants {
     static let NETWORK_VIRTIO_NET_PCI_TRANSITIONAL = "virtio-net-pci-transitional"
     static let NETWORK_VMXNET3 = "vmxnet3";
     
-    
-    
     static let VGA_VIRTIO = "virtio";
     static let VGA_VMWARE = "vmware";
     
@@ -634,6 +632,8 @@ class QemuConstants {
     static let SOUND_HDA_DUPLEX = "hda-duplex"
     static let SOUND_AC97 = "AC97"
     
-    static let OPENCORE_MODERN = "OPENCORE_MODERN";
-    static let OPENCORE_LEGACY = "OPENCORE_LEGACY";
+    static let OPENCORE_MODERN = "OPENCORE_MODERN"
+    static let OPENCORE_LEGACY = "OPENCORE_LEGACY"
+    
+    static let OTHER = "other"
 }
