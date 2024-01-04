@@ -52,7 +52,7 @@
                             </textField>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hyj-Oh-hZP">
                                 <rect key="frame" x="414" y="83" width="76" height="23"/>
-                                <buttonCell key="cell" type="smallSquare" title="Obtain..." bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aye-9L-Luk">
+                                <buttonCell key="cell" type="smallSquare" title="Obtenir..." bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aye-9L-Luk">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -63,22 +63,22 @@
                                     <action selector="downloadInstallMedia:" target="xGt-xo-6x3" id="TNi-fz-b7j"/>
                                 </connections>
                             </button>
-                            <box title="Essential information" translatesAutoresizingMaskIntoConstraints="NO" id="MKc-8o-Spu">
+                            <box title="information essentielle" translatesAutoresizingMaskIntoConstraints="NO" id="MKc-8o-Spu">
                                 <rect key="frame" x="17" y="243" width="513" height="109"/>
                                 <view key="contentView" id="sVp-sP-rw6">
                                     <rect key="frame" x="4" y="5" width="505" height="89"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
-                                            <rect key="frame" x="18" y="53" width="61" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="VM name" id="ufg-Q8-INQ">
+                                            <rect key="frame" x="18" y="53" width="89" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Nom de la MV" id="ufg-Q8-INQ">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0SJ-fj-RZf">
-                                            <rect key="frame" x="85" y="53" width="400" height="21"/>
+                                            <rect key="frame" x="113" y="53" width="372" height="21"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="tWV-Kd-eiT">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +86,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
-                                            <rect key="frame" x="84" y="16" width="109" height="23"/>
+                                            <rect key="frame" x="112" y="16" width="109" height="23"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="105" id="SDE-4s-t9s"/>
                                             </constraints>
@@ -101,7 +101,7 @@
                                             </connections>
                                         </comboBox>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
-                                            <rect key="frame" x="284" y="16" width="204" height="23"/>
+                                            <rect key="frame" x="358" y="16" width="130" height="23"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="15" id="FWM-R2-PIQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -113,16 +113,16 @@
                                             </connections>
                                         </comboBox>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
-                                            <rect key="frame" x="202" y="19" width="77" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="VM subtype" id="j97-je-Te1">
+                                            <rect key="frame" x="230" y="19" width="123" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Sous-type de la MV" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
-                                            <rect key="frame" x="18" y="19" width="55" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="ge1-Tl-Cs3">
+                                            <rect key="frame" x="18" y="19" width="90" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Type de la MV" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -150,7 +150,7 @@
                             </box>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eob-Bk-Xrs">
                                 <rect key="frame" x="231" y="13" width="84" height="32"/>
-                                <buttonCell key="cell" type="push" title="Create" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2DH-DB-cW6">
+                                <buttonCell key="cell" type="push" title="Créer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2DH-DB-cW6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                     <string key="keyEquivalent" base64-UTF8="YES">
@@ -164,13 +164,6 @@ DQ
                                 <connections>
                                     <action selector="createVM:" target="xGt-xo-6x3" id="M9k-mV-hZk"/>
                                 </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KND-mb-4GG">
-                                <rect key="frame" x="96" y="50" width="352" height="18"/>
-                                <buttonCell key="cell" type="check" title="Review configuration of the new VM after the creation" bezelStyle="regularSquare" imagePosition="left" inset="2" id="id1-UX-6s1">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
                             </button>
                             <scrollView misplaced="YES" borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jhb-Rc-tJm">
                                 <rect key="frame" x="56" y="166" width="434" height="69"/>
@@ -186,7 +179,7 @@ DQ
                                             <size key="minSize" width="432" height="67"/>
                                             <size key="maxSize" width="515" height="10000000"/>
                                             <attributedString key="textStorage">
-                                                <fragment content="You can type here to write a description of your VM...">
+                                                <fragment content="Vous pouvez taper ici pour rédiger une description de votre MV...">
                                                     <attributes>
                                                         <color key="NSColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -211,15 +204,15 @@ DQ
                                 </scroller>
                             </scrollView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hWZ-ut-31g">
-                                <rect key="frame" x="146" y="118" width="287" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="If you have an installation image, select it here:" id="QrW-Cv-p8F">
+                                <rect key="frame" x="97" y="118" width="385" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Si vous disposez d'une image d'installation, sélectionnez-la ici:" id="QrW-Cv-p8F">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtC-sa-i8Z">
-                                <rect key="frame" x="115" y="113" width="25" height="25"/>
+                                <rect key="frame" x="66" y="113" width="25" height="25"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="CD Icon" id="I3W-Cv-3Lw"/>
                             </imageView>
                             <button identifier="Dummy Button" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tka-U1-EMq">
@@ -237,7 +230,7 @@ DQ
                             </button>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-LX-aa9">
                                 <rect key="frame" x="350" y="83" width="56" height="23"/>
-                                <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0WP-40-iBd">
+                                <buttonCell key="cell" type="smallSquare" title="Trouver" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0WP-40-iBd">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -247,6 +240,13 @@ DQ
                                 <connections>
                                     <action selector="findInstallMedia:" target="xGt-xo-6x3" id="mm9-8q-gyx"/>
                                 </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KND-mb-4GG">
+                                <rect key="frame" x="84" y="53" width="376" height="18"/>
+                                <buttonCell key="cell" type="check" title="Revoir la configuration de la nouvelle VM après la création" bezelStyle="regularSquare" imagePosition="left" inset="2" id="id1-UX-6s1">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
                             </button>
                         </subviews>
                         <constraints>
@@ -262,7 +262,7 @@ DQ
                             <constraint firstItem="Hyj-Oh-hZP" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="trailing" constant="72" id="JUA-ix-y3z"/>
                             <constraint firstItem="hWZ-ut-31g" firstAttribute="leading" secondItem="VtC-sa-i8Z" secondAttribute="trailing" constant="8" symbolic="YES" id="NOm-CY-P9N"/>
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="centerX" secondItem="KND-mb-4GG" secondAttribute="centerX" id="NWV-61-bHc"/>
-                            <constraint firstItem="VtC-sa-i8Z" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="115" id="SFv-ic-vXj"/>
+                            <constraint firstItem="VtC-sa-i8Z" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="66" id="SFv-ic-vXj"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="bottom" secondItem="Hyj-Oh-hZP" secondAttribute="bottom" id="TvC-02-LBF"/>
                             <constraint firstItem="MKc-8o-Spu" firstAttribute="centerX" secondItem="Jhb-Rc-tJm" secondAttribute="centerX" id="Tzt-5u-7wV"/>
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="trailing" secondItem="Hyj-Oh-hZP" secondAttribute="trailing" id="VVd-PE-wrN"/>
@@ -276,7 +276,7 @@ DQ
                             <constraint firstItem="VtC-sa-i8Z" firstAttribute="centerY" secondItem="hWZ-ut-31g" secondAttribute="centerY" id="qSO-ef-sXd"/>
                             <constraint firstItem="MKc-8o-Spu" firstAttribute="top" secondItem="rQV-Ib-82f" secondAttribute="top" constant="20" symbolic="YES" id="r0n-6p-iF2"/>
                             <constraint firstItem="VtC-sa-i8Z" firstAttribute="top" secondItem="Jhb-Rc-tJm" secondAttribute="bottom" constant="28" id="vDE-zc-lwr"/>
-                            <constraint firstItem="Jhb-Rc-tJm" firstAttribute="top" secondItem="MKc-8o-Spu" secondAttribute="bottom" constant="15" id="xYD-O9-8VO"/>
+                            <constraint firstItem="Jhb-Rc-tJm" firstAttribute="top" secondItem="MKc-8o-Spu" secondAttribute="bottom" constant="12" id="xYD-O9-8VO"/>
                             <constraint firstItem="Cpu-LX-aa9" firstAttribute="firstBaseline" secondItem="CSW-rW-Lt7" secondAttribute="baseline" id="yKu-Br-hIt"/>
                         </constraints>
                     </view>
@@ -309,7 +309,7 @@ DQ
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyV-iQ-kJO">
                                 <rect key="frame" x="18" y="72" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Creating new Virtual Machine..." id="zoH-ZF-BQj">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Création d'une nouvelle machine virtuelle..." id="zoH-ZF-BQj">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -329,7 +329,7 @@ DQ
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdN-2B-gFS">
                                 <rect key="frame" x="18" y="20" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="GQ5-cq-QpX">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Temps restant estimé : 10 minutes" id="GQ5-cq-QpX">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>

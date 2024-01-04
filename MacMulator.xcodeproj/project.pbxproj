@@ -141,6 +141,10 @@
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
+		3B3772C82B47158C0002AB3B /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3B3772C92B47158C0002AB3B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3B3772CA2B47158C0002AB3B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = MacMulator/UI/fr.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3B3772CB2B47158C0002AB3B /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = MacMulator/UI/fr.lproj/EditVM.storyboard; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -498,6 +502,7 @@
 			knownRegions = (
 				en,
 				it,
+				fr,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
 			packageReferences = (
@@ -625,6 +630,7 @@
 			children = (
 				3B75C7EB29DF06C4007C3781 /* en */,
 				3B75C7ED29DF06C9007C3781 /* it */,
+				3B3772C82B47158C0002AB3B /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -634,6 +640,7 @@
 			children = (
 				3B75C7F029DF122C007C3781 /* en */,
 				3B75C7F229DF1243007C3781 /* it */,
+				3B3772CB2B47158C0002AB3B /* fr */,
 			);
 			name = EditVM.storyboard;
 			sourceTree = "<group>";
@@ -643,6 +650,7 @@
 			children = (
 				3B75C7E429DF0037007C3781 /* it */,
 				3B75C7E529DF0038007C3781 /* en */,
+				3B3772C92B47158C0002AB3B /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -652,6 +660,7 @@
 			children = (
 				3B75C7E629DF003F007C3781 /* it */,
 				3B75C7E729DF003F007C3781 /* en */,
+				3B3772CA2B47158C0002AB3B /* fr */,
 			);
 			name = NewVM.storyboard;
 			sourceTree = "<group>";
