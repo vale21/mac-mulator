@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -42,7 +42,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="547" height="372"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-rW-Lt7">
+                            <textField focusRingType="none" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-rW-Lt7">
                                 <rect key="frame" x="56" y="84" width="286" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="PeB-NW-smg">
                                     <font key="font" metaFont="system"/>
@@ -52,13 +52,13 @@
                             </textField>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hyj-Oh-hZP">
                                 <rect key="frame" x="414" y="83" width="76" height="23"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="76" id="eyR-At-bZS"/>
-                                </constraints>
                                 <buttonCell key="cell" type="smallSquare" title="Ottieni..." bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aye-9L-Luk">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="76" id="eyR-At-bZS"/>
+                                </constraints>
                                 <connections>
                                     <action selector="downloadInstallMedia:" target="xGt-xo-6x3" id="TNi-fz-b7j"/>
                                 </connections>
@@ -69,7 +69,7 @@
                                     <rect key="frame" x="4" y="5" width="505" height="89"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
                                             <rect key="frame" x="18" y="53" width="64" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Nome VM" id="ufg-Q8-INQ">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -77,7 +77,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0SJ-fj-RZf">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0SJ-fj-RZf">
                                             <rect key="frame" x="88" y="53" width="397" height="21"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="tWV-Kd-eiT">
                                                 <font key="font" metaFont="system"/>
@@ -85,7 +85,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
+                                        <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
                                             <rect key="frame" x="87" y="16" width="109" height="23"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="105" id="SDE-4s-t9s"/>
@@ -100,7 +100,7 @@
                                                 <outlet property="delegate" destination="xGt-xo-6x3" id="jvg-eO-SZc"/>
                                             </connections>
                                         </comboBox>
-                                        <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
+                                        <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
                                             <rect key="frame" x="294" y="16" width="194" height="23"/>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="15" id="FWM-R2-PIQ">
                                                 <font key="font" metaFont="system"/>
@@ -112,7 +112,7 @@
                                                 <outlet property="delegate" destination="xGt-xo-6x3" id="Vei-jz-igI"/>
                                             </connections>
                                         </comboBox>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
                                             <rect key="frame" x="205" y="19" width="84" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Sottotipo VM" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
@@ -120,7 +120,7 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
                                             <rect key="frame" x="18" y="19" width="55" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Tipo VM" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
@@ -150,10 +150,6 @@
                             </box>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Eob-Bk-Xrs">
                                 <rect key="frame" x="231" y="13" width="84" height="32"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="EQE-rV-SA5"/>
-                                    <constraint firstAttribute="width" constant="70" id="uQ5-4E-ZQf"/>
-                                </constraints>
                                 <buttonCell key="cell" type="push" title="Crea" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2DH-DB-cW6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -161,6 +157,10 @@
 DQ
 </string>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="EQE-rV-SA5"/>
+                                    <constraint firstAttribute="width" constant="70" id="uQ5-4E-ZQf"/>
+                                </constraints>
                                 <connections>
                                     <action selector="createVM:" target="xGt-xo-6x3" id="M9k-mV-hZk"/>
                                 </connections>
@@ -179,7 +179,7 @@ DQ
                                             <size key="minSize" width="432" height="67"/>
                                             <size key="maxSize" width="515" height="10000000"/>
                                             <attributedString key="textStorage">
-                                                <fragment content="Puoi digitare qui per aggiungere una descrizione della VM...">
+                                                <fragment content="Puoi digitare qui per aggiungere una descrizione della macchina virtuale...">
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -203,7 +203,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWZ-ut-31g">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWZ-ut-31g">
                                 <rect key="frame" x="134" y="118" width="312" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Se hai un'immagine di installazione selezionala qui:" id="QrW-Cv-p8F">
                                     <font key="font" metaFont="system"/>
@@ -217,26 +217,26 @@ DQ
                             </imageView>
                             <button identifier="Dummy Button" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tka-U1-EMq">
                                 <rect key="frame" x="320" y="20" width="16" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="16" id="ieh-BE-X5Q"/>
-                                </constraints>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="trl-IN-UZv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="16" id="ieh-BE-X5Q"/>
+                                </constraints>
                                 <connections>
                                     <segue destination="Tqa-YD-Kdm" kind="sheet" identifier="createVmFileSegue" id="gBi-at-Q15"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-LX-aa9">
                                 <rect key="frame" x="350" y="83" width="56" height="23"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="56" id="VGH-nm-Wln"/>
-                                </constraints>
                                 <buttonCell key="cell" type="smallSquare" title="Trova" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0WP-40-iBd">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="56" id="VGH-nm-Wln"/>
+                                </constraints>
                                 <connections>
                                     <action selector="findInstallMedia:" target="xGt-xo-6x3" id="mm9-8q-gyx"/>
                                 </connections>
@@ -306,7 +306,7 @@ DQ
                                 <rect key="frame" x="25" y="44" width="302" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyV-iQ-kJO">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oyV-iQ-kJO">
                                 <rect key="frame" x="18" y="72" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Creo la nuova Macchina Virtuale..." id="zoH-ZF-BQj">
@@ -326,7 +326,7 @@ DQ
                                     <action selector="cancelButtonPressed:" target="Tqa-YD-Kdm" id="vGo-XM-70k"/>
                                 </connections>
                             </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdN-2B-gFS">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jdN-2B-gFS">
                                 <rect key="frame" x="18" y="20" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Tempo stimato rimanente: 10 minuti" id="GQ5-cq-QpX">

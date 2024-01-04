@@ -28,12 +28,16 @@
 "NewDiskViewController.editDisk" = "Modifica %@";
 "NewPortMappingViewController.createMapping" = "Crea nuova mappatura porte";
 "NewPortMappingViewController.editMapping" = "Modifica mappatura %@";
-"NewVMViewController.defaultMessage" = "Puoi digitare qui per aggiungere una descrizione della VM...";
+"NewVMViewController.defaultMessage" = "Puoi digitare qui per aggiungere una descrizione della macchina virtuale...";
 "NewVMController.noMediaProvided" = "Non hai specificato un installer di macOS. MacMulator scaricherà l'ultima versione supportata di macOS da Apple. Sei d'accordo?";
 "NewVMController.vmCreationFailed" = "Creazione della VM fallita: ";
 "NewVMController.errorFeldsMissing" = "Non hai fornito un valore per Nome VM o Tipo VM. Questi campi sono nesessari per creare una Macchina Virtuale. Per favore fornisci un valore per entrambi e riprova.";
 "NewVMController.errorVMExisting" = "Una VM chiamata %@ esiste già. Per favore, scegli un nome diverso.";
 "NewVMController.errorFileExisting" = "Un file chiamato %@ esiste già. Per favore, scegli un nome diverso per la macchina virtuale.";
+"PreferencesViewController.updateLivePreview" = "Aggiorna la preview live ogni: (%@ secondi)";
+"PreferencesViewController.pathDoesNotExists" = "Attenzione. La cartella %@ non esiste.";
+"PreferencesViewController.noQemuFound" = "Nessun Qemu trovato. Verrà usata la versione bundle di qemu-img per gestire le immagini dosco.";
+"PreferencesViewController.qemuFound" ="Trovato Qemu versione %@";
 "QemuConstants.hd" = "Disco Rigido";
 "QemuConstants.usb" = "Drive USB";
 "QemuConstants.ipsw" = "Immagine di installazione IPSW";
