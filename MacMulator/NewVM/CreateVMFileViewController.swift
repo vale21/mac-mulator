@@ -57,11 +57,11 @@ class CreateVMFileViewController : NSViewController {
                     progressBar.minValue = 0
                     progressBar.maxValue = 100
                     progressBar.doubleValue = 0.0
-                    descriptionLabel.stringValue = "Preparing to download macOS Installer..."
-                    estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                    descriptionLabel.stringValue = NSLocalizedString("CreateVMFileViewController.preparingDownload", comment: "")
+                    estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
                     cancelButton.isHidden = false
                 } else {
-                    descriptionLabel.stringValue = "Creating Virtual Machine..."
+                    descriptionLabel.stringValue = NSLocalizedString("CreateVMFileViewController.creatingVM", comment: "")
                     estimateTimeRemainingLabel.isHidden = true
                     cancelButton.isHidden = true
                     
@@ -85,16 +85,16 @@ class CreateVMFileViewController : NSViewController {
                         self.progressBar.doubleValue = progress
                         let currentValue = self.progressBar.doubleValue
                         if (currentValue <= 0) {
-                            self.descriptionLabel.stringValue = "Preparing to download macOS Installer..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                            self.descriptionLabel.stringValue = NSLocalizedString("CreateVMFileViewController.preparingDownload", comment: "")
+                            self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
                         } else if (currentValue < 10) {
-                            self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: Calculating..."
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.downloading", comment: ""), Int(progress))
+                            self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
                         } else if (currentValue < 100) {
-                            self.descriptionLabel.stringValue = "Downloading macOS Installer (" + String(Int(progress)) + "%)..."
-                            self.estimateTimeRemainingLabel.stringValue = "Estimate time remaining: " + Utils.computeTimeRemaining(startTime: startTime, progress: progress)
+                            self.descriptionLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.downloading", comment: ""), Int(progress))
+                            self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: progress))
                         } else {
-                            self.descriptionLabel.stringValue = "Creating Virtual Machine..."
+                            self.descriptionLabel.stringValue = NSLocalizedString("CreateVMFileViewController.creatingVM", comment: "")
                         }
                     }
                     
@@ -110,7 +110,7 @@ class CreateVMFileViewController : NSViewController {
                     } catch {
                         DispatchQueue.main.async {
                             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                            message: "Unable to create Virtual Machine " + vm.displayName + ": " + error.localizedDescription);
+                                            message: String(format: NSLocalizedString("CreateVMFileViewController.unableToCreate", comment: ""), vm.displayName, error.localizedDescription))
                         }
                     }
                 }

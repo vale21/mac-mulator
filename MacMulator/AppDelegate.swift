@@ -48,9 +48,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = rootController?.currentVm {
                     do {
                         try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: "Export to Parallels complete.")
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: NSLocalizedString("AppDelegate.exportToParallelsComplete", comment: ""))
                     } catch {
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Export failed with error: " + error.localizedDescription)
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.exportFailed", comment: ""), error.localizedDescription))
                     }
                 }
             })
@@ -64,7 +64,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
                     rootController?.addVirtualMachine(vm)
                 } catch {
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: "Import failed with error: " + error.localizedDescription)
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.importFailed", comment: ""), error.localizedDescription))
                 }
             })
         }
@@ -72,50 +72,50 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBAction func convertToQemuMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
-            rootController?.convertToQemuMenuBarClicked("MainMenu")
+            rootController?.convertToQemuMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
     
     @IBAction func convertToAppleMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
-            rootController?.convertToAppleMenuBarClicked("MainMenu")
+            rootController?.convertToAppleMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
     
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
-        rootController?.startVMMenuBarClicked("MainMenu")
+        rootController?.startVMMenuBarClicked(MacMulatorConstants.mainMenuSender);
     }
     
     @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
-        rootController?.startVMInRecoveryMenuBarClicked("MainMenu")
+        rootController?.startVMInRecoveryMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
     
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
-        rootController?.stopVMMenubarClicked("MainMenu")
-    }
-    
-    @IBAction func pauseVMMenuBarClicked(_ sender: Any) {
-        rootController?.pauseVMMenuBarClicked("MainMenu")
+        rootController?.stopVMMenubarClicked(MacMulatorConstants.mainMenuSender);
     }
     
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked("MainMenu")
-    }
-    
-    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
-        rootController?.cloneVMMenuBarClicked("MainMenu")
-    }
-    
-    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
-        rootController?.showVMInFinderMenuBarClicked("MainMenu")
+        rootController?.editVMmenuBarClicked(MacMulatorConstants.mainMenuSender);
     }
     
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
-        rootController?.showConsoleMenubarClicked("MainMenu")
+        rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender);
     }
     
+    @IBAction func pauseVMMenuBarClicked(_ sender: Any) {
+        rootController?.pauseVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+    
+    @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
+        rootController?.cloneVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+    
+    @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
+        rootController?.showVMInFinderMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
     func refreshVMMenus() {
         vmMenu.autoenablesItems = false
         
@@ -195,8 +195,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return true;
         } else {
-            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning,
-                            message: "Could not open file " + filename + ". It migh be corrupted.");
+            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename));
             return false;
         }
     }
@@ -225,7 +224,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if let rootController = self.rootController {
             if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?");
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""));
                 if response.rawValue != Utils.ALERT_RESP_OK {
                     return NSApplication.TerminateReply.terminateCancel;
                 } else {
@@ -281,7 +280,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         do {
             try fileManager.removeItem(at: URL(fileURLWithPath: savedVM));
         } catch {
-            print("ERROR while deleting" + savedVM + ": " + error.localizedDescription);
+            print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription));
         }
 
         
@@ -319,7 +318,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 removed.append((savedVMs?.remove(at: index))!);
             }
             
-            Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: "Could not find some Virtual Machines that were configured in MacMulator: " + removed.joined(separator: ", "));
+            Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")));
 
             let userDefaults = UserDefaults.standard;
             userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
@@ -338,7 +337,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     }
                 }
             } catch {
-                print("ERROR while reading" + filename + ": " + error.localizedDescription);
+                print(String(format: NSLocalizedString("AppDelegate.errorReading", comment: ""), filename, error.localizedDescription));
             }
         }
         

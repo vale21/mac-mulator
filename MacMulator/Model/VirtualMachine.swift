@@ -49,7 +49,7 @@ class VirtualMachine: Codable, Hashable {
         self.qemuBootLoader = qemuBootloader
         self.hvf = hvf
         self.drives = []
-        self.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        self.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
         self.macAddress = macAddress
         self.type = type
     }
@@ -69,11 +69,11 @@ class VirtualMachine: Codable, Hashable {
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
             setupPaths(vm, plistFilePath);
             if vm.portMappings == nil {
-                vm.portMappings = [PortMapping(name: "SSH port mapping", vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+                vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
             }
             return vm;
         } catch {
-            print("ERROR while reading Info.plist: " + error.localizedDescription);
+            print(String(format: NSLocalizedString("VirtualMachine.infoPlistReadError", comment: ""), error.localizedDescription))
             return nil;
         }
     }
@@ -98,7 +98,7 @@ class VirtualMachine: Codable, Hashable {
             let data = try PropertyListEncoder().encode(self);
             try data.write(to: URL(fileURLWithPath: plistFilePath));
         } catch {
-            print("ERROR while writing Info.plist: " + error.localizedDescription);
+            print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
     
@@ -107,7 +107,7 @@ class VirtualMachine: Codable, Hashable {
             let data = try PropertyListEncoder().encode(self);
             try data.write(to: URL(fileURLWithPath: self.path + "/" + MacMulatorConstants.INFO_PLIST));
         } catch {
-            print("ERROR while writing Info.plist: " + error.localizedDescription);
+            print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
     

@@ -54,7 +54,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                     
                     for virtualDrive in virtualMachine.drives {
                         if virtualDrive.path == path {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "You already have configured image at path " + path + " to be loaded in MacMulator.");
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path));
                             return;
                         }
                     }
@@ -116,7 +116,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 self.removeVirtualDrive(row, index);
             } else {
-                Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to remove Virtual Drive " + drive.name + "? This operation is not reversible.", completionHandler: { response in
+                Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.confirmDeleteDrive", comment: ""), drive.name), completionHandler: { response in
                     if response.rawValue == Utils.ALERT_RESP_OK {
                         self.removeVirtualDrive(row, index);
                         do {
@@ -177,14 +177,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             
             if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
-                openImageButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+                openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
             } else {
                 openImageButton.isEnabled = true
             }
             
             if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
-                createNewDiskButton.toolTip = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment."
+                createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
             } else {
                 createNewDiskButton.isEnabled = true
             }

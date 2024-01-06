@@ -78,7 +78,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         let slider = sender as! NSSlider;
         
         let value = slider.intValue
-        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(value) + " seconds)"
+        livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(value))
         
         userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
         dirty = true;
@@ -93,7 +93,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         livePreviewTickChanged(livePreviewEnabledButton as Any);
         
         let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
-        livePreviewLabel.stringValue = "Update Live Preview every: (" + String(livePreviewRate) + " seconds)"
+        livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(livePreviewRate))
         livePreviewSlider.intValue = Int32(livePreviewRate);
         
         checkForQemuBinaries();
@@ -134,8 +134,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkFile(QemuConstants.ARCH_PPC64, qemu_ppc64_tick);
             checkFile(QemuConstants.ARCH_68K, qemu_68k_tick);
         } else {
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "Attention. Folder " + path + " does not exist.");
-            self.qemuVersionLabel.stringValue = "No Qemu detected. Will just use bundled qemu-img to manage disk images";
+            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), path));
+            self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "");
             setYellowCross(qemu_img_tick);
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
@@ -163,9 +163,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         QemuUtils.getQemuVersion(qemuPath: qemuPath!, uponCompletion: { version in
             DispatchQueue.main.async {
                 if version == nil {
-                    self.qemuVersionLabel.stringValue = "No Qemu detected. Will just use bundled qemu-img to manage disk images";
+                    self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "");
                 } else {
-                    self.qemuVersionLabel.stringValue = "Detected Qemu version " + version!;
+                    self.qemuVersionLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.qemuFound", comment: ""), version!);
                 }
             }
         });

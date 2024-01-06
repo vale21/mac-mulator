@@ -28,7 +28,7 @@ class ConsoleViewController: NSViewController {
                     self.consoleView.string = runner.getConsoleOutput();
                     self.consoleView.scrollToEndOfDocument(self);
                 } else {
-                    self.consoleView.string = "Current VM is not running"
+                    self.consoleView.string = NSLocalizedString("ConsoleViewController.vmNotRunning", comment: "")
                     timer.invalidate();
                 }
             }

@@ -43,6 +43,8 @@
 		3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */; };
 		3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
+		3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
+		3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EF29DF122C007C3781 /* EditVM.storyboard */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
 		3B7F3C2429326F9900F1396D /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
@@ -69,7 +71,6 @@
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */; };
-		3BD669B425E58080004E129D /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD669B325E58080004E129D /* EditVM.storyboard */; };
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
@@ -161,6 +162,14 @@
 		3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostMachineDetails.swift; sourceTree = "<group>"; };
 		3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportHerlper.swift; sourceTree = "<group>"; };
 		3B73E41525CAE040004BAA92 /* QemuRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuRunner.swift; sourceTree = "<group>"; };
+		3B75C7E429DF0037007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3B75C7E529DF0038007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3B75C7E629DF003F007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3B75C7E729DF003F007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = MacMulator/UI/en.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3B75C7EB29DF06C4007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3B75C7ED29DF06C9007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3B75C7F029DF122C007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = MacMulator/UI/en.lproj/EditVM.storyboard; sourceTree = "<group>"; };
+		3B75C7F229DF1243007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/EditVM.storyboard; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
 		3B7F3C2329326F9900F1396D /* parallels_template */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = parallels_template; sourceTree = "<group>"; };
@@ -178,7 +187,6 @@
 		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		3BBB473125CABDC600A4DBA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3BBB473825CABDCB00A4DBA7 /* MacMulator.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MacMulator.entitlements; sourceTree = "<group>"; };
 		3BBB473925CABDCB00A4DBA7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -189,11 +197,9 @@
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPortMappingViewController.swift; sourceTree = "<group>"; };
-		3BD669B325E58080004E129D /* EditVM.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditVM.storyboard; sourceTree = "<group>"; };
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
 		3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
-		3BD9CCF6262DCE5B008341D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = MacMulator/UI/Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
@@ -367,9 +373,10 @@
 		3BBB472F25CABDC600A4DBA7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3B75C7EC29DF06C4007C3781 /* Localizable.strings */,
 				3BBB473025CABDC600A4DBA7 /* Main.storyboard */,
 				3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */,
-				3BD669B325E58080004E129D /* EditVM.storyboard */,
+				3B75C7EF29DF122C007C3781 /* EditVM.storyboard */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -490,7 +497,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
+				it,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
 			packageReferences = (
@@ -513,10 +520,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
+				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
-				3BD669B425E58080004E129D /* EditVM.storyboard in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
+				3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,10 +620,29 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		3B75C7EC29DF06C4007C3781 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B75C7EB29DF06C4007C3781 /* en */,
+				3B75C7ED29DF06C9007C3781 /* it */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		3B75C7EF29DF122C007C3781 /* EditVM.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B75C7F029DF122C007C3781 /* en */,
+				3B75C7F229DF1243007C3781 /* it */,
+			);
+			name = EditVM.storyboard;
+			sourceTree = "<group>";
+		};
 		3BBB473025CABDC600A4DBA7 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3BBB473125CABDC600A4DBA7 /* Base */,
+				3B75C7E429DF0037007C3781 /* it */,
+				3B75C7E529DF0038007C3781 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -623,7 +650,8 @@
 		3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3BD9CCF6262DCE5B008341D9 /* Base */,
+				3B75C7E629DF003F007C3781 /* it */,
+				3B75C7E729DF003F007C3781 /* en */,
 			);
 			name = NewVM.storyboard;
 			sourceTree = "<group>";
@@ -635,6 +663,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -696,6 +725,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
