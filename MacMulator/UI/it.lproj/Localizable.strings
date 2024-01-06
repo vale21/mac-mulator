@@ -92,6 +92,8 @@
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Annullo l'installazione. Per favore attendi...";
 "VirtualizationFrameworkInstallVMViewController.installProgressLong" = "Installo macOS sulla Macchina Virtuale (%d%%)...";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Tempo stimato rimanente: %@";
+"VirtualizationFrameworkPauseResumeVMViewController.pausing" = "Metto in pausa la VM e salvo lo stato...";
+"VirtualizationFrameworkPauseResumeVMViewController.resuming" = "Recupero la VM dallo stato salvato...";
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Errore nella scrittura di Info.plist: %@";

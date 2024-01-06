@@ -21,8 +21,8 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
     @available(macOS 13.0, *)
     static func deleteLinuxVirtualMachineData(vm: VirtualMachine) {
         
-        _ = deleteLinuxPlatformConfiguration(vm: vm)
-        _ = deleteLinuxBootloader(vm: vm)
+        deleteLinuxPlatformConfiguration(vm: vm)
+        deleteLinuxBootloader(vm: vm)
     }
     
     @available(macOS 13.0, *)
