@@ -34,9 +34,9 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
         progressSpinner.startAnimation(self)
         
         if self.operation == "Pausing" {
-            descriptionLabel.stringValue = "Pausing VM and saving state..."
+            descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.pausing", comment: "")
         } else {
-            descriptionLabel.stringValue = "Resuming VM from saved state..."
+            descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.resuming", comment: "")
         }
         
         DispatchQueue.main.async {
