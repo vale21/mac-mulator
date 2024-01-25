@@ -1,6 +1,3 @@
-"AppDelegate.exportToParallelsComplete" = "Esportazione completata.";
-"AppDelegate.exportToParallelsFailed" = "Esportazione fallita con errore: %@";
-"AppDelegate.importFromParallelsFailed" = "Importazione fallita con errore: %@";
 "AppDelegate.youHaveRunningVMs" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "AppDelegate.cannotOpenFile" = "Non ho potuto aprire il file %@. Potrebbe essere corrotto.";
 "AppDelegate.errorDeleting" = "Errore durante la cancellazione di %@: %@";

@@ -10,7 +10,7 @@
         <scene sceneID="C5n-dN-zxF">
             <objects>
                 <windowController showSeguePresentationStyle="single" id="oEd-tg-l1q" sceneMemberID="viewController">
-                    <window key="window" title="New Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="dIq-vo-sNu">
+                    <window key="window" title="Nouvelle machine virtuelle" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="dIq-vo-sNu">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -71,7 +71,7 @@
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
                                             <rect key="frame" x="18" y="53" width="89" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Nom de la MV" id="ufg-Q8-INQ">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Nom de la VM" id="ufg-Q8-INQ">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -114,7 +114,7 @@
                                         </comboBox>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
                                             <rect key="frame" x="230" y="19" width="123" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Sous-type de la MV" id="j97-je-Te1">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Sous-type de la VM" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -122,7 +122,7 @@
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
                                             <rect key="frame" x="18" y="19" width="90" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Type de la MV" id="ge1-Tl-Cs3">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Type de la VM" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -179,7 +179,7 @@ DQ
                                             <size key="minSize" width="432" height="67"/>
                                             <size key="maxSize" width="515" height="10000000"/>
                                             <attributedString key="textStorage">
-                                                <fragment content="Vous pouvez taper ici pour rédiger une description de votre MV...">
+                                                <fragment content="Vous pouvez taper ici pour rédiger une description de votre VM...">
                                                     <attributes>
                                                         <color key="NSColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -254,7 +254,7 @@ DQ
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="56" id="3pE-Rl-2ea"/>
                             <constraint firstItem="MKc-8o-Spu" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="20" symbolic="YES" id="42f-VJ-ama"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="top" secondItem="hWZ-ut-31g" secondAttribute="bottom" constant="13" id="56w-u8-GSp"/>
-                            <constraint firstItem="KND-mb-4GG" firstAttribute="top" secondItem="CSW-rW-Lt7" secondAttribute="bottom" constant="17" id="6VT-JK-u3t"/>
+                            <constraint firstItem="KND-mb-4GG" firstAttribute="top" secondItem="CSW-rW-Lt7" secondAttribute="bottom" constant="14" id="6VT-JK-u3t"/>
                             <constraint firstItem="tka-U1-EMq" firstAttribute="leading" secondItem="Eob-Bk-Xrs" secondAttribute="trailing" constant="12" id="7Xx-N4-kWW"/>
                             <constraint firstItem="Cpu-LX-aa9" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="trailing" constant="8" symbolic="YES" id="CUL-b5-ROa"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="baseline" secondItem="Hyj-Oh-hZP" secondAttribute="firstBaseline" id="DF4-Tu-3gO"/>
@@ -269,7 +269,7 @@ DQ
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="leading" id="ZAS-9p-hE3"/>
                             <constraint firstItem="Eob-Bk-Xrs" firstAttribute="bottom" secondItem="tka-U1-EMq" secondAttribute="bottom" id="c76-jr-i0V"/>
                             <constraint firstAttribute="trailing" secondItem="MKc-8o-Spu" secondAttribute="trailing" constant="20" symbolic="YES" id="cQf-ao-6Hd"/>
-                            <constraint firstItem="Eob-Bk-Xrs" firstAttribute="top" secondItem="KND-mb-4GG" secondAttribute="bottom" constant="11" id="cXA-eO-UdK"/>
+                            <constraint firstItem="Eob-Bk-Xrs" firstAttribute="top" secondItem="KND-mb-4GG" secondAttribute="bottom" constant="14" id="cXA-eO-UdK"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="top" secondItem="VtC-sa-i8Z" secondAttribute="bottom" constant="8" symbolic="YES" id="l5D-Im-Wg1"/>
                             <constraint firstItem="Cpu-LX-aa9" firstAttribute="baseline" secondItem="Hyj-Oh-hZP" secondAttribute="baseline" id="ndY-PL-5sX"/>
                             <constraint firstItem="KND-mb-4GG" firstAttribute="centerX" secondItem="Eob-Bk-Xrs" secondAttribute="centerX" id="pcG-iV-HSA"/>
