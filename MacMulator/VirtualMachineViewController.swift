@@ -340,7 +340,7 @@ class VirtualMachineViewController: NSViewController {
                         try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
                             result, virtualMachine in
                             self.completionhandler(result: result, virtualMachine: virtualMachine)
-                        });
+                        })
                     } catch let error as ValidationError {
                         completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
                     } catch {

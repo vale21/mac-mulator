@@ -1,8 +1,8 @@
 "AppDelegate.exportToParallelsComplete" = "Export to Parallels complete.";
 "AppDelegate.exportToParallelsFailed" = "Export failed with error: %@";
 "AppDelegate.importFromParallelsFailed" = "Import failed with error: %@";
-"AppDelegate.cannotOpenFile" = "Could not open file %@. It migh be corrupted.";
 "AppDelegate.youHaveRunningVMs" = "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
+"AppDelegate.cannotOpenFile" = "Could not open file %@. It migh be corrupted.";
 "AppDelegate.errorDeleting" = "Error while deleting %@: %@";
 "AppDelegate.errorReading" = "Error while reading %@: %@";
 "AppDelegate.couldNotFindExistingVMs" = "Could not find some Virtual Machines that were configured in MacMulator: %@";

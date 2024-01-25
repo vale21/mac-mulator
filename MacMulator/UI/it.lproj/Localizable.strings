@@ -64,7 +64,7 @@
 "Utils.genericError" = "L'eseguibile Qemu fornito è corrotto o non supportato.";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Annulla";
-"Utils.hostArchitectureNotGood" = "La VM non può essere avviata perché è una VM %@ VM e non può essere eseguita su un Mac %@.";
+"Utils.hostArchitectureNotGood" = "La VM non può essere avviata perché è una VM %@ e non può essere eseguita su un Mac %@.";
 "Utils.appleSiliconOnly" = "La VM non può essere avviata perché funziona solo su hardware Apple Silicon.";
 "Utils.virtualizationNotSupported" = "La VM non può essere avviata perché Apple Virtualization Framework non è supportato su questa VM.";
 "Utils.linuxMonterey" = "The VM cannot be started because Apple Virtualization Framework is not supported with Linux VMs on macOS Monterey.";

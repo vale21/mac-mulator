@@ -141,6 +141,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
+                    editVMMenuItem.isEnabled = true
                     
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
@@ -153,7 +154,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         pauseVMMenuItem.isEnabled = false
                         startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
                         #if arch(arm64)
-                        startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
+                        startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
                         #endif
                         stopVMMenuItem.isEnabled = false
                     }

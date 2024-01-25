@@ -67,6 +67,9 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
                         }
                     }
                 });
+                
+                let appDelegate = NSApp.delegate as! AppDelegate
+                appDelegate.refreshVMMenus()
             }
         }
     }

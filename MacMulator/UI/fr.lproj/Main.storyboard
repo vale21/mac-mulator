@@ -2649,7 +2649,7 @@ Raspberry Pi</mutableString>
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Exporter en tant que" id="3Ko-t4-AGP">
                                                 <items>
-                                                    <menuItem title="Machine virtuelle Parallels" id="FzN-3M-7zL">
+                                                    <menuItem title="Parallels VM" id="FzN-3M-7zL">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="exportVMToParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="FXO-G3-Gh1"/>

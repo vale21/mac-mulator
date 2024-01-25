@@ -181,6 +181,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
         self.listController?.refreshList();
         self.vmController?.setVirtualMachine(virtualMachine);
+        
     }
     
     
