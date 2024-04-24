@@ -39,8 +39,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     
     func tableView(_ tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
         return [
-            NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: "Delete", handler: { action, index in self.deleteVirtualMachine(index)}),
-            NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: "Edit", handler: { action, index in self.editVirtualMachine(index)}),
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), handler: { action, index in self.deleteVirtualMachine(index)}),
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), handler: { action, index in self.editVirtualMachine(index)}),
         ];
     }
     
@@ -62,18 +62,18 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let menu = NSMenu()
         menu.autoenablesItems = false
         menu.delegate = self
-        menu.addItem(NSMenuItem(title: "Start", action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.start", comment: ""), action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
         #if arch(arm64)
-        menu.addItem(NSMenuItem(title: "Start in Recovery Mode", action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""), action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
         #endif
-        menu.addItem(NSMenuItem(title: "Stop", action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Pause", action: #selector(tableViewPauseItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""), action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""), action: #selector(tableViewPauseItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Edit", action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Delete", action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), action: #selector(tableViewEditItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), action: #selector(tableViewDeleteItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Show in Finder", action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Clone", action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType]);
         table.allowsMultipleSelection = false;
@@ -84,19 +84,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         if let rootController = self.rootController {
             let vm = rootController.getVirtualMachineAt(row)
             if rootController.isVMRunning(vm) {
-                menu.item(withTitle: "Start")?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 #if arch(arm64)
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
                 #endif
-                menu.item(withTitle: "Stop")?.isEnabled = true
-                menu.item(withTitle: "Pause")?.isEnabled = Utils.isPauseSupported(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = true
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = Utils.isPauseSupported(vm)
             } else {
-                menu.item(withTitle: "Start")?.isEnabled = Utils.isVMAvailable(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)
-                menu.item(withTitle: "Start in Recovery Mode")?.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
                 #endif
-                menu.item(withTitle: "Stop")?.isEnabled = false
-                menu.item(withTitle: "Pause")?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
             }
         }
     }
