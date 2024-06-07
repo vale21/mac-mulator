@@ -320,6 +320,19 @@ class VirtualMachineViewController: NSViewController {
         qemuUnavailableLabel.isHidden = false;
     }
     
+    fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
+        do {
+            try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
+                result, virtualMachine in
+                self.completionhandler(result: result, virtualMachine: virtualMachine)
+            });
+        } catch let error as ValidationError {
+            completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
+        } catch {
+            print (error.localizedDescription)
+        }
+    }
+    
     fileprivate func startVM(sender: Any, inRecovery: Bool) {
         if let rootController = self.rootController {
             if let vm = rootController.currentVm {
@@ -333,18 +346,14 @@ class VirtualMachineViewController: NSViewController {
                     self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
                     if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm);
-                    }
-                    
-                    do {
-                        try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
-                            result, virtualMachine in
-                            self.completionhandler(result: result, virtualMachine: virtualMachine)
+                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm, uponCompletion: {
+                            terminationCode in
+                            if terminationCode == 0 {
+                                self.startVM_internal(runner, inRecovery, vm)
+                            }
                         });
-                    } catch let error as ValidationError {
-                        completionhandler(result: VMExecutionResult(exitCode: -1, error: error.description), virtualMachine: vm)
-                    } catch {
-                        print (error.localizedDescription)
+                    } else {
+                        startVM_internal(runner, inRecovery, vm)
                     }
                 }
             }
@@ -358,7 +367,12 @@ class VirtualMachineViewController: NSViewController {
             if let rootController = self.rootController {
                 if let vm = rootController.currentVm {
                     if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm);
+                        QemuUtils.restoreOpenCoreConfigTemplate(virtualMachine: vm, uponCompletion: {
+                            terminationCode in
+                            if terminationCode != 0 {
+                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")))
+                            }
+                        });
                     }
                 }
             }

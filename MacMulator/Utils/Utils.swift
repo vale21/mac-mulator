@@ -508,6 +508,10 @@ class Utils {
         return getStringValueForSubType(os, subtype, 16) ?? QemuConstants.URL_APPLE_COM
     }
     
+    static func getMediaTypeForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 17) ?? QemuConstants.MEDIATYPE_DISK
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {
@@ -673,6 +677,14 @@ class Utils {
         return QemuConstants.CPU_IVY_BRIDGE
 #else
         return QemuConstants.CPU_MAX
+#endif
+    }
+    
+    static func getPreferredDriveSize() -> Int {
+#if arch(arm64)
+        return 120
+#else
+        return 250
 #endif
     }
     

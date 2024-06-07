@@ -43,7 +43,7 @@
 "QemuConstants.ipsw" = "Immagine di installazione IPSW";
 "QemuConstants.efi" = "Firmware EFI";
 "QemuConstants.network" = "Network";
-"QemuConstants.nvme" = "Firmware NVMe";
+"QemuConstants.nvme" = "Drive NVMe";
 "QemuConstants.other" = "Altro";
 "QemuConstants.macos" = "macOS Generico";
 "QemuConstants.windows" = "Windows Generico";

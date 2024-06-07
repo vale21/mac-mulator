@@ -16,7 +16,7 @@ class Shell {
     var stdout: String = "";
     var stderr: String = "";
     var output: String = "";
-        
+    
     fileprivate func setupStandardOutput() {
         self.task.standardOutput = self.pipe_out;
         self.pipe_out.fileHandleForReading.readabilityHandler = { (fileHandle) -> Void in
@@ -47,30 +47,28 @@ class Shell {
             self.task.currentDirectoryPath = currentDirectoryPath;
             print("Running " + command + " in " + self.task.currentDirectoryPath);
             do {
-                try ObjC.catchException({
-                    if (!self.task.isRunning) {
+                if (!self.task.isRunning) {
+                    
+                    self.setupStandardOutput()
+                    self.setupStandardError()
+                    
+                    self.task.arguments = ["-c", command];
+                    self.task.launchPath = "/bin/zsh";
+                    
+                    self.task.terminationHandler = {process in
+                        self.pipe_err.fileHandleForReading.readabilityHandler = nil;
+                        self.pipe_out.fileHandleForReading.readabilityHandler = nil;
+                        self.pipe_in.fileHandleForWriting.writeabilityHandler = nil;
                         
-                        self.setupStandardOutput()
-                        self.setupStandardError()
-                        
-                        self.task.arguments = ["-c", command];
-                        self.task.launchPath = "/bin/zsh";
-                        
-                        self.task.terminationHandler = {process in
-                            self.pipe_err.fileHandleForReading.readabilityHandler = nil;
-                            self.pipe_out.fileHandleForReading.readabilityHandler = nil;
-                            self.pipe_in.fileHandleForWriting.writeabilityHandler = nil;
-                            
-                            callback(self.task.terminationStatus) };
-                        self.task.launch();
-                    }
-                })
+                        callback(self.task.terminationStatus) };
+                    try self.task.run();
+                }
             } catch {
                 print(error.localizedDescription);
             }
         }
     }
-
+    
     func isRunning() -> Bool {
         return task.isRunning;
     }

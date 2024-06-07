@@ -194,8 +194,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if let virtualMachine = self.virtualMachine {
             if (segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE) {
-                let diskName = QemuConstants.MEDIATYPE_DISK + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_DISK));
-                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: QemuConstants.MEDIATYPE_DISK, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)));
+                let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
+                let diskName = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType));
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: mediaType, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)));
                 
                 let destinationController = segue.destinationController as! NewDiskViewController;
                 destinationController.setVirtualDrive(virtualDrive);

@@ -28,10 +28,9 @@
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
-		3B3E56E226EF59E400D79C92 /* OPENCORE_LEGACY.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3E56E026EF59C900D79C92 /* OPENCORE_LEGACY.zip */; };
+		3B3E56E226EF59E400D79C92 /* OPENCORE.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3E56E026EF59C900D79C92 /* OPENCORE.zip */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
-		3B559E6926EB55410071E5B5 /* OPENCORE_MODERN.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -112,8 +111,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				3B3E56E226EF59E400D79C92 /* OPENCORE_LEGACY.zip in CopyFiles */,
-				3B559E6926EB55410071E5B5 /* OPENCORE_MODERN.zip in CopyFiles */,
+				3B3E56E226EF59E400D79C92 /* OPENCORE.zip in CopyFiles */,
 				3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */,
 				3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
@@ -147,9 +145,8 @@
 		3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
-		3B3E56E026EF59C900D79C92 /* OPENCORE_LEGACY.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE_LEGACY.zip; sourceTree = "<group>"; };
+		3B3E56E026EF59C900D79C92 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
-		3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE_MODERN.zip; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
 		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
@@ -385,8 +382,7 @@
 			isa = PBXGroup;
 			children = (
 				3B7F3C2329326F9900F1396D /* parallels_template */,
-				3B3E56E026EF59C900D79C92 /* OPENCORE_LEGACY.zip */,
-				3B559E6726EB551E0071E5B5 /* OPENCORE_MODERN.zip */,
+				3B3E56E026EF59C900D79C92 /* OPENCORE.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
 				3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
