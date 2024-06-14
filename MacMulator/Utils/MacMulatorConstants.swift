@@ -31,6 +31,7 @@ class MacMulatorConstants {
     static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
+    static let START_VM_SEGUE = "startVMSegue"
     
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";

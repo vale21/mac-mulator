@@ -7,6 +7,13 @@
 
 import Cocoa
 
+protocol RunningVMManagerViewController {
+    func setVirtualMachine(_ vm: VirtualMachine)
+    func setRecoveryMode(_ recoveryMode: Bool)
+    func setVmController(_ controller: VirtualMachineViewController)
+    func setVmRunner(_ runner: VirtualMachineRunner)
+}
+
 class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
@@ -77,10 +84,6 @@ class VirtualMachineViewController: NSViewController {
         self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: rootController?.currentVm);
     }
     
-    func startVMInRecovery(sender: Any) {
-        startVM(sender: sender, inRecovery: true)
-    }
-    
     @IBAction
     func startVM(sender: Any) {
         startVM(sender: sender, inRecovery: false)
@@ -119,13 +122,16 @@ class VirtualMachineViewController: NSViewController {
         });
     }
     
+    func startVMInRecovery(sender: Any) {
+        startVM(sender: sender, inRecovery: true)
+    }
+    
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
-        if #available(macOS 12.0, *) {
-            let source = segue.sourceController as! VirtualMachineViewController;
-            let dest = segue.destinationController as! VirtualMachineContainerViewController;
-            
-            if (segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE) {
+        if (segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE) {
+            if #available(macOS 12.0, *) {
+                let source = segue.sourceController as! VirtualMachineViewController;
+                let dest = segue.destinationController as! VirtualMachineContainerViewController;
                 let vmToStart = sender as! VMToStart
                 
                 dest.setVirtualMachine(vmToStart.vm)
@@ -134,6 +140,15 @@ class VirtualMachineViewController: NSViewController {
                 dest.setVmController(source)
                 dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
             }
+        } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
+            let source = segue.sourceController as! VirtualMachineViewController;
+            let dest = segue.destinationController as! StartVMViewController;
+            let vmToStart = sender as! VMToStart
+            
+            dest.setVmRunner(vmToStart.runner)
+            dest.setVirtualMachine(vmToStart.vm)
+            dest.setRecoveryMode(vmToStart.inRecovery)
+            dest.setVmController(source)
         }
     }
     
@@ -320,6 +335,10 @@ class VirtualMachineViewController: NSViewController {
         qemuUnavailableLabel.isHidden = false;
     }
     
+    func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
+        startVM_internal(runner, inRecovery, vm)
+    }
+    
     fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         do {
             try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
@@ -346,12 +365,7 @@ class VirtualMachineViewController: NSViewController {
                     self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
                     if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        QemuUtils.populateOpenCoreConfig(virtualMachine: vm, uponCompletion: {
-                            terminationCode in
-                            if terminationCode == 0 {
-                                self.startVM_internal(runner, inRecovery, vm)
-                            }
-                        });
+                        self.performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                     } else {
                         startVM_internal(runner, inRecovery, vm)
                     }
