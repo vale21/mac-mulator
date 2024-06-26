@@ -48,6 +48,7 @@
 "QemuConstants.macos" = "macOS Generico";
 "QemuConstants.windows" = "Windows Generico";
 "QemuConstants.linux" = "Linux Generico";
+"QemuConstants.ios" = "iOS Generico";
 "QemuConstants.generic" = "VM Generica";
 "QemuConstants.x64" = "VM Generica x86_64";
 "QemuConstants.x86" = "VM Generica x86";
