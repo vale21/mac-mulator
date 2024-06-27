@@ -302,7 +302,7 @@ class QemuRunner : VirtualMachineRunner {
 
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withSerial(QemuConstants.SERIAL_MON_STDIO)
-            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + virtualMachine.drives[1].path, "nand=" + virtualMachine.drives[0].path, "nor=" + virtualMachine.drives[2].path])
+            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(virtualMachine.drives[1].path), "nand=" + Utils.escape(virtualMachine.drives[0].path), "nor=" + Utils.escape(virtualMachine.drives[2].path)])
             .withCpu(sanitizeCPUTypeForARM())
             .withMemory(virtualMachine.memory)
             .withRtcEnabled(false)
