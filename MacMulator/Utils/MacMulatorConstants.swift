@@ -9,11 +9,12 @@ import Foundation
 
 class MacMulatorConstants {
     
-    static let VM_EXTENSION = "qvm";
-    static let DISK_EXTENSION = "qvd";
-    static let EFI_EXTENSION = "fd";
-    static let IMG_EXTENSION = "img";
-    static let INFO_PLIST = "Info.plist";
+    static let VM_EXTENSION = "qvm"
+    static let DISK_EXTENSION = "qvd"
+    static let EFI_EXTENSION = "fd"
+    static let IMG_EXTENSION = "img"
+    static let BIN_EXTENSION = "bin"
+    static let INFO_PLIST = "Info.plist"
     static let SAVE_FILE_NAME = "SaveFile.qvs"
     static let SCREENSHOT_FILE_NAME = "Screenshot.qvs"
     

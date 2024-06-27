@@ -19,6 +19,9 @@ class QemuConstants {
     static let MEDIATYPE_NVRAM = "nvram"
     static let MEDIATYPE_OPENCORE = "opencore"
     static let MEDIATYPE_IPSW = "ipsw"
+    static let MEDIATYPE_BOOTROM = "bootrom"
+    static let MEDIATYPE_NOR = "nor"
+    static let MEDIATYPE_NAND = "nand"
     
     static let IMAGE_CMD_CREATE = "create"
     static let IMAGE_CMD_INFO = "info"
@@ -30,6 +33,7 @@ class QemuConstants {
     static let FORMAT_RAW = "raw"
     static let FORMAT_UNKNOWN = "unknown"
     static let FORMAT_VHDX = "vhdx"
+    static let FORMAT_DIR = "directory"
     
     // Virtual Machine constants
     
@@ -41,6 +45,7 @@ class QemuConstants {
     static let NET = NSLocalizedString("QemuConstants.network", comment: "")
     static let NVRAM = "Nvram"
     static let NVME = NSLocalizedString("QemuConstants.nvme", comment: "")
+    static let NAND = "NAND"
     
     static let ARG_CD = "d"
     static let ARG_HD = "c"
@@ -50,6 +55,7 @@ class QemuConstants {
     static let OS_MAC = "macOS"
     static let OS_WIN = "Windows"
     static let OS_LINUX = "Linux"
+    static let OS_IOS = "iOS"
     static let OS_OTHER = NSLocalizedString("QemuConstants.other", comment: "")
     
     static let SUB_MAC_GENERIC = NSLocalizedString("QemuConstants.macos", comment: "")
@@ -131,6 +137,10 @@ class QemuConstants {
     static let SUB_NETRUNNER = "Netrunner"
     static let SUB_NEPTUNE = "Neptune Linux"
     
+    static let SUB_IOS_GENERIC = NSLocalizedString("QemuConstants.ios", comment: "")
+    static let SUB_IOS_1 = "iOS 1.x"
+    static let SUB_IOS_2 = "iOS 2.x"
+    
     static let SUB_OTHER_GENERIC = NSLocalizedString("QemuConstants.generic", comment: "")
     static let SUB_OTHER_x64 = NSLocalizedString("QemuConstants.x64", comment: "")
     static let SUB_OTHER_x86 = NSLocalizedString("QemuConstants.x86", comment: "")
@@ -200,6 +210,7 @@ class QemuConstants {
     static let ICON_REACT_OS = "react.os"
     static let ICON_RASPBERRY_OS = "raspberry.os"
     
+    static let ICON_IOS = "ios"
     
     static let QEMU_IMG = "qemu-img";
     static let ARCH_PPC = "qemu-system-ppc";
@@ -280,6 +291,7 @@ class QemuConstants {
     static let URL_ELEMENTARY = "https://elementary.io"
     static let URL_REACT_OS = "https://reactos.org/download/"
     static let URL_RASPBERRY_OS = "https://www.raspberrypi.com/software/operating-systems/"
+    static let URL_QEMU_IOS = "https://github.com/devos50/qemu-ios/releases/"
     
     static let ALL_ARCHITECTURES = [
         ARCH_X64,
@@ -390,6 +402,7 @@ class QemuConstants {
         OS_MAC,
         OS_WIN,
         OS_LINUX,
+        OS_IOS,
         OS_OTHER
     ]
     
@@ -527,6 +540,9 @@ class QemuConstants {
         [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ELEMENTARY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY, MEDIATYPE_DISK],
         [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS, MEDIATYPE_DISK],
         [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS, MEDIATYPE_DISK],
+        [OS_IOS, SUB_IOS_GENERIC, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND],
+        [OS_IOS, SUB_IOS_1, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND],
+        [OS_IOS, SUB_IOS_2, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND],      
         [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil],
         [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil, nil],
@@ -566,8 +582,10 @@ class QemuConstants {
     static let MACHINE_TYPE_VIRT = "virt,highmem=no";
     static let MACHINE_TYPE_VIRT_HIGHMEM = "virt,highmem=on";
     static let MACHINE_TYPE_Q800 = "q800";
+    static let MACHINE_TYPE_IPOD_TOUCH = "iPod-Touch"
     
     static let SERIAL_STDIO = "stdio";
+    static let SERIAL_MON_STDIO = "mon:stdio"
     
     static let PC_BIOS = "pc-bios";
     
@@ -635,6 +653,8 @@ class QemuConstants {
     static let SOUND_USB = "usb-audio"
     
     static let OPENCORE = "OPENCORE"
+    
+    static let LOG_UNIMPLEMENTED = "unimp"
     
     static let OTHER = "other"
 }

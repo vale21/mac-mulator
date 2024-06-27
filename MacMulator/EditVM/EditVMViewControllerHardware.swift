@@ -178,6 +178,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
                 openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
+            } else if virtualMachine.os == QemuConstants.OS_IOS {
+                openImageButton.isEnabled = false
             } else {
                 openImageButton.isEnabled = true
             }
@@ -185,10 +187,28 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
                 createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
+            } else if virtualMachine.os == QemuConstants.OS_IOS {
+                createNewDiskButton.title = "Select NAND..."
             } else {
                 createNewDiskButton.isEnabled = true
             }
         }
+    }
+    
+    override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender: Any?) -> Bool {
+        if let virtualMachine = self.virtualMachine {
+            // This is bad, but it is the quckest way to differenciate the single iPod touch use case from all the others
+            if (identifier == MacMulatorConstants.NEW_DISK_SEGUE && virtualMachine.os == QemuConstants.OS_IOS) {
+                Utils.showDirectorySelector(uponSelection: { panel in
+                    if let path = panel.url?.path {
+                        virtualMachine.drives[0].path = path
+                        updateView()
+                    }
+                })
+                return false
+            }
+        }
+        return true
     }
     
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -234,7 +254,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             return QemuConstants.ALL_ARCHITECTURES_DESC.count
         } else {
             if let virtualMachine = self.virtualMachine {
-                return QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0;
+                return virtualMachine.os == QemuConstants.OS_IOS ? 1 :  QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0;
             }
         }
         return 0;
@@ -331,7 +351,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         
         if (tableColumn?.identifier.rawValue == "Buttons") {
             let cellView = cell as! DrivesTableButtonsCell;
-            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW) {
+            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND) {
                 cellView.editButton.isEnabled = false;
                 cellView.infoButton.isEnabled = false;
             } else {

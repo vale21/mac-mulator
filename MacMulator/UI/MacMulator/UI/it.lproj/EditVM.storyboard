@@ -424,7 +424,6 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="createNewDisk:" target="fBa-tq-xkS" id="js8-SO-qv2"/>
                                     <segue destination="jnj-BN-7iT" kind="sheet" identifier="newDiskSegue" id="qMP-wa-FjT"/>
                                 </connections>
                             </button>

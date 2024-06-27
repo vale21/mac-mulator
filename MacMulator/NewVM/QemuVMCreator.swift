@@ -14,7 +14,7 @@ class QemuVMCreator: VMCreator {
     var progress: Double = 0.0
     
     func createVM(vm: VirtualMachine, installMedia: String) throws {
-        let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)!
+        let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)
         try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia)
     }
     
@@ -52,6 +52,15 @@ class QemuVMCreator: VMCreator {
                     size: 0);
                 virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB);
+            } else if vm.os == QemuConstants.OS_IOS {
+                // Install media is the path iPod Touch NAND
+                let virtualNAND = VirtualDrive(
+                    path: installMedia,
+                    name: QemuConstants.MEDIATYPE_NAND + "-0",
+                    format: QemuConstants.FORMAT_DIR,
+                    mediaType: QemuConstants.MEDIATYPE_NAND,
+                    size: 0);
+                vm.addVirtualDrive(virtualNAND);
             } else if Utils.isVHDXImage(installMedia) {
                 // Install media is a VHDX drive. We create a VirtualDrive of type NVME
                 virtualHDD = VirtualDrive(
@@ -75,7 +84,7 @@ class QemuVMCreator: VMCreator {
             }
         }
         
-        if virtualHDD == nil {
+        if virtualHDD == nil && vm.os != QemuConstants.OS_IOS {
             let mediaType = Utils.getMediaTypeForSubType(vm.os, vm.subtype)
             virtualHDD = VirtualDrive(
                 path: vm.path + "/" + mediaType + "-0." + MacMulatorConstants.DISK_EXTENSION,
@@ -86,27 +95,33 @@ class QemuVMCreator: VMCreator {
             vm.addVirtualDrive(virtualHDD!);
         }
         
-        return virtualHDD! // Safe to do this because the virtualHDD object is created above, it was found nil
+        return virtualHDD
     }
         
-    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive, installMedia: String) throws {
+    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive?, installMedia: String) throws {
         do {
             try Utils.createDocumentPackage(vm.path);
-            if !Utils.isVHDXImage(installMedia) {
-                QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                    terminationCcode in
-                    vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-                    QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
-                    self.complete = true
-                });
+            if let virtualHDD = virtualHDD {
+                if !Utils.isVHDXImage(installMedia) {
+                    QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                        terminationCcode in
+                        QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
+                        vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                        self.complete = true
+                    });
+                } else {
+                    QemuUtils.convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                        terminationCode, driveSize in
+                        virtualHDD.size = driveSize
+                        QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
+                        vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                        self.complete = true
+                    })
+                }
             } else {
-                QemuUtils.convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                    terminationCode, driveSize in
-                    virtualHDD.size = driveSize
-                    vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-                    QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
-                    self.complete = true
-                })
+                QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
+                vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
+                self.complete = true
             }
         } catch {
             complete = true;

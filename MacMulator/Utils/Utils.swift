@@ -19,7 +19,7 @@ enum ValidationError: Error, CustomStringConvertible {
         case .sudoNotAllowed:
             return NSLocalizedString("Utils.sudoNotAllowed", comment: "")
         case .workingPathError(let qemuPath, let command):
-            return String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25)) 
+            return String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25))
         case .executableError(let allowed, let command):
             return String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
         case .genericError:
@@ -516,7 +516,11 @@ class Utils {
         var size = 0;
         if let vm = virtualMachine {
             for drive in vm.drives {
-                if drive.mediaType != QemuConstants.MEDIATYPE_EFI && drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE && drive.mediaType != QemuConstants.MEDIATYPE_NVRAM {
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_NVRAM &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_NOR {
                     size += 1;
                 }
             }

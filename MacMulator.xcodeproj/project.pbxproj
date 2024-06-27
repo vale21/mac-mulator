@@ -44,6 +44,8 @@
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
 		3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EF29DF122C007C3781 /* EditVM.storyboard */; };
+		3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
+		3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
 		3B7F3C2429326F9900F1396D /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
@@ -168,6 +170,8 @@
 		3B75C7ED29DF06C9007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3B75C7F029DF122C007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = MacMulator/UI/en.lproj/EditVM.storyboard; sourceTree = "<group>"; };
 		3B75C7F229DF1243007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/EditVM.storyboard; sourceTree = "<group>"; };
+		3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = nor_n72ap.bin; sourceTree = "<group>"; };
+		3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootrom_240_4; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
 		3B7F3C2329326F9900F1396D /* parallels_template */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = parallels_template; sourceTree = "<group>"; };
@@ -384,6 +388,8 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
+				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
 				3B7F3C2329326F9900F1396D /* parallels_template */,
 				3B3E56E026EF59C900D79C92 /* OPENCORE.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
@@ -520,10 +526,12 @@
 			files = (
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
+				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */,
+				3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

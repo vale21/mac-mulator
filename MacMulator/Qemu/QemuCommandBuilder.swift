@@ -9,32 +9,34 @@ import Foundation
 
 class QemuCommandBuilder {
         
-    var qemuPath: String;
-    var executable: String;
-    var addQmpString: Bool?;
+    var qemuPath: String
+    var executable: String
+    var addQmpString: Bool?
     var showCursor: Bool?
-    var serial: String?;
-    var bios: String?;
-    var cpus: Int?;
-    var accel: String?;
-    var vga: String?;
+    var serial: String?
+    var bios: String?
+    var cpus: Int?
+    var accel: String?
+    var vga: String?
     var display: String?
-    var cpu: String?;
-    var usb: Bool?;
-    var device: [String] = [];
-    var bootArg: String?;
-    var machine: String?;
+    var cpu: String?
+    var usb: Bool?
+    var device: [String] = []
+    var bootArg: String?
+    var machine: String?
     var memory: Int32?
-    var graphics: String?;
-    var autoBoot: Bool?;
-    var vgaEnabled: Bool?;
-    var sound: [String] = [];
-    var efi: String?;
-    var drives: [String] = [];
-    var network: String?;
+    var graphics: String?
+    var autoBoot: Bool?
+    var vgaEnabled: Bool?
+    var sound: [String] = []
+    var efi: String?
+    var drives: [String] = []
+    var network: String?
     var portMappings: [PortMapping] = []
-    var managementPort: Int32?;
+    var managementPort: Int32?
     var nic: String?
+    var rtcEnabled: Bool = true
+    var logging: String?
     
     init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath;
@@ -98,9 +100,15 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withMachine(_ machine: String?) -> QemuCommandBuilder {
-        self.machine = machine;
-        return self;
+    func withMachine(_ machine: String?, _ options: [String]) -> QemuCommandBuilder {
+        self.machine = machine
+        if !options.isEmpty {
+            let optString = options.joined(separator: ",")
+            if let machine = self.machine {
+                self.machine = machine + "," + optString
+            }
+        }
+        return self
     }
     
     func withMemory(_ memory: Int32?) -> QemuCommandBuilder {
@@ -127,6 +135,16 @@ class QemuCommandBuilder {
         if let soudHw = sound {
             self.sound.append(soudHw);
         }
+        return self;
+    }
+    
+    func withRtcEnabled(_ rtcEnabled: Bool) -> QemuCommandBuilder {
+        self.rtcEnabled = rtcEnabled;
+        return self;
+    }
+    
+    func withLogging(_ logging: String?) -> QemuCommandBuilder {
+        self.logging = logging;
         return self;
     }
     
@@ -203,22 +221,22 @@ class QemuCommandBuilder {
     func build() -> String {
         var cmd = self.qemuPath + "/" + self.executable;
         if let serial = self.serial {
-            cmd += " -serial " + serial;
+            cmd += " -serial " + serial
         }
         if let bios = self.bios {
-            cmd += " -L " + bios;
+            cmd += " -L " + bios
         }
         if let cpus = self.cpus {
-            cmd += " -smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus);
+            cmd += " -smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus)
         }
         if let bootArg = self.bootArg {
-            cmd += " -boot " + bootArg;
+            cmd += " -boot " + bootArg
         }
         if let accel = self.accel {
-            cmd += " -accel " + accel;
+            cmd += " -accel " + accel
         }
         if let vga = self.vga {
-            cmd += " -vga " + vga;
+            cmd += " -vga " + vga
         }
         if let display = self.display {
             cmd += " -display " + display + ",show-cursor=";
@@ -229,48 +247,53 @@ class QemuCommandBuilder {
             }
         }
         if let cpu = self.cpu {
-            cmd += " -cpu " + cpu;
+            cmd += " -cpu " + cpu
         }
         if let usb = self.usb, usb {
-            cmd += " -usb";
+            cmd += " -usb"
         }
         if let nic = self.nic {
             cmd += " -nic user,model=" + nic
         }
         for device in self.device {
-            cmd += " -device " + device;
+            cmd += " -device " + device
         }
         if let machine = self.machine {
-            cmd += " -M " + machine;
+            cmd += " -M " + machine
         }
         if let memory = self.memory {
-            cmd += " -m " + String(memory);
+            cmd += " -m " + String(memory)
         }
         if let graphics = self.graphics {
-            cmd += " -g " + graphics;
+            cmd += " -g " + graphics
         }
         for sound in self.sound {
-            cmd += " -device " + sound;
+            cmd += " -device " + sound
         }
         if let autoBoot = self.autoBoot {
-            cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'";
+            cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'"
         }
         if let vgaEnabled = self.vgaEnabled {
-            cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'";
+            cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'"
         }
         if let efi = self.efi {
-            cmd += " -bios " + efi;
+            cmd += " -bios " + efi
         }
         for drive in self.drives {
-            cmd += " " + drive;
+            cmd += " " + drive
         }
         if let network = self.network {
-            cmd += " " + network;
+            cmd += " " + network
         }
         if self.addQmpString == true, let managementPort = self.managementPort{
-            cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait";
+            cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait"
         }
-        cmd += " -rtc base=localtime,clock=host"
+        if self.rtcEnabled {
+            cmd += " -rtc base=localtime,clock=host"
+        }
+        if let logging = self.logging {
+            cmd += " -d " + logging
+        }
         
         return cmd;
     }
