@@ -84,25 +84,27 @@ class QemuRunner : VirtualMachineRunner {
             var index = 1;
             Utils.removeUnexistingDrives(virtualMachine)
             
-            for drive in virtualMachine.drives {
-                var driveIndex = 0;
-                if !drive.isBootDrive {
-                    driveIndex = index;
-                    index += 1;
-                }
-                
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
-                    builder = builder.withEfi(file: drive.path);
-                } else {
-                    let mediaType = setupMediaType(drive);
-                    let path = setupPath(drive, virtualMachine);
+            if virtualMachine.os != QemuConstants.OS_IOS { // iOS has no drives, but uses the NAND
+                for drive in virtualMachine.drives {
+                    var driveIndex = 0;
+                    if !drive.isBootDrive {
+                        driveIndex = index;
+                        index += 1;
+                    }
                     
-                    builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
+                    if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                        builder = builder.withEfi(file: drive.path);
+                    } else {
+                        let mediaType = setupMediaType(drive);
+                        let path = setupPath(drive, virtualMachine);
+                        
+                        builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
+                    }
                 }
-            }
-            if livePreviewEnabled {
-                builder = builder.withQmpString(true);
-                builder = builder.withManagementPort(listenPort);
+                if livePreviewEnabled {
+                    builder = builder.withQmpString(true);
+                    builder = builder.withManagementPort(listenPort);
+                }
             }
             return builder.build();
         }
@@ -187,7 +189,7 @@ class QemuRunner : VirtualMachineRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(sanitizeMachineTypeForPPC())
+            .withMachine(sanitizeMachineTypeForPPC(), [])
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
@@ -203,7 +205,7 @@ class QemuRunner : VirtualMachineRunner {
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_PSERIES)
+            .withMachine(QemuConstants.MACHINE_TYPE_PSERIES, [])
             .withMemory(virtualMachine.memory)
             .withGraphics(virtualMachine.displayResolution)
             .withAutoBoot(true)
@@ -220,7 +222,7 @@ class QemuRunner : VirtualMachineRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_PC)
+            .withMachine(QemuConstants.MACHINE_TYPE_PC, [])
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withSound(QemuConstants.SOUND_AC97)
@@ -246,7 +248,7 @@ class QemuRunner : VirtualMachineRunner {
             .withBootArg(computeBootArg(virtualMachine))
             .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_Q35)
+            .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
@@ -266,7 +268,7 @@ class QemuRunner : VirtualMachineRunner {
             .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
             .withCpus(virtualMachine.cpus)
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
-            .withMachine(QemuConstants.MACHINE_TYPE_Q35)
+            .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(virtualMachine.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
@@ -281,14 +283,30 @@ class QemuRunner : VirtualMachineRunner {
     }
     
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
+        
+        if (virtualMachine.os == QemuConstants.OS_IOS) {
+            return createBuilderForIOSGuests()
+        }
+        
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withSerial(QemuConstants.SERIAL_STDIO)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB)
+            .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB, [])
             .withCpu(sanitizeCPUTypeForARM())
-            .withMemory(virtualMachine.memory);
+            .withMemory(virtualMachine.memory)
+    }
+    
+    fileprivate func createBuilderForIOSGuests() -> QemuCommandBuilder {
+
+        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+            .withSerial(QemuConstants.SERIAL_MON_STDIO)
+            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(virtualMachine.drives[1].path), "nand=" + Utils.escape(virtualMachine.drives[0].path), "nor=" + Utils.escape(virtualMachine.drives[2].path)])
+            .withCpu(sanitizeCPUTypeForARM())
+            .withMemory(virtualMachine.memory)
+            .withRtcEnabled(false)
+            .withLogging(QemuConstants.LOG_UNIMPLEMENTED)
     }
     
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
@@ -298,7 +316,7 @@ class QemuRunner : VirtualMachineRunner {
         
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
-            .withMachine(QemuConstants.MACHINE_TYPE_VIRT)
+            .withMachine(QemuConstants.MACHINE_TYPE_VIRT, [])
             .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(virtualMachine.memory)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
@@ -317,7 +335,7 @@ class QemuRunner : VirtualMachineRunner {
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
-            .withMachine(QemuConstants.MACHINE_TYPE_Q800)
+            .withMachine(QemuConstants.MACHINE_TYPE_Q800, [])
             .withMemory(virtualMachine.memory);
     }
     
@@ -374,7 +392,8 @@ class QemuRunner : VirtualMachineRunner {
     
     fileprivate func sanitizeCPUTypeForARM() -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false);
-        if (cpuType != QemuConstants.CPU_ARM1176 ) {
+        if (cpuType != QemuConstants.CPU_ARM1176 &&
+            cpuType != QemuConstants.CPU_MAX) {
             cpuType = QemuConstants.CPU_ARM1176;
         }
         return cpuType
