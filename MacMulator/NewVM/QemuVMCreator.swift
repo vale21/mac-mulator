@@ -85,11 +85,12 @@ class QemuVMCreator: VMCreator {
         }
         
         if virtualHDD == nil && vm.os != QemuConstants.OS_IOS {
+            let mediaType = Utils.getMediaTypeForSubType(vm.os, vm.subtype)
             virtualHDD = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
-                name: QemuConstants.MEDIATYPE_DISK + "-0",
+                path: vm.path + "/" + mediaType + "-0." + MacMulatorConstants.DISK_EXTENSION,
+                name: mediaType + "-0",
                 format: QemuConstants.FORMAT_QCOW2,
-                mediaType: QemuConstants.MEDIATYPE_DISK,
+                mediaType: mediaType,
                 size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
             vm.addVirtualDrive(virtualHDD!);
         }

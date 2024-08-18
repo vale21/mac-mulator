@@ -43,7 +43,7 @@
 "QemuConstants.ipsw" = "Immagine di installazione IPSW";
 "QemuConstants.efi" = "Firmware EFI";
 "QemuConstants.network" = "Network";
-"QemuConstants.nvme" = "Firmware NVMe";
+"QemuConstants.nvme" = "Drive NVMe";
 "QemuConstants.other" = "Altro";
 "QemuConstants.macos" = "macOS Generico";
 "QemuConstants.windows" = "Windows Generico";
@@ -98,6 +98,14 @@
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Errore nella scrittura di Info.plist: %@";
+"VirtualMachineListViewController.delete" = "Elimina";
+"VirtualMachineListViewController.edit" = "Modifica";
+"VirtualMachineListViewController.start" = "Avvia";
+"VirtualMachineListViewController.startInRecovery" = "Avvia in modalità di recupero";
+"VirtualMachineListViewController.stop" = "Arresta";
+"VirtualMachineListViewController.pause" = "Pausa";
+"VirtualMachineListViewController.showInFinder" = "Mostra nel Finder";
+"VirtualMachineListViewController.clone" = "Clona";
 "VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggerimao di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineViewController.startVM" = "Avvia questa VM";
 "VirtualMachineViewController.pauseNotSupported" = "La pausa è supportata solo da VM Apple Silicon con guest macOS";

@@ -161,21 +161,14 @@ class QemuUtils {
         }
         
         if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
-            var opencore: String = "";
-            if QemuUtils.isMacModern(vm.subtype) {
-                opencore = QemuConstants.OPENCORE_MODERN;
-            } else if QemuUtils.isMacLegacy(vm.subtype) {
-                opencore = QemuConstants.OPENCORE_LEGACY;
-            }
-            
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
-            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: opencore + ".zip", ofType: nil)!);
-            let destinationURL = URL(fileURLWithPath: vm.path);
-            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true);
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd")
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: QemuConstants.OPENCORE + ".zip", ofType: nil)!)
+            let destinationURL = URL(fileURLWithPath: vm.path)
+            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
             
             // Rename unzipped image and clean up garbage empty folder
-            try? FileManager.default.moveItem(atPath: vm.path + "/" + opencore + ".img", toPath: vm.path + "/opencore-0.img");
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"));
+            try? FileManager.default.moveItem(atPath: vm.path + "/" + QemuConstants.OPENCORE + ".img", toPath: vm.path + "/opencore-0.img")
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
         }
         
         if vm.os == QemuConstants.OS_IOS {
@@ -285,30 +278,7 @@ class QemuUtils {
         }
     }
     
-    static func isMacModern(_ subtype: String?) -> Bool {
-        let ret =
-        (subtype == QemuConstants.SUB_MAC_VENTURA ||
-        subtype == QemuConstants.SUB_MAC_MONTEREY ||
-        subtype == QemuConstants.SUB_MAC_BIG_SUR ||
-        subtype == QemuConstants.SUB_MAC_CATALINA);
-        return ret;
-    }
-    
-    static func isMacLegacy(_ subtype: String?) -> Bool {
-        let ret =
-        (subtype == QemuConstants.SUB_MAC_MOJAVE ||
-        subtype == QemuConstants.SUB_MAC_HIGH_SIERRA ||
-        subtype == QemuConstants.SUB_MAC_SIERRA ||
-        subtype == QemuConstants.SUB_MAC_EL_CAPITAN ||
-        subtype == QemuConstants.SUB_MAC_YOSEMITE ||
-        subtype == QemuConstants.SUB_MAC_MAVERICKS ||
-        subtype == QemuConstants.SUB_MAC_MOUNTAIN_LION ||
-        subtype == QemuConstants.SUB_MAC_LION ||
-        subtype == QemuConstants.SUB_MAC_SNOW_LEOPARD);
-        return ret;
-    }
-    
-    static func populateOpenCoreConfig(virtualMachine: VirtualMachine) {
+    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
         let shell = Shell();
         shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
             
@@ -332,16 +302,24 @@ class QemuUtils {
                     do {
                         var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template");
                             
-                        plistContent = plistContent.replacingOccurrences(of: "{screenResolution}", with: Utils.getResolutionOnly(virtualMachine.displayResolution));
+                        print("Replacing screen resolution in OpenCore config...")
+                        plistContent = plistContent.replacingOccurrences(of: "{screenResolution}", with: Utils.getResolutionOnly(virtualMachine.displayResolution))
+                        
+                        print("Replacing product name in OpenCore config...")
                         plistContent = plistContent.replacingOccurrences(of: "{macProductName}", with: machineDetails?.machine_model ?? "MacPro7,1")
-                        plistContent = plistContent.replacingOccurrences(of: "{serialNumber}", with: machineDetails?.serial_number ?? "ABCDEFG");
-                        plistContent = plistContent.replacingOccurrences(of: "{hardwareUUID}", with: machineDetails?.platform_UUID ?? "000-000");
+                        
+                        print("Replacing serial number in OpenCore config...")
+                        plistContent = plistContent.replacingOccurrences(of: "{serialNumber}", with: machineDetails?.serial_number ?? "ABCDEFG")
+                        
+                        print("Replacing hardware UUID in OpenCore config...")
+                        plistContent = plistContent.replacingOccurrences(of: "{hardwareUUID}", with: machineDetails?.platform_UUID ?? "000-000")
                             
+                        print("Writing to plist...")
                         try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8);
                             
                         let shell4 = Shell();
-                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
-                            print("Done");
+                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode in
+                            callback(terminationCode)
                         });
                     } catch {
                         print("ERROR while reading/writing OpenCore config.plist: " + error.localizedDescription);
@@ -351,15 +329,15 @@ class QemuUtils {
         }
     }
     
-    static func restoreOpenCoreConfigTemplate(virtualMachine: VirtualMachine) {
+    static func restoreOpenCoreConfigTemplate(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
         let shell = Shell();
         shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
             
-            let shell2 = Shell();
+            let shell2 = Shell()
             shell2.runCommand("mv /Volumes/OPENCORE/EFI/OC/config.plist.template /Volumes/OPENCORE/EFI/OC/config.plist", virtualMachine.path, uponCompletion: { terminationCode in
-                let shell3 = Shell();
+                let shell3 = Shell()
                 shell3.runCommand("hdiutil detach -force /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
-                    print("Done");
+                    callback(terminationCode)
                 });
             });
         }

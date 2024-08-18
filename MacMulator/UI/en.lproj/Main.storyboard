@@ -4039,6 +4039,7 @@ Raspberry Pi</mutableString>
                         <outlet property="vmType" destination="R79-YR-ULi" id="fCH-wy-aA4"/>
                         <outlet property="vmTypeDesc" destination="Xaw-fC-Wcz" id="aCd-x2-2kJ"/>
                         <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
+                        <segue destination="cvb-zf-bpY" kind="sheet" identifier="startVMSegue" id="xJM-1W-fcJ"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -4174,6 +4175,37 @@ Raspberry Pi</mutableString>
                 </viewController>
             </objects>
             <point key="canvasLocation" x="1287.5" y="990"/>
+        </scene>
+        <!--StartVM View Controller-->
+        <scene sceneID="37R-H4-ud8">
+            <objects>
+                <viewController id="cvb-zf-bpY" customClass="StartVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="VBd-K6-xzk">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="wK0-cK-L5g">
+                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bOR-Mz-m8E">
+                                <rect key="frame" x="108" y="46" width="163" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Starting VM. Please wait..." id="OCl-7C-wl7">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="progressBar" destination="wK0-cK-L5g" id="1tu-66-k8y"/>
+                    </connections>
+                </viewController>
+                <customObject id="dsI-EX-obA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="285.5" y="1502"/>
         </scene>
     </scenes>
     <resources>

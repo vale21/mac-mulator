@@ -418,8 +418,12 @@ class QemuRunner : VirtualMachineRunner {
             subtype == QemuConstants.SUB_MAC_EL_CAPITAN ||
             subtype == QemuConstants.SUB_MAC_SIERRA) {
             installDMGFile = "/Contents/SharedSupport/InstallESD.dmg";
-        } else {
+        } else if (subtype == QemuConstants.SUB_MAC_HIGH_SIERRA ||
+                   subtype == QemuConstants.SUB_MAC_MOJAVE ||
+                   subtype == QemuConstants.SUB_MAC_CATALINA) {
             installDMGFile = "/Contents/SharedSupport/BaseSystem.dmg";
+        } else {
+            installDMGFile = "/Contents/SharedSupport/SharedSupport.dmg";
         }
         return path + installDMGFile;
     }

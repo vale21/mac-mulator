@@ -155,8 +155,8 @@ class QemuCommandBuilder {
             self.drives.append(driveString);
         } else if media == QemuConstants.MEDIATYPE_NVME {
             var driveString = "-drive file=" + Utils.escape(file);
-            driveString.append(",if=none,id=boot,cache=writethrough");
-            driveString.append(" -device nvme,drive=boot,serial=boot");
+            driveString.append(",if=none,id=nvme,cache=writethrough");
+            driveString.append(" -device nvme,drive=nvme,serial=MACMULATOR_NVME_" + String(index));
             self.drives.append(driveString);
         } else if media == QemuConstants.MEDIATYPE_NVRAM {
             var driveString = "-drive file=" + Utils.escape(file);

@@ -9,7 +9,7 @@ import Cocoa
 import Virtualization
 
 @available(macOS 12.0, *)
-class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate {
+class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate, RunningVMManagerViewController {
     
     var virtualMachine: VirtualMachine?
     var recoveryMode: Bool = false

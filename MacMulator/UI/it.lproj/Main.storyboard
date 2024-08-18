@@ -51,7 +51,7 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSApplicationIcon" id="rz7-IB-pB5"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jcg-29-BcR">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jcg-29-BcR">
                                 <rect key="frame" x="116" y="427" width="118" height="26"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="MacMulator" id="e3y-dJ-Pds">
                                     <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -59,7 +59,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nbc-Cc-IYr">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nbc-Cc-IYr">
                                 <rect key="frame" x="116" y="403" width="364" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Version 1.0.0 Beta 10 (10)" id="pTz-f8-LGs">
                                     <font key="font" metaFont="system"/>
@@ -67,7 +67,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BHS-cg-DeE">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="BHS-cg-DeE">
                                 <rect key="frame" x="116" y="382" width="364" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="MacMulator è un software libero, non commerciale" id="tx0-XO-Wkr">
                                     <font key="font" metaFont="system"/>
@@ -75,7 +75,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ku-Ih-vBn">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Ku-Ih-vBn">
                                 <rect key="frame" x="57" y="20" width="483" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Copyright © 2020–2021 the MacMulator Project. macmulator@gmail.com" id="6uC-Ba-yDG">
                                     <font key="font" metaFont="smallSystem"/>
@@ -83,7 +83,7 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bNY-9B-VBP">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bNY-9B-VBP">
                                 <rect key="frame" x="20" y="291" width="604" height="73"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="73" id="UMa-6o-SXH"/>
@@ -2427,7 +2427,7 @@ Raspberry Pi</mutableString>
                                     <action selector="openLicense:" target="7e0-Bt-54A" id="s6X-kK-3TI"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeU-0G-eWl">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AeU-0G-eWl">
                                 <rect key="frame" x="243" y="250" width="156" height="27"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="27" id="WUC-l1-6MI"/>
@@ -2950,7 +2950,7 @@ Raspberry Pi</mutableString>
                         <rect key="frame" x="0.0" y="0.0" width="544" height="424"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SXs-MC-95b">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SXs-MC-95b">
                                 <rect key="frame" x="18" y="388" width="199" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Cartella degli eseguibili di Qemu" id="ciT-ZP-2c9">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -2958,7 +2958,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1x-Fr-N6k">
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1x-Fr-N6k">
                                 <rect key="frame" x="20" y="359" width="440" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Ag2-Lx-SfX">
                                     <font key="font" metaFont="system"/>
@@ -2998,7 +2998,7 @@ Raspberry Pi</mutableString>
                                     <action selector="livePreviewTickChanged:" target="cF1-rS-o50" id="U6W-oh-MuB"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Tr-xq-8xH">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Tr-xq-8xH">
                                 <rect key="frame" x="71" y="46" width="250" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Aggiorna la live preview ogni (5 secondi)" id="ZbJ-zq-6S5">
                                     <font key="font" metaFont="system"/>
@@ -3013,7 +3013,7 @@ Raspberry Pi</mutableString>
                                     <action selector="sliderChanged:" target="cF1-rS-o50" id="g2h-o1-BfZ"/>
                                 </connections>
                             </slider>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wKF-A0-RM3">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wKF-A0-RM3">
                                 <rect key="frame" x="73" y="22" width="35" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="1 sec" id="tJe-DA-6Ca">
                                     <font key="font" metaFont="system"/>
@@ -3021,7 +3021,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Q2-Tu-83e">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0Q2-Tu-83e">
                                 <rect key="frame" x="429" y="22" width="46" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="60 sec" id="2wb-WF-wXA">
                                     <font key="font" metaFont="system"/>
@@ -3029,7 +3029,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
                                 <rect key="frame" x="18" y="158" width="192" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Cartella delle Macchine Virtuali" id="NX3-mj-339">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -3037,7 +3037,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
                                 <rect key="frame" x="20" y="129" width="440" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="7JJ-SA-RYa">
                                     <font key="font" metaFont="system"/>
@@ -3061,7 +3061,7 @@ Raspberry Pi</mutableString>
                                     <action selector="searchFolder:" target="cF1-rS-o50" id="0h1-Vc-dDu"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rM6-Gc-oyU">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rM6-Gc-oyU">
                                 <rect key="frame" x="18" y="337" width="508" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Cerco la versione di Qemu..." id="agm-Pw-Q2s">
                                     <font key="font" metaFont="smallSystem"/>
@@ -3082,7 +3082,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="Mw1-DH-oJy"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TbL-Ch-oZB">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TbL-Ch-oZB">
                                 <rect key="frame" x="46" y="311" width="131" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-img" id="WBW-0n-q8n">
                                     <font key="font" metaFont="system"/>
@@ -3090,7 +3090,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNI-RH-lWM">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNI-RH-lWM">
                                 <rect key="frame" x="46" y="283" width="121" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-i386" id="baj-26-Tvx">
                                     <font key="font" metaFont="system"/>
@@ -3103,7 +3103,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="Yg9-b9-d4q"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="twW-NU-sLy">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="twW-NU-sLy">
                                 <rect key="frame" x="46" y="255" width="139" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-x86_64" id="XhX-Jb-eWK">
                                     <font key="font" metaFont="system"/>
@@ -3124,7 +3124,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="3mT-6C-VO4"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q6s-7c-wCb">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q6s-7c-wCb">
                                 <rect key="frame" x="250" y="311" width="131" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="127" id="sKW-Nd-OPS"/>
@@ -3135,7 +3135,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cad-QZ-tB8">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cad-QZ-tB8">
                                 <rect key="frame" x="250" y="283" width="144" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-aarch64" id="AFI-bd-FCH">
                                     <font key="font" metaFont="system"/>
@@ -3148,7 +3148,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="3rg-If-KCe"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gSB-28-Ef9">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gSB-28-Ef9">
                                 <rect key="frame" x="250" y="255" width="117" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc" id="0mo-UO-Tfx">
                                     <font key="font" metaFont="system"/>
@@ -3161,7 +3161,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="ATc-gH-DIk"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-uc-Av9">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-uc-Av9">
                                 <rect key="frame" x="250" y="227" width="133" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc64" id="z5E-mC-zk7">
                                     <font key="font" metaFont="system"/>
@@ -3174,7 +3174,7 @@ Raspberry Pi</mutableString>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="udX-sO-DrE"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b9j-mm-eoZ">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b9j-mm-eoZ">
                                 <rect key="frame" x="46" y="227" width="128" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-m68k" id="Glm-IL-Pfy">
                                     <font key="font" metaFont="system"/>
@@ -3450,7 +3450,7 @@ Raspberry Pi</mutableString>
                                                                         <imageReference key="image" image="tiger.small" symbolScale="large"/>
                                                                     </imageCell>
                                                                 </imageView>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsExpansionToolTips="YES" id="qJR-bt-XWc">
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsExpansionToolTips="YES" id="qJR-bt-XWc">
                                                                     <rect key="frame" x="47" y="18" width="129" height="19"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" alignment="left" title="Mac OS X Tiger" placeholderString="Mac OS X Tiger" id="BEt-Jw-pWW">
@@ -3522,7 +3522,7 @@ Raspberry Pi</mutableString>
                                                 <rect key="frame" x="0.0" y="0.0" width="367" height="245"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XIi-hH-iuO">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XIi-hH-iuO">
                                                         <rect key="frame" x="18" y="142" width="328" height="48"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="48" id="EPC-VJ-nxX"/>
@@ -3592,7 +3592,7 @@ Raspberry Pi</mutableString>
                                                             <action selector="importVM:" target="Urh-Tu-1Cq" id="rV3-7I-zT4"/>
                                                         </connections>
                                                     </button>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xtU-oZ-JtS">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xtU-oZ-JtS">
                                                         <rect key="frame" x="122" y="198" width="122" height="26"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="MacMulator" id="6TX-h8-Wug">
                                                             <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -3623,7 +3623,7 @@ Raspberry Pi</mutableString>
                                                 <constraint firstAttribute="height" constant="245" id="j4D-33-NwD"/>
                                             </constraints>
                                         </box>
-                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TJ-y4-d9V">
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TJ-y4-d9V">
                                             <rect key="frame" x="18" y="401" width="544" height="26"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="26" id="tQh-oS-HUA"/>
@@ -3634,7 +3634,7 @@ Raspberry Pi</mutableString>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gzW-c5-Oke">
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gzW-c5-Oke">
                                             <rect key="frame" x="17" y="304" width="544" height="89"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="89" id="wMZ-B6-1Y2"/>
@@ -3652,7 +3652,7 @@ Raspberry Pi</mutableString>
                                                 <rect key="frame" x="4" y="5" width="466" height="194"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="crb-Lz-Aot">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="crb-Lz-Aot">
                                                         <rect key="frame" x="129" y="158" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Architettura:" id="37H-Uq-o6b">
                                                             <font key="font" metaFont="system"/>
@@ -3660,7 +3660,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xaw-fC-Wcz">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xaw-fC-Wcz">
                                                         <rect key="frame" x="129" y="134" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Tipo:" id="zBD-yY-AwV">
                                                             <font key="font" metaFont="system"/>
@@ -3668,7 +3668,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bJS-UN-Auk">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bJS-UN-Auk">
                                                         <rect key="frame" x="129" y="110" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Processori:" id="8AW-y2-6Bd">
                                                             <font key="font" metaFont="system"/>
@@ -3676,7 +3676,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bwd-IX-dSu">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bwd-IX-dSu">
                                                         <rect key="frame" x="129" y="86" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Memoria:" id="DVq-k5-x3l">
                                                             <font key="font" metaFont="system"/>
@@ -3684,7 +3684,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ynO-41-Zwf">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ynO-41-Zwf">
                                                         <rect key="frame" x="129" y="62" width="105" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="101" id="Ext-q8-D7w"/>
@@ -3713,7 +3713,7 @@ Raspberry Pi</mutableString>
                                                             <action selector="editVM:" target="Urh-Tu-1Cq" id="Wxe-8s-AcC"/>
                                                         </connections>
                                                     </button>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNo-Km-ykM">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNo-Km-ykM">
                                                         <rect key="frame" x="238" y="86" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="2 GB" id="pvp-0w-XJp">
                                                             <font key="font" metaFont="system"/>
@@ -3721,7 +3721,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pDO-9H-D7g">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pDO-9H-D7g">
                                                         <rect key="frame" x="238" y="62" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="500 GB" id="2Kz-yJ-7FH">
                                                             <font key="font" metaFont="system"/>
@@ -3729,7 +3729,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ibh-ZQ-tyo">
+                                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ibh-ZQ-tyo">
                                                         <rect key="frame" x="238" y="110" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="2" id="rXz-ns-Bhh">
                                                             <font key="font" metaFont="system"/>
@@ -3737,7 +3737,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R79-YR-ULi">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R79-YR-ULi">
                                                         <rect key="frame" x="238" y="134" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Tiger" id="Ero-Oa-CWH">
                                                             <font key="font" metaFont="system"/>
@@ -3745,7 +3745,7 @@ Raspberry Pi</mutableString>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hm8-Zq-L4L">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hm8-Zq-L4L">
                                                         <rect key="frame" x="238" y="158" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="PowerPC" id="miw-4e-d3D">
                                                             <font key="font" metaFont="system"/>
@@ -3806,7 +3806,7 @@ Raspberry Pi</mutableString>
                                                 <constraint firstAttribute="width" constant="36" id="l3D-Vx-YIi"/>
                                             </constraints>
                                             <connections>
-                                                <action selector="startVMWithSender:" target="Urh-Tu-1Cq" id="rzz-jA-YD0"/>
+                                                <action selector="startVMWithSender:" target="Urh-Tu-1Cq" id="lIV-8X-3Ww"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="drX-xb-Fr1">
@@ -3837,7 +3837,7 @@ Raspberry Pi</mutableString>
                                                 <action selector="pauseVMWithSender:" target="Urh-Tu-1Cq" id="4kt-6K-52d"/>
                                             </connections>
                                         </button>
-                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23l-NY-BDE">
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23l-NY-BDE">
                                             <rect key="frame" x="18" y="57" width="544" height="16"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="16" id="1Cr-uj-X9S"/>
@@ -3917,11 +3917,43 @@ Raspberry Pi</mutableString>
                         <outlet property="vmType" destination="R79-YR-ULi" id="fCH-wy-aA4"/>
                         <outlet property="vmTypeDesc" destination="Xaw-fC-Wcz" id="aCd-x2-2kJ"/>
                         <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
+                        <segue destination="43Y-oV-RvL" kind="sheet" identifier="startVMSegue" id="I1j-Fl-gNK"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="8" y="1051"/>
+        </scene>
+        <!--StartVM View Controller-->
+        <scene sceneID="QeQ-2p-hJM">
+            <objects>
+                <viewController id="43Y-oV-RvL" customClass="StartVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="S75-hY-2vD">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="aWA-Cq-Wt2">
+                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9GI-9T-xdN">
+                                <rect key="frame" x="102" y="46" width="174" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Avvio la Macchina Virtuale..." id="lXF-cb-wki">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="progressBar" destination="aWA-Cq-Wt2" id="jad-aa-tmI"/>
+                    </connections>
+                </viewController>
+                <customObject id="Tac-6m-Ayz" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="285.5" y="1502"/>
         </scene>
         <!--Virtual Machine Container View Controller-->
         <scene sceneID="EIf-4K-aeP">
@@ -3973,7 +4005,7 @@ Raspberry Pi</mutableString>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="monterey.large" id="6Vp-3F-Pg5"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UVW-ar-dwd">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UVW-ar-dwd">
                                 <rect key="frame" x="30" y="46" width="352" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Metto in pausa la VM..." id="6bp-pc-a1M">
@@ -4003,7 +4035,7 @@ Raspberry Pi</mutableString>
                         <rect key="frame" x="0.0" y="0.0" width="591" height="238"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTY-U4-JTa">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gTY-U4-JTa">
                                 <rect key="frame" x="18" y="70" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Installo macOS sulla Virtual Machine (0%)..." id="dgV-br-cwK">
@@ -4012,7 +4044,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7rW-oK-SaX">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7rW-oK-SaX">
                                 <rect key="frame" x="18" y="20" width="555" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Tempo stimato rimanente: 10 minuti" id="PWu-dz-l5q">

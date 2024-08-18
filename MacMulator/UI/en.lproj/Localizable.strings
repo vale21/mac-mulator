@@ -98,6 +98,14 @@
 "VirtualMachine.sshPortMapping" = "SSH port mapping";
 "VirtualMachine.infoPlistReadError" = "Error while reading Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Error while writing Info.plist: %@";
+"VirtualMachineListViewController.delete" = "Delete";
+"VirtualMachineListViewController.edit" = "Edit";
+"VirtualMachineListViewController.start" = "Start";
+"VirtualMachineListViewController.startInRecovery" = "Start in Recovery Mode";
+"VirtualMachineListViewController.stop" = "Stop";
+"VirtualMachineListViewController.pause" = "Pause";
+"VirtualMachineListViewController.showInFinder" = "Show in Finder";
+"VirtualMachineListViewController.clone" = "Clone";
 "VirtualMachineViewController.forciblyClosing" = "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "VirtualMachineViewController.startVM" = "Start this VM";
 "VirtualMachineViewController.pauseNotSupported" = "Pause feature is supported only for Apple Silicon macOS Guests";
