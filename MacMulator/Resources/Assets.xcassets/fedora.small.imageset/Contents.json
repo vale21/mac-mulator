@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "fedora_s.png",
+      "filename" : "Icon_fedora_small.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "fedora_s_2.png",
+      "filename" : "Icon_fedora_small_2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "fedora_s_3.png",
+      "filename" : "Icon_fedora_small_3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
