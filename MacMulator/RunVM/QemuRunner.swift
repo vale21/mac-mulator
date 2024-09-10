@@ -242,7 +242,7 @@ class QemuRunner : VirtualMachineRunner {
             return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice);
         }
         
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        var builder = QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
@@ -253,13 +253,18 @@ class QemuRunner : VirtualMachineRunner {
             .withVga(QemuConstants.VGA_VIRTIO)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
-            .withSound(QemuConstants.SOUND_HDA)
-            .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
             .withPortMappings(virtualMachine.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+        let sound = Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)
+        if sound == QemuConstants.SOUND_HDA {
+            builder = builder.withSound(QemuConstants.SOUND_HDA).withSound(QemuConstants.SOUND_HDA_DUPLEX)
+        } else {
+            builder = builder.withSound(sound)
+        }
+        return builder
     }
     
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
