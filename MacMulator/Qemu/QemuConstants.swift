@@ -79,7 +79,8 @@ class QemuConstants {
     static let SUB_MAC_BIG_SUR = "macOS 11.x (Big Sur)"
     static let SUB_MAC_MONTEREY = "macOS 12.x (Monterey)"
     static let SUB_MAC_VENTURA = "macOS 13.x (Ventura)"
-    static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)";
+    static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)"
+    static let SUB_MAC_SEQUOIA = "macOS 15.x (Sequoia)"
     static let SUB_MAC_OS_9 = "Mac OS 9"
     static let SUB_MAC_OS_8 = "Mac OS 8"
     static let SUB_SYSTEM_7 = "System 7"
@@ -152,52 +153,53 @@ class QemuConstants {
     static let SUB_OTHER_RISCV = NSLocalizedString("QemuConstants.riscv", comment: "")
     static let SUB_OTHER_M68K = NSLocalizedString("QemuConstants.m68k", comment: "")
     
-    static let ICON_MAC_OS_9 = "mac.os.9";
-    static let ICON_MAC_CHEETAH = "cheetah";
-    static let ICON_MAC_JAGUAR = "jaguar";
-    static let ICON_MAC_PANTHER = "panther";
-    static let ICON_MAC_TIGER = "tiger";
-    static let ICON_MAC_LEOPARD = "leopard";
-    static let ICON_MAC_SNOW_LEOPARD = "snow.leopard";
-    static let ICON_LION = "lion";
-    static let ICON_MOUNTAIN_LION = "mountain.lion";
-    static let ICON_MAVERICKS = "mavericks";
-    static let ICON_YOSEMITE = "yosemite";
-    static let ICON_EL_CAPITAN = "el.capitan";
-    static let ICON_SIERRA = "sierra";
-    static let ICON_HIGH_SIERRA = "high.sierra";
-    static let ICON_MOJAVE = "mojave";
-    static let ICON_CATALINA = "catalina";
-    static let ICON_BIG_SUR = "big.sur";
-    static let ICON_MONTEREY = "monterey";
-    static let ICON_VENTURA = "ventura";
-    static let ICON_SONOMA = "sonoma";
+    static let ICON_MAC_OS_9 = "mac.os.9"
+    static let ICON_MAC_CHEETAH = "cheetah"
+    static let ICON_MAC_JAGUAR = "jaguar"
+    static let ICON_MAC_PANTHER = "panther"
+    static let ICON_MAC_TIGER = "tiger"
+    static let ICON_MAC_LEOPARD = "leopard"
+    static let ICON_MAC_SNOW_LEOPARD = "snow.leopard"
+    static let ICON_LION = "lion"
+    static let ICON_MOUNTAIN_LION = "mountain.lion"
+    static let ICON_MAVERICKS = "mavericks"
+    static let ICON_YOSEMITE = "yosemite"
+    static let ICON_EL_CAPITAN = "el.capitan"
+    static let ICON_SIERRA = "sierra"
+    static let ICON_HIGH_SIERRA = "high.sierra"
+    static let ICON_MOJAVE = "mojave"
+    static let ICON_CATALINA = "catalina"
+    static let ICON_BIG_SUR = "big.sur"
+    static let ICON_MONTEREY = "monterey"
+    static let ICON_VENTURA = "ventura"
+    static let ICON_SONOMA = "sonoma"
+    static let ICON_SEQUOIA = "sequoia"
     
-    static let ICON_WINDOWS_XP = "windows.xp";
-    static let ICON_WINDOWS_VISTA = "windows.vista";
-    static let ICON_WINDOWS_7 = "windows.7";
-    static let ICON_WINDOWS_8 = "windows.8";
-    static let ICON_WINDOWS_8_1 = "windows.8.1";
-    static let ICON_WINDOWS_10 = "windows.10";
+    static let ICON_WINDOWS_XP = "windows.xp"
+    static let ICON_WINDOWS_VISTA = "windows.vista"
+    static let ICON_WINDOWS_7 = "windows.7"
+    static let ICON_WINDOWS_8 = "windows.8"
+    static let ICON_WINDOWS_8_1 = "windows.8.1"
+    static let ICON_WINDOWS_10 = "windows.10"
     
-    static let ICON_MX_LINUX = "mx.linux";
-    static let ICON_LINUX_MINT = "linux.mint";
-    static let ICON_DEBIAN = "debian";
-    static let ICON_UBUNTU = "ubuntu";
-    static let ICON_XUBUNTU = "xubuntu";
-    static let ICON_KUBUNTU = "kubuntu";
-    static let ICON_LUBUNTU = "lubuntu";
-    static let ICON_UBUNTU_MATE = "ubuntu.mate";
-    static let ICON_OPENSUSE = "opensuse";
-    static let ICON_ARCH_LINUX = "arch.linux";
-    static let ICON_MANJARO = "manjaro";
-    static let ICON_FEDORA = "fedora";
-    static let ICON_KALI_LINUX = "kali.linux";
-    static let ICON_REDHAT = "redhat.linux";
-    static let ICON_CENTOS = "centos.linux";
-    static let ICON_SOLUS = "solus.linux";
-    static let ICON_DEEPIN = "deepin";
-    static let ICON_ZORIN = "zorin.os";
+    static let ICON_MX_LINUX = "mx.linux"
+    static let ICON_LINUX_MINT = "linux.mint"
+    static let ICON_DEBIAN = "debian"
+    static let ICON_UBUNTU = "ubuntu"
+    static let ICON_XUBUNTU = "xubuntu"
+    static let ICON_KUBUNTU = "kubuntu"
+    static let ICON_LUBUNTU = "lubuntu"
+    static let ICON_UBUNTU_MATE = "ubuntu.mate"
+    static let ICON_OPENSUSE = "opensuse"
+    static let ICON_ARCH_LINUX = "arch.linux"
+    static let ICON_MANJARO = "manjaro"
+    static let ICON_FEDORA = "fedora"
+    static let ICON_KALI_LINUX = "kali.linux"
+    static let ICON_REDHAT = "redhat.linux"
+    static let ICON_CENTOS = "centos.linux"
+    static let ICON_SOLUS = "solus.linux"
+    static let ICON_DEEPIN = "deepin"
+    static let ICON_ZORIN = "zorin.os"
     static let ICON_SLACKEL = "slackel"
     static let ICON_PURE_OS = "pure.os"
     static let ICON_MAGEIA = "mageia"
@@ -224,12 +226,13 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
     
     static let URL_APPLE_COM = "https://www.apple.com"
-    static let URL_MAC_SONOMA = "https://developer.apple.com"
-    static let URL_MAC_VENTURA = "https://apps.apple.com/us/app/macos-ventura/id1638787999"
+    static let URL_MAC_SEQUOIA = "https://apps.apple.com/it/app/macos-sequoia"
+    static let URL_MAC_SONOMA = "https://apps.apple.com/it/app/macos-sonoma/id6450717509"
+    static let URL_MAC_VENTURA = "https://apps.apple.com/it/app/macos-ventura/id1638787999"
     static let URL_MAC_MONTEREY = "https://apps.apple.com/it/app/macos-monterey/id1576738294"
     static let URL_MAC_BIG_SUR = "https://apps.apple.com/it/app/macos-big-sur/id1526878132"
     static let URL_MAC_CATALINA = "https://apps.apple.com/it/app/macos-catalina/id1466841314"
-    static let URL_MAC_MOJAVE = "https://apps.apple.com/us/app/macos-mojave/id1398502828"
+    static let URL_MAC_MOJAVE = "https://apps.apple.com/it/app/macos-mojave/id1398502828"
     static let URL_MAC_HIGH_SIERRA = "https://support.apple.com/it-it/HT211683"
     static let URL_MAC_SIERRA = "https://support.apple.com/it-it/HT211683"
     static let URL_MAC_EL_CAPITAN = "https://support.apple.com/it-it/HT211683"
@@ -475,6 +478,7 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM, MEDIATYPE_DISK],
+        [OS_MAC, SUB_MAC_SEQUOIA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SEQUOIA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SEQUOIA, MEDIATYPE_NVME],
         [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA, MEDIATYPE_NVME],
         [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA, MEDIATYPE_NVME],
         [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_MONTEREY, MEDIATYPE_NVME],

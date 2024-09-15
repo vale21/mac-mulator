@@ -904,7 +904,8 @@ class Utils {
             QemuConstants.SUB_MAC_BIG_SUR,
             QemuConstants.SUB_MAC_MONTEREY,
             QemuConstants.SUB_MAC_VENTURA,
-            QemuConstants.SUB_MAC_SONOMA
+            QemuConstants.SUB_MAC_SONOMA,
+            QemuConstants.SUB_MAC_SEQUOIA
         ]
         
         let version = versions.firstIndex(of: subtype)
