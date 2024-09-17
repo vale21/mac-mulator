@@ -91,6 +91,15 @@ class QemuConstants {
     static let SUB_SYSTEM_2 = "System 2"
     static let SUB_SYSTEM_1 = "System 1"
     
+    static let DESC_MAC_HIGH_SIERRA = "macOS High Sierra"
+    static let DESC_MAC_MOJAVE = "macOS Mojave"
+    static let DESC_MAC_CATALINA = "macOS Catalin)"
+    static let DESC_MAC_BIG_SUR = "macOS Big Sur"
+    static let DESC_MAC_MONTEREY = "macOS Monterey"
+    static let DESC_MAC_VENTURA = "macOS Ventura"
+    static let DESC_MAC_SONOMA = "macOS Sonoma"
+    static let DESC_MAC_SEQUOIA = "macOS Sequoia"
+    
     static let SUB_WIN_GENERIC = NSLocalizedString("QemuConstants.windows", comment: "")
     static let SUB_WINDOWS_10 = "Windows 10"
     static let SUB_WINDOWS_8_1 = "Windows 8.1"
@@ -226,7 +235,7 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
     
     static let URL_APPLE_COM = "https://www.apple.com"
-    static let URL_MAC_SEQUOIA = "https://apps.apple.com/it/app/macos-sequoia"
+    static let URL_MAC_SEQUOIA = "https://apps.apple.com/it/app/id6596773750"
     static let URL_MAC_SONOMA = "https://apps.apple.com/it/app/macos-sonoma/id6450717509"
     static let URL_MAC_VENTURA = "https://apps.apple.com/it/app/macos-ventura/id1638787999"
     static let URL_MAC_MONTEREY = "https://apps.apple.com/it/app/macos-monterey/id1576738294"

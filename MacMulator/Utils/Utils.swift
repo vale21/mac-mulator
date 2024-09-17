@@ -434,6 +434,29 @@ class Utils {
         return QemuConstants.SUB_OTHER_GENERIC;
     }
     
+    static func getMacOSSubType(_ os: String?) -> String {
+        switch(os) {
+        case QemuConstants.DESC_MAC_SEQUOIA:
+            return QemuConstants.SUB_MAC_SEQUOIA
+        case QemuConstants.DESC_MAC_SONOMA:
+            return QemuConstants.SUB_MAC_SONOMA
+        case QemuConstants.DESC_MAC_VENTURA:
+            return QemuConstants.SUB_MAC_VENTURA
+        case QemuConstants.DESC_MAC_MONTEREY:
+            return QemuConstants.SUB_MAC_MONTEREY
+        case QemuConstants.DESC_MAC_BIG_SUR:
+            return QemuConstants.SUB_MAC_BIG_SUR
+        case QemuConstants.DESC_MAC_CATALINA:
+            return QemuConstants.SUB_MAC_CATALINA
+        case QemuConstants.DESC_MAC_MOJAVE:
+            return QemuConstants.SUB_MAC_MOJAVE
+        case QemuConstants.DESC_MAC_HIGH_SIERRA:
+            return QemuConstants.SUB_MAC_HIGH_SIERRA
+        default:
+            return QemuConstants.SUB_MAC_GENERIC
+        }
+    }
+    
     static func getIndexOfSubType(_ os: String, _ subtype: String) -> Int {
         var count = -1;
         for vmDefault in QemuConstants.vmDefaults {
@@ -662,6 +685,30 @@ class Utils {
         } else {
             return NSLocalizedString("Utils.virtualizationGeneric", comment: "")
         }
+    }
+    
+    static func getHostMacOSVersion() -> String {
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        switch (version.majorVersion, version.minorVersion) {
+            case (15, _):
+                return QemuConstants.DESC_MAC_SEQUOIA
+            case (14, _):
+                return QemuConstants.DESC_MAC_SONOMA
+            case (13, _):
+                return QemuConstants.DESC_MAC_VENTURA
+            case (12, _):
+                return QemuConstants.DESC_MAC_MONTEREY
+            case (11, _):
+                return QemuConstants.DESC_MAC_BIG_SUR
+            case (10, 15):
+                return QemuConstants.DESC_MAC_CATALINA
+            case (10, 14):
+                return QemuConstants.DESC_MAC_MOJAVE
+            case (10, 13):
+                return QemuConstants.DESC_MAC_HIGH_SIERRA
+            default:
+                return "N/A"
+            }
     }
     
     static func getPreferredArchitecture() -> String {
