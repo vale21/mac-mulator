@@ -68,6 +68,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.pauseVM(sender: sender)
     }
     
+    func attachUSBImageToVM(_ sender: Any, _ path: String) {
+        vmController?.attachUSBImageToVM(sender: sender, path: path)
+    }
+    
     func showConsoleMenubarClicked(_ sender: Any) {
         self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_CONSOLE_SEGUE, sender: self);
     }
@@ -284,5 +288,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             runner.stopVM(guestStopped: false)
         }
     }
+
 }
 

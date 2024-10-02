@@ -63,6 +63,10 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
+        if #available(macOS 15.0, *) {
+            virtualMachineConfiguration.usbControllers = [MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()]
+        }
+        
         try! virtualMachineConfiguration.validate()
         if #available(macOS 14.0, *) {
 #if arch(arm64)

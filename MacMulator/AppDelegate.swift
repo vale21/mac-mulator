@@ -42,6 +42,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             _ = self.application(NSApp, openFile: String(panel.url!.path)) });
     }
     
+    @IBAction func attachUSBImageMenuBarClicked(_ sender: Any) {
+        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
+            if let path = panel.url?.path {
+                rootController?.attachUSBImageToVM(MacMulatorConstants.mainMenuSender, path)
+            }
+        })
+    }
+    
     @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
         if #available(macOS 11.0, *) {
             Utils.showDirectorySelector(uponSelection: { panel in

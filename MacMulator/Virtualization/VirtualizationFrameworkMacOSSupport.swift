@@ -63,6 +63,10 @@ class VirtualizationFrameworkMacOSSupport : VirtualizationFrameworkSupport {
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration(vm: vm)]
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
         
+        if #available(macOS 15.0, *) {
+            virtualMachineConfiguration.usbControllers = [MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()]
+        }
+        
         try! virtualMachineConfiguration.validate()
         if #available(macOS 14.0, *) {
             do {

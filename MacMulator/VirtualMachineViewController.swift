@@ -126,6 +126,17 @@ class VirtualMachineViewController: NSViewController {
         startVM(sender: sender, inRecovery: true)
     }
     
+    func attachUSBImageToVM(sender: Any, path: String) {
+        if #available(macOS 15.0, *) {
+            if let vm = self.rootController?.currentVm  {
+                if sender as? String == MacMulatorConstants.mainMenuSender && vm.type == MacMulatorConstants.APPLE_VM {
+                    let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
+                    runner.attachUSBImageToVM(path: path)
+                }
+            }
+        }
+    }
+    
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         
         if (segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE) {

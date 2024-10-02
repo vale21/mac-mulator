@@ -7,6 +7,8 @@
 
 import Foundation
 import Virtualization
+import IOKit
+import IOKit.usb
 
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
@@ -37,7 +39,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     
     func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
-        
+
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
 #if arch(arm64)
             
@@ -235,6 +237,27 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
 
             self.saveVirtualMachine(completionHandler: completionHandler)
         })
+    }
+    
+    @available(macOS 15.0, *)
+    func attachUSBImageToVM(path: String) {
+
+        let diskURL = URL(fileURLWithPath: path)
+        do {
+            let diskAttachment = try VZDiskImageStorageDeviceAttachment(url: diskURL, readOnly: false)
+            let usbMassStorageDeviceConfiguration = VZUSBMassStorageDeviceConfiguration(attachment: diskAttachment)
+            let usbMassStorageDevice = VZUSBMassStorageDevice(configuration: usbMassStorageDeviceConfiguration)
+
+            if let usbControllers = vzVirtualMachine?.usbControllers {
+                if  usbControllers.count > 0 {
+                    vzVirtualMachine?.usbControllers[0].attach(device: usbMassStorageDevice, completionHandler: { (result) in
+                        print("ok")
+                    })
+                }
+            }
+        } catch {
+            Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription)
+        }
     }
     
 #endif
