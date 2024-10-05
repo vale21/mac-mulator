@@ -389,8 +389,9 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
             cpuType != QemuConstants.CPU_SKYLAKE_CLIENT &&
-            cpuType != QemuConstants.CPU_QEMU64 ) {
-            cpuType = QemuConstants.CPU_QEMU64;
+            cpuType != QemuConstants.CPU_QEMU64 &&
+            cpuType != QemuConstants.CPU_MAX) {
+            cpuType = QemuConstants.CPU_MAX;
         }
         return cpuType
     }
