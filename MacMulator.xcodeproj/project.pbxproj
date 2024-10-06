@@ -29,6 +29,8 @@
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B3E56E226EF59E400D79C92 /* OPENCORE.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3E56E026EF59C900D79C92 /* OPENCORE.zip */; };
+		3B4091162CB30A9500A939AD /* SECURE_EFI.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B4091142CB30A9500A939AD /* SECURE_EFI.fd */; };
+		3B4091172CB30A9500A939AD /* SECURE_EFI_VARS.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B4091152CB30A9500A939AD /* SECURE_EFI_VARS.fd */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -149,6 +151,8 @@
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B3E56E026EF59C900D79C92 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
+		3B4091142CB30A9500A939AD /* SECURE_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI.fd; sourceTree = "<group>"; };
+		3B4091152CB30A9500A939AD /* SECURE_EFI_VARS.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS.fd; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
@@ -388,6 +392,8 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B4091142CB30A9500A939AD /* SECURE_EFI.fd */,
+				3B4091152CB30A9500A939AD /* SECURE_EFI_VARS.fd */,
 				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
 				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
 				3B7F3C2329326F9900F1396D /* parallels_template */,
@@ -526,6 +532,8 @@
 			files = (
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
+				3B4091162CB30A9500A939AD /* SECURE_EFI.fd in Resources */,
+				3B4091172CB30A9500A939AD /* SECURE_EFI_VARS.fd in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,

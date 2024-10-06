@@ -101,6 +101,7 @@ class QemuConstants {
     static let DESC_MAC_SEQUOIA = "macOS Sequoia"
     
     static let SUB_WIN_GENERIC = NSLocalizedString("QemuConstants.windows", comment: "")
+    static let SUB_WINDOWS_11 = "Windows 11"
     static let SUB_WINDOWS_10 = "Windows 10"
     static let SUB_WINDOWS_8_1 = "Windows 8.1"
     static let SUB_WINDOWS_8 = "Windows 8"
@@ -190,6 +191,7 @@ class QemuConstants {
     static let ICON_WINDOWS_8 = "windows.8"
     static let ICON_WINDOWS_8_1 = "windows.8.1"
     static let ICON_WINDOWS_10 = "windows.10"
+    static let ICON_WINDOWS_11 = "windows.11"
     
     static let ICON_MX_LINUX = "mx.linux"
     static let ICON_LINUX_MINT = "linux.mint"
@@ -261,6 +263,7 @@ class QemuConstants {
     static let URL_SYSTEM_7 = "https://www.macintoshrepository.org"
     
     static let URL_MICROSOFT_COM = "https://www.microsoft.com"
+    static let URL_WINDOWS_11 = "https://www.microsoft.com/software-download/windows11"
     static let URL_WINDOWS_10 = "https://www.microsoft.com/software-download/windows10ISO"
     static let URL_WINDOWS_8_1 = "https://www.microsoft.com/software-download/windows8ISO"
     static let URL_WINDOWS_8 = "https://www.microsoft.com/software-download/windows8ISO"
@@ -512,6 +515,7 @@ class QemuConstants {
         [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_8, MEDIATYPE_DISK],
         [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, URL_SYSTEM_7, MEDIATYPE_DISK],
         [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MICROSOFT_COM, MEDIATYPE_DISK],
+        [OS_WIN, SUB_WINDOWS_11, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_11, Utils.getPreferredMachineType(), nil, true, NETWORK_E1000, nil, URL_WINDOWS_11, MEDIATYPE_NVME],
         [OS_WIN, SUB_WINDOWS_10, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, Utils.getPreferredMachineType(), nil, true, NETWORK_E1000, nil, URL_WINDOWS_10, MEDIATYPE_DISK],
         [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8_1, MEDIATYPE_DISK],
         [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8, MEDIATYPE_DISK],
