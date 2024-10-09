@@ -83,6 +83,7 @@ class QemuRunner : VirtualMachineRunner {
             
             var index = 1;
             Utils.removeUnexistingDrives(virtualMachine)
+            Utils.sortDrives(virtualMachine)
             
             if virtualMachine.os != QemuConstants.OS_IOS { // iOS has no drives, but uses the NAND
                 for drive in virtualMachine.drives {
@@ -94,6 +95,10 @@ class QemuRunner : VirtualMachineRunner {
                     
                     if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
                         builder = builder.withEfi(file: drive.path);
+                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE {
+                        builder = builder.withEfiSecure(file: drive.path);
+                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS {
+                        builder = builder.withEfiVars(file: drive.path);
                     } else {
                         let mediaType = setupMediaType(drive);
                         let path = setupPath(drive, virtualMachine);
@@ -258,6 +263,7 @@ class QemuRunner : VirtualMachineRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil)
         let sound = Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)
         if sound == QemuConstants.SOUND_HDA {
             builder = builder.withSound(QemuConstants.SOUND_HDA).withSound(QemuConstants.SOUND_HDA_DUPLEX)
@@ -347,7 +353,7 @@ class QemuRunner : VirtualMachineRunner {
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
         
         if vm.qemuBootLoader {
-            return QemuConstants.ARG_BOOTLOADER;
+            return QemuConstants.ARG_BOOTLOADER
         }
         
         for drive in vm.drives {
@@ -356,12 +362,12 @@ class QemuRunner : VirtualMachineRunner {
                     return QemuConstants.ARG_HD
                 }
                 if drive.mediaType == QemuConstants.MEDIATYPE_CDROM {
-                    return QemuConstants.ARG_CD;
+                    return QemuConstants.ARG_CD
                 }
             }
         }
         
-        return QemuConstants.ARG_NET;
+        return QemuConstants.ARG_NET
     }
     
     fileprivate func searchForDrive(_ vm: VirtualMachine, _ mediaType: String) -> Bool {
@@ -389,6 +395,7 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
             cpuType != QemuConstants.CPU_IVY_BRIDGE &&
             cpuType != QemuConstants.CPU_SKYLAKE_CLIENT &&
+            cpuType != QemuConstants.CPU_ICELAKE_SERVER &&
             cpuType != QemuConstants.CPU_QEMU64 &&
             cpuType != QemuConstants.CPU_MAX) {
             cpuType = QemuConstants.CPU_MAX;

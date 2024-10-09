@@ -84,7 +84,7 @@ class VirtualMachine: Codable, Hashable {
             if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION;
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION;
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION;

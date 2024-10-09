@@ -30,11 +30,14 @@ class QemuCommandBuilder {
     var vgaEnabled: Bool?
     var sound: [String] = []
     var efi: String?
+    var efiSecure: String?
+    var efiVars: String?
     var drives: [String] = []
     var network: String?
     var portMappings: [PortMapping] = []
     var managementPort: Int32?
     var nic: String?
+    var tpmPath: String?
     var rtcEnabled: Bool = true
     var logging: String?
     
@@ -181,6 +184,16 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withEfiSecure(file: String)-> QemuCommandBuilder {
+        self.efiSecure = Utils.escape(file);
+        return self;
+    }
+    
+    func withEfiVars(file: String)-> QemuCommandBuilder {
+        self.efiVars = Utils.escape(file);
+        return self;
+    }
+    
     func withPortMappings(_ portMappings: [PortMapping]?) -> QemuCommandBuilder {
         if let mappings = portMappings {
             self.portMappings = mappings
@@ -204,18 +217,23 @@ class QemuCommandBuilder {
     }
     
     func withQmpString(_ addQmpString: Bool?) -> QemuCommandBuilder {
-        self.addQmpString = addQmpString;
-        return self;
+        self.addQmpString = addQmpString
+        return self
     }
     
     func withManagementPort(_ managementPort: Int32) -> QemuCommandBuilder {
-        self.managementPort = managementPort;
-        return self;
+        self.managementPort = managementPort
+        return self
     }
     
     func withNic(_ nic: String) -> QemuCommandBuilder {
-        self.nic = nic;
-        return self;
+        self.nic = nic
+        return self
+    }
+    
+    func withTpm(_ tpmPath: String?) -> QemuCommandBuilder {
+        self.tpmPath = tpmPath
+        return self
     }
     
     func build() -> String {
@@ -279,6 +297,12 @@ class QemuCommandBuilder {
         if let efi = self.efi {
             cmd += " -bios " + efi
         }
+        if let efiSecure = self.efiSecure {
+            cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off,readonly=on"
+        }
+        if let efiVars = self.efiVars {
+            cmd += " -drive if=pflash,unit=1,file=" + efiVars + " -global driver=cfi.pflash01,property=secure,value=on"
+        }
         for drive in self.drives {
             cmd += " " + drive
         }
@@ -290,6 +314,9 @@ class QemuCommandBuilder {
         }
         if self.rtcEnabled {
             cmd += " -rtc base=localtime,clock=host"
+        }
+        if let tpmPath = self.tpmPath {
+            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 -smp 2"
         }
         if let logging = self.logging {
             cmd += " -d " + logging

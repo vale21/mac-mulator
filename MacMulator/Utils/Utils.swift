@@ -539,11 +539,17 @@ class Utils {
         return getStringValueForSubType(os, subtype, 17) ?? QemuConstants.MEDIATYPE_DISK
     }
     
+    static func getTPMForSubType(_ os: String, _ subtype: String?) -> Bool {
+        return getBoolValueForSubType(os, subtype, 18, false)
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {
             for drive in vm.drives {
                 if drive.mediaType != QemuConstants.MEDIATYPE_EFI &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS &&
                     drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE &&
                     drive.mediaType != QemuConstants.MEDIATYPE_NVRAM &&
                     drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM &&
@@ -565,7 +571,7 @@ class Utils {
                     // end loop and return
                     return row + counter;
                 }
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
                     counter += 1;
                 }
                 iterationIndex += 1
@@ -819,7 +825,11 @@ class Utils {
     
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
-            return QemuUtils.isBinaryAvailable(vm.architecture)
+            if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
+                return QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+            } else {
+                return QemuUtils.isBinaryAvailable(vm.architecture)
+            }
         } else {
             return isVirtualizationFrameworkPreferred(vm)
         }
@@ -864,6 +874,18 @@ class Utils {
                 }
             }
         }
+    }
+    
+    static func sortDrives(_ virtualMachine: VirtualMachine) {
+        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_OPENCORE, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_CDROM]
+        
+        let sortedDrives = virtualMachine.drives.sorted {
+            let firstIndex = order.firstIndex(of: $0.mediaType) ?? Int.max
+            let secondIndex = order.firstIndex(of: $1.mediaType) ?? Int.max
+            return firstIndex < secondIndex
+        }
+        
+        virtualMachine.drives = sortedDrives
     }
     
     static func getMainScreenSize() -> String {

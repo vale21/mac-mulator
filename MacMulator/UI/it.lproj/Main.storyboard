@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -102,7 +102,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="-2" width="600" height="2073"/>
+                                            <rect key="frame" x="0.0" y="-3" width="600" height="2074"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2409,7 +2409,7 @@ Raspberry Pi</mutableString>
                                     <rect key="frame" x="-100" y="-100" width="240" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="C2s-qX-0Pe">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00052966101694915254" horizontal="NO" id="C2s-qX-0Pe">
                                     <rect key="frame" x="584" y="0.0" width="16" height="186"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -2985,7 +2985,7 @@ Raspberry Pi</mutableString>
                             <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="VSk-jC-MIC">
                                 <rect key="frame" x="107" y="104" width="337" height="5"/>
                             </box>
-                            <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EZq-aB-jhj">
+                            <box verticalHuggingPriority="750" ambiguous="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="EZq-aB-jhj">
                                 <rect key="frame" x="107" y="192" width="337" height="5"/>
                             </box>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GGz-Fj-dh8">
@@ -3029,7 +3029,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-YA-iXF">
                                 <rect key="frame" x="18" y="158" width="192" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Cartella delle Macchine Virtuali" id="NX3-mj-339">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -3037,7 +3037,7 @@ Raspberry Pi</mutableString>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
+                            <textField focusRingType="none" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
                                 <rect key="frame" x="20" y="129" width="440" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="7JJ-SA-RYa">
                                     <font key="font" metaFont="system"/>
@@ -3048,7 +3048,7 @@ Raspberry Pi</mutableString>
                                     <outlet property="delegate" destination="cF1-rS-o50" id="uqP-6y-4Za"/>
                                 </connections>
                             </textField>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
+                            <button verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
                                 <rect key="frame" x="468" y="128" width="56" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" title="Trova" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0Kf-o9-ZUv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3061,122 +3061,122 @@ Raspberry Pi</mutableString>
                                     <action selector="searchFolder:" target="cF1-rS-o50" id="0h1-Vc-dDu"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rM6-Gc-oyU">
-                                <rect key="frame" x="18" y="337" width="508" height="14"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rM6-Gc-oyU">
+                                <rect key="frame" x="18" y="337" width="152" height="14"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Cerco la versione di Qemu..." id="agm-Pw-Q2s">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mno-7U-prL">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YIz-hg-YoU">
                                 <rect key="frame" x="20" y="306" width="20" height="26"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="20" id="obM-a0-jc9"/>
+                                    <constraint firstAttribute="width" constant="20" id="dsv-qq-e4i"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="I7d-cm-GsJ"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="1Lg-Fe-5z8"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sEJ-fi-wqq">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6iX-Om-0Ay">
                                 <rect key="frame" x="20" y="278" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="Mw1-DH-oJy"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="JXe-Oq-gsM"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TbL-Ch-oZB">
-                                <rect key="frame" x="46" y="311" width="131" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-img" id="WBW-0n-q8n">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p69-0X-TL9">
+                                <rect key="frame" x="46" y="311" width="136" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="swtpm" id="Pbf-XF-SaR">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lNI-RH-lWM">
-                                <rect key="frame" x="46" y="283" width="121" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-i386" id="baj-26-Tvx">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JSX-Cp-dWS">
+                                <rect key="frame" x="46" y="283" width="117" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-arm" id="W4S-Wc-euM">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0ew-fP-vT5">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qVg-eB-Zbk">
                                 <rect key="frame" x="20" y="250" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="Yg9-b9-d4q"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="3Ys-wY-8v9"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="twW-NU-sLy">
-                                <rect key="frame" x="46" y="255" width="139" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-x86_64" id="XhX-Jb-eWK">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dvI-sJ-7Zl">
+                                <rect key="frame" x="46" y="255" width="144" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-aarch64" id="QUw-Bh-F64">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8O0-SH-CV8">
-                                <rect key="frame" x="224" y="306" width="20" height="26"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E16-Tb-s0C">
+                                <rect key="frame" x="229" y="306" width="20" height="26"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="20" id="rCN-cO-jPu"/>
+                                    <constraint firstAttribute="width" constant="20" id="NuJ-iY-E91"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="wMB-Cs-a3l"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="Z3D-3L-tTg"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="h3K-6a-f4h">
-                                <rect key="frame" x="224" y="278" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="3mT-6C-VO4"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0T9-MI-p7w">
+                                <rect key="frame" x="229" y="278" width="20" height="26"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="KC5-lh-Rmy"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q6s-7c-wCb">
-                                <rect key="frame" x="250" y="311" width="131" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="shE-su-0NS">
+                                <rect key="frame" x="255" y="311" width="131" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="127" id="sKW-Nd-OPS"/>
+                                    <constraint firstAttribute="width" constant="127" id="HOK-7R-szX"/>
                                 </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-arm" id="coK-9g-JRB">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-img" id="VUz-6B-crx">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cad-QZ-tB8">
-                                <rect key="frame" x="250" y="283" width="144" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-aarch64" id="AFI-bd-FCH">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IkI-Tj-yM8">
+                                <rect key="frame" x="255" y="283" width="121" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-i386" id="KWh-Nd-Lto">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XXE-ml-0zx">
-                                <rect key="frame" x="224" y="250" width="20" height="26"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="3rg-If-KCe"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="77F-oA-8ZA">
+                                <rect key="frame" x="229" y="250" width="20" height="26"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="checkmark.circle.fill" catalog="system" id="8cG-lU-vim"/>
                                 <color key="contentTintColor" name="systemGreenColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gSB-28-Ef9">
-                                <rect key="frame" x="250" y="255" width="117" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc" id="0mo-UO-Tfx">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Kj-IX-6ar">
+                                <rect key="frame" x="255" y="255" width="139" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-x86_64" id="hX1-0o-HH0">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KDU-qN-eAe">
-                                <rect key="frame" x="224" y="227" width="20" height="16"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="ATc-gH-DIk"/>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4O2-bK-INt">
+                                <rect key="frame" x="229" y="227" width="20" height="16"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="dAc-ox-nEq"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SkS-uc-Av9">
-                                <rect key="frame" x="250" y="227" width="133" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc64" id="z5E-mC-zk7">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D22-zl-m89">
+                                <rect key="frame" x="255" y="227" width="128" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-m68k" id="0Oa-SJ-D1C">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5pp-fD-eqK">
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KJ4-jd-V5g">
                                 <rect key="frame" x="20" y="227" width="20" height="16"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="udX-sO-DrE"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="xmark.circle.fill" catalog="system" id="yDM-BD-w7y"/>
                                 <color key="contentTintColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b9j-mm-eoZ">
-                                <rect key="frame" x="46" y="227" width="128" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-m68k" id="Glm-IL-Pfy">
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n9a-vC-jtz">
+                                <rect key="frame" x="46" y="227" width="117" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="qemu-system-ppc" id="QmD-7h-hLj">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3185,88 +3185,82 @@ Raspberry Pi</mutableString>
                         </subviews>
                         <constraints>
                             <constraint firstItem="0Q2-Tu-83e" firstAttribute="leading" secondItem="t0A-gf-C7u" secondAttribute="trailing" constant="11" id="0QH-aE-Kjv"/>
+                            <constraint firstItem="p69-0X-TL9" firstAttribute="leading" secondItem="JSX-Cp-dWS" secondAttribute="leading" id="0oK-14-cFJ"/>
+                            <constraint firstItem="YIz-hg-YoU" firstAttribute="baseline" secondItem="E16-Tb-s0C" secondAttribute="baseline" id="1Bg-p9-5hh"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="bottom" secondItem="ZSk-8V-9fP" secondAttribute="bottom" id="1VE-VU-TOa"/>
-                            <constraint firstItem="5pp-fD-eqK" firstAttribute="baseline" secondItem="b9j-mm-eoZ" secondAttribute="baseline" id="28X-FC-3ju"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="top" secondItem="u1x-Fr-N6k" secondAttribute="bottom" constant="30" id="3ff-Im-Kxb"/>
-                            <constraint firstItem="u1x-Fr-N6k" firstAttribute="leading" secondItem="Mno-7U-prL" secondAttribute="leading" id="5cE-q7-xNt"/>
+                            <constraint firstItem="JSX-Cp-dWS" firstAttribute="top" secondItem="p69-0X-TL9" secondAttribute="bottom" constant="12" id="2wk-h9-mtn"/>
+                            <constraint firstItem="4O2-bK-INt" firstAttribute="leading" secondItem="KJ4-jd-V5g" secondAttribute="leading" constant="209" id="4mn-6T-Wew"/>
+                            <constraint firstItem="JSX-Cp-dWS" firstAttribute="leading" secondItem="6iX-Om-0Ay" secondAttribute="trailing" constant="8" symbolic="YES" id="4o0-18-E1V"/>
+                            <constraint firstItem="p69-0X-TL9" firstAttribute="leading" secondItem="YIz-hg-YoU" secondAttribute="trailing" constant="8" symbolic="YES" id="4zu-Ft-pij"/>
                             <constraint firstItem="ZSk-8V-9fP" firstAttribute="leading" secondItem="u1x-Fr-N6k" secondAttribute="trailing" constant="8" symbolic="YES" id="6OS-VV-iUK"/>
                             <constraint firstItem="EZq-aB-jhj" firstAttribute="trailing" secondItem="VSk-jC-MIC" secondAttribute="trailing" id="72R-Yh-csm"/>
-                            <constraint firstItem="twW-NU-sLy" firstAttribute="leading" secondItem="0ew-fP-vT5" secondAttribute="trailing" constant="8" symbolic="YES" id="7Vc-fA-xN0"/>
-                            <constraint firstItem="twW-NU-sLy" firstAttribute="baseline" secondItem="gSB-28-Ef9" secondAttribute="baseline" id="8km-LS-tJk"/>
+                            <constraint firstItem="77F-oA-8ZA" firstAttribute="leading" secondItem="4O2-bK-INt" secondAttribute="leading" id="76R-OX-0zU"/>
+                            <constraint firstItem="n9a-vC-jtz" firstAttribute="leading" secondItem="KJ4-jd-V5g" secondAttribute="trailing" constant="8" symbolic="YES" id="88a-gB-JFo"/>
+                            <constraint firstItem="shE-su-0NS" firstAttribute="leading" secondItem="E16-Tb-s0C" secondAttribute="trailing" constant="8" symbolic="YES" id="8Oy-3g-S68"/>
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="bottom" secondItem="7Ih-Ef-1Mh" secondAttribute="bottom" id="8rb-Hw-6nT"/>
+                            <constraint firstItem="JSX-Cp-dWS" firstAttribute="leading" secondItem="dvI-sJ-7Zl" secondAttribute="leading" id="99Y-Zq-zRN"/>
                             <constraint firstItem="GGz-Fj-dh8" firstAttribute="top" secondItem="VSk-jC-MIC" secondAttribute="bottom" constant="20" id="9Ca-OV-HuV"/>
                             <constraint firstAttribute="trailing" secondItem="0Q2-Tu-83e" secondAttribute="trailing" constant="71" id="AZK-rh-7dL"/>
-                            <constraint firstItem="gSB-28-Ef9" firstAttribute="leading" secondItem="XXE-ml-0zx" secondAttribute="trailing" constant="8" symbolic="YES" id="C28-wZ-wkM"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="centerY" secondItem="TbL-Ch-oZB" secondAttribute="centerY" id="DTN-nX-0Ys"/>
-                            <constraint firstItem="b9j-mm-eoZ" firstAttribute="baseline" secondItem="KDU-qN-eAe" secondAttribute="baseline" id="ErG-TD-RWb"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="top" secondItem="rM6-Gc-oyU" secondAttribute="bottom" constant="8" symbolic="YES" id="FbF-80-HBM"/>
+                            <constraint firstItem="6iX-Om-0Ay" firstAttribute="leading" secondItem="qVg-eB-Zbk" secondAttribute="leading" id="ApJ-te-m2P"/>
+                            <constraint firstItem="dvI-sJ-7Zl" firstAttribute="baseline" secondItem="1Kj-IX-6ar" secondAttribute="baseline" id="BPX-mB-YEP"/>
+                            <constraint firstItem="D22-zl-m89" firstAttribute="leading" secondItem="4O2-bK-INt" secondAttribute="trailing" constant="8" symbolic="YES" id="C6I-2J-gKC"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="top" secondItem="SXs-MC-95b" secondAttribute="bottom" constant="8" symbolic="YES" id="G9o-eN-1Ph"/>
+                            <constraint firstItem="E16-Tb-s0C" firstAttribute="leading" secondItem="0T9-MI-p7w" secondAttribute="leading" id="GPx-Bi-4Qa"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="baseline" secondItem="0Q2-Tu-83e" secondAttribute="baseline" id="Gco-dk-zfp"/>
+                            <constraint firstItem="p69-0X-TL9" firstAttribute="baseline" secondItem="shE-su-0NS" secondAttribute="baseline" id="GlC-VT-q9V"/>
                             <constraint firstItem="EZq-aB-jhj" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="107" id="Gpy-TA-8E7"/>
-                            <constraint firstItem="lNI-RH-lWM" firstAttribute="baseline" secondItem="Cad-QZ-tB8" secondAttribute="baseline" id="H11-AU-FZe"/>
-                            <constraint firstItem="Cad-QZ-tB8" firstAttribute="leading" secondItem="gSB-28-Ef9" secondAttribute="leading" id="HBw-10-HUX"/>
-                            <constraint firstItem="XXE-ml-0zx" firstAttribute="centerY" secondItem="gSB-28-Ef9" secondAttribute="centerY" id="Hbk-ia-phH"/>
-                            <constraint firstItem="rM6-Gc-oyU" firstAttribute="leading" secondItem="Mno-7U-prL" secondAttribute="leading" id="IJE-5R-d7a"/>
-                            <constraint firstItem="lNI-RH-lWM" firstAttribute="leading" secondItem="sEJ-fi-wqq" secondAttribute="trailing" constant="8" symbolic="YES" id="IV0-xS-hMe"/>
-                            <constraint firstItem="b9j-mm-eoZ" firstAttribute="top" secondItem="twW-NU-sLy" secondAttribute="bottom" constant="12" id="Jtx-Hg-Kmx"/>
+                            <constraint firstItem="shE-su-0NS" firstAttribute="leading" secondItem="IkI-Tj-yM8" secondAttribute="leading" id="JSc-cZ-3bm"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="top" secondItem="EZq-aB-jhj" secondAttribute="bottom" constant="20" id="KYL-uB-GXa"/>
-                            <constraint firstItem="5pp-fD-eqK" firstAttribute="centerY" secondItem="b9j-mm-eoZ" secondAttribute="centerY" id="KnZ-a4-qUi"/>
-                            <constraint firstItem="h3K-6a-f4h" firstAttribute="leading" secondItem="XXE-ml-0zx" secondAttribute="leading" id="Lv5-Iq-uKK"/>
-                            <constraint firstItem="TbL-Ch-oZB" firstAttribute="baseline" secondItem="Q6s-7c-wCb" secondAttribute="baseline" id="Nsz-ax-UCc"/>
+                            <constraint firstItem="KJ4-jd-V5g" firstAttribute="baseline" secondItem="n9a-vC-jtz" secondAttribute="baseline" id="NpV-A9-grB"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="centerY" secondItem="t0A-gf-C7u" secondAttribute="centerY" id="Nto-WS-2nK"/>
-                            <constraint firstItem="SkS-uc-Av9" firstAttribute="leading" secondItem="b9j-mm-eoZ" secondAttribute="leading" constant="204" id="RA2-UO-vl3"/>
+                            <constraint firstItem="6iX-Om-0Ay" firstAttribute="top" secondItem="0T9-MI-p7w" secondAttribute="top" id="Ole-Jz-7Dd"/>
+                            <constraint firstItem="4O2-bK-INt" firstAttribute="centerY" secondItem="D22-zl-m89" secondAttribute="centerY" id="PZk-PY-DHT"/>
+                            <constraint firstItem="n9a-vC-jtz" firstAttribute="top" secondItem="dvI-sJ-7Zl" secondAttribute="bottom" constant="12" id="Qlo-Fq-iRj"/>
                             <constraint firstItem="SXs-MC-95b" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="20" symbolic="YES" id="RCL-2h-MaE"/>
-                            <constraint firstItem="lNI-RH-lWM" firstAttribute="leading" secondItem="twW-NU-sLy" secondAttribute="leading" id="Rez-fz-QcB"/>
+                            <constraint firstItem="6iX-Om-0Ay" firstAttribute="baseline" secondItem="0T9-MI-p7w" secondAttribute="baseline" id="RK7-yd-Rtz"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="leading" secondItem="FWM-lN-Jy4" secondAttribute="leading" id="SMb-zo-e4X"/>
-                            <constraint firstItem="8O0-SH-CV8" firstAttribute="leading" secondItem="TbL-Ch-oZB" secondAttribute="trailing" constant="49" id="TaP-7a-Yu0"/>
-                            <constraint firstItem="twW-NU-sLy" firstAttribute="top" secondItem="lNI-RH-lWM" secondAttribute="bottom" constant="12" id="Tmn-3l-z1E"/>
-                            <constraint firstItem="Q6s-7c-wCb" firstAttribute="leading" secondItem="Cad-QZ-tB8" secondAttribute="leading" id="Uyz-Dh-VfZ"/>
                             <constraint firstItem="EZq-aB-jhj" firstAttribute="leading" secondItem="VSk-jC-MIC" secondAttribute="leading" id="Vgg-7B-m8U"/>
+                            <constraint firstItem="qVg-eB-Zbk" firstAttribute="top" secondItem="77F-oA-8ZA" secondAttribute="top" id="WXu-Im-Hkq"/>
                             <constraint firstAttribute="trailing" secondItem="EZq-aB-jhj" secondAttribute="trailing" constant="100" id="XcL-1q-Twk"/>
-                            <constraint firstItem="EZq-aB-jhj" firstAttribute="top" secondItem="5pp-fD-eqK" secondAttribute="bottom" constant="35" id="Y2n-8f-jv7"/>
-                            <constraint firstItem="TbL-Ch-oZB" firstAttribute="top" secondItem="u1x-Fr-N6k" secondAttribute="bottom" constant="32" id="YGJ-Ct-kqQ"/>
+                            <constraint firstItem="IkI-Tj-yM8" firstAttribute="leading" secondItem="1Kj-IX-6ar" secondAttribute="leading" id="YfU-Hc-UVo"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="top" secondItem="3Tr-xq-8xH" secondAttribute="bottom" constant="8" symbolic="YES" id="Z3a-2m-Vgc"/>
-                            <constraint firstItem="Q6s-7c-wCb" firstAttribute="leading" secondItem="8O0-SH-CV8" secondAttribute="trailing" constant="8" symbolic="YES" id="ZWi-lM-cbf"/>
                             <constraint firstItem="GGz-Fj-dh8" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="71" id="ZeJ-Gj-pvw"/>
-                            <constraint firstItem="lNI-RH-lWM" firstAttribute="top" secondItem="TbL-Ch-oZB" secondAttribute="bottom" constant="12" id="a16-uJ-bBK"/>
+                            <constraint firstItem="YIz-hg-YoU" firstAttribute="leading" secondItem="6iX-Om-0Ay" secondAttribute="leading" id="aS1-6q-g02"/>
                             <constraint firstItem="u1x-Fr-N6k" firstAttribute="baseline" secondItem="ZSk-8V-9fP" secondAttribute="firstBaseline" id="arT-Ud-R2W"/>
+                            <constraint firstItem="qVg-eB-Zbk" firstAttribute="baseline" secondItem="77F-oA-8ZA" secondAttribute="baseline" id="b8w-s3-u2V"/>
+                            <constraint firstItem="dvI-sJ-7Zl" firstAttribute="leading" secondItem="qVg-eB-Zbk" secondAttribute="trailing" constant="8" symbolic="YES" id="bfU-9t-shm"/>
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="top" secondItem="wzh-YA-iXF" secondAttribute="bottom" constant="8" symbolic="YES" id="bma-ck-VFo"/>
-                            <constraint firstItem="sEJ-fi-wqq" firstAttribute="top" secondItem="Mno-7U-prL" secondAttribute="bottom" constant="8" symbolic="YES" id="cC2-2f-kas"/>
-                            <constraint firstItem="sEJ-fi-wqq" firstAttribute="baseline" secondItem="h3K-6a-f4h" secondAttribute="baseline" id="ck9-cd-8D5"/>
-                            <constraint firstItem="TbL-Ch-oZB" firstAttribute="leading" secondItem="Mno-7U-prL" secondAttribute="trailing" constant="8" symbolic="YES" id="dOR-cS-Ynr"/>
-                            <constraint firstItem="0ew-fP-vT5" firstAttribute="top" secondItem="XXE-ml-0zx" secondAttribute="top" id="dvc-on-ILN"/>
+                            <constraint firstItem="1Kj-IX-6ar" firstAttribute="leading" secondItem="77F-oA-8ZA" secondAttribute="trailing" constant="8" symbolic="YES" id="c8x-Zf-Z8f"/>
+                            <constraint firstItem="JSX-Cp-dWS" firstAttribute="baseline" secondItem="IkI-Tj-yM8" secondAttribute="baseline" id="cbF-UT-J1o"/>
+                            <constraint firstItem="6iX-Om-0Ay" firstAttribute="centerY" secondItem="JSX-Cp-dWS" secondAttribute="centerY" id="d71-Zi-nDF"/>
                             <constraint firstItem="SXs-MC-95b" firstAttribute="top" secondItem="SYm-hx-Lfj" secondAttribute="top" constant="20" symbolic="YES" id="dw8-kS-58O"/>
-                            <constraint firstItem="KDU-qN-eAe" firstAttribute="centerY" secondItem="SkS-uc-Av9" secondAttribute="centerY" id="eOm-ah-Rak"/>
+                            <constraint firstItem="YIz-hg-YoU" firstAttribute="top" secondItem="E16-Tb-s0C" secondAttribute="top" id="e0T-mg-USz"/>
                             <constraint firstAttribute="bottom" secondItem="t0A-gf-C7u" secondAttribute="bottom" constant="20" symbolic="YES" id="enj-lb-SjI"/>
                             <constraint firstItem="7Ih-Ef-1Mh" firstAttribute="leading" secondItem="FWM-lN-Jy4" secondAttribute="trailing" constant="8" symbolic="YES" id="epj-VT-HV9"/>
                             <constraint firstItem="3Tr-xq-8xH" firstAttribute="top" secondItem="GGz-Fj-dh8" secondAttribute="bottom" constant="8" symbolic="YES" id="fcg-fM-gyY"/>
-                            <constraint firstItem="KDU-qN-eAe" firstAttribute="leading" secondItem="5pp-fD-eqK" secondAttribute="leading" constant="204" id="fi4-4k-S02"/>
                             <constraint firstItem="FWM-lN-Jy4" firstAttribute="baseline" secondItem="7Ih-Ef-1Mh" secondAttribute="firstBaseline" id="fwo-ky-rAL"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="top" secondItem="8O0-SH-CV8" secondAttribute="top" id="gQO-wy-ibd"/>
-                            <constraint firstItem="0ew-fP-vT5" firstAttribute="top" secondItem="sEJ-fi-wqq" secondAttribute="bottom" constant="8" symbolic="YES" id="gjV-jI-8LA"/>
-                            <constraint firstItem="TbL-Ch-oZB" firstAttribute="leading" secondItem="lNI-RH-lWM" secondAttribute="leading" id="hir-eL-aLf"/>
-                            <constraint firstItem="SkS-uc-Av9" firstAttribute="leading" secondItem="KDU-qN-eAe" secondAttribute="trailing" constant="8" symbolic="YES" id="i7F-zs-3mB"/>
                             <constraint firstItem="SXs-MC-95b" firstAttribute="leading" secondItem="u1x-Fr-N6k" secondAttribute="leading" id="ikz-e2-VeZ"/>
-                            <constraint firstItem="XXE-ml-0zx" firstAttribute="leading" secondItem="twW-NU-sLy" secondAttribute="trailing" constant="41" id="inS-Bq-uuY"/>
-                            <constraint firstItem="b9j-mm-eoZ" firstAttribute="leading" secondItem="5pp-fD-eqK" secondAttribute="trailing" constant="8" symbolic="YES" id="jbf-te-9Jm"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="leading" secondItem="sEJ-fi-wqq" secondAttribute="leading" id="kel-cp-jb4"/>
-                            <constraint firstItem="KDU-qN-eAe" firstAttribute="baseline" secondItem="SkS-uc-Av9" secondAttribute="baseline" id="kxr-Vy-TzU"/>
-                            <constraint firstItem="8O0-SH-CV8" firstAttribute="leading" secondItem="h3K-6a-f4h" secondAttribute="leading" id="lHN-mA-aOm"/>
-                            <constraint firstItem="sEJ-fi-wqq" firstAttribute="top" secondItem="h3K-6a-f4h" secondAttribute="top" id="lrF-Qf-oHx"/>
-                            <constraint firstItem="Mno-7U-prL" firstAttribute="baseline" secondItem="8O0-SH-CV8" secondAttribute="baseline" id="mt2-pK-ETI"/>
+                            <constraint firstItem="6iX-Om-0Ay" firstAttribute="top" secondItem="YIz-hg-YoU" secondAttribute="bottom" constant="8" symbolic="YES" id="k9J-VB-Fnt"/>
+                            <constraint firstItem="4O2-bK-INt" firstAttribute="baseline" secondItem="D22-zl-m89" secondAttribute="baseline" id="kcT-aG-Oan"/>
+                            <constraint firstItem="1Kj-IX-6ar" firstAttribute="leading" secondItem="D22-zl-m89" secondAttribute="leading" id="lbR-Fn-MfM"/>
                             <constraint firstItem="wKF-A0-RM3" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="75" id="mvW-eG-Tcg"/>
-                            <constraint firstItem="gSB-28-Ef9" firstAttribute="leading" secondItem="SkS-uc-Av9" secondAttribute="leading" id="pdo-Fi-Oci"/>
+                            <constraint firstItem="YIz-hg-YoU" firstAttribute="centerY" secondItem="p69-0X-TL9" secondAttribute="centerY" id="nub-Pu-JAF"/>
+                            <constraint firstItem="n9a-vC-jtz" firstAttribute="baseline" secondItem="4O2-bK-INt" secondAttribute="baseline" id="oKj-eN-g3K"/>
+                            <constraint firstItem="qVg-eB-Zbk" firstAttribute="top" secondItem="6iX-Om-0Ay" secondAttribute="bottom" constant="8" symbolic="YES" id="pLl-hP-9GK"/>
+                            <constraint firstItem="IkI-Tj-yM8" firstAttribute="leading" secondItem="0T9-MI-p7w" secondAttribute="trailing" constant="8" symbolic="YES" id="pkg-ZB-Ibe"/>
                             <constraint firstItem="t0A-gf-C7u" firstAttribute="leading" secondItem="wKF-A0-RM3" secondAttribute="trailing" constant="8" symbolic="YES" id="qFa-DI-VHP"/>
-                            <constraint firstItem="sEJ-fi-wqq" firstAttribute="centerY" secondItem="lNI-RH-lWM" secondAttribute="centerY" id="qS2-28-kGe"/>
-                            <constraint firstItem="Cad-QZ-tB8" firstAttribute="leading" secondItem="h3K-6a-f4h" secondAttribute="trailing" constant="8" symbolic="YES" id="rHT-tL-Wbb"/>
+                            <constraint firstItem="dvI-sJ-7Zl" firstAttribute="top" secondItem="JSX-Cp-dWS" secondAttribute="bottom" constant="12" id="qxK-Xh-THj"/>
+                            <constraint firstItem="77F-oA-8ZA" firstAttribute="centerY" secondItem="1Kj-IX-6ar" secondAttribute="centerY" id="rPf-xZ-klF"/>
+                            <constraint firstItem="D22-zl-m89" firstAttribute="leading" secondItem="n9a-vC-jtz" secondAttribute="leading" constant="209" id="sJk-uh-1S9"/>
                             <constraint firstItem="3Tr-xq-8xH" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="73" id="syJ-yf-FZw"/>
                             <constraint firstAttribute="trailing" secondItem="ZSk-8V-9fP" secondAttribute="trailing" constant="20" symbolic="YES" id="tnZ-PS-dK3"/>
+                            <constraint firstItem="0T9-MI-p7w" firstAttribute="leading" secondItem="77F-oA-8ZA" secondAttribute="leading" id="uqG-sT-S8i"/>
+                            <constraint firstItem="E16-Tb-s0C" firstAttribute="leading" secondItem="p69-0X-TL9" secondAttribute="trailing" constant="49" id="vMs-ND-gVZ"/>
+                            <constraint firstItem="77F-oA-8ZA" firstAttribute="leading" secondItem="dvI-sJ-7Zl" secondAttribute="trailing" constant="41" id="wRX-ac-Stn"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="20" id="x5t-wp-Tef"/>
-                            <constraint firstItem="sEJ-fi-wqq" firstAttribute="leading" secondItem="0ew-fP-vT5" secondAttribute="leading" id="xM4-sb-3fi"/>
-                            <constraint firstItem="rM6-Gc-oyU" firstAttribute="trailing" secondItem="ZSk-8V-9fP" secondAttribute="trailing" id="xSH-LL-0XY"/>
-                            <constraint firstItem="XXE-ml-0zx" firstAttribute="leading" secondItem="KDU-qN-eAe" secondAttribute="leading" id="xW7-Gp-Nuq"/>
-                            <constraint firstItem="0ew-fP-vT5" firstAttribute="baseline" secondItem="XXE-ml-0zx" secondAttribute="baseline" id="yre-9q-2f9"/>
+                            <constraint firstItem="rM6-Gc-oyU" firstAttribute="trailing" secondItem="ZSk-8V-9fP" secondAttribute="trailing" constant="-356" id="xSH-LL-0XY"/>
                             <constraint firstAttribute="trailing" secondItem="7Ih-Ef-1Mh" secondAttribute="trailing" constant="20" id="z1V-ZT-IZ2"/>
+                            <constraint firstItem="KJ4-jd-V5g" firstAttribute="centerY" secondItem="n9a-vC-jtz" secondAttribute="centerY" id="zWe-ff-bmF"/>
                         </constraints>
                     </view>
                     <connections>
@@ -3277,16 +3271,16 @@ Raspberry Pi</mutableString>
                         <outlet property="qemuFolderButton" destination="ZSk-8V-9fP" id="YTN-tX-3SX"/>
                         <outlet property="qemuFolderField" destination="u1x-Fr-N6k" id="9zG-id-6wl"/>
                         <outlet property="qemuVersionLabel" destination="rM6-Gc-oyU" id="Zvk-S6-Lr8"/>
-                        <outlet property="qemu_68k_tick" destination="5pp-fD-eqK" id="lbx-Ri-aM3"/>
-                        <outlet property="qemu_arm64_tick" destination="h3K-6a-f4h" id="Fur-lQ-FvF"/>
-                        <outlet property="qemu_arm_tick" destination="8O0-SH-CV8" id="on6-m3-L2H"/>
-                        <outlet property="qemu_i386_tick" destination="sEJ-fi-wqq" id="27Y-NL-hOb"/>
-                        <outlet property="qemu_img_label" destination="TbL-Ch-oZB" id="N9t-Vd-5vH"/>
-                        <outlet property="qemu_img_tick" destination="Mno-7U-prL" id="RO1-Cj-JnR"/>
-                        <outlet property="qemu_ppc64_tick" destination="KDU-qN-eAe" id="pFt-mL-r25"/>
-                        <outlet property="qemu_ppc_tick" destination="XXE-ml-0zx" id="LMc-WM-ogH"/>
-                        <outlet property="qemu_x86_64_tick" destination="0ew-fP-vT5" id="a1W-2B-hry"/>
+                        <outlet property="qemu_68k_tick" destination="4O2-bK-INt" id="zcG-SO-Mn3"/>
+                        <outlet property="qemu_arm64_tick" destination="qVg-eB-Zbk" id="WL5-u2-YfH"/>
+                        <outlet property="qemu_arm_tick" destination="6iX-Om-0Ay" id="dJv-cO-wRu"/>
+                        <outlet property="qemu_i386_tick" destination="0T9-MI-p7w" id="exQ-tP-sz1"/>
+                        <outlet property="qemu_img_label" destination="shE-su-0NS" id="dRN-dO-4g2"/>
+                        <outlet property="qemu_img_tick" destination="E16-Tb-s0C" id="x8v-hs-xJ9"/>
+                        <outlet property="qemu_ppc_tick" destination="KJ4-jd-V5g" id="j6W-LF-GWu"/>
+                        <outlet property="qemu_x86_64_tick" destination="77F-oA-8ZA" id="TnL-x2-i4t"/>
                         <outlet property="sixtySecsLabel" destination="0Q2-Tu-83e" id="hUv-ow-Nlw"/>
+                        <outlet property="swtpm_tick" destination="YIz-hg-YoU" id="Vos-NQ-1IP"/>
                         <outlet property="vmFolderButton" destination="7Ih-Ef-1Mh" id="0Dq-hQ-2W8"/>
                         <outlet property="vmFolderField" destination="FWM-lN-Jy4" id="uEA-dE-Kbk"/>
                     </connections>
@@ -3308,7 +3302,7 @@ Raspberry Pi</mutableString>
                             <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
-                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
+                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
                                 <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" catalog="system" sizingBehavior="auto" id="F8q-EA-dwq">
@@ -4087,16 +4081,16 @@ Raspberry Pi</mutableString>
         </scene>
     </scenes>
     <resources>
-        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="NSAddTemplate" width="18" height="16"/>
         <image name="NSApplicationIcon" width="32" height="32"/>
-        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
+        <image name="NSStopProgressFreestandingTemplate" width="19" height="19"/>
         <image name="checkmark.circle.fill" catalog="system" width="15" height="15"/>
         <image name="folder.circle" width="78" height="78"/>
         <image name="monterey.large" width="90" height="90"/>
         <image name="new.vm" width="78" height="78"/>
         <image name="pause.circle.fill" catalog="system" width="15" height="15"/>
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
-        <image name="plus" catalog="system" width="14" height="13"/>
+        <image name="plus" catalog="system" width="15" height="13"/>
         <image name="stop.circle.fill" catalog="system" width="15" height="15"/>
         <image name="tiger.small" width="44" height="44"/>
         <image name="windows.large" width="90" height="90"/>

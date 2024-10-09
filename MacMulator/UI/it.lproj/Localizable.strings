@@ -114,6 +114,7 @@
 "VirtualMachineViewController.pausedVMName" = "%@ (In pausa)";
 "VirtualMachineViewController.notSpecified" ="Non specificato";
 "VirtualMachineViewController.binaryNotAvaiable" ="La VM non può essere avviata perché l'eseguibile QEMU per l'architettura %@ non è disponibile.";
+"VirtualMachineViewController.swTpmNotAvailable" ="La VM non può essere avviata perché richiede swtpm ma l'eseguibile non è stato trovato.";
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmFeatures" = "Caratteristiche Macchina Virtuale";
 "VirtualMachineViewController.vmExecutionFailed" = "L'esecuzione della VM è fallita con questo errore: %@";
