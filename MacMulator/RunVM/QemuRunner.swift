@@ -171,7 +171,7 @@ class QemuRunner : VirtualMachineRunner {
     fileprivate func setupMediaType(_ drive: VirtualDrive) -> String {
         var mediaType = drive.mediaType;
         if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-            mediaType = QemuConstants.MEDIATYPE_DISK;
+            mediaType = QemuConstants.MEDIATYPE_NVME;
         }
         return mediaType;
     }

@@ -877,7 +877,7 @@ class Utils {
     }
     
     static func sortDrives(_ virtualMachine: VirtualMachine) {
-        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_OPENCORE, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_CDROM]
+        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_OPENCORE,  QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_CDROM]
         
         let sortedDrives = virtualMachine.drives.sorted {
             let firstIndex = order.firstIndex(of: $0.mediaType) ?? Int.max
