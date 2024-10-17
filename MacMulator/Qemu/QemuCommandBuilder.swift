@@ -254,7 +254,7 @@ class QemuCommandBuilder {
             cmd += " -accel " + accel
         }
         if let vga = self.vga {
-            cmd += " -vga " + vga
+            cmd += " -device " + vga
         }
         if let display = self.display {
             cmd += " -display " + display + ",show-cursor=";

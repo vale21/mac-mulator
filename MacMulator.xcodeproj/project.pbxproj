@@ -37,6 +37,7 @@
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
 		3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B672E6627C788AE00732C46 /* SystemProfilerData.swift */; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
 		3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */; };
@@ -158,6 +159,7 @@
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
 		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
 		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
+		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B672E6627C788AE00732C46 /* SystemProfilerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProfilerData.swift; sourceTree = "<group>"; };
 		3B6A9E0925CBFD8300123D6B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulator-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
 				3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */,
+				3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
 				3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */,
@@ -585,6 +588,7 @@
 				3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */,
 				3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
+				3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,

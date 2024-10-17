@@ -21,6 +21,7 @@ class VirtualMachine: Codable, Hashable {
     var displayOrigin: String?
     var qemuBootLoader: Bool
     var networkDevice: String?
+    var videoDevice: String?
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
@@ -31,10 +32,10 @@ class VirtualMachine: Codable, Hashable {
     var pauseSupported: Bool? = false
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, qemuBootloader: Bool, hvf: Bool, macAddress: String?, type: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, qemuBootloader: Bool, hvf: Bool, macAddress: String?, type: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -46,6 +47,7 @@ class VirtualMachine: Codable, Hashable {
         self.displayResolution = displayResolution
         self.displayOrigin = displayOrigin
         self.networkDevice = networkDevice
+        self.videoDevice = videoDevice
         self.qemuBootLoader = qemuBootloader
         self.hvf = hvf
         self.drives = []

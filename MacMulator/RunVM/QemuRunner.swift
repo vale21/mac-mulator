@@ -242,9 +242,10 @@ class QemuRunner : VirtualMachineRunner {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
+        let videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
         
         if (virtualMachine.os == QemuConstants.OS_MAC) {
-            return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice);
+            return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice, videoDevice);
         }
         
         var builder = QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
@@ -255,7 +256,7 @@ class QemuRunner : VirtualMachineRunner {
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(virtualMachine.memory)
-            .withVga(QemuConstants.VGA_VIRTIO)
+            .withVga(videoDevice)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
             .withUsb(true)
@@ -273,7 +274,7 @@ class QemuRunner : VirtualMachineRunner {
         return builder
     }
     
-    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String) -> QemuCommandBuilder {
+    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String, _ videoDevice: String) -> QemuCommandBuilder {
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
@@ -281,7 +282,7 @@ class QemuRunner : VirtualMachineRunner {
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(virtualMachine.memory)
-            .withVga(QemuConstants.VGA_VIRTIO)
+            .withVga(videoDevice)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)

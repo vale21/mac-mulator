@@ -527,6 +527,10 @@ class Utils {
         return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
     
+    static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
+    }
+    
     static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
         return getStringValueForSubType(os, subtype, 15) ?? QemuConstants.SOUND_HDA
     }
@@ -746,6 +750,14 @@ class Utils {
         return 120
 #else
         return 250
+#endif
+    }
+    
+    static func getPreferredVideoCard() -> String {
+#if arch(arm64)
+        return QemuConstants.VGA_RAMFB
+#else
+        return QemuConstants.VGA_VIRTIO
 #endif
     }
     

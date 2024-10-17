@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23094"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -49,6 +49,7 @@
                         <tabViewItem label="Network" identifier="network" id="FK0-cD-72z">
                             <imageReference key="image" image="network" catalog="system" symbolScale="default" renderingMode="template"/>
                         </tabViewItem>
+                        <tabViewItem label="Video" image="display" catalog="system" id="DIj-a9-ud3"/>
                         <tabViewItem label="Avanzate" identifier="advanced" id="rXL-e0-tcc">
                             <imageReference key="image" image="gear" catalog="system" symbolScale="default" renderingMode="template"/>
                         </tabViewItem>
@@ -66,6 +67,7 @@
                         <segue destination="67A-Mm-B6X" kind="relationship" relationship="tabItems" id="ahe-hb-HW7"/>
                         <segue destination="fBa-tq-xkS" kind="relationship" relationship="tabItems" id="8HZ-3j-S1y"/>
                         <segue destination="CC8-R8-wkI" kind="relationship" relationship="tabItems" id="HIp-WZ-HvB"/>
+                        <segue destination="buU-wd-t6L" kind="relationship" relationship="tabItems" id="Uwh-EE-lwh"/>
                         <segue destination="oyc-lN-MJc" kind="relationship" relationship="tabItems" id="v2w-Tj-EVa"/>
                     </connections>
                 </tabViewController>
@@ -1251,7 +1253,7 @@ Gw
                 </viewController>
                 <customObject id="Z8l-Yt-bRq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="-544"/>
+            <point key="canvasLocation" x="1636" y="-78"/>
         </scene>
         <!--Network-->
         <scene sceneID="3Tm-y0-dlA">
@@ -1654,6 +1656,83 @@ Gw
             </objects>
             <point key="canvasLocation" x="2272" y="-1005"/>
         </scene>
+        <!--Video-->
+        <scene sceneID="pHm-nO-Hsr">
+            <objects>
+                <viewController title="Video" id="buU-wd-t6L" customClass="EditVMViewControllerVideo" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="v1E-0n-Ptk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="390"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iMR-ZO-aS7">
+                                <rect key="frame" x="183" y="295" width="234" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Adattatore video da collegare alla VM:" id="d4E-tE-sX3">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Fo-Gv-e3w">
+                                <rect key="frame" x="130" y="263" width="342" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="43Q-SN-FUd"/>
+                                    <constraint firstAttribute="width" constant="338" id="uWA-Lg-d9j"/>
+                                </constraints>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="brA-lb-XEk">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                                <connections>
+                                    <outlet property="dataSource" destination="buU-wd-t6L" id="UMh-Ie-otX"/>
+                                    <outlet property="delegate" destination="buU-wd-t6L" id="Lx9-w6-V0G"/>
+                                </connections>
+                            </comboBox>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="bJ2-Ly-7PM">
+                                <rect key="frame" x="18" y="328" width="564" height="42"/>
+                                <textFieldCell key="cell" selectable="YES" id="GmQ-et-kaO">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <string key="title">La macchina virtuale è creata con un adattatore video di default, ma diversi adattatori possono funzionare nella VM, a seconda dell'hardware emulato e del sistema operativo guest. Qui puoi selezionatre quale collegare alla VM:</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Egz-4i-9gr">
+                                <rect key="frame" x="18" y="20" width="564" height="98"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="98" id="2el-IL-q9c"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" id="Tee-Bc-gk2">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <string key="title">Nota per gli utenti con Windows 11 ARM:
+
+La macchina virtuale è creata con "Ram framebuffer standalone device". Questo è necessario per installare correttamente Windows 11 sulla VM. Una volta installato Windows può essere selezionato l'adattatore "VirtIO GPU PCI". Questo adattatore funziona meglio ed offre la possibilità di selezionare la risoluzione dello schermo, una volta installato il relativo driver. Il driver si trova nel DVD che viene collegato alla VM al momento della sua creazione.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="bJ2-Ly-7PM" firstAttribute="top" secondItem="v1E-0n-Ptk" secondAttribute="top" constant="20" symbolic="YES" id="3Th-Vn-Nlg"/>
+                            <constraint firstAttribute="bottom" secondItem="Egz-4i-9gr" secondAttribute="bottom" constant="20" symbolic="YES" id="JPi-9g-XNb"/>
+                            <constraint firstItem="bJ2-Ly-7PM" firstAttribute="leading" secondItem="v1E-0n-Ptk" secondAttribute="leading" constant="20" symbolic="YES" id="QU0-Kx-Vfy"/>
+                            <constraint firstItem="bJ2-Ly-7PM" firstAttribute="centerX" secondItem="iMR-ZO-aS7" secondAttribute="centerX" id="ZwS-U1-ZK0"/>
+                            <constraint firstItem="bJ2-Ly-7PM" firstAttribute="trailing" secondItem="Egz-4i-9gr" secondAttribute="trailing" id="aXE-W7-oLN"/>
+                            <constraint firstItem="iMR-ZO-aS7" firstAttribute="centerX" secondItem="9Fo-Gv-e3w" secondAttribute="centerX" id="cZx-IF-sPQ"/>
+                            <constraint firstItem="9Fo-Gv-e3w" firstAttribute="top" secondItem="iMR-ZO-aS7" secondAttribute="bottom" constant="8" symbolic="YES" id="dRB-AD-EgX"/>
+                            <constraint firstAttribute="trailing" secondItem="bJ2-Ly-7PM" secondAttribute="trailing" constant="20" symbolic="YES" id="hoJ-Ew-tU6"/>
+                            <constraint firstItem="bJ2-Ly-7PM" firstAttribute="leading" secondItem="Egz-4i-9gr" secondAttribute="leading" id="uuX-Rs-ZZz"/>
+                            <constraint firstItem="iMR-ZO-aS7" firstAttribute="top" secondItem="bJ2-Ly-7PM" secondAttribute="bottom" constant="17" id="zfE-Qz-r98"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="videoAdapterComboBox" destination="9Fo-Gv-e3w" id="ibG-No-tVx"/>
+                    </connections>
+                </viewController>
+                <customObject id="88T-Kl-Nug" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1636" y="-538"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="dAG-Lk-g12"/>
@@ -1661,15 +1740,16 @@ Gw
     </inferredMetricsTieBreakers>
     <resources>
         <image name="HD Icon" width="25" height="25"/>
-        <image name="NSAddTemplate" width="18" height="16"/>
-        <image name="cpu" catalog="system" width="17" height="15"/>
-        <image name="folder.fill" catalog="system" width="19" height="14"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
+        <image name="cpu" catalog="system" width="16" height="15"/>
+        <image name="display" catalog="system" width="19" height="15"/>
+        <image name="folder.fill" catalog="system" width="18" height="14"/>
         <image name="gear" catalog="system" width="17" height="16"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="network" catalog="system" width="15" height="15"/>
-        <image name="plus.app.fill" catalog="system" width="16" height="14"/>
+        <image name="plus.app.fill" catalog="system" width="15" height="14"/>
         <image name="rays" catalog="system" width="16" height="16"/>
-        <image name="square.and.pencil" catalog="system" width="16" height="16"/>
+        <image name="square.and.pencil" catalog="system" width="17" height="16"/>
         <image name="trash" catalog="system" width="15" height="17"/>
     </resources>
 </document>

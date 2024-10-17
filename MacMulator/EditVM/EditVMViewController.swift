@@ -22,17 +22,21 @@ class EditVMViewController: NSTabViewController {
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
         let network = tabViewItems[2].viewController as! EditVMViewControllerNetwork
-        let advanced = tabViewItems[3].viewController as! EditVMViewControllerAdvanced
+        let video = tabViewItems[3].viewController as! EditVMViewControllerVideo
+        let advanced = tabViewItems[4].viewController as! EditVMViewControllerAdvanced
         
-        general.setVirtualMachine(vm);
-        hardware.setVirtualMachine(vm);
-        network.setVirtualMachine(vm);
-        advanced.setVirtualMachine(vm);
+        general.setVirtualMachine(vm)
+        hardware.setVirtualMachine(vm)
+        network.setVirtualMachine(vm)
+        video.setVirtualMachine(vm)
+        advanced.setVirtualMachine(vm)
         
         if vm.type == MacMulatorConstants.APPLE_VM {
+            removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
         } else if vm.os == QemuConstants.OS_IOS {
+            removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
         }
     }
