@@ -316,7 +316,7 @@ class QemuCommandBuilder {
             cmd += " -rtc base=localtime,clock=host"
         }
         if let tpmPath = self.tpmPath {
-            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0 -smp 2"
+            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
         }
         if let logging = self.logging {
             cmd += " -d " + logging
