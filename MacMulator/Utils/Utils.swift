@@ -737,11 +737,11 @@ class Utils {
 #endif
     }
     
-    static func getPreferredCPU() -> String {
+    static func getWindows11CPU() -> String {
 #if arch(arm64)
-        return QemuConstants.CPU_IVY_BRIDGE
+        return QemuConstants.CPU_HOST
 #else
-        return QemuConstants.CPU_MAX
+        return QemuConstants.CPU_ICELAKE_SERVER
 #endif
     }
     
@@ -750,6 +750,14 @@ class Utils {
         return 120
 #else
         return 250
+#endif
+    }
+
+    static func getPreferredNetworkCard() -> String {
+#if arch(arm64)
+        return QemuConstants.NETWORK_VIRTIO_NET_PCI
+#else
+        return QemuConstants.NETWORK_E1000
 #endif
     }
     

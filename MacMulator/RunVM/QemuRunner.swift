@@ -325,21 +325,23 @@ class QemuRunner : VirtualMachineRunner {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation();
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype);
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)
-        
+        let videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
+
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
-            .withMachine(QemuConstants.MACHINE_TYPE_VIRT, [])
+            .withMachine(QemuConstants.MACHINE_TYPE_VIRT_HIGHMEM, [])
             .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(virtualMachine.memory)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
-            .withDevice(QemuConstants.QEMU_XHCI)
+            .withDevice(QemuConstants.NEC_USB_XHCI)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withDevice(QemuConstants.RAMFB)
-            .withNic(QemuConstants.VGA_VIRTIO)
+            .withVga(videoDevice)
+            .withNic(QemuConstants.NIC_VIRTIO)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil)
     }
     
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {

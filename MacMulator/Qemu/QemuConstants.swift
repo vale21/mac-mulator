@@ -15,6 +15,7 @@ class QemuConstants {
     static let MEDIATYPE_NVME = "nvme"
     static let MEDIATYPE_CDROM = "cdrom"
     static let MEDIATYPE_USB = "usb"
+    static let MEDIATYPE_USB_CDROM = "usb-cdrom"
     static let MEDIATYPE_EFI = "efi"
     static let MEDIATYPE_EFI_SECURE = "efi-secure"
     static let MEDIATYPE_EFI_VARS = "efi-vars"
@@ -42,6 +43,7 @@ class QemuConstants {
     static let CD = "CD/DVD"
     static let HD = NSLocalizedString("QemuConstants.hd", comment: "")
     static let USB = NSLocalizedString("QemuConstants.usb", comment: "")
+    static let USB_CDROM = NSLocalizedString("QemuConstants.usb-cdrom", comment: "")
     static let IPSW = NSLocalizedString("QemuConstants.ipsw", comment: "")
     static let EFI = NSLocalizedString("QemuConstants.efi", comment: "")
     static let NET = NSLocalizedString("QemuConstants.network", comment: "")
@@ -554,8 +556,8 @@ class QemuConstants {
         [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_8, MEDIATYPE_DISK, false, nil],
         [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, URL_SYSTEM_7, MEDIATYPE_DISK, false, nil],
         [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MICROSOFT_COM, MEDIATYPE_DISK, false, VGA_VIRTIO],
-        [OS_WIN, SUB_WINDOWS_11, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_11, Utils.getPreferredMachineType(), CPU_ICELAKE_SERVER, true, NETWORK_E1000, nil, URL_WINDOWS_11, MEDIATYPE_NVME, true, Utils.getPreferredVideoCard()],
-        [OS_WIN, SUB_WINDOWS_10, Utils.getPreferredArchitecture(), 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, Utils.getPreferredMachineType(), nil, true, NETWORK_E1000, nil, URL_WINDOWS_10, MEDIATYPE_DISK, false, Utils.getPreferredVideoCard()],
+        [OS_WIN, SUB_WINDOWS_11, Utils.getPreferredArchitecture(), 2, 1024, 32768, 4096, 120, 8192, 250, ICON_WINDOWS_11, Utils.getPreferredMachineType(), Utils.getWindows11CPU(), true, Utils.getPreferredNetworkCard(), nil, URL_WINDOWS_11, MEDIATYPE_NVME, true, Utils.getPreferredVideoCard()],
+        [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, nil, true, NETWORK_E1000, nil, URL_WINDOWS_10, MEDIATYPE_DISK, false, VGA_VIRTIO],
         [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8_1, MEDIATYPE_DISK, false, VGA_VIRTIO],
         [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8, MEDIATYPE_DISK, false, VGA_VIRTIO],
         [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_7, MEDIATYPE_DISK, false, VGA_VIRTIO],
@@ -640,14 +642,15 @@ class QemuConstants {
     static let MACHINE_TYPE_Q800 = "q800";
     static let MACHINE_TYPE_IPOD_TOUCH = "iPod-Touch"
     
-    static let SERIAL_STDIO = "stdio";
+    static let SERIAL_STDIO = "stdio"
     static let SERIAL_MON_STDIO = "mon:stdio"
     
-    static let PC_BIOS = "pc-bios";
+    static let PC_BIOS = "pc-bios"
+    static let NIC_VIRTIO = "virtio"
     
     static let NETWORK_E1000 = "e1000";
-    static let NETWORK_E1000_82544GC = "e1000-82544gc";
-    static let NETWORK_E1000_82545EM = "e1000-82545em";
+    static let NETWORK_E1000_82544GC = "e1000-82544gc"
+    static let NETWORK_E1000_82545EM = "e1000-82545em"
     static let NETWORK_E1000E = "e1000e";
     static let NETWORK_I82550 = "i82550";
     static let NETWORK_I82551 = "i82551";
@@ -713,6 +716,7 @@ class QemuConstants {
     static let USB_KEYBOARD = "usb-kbd";
     static let USB_TABLET = "usb-tablet";
     static let QEMU_XHCI = "qemu-xhci";
+    static let NEC_USB_XHCI = "nec-usb-xhci,id=usb-bus"
     static let RAMFB = "ramfb";
     static let APPLE_SMC = "isa-applesmc,osk=\"ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc\""
     static let VIRTIO_GPU_PCI = "virtio-gpu-pci";

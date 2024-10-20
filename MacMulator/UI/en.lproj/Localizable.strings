@@ -40,6 +40,7 @@
 "PreferencesViewController.qemuFound" ="Detected Qemu version %@";
 "QemuConstants.hd" = "Hard Drive";
 "QemuConstants.usb" = "USB Drive";
+"QemuConstants.usb-cdrom" = "CD/DVD over USB";
 "QemuConstants.ipsw" = "IPSW Install Image";
 "QemuConstants.efi" = "EFI Firmware";
 "QemuConstants.network" = "Network";

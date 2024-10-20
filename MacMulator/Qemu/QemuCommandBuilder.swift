@@ -152,7 +152,11 @@ class QemuCommandBuilder {
     }
     
     func withDrive(file: String, format: String, index: Int, media:String)-> QemuCommandBuilder {
-        if media == QemuConstants.MEDIATYPE_USB {
+        if media == QemuConstants.MEDIATYPE_USB_CDROM {
+            var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=true,bootindex=" + String(index) + ",bus=usb-bus.0";
+            driveString.append(" -drive \"if=none,format=raw,media=cdrom,id=drive" + String(index) + ",file.filename=" + file + ",file.locking=off,readonly=on\"");
+            self.drives.append(driveString);
+        } else if media == QemuConstants.MEDIATYPE_USB {
             var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=false";
             driveString.append(" -drive \"if=none,media=disk,id=drive" + String(index) + ",file=" + file + ",cache=writethrough\"");
             self.drives.append(driveString);
@@ -301,7 +305,7 @@ class QemuCommandBuilder {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off,readonly=on"
         }
         if let efiVars = self.efiVars {
-            cmd += " -drive if=pflash,unit=1,file=" + efiVars + " -global driver=cfi.pflash01,property=secure,value=on"
+            cmd += " -drive if=pflash,unit=1,file=" + efiVars // + " -global driver=cfi.pflash01,property=secure,value=on"
         }
         for drive in self.drives {
             cmd += " " + drive
@@ -316,7 +320,7 @@ class QemuCommandBuilder {
             cmd += " -rtc base=localtime,clock=host"
         }
         if let tpmPath = self.tpmPath {
-            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"
+            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis-device,tpmdev=tpm0"
         }
         if let logging = self.logging {
             cmd += " -d " + logging

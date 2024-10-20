@@ -26,6 +26,8 @@ class QemuUtils {
             return QemuConstants.EFI;
         } else if driveType == QemuConstants.MEDIATYPE_USB {
             return QemuConstants.USB;
+        } else if driveType == QemuConstants.MEDIATYPE_USB_CDROM {
+            return QemuConstants.USB_CDROM;
         } else if driveType == QemuConstants.MEDIATYPE_IPSW {
             return QemuConstants.IPSW;
         } else if driveType == QemuConstants.MEDIATYPE_NVRAM {
@@ -122,17 +124,61 @@ class QemuUtils {
     }
     
     static func createAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
-        if vm.architecture == QemuConstants.ARCH_ARM64 || vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
-            let virtualEfi = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
-                name: QemuConstants.MEDIATYPE_EFI + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_EFI,
-                size: 0);
-            vm.addVirtualDrive(virtualEfi)
+        if Utils.getTPMForSubType(vm.os, vm.subtype) {
+            try? FileManager.default.createDirectory(at: URL(fileURLWithPath: vm.path + "/tpm"), withIntermediateDirectories: false)
         }
         
         if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
+            let driversCdRom = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0." + MacMulatorConstants.ISO_EXTENSION,
+                name: QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
+                size: 0);
+            vm.addVirtualDrive(driversCdRom)
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "windows-11-drivers.iso", ofType: nil)!, toPath: vm.path + "/usb-cdrom-windows-drivers-0.iso")
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_ARM64 {
+            let virtualEfi = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI_SECURE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI_SECURE,
+                size: 0);
+            vm.addVirtualDrive(virtualEfi)
+            
+            let virtualEfiVars = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_VARS + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI_VARS + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI_VARS,
+                size: 0);
+            vm.addVirtualDrive(virtualEfiVars)
+                        
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_ARM.fd", ofType: nil)!, toPath: vm.path + "/efi-secure-0.fd")
+            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS_ARM.fd", ofType: nil)!, toPath: vm.path + "/efi-vars-0.fd")
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_X64 && (vm.subtype == QemuConstants.SUB_WINDOWS_11 || vm.os == QemuConstants.OS_MAC) {
+            let openCore = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
+                size: 0);
+            vm.addVirtualDrive(openCore);
+            
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: QemuConstants.OPENCORE + ".zip", ofType: nil)!)
+            let destinationURL = URL(fileURLWithPath: vm.path)
+            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
+            
+            // Rename unzipped image and clean up garbage empty folder
+            try? FileManager.default.moveItem(atPath: vm.path + "/" + QemuConstants.OPENCORE + ".img", toPath: vm.path + "/opencore-0.img")
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_X64 && vm.subtype == QemuConstants.SUB_WINDOWS_11 {
             let virtualEfi = VirtualDrive(
                 path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
                 name: QemuConstants.MEDIATYPE_EFI_SECURE + "-0",
@@ -153,42 +199,15 @@ class QemuUtils {
             try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS.fd", ofType: nil)!, toPath: vm.path + "/efi-vars-0.fd")
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: vm.path + "/tpm"), withIntermediateDirectories: false)
         }
-                
-        if vm.subtype == QemuConstants.SUB_WINDOWS_11 || vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
-            let openCore = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
-                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
-                size: 0);
-            vm.addVirtualDrive(openCore);
-            
-            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: QemuConstants.OPENCORE + ".zip", ofType: nil)!)
-            let destinationURL = URL(fileURLWithPath: vm.path)
-            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
-            
-            // Rename unzipped image and clean up garbage empty folder
-            try? FileManager.default.moveItem(atPath: vm.path + "/" + QemuConstants.OPENCORE + ".img", toPath: vm.path + "/opencore-0.img")
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
-        }
-        
-        if vm.architecture == QemuConstants.ARCH_ARM64 {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "ARM_QEMU_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd");
-            let nvramDrive = Utils.findNvramDrive(vm.drives)
-            if let nvramDrive = nvramDrive {
-                QemuUtils.createDiskImage(path: vm.path, name: nvramDrive.name, format: nvramDrive.format, size: "67108864", uponCompletion: { result in })
-            }
-            
-            let virtualNvram = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_NVRAM + "-0",
-                name: QemuConstants.MEDIATYPE_NVRAM + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_NVRAM,
-                size: 0);
-            vm.addVirtualDrive(virtualNvram)
-        }
-        
+                                
         if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
+            let virtualEfi = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI,
+                size: 0);
+            vm.addVirtualDrive(virtualEfi)
             try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "MACOS_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-0.fd")
         }
         

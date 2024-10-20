@@ -377,7 +377,7 @@ class VirtualMachineViewController: NSViewController {
                 if vm.type == MacMulatorConstants.APPLE_VM {
                     self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
-                    if (vm.subtype == QemuConstants.SUB_WINDOWS_11 || vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                    if (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64) || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                         self.performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                     } else {
                         startVM_internal(runner, inRecovery, vm)
