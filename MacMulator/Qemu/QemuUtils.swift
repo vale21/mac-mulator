@@ -136,7 +136,14 @@ class QemuUtils {
                 mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
                 size: 0);
             vm.addVirtualDrive(driversCdRom)
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "windows-11-drivers.iso", ofType: nil)!, toPath: vm.path + "/usb-cdrom-windows-drivers-0.iso")
+            
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "windows-11-drivers.iso.zip", ofType: nil)!)
+            let destinationURL = URL(fileURLWithPath: vm.path)
+            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
+            
+            // Rename unzipped image and clean up garbage empty folder
+            try? FileManager.default.moveItem(atPath: vm.path + "/windows-11-drivers.iso", toPath: vm.path + "/usb-cdrom-windows-drivers-0.iso")
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
         }
         
         if vm.architecture == QemuConstants.ARCH_ARM64 {
