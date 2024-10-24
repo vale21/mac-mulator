@@ -32,6 +32,7 @@ class QemuCommandBuilder {
     var efi: String?
     var efiSecure: String?
     var efiVars: String?
+    var globalClause: String?
     var drives: [String] = []
     var network: String?
     var portMappings: [PortMapping] = []
@@ -194,8 +195,9 @@ class QemuCommandBuilder {
         return self;
     }
     
-    func withEfiVars(file: String)-> QemuCommandBuilder {
-        self.efiVars = Utils.escape(file);
+    func withEfiVars(file: String, global: Bool)-> QemuCommandBuilder {
+        self.efiVars = Utils.escape(file)
+        self.globalClause = global ? " -global driver=cfi.pflash01,property=secure,value=on" : ""
         return self;
     }
     
@@ -307,7 +309,7 @@ class QemuCommandBuilder {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off,readonly=on"
         }
         if let efiVars = self.efiVars {
-            cmd += " -drive if=pflash,unit=1,file=" + efiVars // + " -global driver=cfi.pflash01,property=secure,value=on"
+            cmd += " -drive if=pflash,unit=1,file=" + efiVars + self.globalClause!
         }
         for drive in self.drives {
             cmd += " " + drive
@@ -322,7 +324,8 @@ class QemuCommandBuilder {
             cmd += " -rtc base=localtime,clock=host"
         }
         if let tpmPath = self.tpmPath {
-            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + (self.tpmDevice ? self.tpmDevice : QemuConstants.TPM_TIS_DEVICE) + ",tpmdev=tpm0"
+            let device = self.tpmDevice != nil ? self.tpmDevice! : QemuConstants.TPM_TIS_DEVICE
+            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
         }
         if let logging = self.logging {
             cmd += " -d " + logging
