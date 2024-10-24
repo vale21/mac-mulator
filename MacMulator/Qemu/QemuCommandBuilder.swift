@@ -38,6 +38,7 @@ class QemuCommandBuilder {
     var managementPort: Int32?
     var nic: String?
     var tpmPath: String?
+    var tpmDevice: String?
     var rtcEnabled: Bool = true
     var logging: String?
     
@@ -235,8 +236,9 @@ class QemuCommandBuilder {
         return self
     }
     
-    func withTpm(_ tpmPath: String?) -> QemuCommandBuilder {
+    func withTpm(_ tpmPath: String?, _ tpmDevice: String?) -> QemuCommandBuilder {
         self.tpmPath = tpmPath
+        self.tpmDevice = tpmDevice
         return self
     }
     
@@ -320,7 +322,7 @@ class QemuCommandBuilder {
             cmd += " -rtc base=localtime,clock=host"
         }
         if let tpmPath = self.tpmPath {
-            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis-device,tpmdev=tpm0"
+            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + (self.tpmDevice ? self.tpmDevice : QemuConstants.TPM_TIS_DEVICE) + ",tpmdev=tpm0"
         }
         if let logging = self.logging {
             cmd += " -d " + logging

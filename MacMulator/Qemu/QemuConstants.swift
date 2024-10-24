@@ -728,6 +728,9 @@ class QemuConstants {
     
     static let OPENCORE = "OPENCORE"
     
+    static let TPM_TIS_DEVICE = "tpm-tis-device"
+    static let TPM_TIS = "tpm-tis"
+    
     static let LOG_UNIMPLEMENTED = "unimp"
     
     static let OTHER = "other"

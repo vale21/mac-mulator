@@ -264,7 +264,7 @@ class QemuRunner : VirtualMachineRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
-            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil)
+            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil, QemuConstants.TPM_TIS)
         let sound = Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)
         if sound == QemuConstants.SOUND_HDA {
             builder = builder.withSound(QemuConstants.SOUND_HDA).withSound(QemuConstants.SOUND_HDA_DUPLEX)
@@ -343,7 +343,7 @@ class QemuRunner : VirtualMachineRunner {
             .withVga(videoDevice)
             .withNic(QemuConstants.NIC_VIRTIO)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
-            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil)
+            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil, QemuConstants.TPM_TIS_DEVICE)
     }
     
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
