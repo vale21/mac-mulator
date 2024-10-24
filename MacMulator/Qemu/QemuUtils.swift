@@ -127,25 +127,7 @@ class QemuUtils {
         if Utils.getTPMForSubType(vm.os, vm.subtype) {
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: vm.path + "/tpm"), withIntermediateDirectories: false)
         }
-        
-        if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-            let driversCdRom = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0." + MacMulatorConstants.ISO_EXTENSION,
-                name: QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
-                size: 0);
-            vm.addVirtualDrive(driversCdRom)
-            
-            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "windows-11-drivers.iso.zip", ofType: nil)!)
-            let destinationURL = URL(fileURLWithPath: vm.path)
-            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
-            
-            // Rename unzipped image and clean up garbage empty folder
-            try? FileManager.default.moveItem(atPath: vm.path + "/windows-11-drivers.iso", toPath: vm.path + "/usb-cdrom-windows-drivers-0.iso")
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
-        }
-        
+                
         if vm.architecture == QemuConstants.ARCH_ARM64 {
             let virtualEfi = VirtualDrive(
                 path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
@@ -165,6 +147,24 @@ class QemuUtils {
                         
             try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_ARM.fd", ofType: nil)!, toPath: vm.path + "/efi-secure-0.fd")
             try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS_ARM.fd", ofType: nil)!, toPath: vm.path + "/efi-vars-0.fd")
+        }
+        
+        if vm.architecture == QemuConstants.ARCH_ARM64 && vm.subtype == QemuConstants.SUB_WINDOWS_11 {
+            let driversCdRom = VirtualDrive(
+                path: vm.path + "/" + QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0." + MacMulatorConstants.ISO_EXTENSION,
+                name: QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
+                size: 0);
+            vm.addVirtualDrive(driversCdRom)
+            
+            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "windows-11-drivers.iso.zip", ofType: nil)!)
+            let destinationURL = URL(fileURLWithPath: vm.path)
+            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
+            
+            // Rename unzipped image and clean up garbage empty folder
+            try? FileManager.default.moveItem(atPath: vm.path + "/windows-11-drivers.iso", toPath: vm.path + "/usb-cdrom-windows-drivers-0.iso")
+            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
         }
         
         if vm.architecture == QemuConstants.ARCH_X64 && (vm.subtype == QemuConstants.SUB_WINDOWS_11 || vm.os == QemuConstants.OS_MAC) {
