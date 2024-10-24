@@ -527,6 +527,10 @@ class Utils {
         return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
     
+    static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
+    }
+    
     static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
         return getStringValueForSubType(os, subtype, 15) ?? QemuConstants.SOUND_HDA
     }
@@ -539,11 +543,17 @@ class Utils {
         return getStringValueForSubType(os, subtype, 17) ?? QemuConstants.MEDIATYPE_DISK
     }
     
+    static func getTPMForSubType(_ os: String, _ subtype: String?) -> Bool {
+        return getBoolValueForSubType(os, subtype, 18, false)
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {
             for drive in vm.drives {
                 if drive.mediaType != QemuConstants.MEDIATYPE_EFI &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE &&
+                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS &&
                     drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE &&
                     drive.mediaType != QemuConstants.MEDIATYPE_NVRAM &&
                     drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM &&
@@ -565,7 +575,7 @@ class Utils {
                     // end loop and return
                     return row + counter;
                 }
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
                     counter += 1;
                 }
                 iterationIndex += 1
@@ -727,11 +737,11 @@ class Utils {
 #endif
     }
     
-    static func getPreferredCPU() -> String {
+    static func getWindows11CPU() -> String {
 #if arch(arm64)
-        return QemuConstants.CPU_IVY_BRIDGE
+        return QemuConstants.CPU_HOST
 #else
-        return QemuConstants.CPU_MAX
+        return QemuConstants.CPU_ICELAKE_SERVER
 #endif
     }
     
@@ -740,6 +750,22 @@ class Utils {
         return 120
 #else
         return 250
+#endif
+    }
+
+    static func getPreferredNetworkCard() -> String {
+#if arch(arm64)
+        return QemuConstants.NETWORK_VIRTIO_NET_PCI
+#else
+        return QemuConstants.NETWORK_E1000
+#endif
+    }
+    
+    static func getPreferredVideoCard() -> String {
+#if arch(arm64)
+        return QemuConstants.VGA_RAMFB
+#else
+        return QemuConstants.VGA_VIRTIO
 #endif
     }
     
@@ -819,7 +845,11 @@ class Utils {
     
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
-            return QemuUtils.isBinaryAvailable(vm.architecture)
+            if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
+                return QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+            } else {
+                return QemuUtils.isBinaryAvailable(vm.architecture)
+            }
         } else {
             return isVirtualizationFrameworkPreferred(vm)
         }
@@ -864,6 +894,18 @@ class Utils {
                 }
             }
         }
+    }
+    
+    static func sortDrives(_ virtualMachine: VirtualMachine) {
+        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_OPENCORE,  QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_CDROM]
+        
+        let sortedDrives = virtualMachine.drives.sorted {
+            let firstIndex = order.firstIndex(of: $0.mediaType) ?? Int.max
+            let secondIndex = order.firstIndex(of: $1.mediaType) ?? Int.max
+            return firstIndex < secondIndex
+        }
+        
+        virtualMachine.drives = sortedDrives
     }
     
     static func getMainScreenSize() -> String {

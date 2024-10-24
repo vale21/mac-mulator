@@ -218,20 +218,24 @@ class VirtualMachineViewController: NSViewController {
             
             if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
                 if Utils.isVMAvailable(vm) {
-                    startVMButton.isEnabled = true;
-                    qemuUnavailableLabel.isHidden = true;
+                    startVMButton.isEnabled = true
+                    qemuUnavailableLabel.isHidden = true
+                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11 && !QemuUtils.isBinaryAvailable(QemuConstants.SWTPM) {
+                    startVMButton.isEnabled = false
+                    qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.swTpmNotAvailable", comment: ""), vmArchitecture.stringValue)
+                    qemuUnavailableLabel.isHidden = false
                 } else {
-                    startVMButton.isEnabled = false;
-                    qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.binaryNotAvaiable", comment: ""), vmArchitecture.stringValue)
-                    qemuUnavailableLabel.isHidden = false;
+                    startVMButton.isEnabled = false
+                    qemuUnavailableLabel.stringValue = NSLocalizedString("VirtualMachineViewController.binaryNotAvaiable", comment: "")
+                    qemuUnavailableLabel.isHidden = false
                 }
             } else {
                 if Utils.isVMAvailable(vm) {
-                    startVMButton.isEnabled = true;
-                    qemuUnavailableLabel.isHidden = true;
+                    startVMButton.isEnabled = true
+                    qemuUnavailableLabel.isHidden = true
                 } else {
-                    startVMButton.isEnabled = false;
-                    qemuUnavailableLabel.isHidden = false;
+                    startVMButton.isEnabled = false
+                    qemuUnavailableLabel.isHidden = false
                     qemuUnavailableLabel.stringValue = Utils.getUnavailabilityMessage(vm)
                 }
             }
@@ -341,6 +345,15 @@ class VirtualMachineViewController: NSViewController {
     
     fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         do {
+            if (vm.subtype == QemuConstants.SUB_WINDOWS_11) {
+                let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+                let swTpmPath = vm.qemuPath != nil ? vm.qemuPath! : qemuPath
+                let shell = Shell()
+                shell.runCommand(swTpmPath + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(vm.path) + "/tpm/socket  --log level=20 --tpm2", vm.path, uponCompletion: { result in
+                    print("swtpm done")
+                    //Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "swtpm terminated")
+                })
+            }
             try runner.runVM(recoveryMode: inRecovery, uponCompletion: {
                 result, virtualMachine in
                 self.completionhandler(result: result, virtualMachine: virtualMachine)
@@ -364,7 +377,7 @@ class VirtualMachineViewController: NSViewController {
                 if vm.type == MacMulatorConstants.APPLE_VM {
                     self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
-                    if (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                    if (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64) || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                         self.performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                     } else {
                         startVM_internal(runner, inRecovery, vm)
