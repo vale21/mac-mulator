@@ -114,7 +114,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="-3" width="600" height="2073"/>
+                                            <rect key="frame" x="0.0" y="-2" width="600" height="2072"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2400,7 +2400,7 @@ Raspberry Pi</mutableString>
                                     <rect key="frame" x="-100" y="-100" width="240" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.00053333333333333336" horizontal="NO" id="C2s-qX-0Pe">
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="C2s-qX-0Pe">
                                     <rect key="frame" x="584" y="0.0" width="16" height="198"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -4209,16 +4209,16 @@ Raspberry Pi</mutableString>
         </scene>
     </scenes>
     <resources>
-        <image name="NSAddTemplate" width="18" height="16"/>
+        <image name="NSAddTemplate" width="18" height="17"/>
         <image name="NSApplicationIcon" width="32" height="32"/>
-        <image name="NSStopProgressFreestandingTemplate" width="19" height="19"/>
+        <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
         <image name="checkmark.circle.fill" catalog="system" width="15" height="15"/>
         <image name="folder.circle" width="78" height="78"/>
         <image name="monterey.large" width="90" height="90"/>
         <image name="new.vm" width="78" height="78"/>
         <image name="pause.circle.fill" catalog="system" width="15" height="15"/>
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
-        <image name="plus" catalog="system" width="15" height="13"/>
+        <image name="plus" catalog="system" width="14" height="13"/>
         <image name="stop.circle.fill" catalog="system" width="15" height="15"/>
         <image name="tiger.small" width="44" height="44"/>
         <image name="windows.large" width="90" height="90"/>
