@@ -187,7 +187,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func editVirtualMachine(_ index: Int) {
         if let rootController = self.rootController {
             let item = rootController.getVirtualMachineAt(index);
-            self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: item);
+            self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, item]);
         }
     }
         

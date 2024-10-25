@@ -77,7 +77,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     func editVMmenuBarClicked(_ sender: Any) {
-        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: currentVm);
+        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [sender, currentVm]) // The sender here determines which tab to show
     }
     
     @IBAction func cloneVMMenuBarClicked(_ sender: Any) {

@@ -20,11 +20,14 @@ class MainWindowController: NSWindowController {
             destinationController.setRootController(sourceController);
         }
         if (segue.identifier == MacMulatorConstants.EDIT_VM_SEGUE) {
-            let vmToEdit = sender as! VirtualMachine;
+            let args = sender as! [Any]
+            let originalSender = args[0] as? NSMenuItem
+            let vmToEdit = args[1] as! VirtualMachine;
             
             let destinationController = dest.contentViewController as! EditVMViewController;
-            destinationController.setVirtualMachine(vmToEdit);
-            destinationController.setRootController(sourceController);
+            destinationController.setVirtualMachine(vmToEdit)
+            destinationController.setRootController(sourceController)
+            destinationController.selectedTabViewItemIndex = originalSender?.title == NSLocalizedString("AppDelegate.configure", comment: "") ? 1 : 0
         }
         if (segue.identifier == MacMulatorConstants.PREFERENCES_SEGUE) {
             let destinationController = dest.contentViewController as! PreferencesViewController;

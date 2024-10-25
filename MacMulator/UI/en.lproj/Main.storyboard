@@ -2795,7 +2795,7 @@ Raspberry Pi</mutableString>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
-                                        <menuItem title="Configure" id="Qce-a5-l81">
+                                        <menuItem title="Edit" id="Qce-a5-l81">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
@@ -2823,6 +2823,13 @@ Raspberry Pi</mutableString>
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="attachUSBImageMenuBarClicked:" target="Voe-Tx-rLC" id="b1f-Bg-fc4"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="BWP-T9-TOD"/>
+                                                    <menuItem title="Configure" id="vyi-Nn-ga9">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="Jzh-OX-vA0"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
@@ -2960,7 +2967,7 @@ Raspberry Pi</mutableString>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2604" y="-951"/>
+            <point key="canvasLocation" x="-2830" y="-1037"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="ca3-oh-WzR">

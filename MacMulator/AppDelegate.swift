@@ -143,7 +143,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked(MacMulatorConstants.mainMenuSender);
+        rootController?.editVMmenuBarClicked(sender) // The sender here determines which tab to show
     }
     
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
@@ -187,6 +187,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
+                    editVMMenuItem.isEnabled = true
                     
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)

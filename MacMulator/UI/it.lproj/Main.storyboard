@@ -2686,7 +2686,7 @@ Raspberry Pi</mutableString>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
-                                        <menuItem title="Configura" id="Qce-a5-l81">
+                                        <menuItem title="Modifica" id="Qce-a5-l81">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
@@ -2714,6 +2714,13 @@ Raspberry Pi</mutableString>
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="attachUSBImageMenuBarClicked:" target="Voe-Tx-rLC" id="8GZ-Ag-909"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="lNm-9b-2x1"/>
+                                                    <menuItem title="Configura" id="C9f-wr-OnI">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="KuG-z9-rbY"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
