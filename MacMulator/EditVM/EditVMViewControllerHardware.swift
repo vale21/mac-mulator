@@ -20,7 +20,12 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet weak var openImageButton: NSButton!
     @IBOutlet weak var createNewDiskButton: NSButton!
     
-    var virtualMachine: VirtualMachine?;
+    var rootController : RootViewController?
+    var virtualMachine: VirtualMachine?
+    
+    func setRootController(_ rootController:RootViewController) {
+        self.rootController = rootController;
+    }
     
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
@@ -67,41 +72,58 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             name: QemuConstants.MEDIATYPE_DISK + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_DISK)),
                             format: QemuConstants.FORMAT_UNKNOWN,
                             mediaType: QemuConstants.MEDIATYPE_DISK,
-                            size: 0);
+                            size: 0)
                     } else if path.hasSuffix(MacMulatorConstants.EFI_EXTENSION) {
                         newDrive = VirtualDrive(
                             path: path,
                             name: QemuConstants.MEDIATYPE_EFI + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_EFI)),
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_EFI,
-                            size: 0);
-                    } else if virtualMachine.architecture == QemuConstants.ARCH_X64 && virtualMachine.os == QemuConstants.OS_MAC {
-                        // Install media is a USB stick
-                        newDrive = VirtualDrive(
-                            path: path,
-                            name: QemuConstants.MEDIATYPE_USB + "-0",
-                            format: QemuConstants.FORMAT_RAW,
-                            mediaType: QemuConstants.MEDIATYPE_USB,
-                            size: 0);
-                    } else if virtualMachine.type == MacMulatorConstants.APPLE_VM && virtualMachine.os == QemuConstants.OS_MAC {
-                        // Install media is a IPSW image
+                            size: 0)
+                    } else if path.hasSuffix(MacMulatorConstants.IPSW_EXTENSION) {
                         newDrive = VirtualDrive(
                             path: path,
                             name: QemuConstants.MEDIATYPE_IPSW + "-0",
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_IPSW,
-                            size: 0);
+                            size: 0)
+                    } else if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_USB + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_USB,
+                            size: 0)
+                        
+                        if #available(macOS 15.0, *), rootController?.isVMRunning(virtualMachine) == true {
+                            let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
+                            runner.attachUSBImageToVM(virtualDrive: newDrive)
+                        }
+                    } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_USB_CDROM + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
+                            size: 0)
+                    } else if virtualMachine.architecture == QemuConstants.ARCH_X64 && virtualMachine.os == QemuConstants.OS_MAC {
+                        newDrive = VirtualDrive(
+                            path: path,
+                            name: QemuConstants.MEDIATYPE_USB + "-0",
+                            format: QemuConstants.FORMAT_RAW,
+                            mediaType: QemuConstants.MEDIATYPE_USB,
+                            size: 0)
                     } else {
                         newDrive = VirtualDrive(
                             path: path,
                             name: QemuConstants.MEDIATYPE_CDROM + "-" + String(Utils.computeNextDriveIndex(virtualMachine, QemuConstants.MEDIATYPE_CDROM)),
                             format: QemuConstants.FORMAT_RAW,
                             mediaType: QemuConstants.MEDIATYPE_CDROM,
-                            size: 0);
+                            size: 0)
                     }
-                    virtualMachine.addVirtualDrive(newDrive);
-                
-                    virtualMachine.writeToPlist();
+                    virtualMachine.addVirtualDrive(newDrive)
+                    virtualMachine.writeToPlist()
+                                        
                     updateView()
                 }
             }
@@ -133,9 +155,17 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     fileprivate func removeVirtualDrive(_ row: Int, _ index: Int) {
         if let virtualMachine = self.virtualMachine {
             self.drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp);
-            virtualMachine.drives.remove(at: index);
+            let removedDrive = virtualMachine.drives.remove(at: index);
             virtualMachine.writeToPlist();
             self.updateView()
+            
+            if #available(macOS 15.0, *), virtualMachine.type == MacMulatorConstants.APPLE_VM, rootController?.isVMRunning(virtualMachine) == true {
+                let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
+                runner.detachUSBImageFromVM(virtualDrive: removedDrive)
+                
+                let appDelegate = NSApp.delegate as! AppDelegate;
+                appDelegate.refreshVMMenus()
+            }
         }
     }
     
@@ -192,6 +222,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             } else {
                 createNewDiskButton.isEnabled = true
             }
+            
+            let appDelegate = NSApp.delegate as! AppDelegate;
+            appDelegate.refreshVMMenus()
         }
     }
     

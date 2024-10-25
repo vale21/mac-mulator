@@ -68,8 +68,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.pauseVM(sender: sender)
     }
     
-    func attachUSBImageToVM(_ sender: Any, _ path: String) {
-        vmController?.attachUSBImageToVM(sender: sender, path: path)
+    func attachUSBImageToVM(_ sender: Any, _ virtualDrive: VirtualDrive) {
+        vmController?.attachUSBImageToVM(sender: sender, virtualDrive: virtualDrive)
     }
     
     func showConsoleMenubarClicked(_ sender: Any) {

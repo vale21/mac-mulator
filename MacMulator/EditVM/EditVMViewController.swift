@@ -13,7 +13,9 @@ class EditVMViewController: NSTabViewController {
     var virtualMachine: VirtualMachine?
     
     func setRootController(_ rootController:RootViewController) {
-        self.rootController = rootController;
+        self.rootController = rootController
+        let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
+        hardware.setRootController(rootController)
     }
     
     func setVirtualMachine(_ vm: VirtualMachine) {

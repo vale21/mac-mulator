@@ -93,32 +93,42 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
                 self.vmView?.automaticallyReconfiguresDisplay = true
             }
             self.vmView?.capturesSystemKeys = true
-            
             if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
-                
 #if arch(arm64)
-                
                 let options = VZMacOSVirtualMachineStartOptions()
                 options.startUpFromMacOSRecovery = self.recoveryMode
-                
-                vzVirtualMachine.start(options: options, completionHandler: { error in
-                    if let error = error {
-                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
-                    }
-                })
-                
+                vzVirtualMachine.start(options: options, completionHandler: { result in self.handleVMStartWithOptions(error: result) })
 #endif
-                
             } else {
-                vzVirtualMachine.start(completionHandler: { (result) in
-                    switch result {
-                    case let .failure(error):
-                        Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
-                        break;
-                    default:
-                        print(result)
-                    }
-                })
+                vzVirtualMachine.start(completionHandler: { result in self.handleVMStart(result: result) })
+            }
+        }
+    }
+    
+    fileprivate func handleVMStartWithOptions(error: (any Error)?) {
+        if error != nil {
+            Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
+        } else {
+            attachUSBDrives()
+        }
+    }
+    
+    fileprivate func handleVMStart(result: (Result<Void, any Error>)) {
+        switch result {
+        case let .failure(error):
+            Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
+            break;
+        default:
+            attachUSBDrives()
+        }
+    }
+        
+    fileprivate func attachUSBDrives() {
+        if #available(macOS 15.0, *) {
+            for drive in self.managedVm.drives {
+                if drive.mediaType == QemuConstants.MEDIATYPE_USB{
+                    self.attachUSBImageToVM(virtualDrive: drive)
+                }
             }
         }
     }
@@ -240,23 +250,36 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
     }
     
     @available(macOS 15.0, *)
-    func attachUSBImageToVM(path: String) {
+    func attachUSBImageToVM(virtualDrive: VirtualDrive) {
 
-        let diskURL = URL(fileURLWithPath: path)
+        let diskURL = URL(fileURLWithPath: virtualDrive.path)
         do {
             let diskAttachment = try VZDiskImageStorageDeviceAttachment(url: diskURL, readOnly: false)
             let usbMassStorageDeviceConfiguration = VZUSBMassStorageDeviceConfiguration(attachment: diskAttachment)
             let usbMassStorageDevice = VZUSBMassStorageDevice(configuration: usbMassStorageDeviceConfiguration)
 
-            if let usbControllers = vzVirtualMachine?.usbControllers {
-                if  usbControllers.count > 0 {
-                    vzVirtualMachine?.usbControllers[0].attach(device: usbMassStorageDevice, completionHandler: { (result) in
-                        print("ok")
-                    })
-                }
+            if let usbControllers = vzVirtualMachine?.usbControllers, usbControllers.count > 0 {
+                vzVirtualMachine?.usbControllers[0].attach(device: usbMassStorageDevice, completionHandler: { (result) in
+                    print("Image at path " + virtualDrive.path + " attached.")
+                })
             }
+            virtualDrive.vzDeviceUUID = usbMassStorageDevice.uuid.uuidString
+            managedVm.writeToPlist()
         } catch {
             Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription)
+        }
+    }
+    
+    @available(macOS 15.0, *)
+    func detachUSBImageFromVM(virtualDrive: VirtualDrive) {
+        if let usbControllers = vzVirtualMachine?.usbControllers, usbControllers.count > 0 {
+            usbControllers[0].usbDevices.forEach({ device in
+                if device.uuid.uuidString == virtualDrive.vzDeviceUUID {
+                    usbControllers[0].detach(device: device, completionHandler: { (result) in
+                        print("Image at path " + virtualDrive.path + " detached.")
+                    })
+                }
+            })
         }
     }
     

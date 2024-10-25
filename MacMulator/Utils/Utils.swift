@@ -30,8 +30,9 @@ enum ValidationError: Error, CustomStringConvertible {
 
 class Utils {
     
-    static let ALERT_RESP_OK = 1000;
-    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw"];
+    static let ALERT_RESP_OK = 1000
+    static let IMAGE_TYPES  = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
+    static let IMAGE_TYPES_USB  = ["img", "iso", "cdr"]
     
     static func createDocumentPackage(_ path: String) throws {
         let fileManager = FileManager.default;

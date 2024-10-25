@@ -9,6 +9,7 @@
 "AppDelegate.exportToParallelsComplete" = "Esportazione in formato Parallels VM completata con successo.";
 "AppDelegate.exportFailed" = "Esportazione fallita con il seguente errore: %@";
 "AppDelegate.importFailed" = "Importazione fallita con il seguente errore: %@";
+"AppDelegate.detachImage" = "Disconnetti Immagine";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "CreateVMFileViewController.preparingDownload" = "Preparo il download dell'installer di macOS...";
 "CreateVMFileViewController.timeRemainingCalculating" = "Tempo stimato rimanente: Calcolo...";

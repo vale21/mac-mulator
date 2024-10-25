@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Virtualization
 
 class VirtualDrive: Codable, Equatable {
 
@@ -16,6 +17,7 @@ class VirtualDrive: Codable, Equatable {
     var size: Int32
     var isBootDrive: Bool = false
     var blank: Int? = 1 // TODO Review why on earth Bool? does not work and we have to do this crap with Int?
+    var vzDeviceUUID: String?
 
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
         self.path = path
@@ -49,5 +51,6 @@ class VirtualDrive: Codable, Equatable {
         lhs.size == rhs.size &&
         lhs.isBootDrive == rhs.isBootDrive &&
         lhs.blank == rhs.blank
+        lhs.vzDeviceUUID == rhs.vzDeviceUUID
     }
 }

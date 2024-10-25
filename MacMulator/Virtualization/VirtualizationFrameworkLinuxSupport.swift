@@ -47,16 +47,7 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
             witdh: resolution[0],
             height: resolution[1])]
         
-        let disksArray = NSMutableArray()
-        if installMedia != "" {
-            disksArray.add(LinuxVirtualMachineConfigurationHelper.createUSBMassStorageDeviceConfiguration(installMedia))
-        }
-        disksArray.add(LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path))
-        guard let disks = disksArray as? [VZStorageDeviceConfiguration] else {
-            fatalError("Invalid disksArray.")
-        }
-        
-        virtualMachineConfiguration.storageDevices = disks
+        virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
         virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [LinuxVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
@@ -64,7 +55,17 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
         if #available(macOS 15.0, *) {
-            virtualMachineConfiguration.usbControllers = [MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()]
+            let usbController = MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()
+//            for drive in vm.drives {
+//                if drive.mediaType == QemuConstants.MEDIATYPE_USB{
+//                    let usbMassStorageDeviceConfiguration = LinuxVirtualMachineConfigurationHelper.createUSBMassStorageDeviceConfiguration(drive.path)
+//                    usbController.usbDevices.append(usbMassStorageDeviceConfiguration)
+//                    
+//                    virtualDrive.vzDeviceUUID = usbMassStorageDevice.uuid.uuidString
+//                    managedVm.writeToPlist()
+//                }
+//            }
+            virtualMachineConfiguration.usbControllers = [usbController]
         }
         
         try! virtualMachineConfiguration.validate()

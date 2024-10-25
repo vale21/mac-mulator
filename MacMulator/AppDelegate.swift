@@ -28,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet weak var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet weak var convertToAppleMenuItem: NSMenuItem!
+    @IBOutlet weak var usbDevicesMenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -42,12 +43,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             _ = self.application(NSApp, openFile: String(panel.url!.path)) });
     }
     
+    @available(macOS 15.0, *)
     @IBAction func attachUSBImageMenuBarClicked(_ sender: Any) {
-        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
-            if let path = panel.url?.path {
-                rootController?.attachUSBImageToVM(MacMulatorConstants.mainMenuSender, path)
+        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES_USB, uponSelection: { panel in
+            if let path = panel.url?.path, let virtualMachine = rootController?.currentVm {
+                for virtualDrive in virtualMachine.drives {
+                    if virtualDrive.path == path {
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path));
+                        return;
+                    }
+                }
+                
+                let newDrive = VirtualDrive(
+                    path: path,
+                    name: QemuConstants.MEDIATYPE_USB + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_USB,
+                    size: 0)
+                virtualMachine.drives.append(newDrive)
+                virtualMachine.writeToPlist()
+                
+                rootController?.attachUSBImageToVM(MacMulatorConstants.mainMenuSender, newDrive)
+                refreshVMMenus()
             }
         })
+    }
+    
+    @available(macOS 15.0, *)
+    @IBAction func detachUSBImageMenuBarClicked(_ sender: NSMenuItem) {
+        let path = sender.title
+        
+        if let virtualMachine = rootController?.currentVm {
+            let driveToRemove = virtualMachine.drives.first(where: { drive in drive.path == path})
+            if driveToRemove != nil {
+                virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(of: driveToRemove!)!)
+                virtualMachine.writeToPlist();
+                
+                if rootController?.isVMRunning(virtualMachine) == true {
+                    let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
+                    runner.detachUSBImageFromVM(virtualDrive: driveToRemove!)
+                }
+                refreshVMMenus()
+            }
+        }
     }
     
     @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
@@ -184,9 +222,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     if vm.type == MacMulatorConstants.APPLE_VM {
                         convertToQemuMenuItem.isEnabled = !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
                         convertToAppleMenuItem.isEnabled = false
+                        
+                        var usbDrives: [String] = []
+                        vm.drives.forEach({ drive in
+                            if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                                usbDrives.append(drive.path)
+                            }
+                        })
+                        
+                        if #available(macOS 15.0, *) {
+                            usbDevicesMenuItem.isEnabled = true
+                            if usbDrives.count > 0 {
+                                var detachMenuItem: NSMenuItem
+                                if !usbDevicesMenuItem.submenu!.items.contains(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")}){
+                                    detachMenuItem = NSMenuItem(title: NSLocalizedString("AppDelegate.detachImage", comment: ""), action: nil, keyEquivalent: "")
+                                    detachMenuItem.submenu = NSMenu(title: NSLocalizedString("AppDelegate.detachImage", comment: ""))
+                                    usbDevicesMenuItem.submenu?.addItem(detachMenuItem)
+                                } else {
+                                    detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")})!
+                                }
+                                
+                                detachMenuItem.submenu?.removeAllItems()
+                                usbDrives.forEach({ title in
+                                    if !detachMenuItem.submenu!.items.contains(where: {item in item.title == title}) {
+                                        detachMenuItem.submenu?.addItem(NSMenuItem(title: title, action: #selector(detachUSBImageMenuBarClicked(_:)), keyEquivalent: ""))
+                                    }
+                                })
+                            } else {
+                                if usbDevicesMenuItem.submenu!.items.contains(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")}) {
+                                    usbDevicesMenuItem.submenu?.removeItem(at: 1)
+                                }
+                            }
+                        } else {
+                            usbDevicesMenuItem.isEnabled = false
+                        }
                     } else {
                         convertToQemuMenuItem.isEnabled = false
                         convertToAppleMenuItem.isEnabled = vm.os == QemuConstants.OS_LINUX
+                        usbDevicesMenuItem.isEnabled = false
                     }
 
                 }

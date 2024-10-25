@@ -126,12 +126,12 @@ class VirtualMachineViewController: NSViewController {
         startVM(sender: sender, inRecovery: true)
     }
     
-    func attachUSBImageToVM(sender: Any, path: String) {
+    func attachUSBImageToVM(sender: Any, virtualDrive: VirtualDrive) {
         if #available(macOS 15.0, *) {
-            if let vm = self.rootController?.currentVm  {
+            if let rootController = self.rootController, let vm = rootController.currentVm, rootController.isVMRunning(vm) {
                 if sender as? String == MacMulatorConstants.mainMenuSender && vm.type == MacMulatorConstants.APPLE_VM {
                     let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
-                    runner.attachUSBImageToVM(path: path)
+                    runner.attachUSBImageToVM(virtualDrive: virtualDrive)
                 }
             }
         }
