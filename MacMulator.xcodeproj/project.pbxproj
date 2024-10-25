@@ -12,6 +12,7 @@
 		3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */; };
 		3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
+		3B14387E2CC5B22700440F24 /* windows-11-drivers.iso.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3B14387D2CC5B22700440F24 /* windows-11-drivers.iso.zip */; };
 		3B15E94825CD87760046891B /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
 		3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
 		3B1BDFC5280804A000E353CE /* VirtualMachineContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */; };
@@ -29,12 +30,17 @@
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
 		3B3E56E226EF59E400D79C92 /* OPENCORE.zip in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B3E56E026EF59C900D79C92 /* OPENCORE.zip */; };
+		3B4091162CB30A9500A939AD /* SECURE_EFI.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B4091142CB30A9500A939AD /* SECURE_EFI.fd */; };
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
 		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
+		3B6492FE2CC24D440015F73F /* SECURE_EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B6492FC2CC24D440015F73F /* SECURE_EFI_ARM.fd */; };
+		3B6493052CC2664C0015F73F /* SECURE_EFI_VARS.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B6493042CC2664C0015F73F /* SECURE_EFI_VARS.fd */; };
+		3B6493072CC266690015F73F /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B6493062CC266690015F73F /* SECURE_EFI_VARS_ARM.fd */; };
 		3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B672E6627C788AE00732C46 /* SystemProfilerData.swift */; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
 		3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */; };
@@ -58,7 +64,6 @@
 		3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
 		3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9E42A72806178500981297 /* Virtualization.framework */; };
 		3BA0D1932C1C76CC0079AF20 /* StartVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */; };
-		3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */; };
 		3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BB2A73E2AF68E260043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */; };
@@ -116,7 +121,6 @@
 			files = (
 				3B3E56E226EF59E400D79C92 /* OPENCORE.zip in CopyFiles */,
 				3B90F6AB26EA4C3A00575751 /* MACOS_EFI.fd in CopyFiles */,
-				3BA985FC26C2804B00D2C5DB /* ARM_QEMU_EFI.fd in CopyFiles */,
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -129,6 +133,7 @@
 		3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkSupport.swift; sourceTree = "<group>"; };
 		3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineDelegate.swift; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
+		3B14387D2CC5B22700440F24 /* windows-11-drivers.iso.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "windows-11-drivers.iso.zip"; sourceTree = "<group>"; };
 		3B15E94725CD87760046891B /* QemuConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuConstants.swift; sourceTree = "<group>"; };
 		3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacMulatorConstants.swift; sourceTree = "<group>"; };
 		3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineContainerViewController.swift; sourceTree = "<group>"; };
@@ -149,11 +154,16 @@
 		3B391F0125C075F50030E914 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		3B3E56E026EF59C900D79C92 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
+		3B4091142CB30A9500A939AD /* SECURE_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI.fd; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B578555266523780003C3C8 /* qemu-img */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = "qemu-img"; sourceTree = "<group>"; };
 		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
 		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
 		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
+		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
+		3B6492FC2CC24D440015F73F /* SECURE_EFI_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_ARM.fd; sourceTree = "<group>"; };
+		3B6493042CC2664C0015F73F /* SECURE_EFI_VARS.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS.fd; sourceTree = "<group>"; };
+		3B6493062CC266690015F73F /* SECURE_EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3B672E6627C788AE00732C46 /* SystemProfilerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProfilerData.swift; sourceTree = "<group>"; };
 		3B6A9E0925CBFD8300123D6B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulator-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -184,7 +194,6 @@
 		3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3B9E42A72806178500981297 /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVMViewController.swift; sourceTree = "<group>"; };
-		3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = ARM_QEMU_EFI.fd; sourceTree = "<group>"; };
 		3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkUtils.swift; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
@@ -388,12 +397,16 @@
 		3BBB473625CABDCB00A4DBA7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3B4091142CB30A9500A939AD /* SECURE_EFI.fd */,
+				3B6492FC2CC24D440015F73F /* SECURE_EFI_ARM.fd */,
+				3B6493042CC2664C0015F73F /* SECURE_EFI_VARS.fd */,
+				3B6493062CC266690015F73F /* SECURE_EFI_VARS_ARM.fd */,
 				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
 				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
+				3B14387D2CC5B22700440F24 /* windows-11-drivers.iso.zip */,
 				3B7F3C2329326F9900F1396D /* parallels_template */,
 				3B3E56E026EF59C900D79C92 /* OPENCORE.zip */,
 				3B90F6A926EA4AA800575751 /* MACOS_EFI.fd */,
-				3BA985FB26C27F2600D2C5DB /* ARM_QEMU_EFI.fd */,
 				3B578557266526460003C3C8 /* Libs */,
 				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
@@ -426,6 +439,7 @@
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
 				3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */,
+				3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
 				3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */,
@@ -525,12 +539,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
+				3B6492FE2CC24D440015F73F /* SECURE_EFI_ARM.fd in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
+				3B6493052CC2664C0015F73F /* SECURE_EFI_VARS.fd in Resources */,
+				3B4091162CB30A9500A939AD /* SECURE_EFI.fd in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
+				3B6493072CC266690015F73F /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */,
+				3B14387E2CC5B22700440F24 /* windows-11-drivers.iso.zip in Resources */,
 				3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,6 +596,7 @@
 				3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */,
 				3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
+				3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,

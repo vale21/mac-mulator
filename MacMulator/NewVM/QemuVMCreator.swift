@@ -42,7 +42,27 @@ class QemuVMCreator: VMCreator {
                 
         var virtualHDD: VirtualDrive? = nil
         if installMedia != "" {
-            if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
+            if Utils.isVHDXImage(installMedia) {
+                // Install media is a VHDX drive. We create a VirtualDrive of type NVME
+                virtualHDD = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_DISK + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_NVME,
+                    size: 0); // Size is zero because we don't know it at this stage. We will upadte it after the conversion to qvd
+                virtualHDD!.isBootDrive = true
+                vm.addVirtualDrive(virtualHDD!);
+            } else if vm.architecture == QemuConstants.ARCH_ARM64 {
+                // Install media is a USB stick
+                let virtualUSB = VirtualDrive(
+                    path: installMedia,
+                    name: QemuConstants.MEDIATYPE_USB_CDROM + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_USB_CDROM,
+                    size: 0);
+                virtualUSB.isBootDrive = true
+                vm.addVirtualDrive(virtualUSB);
+            } else if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
                 // Install media is a USB stick
                 let virtualUSB = VirtualDrive(
                     path: installMedia,
@@ -61,16 +81,6 @@ class QemuVMCreator: VMCreator {
                     mediaType: QemuConstants.MEDIATYPE_NAND,
                     size: 0);
                 vm.addVirtualDrive(virtualNAND);
-            } else if Utils.isVHDXImage(installMedia) {
-                // Install media is a VHDX drive. We create a VirtualDrive of type NVME
-                virtualHDD = VirtualDrive(
-                    path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
-                    name: QemuConstants.MEDIATYPE_DISK + "-0",
-                    format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_NVME,
-                    size: 0); // Size is zero because we don't know it at this stage. We will upadte it after the conversion to qvd
-                virtualHDD!.isBootDrive = true
-                vm.addVirtualDrive(virtualHDD!);
             } else {
                 // Install media is a CD
                 let virtualCD = VirtualDrive(

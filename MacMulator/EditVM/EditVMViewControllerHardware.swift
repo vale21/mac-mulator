@@ -113,7 +113,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let row = drivesTableView.row(for: sender as! NSView);
             let index = Utils.computeDrivesTableIndex(virtualMachine, row);
             let drive = virtualMachine.drives[index];
-            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
+            if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 self.removeVirtualDrive(row, index);
             } else {
                 Utils.showPrompt(window: self.view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.confirmDeleteDrive", comment: ""), drive.name), completionHandler: { response in
@@ -351,7 +351,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         
         if (tableColumn?.identifier.rawValue == "Buttons") {
             let cellView = cell as! DrivesTableButtonsCell;
-            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND) {
+            if (drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND) {
                 cellView.editButton.isEnabled = false;
                 cellView.infoButton.isEnabled = false;
             } else {

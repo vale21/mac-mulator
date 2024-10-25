@@ -40,6 +40,7 @@
 "PreferencesViewController.qemuFound" ="Detected Qemu version %@";
 "QemuConstants.hd" = "Hard Drive";
 "QemuConstants.usb" = "USB Drive";
+"QemuConstants.usb-cdrom" = "CD/DVD over USB";
 "QemuConstants.ipsw" = "IPSW Install Image";
 "QemuConstants.efi" = "EFI Firmware";
 "QemuConstants.network" = "Network";
@@ -114,6 +115,7 @@
 "VirtualMachineViewController.pausedVMName" = "%@ (Paused)";
 "VirtualMachineViewController.notSpecified" = "Not specified";
 "VirtualMachineViewController.binaryNotAvaiable" ="The VM cannot be started because Qemu binary for artchitecture %@ is not available.";
+"VirtualMachineViewController.swTpmNotAvailable" ="The VM cannot be started because it requires swtpm but the executable was not found.";
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmFeatures" = "Virtual Machine Features";
 "VirtualMachineViewController.vmExecutionFailed" = "VM execution failed with error: %@";

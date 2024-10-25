@@ -15,6 +15,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemuFolderButton: NSButton!
     
     @IBOutlet weak var qemuVersionLabel: NSTextField!
+    @IBOutlet weak var swtpm_tick: NSImageView!
     @IBOutlet weak var qemu_img_tick: NSImageView!
     @IBOutlet weak var qemu_img_label: NSTextField!
     @IBOutlet weak var qemu_i386_tick: NSImageView!
@@ -22,7 +23,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemu_arm_tick: NSImageView!
     @IBOutlet weak var qemu_arm64_tick: NSImageView!
     @IBOutlet weak var qemu_ppc_tick: NSImageView!
-    @IBOutlet weak var qemu_ppc64_tick: NSImageView!
     @IBOutlet weak var qemu_68k_tick: NSImageView!
     
     @IBOutlet weak var livePreviewEnabledButton: NSButton!
@@ -125,24 +125,24 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         let fileManager = FileManager.default;
         let path = qemuFolderField.stringValue
         if fileManager.fileExists(atPath: path) {
+            checkFile(QemuConstants.SWTPM, swtpm_tick);
             checkFileAndGetVersion(QemuConstants.QEMU_IMG, qemu_img_tick);
             checkFile(QemuConstants.ARCH_X86, qemu_i386_tick);
             checkFile(QemuConstants.ARCH_X64, qemu_x86_64_tick);
             checkFile(QemuConstants.ARCH_ARM, qemu_arm_tick);
             checkFile(QemuConstants.ARCH_ARM64, qemu_arm64_tick);
             checkFile(QemuConstants.ARCH_PPC, qemu_ppc_tick);
-            checkFile(QemuConstants.ARCH_PPC64, qemu_ppc64_tick);
             checkFile(QemuConstants.ARCH_68K, qemu_68k_tick);
         } else {
             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), path));
             self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "");
             setYellowCross(qemu_img_tick);
+            setRedCross(swtpm_tick);
             setRedCross(qemu_i386_tick);
             setRedCross(qemu_x86_64_tick);
             setRedCross(qemu_arm_tick);
             setRedCross(qemu_arm64_tick);
             setRedCross(qemu_ppc_tick);
-            setRedCross(qemu_ppc64_tick);
             setRedCross(qemu_68k_tick);
         }
     }

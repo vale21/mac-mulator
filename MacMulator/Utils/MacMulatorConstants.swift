@@ -13,6 +13,7 @@ class MacMulatorConstants {
     static let DISK_EXTENSION = "qvd"
     static let EFI_EXTENSION = "fd"
     static let IMG_EXTENSION = "img"
+    static let ISO_EXTENSION = "iso"
     static let BIN_EXTENSION = "bin"
     static let INFO_PLIST = "Info.plist"
     static let SAVE_FILE_NAME = "SaveFile.qvs"

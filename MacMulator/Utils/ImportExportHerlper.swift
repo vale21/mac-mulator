@@ -43,10 +43,11 @@ class ImportExportHerlper {
         let displayResolution = QemuConstants.RES_1280_768
         let displayOrigin = QemuConstants.ORIGIN
         let networkDevice = Utils.getNetworkForSubType(os, subtype)
+        let videoDevice = Utils.getVideoForSubType(os, subtype)
         let hvf = Utils.getAccelForSubType(os, subtype)
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         
-        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, qemuBootloader: false, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType);
+        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, qemuBootloader: false, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType);
         
         try! Utils.createDocumentPackage(vm.path)
         
