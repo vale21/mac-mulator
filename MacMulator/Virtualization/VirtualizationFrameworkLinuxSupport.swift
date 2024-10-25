@@ -55,16 +55,7 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
         if #available(macOS 15.0, *) {
-            let usbController = MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()
-//            for drive in vm.drives {
-//                if drive.mediaType == QemuConstants.MEDIATYPE_USB{
-//                    let usbMassStorageDeviceConfiguration = LinuxVirtualMachineConfigurationHelper.createUSBMassStorageDeviceConfiguration(drive.path)
-//                    usbController.usbDevices.append(usbMassStorageDeviceConfiguration)
-//                    
-//                    virtualDrive.vzDeviceUUID = usbMassStorageDevice.uuid.uuidString
-//                    managedVm.writeToPlist()
-//                }
-//            }
+            let usbController = LinuxVirtualMachineConfigurationHelper.createUSBControllerConfiguration()
             virtualMachineConfiguration.usbControllers = [usbController]
         }
         

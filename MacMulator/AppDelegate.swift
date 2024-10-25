@@ -238,7 +238,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 if !usbDevicesMenuItem.submenu!.items.contains(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")}){
                                     detachMenuItem = NSMenuItem(title: NSLocalizedString("AppDelegate.detachImage", comment: ""), action: nil, keyEquivalent: "")
                                     detachMenuItem.submenu = NSMenu(title: NSLocalizedString("AppDelegate.detachImage", comment: ""))
-                                    usbDevicesMenuItem.submenu?.addItem(detachMenuItem)
+                                    usbDevicesMenuItem.submenu?.insertItem(detachMenuItem, at: 1)
                                 } else {
                                     detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")})!
                                 }

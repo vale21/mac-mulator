@@ -249,6 +249,8 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         })
     }
     
+#endif
+    
     @available(macOS 15.0, *)
     func attachUSBImageToVM(virtualDrive: VirtualDrive) {
 
@@ -282,6 +284,4 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             })
         }
     }
-    
-#endif
 }
