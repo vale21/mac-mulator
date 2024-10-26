@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Virtualization
 
 class VirtualDrive: Codable, Equatable {
 
