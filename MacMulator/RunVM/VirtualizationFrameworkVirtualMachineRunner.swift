@@ -7,8 +7,6 @@
 
 import Foundation
 import Virtualization
-import IOKit
-import IOKit.usb
 
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
