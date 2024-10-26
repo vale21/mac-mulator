@@ -3726,8 +3726,8 @@ Raspberry Pi</mutableString>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="windows.large" id="juw-gh-9zy"/>
                                                     </imageView>
                                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oHu-X9-tE7">
-                                                        <rect key="frame" x="152" y="13" width="162" height="32"/>
-                                                        <buttonCell key="cell" type="push" title="Configura questa VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cC3-21-evY">
+                                                        <rect key="frame" x="156" y="13" width="155" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Modifica questa VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cC3-21-evY">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
