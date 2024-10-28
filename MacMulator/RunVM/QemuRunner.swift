@@ -100,7 +100,7 @@ class QemuRunner : VirtualMachineRunner {
                     } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS {
                         builder = builder.withEfiVars(file: drive.path, global: virtualMachine.architecture == QemuConstants.ARCH_X64 )
                     } else {
-                        let mediaType = setupMediaType(drive);
+                        let mediaType = setupMediaType(virtualMachine.subtype, drive);
                         let path = setupPath(drive, virtualMachine);
                         
                         builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType);
@@ -168,10 +168,10 @@ class QemuRunner : VirtualMachineRunner {
         })
     }
     
-    fileprivate func setupMediaType(_ drive: VirtualDrive) -> String {
+    fileprivate func setupMediaType(_ subtype: String, _ drive: VirtualDrive) -> String {
         var mediaType = drive.mediaType;
         if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-            mediaType = QemuConstants.MEDIATYPE_NVME;
+            mediaType = subtype == QemuConstants.SUB_WINDOWS_11 ? QemuConstants.MEDIATYPE_NVME : QemuConstants.MEDIATYPE_DISK
         }
         return mediaType;
     }

@@ -175,14 +175,6 @@ class QemuUtils {
                 mediaType: QemuConstants.MEDIATYPE_OPENCORE,
                 size: 0);
             vm.addVirtualDrive(openCore);
-            
-            let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: QemuConstants.OPENCORE + ".zip", ofType: nil)!)
-            let destinationURL = URL(fileURLWithPath: vm.path)
-            try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
-            
-            // Rename unzipped image and clean up garbage empty folder
-            try? FileManager.default.moveItem(atPath: vm.path + "/" + QemuConstants.OPENCORE + ".img", toPath: vm.path + "/opencore-0.img")
-            try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
         }
         
         if vm.architecture == QemuConstants.ARCH_X64 && vm.subtype == QemuConstants.SUB_WINDOWS_11 {
@@ -332,6 +324,17 @@ class QemuUtils {
     }
     
     static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
+            try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
+        }
+        let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: QemuConstants.OPENCORE + ".zip", ofType: nil)!)
+        let destinationURL = URL(fileURLWithPath: virtualMachine.path)
+        try? fileManager.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
+        
+        // Rename unzipped image and clean up garbage empty folder
+        try? fileManager.moveItem(atPath: virtualMachine.path + "/" + QemuConstants.OPENCORE + ".img", toPath: virtualMachine.path + "/opencore-0.img")
+        try? fileManager.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/__MACOSX"))
         let shell = Shell();
         shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
             
@@ -383,16 +386,6 @@ class QemuUtils {
     }
     
     static func restoreOpenCoreConfigTemplate(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
-        let shell = Shell();
-        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
-            
-            let shell2 = Shell()
-            shell2.runCommand("mv /Volumes/OPENCORE/EFI/OC/config.plist.template /Volumes/OPENCORE/EFI/OC/config.plist", virtualMachine.path, uponCompletion: { terminationCode in
-                let shell3 = Shell()
-                shell3.runCommand("hdiutil detach -force /Volumes/OPENCORE", virtualMachine.path, uponCompletion: { terminationCode in
-                    callback(terminationCode)
-                });
-            });
-        }
+        try? FileManager.default.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/opencore-0.img"))
     }
 }
