@@ -43,12 +43,13 @@ class CreateVMFileViewController : NSViewController {
             let videoDevice = Utils.getVideoForSubType(os, subtype)
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
+            let bootMode = Utils.getBootModeForSubType(os, subtype)
             
             var macAddress: String? = nil
             if #available(macOS 11.0, *) {
                 macAddress = VZMACAddress.randomLocallyAdministered().string
             }
-            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, qemuBootloader: false, hvf: hvf, macAddress: macAddress, type: vmType);
+            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, qemuBootloader: false, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode);
             
             if let vm = self.vm {
                 let installMedia = parentController.installMedia.stringValue;

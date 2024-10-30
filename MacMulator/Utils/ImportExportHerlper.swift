@@ -46,8 +46,9 @@ class ImportExportHerlper {
         let videoDevice = Utils.getVideoForSubType(os, subtype)
         let hvf = Utils.getAccelForSubType(os, subtype)
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
+        let bootMode = Utils.getBootModeForSubType(os, subtype)
         
-        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, qemuBootloader: false, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType);
+        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, qemuBootloader: false, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode);
         
         try! Utils.createDocumentPackage(vm.path)
         

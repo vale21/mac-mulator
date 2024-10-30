@@ -548,6 +548,10 @@ class Utils {
         return getBoolValueForSubType(os, subtype, 18, false)
     }
     
+    static func getBootModeForSubType(_ os: String, _ subtype: String?) -> String {
+        return getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
+    }
+    
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0;
         if let vm = virtualMachine {

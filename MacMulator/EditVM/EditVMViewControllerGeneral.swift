@@ -32,15 +32,21 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     fileprivate func selectBootDrive(_ virtualMachine: VirtualMachine) {
-        var i = 0;
-        for drive in virtualMachine.drives {
-            if drive.isBootDrive {
-                bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false);
-                return;
+        if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+            let defaultBootMode = Utils.getBootModeForSubType(virtualMachine.os, virtualMachine.subtype)
+            let index = QemuConstants.ALL_BOOT_MODES.firstIndex(of: virtualMachine.bootMode ?? defaultBootMode) ?? 0
+            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+        } else {
+            var i = 0;
+            for drive in virtualMachine.drives {
+                if drive.isBootDrive {
+                    bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
+                    return
+                }
+                i += 1
             }
-            i += 1;
+            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
         }
-        bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false);
     }
     
     func updateView() {
@@ -54,10 +60,10 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                         
             bootOrderTable.reloadData()
             resolutionTable.reloadData()
-            updating = false
             
             selectBootDrive(virtualMachine)
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
+            updating = false
             
             if virtualMachine.os == QemuConstants.OS_IOS {
                 resolutionTable.isHidden = true
@@ -66,17 +72,19 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
-        if tableView == bootOrderTable {
-            return Utils.computeDrivesTableSize(virtualMachine);
-        }
-        if tableView == resolutionTable {
-            if self.virtualMachine != nil {
+        if let virtualMachine = self.virtualMachine {
+            if tableView == bootOrderTable {
+                if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                    return QemuConstants.ALL_BOOT_MODES.count
+                } else {
+                    return Utils.computeDrivesTableSize(virtualMachine)
+                }
+            }
+            if tableView == resolutionTable {
                 return QemuConstants.ALL_RESOLUTIONS_DESC.count + 1
-            } else {
-                return 0
             }
         }
-        return 0;
+        return 0
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -84,13 +92,17 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         
         if let virtualMachine = self.virtualMachine {
             if tableView == bootOrderTable {
-                let index = Utils.computeDrivesTableIndex(virtualMachine, row);
-                let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, index));
-                cell.addSubview(view);
-                if (virtualMachine.qemuBootLoader) {
-                    view.textColor = NSColor.gray;
+                if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                    cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_BOOT_MODES_DESC[QemuConstants.ALL_BOOT_MODES[row]]!))
                 } else {
-                    view.textColor = NSColor.labelColor;
+                    let index = Utils.computeDrivesTableIndex(virtualMachine, row)
+                    let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, index))
+                    cell.addSubview(view);
+                    if (virtualMachine.qemuBootLoader) {
+                        view.textColor = NSColor.gray
+                    } else {
+                        view.textColor = NSColor.labelColor
+                    }
                 }
             }
             
@@ -118,10 +130,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
-        if tableView == bootOrderTable {
-            return !(virtualMachine?.qemuBootLoader ?? true);
-        }
-        return true;
+        return true
     }
     
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -167,15 +176,21 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         if !updating {
             if ((notification.object as! NSTableView) == bootOrderTable) {
                 if let virtualMachine = self.virtualMachine {
-                    let row = bootOrderTable.selectedRow;
-                    var i = 0;
-                    for drive in virtualMachine.drives {
-                        if row == i {
-                            drive.isBootDrive = true
-                        } else {
-                            drive.isBootDrive = false
+                    let row = bootOrderTable.selectedRow
+                    if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                        if row >= 0 && row < QemuConstants.ALL_BOOT_MODES.count {
+                            virtualMachine.bootMode = QemuConstants.ALL_BOOT_MODES[row]
                         }
-                        i += 1;
+                    } else {
+                        var i = 0;
+                        for drive in virtualMachine.drives {
+                            if row == i {
+                                drive.isBootDrive = true
+                            } else {
+                                drive.isBootDrive = false
+                            }
+                            i += 1;
+                        }
                     }
                 }
                 

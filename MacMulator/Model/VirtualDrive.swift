@@ -49,7 +49,7 @@ class VirtualDrive: Codable, Equatable {
         lhs.mediaType == rhs.mediaType &&
         lhs.size == rhs.size &&
         lhs.isBootDrive == rhs.isBootDrive &&
-        lhs.blank == rhs.blank
+        lhs.blank == rhs.blank &&
         lhs.vzDeviceUUID == rhs.vzDeviceUUID
     }
 }
