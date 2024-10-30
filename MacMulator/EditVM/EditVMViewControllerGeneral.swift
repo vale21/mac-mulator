@@ -17,7 +17,10 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     @IBOutlet weak var bootOrderView: NSScrollView!
     @IBOutlet weak var bootOrderTable: NSTableView!
     @IBOutlet weak var resolutionTable: NSTableView!
-
+    @IBOutlet weak var resolutionView: NSScrollView!
+    @IBOutlet weak var resolutionLabelTop: NSTextField!
+    @IBOutlet weak var resolutionlabelSide: NSTextField!
+    
     var virtualMachine: VirtualMachine?;
     let accountPasteboardType = NSPasteboard.PasteboardType.string;
     var updating = false
@@ -64,10 +67,21 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 bootOrderLabel.isHidden = true
                 bootOrderTable.isHidden = true
                 bootOrderView.isHidden = true
+                
+                resolutionView.setFrameSize(NSSize(width: 464, height: 165))
+                resolutionTable.setFrameSize(NSSize(width: 464, height: 165))
+                resolutionLabelTop.isHidden = true
+                resolutionlabelSide.isHidden = false
+                
             } else {
                 bootOrderLabel.isHidden = false
                 bootOrderTable.isHidden = false
                 bootOrderView.isHidden = false
+                
+                resolutionView.setFrameSize(NSSize(width: 218, height: 141))
+                resolutionTable.setFrameSize(NSSize(width: 218, height: 141))
+                resolutionLabelTop.isHidden = false
+                resolutionlabelSide.isHidden = true
             }
             
             if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
