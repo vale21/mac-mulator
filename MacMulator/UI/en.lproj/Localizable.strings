@@ -62,6 +62,8 @@
 "QemuConstants.riscv64" = "Generic RISC-V 64 VM";
 "QemuConstants.riscv" = "Generic RISC-V VM";
 "QemuConstants.m68k" = "Generic Motorola 68k VM";
+"QemuConstants.bootDrive" = "Boot Drive";
+"QemuConstants.bootMode" = "Boot Mode";
 "QemuConstants.uefiSecure" = "UEFI with Secure Boot";
 "Utils.sudoNotAllowed" = "Incorrect Qemu command provided: The usage of sudo command is not allowed.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";

@@ -13,6 +13,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     @IBOutlet weak var vmSubType: NSComboBox!
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
+    @IBOutlet weak var bootOrderLabel: NSTextField!
+    @IBOutlet weak var bootOrderView: NSScrollView!
     @IBOutlet weak var bootOrderTable: NSTableView!
     @IBOutlet weak var resolutionTable: NSTableView!
 
@@ -57,6 +59,22 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
 
             vmName.stringValue = virtualMachine.displayName
             vmDescription.string = virtualMachine.description
+            
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                bootOrderLabel.isHidden = true
+                bootOrderTable.isHidden = true
+                bootOrderView.isHidden = true
+            } else {
+                bootOrderLabel.isHidden = false
+                bootOrderTable.isHidden = false
+                bootOrderView.isHidden = false
+            }
+            
+            if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootMode", comment: "")
+            } else {
+                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootDrive", comment: "")
+            }
                         
             bootOrderTable.reloadData()
             resolutionTable.reloadData()
@@ -95,14 +113,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
                     cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_BOOT_MODES_DESC[QemuConstants.ALL_BOOT_MODES[row]]!))
                 } else {
-                    let index = Utils.computeDrivesTableIndex(virtualMachine, row)
-                    let view = NSTextField(labelWithString: getDriveDescription(virtualMachine, index))
-                    cell.addSubview(view);
-                    if (virtualMachine.qemuBootLoader) {
-                        view.textColor = NSColor.gray
-                    } else {
-                        view.textColor = NSColor.labelColor
-                    }
+                    cell.addSubview(NSTextField(labelWithString: getDriveDescription(virtualMachine, Utils.computeDrivesTableIndex(virtualMachine, row))));
                 }
             }
             

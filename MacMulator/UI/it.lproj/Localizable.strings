@@ -62,6 +62,8 @@
 "QemuConstants.riscv64" = "VM Generica RISC-V 64";
 "QemuConstants.riscv" = "VM Generica RISC-V";
 "QemuConstants.m68k" = "VM Generica Motorola 68k";
+"QemuConstants.bootDrive" = "Disco di avvio";
+"QemuConstants.bootMode" = "Modalità di avvio";
 "QemuConstants.uefiSecure" = "UEFI con Secure Boot";
 "Utils.sudoNotAllowed" = "Il comando Qemu fornito è errato: L'uso del comando sudo non è consentito.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";

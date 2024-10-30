@@ -356,11 +356,6 @@ class QemuRunner : VirtualMachineRunner {
     }
     
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
-        
-        if vm.qemuBootLoader {
-            return QemuConstants.ARG_BOOTLOADER
-        }
-        
         for drive in vm.drives {
             if drive.isBootDrive {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {

@@ -19,7 +19,6 @@ class VirtualMachine: Codable, Hashable {
     var memory: Int32
     var displayResolution: String
     var displayOrigin: String?
-    var qemuBootLoader: Bool
     var networkDevice: String?
     var videoDevice: String?
     var drives: [VirtualDrive]
@@ -33,10 +32,10 @@ class VirtualMachine: Codable, Hashable {
     var bootMode: String?
     
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, qemuBootLoader, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode;
     }
     
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, qemuBootloader: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -49,7 +48,6 @@ class VirtualMachine: Codable, Hashable {
         self.displayOrigin = displayOrigin
         self.networkDevice = networkDevice
         self.videoDevice = videoDevice
-        self.qemuBootLoader = qemuBootloader
         self.hvf = hvf
         self.drives = []
         self.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
