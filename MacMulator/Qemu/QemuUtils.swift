@@ -428,6 +428,6 @@ class QemuUtils {
     }
     
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
-        return (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) || vm.subtype == QemuConstants.SUB_WINDOWS_11
+        return (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
 }

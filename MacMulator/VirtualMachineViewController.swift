@@ -384,6 +384,11 @@ class VirtualMachineViewController: NSViewController {
                 self.setRunningStatus(vm, true);
                 rootController.setRunningVM(vm, runner);
                 
+                if vm.bootMode == nil {
+                    vm.bootMode = Utils.getBootModeForSubType(vm.os, vm.subtype)
+                    vm.writeToPlist()
+                }
+                
                 if vm.type == MacMulatorConstants.APPLE_VM {
                     self.performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner));
                 } else {
