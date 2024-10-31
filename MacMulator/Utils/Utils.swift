@@ -746,7 +746,7 @@ class Utils {
 #if arch(arm64)
         return QemuConstants.CPU_HOST
 #else
-        return QemuConstants.CPU_ICELAKE_SERVER
+        return QemuConstants.CPU_SKYLAKE_CLIENT
 #endif
     }
     

@@ -303,7 +303,7 @@ class QemuCommandBuilder {
             cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'"
         }
         if let efi = self.efi {
-            cmd += " -bios " + efi
+            cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efi + ",file.locking=off,readonly=on"
         }
         if let efiSecure = self.efiSecure {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off,readonly=on"
