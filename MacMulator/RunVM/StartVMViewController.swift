@@ -33,20 +33,42 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
     }
     
     override func viewDidAppear() {
-        progressBar.startAnimation(self);
-        var complete = false;
+        progressBar.startAnimation(self)
+        var openCoreComplete = false
+        var uefiComplete = false
+        var uefiSecureComplete = false
         
         if let virtualMachine = virtualMachine {
             if let vmRunner = vmRunner {
-                QemuUtils.populateOpenCoreConfig(virtualMachine: virtualMachine, uponCompletion: {
-                    terminationCode in
-                    if terminationCode == 0 {
-                        complete = true
-                    }
-                });
+                
+                if virtualMachine.bootMode == QemuConstants.BOOT_UEFI {
+                    QemuUtils.removeUEFISecureConfig(virtualMachine: virtualMachine)
+                    QemuUtils.populateUEFIConfig(virtualMachine: virtualMachine)
+                    uefiSecureComplete = true
+                    uefiComplete = true
+                } else if virtualMachine.bootMode == QemuConstants.BOOT_UEFI_SECURE {
+                    QemuUtils.removeUEFISecureConfig(virtualMachine: virtualMachine)
+                    QemuUtils.populateUEFISecureConfig(virtualMachine: virtualMachine)
+                    uefiComplete = true
+                    uefiSecureComplete = true
+                } else {
+                    uefiComplete = true
+                    uefiSecureComplete = true
+                }
+                
+                if QemuUtils.requiresOpenCore(virtualMachine) {
+                    QemuUtils.populateOpenCoreConfig(virtualMachine: virtualMachine, uponCompletion: {
+                        terminationCode in
+                        if terminationCode == 0 {
+                            openCoreComplete = true
+                        }
+                    })
+                } else {
+                    openCoreComplete = true
+                }
                 
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
-                    
+                    let complete = openCoreComplete && uefiComplete && uefiSecureComplete
                     guard !complete else {
                         timer.invalidate();
                         self.progressBar.stopAnimation(self);

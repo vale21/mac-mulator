@@ -56,11 +56,17 @@ class VirtualMachine: Codable, Hashable {
         self.bootMode = bootMode
     }
     
-    func addVirtualDrive(_ drive: VirtualDrive){
+    func addVirtualDrive(_ drive: VirtualDrive) {
         drives.append(drive);
     }
     
-    func addPortMapping(_ portMapping: PortMapping){
+    func removeVirtualDrive(_ path: String) {
+        if let index = drives.firstIndex(where: { $0.path == path }) {
+            drives.remove(at: index)
+        }
+    }
+    
+    func addPortMapping(_ portMapping: PortMapping) {
         portMappings?.append(portMapping);
     }
     
