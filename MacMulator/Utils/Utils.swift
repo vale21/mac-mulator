@@ -558,7 +558,6 @@ class Utils {
             for drive in vm.drives {
                 if drive.mediaType != QemuConstants.MEDIATYPE_EFI &&
                     drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS &&
                     drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE &&
                     drive.mediaType != QemuConstants.MEDIATYPE_NVRAM &&
                     drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM &&
@@ -580,7 +579,7 @@ class Utils {
                     // end loop and return
                     return row + counter;
                 }
-                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE || drive.mediaType == QemuConstants.MEDIATYPE_NVRAM {
                     counter += 1;
                 }
                 iterationIndex += 1
@@ -770,7 +769,7 @@ class Utils {
 #if arch(arm64)
         return QemuConstants.VGA_RAMFB
 #else
-        return QemuConstants.VGA_VIRTIO
+        return QemuConstants.VGA_VIRTIO_GPU
 #endif
     }
     
@@ -902,7 +901,7 @@ class Utils {
     }
     
     static func sortDrives(_ virtualMachine: VirtualMachine) {
-        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_OPENCORE,  QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_CDROM]
+        let order = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_OPENCORE,  QemuConstants.MEDIATYPE_DISK, QemuConstants.MEDIATYPE_NVME, QemuConstants.MEDIATYPE_CDROM]
         
         let sortedDrives = virtualMachine.drives.sorted {
             let firstIndex = order.firstIndex(of: $0.mediaType) ?? Int.max

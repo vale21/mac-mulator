@@ -47,7 +47,7 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
                     uefiSecureComplete = true
                     uefiComplete = true
                 } else if virtualMachine.bootMode == QemuConstants.BOOT_UEFI_SECURE {
-                    QemuUtils.removeUEFISecureConfig(virtualMachine: virtualMachine)
+                    QemuUtils.removeUEFIConfig(virtualMachine: virtualMachine)
                     QemuUtils.populateUEFISecureConfig(virtualMachine: virtualMachine)
                     uefiComplete = true
                     uefiSecureComplete = true

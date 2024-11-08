@@ -408,13 +408,6 @@ class VirtualMachineViewController: NSViewController {
             
             if let rootController = self.rootController {
                 if let vm = rootController.currentVm {
-                    if vm.bootMode == QemuConstants.BOOT_UEFI {
-                        QemuUtils.removeUEFIConfig(virtualMachine: vm)
-                    } else if (vm.bootMode == QemuConstants.BOOT_UEFI_SECURE) {
-                        QemuUtils.removeUEFISecureConfig(virtualMachine: vm)
-                    }
-                    virtualMachine.writeToPlist()
-                    
                     if QemuUtils.requiresOpenCore(vm) {
                         QemuUtils.removeOpenCoreConfig(virtualMachine: vm, uponCompletion: {
                             terminationCode in

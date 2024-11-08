@@ -66,6 +66,13 @@ class VirtualMachine: Codable, Hashable {
         }
     }
     
+    func containsVirtualDrive(_ path: String) -> Bool {
+        if let index = drives.firstIndex(where: { $0.path == path }) {
+            return true
+        }
+        return false
+    }
+    
     func addPortMapping(_ portMapping: PortMapping) {
         portMappings?.append(portMapping);
     }
@@ -92,7 +99,7 @@ class VirtualMachine: Codable, Hashable {
             if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION;
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS {
+                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION;
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION;

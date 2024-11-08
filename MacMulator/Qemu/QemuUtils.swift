@@ -128,7 +128,7 @@ class QemuUtils {
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: vm.path + "/tpm"), withIntermediateDirectories: false)
         }
   
-        if vm.architecture == QemuConstants.ARCH_ARM64 && vm.subtype == QemuConstants.SUB_WINDOWS_11 {
+        if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
             let driversCdRom = VirtualDrive(
                 path: vm.path + "/" + QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0." + MacMulatorConstants.ISO_EXTENSION,
                 name: QemuConstants.MEDIATYPE_USB_CDROM + "-windows-drivers-0",
@@ -146,7 +146,7 @@ class QemuUtils {
             try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
         }
         
-        if vm.architecture == QemuConstants.ARCH_X64 && (vm.subtype == QemuConstants.SUB_WINDOWS_11 || vm.os == QemuConstants.OS_MAC) {
+        if QemuUtils.requiresOpenCore(vm) {
             let openCore = VirtualDrive(
                 path: vm.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
                 name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
@@ -155,27 +155,6 @@ class QemuUtils {
                 size: 0);
             vm.addVirtualDrive(openCore);
         }
-        
-//        if vm.architecture == QemuConstants.ARCH_X64 && vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-//            let virtualEfi = VirtualDrive(
-//                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
-//                name: QemuConstants.MEDIATYPE_EFI_SECURE + "-0",
-//                format: QemuConstants.FORMAT_RAW,
-//                mediaType: QemuConstants.MEDIATYPE_EFI_SECURE,
-//                size: 0);
-//            vm.addVirtualDrive(virtualEfi)
-//            
-//            let virtualEfiVars = VirtualDrive(
-//                path: vm.path + "/" + QemuConstants.MEDIATYPE_EFI_VARS + "-0." + MacMulatorConstants.EFI_EXTENSION,
-//                name: QemuConstants.MEDIATYPE_EFI_VARS + "-0",
-//                format: QemuConstants.FORMAT_RAW,
-//                mediaType: QemuConstants.MEDIATYPE_EFI_VARS,
-//                size: 0);
-//            vm.addVirtualDrive(virtualEfiVars)
-//            
-//            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI.fd", ofType: nil)!, toPath: vm.path + "/efi-secure-0.fd")
-//            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS.fd", ofType: nil)!, toPath: vm.path + "/efi-vars-0.fd")
-//        }
                                 
         if vm.os == QemuConstants.OS_IOS {
             try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0");
@@ -217,6 +196,7 @@ class QemuUtils {
                 }
             }
         }
+        
         if (vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC) {
             try? FileManager.default.removeItem(atPath: vm.path + "/efi-0.fd")
             try? FileManager.default.removeItem(atPath: vm.path + "/opencore-0")
@@ -224,7 +204,6 @@ class QemuUtils {
         
         if (vm.subtype == QemuConstants.SUB_WINDOWS_11) {
             try? FileManager.default.removeItem(atPath: vm.path + "/efi-secure-0.fd")
-            try? FileManager.default.removeItem(atPath: vm.path + "/efi-vars-0.fd")
             try? FileManager.default.removeItem(atPath: vm.path + "/opencore-0")
         }
         
@@ -357,77 +336,58 @@ class QemuUtils {
     }
     
     static func populateUEFIConfig(virtualMachine: VirtualMachine) {
-        virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-0.fd")
-        
-        let virtualEfi = VirtualDrive(
-            path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
-            name: QemuConstants.MEDIATYPE_EFI + "-0",
-            format: QemuConstants.FORMAT_RAW,
-            mediaType: QemuConstants.MEDIATYPE_EFI,
-            size: 0);
-        virtualMachine.addVirtualDrive(virtualEfi)
-        
-        if FileManager.default.fileExists(atPath: virtualMachine.path + "/efi-0.fd") {
-            try? FileManager.default.removeItem(atPath: virtualMachine.path + "/efi-0.fd")
+        if (!virtualMachine.containsVirtualDrive(virtualMachine.path + "/efi-0.fd")) {
+            let virtualEfi = VirtualDrive(
+                path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_EFI + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI,
+                size: 0);
+            virtualMachine.addVirtualDrive(virtualEfi)
+            virtualMachine.writeToPlist()
         }
-        
-        if virtualMachine.architecture == QemuConstants.ARCH_X64 {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "EFI_x64.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-0.fd")
-        } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "EFI_ARM.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-0.fd")
+        if !FileManager.default.fileExists(atPath: virtualMachine.path + "/efi-0.fd") {
+            if virtualMachine.architecture == QemuConstants.ARCH_X64 {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "EFI_x64.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-0.fd")
+            } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "EFI_ARM.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-0.fd")
+            }
         }
     }
     
     static func removeUEFIConfig(virtualMachine: VirtualMachine) {
         try? FileManager.default.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/efi-0.fd"))
         virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-0.fd")
+        virtualMachine.writeToPlist()
     }
     
     static func populateUEFISecureConfig(virtualMachine: VirtualMachine) {
-        virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-secure-0.fd")
-        virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-vars-0.fd")
-        
-        let virtualEfi = VirtualDrive(
-            path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
-            name: QemuConstants.MEDIATYPE_EFI_SECURE + "-0",
-            format: QemuConstants.FORMAT_RAW,
-            mediaType: QemuConstants.MEDIATYPE_EFI_SECURE,
-            size: 0);
-        virtualMachine.addVirtualDrive(virtualEfi)
-        
-        let virtualEfiVars = VirtualDrive(
-            path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_EFI_VARS + "-0." + MacMulatorConstants.EFI_EXTENSION,
-            name: QemuConstants.MEDIATYPE_EFI_VARS + "-0",
-            format: QemuConstants.FORMAT_RAW,
-            mediaType: QemuConstants.MEDIATYPE_EFI_VARS,
-            size: 0);
-        virtualMachine.addVirtualDrive(virtualEfiVars)
-        
-        if FileManager.default.fileExists(atPath: virtualMachine.path + "/efi-secure-0.fd") {
-            try? FileManager.default.removeItem(atPath: virtualMachine.path + "/efi-secure-0.fd")
+        if (!virtualMachine.containsVirtualDrive(virtualMachine.path + "/efi-secure-0.fd")) {
+            let virtualEfi = VirtualDrive(
+                path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_EFI_SECURE + "-0." + MacMulatorConstants.EFI_EXTENSION,
+                name: QemuConstants.MEDIATYPE_EFI_SECURE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_EFI_SECURE,
+                size: 0);
+            virtualMachine.addVirtualDrive(virtualEfi)
+            virtualMachine.writeToPlist()
         }
-        if FileManager.default.fileExists(atPath: virtualMachine.path + "/efi-vars-0.fd") {
-            try? FileManager.default.removeItem(atPath: virtualMachine.path + "/efi-vars-0.fd")
+        if !FileManager.default.fileExists(atPath: virtualMachine.path + "/efi-secure-0.fd") {
+            if virtualMachine.architecture == QemuConstants.ARCH_X64 {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_x64.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-secure-0.fd")
+            } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_ARM.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-secure-0.fd")
+            }
         }
-        
-        if virtualMachine.architecture == QemuConstants.ARCH_X64 {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_x64.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-secure-0.fd")
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS_x64.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-vars-0.fd")
-        } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_ARM.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-secure-0.fd")
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "SECURE_EFI_VARS_ARM.fd", ofType: nil)!, toPath: virtualMachine.path + "/efi-vars-0.fd")
-        }
-        
     }
     
     static func removeUEFISecureConfig(virtualMachine: VirtualMachine) {
         try? FileManager.default.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/efi-secure-0.fd"))
-        try? FileManager.default.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/efi-vars-0.fd"))
         virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-secure-0.fd")
-        virtualMachine.removeVirtualDrive(virtualMachine.path + "/efi-vars-0.fd")
+        virtualMachine.writeToPlist()
     }
     
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
-        return (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
+        return (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
 }
