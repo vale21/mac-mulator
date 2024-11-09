@@ -706,7 +706,9 @@ class QemuConstants {
     static let VGA_VIRTIO = "virtio-vga"
     static let VGA_VMWARE = "vmware-svga"
     static let VGA_QXL = "qxl-vga"
+    
     static let DISPLAY_DEFAULT = "default"
+    static let DISPLAY_COCOA = "cocoa"
     
     static let CPU_HOST = "host,-pdpe1gb";
     static let CPU_MAX = "max,-pdpe1gb";
