@@ -710,8 +710,8 @@ class QemuConstants {
     static let DISPLAY_DEFAULT = "default"
     static let DISPLAY_COCOA = "cocoa"
     
-    static let CPU_HOST = "host,-pdpe1gb";
-    static let CPU_MAX = "max,-pdpe1gb";
+    static let CPU_HOST = "host" //"host,-pdpe1gb"
+    static let CPU_MAX = "max,-pdpe1gb"
     static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2,vendor=GenuineIntel"
     static let CPU_PENRYN = "Penryn,vendor=GenuineIntel"
     static let CPU_CORE_2_DUO = "core2duo-v1,vendor=GenuineIntel"
@@ -719,12 +719,12 @@ class QemuConstants {
     static let CPU_IVY_BRIDGE = "IvyBridge"
     static let CPU_SKYLAKE_CLIENT = "Skylake-Client"
     static let CPU_ICELAKE_SERVER = "Icelake-Server-v1"
-    static let CPU_QEMU64 = "qemu64";
-    static let CPU_CORTEX_A72 = "cortex-a72";
+    static let CPU_QEMU64 = "qemu64"
+    static let CPU_CORTEX_A72 = "cortex-a72"
     static let CPU_ARM1176 = "arm1176"
     
-    static let ACCEL_HVF = "hvf";
-    static let ACCEL_TCG = "tcg,thread=multi,tb-size=1024";
+    static let ACCEL_HVF = "hvf"
+    static let ACCEL_TCG = "tcg,thread=multi,tb-size=1024"
     
     static let BOOT_BIOS = "bios"
     static let BOOT_UEFI = "uefi"

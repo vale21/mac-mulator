@@ -72,6 +72,7 @@
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */; };
+		3BD6832D2CDBAA9B00BDDD54 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BD6832C2CDBAA9B00BDDD54 /* SECURE_EFI_VARS_ARM.fd */; };
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
@@ -200,6 +201,7 @@
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPortMappingViewController.swift; sourceTree = "<group>"; };
+		3BD6832C2CDBAA9B00BDDD54 /* SECURE_EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
 		3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewVMViewController.swift; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 				3B6492FE2CC24D440015F73F /* SECURE_EFI_ARM.fd in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
+				3BD6832D2CDBAA9B00BDDD54 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
