@@ -46,6 +46,7 @@
 		3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EF29DF122C007C3781 /* EditVM.storyboard */; };
 		3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
 		3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
+		3B79495D2CE4F27500442BB9 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B79495C2CE4F27500442BB9 /* SECURE_EFI_VARS_ARM.fd */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
 		3B7F3C2429326F9900F1396D /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
@@ -69,7 +70,6 @@
 		3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473025CABDC600A4DBA7 /* Main.storyboard */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
 		3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
-		3BC4761B2CE4A66C00AEC13A /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761A2CE4A66C00AEC13A /* SECURE_EFI_VARS_ARM.fd */; };
 		3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */; };
 		3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
@@ -175,6 +175,7 @@
 		3B75C7F229DF1243007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/EditVM.storyboard; sourceTree = "<group>"; };
 		3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = nor_n72ap.bin; sourceTree = "<group>"; };
 		3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootrom_240_4; sourceTree = "<group>"; };
+		3B79495C2CE4F27500442BB9 /* SECURE_EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
 		3B7F3C2329326F9900F1396D /* parallels_template */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = parallels_template; sourceTree = "<group>"; };
@@ -199,7 +200,6 @@
 		3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
 		3BBC4BB525DE74020001CA02 /* QemuUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuUtils.swift; sourceTree = "<group>"; };
 		3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVirtualMachineRunner.swift; sourceTree = "<group>"; };
-		3BC4761A2CE4A66C00AEC13A /* SECURE_EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_ARM.fd; sourceTree = "<group>"; };
 		3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
@@ -402,7 +402,7 @@
 				3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */,
 				3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */,
 				3B89B6ED2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd */,
-				3BC4761A2CE4A66C00AEC13A /* SECURE_EFI_VARS_ARM.fd */,
+				3B79495C2CE4F27500442BB9 /* SECURE_EFI_VARS_ARM.fd */,
 				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
 				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
 				3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */,
@@ -541,6 +541,7 @@
 			files = (
 				3B89B6EE2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd in Resources */,
 				3BFB1F862CD3F1B400EBF67D /* windows-11-drivers.iso.zip in Resources */,
+				3B79495D2CE4F27500442BB9 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
@@ -549,7 +550,6 @@
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
-				3BC4761B2CE4A66C00AEC13A /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */,
 				3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */,

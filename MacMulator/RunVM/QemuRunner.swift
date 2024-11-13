@@ -97,7 +97,7 @@ class QemuRunner : VirtualMachineRunner {
                         builder = builder.withEfi(file: drive.path);
                     } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE {
                         builder = builder.withEfiSecure(file: drive.path)
-                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS {
+                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
                         builder = builder.withEfiVars(file: drive.path, global: false)
                     } else {
                         let mediaType = setupMediaType(virtualMachine.subtype, drive);
