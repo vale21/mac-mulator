@@ -31,6 +31,7 @@ class QemuCommandBuilder {
     var sound: [String] = []
     var efi: String?
     var efiSecure: String?
+    var efiVars: String?
     var globalClause: String?
     var drives: [String] = []
     var network: String?
@@ -194,6 +195,12 @@ class QemuCommandBuilder {
         return self;
     }
     
+    func withEfiVars(file: String, global: Bool)-> QemuCommandBuilder {
+        self.efiVars = Utils.escape(file)
+        self.globalClause = global ? " -global driver=cfi.pflash01,property=secure,value=on" : ""
+        return self;
+    }
+    
     func withPortMappings(_ portMappings: [PortMapping]?) -> QemuCommandBuilder {
         if let mappings = portMappings {
             self.portMappings = mappings
@@ -300,6 +307,9 @@ class QemuCommandBuilder {
         }
         if let efiSecure = self.efiSecure {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off"
+        }
+        if let efiVars = self.efiVars {
+            cmd += " -drive if=pflash,unit=1,file=" + efiVars + self.globalClause!
         }
         for drive in self.drives {
             cmd += " " + drive
