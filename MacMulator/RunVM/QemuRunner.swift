@@ -389,7 +389,7 @@ class QemuRunner : VirtualMachineRunner {
     
     fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative);
-        if (cpuType != QemuConstants.CPU_HOST &&
+        if (cpuType != QemuConstants.CPU_HOST_PDPE_1GB &&
             cpuType != QemuConstants.CPU_PENRYN &&
             cpuType != QemuConstants.CPU_PENRYN_SSE &&
             cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
@@ -397,8 +397,8 @@ class QemuRunner : VirtualMachineRunner {
             cpuType != QemuConstants.CPU_SKYLAKE_CLIENT &&
             cpuType != QemuConstants.CPU_ICELAKE_SERVER &&
             cpuType != QemuConstants.CPU_QEMU64 &&
-            cpuType != QemuConstants.CPU_MAX) {
-            cpuType = QemuConstants.CPU_MAX;
+            cpuType != QemuConstants.CPU_MAX_PDPE_1GB) {
+            cpuType = QemuConstants.CPU_MAX_PDPE_1GB;
         }
         return cpuType
     }

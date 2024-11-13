@@ -516,7 +516,7 @@ class Utils {
         if let cpu = definedCpu {
             return cpu;
         } else {
-            return isNative ? QemuConstants.CPU_HOST : QemuConstants.CPU_QEMU64
+            return isNative ? getHostCPU() : QemuConstants.CPU_QEMU64
         }
     }
     
@@ -732,6 +732,14 @@ class Utils {
         return QemuConstants.ARCH_ARM64
 #else
         return QemuConstants.ARCH_X64
+#endif
+    }
+    
+    static func getHostCPU() -> String {
+#if arch(arm64)
+        return QemuConstants.CPU_HOST
+#else
+        return QemuConstants.CPU_HOST_PDPE_1GB
 #endif
     }
     

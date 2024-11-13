@@ -712,8 +712,10 @@ class QemuConstants {
     static let DISPLAY_DEFAULT = "default"
     static let DISPLAY_COCOA = "cocoa"
     
-    static let CPU_HOST = "host" //"host,-pdpe1gb"
-    static let CPU_MAX = "max,-pdpe1gb"
+    static let CPU_HOST = "host"
+    static let CPU_HOST_PDPE_1GB = "host,-pdpe1gb"
+    static let CPU_MAX = "max"
+    static let CPU_MAX_PDPE_1GB = "max,-pdpe1gb"
     static let CPU_PENRYN_SSE = "Penryn,+ssse3,+sse4.1,+sse4.2,vendor=GenuineIntel"
     static let CPU_PENRYN = "Penryn,vendor=GenuineIntel"
     static let CPU_CORE_2_DUO = "core2duo-v1,vendor=GenuineIntel"
