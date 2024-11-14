@@ -111,7 +111,7 @@ class NewVMViewController : NSViewController, NSComboBoxDataSource, NSComboBoxDe
     func vmCreated(_ vm: VirtualMachine) {
         rootController?.addVirtualMachine(vm);
         if fullConfiguration.state == NSControl.StateValue.on {
-            rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: vm);
+            rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, vm]);
         }
         self.view.window?.close();
     }
