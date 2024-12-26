@@ -138,6 +138,8 @@ class QemuConstants {
     static let SUB_DEEPIN = "Deepin"
     static let SUB_FEDORA = "Fedora"
     static let SUB_ZORIN = "Zorin OS"
+    static let SUB_VANILLA = "Vanilla OS"
+    static let SUB_POP_OS = "Pop!_OS"
     static let SUB_SLACKWARE = "Slackware Linux"
     static let SUB_ELEMENTARY = "Elementary OS"
     static let SUB_CENTOS_LINUX = "CentOS Linux"
@@ -215,6 +217,8 @@ class QemuConstants {
     static let ICON_CENTOS = "centos.linux"
     static let ICON_SOLUS = "solus.linux"
     static let ICON_DEEPIN = "deepin"
+    static let ICON_VANILLA = "vanilla.os"
+    static let ICON_POP_OS = "pop.os"
     static let ICON_ZORIN = "zorin.os"
     static let ICON_SLACKEL = "slackel"
     static let ICON_PURE_OS = "pure.os"
@@ -301,6 +305,8 @@ class QemuConstants {
     static let URL_SOLUS = "https://getsol.us/download/"
     static let URL_DEEPIN = "https://www.deepin.org/en/download/"
     static let URL_ZORIN = "https://zorin.com/os/download/"
+    static let URL_VANILLA = "https://vanillaos.org/download/orchid/stable/"
+    static let URL_POP_OS = "https://pop.system76.com/"
     static let URL_SLACKEL = "https://sourceforge.net/projects/slackel/files/?source=navbar"
     static let URL_PURE_OS = "https://pureos.net/download/"
     static let URL_MAGEIA = "https://www.mageia.org/en/downloads/"
@@ -599,6 +605,8 @@ class QemuConstants {
         [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
         [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_DEEPIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
         [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ZORIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
+        [OS_LINUX, SUB_VANILLA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_VANILLA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_VANILLA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
+        [OS_LINUX, SUB_POP_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_POP_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_POP_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
         [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKEL, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
         [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PURE_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
         [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MAGEIA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI_SECURE],
