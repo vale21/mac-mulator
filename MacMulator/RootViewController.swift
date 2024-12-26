@@ -95,14 +95,16 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
     
     @available(macOS 13.0, *)
-    func convertToQemuMenuBarClicked(_ sender: Any) {
+    func convertToQemuMenuBarClicked(_ sender: Any, _ showAlert: Bool = true) {
         if let currentVm = self.currentVm {
             QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
             VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
             currentVm.type = MacMulatorConstants.QEMU_VM
             currentVm.writeToPlist()
             vmController?.setVirtualMachine(currentVm)
-            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to QEMU format.")
+            if showAlert {
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to QEMU format.")
+            }
         }
     }
     
@@ -137,7 +139,12 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST);
         if let vm = virtualMachine {
-            self.addVirtualMachine(vm);
+            self.addVirtualMachine(vm)
+            if #available(macOS 13.0, *) {
+                if (vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_LINUX && Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture)) {
+                    self.convertToQemuMenuBarClicked(self, false)
+                }
+            }
         }
     }
     
