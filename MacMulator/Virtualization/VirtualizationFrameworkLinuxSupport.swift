@@ -96,6 +96,10 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
             linuxPlatformConfiguration.machineIdentifier = machineIdentifier
         }
         
+        if #available(macOS 15.0, *), VZGenericPlatformConfiguration.isNestedVirtualizationSupported {
+            linuxPlatformConfiguration.isNestedVirtualizationEnabled = true
+        }
+        
         return linuxPlatformConfiguration
     }
     
