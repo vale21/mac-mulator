@@ -155,6 +155,7 @@ class QemuConstants {
     static let SUB_NETRUNNER = "Netrunner"
     static let SUB_NEPTUNE = "Neptune Linux"
     static let SUB_ALMA_LINUX = "Alma Linux"
+    static let SUB_ROCKY_LINUX = "Rocky Linux"
     
     static let SUB_IOS_GENERIC = NSLocalizedString("QemuConstants.ios", comment: "")
     static let SUB_IOS_1 = "iOS 1.x"
@@ -233,6 +234,7 @@ class QemuConstants {
     static let ICON_REACT_OS = "react.os"
     static let ICON_RASPBERRY_OS = "raspberry.os"
     static let ICON_ALMA_LINUX = "alma.linux"
+    static let ICON_ROCKY_LINUX = "rocky.linux"
     
     static let ICON_IOS = "ios"
     
@@ -321,6 +323,7 @@ class QemuConstants {
     static let URL_ELEMENTARY = "https://elementary.io"
     static let URL_REACT_OS = "https://reactos.org/download/"
     static let URL_ALMA_LINUX = "https://almalinux.org/get-almalinux/"
+    static let URL_ROCKY_LINUX = "https://rockylinux.org/it-IT/download/"
     static let URL_RASPBERRY_OS = "https://www.raspberrypi.com/software/operating-systems/"
     static let URL_QEMU_IOS = "https://github.com/devos50/qemu-ios/releases/"
     
@@ -615,6 +618,7 @@ class QemuConstants {
         [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS, MEDIATYPE_DISK, false, VGA_RAMFB, nil],
         [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_RED_HAT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
+        [OS_LINUX, SUB_ROCKY_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ROCKY_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ROCKY_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKEL, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKWARE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
