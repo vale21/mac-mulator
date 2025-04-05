@@ -671,6 +671,10 @@ class Utils {
         return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SONOMA)
     }
     
+    static func isMacClipboardSharingSupported(_ vm: VirtualMachine) -> Bool {
+        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
+    }
+    
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()
