@@ -98,7 +98,25 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_IPSW,
                 size: 0)
-            vm.addVirtualDrive(installMedia);
+            vm.addVirtualDrive(installMedia)
+            
+            if #available(macOS 15.0, *), Utils.isMacClipboardSharingSupported(vm) {
+                let guestTools = VirtualDrive(
+                    path: vm.path + "/usb-guest-tools-0." + MacMulatorConstants.IMG_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_USB + "-guest-tools-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_USB,
+                    size: 0);
+                vm.addVirtualDrive(guestTools)
+                
+                let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "macos-guest-tools.img.zip", ofType: nil)!)
+                let destinationURL = URL(fileURLWithPath: vm.path)
+                try? FileManager.default.unzipItem(at: sourceURL, to: destinationURL, skipCRC32: true)
+                
+                // Rename unzipped image and clean up garbage empty folder
+                try? FileManager.default.moveItem(atPath: vm.path + "/macos-guest-tools.img", toPath: vm.path + "/usb-guest-tools-0.img")
+                try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
+            }
         } else if installMediaPath != ""{
             let installMedia = VirtualDrive(
                 path: installMediaPath,
@@ -106,7 +124,7 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_USB,
                 size: 0)
-            vm.addVirtualDrive(installMedia);
+            vm.addVirtualDrive(installMedia)
         }
         
         if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {

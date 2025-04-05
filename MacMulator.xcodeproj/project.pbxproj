@@ -82,6 +82,7 @@
 		3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */; };
 		3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
 		3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */; };
+		3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
@@ -211,6 +212,7 @@
 		3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_x64.fd; sourceTree = "<group>"; };
 		3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_x64.fd; sourceTree = "<group>"; };
 		3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
+		3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "macos-guest-tools.img.zip"; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
 				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
 				3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */,
+				3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */,
 				3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */,
 				3B7F3C2329326F9900F1396D /* parallels_template */,
 				3B578557266526460003C3C8 /* Libs */,
@@ -546,6 +549,7 @@
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */,
+				3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */,
 				3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */,
 				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */,

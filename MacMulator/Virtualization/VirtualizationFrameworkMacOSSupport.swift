@@ -75,7 +75,9 @@ class VirtualizationFrameworkMacOSSupport : VirtualizationFrameworkSupport {
         virtualMachineConfiguration.pointingDevices = MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfigurations(vm: vm)
         virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration(vm: vm)]
         virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
-        
+        if #available(macOS 13.0, *) {
+            virtualMachineConfiguration.consoleDevices = [MacOSVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
+        }
         if #available(macOS 15.0, *) {
             virtualMachineConfiguration.usbControllers = [MacOSVirtualMachineConfigurationHelper.createUSBControllerConfiguration()]
         }
