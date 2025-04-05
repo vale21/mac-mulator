@@ -983,7 +983,7 @@ class Utils {
         return defaultValue;
     }
     
-    static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
+    fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
         return os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
     }
     
