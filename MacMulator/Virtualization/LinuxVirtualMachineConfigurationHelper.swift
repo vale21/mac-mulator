@@ -47,17 +47,24 @@ class LinuxVirtualMachineConfigurationHelper {
         return VZUSBKeyboardConfiguration()
     }
 
-    static func createAudioDeviceConfiguration() -> VZVirtioSoundDeviceConfiguration {
-        let audioConfiguration = VZVirtioSoundDeviceConfiguration()
+    static func createInputAudioDeviceConfiguration() -> VZVirtioSoundDeviceConfiguration {
+        let inputAudioDevice = VZVirtioSoundDeviceConfiguration()
 
         let inputStream = VZVirtioSoundDeviceInputStreamConfiguration()
         inputStream.source = VZHostAudioInputStreamSource()
 
+        inputAudioDevice.streams = [inputStream]
+        return inputAudioDevice
+    }
+
+    static func createOutputAudioDeviceConfiguration() -> VZVirtioSoundDeviceConfiguration {
+        let outputAudioDevice = VZVirtioSoundDeviceConfiguration()
+
         let outputStream = VZVirtioSoundDeviceOutputStreamConfiguration()
         outputStream.sink = VZHostAudioOutputStreamSink()
 
-        audioConfiguration.streams = [inputStream, outputStream]
-        return audioConfiguration
+        outputAudioDevice.streams = [outputStream]
+        return outputAudioDevice
     }
     
     static func createSpiceAgentConsoleDeviceConfiguration() -> VZVirtioConsoleDeviceConfiguration {

@@ -51,7 +51,7 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
         virtualMachineConfiguration.pointingDevices = [LinuxVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
-        virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]
+        virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createInputAudioDeviceConfiguration(), LinuxVirtualMachineConfigurationHelper.createOutputAudioDeviceConfiguration()]
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
         
         if #available(macOS 15.0, *) {
