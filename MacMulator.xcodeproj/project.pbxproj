@@ -44,7 +44,6 @@
 		3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
-		3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EF29DF122C007C3781 /* EditVM.storyboard */; };
 		3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
 		3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
@@ -59,6 +58,9 @@
 		3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
 		3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9E42A72806178500981297 /* Virtualization.framework */; };
 		3BA0D1932C1C76CC0079AF20 /* StartVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */; };
+		3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E12DA32AE80067415E /* Main.storyboard */; };
+		3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E02DA32AE80067415E /* EditVM.storyboard */; };
+		3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E22DA32AE80067415E /* NewVM.storyboard */; };
 		3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BB2A73E2AF68E260043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */; };
@@ -67,7 +69,6 @@
 		3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */; };
 		3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */; };
 		3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */; };
-		3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473025CABDC600A4DBA7 /* Main.storyboard */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
 		3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
 		3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */; };
@@ -78,7 +79,6 @@
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
 		3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
-		3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */; };
 		3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */; };
 		3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
 		3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */; };
@@ -167,14 +167,7 @@
 		3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostMachineDetails.swift; sourceTree = "<group>"; };
 		3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportHerlper.swift; sourceTree = "<group>"; };
 		3B73E41525CAE040004BAA92 /* QemuRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuRunner.swift; sourceTree = "<group>"; };
-		3B75C7E429DF0037007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3B75C7E529DF0038007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3B75C7E629DF003F007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/NewVM.storyboard; sourceTree = "<group>"; };
-		3B75C7E729DF003F007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = MacMulator/UI/en.lproj/NewVM.storyboard; sourceTree = "<group>"; };
 		3B75C7EB29DF06C4007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3B75C7ED29DF06C9007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3B75C7F029DF122C007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = MacMulator/UI/en.lproj/EditVM.storyboard; sourceTree = "<group>"; };
-		3B75C7F229DF1243007C3781 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = MacMulator/UI/it.lproj/EditVM.storyboard; sourceTree = "<group>"; };
 		3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = nor_n72ap.bin; sourceTree = "<group>"; };
 		3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootrom_240_4; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
@@ -189,9 +182,13 @@
 		3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
 		3B9E42A72806178500981297 /* Virtualization.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Virtualization.framework; path = System/Library/Frameworks/Virtualization.framework; sourceTree = SDKROOT; };
 		3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVMViewController.swift; sourceTree = "<group>"; };
+		3BA6C6E32DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
+		3BA6C6E42DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EditVM.storyboard; sourceTree = "<group>"; };
+		3BA6C6E52DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkUtils.swift; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
+		3BBA2BBD2DA329FE00EBE373 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -388,10 +385,10 @@
 		3BBB472F25CABDC600A4DBA7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3BA6C6E02DA32AE80067415E /* EditVM.storyboard */,
+				3BA6C6E12DA32AE80067415E /* Main.storyboard */,
+				3BA6C6E22DA32AE80067415E /* NewVM.storyboard */,
 				3B75C7EC29DF06C4007C3781 /* Localizable.strings */,
-				3BBB473025CABDC600A4DBA7 /* Main.storyboard */,
-				3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */,
-				3B75C7EF29DF122C007C3781 /* EditVM.storyboard */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -521,6 +518,7 @@
 			knownRegions = (
 				en,
 				it,
+				Base,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
 			packageReferences = (
@@ -545,18 +543,18 @@
 				3B89B6EE2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd in Resources */,
 				3BFB1F862CD3F1B400EBF67D /* windows-11-drivers.iso.zip in Resources */,
 				3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */,
-				3BD9CCF7262DCE5B008341D9 /* NewVM.storyboard in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */,
 				3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */,
 				3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */,
-				3BBB475025CABE6D00A4DBA7 /* Main.storyboard in Resources */,
 				3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */,
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
+				3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */,
+				3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */,
+				3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */,
 				3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */,
-				3B75C7F129DF122C007C3781 /* EditVM.storyboard in Resources */,
 				3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */,
 				3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */,
 			);
@@ -660,34 +658,31 @@
 			isa = PBXVariantGroup;
 			children = (
 				3B75C7EB29DF06C4007C3781 /* en */,
-				3B75C7ED29DF06C9007C3781 /* it */,
+				3BBA2BBD2DA329FE00EBE373 /* it */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
-		3B75C7EF29DF122C007C3781 /* EditVM.storyboard */ = {
+		3BA6C6E02DA32AE80067415E /* EditVM.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3B75C7F029DF122C007C3781 /* en */,
-				3B75C7F229DF1243007C3781 /* it */,
+				3BA6C6E42DA32AE80067415E /* Base */,
 			);
 			name = EditVM.storyboard;
 			sourceTree = "<group>";
 		};
-		3BBB473025CABDC600A4DBA7 /* Main.storyboard */ = {
+		3BA6C6E12DA32AE80067415E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3B75C7E429DF0037007C3781 /* it */,
-				3B75C7E529DF0038007C3781 /* en */,
+				3BA6C6E52DA32AE80067415E /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		3BD9CCF5262DCE5B008341D9 /* NewVM.storyboard */ = {
+		3BA6C6E22DA32AE80067415E /* NewVM.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3B75C7E629DF003F007C3781 /* it */,
-				3B75C7E729DF003F007C3781 /* en */,
+				3BA6C6E32DA32AE80067415E /* Base */,
 			);
 			name = NewVM.storyboard;
 			sourceTree = "<group>";
