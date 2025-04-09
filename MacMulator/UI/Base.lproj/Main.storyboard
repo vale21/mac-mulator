@@ -2957,6 +2957,8 @@ Raspberry Pi</mutableString>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="SUm-X6-wZL"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="preferencesMenu" destination="BOF-NM-1cW" id="exj-bZ-Crc"/>
+                        <outlet property="servicesMenu" destination="NMo-om-nkz" id="bZc-2b-KBB"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>

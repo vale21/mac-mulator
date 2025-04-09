@@ -16,6 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var initialized = false
     
     @IBOutlet weak var aboutMacMulatorMenu: NSMenuItem!
+    @IBOutlet weak var preferencesMenu: NSMenuItem!
+    @IBOutlet weak var servicesMenu: NSMenuItem!
     
     @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
@@ -286,6 +288,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillFinishLaunching(_ notification: Notification) {
         aboutMacMulatorMenu.title = NSLocalizedString("AppDelegate.aboutMacMulatorMenu", comment: "")
+        preferencesMenu.title = NSLocalizedString("AppDelegate.preferencesMenu", comment: "")
+        servicesMenu.title = NSLocalizedString("AppDelegate.servicesMenu", comment: "")
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {

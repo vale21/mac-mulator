@@ -1,4 +1,6 @@
 "AppDelegate.aboutMacMulatorMenu" = "Informazioni su MacMulator";
+"AppDelegate.preferencesMenu" = "Impostazioni...";
+"AppDelegate.servicesMenu" = "Servizi";
 "AppDelegate.exportToParallelsComplete" = "Esportazione completata.";
 "AppDelegate.exportToParallelsFailed" = "Esportazione fallita con errore: %@";
 "AppDelegate.importFromParallelsFailed" = "Importazione fallita con errore: %@";
