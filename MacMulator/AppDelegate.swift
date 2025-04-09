@@ -14,7 +14,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var rootController: RootViewController?;
     private var fileName: String?
     private var initialized = false
-
+    
+    @IBOutlet weak var aboutMacMulatorMenu: NSMenuItem!
+    
     @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
     @IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
@@ -280,6 +282,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename));
             return false;
         }
+    }
+    
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        aboutMacMulatorMenu.title = NSLocalizedString("AppDelegate.aboutMacMulatorMenu", comment: "")
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
