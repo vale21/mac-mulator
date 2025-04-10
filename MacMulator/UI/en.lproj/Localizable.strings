@@ -18,7 +18,7 @@
 "AppDelegate.pasteAndMatchStyleMenuItem" = "Paste and Match Style";
 "AppDelegate.deleteMenuItem" = "Delete";
 "AppDelegate.selectAllMenuItem" = "Select All";
-"AppDelegate.vmMenu" = "VM";
+"AppDelegate.vmMenuItem" = "VM";
 "AppDelegate.startVMMenuItem" = "Start";
 "AppDelegate.startVMInRecoveryMenuItem" = "Start in Recovery Mode";
 "AppDelegate.stopVMMenuItem" = "Stop";

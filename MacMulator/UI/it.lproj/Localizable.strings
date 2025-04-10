@@ -18,7 +18,7 @@
 "AppDelegate.pasteAndMatchStyleMenuItem" = "Incolla e adegua lo stile";
 "AppDelegate.deleteMenuItem" = "Elimina";
 "AppDelegate.selectAllMenuItem" = "Seleziona tutto";
-"AppDelegate.vmMenu" = "Macchina Virtuale";
+"AppDelegate.vmMenuItem" = "Macchina Virtuale";
 "AppDelegate.startVMMenuItem" = "Avvia";
 "AppDelegate.startVMInRecoveryMenuItem" = "Avvia in modalità di recupero";
 "AppDelegate.stopVMMenuItem" = "Arresta";

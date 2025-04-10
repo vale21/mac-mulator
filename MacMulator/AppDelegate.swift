@@ -23,14 +23,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var showAllMenuItem: NSMenuItem!
     @IBOutlet weak var quitMacMulatorMenuItem: NSMenuItem!
     
-    @IBOutlet weak var fileMenu: NSMenu!
+    @IBOutlet weak var fileMenu: NSMenuItem!
     @IBOutlet weak var newMenuItem: NSMenuItem!
     @IBOutlet weak var openMenuItem: NSMenuItem!
     @IBOutlet weak var importVMFromMenuItem: NSMenuItem!
     @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet weak var closeMenuItem: NSMenuItem!
     
-    @IBOutlet weak var editMenu: NSMenu!
+    @IBOutlet weak var editMenu: NSMenuItem!
     @IBOutlet weak var cutMenuItem: NSMenuItem!
     @IBOutlet weak var copyMenuItem: NSMenuItem!
     @IBOutlet weak var pasteMenuItem: NSMenuItem!
@@ -39,6 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var selectAllMenuItem: NSMenuItem!
     
     @IBOutlet weak var vmMenu: NSMenu!
+    @IBOutlet weak var vmMenuItem: NSMenuItem!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
     @IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
@@ -331,7 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         deleteMenuItem.title = NSLocalizedString("AppDelegate.deleteMenuItem", comment: "")
         selectAllMenuItem.title = NSLocalizedString("AppDelegate.selectAllMenuItem", comment: "")
         
-        vmMenu.title = NSLocalizedString("AppDelegate.vmMenu", comment: "")
+        vmMenuItem.title = NSLocalizedString("AppDelegate.vmMenuItem", comment: "")
         startVMMenuItem.title = NSLocalizedString("AppDelegate.startVMMenuItem", comment: "")
         startVMInRecoveryMenuItem.title = NSLocalizedString("AppDelegate.startVMInRecoveryMenuItem", comment: "")
         stopVMMenuItem.title = NSLocalizedString("AppDelegate.stopVMMenuItem", comment: "")
