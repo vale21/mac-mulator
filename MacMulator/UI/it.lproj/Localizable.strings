@@ -26,13 +26,14 @@
 "AppDelegate.settingsMenuItem" = "Opzioni...";
 "AppDelegate.cloneVMMemuItem" = "Crea clone";
 "AppDelegate.showVMInFinderMenuItem" = "Mostra nel Finder";
-"AppDelegate.exportMenuItem" = "Exporta come";
+"AppDelegate.exportMenuItem" = "Esporta come";
 "AppDelegate.exportToParallelsMenuItem" = "VM Parallels";
 "AppDelegate.convertToQemuMenuItem" = "Convert in VM QEMU";
 "AppDelegate.convertToAppleMenuItem" = "Converti in VM Apple";
 "AppDelegate.usbDevicesMenuItem" = "Dispositivi USB";
 "AppDelegate.attachImageMenuItem" = "Connetti immagine...";
 "AppDelegate.configureMenuItem" = "Configura...";
+"AppDelegate.showConsoleOutputmenuItem" = "Mostra output console";
 "AppDelegate.exportToParallelsComplete" = "Esportazione completata.";
 "AppDelegate.exportToParallelsFailed" = "Esportazione fallita con errore: %@";
 "AppDelegate.importFromParallelsFailed" = "Importazione fallita con errore: %@";
