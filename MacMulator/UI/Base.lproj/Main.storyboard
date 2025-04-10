@@ -2626,7 +2626,7 @@ Raspberry Pi</mutableString>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
-                                        <menuItem title="Edit" id="Qce-a5-l81">
+                                        <menuItem title="Settings..." id="Qce-a5-l81">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
@@ -2780,14 +2780,16 @@ Raspberry Pi</mutableString>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
                         <outlet property="aboutMacMulatorMenu" destination="5kV-Vb-QxS" id="sI6-Gm-dxT"/>
+                        <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="fN5-7M-Wj8"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
                         <outlet property="closeMenu" destination="DVo-aG-piG" id="wDX-Tj-FHx"/>
+                        <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="6C4-UB-fqC"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
                         <outlet property="copyMenu" destination="4wb-NG-JAH" id="fmj-DP-PQc"/>
                         <outlet property="cutMenu" destination="6VH-bp-5pg" id="84u-eG-mYB"/>
                         <outlet property="deleteMenu" destination="IDo-RT-0Vk" id="r58-EU-ePN"/>
-                        <outlet property="editVMMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
+                        <outlet property="editMenu" destination="5Va-YG-7Yh" id="rHK-tJ-w2K"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="fileMenu" destination="dMs-cI-mzQ" id="XPe-lW-fUE"/>
@@ -2805,13 +2807,15 @@ Raspberry Pi</mutableString>
                         <outlet property="quitMacMulatorMenu" destination="4sb-4s-VLi" id="MUT-mb-FqN"/>
                         <outlet property="selectAllMenu" destination="taQ-Ih-G8N" id="8ln-HP-kOp"/>
                         <outlet property="servicesMenu" destination="NMo-om-nkz" id="bZc-2b-KBB"/>
+                        <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
                         <outlet property="showAllMenu" destination="Kd2-mp-pUS" id="Iw0-cW-eeV"/>
+                        <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="PnT-B2-4h0"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="e2f-AR-nAc"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
                         <outlet property="usbDevicesMenuItem" destination="S7C-pL-vez" id="Cyf-X7-X0C"/>
-                        <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
+                        <outlet property="vmMenu" destination="0zK-Vf-XkJ" id="rt6-OQ-d46"/>
                     </connections>
                 </customObject>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>

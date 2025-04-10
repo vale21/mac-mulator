@@ -15,44 +15,45 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var fileName: String?
     private var initialized = false
     
-    @IBOutlet weak var aboutMacMulatorMenu: NSMenuItem!
-    @IBOutlet weak var preferencesMenu: NSMenuItem!
-    @IBOutlet weak var servicesMenu: NSMenuItem!
-    @IBOutlet weak var hideMacMulatorMenu: NSMenuItem!
-    @IBOutlet weak var hideOthersMenu: NSMenuItem!
-    @IBOutlet weak var showAllMenu: NSMenuItem!
-    @IBOutlet weak var quitMacMulatorMenu: NSMenuItem!
+    @IBOutlet weak var aboutMacMulatorMenuItem: NSMenuItem!
+    @IBOutlet weak var preferencesMenuItem: NSMenuItem!
+    @IBOutlet weak var servicesMenuItem: NSMenuItem!
+    @IBOutlet weak var hideMacMulatorMenuItem: NSMenuItem!
+    @IBOutlet weak var hideOthersMenuItem: NSMenuItem!
+    @IBOutlet weak var showAllMenuItem: NSMenuItem!
+    @IBOutlet weak var quitMacMulatorMenuItem: NSMenuItem!
     
-    @IBOutlet weak var fileMenu: NSMenuItem!
-    @IBOutlet weak var newMenu: NSMenuItem!
-    @IBOutlet weak var openMenu: NSMenuItem!
-    @IBOutlet weak var importVMFromMenu: NSMenuItem!
-    @IBOutlet weak var parallelsVMMenu: NSMenuItem!
-    @IBOutlet weak var closeMenu: NSMenuItem!
+    @IBOutlet weak var fileMenu: NSMenu!
+    @IBOutlet weak var newMenuItem: NSMenuItem!
+    @IBOutlet weak var openMenuItem: NSMenuItem!
+    @IBOutlet weak var importVMFromMenuItem: NSMenuItem!
+    @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
+    @IBOutlet weak var closeMenuItem: NSMenuItem!
     
-    @IBOutlet weak var cutMenu: NSMenuItem!
-    @IBOutlet weak var copyMenu: NSMenuItem!
-    @IBOutlet weak var pasteMenu: NSMenuItem!
-    @IBOutlet weak var pasteAndMatchStyleMenu: NSMenuItem!
-    @IBOutlet weak var deleteMenu: NSMenuItem!
-    @IBOutlet weak var selectAllMenu: NSMenuItem!
-    
-    
+    @IBOutlet weak var editMenu: NSMenu!
+    @IBOutlet weak var cutMenuItem: NSMenuItem!
+    @IBOutlet weak var copyMenuItem: NSMenuItem!
+    @IBOutlet weak var pasteMenuItem: NSMenuItem!
+    @IBOutlet weak var pasteAndMatchStyleMenuItem: NSMenuItem!
+    @IBOutlet weak var deleteMenuItem: NSMenuItem!
+    @IBOutlet weak var selectAllMenuItem: NSMenuItem!
     
     @IBOutlet weak var vmMenu: NSMenu!
     @IBOutlet weak var startVMMenuItem: NSMenuItem!
     @IBOutlet weak var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet weak var stopVMMenuItem: NSMenuItem!
     @IBOutlet weak var pauseVMMenuItem: NSMenuItem!
-    @IBOutlet weak var editVMMenuItem: NSMenuItem!
+    @IBOutlet weak var settingsMenuItem: NSMenuItem!
     @IBOutlet weak var cloneVMMemuItem: NSMenuItem!
     @IBOutlet weak var showVMInFinderMenuItem: NSMenuItem!
     @IBOutlet weak var exportMenuItem: NSMenuItem!
     @IBOutlet weak var exportToParallelsMenuItem: NSMenuItem!
-    @IBOutlet weak var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet weak var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet weak var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet weak var usbDevicesMenuItem: NSMenuItem!
+    @IBOutlet weak var attachImageMenuItem: NSMenuItem!
+    @IBOutlet weak var configureMenuItem: NSMenuItem!
+    @IBOutlet weak var showConsoleOutputmenuItem: NSMenuItem!
     
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
@@ -200,7 +201,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 startVMMenuItem.isEnabled = false
                 startVMInRecoveryMenuItem.isEnabled = false
                 stopVMMenuItem.isEnabled = false
-                editVMMenuItem.isEnabled = false
+                settingsMenuItem.isEnabled = false
                 cloneVMMemuItem.isEnabled = false
                 showVMInFinderMenuItem.isEnabled = false
                 exportMenuItem.isEnabled = false
@@ -211,7 +212,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
-                    editVMMenuItem.isEnabled = true
+                    settingsMenuItem.isEnabled = true
                     
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
@@ -307,27 +308,45 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func applicationWillFinishLaunching(_ notification: Notification) {
-        aboutMacMulatorMenu.title = NSLocalizedString("AppDelegate.aboutMacMulatorMenu", comment: "")
-        preferencesMenu.title = NSLocalizedString("AppDelegate.preferencesMenu", comment: "")
-        servicesMenu.title = NSLocalizedString("AppDelegate.servicesMenu", comment: "")
-        hideMacMulatorMenu.title = NSLocalizedString("AppDelegate.hideMacMulatorMenu", comment: "")
-        hideOthersMenu.title = NSLocalizedString("AppDelegate.hideOthersMenu", comment: "")
-        showAllMenu.title = NSLocalizedString("AppDelegate.showAllMenu", comment: "")
-        quitMacMulatorMenu.title = NSLocalizedString("AppDelegate.quitMacMulatorMenu", comment: "")
+        aboutMacMulatorMenuItem.title = NSLocalizedString("AppDelegate.aboutMacMulatorMenuItem", comment: "")
+        preferencesMenuItem.title = NSLocalizedString("AppDelegate.preferencesMenuItem", comment: "")
+        servicesMenuItem.title = NSLocalizedString("AppDelegate.servicesMenuItem", comment: "")
+        hideMacMulatorMenuItem.title = NSLocalizedString("AppDelegate.hideMacMulatorMenuItem", comment: "")
+        hideOthersMenuItem.title = NSLocalizedString("AppDelegate.hideOthersMenuItem", comment: "")
+        showAllMenuItem.title = NSLocalizedString("AppDelegate.showAllMenuItem", comment: "")
+        quitMacMulatorMenuItem.title = NSLocalizedString("AppDelegate.quitMacMulatorMenuItem", comment: "")
         
         fileMenu.title = NSLocalizedString("AppDelegate.fileMenu", comment: "")
-        newMenu.title = NSLocalizedString("AppDelegate.newMenu", comment: "")
-        openMenu.title = NSLocalizedString("AppDelegate.openMenu", comment: "")
-        importVMFromMenu.title = NSLocalizedString("AppDelegate.importVMFromMenu", comment: "")
-        parallelsVMMenu.title = NSLocalizedString("AppDelegate.parallelsVMMenu", comment: "")
-        closeMenu.title = NSLocalizedString("AppDelegate.closeMenu", comment: "")
+        newMenuItem.title = NSLocalizedString("AppDelegate.newMenuItem", comment: "")
+        openMenuItem.title = NSLocalizedString("AppDelegate.openMenuItem", comment: "")
+        importVMFromMenuItem.title = NSLocalizedString("AppDelegate.importVMFromMenuItem", comment: "")
+        importFromParallelsMenuItem.title = NSLocalizedString("AppDelegate.importFromParallelsMenuItem", comment: "")
+        closeMenuItem.title = NSLocalizedString("AppDelegate.closeMenuItem", comment: "")
         
-        cutMenu.title = NSLocalizedString("AppDelegate.cutMenu", comment: "")
-        copyMenu.title = NSLocalizedString("AppDelegate.copyMenu", comment: "")
-        pasteMenu.title = NSLocalizedString("AppDelegate.pasteMenu", comment: "")
-        pasteAndMatchStyleMenu.title = NSLocalizedString("AppDelegate.pasteAndMatchStyleMenu", comment: "")
-        deleteMenu.title = NSLocalizedString("AppDelegate.deleteMenu", comment: "")
-        selectAllMenu.title = NSLocalizedString("AppDelegate.selectAllMenu", comment: "")
+        editMenu.title = NSLocalizedString("AppDelegate.editMenu", comment: "")
+        cutMenuItem.title = NSLocalizedString("AppDelegate.cutMenuItem", comment: "")
+        copyMenuItem.title = NSLocalizedString("AppDelegate.copyMenuItem", comment: "")
+        pasteMenuItem.title = NSLocalizedString("AppDelegate.pasteMenuItem", comment: "")
+        pasteAndMatchStyleMenuItem.title = NSLocalizedString("AppDelegate.pasteAndMatchStyleMenuItem", comment: "")
+        deleteMenuItem.title = NSLocalizedString("AppDelegate.deleteMenuItem", comment: "")
+        selectAllMenuItem.title = NSLocalizedString("AppDelegate.selectAllMenuItem", comment: "")
+        
+        vmMenu.title = NSLocalizedString("AppDelegate.vmMenu", comment: "")
+        startVMMenuItem.title = NSLocalizedString("AppDelegate.startVMMenuItem", comment: "")
+        startVMInRecoveryMenuItem.title = NSLocalizedString("AppDelegate.startVMInRecoveryMenuItem", comment: "")
+        stopVMMenuItem.title = NSLocalizedString("AppDelegate.stopVMMenuItem", comment: "")
+        pauseVMMenuItem.title = NSLocalizedString("AppDelegate.pauseVMMenuItem", comment: "")
+        settingsMenuItem.title = NSLocalizedString("AppDelegate.settingsMenuItem", comment: "")
+        cloneVMMemuItem.title = NSLocalizedString("AppDelegate.cloneVMMemuItem", comment: "")
+        showVMInFinderMenuItem.title = NSLocalizedString("AppDelegate.showVMInFinderMenuItem", comment: "")
+        exportMenuItem.title = NSLocalizedString("AppDelegate.exportMenuItem", comment: "")
+        exportToParallelsMenuItem.title = NSLocalizedString("AppDelegate.exportToParallelsMenuItem", comment: "")
+        convertToQemuMenuItem.title = NSLocalizedString("AppDelegate.convertToQemuMenuItem", comment: "")
+        convertToAppleMenuItem.title = NSLocalizedString("AppDelegate.convertToAppleMenuItem", comment: "")
+        usbDevicesMenuItem.title = NSLocalizedString("AppDelegate.usbDevicesMenuItem", comment: "")
+        attachImageMenuItem.title = NSLocalizedString("AppDelegate.attachImageMenuItem", comment: "")
+        configureMenuItem.title = NSLocalizedString("AppDelegate.configureMenuItem", comment: "")
+        showConsoleOutputmenuItem.title = NSLocalizedString("AppDelegate.showConsoleOutputmenuItem", comment: "")
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
