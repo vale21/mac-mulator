@@ -2782,33 +2782,32 @@ Raspberry Pi</mutableString>
                         <outlet property="aboutMacMulatorMenuItem" destination="5kV-Vb-QxS" id="S6a-sr-SLN"/>
                         <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="fN5-7M-Wj8"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
-                        <outlet property="closeMenu" destination="DVo-aG-piG" id="wDX-Tj-FHx"/>
+                        <outlet property="closeMenuItem" destination="DVo-aG-piG" id="wr9-ZL-ahE"/>
                         <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="6C4-UB-fqC"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
-                        <outlet property="copyMenu" destination="4wb-NG-JAH" id="fmj-DP-PQc"/>
-                        <outlet property="cutMenu" destination="6VH-bp-5pg" id="84u-eG-mYB"/>
-                        <outlet property="deleteMenu" destination="IDo-RT-0Vk" id="r58-EU-ePN"/>
+                        <outlet property="copyMenuItem" destination="4wb-NG-JAH" id="oIl-3w-baF"/>
+                        <outlet property="cutMenuItem" destination="6VH-bp-5pg" id="sHg-ke-Jkh"/>
+                        <outlet property="deleteMenuItem" destination="IDo-RT-0Vk" id="scT-JU-0ff"/>
                         <outlet property="editMenu" destination="5Va-YG-7Yh" id="rHK-tJ-w2K"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="fileMenu" destination="dMs-cI-mzQ" id="XPe-lW-fUE"/>
-                        <outlet property="hideMacMulatorMenu" destination="Olw-nP-bQN" id="r5K-aa-MXe"/>
-                        <outlet property="hideOthersMenu" destination="Vdr-fp-XzO" id="vKj-ky-VhO"/>
-                        <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="SUm-X6-wZL"/>
-                        <outlet property="importVMFromMenu" destination="wy3-tx-Ofd" id="yWh-XU-x3C"/>
-                        <outlet property="newMenu" destination="Was-JA-tGl" id="M35-BY-ujy"/>
-                        <outlet property="openMenu" destination="IAo-SY-fd9" id="Q4u-ud-BDH"/>
-                        <outlet property="parallelsVMMenu" destination="BlF-ys-fL5" id="Zc4-x6-YAt"/>
-                        <outlet property="pasteAndMatchStyleMenu" destination="LIg-Z1-EYg" id="5pH-ZL-rEz"/>
-                        <outlet property="pasteMenu" destination="mnq-ik-LZC" id="S0b-Za-zYK"/>
+                        <outlet property="hideMacMulatorMenuItem" destination="Olw-nP-bQN" id="Gvh-aB-o7C"/>
+                        <outlet property="hideOthersMenuItem" destination="Vdr-fp-XzO" id="Ktw-79-tTp"/>
+                        <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="LGW-Fy-dhm"/>
+                        <outlet property="importVMFromMenuItem" destination="wy3-tx-Ofd" id="mH9-VP-vJD"/>
+                        <outlet property="newMenuItem" destination="Was-JA-tGl" id="cAC-WU-yCV"/>
+                        <outlet property="openMenuItem" destination="IAo-SY-fd9" id="qjf-NW-unk"/>
+                        <outlet property="pasteAndMatchStyleMenuItem" destination="LIg-Z1-EYg" id="q5k-da-LTs"/>
+                        <outlet property="pasteMenuItem" destination="mnq-ik-LZC" id="2rq-fN-iGH"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
-                        <outlet property="preferencesMenu" destination="BOF-NM-1cW" id="exj-bZ-Crc"/>
-                        <outlet property="quitMacMulatorMenu" destination="4sb-4s-VLi" id="MUT-mb-FqN"/>
-                        <outlet property="selectAllMenu" destination="taQ-Ih-G8N" id="8ln-HP-kOp"/>
-                        <outlet property="servicesMenu" destination="NMo-om-nkz" id="bZc-2b-KBB"/>
+                        <outlet property="preferencesMenuItem" destination="BOF-NM-1cW" id="FQT-Qb-SxM"/>
+                        <outlet property="quitMacMulatorMenuItem" destination="4sb-4s-VLi" id="UeY-bJ-jAv"/>
+                        <outlet property="selectAllMenuItem" destination="taQ-Ih-G8N" id="3Yf-mn-3Vx"/>
+                        <outlet property="servicesMenuItem" destination="NMo-om-nkz" id="tlE-1C-SEf"/>
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="Hwy-0Q-Vni"/>
-                        <outlet property="showAllMenu" destination="Kd2-mp-pUS" id="Iw0-cW-eeV"/>
+                        <outlet property="showAllMenuItem" destination="Kd2-mp-pUS" id="q4X-IC-yrx"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="PnT-B2-4h0"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="diF-FY-1ag"/>
