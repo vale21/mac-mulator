@@ -2779,7 +2779,7 @@ Raspberry Pi</mutableString>
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
-                        <outlet property="aboutMacMulatorMenu" destination="5kV-Vb-QxS" id="sI6-Gm-dxT"/>
+                        <outlet property="aboutMacMulatorMenuItem" destination="5kV-Vb-QxS" id="S6a-sr-SLN"/>
                         <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="fN5-7M-Wj8"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
                         <outlet property="closeMenu" destination="DVo-aG-piG" id="wDX-Tj-FHx"/>
