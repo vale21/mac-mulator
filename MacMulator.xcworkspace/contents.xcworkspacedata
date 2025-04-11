@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:MacMulator/UI/Base.lproj/MainContent.storyboard">
+   </FileRef>
+   <FileRef
       location = "container:MacMulator.xcodeproj">
    </FileRef>
 </Workspace>
