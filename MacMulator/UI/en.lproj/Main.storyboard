@@ -80,7 +80,7 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Import VM from" id="OGd-wn-S60">
                                                 <items>
-                                                    <menuItem title="Parallels VM" id="BlF-ys-fL5">
+                                                    <menuItem title="Parallels" id="BlF-ys-fL5">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="importVMFromParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="dvq-Lw-sgY"/>
