@@ -75,8 +75,7 @@
 		3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
-		3BCFF7302DA9C483008E01D3 /* MainContent.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BCFF72F2DA9C483008E01D3 /* MainContent.storyboard */; };
-		3BCFF7322DA9C487008E01D3 /* MainContent.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BCFF7312DA9C487008E01D3 /* MainContent.storyboard */; };
+		3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BCFF7332DA9C520008E01D3 /* MainContent.storyboard */; };
 		3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */; };
 		3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
@@ -148,6 +147,8 @@
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
+		3B39124E2DA9C64500BF8794 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3B39124F2DA9C65000BF8794 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -186,7 +187,6 @@
 		3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVMViewController.swift; sourceTree = "<group>"; };
 		3BA6C6E32DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
 		3BA6C6E42DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EditVM.storyboard; sourceTree = "<group>"; };
-		3BA6C6E52DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkUtils.swift; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
@@ -204,8 +204,7 @@
 		3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
-		3BCFF72F2DA9C483008E01D3 /* MainContent.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MainContent.storyboard; path = Base.lproj/MainContent.storyboard; sourceTree = "<group>"; };
-		3BCFF7312DA9C487008E01D3 /* MainContent.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = MainContent.storyboard; path = Base.lproj/MainContent.storyboard; sourceTree = "<group>"; };
+		3BCFF7342DA9C520008E01D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainContent.storyboard; sourceTree = "<group>"; };
 		3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPortMappingViewController.swift; sourceTree = "<group>"; };
 		3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveInfoViewController.swift; sourceTree = "<group>"; };
 		3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutBoxViewController.swift; sourceTree = "<group>"; };
@@ -389,11 +388,10 @@
 		3BBB472F25CABDC600A4DBA7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				3BCFF7332DA9C520008E01D3 /* MainContent.storyboard */,
 				3BA6C6E02DA32AE80067415E /* EditVM.storyboard */,
 				3BA6C6E12DA32AE80067415E /* Main.storyboard */,
 				3BA6C6E22DA32AE80067415E /* NewVM.storyboard */,
-				3BCFF72F2DA9C483008E01D3 /* MainContent.storyboard */,
-				3BCFF7312DA9C487008E01D3 /* MainContent.storyboard */,
 				3B75C7EC29DF06C4007C3781 /* Localizable.strings */,
 			);
 			path = UI;
@@ -559,8 +557,7 @@
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */,
 				3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */,
-				3BCFF7322DA9C487008E01D3 /* MainContent.storyboard in Resources */,
-				3BCFF7302DA9C483008E01D3 /* MainContent.storyboard in Resources */,
+				3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */,
 				3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */,
 				3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */,
 				3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */,
@@ -682,7 +679,8 @@
 		3BA6C6E12DA32AE80067415E /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3BA6C6E52DA32AE80067415E /* Base */,
+				3B39124F2DA9C65000BF8794 /* en */,
+				3B39124E2DA9C64500BF8794 /* it */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -693,6 +691,14 @@
 				3BA6C6E32DA32AE80067415E /* Base */,
 			);
 			name = NewVM.storyboard;
+			sourceTree = "<group>";
+		};
+		3BCFF7332DA9C520008E01D3 /* MainContent.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BCFF7342DA9C520008E01D3 /* Base */,
+			);
+			name = MainContent.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
