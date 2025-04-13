@@ -421,7 +421,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2050" y="-447"/>
+            <point key="canvasLocation" x="-2473" y="-608"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">
@@ -429,7 +429,7 @@
                 <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
                 <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1462" y="-827"/>
+            <point key="canvasLocation" x="-1759" y="-602"/>
         </scene>
         <!--NewVM-->
         <scene sceneID="yBO-JT-jb1">
@@ -437,7 +437,7 @@
                 <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
                 <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1355" y="-211"/>
+            <point key="canvasLocation" x="-1757" y="-654"/>
         </scene>
         <!--NSWindowController-DJS-zH-ZBC-->
         <scene sceneID="IxV-8C-Tdx">
@@ -445,7 +445,7 @@
                 <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-DJS-zH-ZBC" id="BcM-Dv-lzx" sceneMemberID="viewController"/>
                 <customObject id="Ixz-2P-r3V" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2565" y="-1445"/>
+            <point key="canvasLocation" x="-3040" y="-885"/>
         </scene>
         <!--NSSplitViewController-xUp-dP-QjM-->
         <scene sceneID="fSq-gU-X88">
@@ -453,7 +453,7 @@
                 <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSSplitViewController-xUp-dP-QjM" id="UrI-1o-1C6" sceneMemberID="viewController"/>
                 <customObject id="jhY-Jw-mQ3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1049" y="551"/>
+            <point key="canvasLocation" x="-1672" y="-504"/>
         </scene>
         <!--NSWindowController-yhg-XN-9MI-->
         <scene sceneID="AkN-ky-dXb">
@@ -461,7 +461,7 @@
                 <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-yhg-XN-9MI" id="Wt2-zD-2a7" sceneMemberID="viewController"/>
                 <customObject id="xLp-6H-4z6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-786" y="-1168"/>
+            <point key="canvasLocation" x="-1677" y="-555"/>
         </scene>
         <!--NSWindowController-Fkf-Y0-JDu-->
         <scene sceneID="utZ-j1-pWG">
@@ -469,7 +469,7 @@
                 <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-Fkf-Y0-JDu" id="T2u-Qx-76b" sceneMemberID="viewController"/>
                 <customObject id="kiY-Zu-CzC" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-160" y="-144"/>
+            <point key="canvasLocation" x="-1679" y="-704"/>
         </scene>
     </scenes>
     <resources>
