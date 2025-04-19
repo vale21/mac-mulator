@@ -10,34 +10,34 @@ import Virtualization
 
 @available(macOS 12.0, *)
 class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate, RunningVMManagerViewController {
-    
+
     var virtualMachine: VirtualMachine?
     var recoveryMode: Bool = false
     var vmController: VirtualMachineViewController?
     var vmRunner: VirtualMachineRunner?
     var isFullScreen = false
- 
+
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
     }
-    
+
     func setRecoveryMode(_ recoveryMode: Bool) {
         self.recoveryMode = recoveryMode
     }
-    
+
     func setVmController(_ controller: VirtualMachineViewController) {
         vmController = controller;
     }
-    
+
     func setVmRunner(_ runner: VirtualMachineRunner) {
         vmRunner = runner
     }
-    
+
     override func viewDidAppear() {
         self.view.window?.delegate = self;
         self.view.window?.title = (virtualMachine?.displayName ?? "") + " - MacMulator"
         self.view.window?.minSize = NSSize(width: 800, height: 600)
-        
+
         if let virtualMachine = virtualMachine {
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution)
             var origin:[String] = []
@@ -45,7 +45,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
                 origin = Utils.getOriginElements(displayOrigin)
             }
             self.view.window?.setContentSize(CGSize(width: resolution[0], height: resolution[1]));
-            
+
             if origin.isEmpty || (origin[0] == "c" && origin[1] == "c") {
                 self.view.window?.center()
             } else if (origin[0] == "f" && origin[1] == "f") {
@@ -54,7 +54,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             } else {
                 self.view.window?.setFrameOrigin(NSPoint(x: Double(origin[0])!, y: Double(origin[1])!))
             }
-            
+
             if let vmRunner = self.vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 runner.setVmView(self.view as! VZVirtualMachineView);
@@ -70,19 +70,19 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             }
         }
     }
-    
+
     func showPausingView() {
         self.performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Pausing")
     }
-    
+
     func showResumingView() {
         self.performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Resuming")
     }
-      
+
     func windowShouldClose(_ sender: NSWindow) -> Bool {
         if Utils.isPauseSupported(vmRunner!.getManagedVM()) {
             self.pauseVM()
-            
+
             // Window will be closed by the VM runner after the pausing will be complete
             return false
         } else {
@@ -95,26 +95,26 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             }
         }
     }
-    
+
     func windowWillClose(_ notification: Notification) {
         let content = self.view.window!.contentView!.frame
         let window = self.view.window!.frame
         let resolution = "\(Int(content.width))x\(Int(content.height))x32"
         let origin = isFullScreen ? "f;f" : "\(Int(window.origin.x));\(Int(window.origin.y))"
-        
+
         virtualMachine?.displayResolution = resolution
         virtualMachine?.displayOrigin = origin
         virtualMachine?.writeToPlist()
     }
-    
+
     func windowDidEnterFullScreen(_ notification: Notification) {
         self.isFullScreen = true
     }
-      
+
     func windowDidExitFullScreen(_ notification: Notification) {
         self.isFullScreen = false
     }
-    
+
     func takeScreenshot() {
         let win = self.view.window
         if let window = win {
@@ -129,7 +129,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             } catch {}
         }
     }
-    
+
     func stopVM(_ closeWindow: Bool) {
         if let vmRunner = self.vmRunner {
             if vmRunner.isVMRunning() {
@@ -143,7 +143,7 @@ class VirtualMachineContainerViewController : NSViewController, NSWindowDelegate
             self.view.window?.close()
         }
     }
-    
+
     func pauseVM() {
         vmRunner?.pauseVM()
     }

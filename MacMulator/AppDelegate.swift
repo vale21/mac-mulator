@@ -29,20 +29,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet weak var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet weak var usbDevicesMenuItem: NSMenuItem!
-    
+
     @IBAction func preferencesMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self);
     }
-    
+
     @IBAction func newVMMenuBarClicked(_ sender: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.NEW_VM_SEGUE, sender: self);
     }
-    
+
     @IBAction func openVMMenuBarClicked(_ sender: Any) {
         Utils.showFileSelector(fileTypes: [MacMulatorConstants.VM_EXTENSION], uponSelection: { panel in
             _ = self.application(NSApp, openFile: String(panel.url!.path)) });
     }
-    
+
     @available(macOS 15.0, *)
     @IBAction func attachUSBImageMenuBarClicked(_ sender: Any) {
         Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES_USB, uponSelection: { panel in
@@ -53,7 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         return;
                     }
                 }
-                
+
                 let newDrive = VirtualDrive(
                     path: path,
                     name: QemuConstants.MEDIATYPE_USB + "-0",
@@ -62,23 +62,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     size: 0)
                 virtualMachine.drives.append(newDrive)
                 virtualMachine.writeToPlist()
-                
+
                 rootController?.attachUSBImageToVM(MacMulatorConstants.mainMenuSender, newDrive)
                 refreshVMMenus()
             }
         })
     }
-    
+
     @available(macOS 15.0, *)
     @IBAction func detachUSBImageMenuBarClicked(_ sender: NSMenuItem) {
         let path = sender.title
-        
+
         if let virtualMachine = rootController?.currentVm {
             let driveToRemove = virtualMachine.drives.first(where: { drive in drive.path == path})
             if driveToRemove != nil {
                 virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(of: driveToRemove!)!)
                 virtualMachine.writeToPlist();
-                
+
                 if rootController?.isVMRunning(virtualMachine) == true {
                     let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
                     runner.detachUSBImageFromVM(virtualDrive: driveToRemove!)
@@ -87,7 +87,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    
+
     @IBAction func exportVMToParallelsMenuBarClicked(_ sender: Any) {
         if #available(macOS 11.0, *) {
             Utils.showDirectorySelector(uponSelection: { panel in
@@ -102,7 +102,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             })
         }
     }
-    
+
     @IBAction func importVMFromParallelsMenuBarClicked(_ sender: Any) {
         if #available(macOS 11.0, *) {
             Utils.showFileSelector(fileTypes: [ImportExportHerlper.PARALLELS_EXTENSION], uponSelection: { panel in
@@ -115,62 +115,62 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             })
         }
     }
-    
+
     @IBAction func convertToQemuMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
             rootController?.convertToQemuMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
-    
+
     @IBAction func convertToAppleMenuBarClicked(_ sender: Any) {
         if #available(macOS 13.0, *) {
             rootController?.convertToAppleMenuBarClicked(MacMulatorConstants.mainMenuSender)
             refreshVMMenus()
         }
     }
-    
+
     @IBAction func startVMMenuBarClicked(_ sender: Any) {
         rootController?.startVMMenuBarClicked(MacMulatorConstants.mainMenuSender);
     }
-    
+
     @IBAction func startVMInRecoveryMenuBarClicked(_ sender: Any) {
         rootController?.startVMInRecoveryMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
-    
+
     @IBAction func stopVMMenubarClicked(_ sender: Any) {
         rootController?.stopVMMenubarClicked(MacMulatorConstants.mainMenuSender);
     }
-    
+
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
         rootController?.editVMmenuBarClicked(sender) // The sender here determines which tab to show
     }
-    
+
     @IBAction func showConsolemenuBarClicked(_ sender: Any) {
         rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender);
     }
-    
+
     @IBAction func pauseVMMenuBarClicked(_ sender: Any) {
         rootController?.pauseVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
-    
+
     @IBAction func cloneVMMenuBarClicked(_ sender: Any) {
         rootController?.cloneVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
-    
+
     @IBAction func showVMInFinderMenuBarClicked(_ sender: Any) {
         rootController?.showVMInFinderMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
 
     func refreshVMMenus() {
         vmMenu.autoenablesItems = false
-        
+
         if let rootController = self.rootController {
-            
+
             #if arch(x86_64)
             startVMInRecoveryMenuItem.isHidden = true
             #endif
-            
+
             if rootController.currentVm == nil {
                 pauseVMMenuItem.isEnabled = false
                 startVMMenuItem.isEnabled = false
@@ -188,7 +188,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     editVMMenuItem.isEnabled = true
-                    
+
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
                         startVMMenuItem.isEnabled = false
@@ -204,7 +204,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         #endif
                         stopVMMenuItem.isEnabled = false
                     }
-                    
+
                     #if arch(arm64)
                         importFromParallelsMenuItem.isEnabled = true
                         if Utils.isFullFeaturedMacOSVM(vm) {
@@ -223,14 +223,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     if vm.type == MacMulatorConstants.APPLE_VM {
                         convertToQemuMenuItem.isEnabled = !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
                         convertToAppleMenuItem.isEnabled = false
-                        
+
                         var usbDrives: [String] = []
                         vm.drives.forEach({ drive in
                             if drive.mediaType == QemuConstants.MEDIATYPE_USB {
                                 usbDrives.append(drive.path)
                             }
                         })
-                        
+
                         if #available(macOS 15.0, *) {
                             usbDevicesMenuItem.isEnabled = true
                             if usbDrives.count > 0 {
@@ -242,7 +242,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 } else {
                                     detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: {item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "")})!
                                 }
-                                
+
                                 detachMenuItem.submenu?.removeAllItems()
                                 usbDrives.forEach({ title in
                                     if !detachMenuItem.submenu!.items.contains(where: {item in item.title == title}) {
@@ -267,7 +267,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
     }
-    
+
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
         if (performSanityCheck(filename)) {
             if initialized {
@@ -281,9 +281,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return false;
         }
     }
-    
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
+
         let userDefaults = UserDefaults.standard;
 
         setupDefaultsPreferences(userDefaults)
@@ -292,17 +292,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if self.savedVMs == nil {
             self.savedVMs = [];
         }
-        
+
         setupSavedVMs();
-        
+
         initialized = true
-        
+
         if let fileName = fileName {
             rootController?.addVirtualMachineFromFile(fileName);
         }
     }
-    
-    
+
+
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if let rootController = self.rootController {
             if rootController.areThereRunningVMs() {
@@ -314,18 +314,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
             }
         }
-        
+
         return .terminateNow
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
-        
+
         // Useful in Development to replicate the startup of a clean installation of MacMulator
         // resetDefaults();
     }
-    
+
     fileprivate func resetDefaults() {
         let defaults = UserDefaults.standard
         let dictionary = defaults.dictionaryRepresentation()
@@ -333,31 +333,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             defaults.removeObject(forKey: key)
         }
     }
-    
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true;
     }
-    
+
     func rootControllerDidFinishLoading(_ rootController: RootViewController) {
         self.rootController = rootController;
         self.refreshVMMenus()
     }
-    
+
     func addSavedVM(_ savedVM: String) {
         let vmToSave = Utils.unescape(savedVM);
         if !(savedVMs!.contains(vmToSave)) {
             savedVMs!.append(vmToSave);
         }
-        
+
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
-    
+
     func removeSavedVM(_ savedVM: String) {
         let vmToRemove = Utils.unescape(savedVM);
         let index = (savedVMs?.firstIndex(of: vmToRemove))!;
         savedVMs?.remove(at: index);
-        
+
         let fileManager = FileManager.default;
         do {
             try fileManager.removeItem(at: URL(fileURLWithPath: savedVM));
@@ -365,19 +365,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription));
         }
 
-        
+
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
-    
+
     func moveSavedVm(at originalRow: Int, to newRow: Int) {
         let vm = savedVMs?.remove(at: originalRow);
         savedVMs?.insert(vm!, at: newRow);
-        
+
         let userDefaults = UserDefaults.standard;
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
     }
-    
+
     fileprivate func setupSavedVMs() {
         let filemanager = FileManager.default
         var toRemove: [Int] = []
@@ -388,28 +388,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 toRemove.append((savedVMs?.lastIndex(of: savedVM))!)
             }
         }
-        
+
         if let controller = rootController, controller.getVirtualMachinesCount() > 0 {
             rootController?.setCurrentVirtualMachine(rootController?.virtualMachines[0]);
         }
-        
+
         if (toRemove.count > 0) {
             var removed:[String] = [];
             toRemove.reverse();
             for index in toRemove {
                 removed.append((savedVMs?.remove(at: index))!);
             }
-            
+
             Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")));
 
             let userDefaults = UserDefaults.standard;
             userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS);
         }
     }
-    
+
     fileprivate func performSanityCheck(_ filename: String) -> Bool{
         if (filename.hasSuffix("." + MacMulatorConstants.VM_EXTENSION)) {
-            
+
             let fileManager = FileManager.default;
             do {
                 let fileNames: [String] = try fileManager.contentsOfDirectory(atPath: filename);
@@ -422,10 +422,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 print(String(format: NSLocalizedString("AppDelegate.errorReading", comment: ""), filename, error.localizedDescription));
             }
         }
-        
+
         return false;
     }
-    
+
     fileprivate func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
             userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
@@ -441,4 +441,3 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 }
-

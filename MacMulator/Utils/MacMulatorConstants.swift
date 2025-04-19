@@ -8,7 +8,7 @@
 import Foundation
 
 class MacMulatorConstants {
-    
+
     static let VM_EXTENSION = "qvm"
     static let DISK_EXTENSION = "qvd"
     static let EFI_EXTENSION = "fd"
@@ -21,7 +21,7 @@ class MacMulatorConstants {
     static let INFO_PLIST = "Info.plist"
     static let SAVE_FILE_NAME = "SaveFile.qvs"
     static let SCREENSHOT_FILE_NAME = "Screenshot.qvs"
-    
+
     static let NEW_VM_SEGUE = "newVMSegue";
     static let EDIT_VM_SEGUE = "editVMSegue";
     static let NEW_DISK_SEGUE = "newDiskSegue";
@@ -37,16 +37,16 @@ class MacMulatorConstants {
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     static let START_VM_SEGUE = "startVMSegue"
-    
+
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs";
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath";
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath";
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate";
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled";
-    
+
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
-    
+
     static let mainMenuSender = "MainMenu"
 
 }

@@ -8,12 +8,12 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController, NSTextFieldDelegate {
-    
+
     @IBOutlet weak var vmFolderField: NSTextField!
     @IBOutlet weak var qemuFolderField: NSTextField!
     @IBOutlet weak var vmFolderButton: NSButton!
     @IBOutlet weak var qemuFolderButton: NSButton!
-    
+
     @IBOutlet weak var qemuVersionLabel: NSTextField!
     @IBOutlet weak var swtpm_tick: NSImageView!
     @IBOutlet weak var qemu_img_tick: NSImageView!
@@ -24,22 +24,22 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var qemu_arm64_tick: NSImageView!
     @IBOutlet weak var qemu_ppc_tick: NSImageView!
     @IBOutlet weak var qemu_68k_tick: NSImageView!
-    
+
     @IBOutlet weak var livePreviewEnabledButton: NSButton!
     @IBOutlet weak var livePreviewLabel: NSTextField!
     @IBOutlet weak var oneSecLabel: NSTextField!
     @IBOutlet weak var sixtySecsLabel: NSTextField!
     @IBOutlet weak var livePreviewSlider: NSSlider!
-    
+
     var userDefaults: UserDefaults = UserDefaults.standard;
     var rootController : RootViewController?
     var qemuVersion : String?
     var dirty = false;
-    
+
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
-    
+
     @IBAction func searchFolder(_ sender: Any) {
         Utils.showDirectorySelector(uponSelection: {
             panel in
@@ -54,10 +54,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             dirty = true;
         });
     }
-    
+
     @IBAction func livePreviewTickChanged(_ sender: Any) {
         let button = sender as! NSButton;
-        
+
         if button.state == NSControl.StateValue.off {
             livePreviewLabel.textColor = NSColor.tertiaryLabelColor;
             oneSecLabel.textColor = NSColor.tertiaryLabelColor;
@@ -69,43 +69,43 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             sixtySecsLabel.textColor = NSColor.labelColor;
             livePreviewSlider.isEnabled = true;
         }
-        
+
         userDefaults.set(button.state == NSControl.StateValue.on, forKey:MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         dirty = true;
     }
-    
+
     @IBAction func sliderChanged(_ sender: Any) {
         let slider = sender as! NSSlider;
-        
+
         let value = slider.intValue
         livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(value))
-        
+
         userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
         dirty = true;
     }
-    
+
     override func viewWillAppear() {
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!);
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!);
-        
+
         let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED);
         livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off;
         livePreviewTickChanged(livePreviewEnabledButton as Any);
-        
+
         let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE);
         livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(livePreviewRate))
         livePreviewSlider.intValue = Int32(livePreviewRate);
-        
+
         checkForQemuBinaries();
         dirty = false;
     }
-    
+
     override func viewDidDisappear() {
         if dirty {
             rootController?.refreshViewForVM(rootController?.currentVm);
         }
     }
-    
+
     func controlTextDidChange(_ obj: Notification) {
         if obj.object as? NSObject == vmFolderField {
             userDefaults.set(Utils.cleanFolderPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH);
@@ -114,13 +114,13 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         }
         dirty = true;
     }
-    
+
     func controlTextDidEndEditing(_ obj: Notification) {
         if obj.object as? NSObject == qemuFolderField {
             checkForQemuBinaries();
         }
     }
-    
+
     fileprivate func checkForQemuBinaries() {
         let fileManager = FileManager.default;
         let path = qemuFolderField.stringValue
@@ -146,7 +146,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             setRedCross(qemu_68k_tick);
         }
     }
-    
+
     fileprivate func checkFile(_ path: String, _ image: NSImageView) {
         if QemuUtils.isBinaryAvailable(path) {
             setGreenTick(image);
@@ -156,7 +156,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             setRedCross(image);
         }
     }
-    
+
     fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
         checkFile(path, image);
         let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
@@ -170,7 +170,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             }
         });
     }
-    
+
     fileprivate func setGreenTick(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil);
@@ -179,7 +179,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             view.image = NSImage(named: "checkmark.circle.fill");
         }
     }
-    
+
     fileprivate func setYellowCross(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil);
@@ -188,7 +188,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             view.image = NSImage.init(named: NSImage.Name("xmark.circle.fill.yellow"));
         }
     }
-    
+
     fileprivate func setRedCross(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil);

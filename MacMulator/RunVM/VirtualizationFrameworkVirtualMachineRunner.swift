@@ -10,37 +10,37 @@ import Virtualization
 
 @available(macOS 12.0, *)
 class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
-    
+
     let managedVm: VirtualMachine
     let saveFileURL: URL
     var vzVirtualMachine: VZVirtualMachine?
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
     var recoveryMode: Bool = false
-    
+
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine;
         saveFileURL = URL(fileURLWithPath: self.managedVm.path).appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
     }
-    
+
     func getManagedVM() -> VirtualMachine {
         return managedVm;
     }
-    
+
     func setVmView(_ vmView: VZVirtualMachineView) {
         self.vmView = vmView
     }
-    
+
     func setVmViewController(_ vmViewController: VirtualMachineContainerViewController) {
         self.vmViewController = vmViewController;
     }
-    
+
     func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
 
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
 #if arch(arm64)
-            
+
             vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
 
             let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
@@ -49,7 +49,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             } else {
                 startOrResumeVM()
             }
-            
+
 #endif
         } else if #available(macOS 13.0, *) {
             let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
@@ -63,7 +63,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             startOrResumeVM()
         }
     }
-    
+
     func instllationComplete(_ result: Result<Void, Error>) {
         if case let .failure(error) = result {
             Utils.showAlert(window: self.vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription )
@@ -73,16 +73,16 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             startVM();
         }
     }
-    
+
     func guestDidStop(_ virtualMachine: VZVirtualMachine) {
         print("Stopped")
         stopVM(guestStopped: true)
     }
-    
+
     func isVMRunning() -> Bool {
         return vzVirtualMachine != nil && vzVirtualMachine!.state == VZVirtualMachine.State.running
     }
-    
+
     func startVM() {
         if let vzVirtualMachine = self.vzVirtualMachine {
             vzVirtualMachine.delegate = self
@@ -102,7 +102,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         }
     }
-    
+
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {
         if error != nil {
             Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
@@ -110,7 +110,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             attachUSBDrives()
         }
     }
-    
+
     fileprivate func handleVMStart(result: (Result<Void, any Error>)) {
         switch result {
         case let .failure(error):
@@ -120,7 +120,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             attachUSBDrives()
         }
     }
-        
+
     fileprivate func attachUSBDrives() {
         if #available(macOS 15.0, *) {
             for drive in self.managedVm.drives {
@@ -130,7 +130,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         }
     }
-    
+
     @available(macOS 14.0, *)
     func resumeVM() {
         if let vzVirtualMachine = self.vzVirtualMachine {
@@ -138,7 +138,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             self.vmView?.virtualMachine = vzVirtualMachine
             self.vmView?.automaticallyReconfiguresDisplay = true
             self.vmView?.capturesSystemKeys = true
-            
+
             vzVirtualMachine.resume(completionHandler: { (result) in
                 if case let .failure(error) = result {
                     Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: {resp in self.stopVM(guestStopped: true)});
@@ -147,12 +147,12 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             })
         }
     }
-    
+
     func stopVM(guestStopped: Bool) {
         vzVirtualMachine?.stop(completionHandler: { err in })
         vmViewController?.stopVM(guestStopped)
     }
-    
+
     func stopVMGracefully() {
         do {
             try vzVirtualMachine?.requestStop()
@@ -161,7 +161,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
         }
         vmViewController?.stopVM(false);
     }
-    
+
     func pauseVM() {
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
@@ -177,15 +177,15 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         }
     }
-    
+
     func abort() {
         vmViewController?.view.window?.close()
     }
-    
+
     func getConsoleOutput() -> String {
         return "";
     }
-    
+
     fileprivate func startOrResumeVM() {
         if #available(macOS 14.0, *) {
 #if arch(arm64)
@@ -202,13 +202,13 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             startVM()
         }
     }
-    
+
     fileprivate func installAndStartVM() {
         self.vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
     }
-    
+
 #if arch(arm64)
-    
+
     @available(macOS 14.0, *)
     fileprivate func restoreVirtualMachine() {
         vmViewController?.showResumingView()
@@ -216,7 +216,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             let fileManager = FileManager.default
             try? fileManager.removeItem(at: self.saveFileURL)
             try? fileManager.removeItem(at: URL(fileURLWithPath: self.managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
-            
+
             if error == nil {
                 self.resumeVM()
             } else {
@@ -224,7 +224,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             }
         })
     }
-        
+
     @available(macOS 14.0, *)
     func saveVirtualMachine(completionHandler: @escaping () -> Void) {
         vzVirtualMachine?.saveMachineStateTo(url: saveFileURL, completionHandler: { (error) in
@@ -246,9 +246,9 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             self.saveVirtualMachine(completionHandler: completionHandler)
         })
     }
-    
+
 #endif
-    
+
     @available(macOS 15.0, *)
     func attachUSBImageToVM(virtualDrive: VirtualDrive) {
 
@@ -269,7 +269,7 @@ class VirtualizationFrameworkVirtualMachineRunner : NSObject, VirtualMachineRunn
             Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription)
         }
     }
-    
+
     @available(macOS 15.0, *)
     func detachUSBImageFromVM(virtualDrive: VirtualDrive) {
         if let usbControllers = vzVirtualMachine?.usbControllers, usbControllers.count > 0 {

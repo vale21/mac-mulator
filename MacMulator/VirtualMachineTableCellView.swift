@@ -12,15 +12,15 @@ class VirtualMachineTableCellView: NSTableCellView {
     @IBOutlet weak var vmName: NSTextField!
     @IBOutlet weak var vmIcon: NSImageView!
     @IBOutlet weak var runningSpinner: NSProgressIndicator!
-    
+
     var virtualMachine: VirtualMachine?
     var rootController: RootViewController?
-    
+
     func setVirtualMachine(virtualMachine: VirtualMachine) {
         self.virtualMachine = virtualMachine
         self.refresh()
     }
-    
+
     func setRunning(_ running: Bool) {
         if running {
             runningSpinner.isHidden = false
@@ -33,18 +33,18 @@ class VirtualMachineTableCellView: NSTableCellView {
         }
         self.refresh()
     }
-    
+
     func refresh() {
         if let virtualMachine = virtualMachine {
             vmName.stringValue = virtualMachine.displayName
-            
+
             if let rootController = rootController {
                 if rootController.isVMPaused(virtualMachine) {
                     let background = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
                     if let background = background {
                         let overlay = NSImage.init(named: NSImage.Name("pause.overlay"))
                         if let overlay = overlay {
-                            
+
                             let newImage = NSImage(size: background.size)
                             newImage.lockFocus()
                             var newImageRect: CGRect = .zero
@@ -52,7 +52,7 @@ class VirtualMachineTableCellView: NSTableCellView {
                             background.draw(in: newImageRect)
                             overlay.draw(in: newImageRect)
                             newImage.unlockFocus()
-                            
+
                             vmIcon.image = newImage
                         }
                     }

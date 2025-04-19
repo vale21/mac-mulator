@@ -1,0 +1,51 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['main']
+
+jobs:
+  ruby-ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Pre-commit
+      - run: bundle install
+      - run: pip install pre-commit
+      - run: pre-commit --version
+      - run: pre-commit run --all-files
+      - run: git diff --name-only
+        if: failure()
+
+      # Build and test
+      # - run: pip install -r requirements.txt
+      # - run: python -m py_compile dispatcher.py
+      # - run: python -m unittest utils-test.py
+
+      # Push tag if on main
+      - name: Bump version and push tag
+        if: github.ref == 'refs/heads/main'
+        uses: anothrNick/github-tag-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          WITH_V: true
+          BRANCH_HISTORY: 'last'
+          MAJOR_STRING_TOKEN: 'feat!:'
+          MINOR_STRING_TOKEN: 'feat:'
+          PATCH_STRING_TOKEN: 'fix:'

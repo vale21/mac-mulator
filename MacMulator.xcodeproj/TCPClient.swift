@@ -69,18 +69,18 @@ open class TCPClient: Socket {
     */
     open func close() {
         guard let fd = self.fd else { return }
-        
+
         _ = c_ytcpsocket_close(fd)
         self.fd = nil
     }
-    
+
     /*
     * send data
     * return success or fail with message
     */
     open func send(data: [Byte]) -> Result {
         guard let fd = self.fd else { return .failure(SocketError.connectionClosed) }
-        
+
         let sendsize: Int32 = c_ytcpsocket_send(fd, buff: data, len: Int32(data.count))
         if Int(sendsize) == data.count {
            return .success
@@ -88,14 +88,14 @@ open class TCPClient: Socket {
             return .failure(SocketError.unknownError)
         }
     }
-    
+
     /*
     * send string
     * return success or fail with message
     */
     open func send(string: String) -> Result {
         guard let fd = self.fd else { return .failure(SocketError.connectionClosed) }
-      
+
         let sendsize = c_ytcpsocket_send(fd, buff: string, len: Int32(strlen(string)))
         if sendsize == Int32(strlen(string)) {
             return .success
@@ -103,14 +103,14 @@ open class TCPClient: Socket {
             return .failure(SocketError.unknownError)
         }
     }
-    
+
     /*
     *
     * send nsdata
     */
     open func send(data: Data) -> Result {
         guard let fd = self.fd else { return .failure(SocketError.connectionClosed) }
-      
+
         var buff = [Byte](repeating: 0x0,count: data.count)
         (data as NSData).getBytes(&buff, length: data.count)
         let sendsize = c_ytcpsocket_send(fd, buff: buff, len: Int32(data.count))
@@ -120,20 +120,20 @@ open class TCPClient: Socket {
             return .failure(SocketError.unknownError)
         }
     }
-    
+
     /*
     * read data with expect length
     * return success or fail with message
     */
     open func read(_ expectlen:Int, timeout:Int = -1) -> [Byte]? {
         guard let fd:Int32 = self.fd else { return nil }
-      
+
         var buff = [Byte](repeating: 0x0,count: expectlen)
         let readLen = c_ytcpsocket_pull(fd, buff: &buff, len: Int32(expectlen), timeout: Int32(timeout))
         if readLen <= 0 { return nil }
         let rs = buff[0...Int(readLen-1)]
         let data: [Byte] = Array(rs)
-      
+
         return data
     }
 
@@ -159,7 +159,7 @@ open class TCPServer: Socket {
         let fd = c_ytcpsocket_listen(self.address, port: Int32(self.port))
         if fd > 0 {
             self.fd = fd
-            
+
             // If port 0 is used, get the actual port number which the server is listening to
             if (self.port == 0) {
                 let p = c_ytcpsocket_port(fd)
@@ -169,32 +169,32 @@ open class TCPServer: Socket {
                     self.port = p
                 }
             }
-            
+
             return .success
         } else {
             return .failure(SocketError.unknownError)
         }
     }
-    
+
     open func accept(timeout :Int32 = 0) -> TCPClient? {
         guard let serferfd = self.fd else { return nil }
-        
+
         var buff: [Int8] = [Int8](repeating: 0x0,count: 16)
         var port: Int32 = 0
         let clientfd: Int32 = c_ytcpsocket_accept(serferfd, ip: &buff, port: &port, timeout: timeout)
-        
+
         guard clientfd >= 0 else { return nil }
         guard let address = String(cString: buff, encoding: String.Encoding.utf8) else { return nil }
-        
+
         let client = TCPClient(address: address, port: port)
         client.fd = clientfd
-            
+
         return client
     }
-    
+
     open func close() {
         guard let fd: Int32=self.fd else { return }
-      
+
         _ = c_ytcpsocket_close(fd)
         self.fd = nil
     }

@@ -10,14 +10,14 @@ import Cocoa
 class ConsoleViewController: NSViewController {
 
     @IBOutlet var consoleView: NSTextView!
-    
+
     var rootController: RootViewController?;
     var isVisible: Bool = false;
-    
+
     func setRootController(_ rootController:RootViewController) {
         self.rootController = rootController;
     }
-    
+
     override func viewWillAppear() {
         self.isVisible = true;
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer in
@@ -34,7 +34,7 @@ class ConsoleViewController: NSViewController {
             }
         });
     }
-    
+
     override func viewWillDisappear() {
         self.isVisible = false;
     }

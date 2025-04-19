@@ -8,19 +8,19 @@
 import Cocoa
 
 class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
-    
+
     @IBOutlet weak var qemuPathView: NSTextField!
     @IBOutlet weak var accelerateVM: NSButton!
     @IBOutlet weak var qemuPathButton: NSButton!
     @IBOutlet var fullCommandView: NSTextView!
 
     var virtualMachine: VirtualMachine?;
-       
+
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm;
         updateView()
     }
-    
+
     @IBAction func findButtonClicked(_ sender: Any) {
         Utils.showDirectorySelector(uponSelection: {
             panel in
@@ -31,18 +31,18 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
             }
         });
     }
-    
+
     @IBAction func accelerateToggleChanged(_ sender: Any) {
         if let virtualMachine = self.virtualMachine {
             virtualMachine.hvf = self.accelerateVM.state == NSButton.StateValue.on;
             updateQemuCommand(virtualMachine);
         }
     }
-    
+
     override func viewWillAppear() {
         updateView();
     }
-    
+
     fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
         let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
         fullCommandView.string = runner.getQemuCommand();
@@ -52,13 +52,13 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
             qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
         }
     }
-    
+
     fileprivate func updateView() {
         if let virtualMachine = self.virtualMachine {
             updateQemuCommand(virtualMachine)
-            
+
             let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture);
-            
+
             if (Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation()) {
                 self.accelerateVM.state = NSButton.StateValue.off;
                 self.accelerateVM.isEnabled = false;
@@ -77,12 +77,12 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
             }
         }
     }
-    
+
     func controlTextDidChange(_ notification: Notification) {
         if ((notification.object as! NSTextField) == qemuPathView) {
             if let virtualMachine = self.virtualMachine {
                 let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
-               
+
                 if qemuPathView.stringValue != originalPath {
                     if qemuPathView.stringValue != "" {
                         virtualMachine.qemuPath = qemuPathView.stringValue;
@@ -94,16 +94,16 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
                 }
             }
         }
-        
+
         updateView();
     }
-    
+
     func textDidChange(_ notification: Notification) {
         if (notification.object as? NSTextView) == fullCommandView {
             if let virtualMachine = self.virtualMachine {
                 let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
                 let originalCommand = runner.getQemuCommand();
-               
+
                 if fullCommandView.string != originalCommand {
                     if fullCommandView.string != "" {
                         virtualMachine.qemuCommand = fullCommandView.string;
@@ -117,5 +117,3 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         }
     }
 }
-
-

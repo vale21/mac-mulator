@@ -19,7 +19,7 @@ class MacOSRestoreImage: NSObject {
         self.vmCreator = vmCreator
         self.vm = vm
     }
-    
+
     #if arch(arm64)
 
     public func download(completionHandler: @escaping (Error?) -> Void) {
@@ -34,7 +34,7 @@ class MacOSRestoreImage: NSObject {
             }
         }
     }
-    
+
     public func cancelDownload() {
         canceled = true
     }
@@ -51,7 +51,7 @@ class MacOSRestoreImage: NSObject {
                 guard (try? FileManager.default.moveItem(at: localURL!, to: URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME))) != nil else {
                     fatalError("Failed to move downloaded restore image to \(URL.init(fileURLWithPath: self.vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)).")
                 }
-                
+
                 completionHandler(nil)
             } else {
                 NSLog("Operation aborted.")
@@ -68,6 +68,6 @@ class MacOSRestoreImage: NSObject {
         }
         downloadTask.resume()
     }
-    
+
     #endif
 }

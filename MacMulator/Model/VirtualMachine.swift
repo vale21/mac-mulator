@@ -8,7 +8,7 @@
 import Foundation
 
 class VirtualMachine: Codable, Hashable {
-    
+
     var os: String
     var subtype: String
     var architecture: String
@@ -30,11 +30,11 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     var pauseSupported: Bool? = false
     var bootMode: String?
-    
+
     private enum CodingKeys: String, CodingKey {
         case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode;
     }
-    
+
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
@@ -55,28 +55,28 @@ class VirtualMachine: Codable, Hashable {
         self.type = type
         self.bootMode = bootMode
     }
-    
+
     func addVirtualDrive(_ drive: VirtualDrive) {
         drives.append(drive);
     }
-    
+
     func removeVirtualDrive(_ path: String) {
         if let index = drives.firstIndex(where: { $0.path == path }) {
             drives.remove(at: index)
         }
     }
-    
+
     func containsVirtualDrive(_ path: String) -> Bool {
         if let index = drives.firstIndex(where: { $0.path == path }) {
             return true
         }
         return false
     }
-    
+
     func addPortMapping(_ portMapping: PortMapping) {
         portMappings?.append(portMapping);
     }
-    
+
     static func readFromPlist(_ plistFilePath: String, _ plistFileName: String) -> VirtualMachine? {
         let fileManager = FileManager.default;
         do {
@@ -92,7 +92,7 @@ class VirtualMachine: Codable, Hashable {
             return nil;
         }
     }
-    
+
     static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
         vm.path = plistFilePath;
         for drive in vm.drives {
@@ -107,7 +107,7 @@ class VirtualMachine: Codable, Hashable {
             }
         }
     }
-    
+
     func writeToPlist(_ plistFilePath: String) {
         do {
             let data = try PropertyListEncoder().encode(self);
@@ -116,7 +116,7 @@ class VirtualMachine: Codable, Hashable {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
-    
+
     func writeToPlist() {
         do {
             let data = try PropertyListEncoder().encode(self);
@@ -125,11 +125,11 @@ class VirtualMachine: Codable, Hashable {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
-    
+
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
         return lhs.displayName == rhs.displayName;
     }
-    
+
     func hash(into hasher: inout Hasher) {
         hasher.combine(displayName);
     }

@@ -73,7 +73,7 @@ class MacOSVirtualMachineConfigurationHelper {
         audioConfiguration.streams = [inputStream, outputStream]
         return audioConfiguration
     }
-    
+
     @available(macOS 13.0, *)
     static func createSpiceAgentConsoleDeviceConfiguration() -> VZVirtioConsoleDeviceConfiguration {
         let consoleDevice = VZVirtioConsoleDeviceConfiguration()
@@ -87,7 +87,7 @@ class MacOSVirtualMachineConfigurationHelper {
 
         return consoleDevice
     }
-    
+
     @available(macOS 15.0, *)
     static func createUSBControllerConfiguration() -> VZUSBControllerConfiguration {
         return VZXHCIControllerConfiguration()

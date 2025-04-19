@@ -8,7 +8,7 @@
 import Foundation
 
 class QemuCommandBuilder {
-        
+
     var qemuPath: String
     var executable: String
     var addQmpString: Bool?
@@ -42,69 +42,69 @@ class QemuCommandBuilder {
     var tpmDevice: String?
     var rtcEnabled: Bool = true
     var logging: String?
-    
+
     init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath;
         self.executable = architecture;
     }
-    
+
     func withShowCursor(_ showCursor: Bool) -> QemuCommandBuilder {
         self.showCursor = showCursor;
         return self;
     }
-    
+
     func withSerial(_ serial: String?) -> QemuCommandBuilder {
         self.serial = serial;
         return self;
     }
-    
+
     func withBios(_ bios: String?) -> QemuCommandBuilder {
         self.bios = bios;
         return self;
     }
-    
+
     func withCpus(_ cpus: Int?) -> QemuCommandBuilder {
         self.cpus = cpus;
         return self;
     }
-        
+
     func withAccel(_ accel: String?) -> QemuCommandBuilder {
         self.accel = accel;
         return self;
     }
-    
+
     func withVga(_ vga: String?) -> QemuCommandBuilder {
         self.vga = vga;
         return self;
     }
-    
+
     func withDisplay(_ display: String?) -> QemuCommandBuilder {
         self.display = display;
         return self;
     }
-    
+
     func withCpu(_ cpu: String?) -> QemuCommandBuilder {
         self.cpu = cpu;
         return self;
     }
-    
+
     func withUsb(_ usb: Bool) -> QemuCommandBuilder {
         self.usb = usb;
         return self;
     }
-    
+
     func withDevice(_ device: String?) -> QemuCommandBuilder {
         if let newDevice = device {
             self.device.append(newDevice);
         }
         return self;
     }
-    
+
     func withBootArg(_ bootArg: String?) -> QemuCommandBuilder {
         self.bootArg = bootArg;
         return self;
     }
-    
+
     func withMachine(_ machine: String?, _ options: [String]) -> QemuCommandBuilder {
         self.machine = machine
         if !options.isEmpty {
@@ -115,44 +115,44 @@ class QemuCommandBuilder {
         }
         return self
     }
-    
+
     func withMemory(_ memory: Int32?) -> QemuCommandBuilder {
         self.memory = memory;
         return self;
     }
-    
+
     func withGraphics(_ graphics: String?) -> QemuCommandBuilder {
         self.graphics = graphics;
         return self;
     }
-    
+
     func withAutoBoot(_ autoBoot: Bool?) -> QemuCommandBuilder {
         self.autoBoot = autoBoot;
         return self;
     }
-    
+
     func withVgaEnabled(_ vgaEnabled: Bool?) -> QemuCommandBuilder {
         self.vgaEnabled = vgaEnabled;
         return self;
     }
-    
+
     func withSound(_ sound: String?) -> QemuCommandBuilder {
         if let soudHw = sound {
             self.sound.append(soudHw);
         }
         return self;
     }
-    
+
     func withRtcEnabled(_ rtcEnabled: Bool) -> QemuCommandBuilder {
         self.rtcEnabled = rtcEnabled;
         return self;
     }
-    
+
     func withLogging(_ logging: String?) -> QemuCommandBuilder {
         self.logging = logging;
         return self;
     }
-    
+
     func withDrive(file: String, format: String, index: Int, media:String)-> QemuCommandBuilder {
         if media == QemuConstants.MEDIATYPE_USB_CDROM {
             var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=true,bootindex=" + String(index) + ",bus=usb-bus.0";
@@ -184,37 +184,37 @@ class QemuCommandBuilder {
         }
         return self;
     }
-    
+
     func withEfi(file: String)-> QemuCommandBuilder {
         self.efi = Utils.escape(file);
         return self;
     }
-    
+
     func withEfiSecure(file: String)-> QemuCommandBuilder {
         self.efiSecure = Utils.escape(file);
         return self;
     }
-    
+
     func withEfiVars(file: String, global: Bool)-> QemuCommandBuilder {
         self.efiVars = Utils.escape(file)
         self.globalClause = global ? " -global driver=cfi.pflash01,property=secure,value=on" : ""
         return self;
     }
-    
+
     func withPortMappings(_ portMappings: [PortMapping]?) -> QemuCommandBuilder {
         if let mappings = portMappings {
             self.portMappings = mappings
         }
         return self;
     }
-    
+
     func withNetwork(name: String, device: String, macAddress: String?) -> QemuCommandBuilder{
         self.network = "-netdev user,id=" + name
-        
+
         for mapping in portMappings {
             self.network = self.network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
         }
-        
+
         if let macAddress = macAddress {
             self.network = self.network! + " -device " + device + ",netdev=" + name + ",mac=" + macAddress
         } else {
@@ -222,28 +222,28 @@ class QemuCommandBuilder {
         }
         return self;
     }
-    
+
     func withQmpString(_ addQmpString: Bool?) -> QemuCommandBuilder {
         self.addQmpString = addQmpString
         return self
     }
-    
+
     func withManagementPort(_ managementPort: Int32) -> QemuCommandBuilder {
         self.managementPort = managementPort
         return self
     }
-    
+
     func withNic(_ nic: String) -> QemuCommandBuilder {
         self.nic = nic
         return self
     }
-    
+
     func withTpm(_ tpmPath: String?, _ tpmDevice: String?) -> QemuCommandBuilder {
         self.tpmPath = tpmPath
         self.tpmDevice = tpmDevice
         return self
     }
-    
+
     func build() -> String {
         var cmd = self.qemuPath + "/" + self.executable;
         if let serial = self.serial {
@@ -330,7 +330,7 @@ class QemuCommandBuilder {
         if let logging = self.logging {
             cmd += " -d " + logging
         }
-        
+
         return cmd;
     }
 }

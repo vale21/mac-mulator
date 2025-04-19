@@ -8,12 +8,12 @@
 import Cocoa
 
 class NewDiskViewController: NSViewController, NSTextFieldDelegate {
-    
+
     enum Mode {
         case ADD
         case EDIT
     }
-    
+
     @IBOutlet weak var titleField: NSTextField!
     @IBOutlet weak var diskSizeTextField: NSTextField!
     @IBOutlet weak var diskSizeStepper: NSStepper!
@@ -22,15 +22,15 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet weak var maxDiskSizeLabel: NSTextField!
     @IBOutlet weak var useCow: NSButton!
     @IBOutlet weak var okButton: NSButton!
-    
+
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
     var isVirtualizaionFrameworkInUse: Bool = false
-    
+
     var parentController: EditVMViewControllerHardware?;
     var isVisible: Bool = false;
     var mode: Mode = Mode.ADD;
-    
+
     func setVirtualDrive(_ virtualDrive: VirtualDrive) {
         self.newVirtualDrive = virtualDrive;
         self.oldVirtualDrive = virtualDrive.clone();
@@ -39,11 +39,11 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     func setMode(_ mode: Mode) {
         self.mode = mode;
     }
-    
+
     func setparentController(_ parentController: EditVMViewControllerHardware) {
         self.parentController = parentController;
     }
-    
+
     fileprivate func updateView() {
         if let parentController = self.parentController {
             if let virtualMachine = parentController.virtualMachine {
@@ -54,7 +54,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
                     if (isVirtualizaionFrameworkInUse) {
                         newVirtualDrive.format = QemuConstants.FORMAT_RAW;
-                        
+
                         useCow.intValue = 0
                         useCow.isEnabled = false
                         useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
@@ -65,17 +65,17 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                             useCow.intValue = 0;
                         }
                     }
-                    
+
                     if (mode == Mode.ADD) {
                         titleField.stringValue = NSLocalizedString("NewDiskViewController.createDisk", comment: "")
                     } else {
                         titleField.stringValue = String(format: NSLocalizedString("NewDiskViewController.editDisk", comment: ""), newVirtualDrive.name)
                     }
-                    
-                    
+
+
                     let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype);
                     let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype);
-                    
+
                     minDiskSizeLabel.stringValue = Utils.formatDisk(Int32(minDiskSize));
                     maxDiskSizeLabel.stringValue = Utils.formatDisk(Int32(maxDiskSize));
                     diskSizeStepper.minValue = Double(minDiskSize);
@@ -86,7 +86,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-    
+
     @IBAction func cowCheckboxChanged(_ sender: Any) {
         if useCow.intValue == 1 {
             newVirtualDrive?.format = QemuConstants.FORMAT_QCOW2;
@@ -98,7 +98,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBAction func cancelButtonPressed(_ sender: Any) {
         self.dismiss(self);
     }
-    
+
     @IBAction func sliderChanged(_ sender: Any) {
         if (sender as? NSObject == diskSizeSlider) {
             if let newVirtualDrive = self.newVirtualDrive {
@@ -108,7 +108,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-    
+
     @IBAction func stepperChanged(_ sender: Any) {
         if (sender as? NSObject == diskSizeStepper) {
             if let newVirtualDrive = self.newVirtualDrive {
@@ -118,15 +118,15 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-    
+
     override func viewWillAppear() {
         updateView();
     }
-    
+
     override func viewDidAppear() {
         isVisible = true;
     }
-    
+
     override func viewDidDisappear() {
         isVisible = false;
     }
@@ -138,7 +138,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                 newVirtualDrive.size = size;
                 diskSizeStepper.intValue = size;
                 diskSizeSlider.intValue = size;
-                
+
                 if let parentController = self.parentController {
                     if let virtualMachine = parentController.virtualMachine {
                         if size < Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) || size > Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) {
@@ -164,7 +164,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-    
+
     func diskCreated() {
         if let newVirtualDrive = self.newVirtualDrive {
             if mode == Mode.ADD {

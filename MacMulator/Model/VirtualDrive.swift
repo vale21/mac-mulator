@@ -25,23 +25,23 @@ class VirtualDrive: Codable, Equatable {
         self.mediaType = mediaType
         self.size = size
     }
-    
+
     func isBlank() -> Bool {
         return blank != nil && blank == 1
     }
-    
+
     func setBlank(blank: Bool) {
         self.blank = blank ? 1 : 0
     }
-    
+
     func clone() -> VirtualDrive {
         let drive = VirtualDrive(path: self.path, name: self.name, format: self.format, mediaType: self.mediaType, size: self.size);
         drive.isBootDrive = self.isBootDrive
         drive.blank = self.blank
-        
+
         return drive;
     }
-    
+
     static func == (lhs: VirtualDrive, rhs: VirtualDrive) -> Bool {
         return lhs.path == rhs.path &&
         lhs.name == rhs.name &&

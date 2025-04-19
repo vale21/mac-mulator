@@ -10,7 +10,7 @@ import Virtualization
 
 @available(macOS 13.0, *)
 class LinuxVirtualMachineConfigurationHelper {
-    
+
     static func createGraphicsDeviceConfiguration(witdh: Int, height: Int) -> VZVirtioGraphicsDeviceConfiguration {
         let graphicsConfiguration = VZVirtioGraphicsDeviceConfiguration()
         graphicsConfiguration.scanouts = [
@@ -19,7 +19,7 @@ class LinuxVirtualMachineConfigurationHelper {
 
         return graphicsConfiguration
     }
-    
+
     static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
         do {
             let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false);
@@ -29,7 +29,7 @@ class LinuxVirtualMachineConfigurationHelper {
             fatalError("Failed to create Disk image: " + error.localizedDescription)
         }
     }
-    
+
     static func createNetworkDeviceConfiguration() -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
@@ -38,7 +38,7 @@ class LinuxVirtualMachineConfigurationHelper {
         networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
         return networkDevice
     }
-    
+
     static func createPointingDeviceConfiguration() -> VZUSBScreenCoordinatePointingDeviceConfiguration {
         return VZUSBScreenCoordinatePointingDeviceConfiguration()
     }
@@ -66,7 +66,7 @@ class LinuxVirtualMachineConfigurationHelper {
         outputAudioDevice.streams = [outputStream]
         return outputAudioDevice
     }
-    
+
     static func createSpiceAgentConsoleDeviceConfiguration() -> VZVirtioConsoleDeviceConfiguration {
         let consoleDevice = VZVirtioConsoleDeviceConfiguration()
 
@@ -79,7 +79,7 @@ class LinuxVirtualMachineConfigurationHelper {
 
         return consoleDevice
     }
-    
+
     static func createEFIVariableStore(path: String) -> VZEFIVariableStore {
         guard let efiVariableStore = try? VZEFIVariableStore(creatingVariableStoreAt: URL(fileURLWithPath: path)) else {
             fatalError("Failed to create the EFI variable store.")
@@ -87,7 +87,7 @@ class LinuxVirtualMachineConfigurationHelper {
 
         return efiVariableStore
     }
-    
+
     static func createUSBMassStorageDeviceConfiguration(_ path: String) -> VZUSBMassStorageDeviceConfiguration {
         guard let intallerDiskAttachment = try? VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: true) else {
             fatalError("Failed to create installer's disk attachment.")
@@ -95,7 +95,7 @@ class LinuxVirtualMachineConfigurationHelper {
 
         return VZUSBMassStorageDeviceConfiguration(attachment: intallerDiskAttachment)
     }
-    
+
     @available(macOS 15.0, *)
     static func createUSBControllerConfiguration() -> VZUSBControllerConfiguration {
         return VZXHCIControllerConfiguration()

@@ -3,7 +3,7 @@ import Foundation
 public enum Result {
   case success
   case failure(Error)
-  
+
   public var isSuccess: Bool {
     switch self {
     case .success:
@@ -12,11 +12,11 @@ public enum Result {
       return false
     }
   }
-    
+
   public var isFailure: Bool {
     return !isSuccess
   }
- 
+
   public var error: Error? {
     switch self {
     case .success:

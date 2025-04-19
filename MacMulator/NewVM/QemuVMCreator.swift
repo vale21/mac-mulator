@@ -5,41 +5,41 @@
 //  Created by Vale on 10/04/22.
 //
 
-import Foundation 
+import Foundation
 import ZIPFoundation
 
 class QemuVMCreator: VMCreator {
-    
+
     var complete = false
     var progress: Double = 0.0
-    
+
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)
         try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia)
     }
-    
+
     func isComplete() -> Bool {
         return complete;
     }
-    
+
     func setProgress(_ progress: Double) {
         self.progress = progress
     }
-    
+
     func getProgress() -> Double {
         return self.progress
     }
-    
+
     func getError() -> Error? {
         return nil
     }
-    
+
     func cancelVMCreation(vm: VirtualMachine) {
-        
+
     }
-    
+
     fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {
-                
+
         var virtualHDD: VirtualDrive? = nil
         if installMedia != "" {
             if Utils.isVHDXImage(installMedia) {
@@ -93,7 +93,7 @@ class QemuVMCreator: VMCreator {
                 vm.addVirtualDrive(virtualCD);
             }
         }
-        
+
         if virtualHDD == nil && vm.os != QemuConstants.OS_IOS {
             let mediaType = Utils.getMediaTypeForSubType(vm.os, vm.subtype)
             virtualHDD = VirtualDrive(
@@ -104,10 +104,10 @@ class QemuVMCreator: VMCreator {
                 size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)));
             vm.addVirtualDrive(virtualHDD!);
         }
-        
+
         return virtualHDD
     }
-        
+
     fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive?, installMedia: String) throws {
         do {
             try Utils.createDocumentPackage(vm.path);
@@ -139,4 +139,3 @@ class QemuVMCreator: VMCreator {
         }
     }
 }
-

@@ -8,13 +8,13 @@
 import Cocoa
 
 class MainWindowController: NSWindowController {
-    
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        
+
         let source = segue.sourceController as! NSWindowController;
         let dest = segue.destinationController as! NSWindowController;
         let sourceController = source.contentViewController as! RootViewController;
-        
+
         if (segue.identifier == MacMulatorConstants.NEW_VM_SEGUE) {
             let destinationController = dest.contentViewController as! NewVMViewController;
             destinationController.setRootController(sourceController);
@@ -23,7 +23,7 @@ class MainWindowController: NSWindowController {
             let args = sender as! [Any]
             let originalSender = args[0] as? NSMenuItem
             let vmToEdit = args[1] as! VirtualMachine;
-            
+
             let destinationController = dest.contentViewController as! EditVMViewController;
             destinationController.setVirtualMachine(vmToEdit)
             destinationController.setRootController(sourceController)
