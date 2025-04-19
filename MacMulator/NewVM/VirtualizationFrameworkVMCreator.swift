@@ -9,8 +9,7 @@ import Foundation
 import Virtualization
 
 @available(macOS 12.0, *)
-class VirtualizationFrameworkVMCreator : VMCreator {
-
+class VirtualizationFrameworkVMCreator: VMCreator {
     private var virtualMachineResponder: MacOSVirtualMachineDelegate?
     private var complete: Bool = false
     private var error: Error? = nil
@@ -18,32 +17,30 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     private var restoreImage: MacOSRestoreImage?
 
     func createVM(vm: VirtualMachine, installMedia: String) throws {
-
-        try! Utils.createDocumentPackage(vm.path);
+        try! Utils.createDocumentPackage(vm.path)
         if !shouldDownloadIpsw(vm, installMedia) {
-            print("Install media specified. Installing...");
-            self.createVM_int(vm: vm, installMedia: installMedia);
+            print("Install media specified. Installing...")
+            createVM_int(vm: vm, installMedia: installMedia)
         } else {
-
             #if arch(arm64)
 
-            print("Detected macOS with IPSW Not specified. Downloading...");
-            self.restoreImage = MacOSRestoreImage(self, vm);
-            restoreImage!.download {error in
-                if error != nil {
-                    self.error = error
+                print("Detected macOS with IPSW Not specified. Downloading...")
+                restoreImage = MacOSRestoreImage(self, vm)
+                restoreImage!.download { error in
+                    if error != nil {
+                        self.error = error
 
-                    do {
-                        try Utils.removeDocumentPackage(vm.path);
-                    } catch {
-                        print("Error while deleting" + vm.path + ": " + error.localizedDescription);
+                        do {
+                            try Utils.removeDocumentPackage(vm.path)
+                        } catch {
+                            print("Error while deleting" + vm.path + ": " + error.localizedDescription)
+                        }
+
+                        self.complete = true
+                    } else {
+                        self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME)
                     }
-
-                    self.complete = true
-                } else {
-                    self.createVM_int(vm: vm, installMedia: vm.path + "/" + VirtualizationFrameworkMacOSSupport.RESTORE_IMAGE_NAME);
                 }
-            }
 
             #endif
         }
@@ -66,18 +63,17 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
 
     func cancelVMCreation(vm: VirtualMachine) {
-
         #if arch(arm64)
 
-        if let restoreImage = self.restoreImage {
-            restoreImage.cancelDownload()
+            if let restoreImage = restoreImage {
+                restoreImage.cancelDownload()
 
-            do {
-                try Utils.removeDocumentPackage(vm.path);
-            } catch {
-                print("Error while deleting" + vm.path + ": " + error.localizedDescription);
+                do {
+                    try Utils.removeDocumentPackage(vm.path)
+                } catch {
+                    print("Error while deleting" + vm.path + ": " + error.localizedDescription)
+                }
             }
-        }
 
         #endif
     }
@@ -88,8 +84,9 @@ class VirtualizationFrameworkVMCreator : VMCreator {
             name: QemuConstants.MEDIATYPE_DISK + "-0",
             format: QemuConstants.FORMAT_RAW,
             mediaType: QemuConstants.MEDIATYPE_DISK,
-            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype)))
-        vm.addVirtualDrive(virtualHDD);
+            size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype))
+        )
+        vm.addVirtualDrive(virtualHDD)
 
         if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
             let installMedia = VirtualDrive(
@@ -97,7 +94,8 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 name: QemuConstants.MEDIATYPE_IPSW,
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_IPSW,
-                size: 0)
+                size: 0
+            )
             vm.addVirtualDrive(installMedia)
 
             if #available(macOS 15.0, *), Utils.isMacClipboardSharingSupported(vm) {
@@ -106,7 +104,8 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                     name: QemuConstants.MEDIATYPE_USB + "-guest-tools-0",
                     format: QemuConstants.FORMAT_RAW,
                     mediaType: QemuConstants.MEDIATYPE_USB,
-                    size: 0);
+                    size: 0
+                )
                 vm.addVirtualDrive(guestTools)
 
                 let sourceURL = URL(fileURLWithPath: Bundle.main.path(forResource: "macos-guest-tools.img.zip", ofType: nil)!)
@@ -117,13 +116,14 @@ class VirtualizationFrameworkVMCreator : VMCreator {
                 try? FileManager.default.moveItem(atPath: vm.path + "/macos-guest-tools.img", toPath: vm.path + "/usb-guest-tools-0.img")
                 try? FileManager.default.removeItem(at: URL(fileURLWithPath: vm.path + "/__MACOSX"))
             }
-        } else if installMediaPath != ""{
+        } else if installMediaPath != "" {
             let installMedia = VirtualDrive(
                 path: installMediaPath,
                 name: QemuConstants.MEDIATYPE_USB + "-0",
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_USB,
-                size: 0)
+                size: 0
+            )
             vm.addVirtualDrive(installMedia)
         }
 
@@ -141,28 +141,27 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     }
 
     fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {
-        try! self.createVMFilesOnDisk(vm, installMedia, uponCompletion: {
-            terminationCode in
-            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST);
-            self.setupVirtualMachine(vm: vm, ipswURL: URL(fileURLWithPath: installMedia));
-        });
+        try! createVMFilesOnDisk(vm, installMedia, uponCompletion: {
+            _ in
+            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
+            self.setupVirtualMachine(vm: vm, ipswURL: URL(fileURLWithPath: installMedia))
+        })
     }
 
     fileprivate func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
-        if (Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)) {
-
+        if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
             #if arch(arm64)
 
-            VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self](result: Result<VZMacOSRestoreImage, Error>) in
-                switch result {
-                case let .failure(error):
-                    fatalError(error.localizedDescription)
+                VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self] (result: Result<VZMacOSRestoreImage, Error>) in
+                    switch result {
+                    case let .failure(error):
+                        fatalError(error.localizedDescription)
 
-                case let .success(restoreImage):
-                    VirtualizationFrameworkMacOSSupport.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage);
-                    complete = true
-                }
-            })
+                    case let .success(restoreImage):
+                        VirtualizationFrameworkMacOSSupport.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage)
+                        complete = true
+                    }
+                })
 
             #endif
 
@@ -177,5 +176,4 @@ class VirtualizationFrameworkVMCreator : VMCreator {
     fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
         return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
-
 }

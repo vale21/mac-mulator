@@ -13,3 +13,8 @@ repos:
       - id: mixed-line-ending # replaces or checks mixed line ending.
       - id: requirements-txt-fixer # sorts entries in requirements.txt.
       - id: trailing-whitespace # trims trailing whitespace.
+
+  - repo: https://github.com/nicklockwood/SwiftFormat
+    rev: 0.55.5
+    hooks:
+      - id: swiftformat

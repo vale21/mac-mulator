@@ -8,6 +8,5 @@
 import Foundation
 
 class SystemProfilerData: Decodable {
-
-    let SPHardwareDataType:[HostMachineDetails]
+    let SPHardwareDataType: [HostMachineDetails]
 }

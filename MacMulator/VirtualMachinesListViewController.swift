@@ -8,55 +8,54 @@
 import Cocoa
 
 class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, NSMenuDelegate {
-
-    @IBOutlet weak var table: NSTableView!
+    @IBOutlet var table: NSTableView!
 
     var rootController: RootViewController?
 
-    func setRootController(_ rootController:RootViewController) {
-        self.rootController = rootController;
+    func setRootController(_ rootController: RootViewController) {
+        self.rootController = rootController
     }
 
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return rootController?.getVirtualMachinesCount() ?? 0;
+    func numberOfRows(in _: NSTableView) -> Int {
+        return rootController?.getVirtualMachinesCount() ?? 0
     }
 
-    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return 55.0;
+    func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
+        return 55.0
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView;
-        if let rootController = self.rootController {
+        let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView
+        if let rootController = rootController {
             cell.rootController = rootController
 
-            let vm: VirtualMachine = rootController.getVirtualMachineAt(row);
-            cell.setVirtualMachine(virtualMachine: vm);
-            cell.setRunning(rootController.isVMRunning(vm));
+            let vm: VirtualMachine = rootController.getVirtualMachineAt(row)
+            cell.setVirtualMachine(virtualMachine: vm)
+            cell.setRunning(rootController.isVMRunning(vm))
         }
-        return cell;
+        return cell
     }
 
-    func tableView(_ tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
+    func tableView(_: NSTableView, rowActionsForRow _: Int, edge _: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
         return [
-            NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), handler: { action, index in self.deleteVirtualMachine(index)}),
-            NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), handler: { action, index in self.editVirtualMachine(index)}),
-        ];
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), handler: { _, index in self.deleteVirtualMachine(index) }),
+            NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), handler: { _, index in self.editVirtualMachine(index) }),
+        ]
     }
 
     func tableViewSelectionDidChange(_ notification: Notification) {
-        if let rootController = self.rootController {
-            let tableView = notification.object as! NSTableView;
+        if let rootController = rootController {
+            let tableView = notification.object as! NSTableView
             if tableView.selectedRow >= 0 {
-                let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow);
+                let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow)
                 if selectedvm != rootController.currentVm {
-                    rootController.setCurrentVirtualMachine(selectedvm);
+                    rootController.setCurrentVirtualMachine(selectedvm)
                 }
             }
         }
     }
 
-    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine");
+    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
 
     override func viewDidLoad() {
         let menu = NSMenu()
@@ -64,7 +63,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.delegate = self
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.start", comment: ""), action: #selector(tableViewStartItemClicked(_:)), keyEquivalent: ""))
         #if arch(arm64)
-        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""), action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""), action: #selector(tableViewStartInRecoveryItemClicked(_:)), keyEquivalent: ""))
         #endif
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""), action: #selector(tableViewStopItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""), action: #selector(tableViewPauseItemClicked(_:)), keyEquivalent: ""))
@@ -75,25 +74,25 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
-        table.registerForDraggedTypes([accountPasteboardType]);
-        table.allowsMultipleSelection = false;
+        table.registerForDraggedTypes([accountPasteboardType])
+        table.allowsMultipleSelection = false
     }
 
     func menuWillOpen(_ menu: NSMenu) {
         let row = table.clickedRow
-        if let rootController = self.rootController {
+        if let rootController = rootController {
             let vm = rootController.getVirtualMachineAt(row)
             if rootController.isVMRunning(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 #if arch(arm64)
-                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
+                    menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = true
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = Utils.isPauseSupported(vm)
             } else {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)
-                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
+                    menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = Utils.isFullFeaturedMacOSVM(vm) && !rootController.isVMPaused(vm)
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
@@ -101,17 +100,17 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    func tableView(_ tableView: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
-        let virtualMachine = rootController?.getVirtualMachineAt(row);
+    func tableView(_: NSTableView, pasteboardWriterForRow row: Int) -> NSPasteboardWriting? {
+        let virtualMachine = rootController?.getVirtualMachineAt(row)
         if let vm = virtualMachine {
             let pasteboardItem = NSPasteboardItem()
             pasteboardItem.setString(vm.displayName, forType: accountPasteboardType)
             return pasteboardItem
         }
-        return nil;
+        return nil
     }
 
-    func tableView(_ tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
+    func tableView(_: NSTableView, validateDrop _: NSDraggingInfo, proposedRow _: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         if dropOperation == .above {
             return .move
         } else {
@@ -119,148 +118,148 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableView.DropOperation) -> Bool {
-         guard
-             let item = info.draggingPasteboard.pasteboardItems?.first,
-             let theString = item.string(forType: accountPasteboardType),
-             let vm = rootController?.getVirtualMachine(name: theString),
-             let originalRow = rootController?.getIndex(of: vm)
-             else { return false }
+    func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation _: NSTableView.DropOperation) -> Bool {
+        guard
+            let item = info.draggingPasteboard.pasteboardItems?.first,
+            let theString = item.string(forType: accountPasteboardType),
+            let vm = rootController?.getVirtualMachine(name: theString),
+            let originalRow = rootController?.getIndex(of: vm)
+        else { return false }
 
-         var newRow = row
-         // When you drag an item downwards, the "new row" index is actually --1. Remember dragging operation is `.above`.
-         if originalRow < newRow {
-             newRow = row - 1
-         }
+        var newRow = row
+        // When you drag an item downwards, the "new row" index is actually --1. Remember dragging operation is `.above`.
+        if originalRow < newRow {
+            newRow = row - 1
+        }
 
-         // Animate the rows
-         tableView.beginUpdates()
-         tableView.moveRow(at: originalRow, to: newRow)
-         tableView.endUpdates()
+        // Animate the rows
+        tableView.beginUpdates()
+        tableView.moveRow(at: originalRow, to: newRow)
+        tableView.endUpdates()
 
-         // Persist the ordering by saving your data model
+        // Persist the ordering by saving your data model
         rootController?.moveVm(at: originalRow, to: newRow)
 
-         return true
-     }
-
-    @objc func tableViewEditItemClicked(_ sender: AnyObject) {
-        guard table.clickedRow >= 0 else { return }
-        editVirtualMachine(table.clickedRow);
+        return true
     }
 
-    @objc func tableViewDeleteItemClicked(_ sender: AnyObject) {
+    @objc func tableViewEditItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        deleteVirtualMachine(table.clickedRow);
+        editVirtualMachine(table.clickedRow)
     }
 
-    @objc func tableViewShowInFinderItemClicked(_ sender: AnyObject) {
+    @objc func tableViewDeleteItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        showVirtualMachineInFinder(table.clickedRow);
+        deleteVirtualMachine(table.clickedRow)
     }
 
-    @objc func tableViewCloneItemClicked(_ sender: AnyObject) {
+    @objc func tableViewShowInFinderItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        cloneVirtualMachine(table.clickedRow);
+        showVirtualMachineInFinder(table.clickedRow)
     }
 
-    @objc func tableViewStartItemClicked(_ sender: AnyObject) {
+    @objc func tableViewCloneItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        startVirtualMachine(table.clickedRow);
+        cloneVirtualMachine(table.clickedRow)
     }
 
-    @objc func tableViewStartInRecoveryItemClicked(_ sender: AnyObject) {
+    @objc func tableViewStartItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        startVirtualMachineInRecovery(table.clickedRow);
+        startVirtualMachine(table.clickedRow)
     }
 
-    @objc func tableViewStopItemClicked(_ sender: AnyObject) {
+    @objc func tableViewStartInRecoveryItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        stopVirtualMachine(table.clickedRow);
+        startVirtualMachineInRecovery(table.clickedRow)
     }
 
-    @objc func tableViewPauseItemClicked(_ sender: AnyObject) {
+    @objc func tableViewStopItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        pauseVirtualMachine(table.clickedRow);
+        stopVirtualMachine(table.clickedRow)
+    }
+
+    @objc func tableViewPauseItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        pauseVirtualMachine(table.clickedRow)
     }
 
     func editVirtualMachine(_ index: Int) {
-        if let rootController = self.rootController {
-            let item = rootController.getVirtualMachineAt(index);
-            self.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, item]);
+        if let rootController = rootController {
+            let item = rootController.getVirtualMachineAt(index)
+            view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, item])
         }
     }
 
     func deleteVirtualMachine(_ index: Int) {
-        if let rootController = self.rootController {
+        if let rootController = rootController {
             if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "The VM you are trying to remove is running. Do you want to continue?");
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "The VM you are trying to remove is running. Do you want to continue?")
                 if response.rawValue == Utils.ALERT_RESP_OK {
-                    table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
-                    _ = rootController.removeVirtualMachineAt(index);
+                    table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
+                    _ = rootController.removeVirtualMachineAt(index)
                 }
             } else {
-                table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp);
-                _ = rootController.removeVirtualMachineAt(index);
+                table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
+                _ = rootController.removeVirtualMachineAt(index)
             }
         }
     }
 
     func showVirtualMachineInFinder(_ index: Int) {
-        if let rootController = self.rootController {
-            let vm = rootController.getVirtualMachineAt(index);
+        if let rootController = rootController {
+            let vm = rootController.getVirtualMachineAt(index)
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)])
         }
     }
 
     func startVirtualMachine(_ index: Int) {
-        if let rootController = self.rootController {
-            _ = rootController.getVirtualMachineAt(index);
+        if let rootController = rootController {
+            _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMMenuBarClicked(self)
         }
     }
 
     func startVirtualMachineInRecovery(_ index: Int) {
-        if let rootController = self.rootController {
-            _ = rootController.getVirtualMachineAt(index);
+        if let rootController = rootController {
+            _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMInRecoveryMenuBarClicked(self)
         }
     }
 
     func stopVirtualMachine(_ index: Int) {
-        if let rootController = self.rootController {
-            _ = rootController.getVirtualMachineAt(index);
+        if let rootController = rootController {
+            _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.stopVMMenubarClicked(self)
         }
     }
 
     func pauseVirtualMachine(_ index: Int) {
-        if let rootController = self.rootController {
-            _ = rootController.getVirtualMachineAt(index);
+        if let rootController = rootController {
+            _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.pauseVMMenuBarClicked(self)
         }
     }
 
     func cloneVirtualMachine(_ index: Int) {
-        rootController?.cloneVirtualMachineAt(index);
+        rootController?.cloneVirtualMachineAt(index)
     }
 
     func selectElement(_ index: Int) {
-        table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false);
+        table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
     }
 
     func refreshList() {
-        self.table.reloadData();
+        table.reloadData()
     }
 
     func setRunning(_ index: Int, _ running: Bool) {
-        let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView;
+        let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
-            cellView.setRunning(running);
+            cellView.setRunning(running)
         }
     }
 }

@@ -8,36 +8,34 @@
 import Foundation
 
 class VMExecutionResult {
-
-    let exitCode: Int32;
+    let exitCode: Int32
     let error: String?
 
     init(exitCode: Int32) {
-        self.exitCode = exitCode;
-        error = nil;
+        self.exitCode = exitCode
+        error = nil
     }
 
     init(exitCode: Int32, error: String) {
-        self.exitCode = exitCode;
-        self.error = error;
+        self.exitCode = exitCode
+        self.error = error
     }
 }
 
 protocol VirtualMachineRunner {
+    func getManagedVM() -> VirtualMachine
 
-    func getManagedVM() -> VirtualMachine;
+    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws
 
-    func runVM(recoveryMode: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws;
+    func isVMRunning() -> Bool
 
-    func isVMRunning() -> Bool;
+    func stopVM(guestStopped: Bool)
 
-    func stopVM(guestStopped: Bool);
+    func stopVMGracefully()
 
-    func stopVMGracefully();
+    func pauseVM()
 
-    func pauseVM();
-
-    func abort();
+    func abort()
 
     func getConsoleOutput() -> String
 }

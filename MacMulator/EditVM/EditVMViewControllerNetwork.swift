@@ -7,44 +7,43 @@
 
 import Cocoa
 
-class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+    @IBOutlet var networkAdapterComboBox: NSComboBox!
+    @IBOutlet var mappingsTableView: NSTableView!
 
-    @IBOutlet weak var networkAdapterComboBox: NSComboBox!
-    @IBOutlet weak var mappingsTableView: NSTableView!
-
-    var virtualMachine: VirtualMachine?;
+    var virtualMachine: VirtualMachine?
 
     func setVirtualMachine(_ vm: VirtualMachine) {
-        virtualMachine = vm;
-        updateView();
+        virtualMachine = vm
+        updateView()
     }
 
     override func viewWillAppear() {
-        updateView();
+        updateView()
     }
 
     func updateView() {
         if let virtualMachine = virtualMachine {
-            networkAdapterComboBox.reloadData();
-            networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1);
+            networkAdapterComboBox.reloadData()
+            networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
 
-            mappingsTableView.reloadData();
+            mappingsTableView.reloadData()
         }
     }
 
     func reloadPortMappings() {
-        self.mappingsTableView.reloadData();
+        mappingsTableView.reloadData()
     }
 
     func addPortmapping(_ portMapping: PortMapping) {
-        if let virtualMachine = self.virtualMachine {
+        if let virtualMachine = virtualMachine {
             virtualMachine.portMappings?.append(portMapping)
             reloadPortMappings()
         }
     }
 
     @IBAction func deletePortmapping(_ sender: Any) {
-        if let virtualMachine = self.virtualMachine {
+        if let virtualMachine = virtualMachine {
             let row = mappingsTableView.row(for: sender as! NSView)
             virtualMachine.portMappings?.remove(at: row)
             reloadPortMappings()
@@ -52,15 +51,15 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        let destinationController = segue.destinationController as! NewPortMappingViewController;
-        destinationController.setParentController(self);
-        if let virtualMachine = self.virtualMachine {
+        let destinationController = segue.destinationController as! NewPortMappingViewController
+        destinationController.setParentController(self)
+        if let virtualMachine = virtualMachine {
             if let portMappings = virtualMachine.portMappings {
-                if (segue.identifier == MacMulatorConstants.NEW_PORT_MAPPING_SEGUE) {
-                    destinationController.setMode(NewPortMappingViewController.Mode.ADD);
+                if segue.identifier == MacMulatorConstants.NEW_PORT_MAPPING_SEGUE {
+                    destinationController.setMode(NewPortMappingViewController.Mode.ADD)
                 }
-                if (segue.identifier == MacMulatorConstants.EDIT_PORT_MAPPING_SEGUE) {
-                    destinationController.setMode(NewPortMappingViewController.Mode.EDIT);
+                if segue.identifier == MacMulatorConstants.EDIT_PORT_MAPPING_SEGUE {
+                    destinationController.setMode(NewPortMappingViewController.Mode.EDIT)
                     let driveTableRow: Int = mappingsTableView.row(for: sender as! NSView)
                     destinationController.setPortmapping(portMappings[driveTableRow])
                 }
@@ -68,14 +67,14 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
         }
     }
 
-    func numberOfRows(in tableView: NSTableView) -> Int {
+    func numberOfRows(in _: NSTableView) -> Int {
         return virtualMachine?.portMappings?.count ?? 0
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self);
+        let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self)
 
-        if let virtualMachine = self.virtualMachine {
+        if let virtualMachine = virtualMachine {
             if let portMappings = virtualMachine.portMappings {
                 let mapping = portMappings[row]
 
@@ -96,28 +95,28 @@ class EditVMViewControllerNetwork : NSViewController, NSComboBoxDataSource, NSCo
             }
         }
 
-        return cell;
+        return cell
     }
 
-    func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        return 30.0;
+    func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
+        return 30.0
     }
 
-    func numberOfItems(in comboBox: NSComboBox) -> Int {
+    func numberOfItems(in _: NSComboBox) -> Int {
         return QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        if (comboBox == networkAdapterComboBox) {
-            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : "";
+        if comboBox == networkAdapterComboBox {
+            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : ""
         }
-        return (index + 1);
+        return index + 1
     }
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == networkAdapterComboBox {
-            if let virtualMachine = self.virtualMachine {
-                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem];
+            if let virtualMachine = virtualMachine {
+                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem]
             }
         }
     }

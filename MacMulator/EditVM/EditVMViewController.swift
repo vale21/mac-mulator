@@ -8,18 +8,17 @@
 import Cocoa
 
 class EditVMViewController: NSTabViewController {
-
-    var rootController : RootViewController?
+    var rootController: RootViewController?
     var virtualMachine: VirtualMachine?
 
-    func setRootController(_ rootController:RootViewController) {
+    func setRootController(_ rootController: RootViewController) {
         self.rootController = rootController
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
         hardware.setRootController(rootController)
     }
 
     func setVirtualMachine(_ vm: VirtualMachine) {
-        virtualMachine = vm;
+        virtualMachine = vm
 
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
@@ -46,13 +45,13 @@ class EditVMViewController: NSTabViewController {
     }
 
     override func viewWillDisappear() {
-        virtualMachine?.writeToPlist();
+        virtualMachine?.writeToPlist()
     }
 
     override func viewDidDisappear() {
-        if let virtualMachine = self.virtualMachine {
-            virtualMachine.writeToPlist();
-            rootController?.refreshViewForVM(virtualMachine);
+        if let virtualMachine = virtualMachine {
+            virtualMachine.writeToPlist()
+            rootController?.refreshViewForVM(virtualMachine)
         }
     }
 }

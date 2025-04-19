@@ -8,7 +8,6 @@
 import Foundation
 
 class PortMapping: Codable {
-
     var name: String
     var vmPort: Int32
     var hostPort: Int32

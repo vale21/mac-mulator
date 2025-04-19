@@ -1,5 +1,5 @@
 //
-//  Virtualdrive.swift
+//  VirtualDrive.swift
 //  MacMulator
 //
 //  Created by Vale on 26/01/21.
@@ -8,14 +8,13 @@
 import Foundation
 
 class VirtualDrive: Codable, Equatable {
-
     var path: String // this value is serialized, but is ignored for media type different from CDROM
     var name: String
     var format: String
     var mediaType: String
     var size: Int32
     var isBootDrive: Bool = false
-    var blank: Int? = 1 // TODO Review why on earth Bool? does not work and we have to do this crap with Int?
+    var blank: Int? = 1 // TODO: Review why on earth Bool? does not work and we have to do this crap with Int?
     var vzDeviceUUID: String?
 
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
@@ -35,21 +34,21 @@ class VirtualDrive: Codable, Equatable {
     }
 
     func clone() -> VirtualDrive {
-        let drive = VirtualDrive(path: self.path, name: self.name, format: self.format, mediaType: self.mediaType, size: self.size);
-        drive.isBootDrive = self.isBootDrive
-        drive.blank = self.blank
+        let drive = VirtualDrive(path: path, name: name, format: format, mediaType: mediaType, size: size)
+        drive.isBootDrive = isBootDrive
+        drive.blank = blank
 
-        return drive;
+        return drive
     }
 
     static func == (lhs: VirtualDrive, rhs: VirtualDrive) -> Bool {
         return lhs.path == rhs.path &&
-        lhs.name == rhs.name &&
-        lhs.format == rhs.format &&
-        lhs.mediaType == rhs.mediaType &&
-        lhs.size == rhs.size &&
-        lhs.isBootDrive == rhs.isBootDrive &&
-        lhs.blank == rhs.blank &&
-        lhs.vzDeviceUUID == rhs.vzDeviceUUID
+            lhs.name == rhs.name &&
+            lhs.format == rhs.format &&
+            lhs.mediaType == rhs.mediaType &&
+            lhs.size == rhs.size &&
+            lhs.isBootDrive == rhs.isBootDrive &&
+            lhs.blank == rhs.blank &&
+            lhs.vzDeviceUUID == rhs.vzDeviceUUID
     }
 }

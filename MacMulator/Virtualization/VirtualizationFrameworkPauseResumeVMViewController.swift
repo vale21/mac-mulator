@@ -9,10 +9,9 @@ import Cocoa
 
 @available(macOS 12.0, *)
 class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
-
-    @IBOutlet weak var progressSpinner: NSProgressIndicator!
-    @IBOutlet weak var descriptionLabel: NSTextField!
-    @IBOutlet weak var vmIcon: NSImageView!
+    @IBOutlet var progressSpinner: NSProgressIndicator!
+    @IBOutlet var descriptionLabel: NSTextField!
+    @IBOutlet var vmIcon: NSImageView!
 
     var parentRunner: VirtualizationFrameworkVirtualMachineRunner?
     var operation: String?
@@ -28,19 +27,19 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
     override func viewDidLoad() {
         let vm = parentRunner?.managedVm
         if let vm = vm {
-            self.vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
+            vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
         }
 
         progressSpinner.startAnimation(self)
 
-        if self.operation == "Pausing" {
+        if operation == "Pausing" {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.pausing", comment: "")
         } else {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.resuming", comment: "")
         }
 
         DispatchQueue.main.async {
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
                 if let parentRunner = self.parentRunner {
                     if parentRunner.isVMRunning() {
                         self.dismiss(self)

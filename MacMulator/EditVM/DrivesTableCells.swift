@@ -1,5 +1,5 @@
 //
-//  DrivesTableIconCell.swift
+//  DrivesTableCells.swift
 //  MacMulator
 //
 //  Created by Vale on 22/02/21.
@@ -8,27 +8,27 @@
 import Cocoa
 
 class DrivesTableIconCell: NSTableCellView {
-    @IBOutlet weak var icon: NSImageView!
+    @IBOutlet var icon: NSImageView!
 }
 
 class DrivesTableDriveNameCell: NSTableCellView {
-    @IBOutlet weak var label: NSTextField!
+    @IBOutlet var label: NSTextField!
 }
 
 class DrivesTableDriveTypeCell: NSTableCellView {
-    @IBOutlet weak var label: NSTextField!
+    @IBOutlet var label: NSTextField!
 }
 
 class DrivesTableDriveSizeCell: NSTableCellView {
-    @IBOutlet weak var label: NSTextField!
+    @IBOutlet var label: NSTextField!
 }
 
 class DrivesTableDrivePathCell: NSTableCellView {
-    @IBOutlet weak var label: NSTextField!
+    @IBOutlet var label: NSTextField!
 }
 
 class DrivesTableButtonsCell: NSTableCellView {
-    @IBOutlet weak var infoButton: NSButton!
-    @IBOutlet weak var editButton: NSButton!
-    @IBOutlet weak var deleteButton: NSButton!
+    @IBOutlet var infoButton: NSButton!
+    @IBOutlet var editButton: NSButton!
+    @IBOutlet var deleteButton: NSButton!
 }

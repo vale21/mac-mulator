@@ -10,11 +10,10 @@ import Virtualization
 
 @available(macOS 13.0, *)
 class LinuxVirtualMachineConfigurationHelper {
-
     static func createGraphicsDeviceConfiguration(witdh: Int, height: Int) -> VZVirtioGraphicsDeviceConfiguration {
         let graphicsConfiguration = VZVirtioGraphicsDeviceConfiguration()
         graphicsConfiguration.scanouts = [
-            VZVirtioGraphicsScanoutConfiguration(widthInPixels: witdh, heightInPixels: height)
+            VZVirtioGraphicsScanoutConfiguration(widthInPixels: witdh, heightInPixels: height),
         ]
 
         return graphicsConfiguration
@@ -22,7 +21,7 @@ class LinuxVirtualMachineConfigurationHelper {
 
     static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
         do {
-            let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false);
+            let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false)
             let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)
             return disk
         } catch {

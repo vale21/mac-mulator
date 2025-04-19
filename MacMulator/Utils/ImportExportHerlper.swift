@@ -10,7 +10,6 @@ import Virtualization
 
 @available(macOS 11.0, *)
 class ImportExportHerlper {
-
     static let PARALLELS_EXTENSION = "macvm"
     static let PARALLELS_TEMPLATE = "parallels_template"
     static let PARALLELS_AUXILIARY_STORAGE_NAME = "aux.bin"
@@ -48,7 +47,7 @@ class ImportExportHerlper {
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         let bootMode = Utils.getBootModeForSubType(os, subtype)
 
-        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode);
+        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode)
 
         try! Utils.createDocumentPackage(vm.path)
 
@@ -58,13 +57,14 @@ class ImportExportHerlper {
         try FileManager.default.copyItem(atPath: sourcePath + "/" + PARALLELS_MACHINE_IDENTIFIER_NAME, toPath: vm.path + "/" + VirtualizationFrameworkSupport.MACHINE_IDENTIFIER_NAME + "-0")
 
         // Disk drive configured asynchronously
-        Utils.computeSizeOfPhysicalDrive(vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION, uponCompletion: { infoCode, size in
+        Utils.computeSizeOfPhysicalDrive(vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION, uponCompletion: { _, size in
             let virtualHDD = VirtualDrive(
                 path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
                 name: QemuConstants.MEDIATYPE_DISK + "-0",
                 format: QemuConstants.FORMAT_RAW,
                 mediaType: QemuConstants.MEDIATYPE_DISK,
-                size: size)
+                size: size
+            )
             virtualHDD.setBlank(blank: false)
             vm.addVirtualDrive(virtualHDD)
             vm.writeToPlist()

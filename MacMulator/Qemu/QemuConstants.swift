@@ -8,7 +8,6 @@
 import Foundation
 
 class QemuConstants {
-
     // Disk image constants
 
     static let MEDIATYPE_DISK = "disk"
@@ -334,27 +333,27 @@ class QemuConstants {
         ARCH_PPC64,
         ARCH_ARM,
         ARCH_ARM64,
-        ARCH_68K
+        ARCH_68K,
     ]
 
-    static let ALL_ARCHITECTURES_DESC: [String:String] = [
+    static let ALL_ARCHITECTURES_DESC: [String: String] = [
         ARCH_X64: "Intel/AMD 64bit",
         ARCH_X86: "Intel/AMD 32bit",
         ARCH_PPC: "PowerPc 32bit",
         ARCH_PPC64: "PowerPc 64bit",
         ARCH_ARM: "ARM",
         ARCH_ARM64: "ARM 64bit",
-        ARCH_68K: "Motorola 68k"
-    ];
+        ARCH_68K: "Motorola 68k",
+    ]
 
-    static let MAX_CPUS: [String:Int] = [
+    static let MAX_CPUS: [String: Int] = [
         ARCH_PPC: 1,
         ARCH_PPC64: 1,
         ARCH_X86: 4,
         ARCH_X64: 16,
         ARCH_ARM: 2,
         ARCH_ARM64: 8,
-        ARCH_68K: 1
+        ARCH_68K: 1,
     ]
 
     // 4:3
@@ -406,10 +405,10 @@ class QemuConstants {
         RES_3840_2160,
         RES_4096_2160,
         RES_5120_2280,
-        RES_6016_3384
+        RES_6016_3384,
     ]
 
-    static let ALL_RESOLUTIONS_DESC: [String:String] = [
+    static let ALL_RESOLUTIONS_DESC: [String: String] = [
         Utils.getMainScreenSize(): Utils.getMainScreenSizeDesc(),
         RES_640_480: "640 x 480",
         RES_800_600: "800 x 600",
@@ -429,51 +428,51 @@ class QemuConstants {
         RES_3840_2160: "UHD (3840 x 2160)",
         RES_4096_2160: "4K (4096 x 2160)",
         RES_5120_2280: "5K (5120 x 2280)",
-        RES_6016_3384: "6K (6016 x 3384)"
-    ];
+        RES_6016_3384: "6K (6016 x 3384)",
+    ]
 
     static let supportedVMTypes: [String] = [
         OS_MAC,
         OS_WIN,
         OS_LINUX,
         OS_IOS,
-        OS_OTHER
+        OS_OTHER,
     ]
 
     static let ALL_NETWORK_ADAPTERS = [
-       NETWORK_E1000,
-       NETWORK_E1000_82544GC,
-       NETWORK_E1000_82545EM,
-       NETWORK_E1000E,
-       NETWORK_I82550,
-       NETWORK_I82551,
-       NETWORK_I82557A,
-       NETWORK_I82557B,
-       NETWORK_I82557C,
-       NETWORK_I82558A,
-       NETWORK_I82558B,
-       NETWORK_I82559A,
-       NETWORK_I82559B,
-       NETWORK_I82559C,
-       NETWORK_I82559ER,
-       NETWORK_I82562,
-       NETWORK_I82801,
-       NETWORK_NE2K_PCI,
-       NETWORK_PCNET,
-       NETWORK_ROCKER,
-       NETWORK_RTL8139,
-       NETWORK_SUNGEM,
-       NETWORK_TULIP,
-       NETWORK_USB_NET,
-       NETWORK_VIRTIO_NET_DEVICE,
-       NETWORK_VIRTIO_NET_PCI,
-       NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL,
-       NETWORK_VIRTIO_NET_PCI_TRANSITIONAL,
-       NETWORK_VMXNET3
+        NETWORK_E1000,
+        NETWORK_E1000_82544GC,
+        NETWORK_E1000_82545EM,
+        NETWORK_E1000E,
+        NETWORK_I82550,
+        NETWORK_I82551,
+        NETWORK_I82557A,
+        NETWORK_I82557B,
+        NETWORK_I82557C,
+        NETWORK_I82558A,
+        NETWORK_I82558B,
+        NETWORK_I82559A,
+        NETWORK_I82559B,
+        NETWORK_I82559C,
+        NETWORK_I82559ER,
+        NETWORK_I82562,
+        NETWORK_I82801,
+        NETWORK_NE2K_PCI,
+        NETWORK_PCNET,
+        NETWORK_ROCKER,
+        NETWORK_RTL8139,
+        NETWORK_SUNGEM,
+        NETWORK_TULIP,
+        NETWORK_USB_NET,
+        NETWORK_VIRTIO_NET_DEVICE,
+        NETWORK_VIRTIO_NET_PCI,
+        NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL,
+        NETWORK_VIRTIO_NET_PCI_TRANSITIONAL,
+        NETWORK_VMXNET3,
     ]
 
-    static let ALL_NETWORK_ADAPTERS_DESC: [String:String] = [
-        NETWORK_E1000 : "Intel Gigabit Ethernet",
+    static let ALL_NETWORK_ADAPTERS_DESC: [String: String] = [
+        NETWORK_E1000: "Intel Gigabit Ethernet",
         NETWORK_E1000_82544GC: "Intel e1000 (82544GC)",
         NETWORK_E1000_82545EM: "Intel e1000 (82545EM)",
         NETWORK_E1000E: "Intel 82574L GbE Controller",
@@ -501,7 +500,7 @@ class QemuConstants {
         NETWORK_VIRTIO_NET_PCI: "VirtIO network device (PCI)",
         NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL: "VirtIO network device (non-transitional)",
         NETWORK_VIRTIO_NET_PCI_TRANSITIONAL: "VirtIO network device (transitional)",
-        NETWORK_VMXNET3: "VMWare Paravirtualized Ethernet"
+        NETWORK_VMXNET3: "VMWare Paravirtualized Ethernet",
     ]
 
     static let ALL_VIDEO_ADAPTERS = [
@@ -513,7 +512,7 @@ class QemuConstants {
         VGA_SECONDARY,
         VGA_STANDARD,
         VGA_VIRTIO_GPU,
-        VGA_VIRTIO_GPU_DEVICE
+        VGA_VIRTIO_GPU_DEVICE,
     ]
 
     static let INTEL_ONLY_VIDEO_ADAPTERS = [
@@ -544,13 +543,13 @@ class QemuConstants {
     static let ALL_BOOT_MODES = [
         BOOT_BIOS,
         BOOT_UEFI,
-        BOOT_UEFI_SECURE
+        BOOT_UEFI_SECURE,
     ]
 
     static let ALL_BOOT_MODES_DESC = [
         BOOT_BIOS: "BIOS",
         BOOT_UEFI: "UEFI",
-        BOOT_UEFI_SECURE: NSLocalizedString("QemuConstants.uefiSecure", comment: "")
+        BOOT_UEFI_SECURE: NSLocalizedString("QemuConstants.uefiSecure", comment: ""),
     ]
 
     static let vmDefaults = [
@@ -637,38 +636,38 @@ class QemuConstants {
         [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil, nil, nil, false, nil, nil],
         [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil],
         [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OTHER, MACHINE_TYPE_Q800, nil, false, nil, nil, nil, nil, false, nil, nil]
+        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OTHER, MACHINE_TYPE_Q800, nil, false, nil, nil, nil, nil, false, nil, nil],
     ]
 
-    static let HOST_I386 = "i386";
-    static let HOST_X86_64 = "x86_64";
-    static let HOST_ARM = "arm";
-    static let HOST_ARM64 = "arm64";
-    static let HOST_PPC = "PowerPC";
-    static let HOST_PPC64 = "PowerPC_64";
-    static let HOST_RISCV32 = "RISCV-32";
-    static let HOST_RISCV64 = "RISCV-64";
-    static let HOST_68K = "m68k";
+    static let HOST_I386 = "i386"
+    static let HOST_X86_64 = "x86_64"
+    static let HOST_ARM = "arm"
+    static let HOST_ARM64 = "arm64"
+    static let HOST_PPC = "PowerPC"
+    static let HOST_PPC64 = "PowerPC_64"
+    static let HOST_RISCV32 = "RISCV-32"
+    static let HOST_RISCV64 = "RISCV-64"
+    static let HOST_68K = "m68k"
 
-    static let HOST_DESC_I386 = "Intel x86";
-    static let HOST_DESC_X86_64 = "Intel";
-    static let HOST_DESC_ARM = "ARM";
-    static let HOST_DESC_ARM64 = "Apple Silicon";
-    static let HOST_DESC_PPC = "PowerPC";
-    static let HOST_DESC_PPC64 = "PowerPC G5";
-    static let HOST_DESC_RISCV32 = "RISC-V";
-    static let HOST_DESC_RISCV64 = "RISC-V 64bit";
-    static let HOST_DESC_68K = "Motorola 68k";
+    static let HOST_DESC_I386 = "Intel x86"
+    static let HOST_DESC_X86_64 = "Intel"
+    static let HOST_DESC_ARM = "ARM"
+    static let HOST_DESC_ARM64 = "Apple Silicon"
+    static let HOST_DESC_PPC = "PowerPC"
+    static let HOST_DESC_PPC64 = "PowerPC G5"
+    static let HOST_DESC_RISCV32 = "RISC-V"
+    static let HOST_DESC_RISCV64 = "RISC-V 64bit"
+    static let HOST_DESC_68K = "Motorola 68k"
 
-    static let MACHINE_TYPE_MAC99 = "mac99";
-    static let MACHINE_TYPE_MAC99_PMU = "mac99,via=pmu";
-    static let MACHINE_TYPE_PSERIES = "pseries";
-    static let MACHINE_TYPE_VERSATILEPB = "versatilepb";
-    static let MACHINE_TYPE_Q35 = "q35";
-    static let MACHINE_TYPE_PC = "pc";
-    static let MACHINE_TYPE_VIRT = "virt,highmem=no";
-    static let MACHINE_TYPE_VIRT_HIGHMEM = "virt,highmem=on";
-    static let MACHINE_TYPE_Q800 = "q800";
+    static let MACHINE_TYPE_MAC99 = "mac99"
+    static let MACHINE_TYPE_MAC99_PMU = "mac99,via=pmu"
+    static let MACHINE_TYPE_PSERIES = "pseries"
+    static let MACHINE_TYPE_VERSATILEPB = "versatilepb"
+    static let MACHINE_TYPE_Q35 = "q35"
+    static let MACHINE_TYPE_PC = "pc"
+    static let MACHINE_TYPE_VIRT = "virt,highmem=no"
+    static let MACHINE_TYPE_VIRT_HIGHMEM = "virt,highmem=on"
+    static let MACHINE_TYPE_Q800 = "q800"
     static let MACHINE_TYPE_IPOD_TOUCH = "iPod-Touch"
 
     static let SERIAL_STDIO = "stdio"
@@ -677,12 +676,12 @@ class QemuConstants {
     static let PC_BIOS = "pc-bios"
     static let NIC_VIRTIO = "virtio"
 
-    static let NETWORK_E1000 = "e1000";
+    static let NETWORK_E1000 = "e1000"
     static let NETWORK_E1000_82544GC = "e1000-82544gc"
     static let NETWORK_E1000_82545EM = "e1000-82545em"
-    static let NETWORK_E1000E = "e1000e";
-    static let NETWORK_I82550 = "i82550";
-    static let NETWORK_I82551 = "i82551";
+    static let NETWORK_E1000E = "e1000e"
+    static let NETWORK_I82550 = "i82550"
+    static let NETWORK_I82551 = "i82551"
     static let NETWORK_I82557A = "i82557a"
     static let NETWORK_I82557B = "i82557b"
     static let NETWORK_I82557C = "i82557c"
@@ -698,14 +697,14 @@ class QemuConstants {
     static let NETWORK_PCNET = "pcnet"
     static let NETWORK_ROCKER = "rocker"
     static let NETWORK_RTL8139 = "rtl8139"
-    static let NETWORK_SUNGEM = "sungem";
+    static let NETWORK_SUNGEM = "sungem"
     static let NETWORK_TULIP = "tulip"
     static let NETWORK_USB_NET = "usb-net"
-    static let NETWORK_VIRTIO_NET_DEVICE = "virtio-net-device";
+    static let NETWORK_VIRTIO_NET_DEVICE = "virtio-net-device"
     static let NETWORK_VIRTIO_NET_PCI = "virtio-net-pci"
     static let NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL = "virtio-net-pci-non-transitional"
     static let NETWORK_VIRTIO_NET_PCI_TRANSITIONAL = "virtio-net-pci-transitional"
-    static let NETWORK_VMXNET3 = "vmxnet3";
+    static let NETWORK_VMXNET3 = "vmxnet3"
 
     // Intel and ARM:
     static let VGA_ATI_RAGE = "ati-vga,model=rage128p"
@@ -750,13 +749,13 @@ class QemuConstants {
     static let BOOT_UEFI = "uefi"
     static let BOOT_UEFI_SECURE = "uefi-secure"
 
-    static let USB_KEYBOARD = "usb-kbd";
-    static let USB_TABLET = "usb-tablet";
-    static let QEMU_XHCI = "qemu-xhci";
+    static let USB_KEYBOARD = "usb-kbd"
+    static let USB_TABLET = "usb-tablet"
+    static let QEMU_XHCI = "qemu-xhci"
     static let NEC_USB_XHCI = "nec-usb-xhci,id=usb-bus"
-    static let RAMFB = "ramfb";
+    static let RAMFB = "ramfb"
     static let APPLE_SMC = "isa-applesmc,osk=\"ourhardworkbythesewordsguardedpleasedontsteal(c)AppleComputerInc\""
-    static let VIRTIO_GPU_PCI = "virtio-gpu-pci";
+    static let VIRTIO_GPU_PCI = "virtio-gpu-pci"
 
     static let SOUND_HDA = "intel-hda"
     static let SOUND_HDA_DUPLEX = "hda-duplex"

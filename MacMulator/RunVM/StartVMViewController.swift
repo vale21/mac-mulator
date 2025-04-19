@@ -1,5 +1,5 @@
 //
-//  StartVMProgressViewController.swift
+//  StartVMViewController.swift
 //  MacMulator
 //
 //  Created by Vale on 14/06/24.
@@ -8,8 +8,7 @@
 import Cocoa
 
 class StartVMViewController: NSViewController, RunningVMManagerViewController {
-
-    @IBOutlet weak var progressBar: NSProgressIndicator!
+    @IBOutlet var progressBar: NSProgressIndicator!
 
     var virtualMachine: VirtualMachine?
     var recoveryMode: Bool = false
@@ -17,7 +16,7 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
     var vmRunner: VirtualMachineRunner?
 
     func setVirtualMachine(_ vm: VirtualMachine) {
-        virtualMachine = vm;
+        virtualMachine = vm
     }
 
     func setRecoveryMode(_ recoveryMode: Bool) {
@@ -25,7 +24,7 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
     }
 
     func setVmController(_ controller: VirtualMachineViewController) {
-        vmController = controller;
+        vmController = controller
     }
 
     func setVmRunner(_ runner: VirtualMachineRunner) {
@@ -40,7 +39,6 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
 
         if let virtualMachine = virtualMachine {
             if let vmRunner = vmRunner {
-
                 if virtualMachine.bootMode == QemuConstants.BOOT_UEFI {
                     QemuUtils.removeUEFISecureConfig(virtualMachine: virtualMachine)
                     QemuUtils.populateUEFIConfig(virtualMachine: virtualMachine)
@@ -70,14 +68,14 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
                 Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
                     let complete = openCoreComplete && uefiComplete && uefiSecureComplete
                     guard !complete else {
-                        timer.invalidate();
-                        self.progressBar.stopAnimation(self);
-                        self.dismiss(self);
+                        timer.invalidate()
+                        self.progressBar.stopAnimation(self)
+                        self.dismiss(self)
 
                         self.vmController!.startVMPrerequisitesCompleted(vmRunner, self.recoveryMode, virtualMachine)
-                        return;
+                        return
                     }
-                });
+                })
             }
         }
     }

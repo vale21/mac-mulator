@@ -6,15 +6,14 @@
 //
 
 import Cocoa
-import ZIPFoundation
 import Virtualization
+import ZIPFoundation
 
-class CreateVMFileViewController : NSViewController {
-
-    @IBOutlet weak var progressBar: NSProgressIndicator!
-    @IBOutlet weak var descriptionLabel: NSTextField!
-    @IBOutlet weak var estimateTimeRemainingLabel: NSTextField!
-    @IBOutlet weak var cancelButton: NSButton!
+class CreateVMFileViewController: NSViewController {
+    @IBOutlet var progressBar: NSProgressIndicator!
+    @IBOutlet var descriptionLabel: NSTextField!
+    @IBOutlet var estimateTimeRemainingLabel: NSTextField!
+    @IBOutlet var cancelButton: NSButton!
 
     private var parentController: NewVMViewController?
     private var vmCreator: VMCreator?
@@ -22,13 +21,13 @@ class CreateVMFileViewController : NSViewController {
     private var vm: VirtualMachine?
 
     func setParentController(_ parentController: NewVMViewController) {
-        self.parentController = parentController;
+        self.parentController = parentController
     }
 
     override func viewDidAppear() {
-        progressBar.startAnimation(self);
+        progressBar.startAnimation(self)
 
-        if let parentController = self.parentController {
+        if let parentController = parentController {
             let os = parentController.vmType.stringValue
             let subtype = parentController.vmSubType.stringValue
             let architecture = Utils.getArchitectureForSubType(os, subtype)
@@ -49,10 +48,10 @@ class CreateVMFileViewController : NSViewController {
             if #available(macOS 11.0, *) {
                 macAddress = VZMACAddress.randomLocallyAdministered().string
             }
-            self.vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode);
+            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
 
-            if let vm = self.vm {
-                let installMedia = parentController.installMedia.stringValue;
+            if let vm = vm {
+                let installMedia = parentController.installMedia.stringValue
                 if shouldDownloadIpsw(vm, installMedia) {
                     // Downloading IPSW
                     progressBar.isIndeterminate = false
@@ -67,18 +66,17 @@ class CreateVMFileViewController : NSViewController {
                     estimateTimeRemainingLabel.isHidden = true
                     cancelButton.isHidden = true
 
-                    let currentFrame = self.view.window?.frame
+                    let currentFrame = view.window?.frame
                     let size = CGSize(width: currentFrame!.width - 25, height: currentFrame!.height - 25)
-                    self.view.window?.setContentSize(size)
+                    view.window?.setContentSize(size)
                 }
 
-
-                self.vmCreator = VMCreatorFactory().create(vm: vm);
+                vmCreator = VMCreatorFactory().create(vm: vm)
 
                 let startTime = Int64(Date().timeIntervalSince1970)
                 var error: Error? = nil
 
-                self.timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer in
+                timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer in
 
                     if self.shouldDownloadIpsw(vm, installMedia) {
                         let progress = self.vmCreator!.getProgress()
@@ -86,13 +84,13 @@ class CreateVMFileViewController : NSViewController {
 
                         self.progressBar.doubleValue = progress
                         let currentValue = self.progressBar.doubleValue
-                        if (currentValue <= 0) {
+                        if currentValue <= 0 {
                             self.descriptionLabel.stringValue = NSLocalizedString("CreateVMFileViewController.preparingDownload", comment: "")
                             self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
-                        } else if (currentValue < 10) {
+                        } else if currentValue < 10 {
                             self.descriptionLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.downloading", comment: ""), Int(progress))
                             self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
-                        } else if (currentValue < 100) {
+                        } else if currentValue < 100 {
                             self.descriptionLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.downloading", comment: ""), Int(progress))
                             self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: progress))
                         } else {
@@ -102,13 +100,13 @@ class CreateVMFileViewController : NSViewController {
 
                     guard !self.vmCreator!.isComplete() else {
                         self.creationComplete(timer, error, vm)
-                        return;
+                        return
                     }
-                });
+                })
 
                 DispatchQueue.global().async {
                     do {
-                        try self.vmCreator!.createVM(vm: vm, installMedia: installMedia);
+                        try self.vmCreator!.createVM(vm: vm, installMedia: installMedia)
                     } catch {
                         DispatchQueue.main.async {
                             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
@@ -120,44 +118,44 @@ class CreateVMFileViewController : NSViewController {
         }
     }
 
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        if let vmCreator = self.vmCreator {
-            if let vm = self.vm {
+    @IBAction func cancelButtonPressed(_: Any) {
+        if let vmCreator = vmCreator {
+            if let vm = vm {
                 vmCreator.cancelVMCreation(vm: vm)
             }
 
-            if let timer = self.timer {
-                timer.invalidate();
+            if let timer = timer {
+                timer.invalidate()
             }
 
-            self.progressBar.stopAnimation(self);
-            self.dismiss(self);
+            progressBar.stopAnimation(self)
+            dismiss(self)
         }
     }
 
     fileprivate func computePath() -> String {
-        let userDefaults = UserDefaults.standard;
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!;
-        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION;
+        let userDefaults = UserDefaults.standard
+        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
+        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
     }
 
     fileprivate func computeDescription() -> String {
-        let description = parentController?.vmDescription.string;
+        let description = parentController?.vmDescription.string
         if description != NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
-            return description!;
+            return description!
         }
-        return "";
+        return ""
     }
 
     fileprivate func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
-        timer.invalidate();
-        self.progressBar.stopAnimation(self);
-        self.dismiss(self);
+        timer.invalidate()
+        progressBar.stopAnimation(self)
+        dismiss(self)
 
         if error == nil {
-            self.parentController!.vmCreated(vm)
+            parentController!.vmCreated(vm)
         } else {
-            self.parentController!.vmCreationfFailed(vm, error!)
+            parentController!.vmCreationfFailed(vm, error!)
         }
     }
 

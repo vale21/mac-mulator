@@ -8,17 +8,16 @@
 import Cocoa
 
 class VirtualMachineTableCellView: NSTableCellView {
-
-    @IBOutlet weak var vmName: NSTextField!
-    @IBOutlet weak var vmIcon: NSImageView!
-    @IBOutlet weak var runningSpinner: NSProgressIndicator!
+    @IBOutlet var vmName: NSTextField!
+    @IBOutlet var vmIcon: NSImageView!
+    @IBOutlet var runningSpinner: NSProgressIndicator!
 
     var virtualMachine: VirtualMachine?
     var rootController: RootViewController?
 
     func setVirtualMachine(virtualMachine: VirtualMachine) {
         self.virtualMachine = virtualMachine
-        self.refresh()
+        refresh()
     }
 
     func setRunning(_ running: Bool) {
@@ -31,7 +30,7 @@ class VirtualMachineTableCellView: NSTableCellView {
             runningSpinner.stopAnimation(self)
             vmIcon.isHidden = false
         }
-        self.refresh()
+        refresh()
     }
 
     func refresh() {
@@ -40,11 +39,10 @@ class VirtualMachineTableCellView: NSTableCellView {
 
             if let rootController = rootController {
                 if rootController.isVMPaused(virtualMachine) {
-                    let background = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+                    let background = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
                     if let background = background {
-                        let overlay = NSImage.init(named: NSImage.Name("pause.overlay"))
+                        let overlay = NSImage(named: NSImage.Name("pause.overlay"))
                         if let overlay = overlay {
-
                             let newImage = NSImage(size: background.size)
                             newImage.lockFocus()
                             var newImageRect: CGRect = .zero
@@ -57,7 +55,7 @@ class VirtualMachineTableCellView: NSTableCellView {
                         }
                     }
                 } else {
-                    vmIcon.image = NSImage.init(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+                    vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
                 }
             }
         }

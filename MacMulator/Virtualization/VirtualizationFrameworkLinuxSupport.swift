@@ -1,5 +1,5 @@
 //
-//  VirtualizationFrameworkConstants.swift
+//  VirtualizationFrameworkLinuxSupport.swift
 //  MacMulator
 //
 //  Created by Vale on 17/09/22.
@@ -9,18 +9,15 @@ import Foundation
 import Virtualization
 
 @available(macOS 12.0, *)
-class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
-
+class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     @available(macOS 13.0, *)
     static func createLinuxVirtualMachineData(vm: VirtualMachine) {
-
         _ = createLinuxPlatformConfiguration(vm: vm, isInstalling: true)
         _ = createLinuxBootloader(vm: vm, isInstalling: true)
     }
 
     @available(macOS 13.0, *)
     static func deleteLinuxVirtualMachineData(vm: VirtualMachine) {
-
         deleteLinuxPlatformConfiguration(vm: vm)
         deleteLinuxBootloader(vm: vm)
     }
@@ -30,11 +27,11 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
         let configuration = setupLinuxVirtualMachine(vm: vm, installMedia: installMedia)
 
         let virtualMachine = VZVirtualMachine(configuration: configuration, queue: .main)
-        return virtualMachine;
+        return virtualMachine
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia: String) -> VZVirtualMachineConfiguration {
+    fileprivate static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia _: String) -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = createLinuxPlatformConfiguration(vm: vm, isInstalling: false)
         virtualMachineConfiguration.cpuCount = vm.cpus
@@ -45,7 +42,8 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
 
         virtualMachineConfiguration.graphicsDevices = [LinuxVirtualMachineConfigurationHelper.createGraphicsDeviceConfiguration(
             witdh: resolution[0],
-            height: resolution[1])]
+            height: resolution[1]
+        )]
 
         virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
         virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
@@ -61,24 +59,24 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
 
         try! virtualMachineConfiguration.validate()
         if #available(macOS 14.0, *) {
-#if arch(arm64)
-            do {
-                try virtualMachineConfiguration.validateSaveRestoreSupport()
-                vm.pauseSupported = true
-            } catch {
-                NSLog("VM Pause is not supported: " + error.localizedDescription)
+            #if arch(arm64)
+                do {
+                    try virtualMachineConfiguration.validateSaveRestoreSupport()
+                    vm.pauseSupported = true
+                } catch {
+                    NSLog("VM Pause is not supported: " + error.localizedDescription)
+                    vm.pauseSupported = false
+                }
+            #else
                 vm.pauseSupported = false
-            }
-#else
-        vm.pauseSupported = false
-#endif
+            #endif
         }
 
         return virtualMachineConfiguration
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func createLinuxPlatformConfiguration(vm: VirtualMachine, isInstalling: Bool)  -> VZGenericPlatformConfiguration {
+    fileprivate static func createLinuxPlatformConfiguration(vm: VirtualMachine, isInstalling: Bool) -> VZGenericPlatformConfiguration {
         let linuxPlatformConfiguration = VZGenericPlatformConfiguration()
 
         let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkLinuxSupport.MACHINE_IDENTIFIER_NAME + "-0")
@@ -104,7 +102,7 @@ class VirtualizationFrameworkLinuxSupport : VirtualizationFrameworkSupport{
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func createLinuxBootloader(vm: VirtualMachine, isInstalling: Bool)  -> VZEFIBootLoader {
+    fileprivate static func createLinuxBootloader(vm: VirtualMachine, isInstalling: Bool) -> VZEFIBootLoader {
         let bootloader = VZEFIBootLoader()
 
         let efiVariableStorePath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.EFI_VARIABLE_STORE_NAME + "-0"
