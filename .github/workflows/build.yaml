@@ -26,7 +26,6 @@ jobs:
           python-version: '3.10'
 
       # Pre-commit
-      - run: bundle install
       - run: pip install pre-commit
       - run: pre-commit --version
       - run: pre-commit run --all-files
