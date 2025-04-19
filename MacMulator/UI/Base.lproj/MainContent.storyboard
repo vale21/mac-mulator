@@ -13,7 +13,7 @@
         <scene sceneID="mAW-ly-ghS">
             <objects>
                 <windowController storyboardIdentifier="NSWindowController-DJS-zH-ZBC" id="DJS-zH-ZBC" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VIH-r7-T0P">
+                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="VIH-r7-T0P">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <rect key="contentRect" x="440" y="364" width="642" height="482"/>
@@ -235,7 +235,7 @@ UTM vd_agent - Thanks to UTM team. </string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content"> 
+                                                    <string key="content">
 
 Windows</string>
                                                     <attributes>
@@ -1396,16 +1396,9 @@ Fedora</string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cgo
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment content="Kali Linux">
+                                                    <string key="content">
+
+Kali Linux</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -1505,17 +1498,8 @@ Cgo
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment>
                                                     <string key="content">
+
 Red Hat</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -1810,16 +1794,9 @@ Deepin</string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cgo
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment content="Vanilla OS">
+                                                    <string key="content">
+
+Vanilla OS</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -2021,17 +1998,8 @@ Pop!_OS</string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment>
                                                     <string key="content">
+
 Zorin</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -3152,16 +3120,9 @@ Raspberry Pi</string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cgo
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment content="Alma Linux">
+                                                    <string key="content">
+
+Alma Linux</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <font key="NSFont" size="12" name="Helvetica"/>
@@ -3363,17 +3324,8 @@ Rocky Linux</string>
                                                     </attributes>
                                                 </fragment>
                                                 <fragment>
-                                                    <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                                    <attributes>
-                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                        <font key="NSFont" size="12" name="Helvetica"/>
-                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                                    </attributes>
-                                                </fragment>
-                                                <fragment>
                                                     <string key="content">
+
 * Other names and brands may be claimed as the property of others</string>
                                                     <attributes>
                                                         <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
