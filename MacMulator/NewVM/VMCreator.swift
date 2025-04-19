@@ -8,16 +8,15 @@
 import Foundation
 
 protocol VMCreator {
-    
     func createVM(vm: VirtualMachine, installMedia: String) throws
-    
+
     func isComplete() -> Bool
-    
+
     func setProgress(_ progress: Double)
-    
+
     func getProgress() -> Double
-    
+
     func getError() -> Error?
-    
+
     func cancelVMCreation(vm: VirtualMachine)
 }

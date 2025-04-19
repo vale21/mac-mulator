@@ -8,7 +8,6 @@
 import Foundation
 
 class VirtualMachine: Codable, Hashable {
-    
     var os: String
     var subtype: String
     var architecture: String
@@ -30,11 +29,11 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     var pauseSupported: Bool? = false
     var bootMode: String?
-    
+
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode;
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
     }
-    
+
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
@@ -49,88 +48,88 @@ class VirtualMachine: Codable, Hashable {
         self.networkDevice = networkDevice
         self.videoDevice = videoDevice
         self.hvf = hvf
-        self.drives = []
-        self.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        drives = []
+        portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
     }
-    
+
     func addVirtualDrive(_ drive: VirtualDrive) {
-        drives.append(drive);
+        drives.append(drive)
     }
-    
+
     func removeVirtualDrive(_ path: String) {
         if let index = drives.firstIndex(where: { $0.path == path }) {
             drives.remove(at: index)
         }
     }
-    
+
     func containsVirtualDrive(_ path: String) -> Bool {
         if let index = drives.firstIndex(where: { $0.path == path }) {
             return true
         }
         return false
     }
-    
+
     func addPortMapping(_ portMapping: PortMapping) {
-        portMappings?.append(portMapping);
+        portMappings?.append(portMapping)
     }
-    
+
     static func readFromPlist(_ plistFilePath: String, _ plistFileName: String) -> VirtualMachine? {
-        let fileManager = FileManager.default;
+        let fileManager = FileManager.default
         do {
-            let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName);
-            let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!);
-            setupPaths(vm, plistFilePath);
+            let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName)
+            let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!)
+            setupPaths(vm, plistFilePath)
             if vm.portMappings == nil {
                 vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
             }
-            return vm;
+            return vm
         } catch {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistReadError", comment: ""), error.localizedDescription))
-            return nil;
+            return nil
         }
     }
-    
+
     static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
-        vm.path = plistFilePath;
+        vm.path = plistFilePath
         for drive in vm.drives {
             if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION;
+                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION;
+                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION;
+                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION
                 }
             }
         }
     }
-    
+
     func writeToPlist(_ plistFilePath: String) {
         do {
-            let data = try PropertyListEncoder().encode(self);
-            try data.write(to: URL(fileURLWithPath: plistFilePath));
+            let data = try PropertyListEncoder().encode(self)
+            try data.write(to: URL(fileURLWithPath: plistFilePath))
         } catch {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
-    
+
     func writeToPlist() {
         do {
-            let data = try PropertyListEncoder().encode(self);
-            try data.write(to: URL(fileURLWithPath: self.path + "/" + MacMulatorConstants.INFO_PLIST));
+            let data = try PropertyListEncoder().encode(self)
+            try data.write(to: URL(fileURLWithPath: path + "/" + MacMulatorConstants.INFO_PLIST))
         } catch {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
     }
-    
+
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
-        return lhs.displayName == rhs.displayName;
+        lhs.displayName == rhs.displayName
     }
-    
+
     func hash(into hasher: inout Hasher) {
-        hasher.combine(displayName);
+        hasher.combine(displayName)
     }
 }
