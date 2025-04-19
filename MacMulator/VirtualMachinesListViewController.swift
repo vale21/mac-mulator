@@ -17,16 +17,16 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func numberOfRows(in _: NSTableView) -> Int {
-        return rootController?.getVirtualMachinesCount() ?? 0
+        rootController?.getVirtualMachinesCount() ?? 0
     }
 
     func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
-        return 55.0
+        55.0
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView
-        if let rootController = rootController {
+        if let rootController {
             cell.rootController = rootController
 
             let vm: VirtualMachine = rootController.getVirtualMachineAt(row)
@@ -37,14 +37,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func tableView(_: NSTableView, rowActionsForRow _: Int, edge _: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
-        return [
+        [
             NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), handler: { _, index in self.deleteVirtualMachine(index) }),
             NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), handler: { _, index in self.editVirtualMachine(index) }),
         ]
     }
 
     func tableViewSelectionDidChange(_ notification: Notification) {
-        if let rootController = rootController {
+        if let rootController {
             let tableView = notification.object as! NSTableView
             if tableView.selectedRow >= 0 {
                 let selectedvm = rootController.getVirtualMachineAt(tableView.selectedRow)
@@ -80,7 +80,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     func menuWillOpen(_ menu: NSMenu) {
         let row = table.clickedRow
-        if let rootController = rootController {
+        if let rootController {
             let vm = rootController.getVirtualMachineAt(row)
             if rootController.isVMRunning(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
@@ -112,9 +112,9 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     func tableView(_: NSTableView, validateDrop _: NSDraggingInfo, proposedRow _: Int, proposedDropOperation dropOperation: NSTableView.DropOperation) -> NSDragOperation {
         if dropOperation == .above {
-            return .move
+            .move
         } else {
-            return []
+            []
         }
     }
 
@@ -184,14 +184,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func editVirtualMachine(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             let item = rootController.getVirtualMachineAt(index)
             view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, item])
         }
     }
 
     func deleteVirtualMachine(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
                 let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "The VM you are trying to remove is running. Do you want to continue?")
                 if response.rawValue == Utils.ALERT_RESP_OK {
@@ -206,14 +206,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func showVirtualMachineInFinder(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             let vm = rootController.getVirtualMachineAt(index)
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: vm.path, isDirectory: false)])
         }
     }
 
     func startVirtualMachine(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMMenuBarClicked(self)
@@ -221,7 +221,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func startVirtualMachineInRecovery(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.startVMInRecoveryMenuBarClicked(self)
@@ -229,7 +229,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func stopVirtualMachine(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.stopVMMenubarClicked(self)
@@ -237,7 +237,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func pauseVirtualMachine(_ index: Int) {
-        if let rootController = rootController {
+        if let rootController {
             _ = rootController.getVirtualMachineAt(index)
             table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
             rootController.pauseVMMenuBarClicked(self)

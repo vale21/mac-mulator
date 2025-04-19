@@ -27,7 +27,7 @@ class CreateVMFileViewController: NSViewController {
     override func viewDidAppear() {
         progressBar.startAnimation(self)
 
-        if let parentController = parentController {
+        if let parentController {
             let os = parentController.vmType.stringValue
             let subtype = parentController.vmSubType.stringValue
             let architecture = Utils.getArchitectureForSubType(os, subtype)
@@ -50,7 +50,7 @@ class CreateVMFileViewController: NSViewController {
             }
             vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
 
-            if let vm = vm {
+            if let vm {
                 let installMedia = parentController.installMedia.stringValue
                 if shouldDownloadIpsw(vm, installMedia) {
                     // Downloading IPSW
@@ -119,12 +119,12 @@ class CreateVMFileViewController: NSViewController {
     }
 
     @IBAction func cancelButtonPressed(_: Any) {
-        if let vmCreator = vmCreator {
-            if let vm = vm {
+        if let vmCreator {
+            if let vm {
                 vmCreator.cancelVMCreation(vm: vm)
             }
 
-            if let timer = timer {
+            if let timer {
                 timer.invalidate()
             }
 
@@ -160,6 +160,6 @@ class CreateVMFileViewController: NSViewController {
     }
 
     fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
-        return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
+        Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

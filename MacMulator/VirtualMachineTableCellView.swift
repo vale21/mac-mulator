@@ -34,15 +34,15 @@ class VirtualMachineTableCellView: NSTableCellView {
     }
 
     func refresh() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             vmName.stringValue = virtualMachine.displayName
 
-            if let rootController = rootController {
+            if let rootController {
                 if rootController.isVMPaused(virtualMachine) {
                     let background = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
-                    if let background = background {
+                    if let background {
                         let overlay = NSImage(named: NSImage.Name("pause.overlay"))
-                        if let overlay = overlay {
+                        if let overlay {
                             let newImage = NSImage(size: background.size)
                             newImage.lockFocus()
                             var newImageRect: CGRect = .zero

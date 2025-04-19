@@ -24,7 +24,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
     fileprivate func buildAdaptersList() -> [String] {
         var videoAdapters = QemuConstants.ALL_VIDEO_ADAPTERS
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if virtualMachine.architecture == QemuConstants.ARCH_X64 {
                 videoAdapters.append(contentsOf: QemuConstants.INTEL_ONLY_VIDEO_ADAPTERS)
             }
@@ -33,14 +33,14 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     func updateView() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             videoAdapterComboBox.reloadData()
             videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
         }
     }
 
     func numberOfItems(in _: NSComboBox) -> Int {
-        return buildAdaptersList().count
+        buildAdaptersList().count
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
@@ -52,7 +52,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == videoAdapterComboBox {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 virtualMachine.videoDevice = buildAdaptersList()[videoAdapterComboBox.indexOfSelectedItem]
             }
         }

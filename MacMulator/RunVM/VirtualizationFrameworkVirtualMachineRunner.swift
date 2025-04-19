@@ -23,7 +23,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func getManagedVM() -> VirtualMachine {
-        return managedVm
+        managedVm
     }
 
     func setVmView(_ vmView: VZVirtualMachineView) {
@@ -53,7 +53,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         } else if #available(macOS 13.0, *) {
             let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
             var installPath: String? = nil
-            if let installMedia = installMedia {
+            if let installMedia {
                 installPath = installMedia.path
             } else {
                 installPath = ""
@@ -79,11 +79,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func isVMRunning() -> Bool {
-        return vzVirtualMachine != nil && vzVirtualMachine!.state == VZVirtualMachine.State.running
+        vzVirtualMachine != nil && vzVirtualMachine!.state == VZVirtualMachine.State.running
     }
 
     func startVM() {
-        if let vzVirtualMachine = vzVirtualMachine {
+        if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
             vmView?.virtualMachine = vzVirtualMachine
             if #available(macOS 14.0, *) {
@@ -131,7 +131,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
     @available(macOS 14.0, *)
     func resumeVM() {
-        if let vzVirtualMachine = vzVirtualMachine {
+        if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
             vmView?.virtualMachine = vzVirtualMachine
             vmView?.automaticallyReconfiguresDisplay = true
@@ -181,7 +181,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func getConsoleOutput() -> String {
-        return ""
+        ""
     }
 
     fileprivate func startOrResumeVM() {

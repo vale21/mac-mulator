@@ -17,7 +17,7 @@ class Shell {
     var stderr: String = ""
     var output: String = ""
 
-    fileprivate func setupStandardOutput() {
+    private func setupStandardOutput() {
         task.standardOutput = pipe_out
         pipe_out.fileHandleForReading.readabilityHandler = { fileHandle in
             let availableData = fileHandle.availableData
@@ -29,7 +29,7 @@ class Shell {
         }
     }
 
-    fileprivate func setupStandardError() {
+    private func setupStandardError() {
         task.standardError = pipe_err
         pipe_err.fileHandleForReading.readabilityHandler = { fileHandle in
             let availableData = fileHandle.availableData
@@ -69,7 +69,7 @@ class Shell {
     }
 
     func isRunning() -> Bool {
-        return task.isRunning
+        task.isRunning
     }
 
     func kill() {
@@ -87,14 +87,14 @@ class Shell {
     }
 
     func readFromStandardOutput() -> String {
-        return stdout
+        stdout
     }
 
     func readFromStandardError() -> String {
-        return stderr
+        stderr
     }
 
     func readFromConsole() -> String {
-        return output
+        output
     }
 }

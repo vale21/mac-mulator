@@ -214,7 +214,7 @@ class QemuCommandBuilder {
             network = network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
         }
 
-        if let macAddress = macAddress {
+        if let macAddress {
             network = network! + " -device " + device + ",netdev=" + name + ",mac=" + macAddress
         } else {
             network = network! + " -device " + device + ",netdev=" + name
@@ -245,88 +245,88 @@ class QemuCommandBuilder {
 
     func build() -> String {
         var cmd = qemuPath + "/" + executable
-        if let serial = serial {
+        if let serial {
             cmd += " -serial " + serial
         }
-        if let bios = bios {
+        if let bios {
             cmd += " -L " + bios
         }
-        if let cpus = cpus {
+        if let cpus {
             cmd += " -smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus)
         }
-        if let bootArg = bootArg {
+        if let bootArg {
             cmd += " -boot " + bootArg
         }
-        if let accel = accel {
+        if let accel {
             cmd += " -accel " + accel
         }
-        if let vga = vga {
+        if let vga {
             cmd += " -device " + vga
         }
-        if let display = display {
+        if let display {
             cmd += " -display " + display + ",show-cursor="
-            if let showCursor = showCursor, showCursor {
+            if let showCursor, showCursor {
                 cmd += "on"
             } else {
                 cmd += "off"
             }
         }
-        if let cpu = cpu {
+        if let cpu {
             cmd += " -cpu " + cpu
         }
-        if let usb = usb, usb {
+        if let usb, usb {
             cmd += " -usb"
         }
-        if let nic = nic {
+        if let nic {
             cmd += " -nic user,model=" + nic
         }
         for device in device {
             cmd += " -device " + device
         }
-        if let machine = machine {
+        if let machine {
             cmd += " -M " + machine
         }
-        if let memory = memory {
+        if let memory {
             cmd += " -m " + String(memory)
         }
-        if let graphics = graphics {
+        if let graphics {
             cmd += " -g " + graphics
         }
         for sound in sound {
             cmd += " -device " + sound
         }
-        if let autoBoot = autoBoot {
+        if let autoBoot {
             cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'"
         }
-        if let vgaEnabled = vgaEnabled {
+        if let vgaEnabled {
             cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'"
         }
-        if let efi = efi {
+        if let efi {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efi + ",file.locking=off"
         }
-        if let efiSecure = efiSecure {
+        if let efiSecure {
             cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off"
         }
-        if let efiVars = efiVars {
+        if let efiVars {
             cmd += " -drive if=pflash,unit=1,file=" + efiVars + globalClause!
         }
         for drive in drives {
             cmd += " " + drive
         }
-        if let network = network {
+        if let network {
             cmd += " " + network
         }
-        if addQmpString == true, let managementPort = managementPort {
+        if addQmpString == true, let managementPort {
             cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait"
         }
         if rtcEnabled {
             cmd += " -rtc base=localtime,clock=host"
         }
-        if let tpmPath = tpmPath {
+        if let tpmPath {
             let device = tpmDevice != nil ? tpmDevice! : QemuConstants.TPM_TIS_DEVICE
             cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
         }
-        if let logging = logging {
+        if let logging {
             cmd += " -d " + logging
         }
 

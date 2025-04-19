@@ -37,7 +37,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
         view.window?.title = (virtualMachine?.displayName ?? "") + " - MacMulator"
         view.window?.minSize = NSSize(width: 800, height: 600)
 
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             let resolution = Utils.getResolutionElements(virtualMachine.displayResolution)
             var origin: [String] = []
             if let displayOrigin = virtualMachine.displayOrigin {
@@ -47,14 +47,14 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
 
             if origin.isEmpty || (origin[0] == "c" && origin[1] == "c") {
                 view.window?.center()
-            } else if origin[0] == "f" && origin[1] == "f" {
+            } else if origin[0] == "f", origin[1] == "f" {
                 view.window?.toggleFullScreen(self)
                 isFullScreen = true
             } else {
                 view.window?.setFrameOrigin(NSPoint(x: Double(origin[0])!, y: Double(origin[1])!))
             }
 
-            if let vmRunner = vmRunner {
+            if let vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 runner.setVmView(view as! VZVirtualMachineView)
                 runner.setVmViewController(self)
@@ -130,12 +130,12 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
     }
 
     func stopVM(_ closeWindow: Bool) {
-        if let vmRunner = vmRunner {
+        if let vmRunner {
             if vmRunner.isVMRunning() {
                 vmRunner.stopVM(guestStopped: closeWindow)
             }
         }
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             vmController?.cleanupStoppedVM(virtualMachine)
         }
         if closeWindow {
@@ -150,7 +150,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE {
             let destinationController = segue.destinationController as! VirtualizationFrameworkInstallVMViewController
-            if let vmRunner = vmRunner {
+            if let vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 destinationController.setParentRunner(runner)
                 destinationController.setVirtualMachine(runner.vzVirtualMachine!)
@@ -161,7 +161,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
             }
         } else if segue.identifier == MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE {
             let destinationController = segue.destinationController as! VirtualizationFrameworkPauseResumeVMViewController
-            if let vmRunner = vmRunner {
+            if let vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 destinationController.setParentRunner(runner)
                 destinationController.setOperation(sender as! String)

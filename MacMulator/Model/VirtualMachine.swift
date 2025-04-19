@@ -126,7 +126,7 @@ class VirtualMachine: Codable, Hashable {
     }
 
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
-        return lhs.displayName == rhs.displayName
+        lhs.displayName == rhs.displayName
     }
 
     func hash(into hasher: inout Hasher) {

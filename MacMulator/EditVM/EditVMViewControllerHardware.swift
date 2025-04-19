@@ -33,7 +33,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     @IBAction func sliderChanged(_ sender: Any) {
         if sender as? NSObject == memorySlider {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 virtualMachine.memory = memorySlider.intValue
                 memoryTextView.stringValue = String(virtualMachine.memory)
                 memoryStepper.intValue = virtualMachine.memory
@@ -43,7 +43,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     @IBAction func stepperChanged(_ sender: Any) {
         if sender as? NSObject == memoryStepper {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 virtualMachine.memory = memoryStepper.intValue
                 memoryTextView.stringValue = String(virtualMachine.memory)
                 memorySlider.intValue = virtualMachine.memory
@@ -136,7 +136,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     @IBAction func deleteVirtualDrive(_ sender: Any) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             let row = drivesTableView.row(for: sender as! NSView)
             let index = Utils.computeDrivesTableIndex(virtualMachine, row)
             let drive = virtualMachine.drives[index]
@@ -158,7 +158,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     fileprivate func removeVirtualDrive(_ row: Int, _ index: Int) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp)
             let removedDrive = virtualMachine.drives.remove(at: index)
             virtualMachine.writeToPlist()
@@ -179,7 +179,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     func updateView() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             architectureComboBox.reloadData()
             architectureComboBox.selectItem(at: QemuConstants.ALL_ARCHITECTURES.firstIndex(of: virtualMachine.architecture) ?? -1)
 
@@ -210,7 +210,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
             drivesTableView.reloadData()
 
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
                 openImageButton.isEnabled = false
                 openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
             } else if virtualMachine.os == QemuConstants.OS_IOS {
@@ -219,7 +219,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 openImageButton.isEnabled = true
             }
 
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM && Utils.findMainDrive(virtualMachine.drives) != nil {
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findMainDrive(virtualMachine.drives) != nil {
                 createNewDiskButton.isEnabled = false
                 createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
             } else if virtualMachine.os == QemuConstants.OS_IOS {
@@ -234,9 +234,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             // This is bad, but it is the quckest way to differenciate the single iPod touch use case from all the others
-            if identifier == MacMulatorConstants.NEW_DISK_SEGUE && virtualMachine.os == QemuConstants.OS_IOS {
+            if identifier == MacMulatorConstants.NEW_DISK_SEGUE, virtualMachine.os == QemuConstants.OS_IOS {
                 Utils.showDirectorySelector(uponSelection: { panel in
                     if let path = panel.url?.path {
                         virtualMachine.drives[0].path = path
@@ -250,7 +250,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE {
                 let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
                 let diskName = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
@@ -291,7 +291,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         if comboBox == architectureComboBox {
             return QemuConstants.ALL_ARCHITECTURES_DESC.count
         } else {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 return virtualMachine.os == QemuConstants.OS_IOS ? 1 : QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0
             }
         }
@@ -307,7 +307,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == architectureComboBox {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 virtualMachine.architecture = QemuConstants.ALL_ARCHITECTURES[architectureComboBox.indexOfSelectedItem]
 
                 cpusComboBox.reloadData()
@@ -324,7 +324,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     func controlTextDidEndEditing(_ notification: Notification) {
         if (notification.object as! NSTextField) == memoryTextView {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 let mem = memoryTextView.stringValue
                 let mem_num = Utils.toInt32WithAutoLocale(mem)
                 if let memory = mem_num {
@@ -401,10 +401,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     func numberOfRows(in _: NSTableView) -> Int {
-        return Utils.computeDrivesTableSize(virtualMachine)
+        Utils.computeDrivesTableSize(virtualMachine)
     }
 
     func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
-        return 30.0
+        30.0
     }
 }

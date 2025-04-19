@@ -26,7 +26,7 @@ class VirtualDrive: Codable, Equatable {
     }
 
     func isBlank() -> Bool {
-        return blank != nil && blank == 1
+        blank != nil && blank == 1
     }
 
     func setBlank(blank: Bool) {
@@ -42,7 +42,7 @@ class VirtualDrive: Codable, Equatable {
     }
 
     static func == (lhs: VirtualDrive, rhs: VirtualDrive) -> Bool {
-        return lhs.path == rhs.path &&
+        lhs.path == rhs.path &&
             lhs.name == rhs.name &&
             lhs.format == rhs.format &&
             lhs.mediaType == rhs.mediaType &&

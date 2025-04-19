@@ -71,28 +71,28 @@ class QemuImgCommandBuilder {
             cmd = Bundle.main.path(forResource: "qemu-img", ofType: nil)!
         }
 
-        if let command = command {
+        if let command {
             cmd += " " + command
         }
-        if let format = format {
+        if let format {
             cmd += " -f " + format
         }
-        if let targetFormat = targetFormat {
+        if let targetFormat {
             cmd += " -O " + targetFormat
         }
-        if let size = size {
+        if let size {
             cmd += " -o size=" + size
         }
-        if let name = name {
+        if let name {
             cmd += " " + name
         }
-        if let targetName = targetName {
+        if let targetName {
             cmd += " " + targetName
         }
-        if let shrinkArg = shrinkArg {
+        if let shrinkArg {
             cmd += shrinkArg ? " --shrink" : ""
         }
-        if let shortSize = shortSize {
+        if let shortSize {
             cmd += " " + shortSize
         }
 

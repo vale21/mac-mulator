@@ -41,36 +41,34 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     func getManagedVM() -> VirtualMachine {
-        return virtualMachine
+        virtualMachine
     }
 
     func getListenPort() -> Int32 {
-        return listenPort
+        listenPort
     }
 
     func getQemuCommand() -> String {
         if let command = virtualMachine.qemuCommand {
             return command
         } else {
-            var builder: QemuCommandBuilder
-
-            switch virtualMachine.architecture {
+            var builder: QemuCommandBuilder = switch virtualMachine.architecture {
             case QemuConstants.ARCH_PPC:
-                builder = createBuilderForPPC()
+                createBuilderForPPC()
             case QemuConstants.ARCH_PPC64:
-                builder = createBuilderForPPC64()
+                createBuilderForPPC64()
             case QemuConstants.ARCH_X86:
-                builder = createBuilderForI386()
+                createBuilderForI386()
             case QemuConstants.ARCH_X64:
-                builder = createBuilderForX86_64()
+                createBuilderForX86_64()
             case QemuConstants.ARCH_ARM:
-                builder = createBuilderForARM()
+                createBuilderForARM()
             case QemuConstants.ARCH_ARM64:
-                builder = createBuilderForARM64()
+                createBuilderForARM64()
             case QemuConstants.ARCH_68K:
-                builder = createBuilderForM68k()
+                createBuilderForM68k()
             default:
-                builder = createBuilderForX86_64()
+                createBuilderForX86_64()
             }
 
             var index = 1
@@ -143,7 +141,7 @@ class QemuRunner: VirtualMachineRunner {
 
         QemuUtils.getQemuVersion(qemuPath: qemuPath, uponCompletion: {
             version in
-            if let version = version {
+            if let version {
                 let versionRegexp = try! NSRegularExpression(pattern: "[0-9]\\.[0-9]\\.[0-9]")
                 let range = NSRange(location: 0, length: version.utf16.count)
                 if versionRegexp.firstMatch(in: version, range: range) != nil {
@@ -170,7 +168,7 @@ class QemuRunner: VirtualMachineRunner {
     fileprivate func setupPath(_ drive: VirtualDrive, _ vm: VirtualMachine) -> String {
         var path = drive.path
         // if User selected Install xxx.app, we add the sffix to reach BasSystem.dmg
-        if path.hasSuffix(".app") && vm.os == QemuConstants.OS_MAC {
+        if path.hasSuffix(".app"), vm.os == QemuConstants.OS_MAC {
             path = extendPathForMacOSInstaller(path, vm.subtype)
         }
         return path
@@ -266,7 +264,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String, _ videoDevice: String) -> QemuCommandBuilder {
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
             .withCpus(virtualMachine.cpus)
@@ -301,7 +299,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func createBuilderForIOSGuests() -> QemuCommandBuilder {
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withSerial(QemuConstants.SERIAL_MON_STDIO)
             .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(virtualMachine.drives[1].path), "nand=" + Utils.escape(virtualMachine.drives[0].path), "nor=" + Utils.escape(virtualMachine.drives[2].path)])
             .withCpu(sanitizeCPUTypeForARM())
@@ -336,7 +334,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
@@ -370,7 +368,7 @@ class QemuRunner: VirtualMachineRunner {
 
     fileprivate func sanitizeMachineTypeForPPC() -> String {
         var machineType = Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype)
-        if machineType != QemuConstants.MACHINE_TYPE_MAC99 && machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU {
+        if machineType != QemuConstants.MACHINE_TYPE_MAC99, machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU {
             machineType = QemuConstants.MACHINE_TYPE_MAC99_PMU
         }
         return machineType
@@ -378,15 +376,15 @@ class QemuRunner: VirtualMachineRunner {
 
     fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative)
-        if cpuType != QemuConstants.CPU_HOST_PDPE_1GB &&
-            cpuType != QemuConstants.CPU_PENRYN &&
-            cpuType != QemuConstants.CPU_PENRYN_SSE &&
-            cpuType != QemuConstants.CPU_SANDY_BRIDGE &&
-            cpuType != QemuConstants.CPU_IVY_BRIDGE &&
-            cpuType != QemuConstants.CPU_SKYLAKE_CLIENT &&
-            cpuType != QemuConstants.CPU_ICELAKE_SERVER &&
-            cpuType != QemuConstants.CPU_QEMU64 &&
-            cpuType != QemuConstants.CPU_MAX_PDPE_1GB
+        if cpuType != QemuConstants.CPU_HOST_PDPE_1GB,
+           cpuType != QemuConstants.CPU_PENRYN,
+           cpuType != QemuConstants.CPU_PENRYN_SSE,
+           cpuType != QemuConstants.CPU_SANDY_BRIDGE,
+           cpuType != QemuConstants.CPU_IVY_BRIDGE,
+           cpuType != QemuConstants.CPU_SKYLAKE_CLIENT,
+           cpuType != QemuConstants.CPU_ICELAKE_SERVER,
+           cpuType != QemuConstants.CPU_QEMU64,
+           cpuType != QemuConstants.CPU_MAX_PDPE_1GB
         {
             cpuType = QemuConstants.CPU_MAX_PDPE_1GB
         }
@@ -395,8 +393,8 @@ class QemuRunner: VirtualMachineRunner {
 
     fileprivate func sanitizeCPUTypeForARM() -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false)
-        if cpuType != QemuConstants.CPU_ARM1176 &&
-            cpuType != QemuConstants.CPU_MAX
+        if cpuType != QemuConstants.CPU_ARM1176,
+           cpuType != QemuConstants.CPU_MAX
         {
             cpuType = QemuConstants.CPU_ARM1176
         }
@@ -405,9 +403,9 @@ class QemuRunner: VirtualMachineRunner {
 
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative)
-        if cpuType != QemuConstants.CPU_HOST &&
-            cpuType != QemuConstants.CPU_CORTEX_A72 &&
-            cpuType != QemuConstants.CPU_MAX
+        if cpuType != QemuConstants.CPU_HOST,
+           cpuType != QemuConstants.CPU_CORTEX_A72,
+           cpuType != QemuConstants.CPU_MAX
         {
             cpuType = QemuConstants.CPU_MAX
         }
@@ -440,7 +438,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     func isVMRunning() -> Bool {
-        return shell.isRunning()
+        shell.isRunning()
     }
 
     func stopVM(guestStopped _: Bool) {
@@ -456,14 +454,14 @@ class QemuRunner: VirtualMachineRunner {
     func abort() {}
 
     func getStandardError() -> String {
-        return shell.readFromStandardError()
+        shell.readFromStandardError()
     }
 
     func getStandardOutput() -> String {
-        return shell.readFromStandardOutput()
+        shell.readFromStandardOutput()
     }
 
     func getConsoleOutput() -> String {
-        return shell.readFromConsole()
+        shell.readFromConsole()
     }
 }

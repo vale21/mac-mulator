@@ -18,15 +18,15 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let children = self.children
+        let children = children
 
         listController = children[0] as? VirtualMachinesListViewController
-        if let listController = listController {
+        if let listController {
             listController.setRootController(self)
         }
 
         vmController = children[1] as? VirtualMachineViewController
-        if let vmController = vmController {
+        if let vmController {
             vmController.setRootController(self)
         }
 
@@ -79,7 +79,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     @IBAction func cloneVMMenuBarClicked(_: Any) {
-        if let currentVm = currentVm {
+        if let currentVm {
             if let vmIndex = getIndex(of: currentVm) {
                 cloneVirtualMachineAt(vmIndex)
             }
@@ -87,14 +87,14 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     @IBAction func showVMInFinderMenuBarClicked(_: Any) {
-        if let currentVm = currentVm {
+        if let currentVm {
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: currentVm.path, isDirectory: false)])
         }
     }
 
     @available(macOS 13.0, *)
     func convertToQemuMenuBarClicked(_: Any, _ showAlert: Bool = true) {
-        if let currentVm = currentVm {
+        if let currentVm {
             QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
             VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
             currentVm.type = MacMulatorConstants.QEMU_VM
@@ -108,7 +108,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
-        if let currentVm = currentVm {
+        if let currentVm {
             VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
             QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
             currentVm.type = MacMulatorConstants.APPLE_VM
@@ -139,7 +139,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         if let vm = virtualMachine {
             addVirtualMachine(vm)
             if #available(macOS 13.0, *) {
-                if vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_LINUX && Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
+                if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
                     self.convertToQemuMenuBarClicked(self, false)
                 }
             }
@@ -159,11 +159,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func getVirtualMachinesCount() -> Int {
-        return virtualMachines.count
+        virtualMachines.count
     }
 
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
-        return virtualMachines[index]
+        virtualMachines[index]
     }
 
     func getVirtualMachine(name: String) -> VirtualMachine? {
@@ -176,7 +176,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func getIndex(of virtualMachine: VirtualMachine) -> Int? {
-        return virtualMachines.firstIndex(of: virtualMachine)
+        virtualMachines.firstIndex(of: virtualMachine)
     }
 
     func moveVm(at originalRow: Int, to newRow: Int) {
@@ -251,15 +251,15 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func isCurrentVMRunning() -> Bool {
-        return isVMRunning(currentVm)
+        isVMRunning(currentVm)
     }
 
     func isVMRunning(_ vm: VirtualMachine?) -> Bool {
-        return vm != nil && runningVMs[vm!] != nil
+        vm != nil && runningVMs[vm!] != nil
     }
 
     func isVMPaused(_ vm: VirtualMachine?) -> Bool {
-        if let vm = vm {
+        if let vm {
             if #available(macOS 14.0, *), vm.type == MacMulatorConstants.APPLE_VM {
                 let filemanager = FileManager.default
                 if filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SAVE_FILE_NAME) {
@@ -273,18 +273,18 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func getRunnerForRunningVM(_ vm: VirtualMachine) -> VirtualMachineRunner? {
-        return runningVMs[vm]
+        runningVMs[vm]
     }
 
     func getRunnerForCurrentVM() -> VirtualMachineRunner? {
-        if let currentVm = currentVm {
+        if let currentVm {
             return runningVMs[currentVm]
         }
         return nil
     }
 
     func areThereRunningVMs() -> Bool {
-        return runningVMs.count > 0
+        runningVMs.count > 0
     }
 
     func killAllRunningVMs() {

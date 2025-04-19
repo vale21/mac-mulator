@@ -18,7 +18,7 @@ class QemuVMCreator: VMCreator {
     }
 
     func isComplete() -> Bool {
-        return complete
+        complete
     }
 
     func setProgress(_ progress: Double) {
@@ -26,11 +26,11 @@ class QemuVMCreator: VMCreator {
     }
 
     func getProgress() -> Double {
-        return progress
+        progress
     }
 
     func getError() -> Error? {
-        return nil
+        nil
     }
 
     func cancelVMCreation(vm _: VirtualMachine) {}
@@ -60,7 +60,7 @@ class QemuVMCreator: VMCreator {
                 )
                 virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB)
-            } else if vm.architecture == QemuConstants.ARCH_X64 && vm.os == QemuConstants.OS_MAC {
+            } else if vm.architecture == QemuConstants.ARCH_X64, vm.os == QemuConstants.OS_MAC {
                 // Install media is a USB stick
                 let virtualUSB = VirtualDrive(
                     path: installMedia,
@@ -95,7 +95,7 @@ class QemuVMCreator: VMCreator {
             }
         }
 
-        if virtualHDD == nil && vm.os != QemuConstants.OS_IOS {
+        if virtualHDD == nil, vm.os != QemuConstants.OS_IOS {
             let mediaType = Utils.getMediaTypeForSubType(vm.os, vm.subtype)
             virtualHDD = VirtualDrive(
                 path: vm.path + "/" + mediaType + "-0." + MacMulatorConstants.DISK_EXTENSION,
@@ -113,7 +113,7 @@ class QemuVMCreator: VMCreator {
     fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive?, installMedia: String) throws {
         do {
             try Utils.createDocumentPackage(vm.path)
-            if let virtualHDD = virtualHDD {
+            if let virtualHDD {
                 if !Utils.isVHDXImage(installMedia) {
                     QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                         _ in

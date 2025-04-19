@@ -18,7 +18,7 @@ class QemuMonitor {
 
         do {
             client = try Socket(.inet, type: .stream, protocol: .tcp)
-            if let client = client {
+            if let client {
                 try client.connect(port: UInt16(port))
 
                 var buffer = [UInt8](repeating: 0, count: 1024)
@@ -45,7 +45,7 @@ class QemuMonitor {
     func takeScreenshot(path: String) {
         if connected {
             let command = "{ \"execute\": \"screendump\", \"arguments\": { \"filename\": \"" + path + "\" } }\n"
-            if let client = client {
+            if let client {
                 do {
                     try client.write(Array(command.data(using: .utf8)!))
 

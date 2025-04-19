@@ -17,13 +17,13 @@ enum ValidationError: Error, CustomStringConvertible {
     var description: String {
         switch self {
         case .sudoNotAllowed:
-            return NSLocalizedString("Utils.sudoNotAllowed", comment: "")
+            NSLocalizedString("Utils.sudoNotAllowed", comment: "")
         case let .workingPathError(qemuPath, command):
-            return String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25))
+            String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25))
         case let .executableError(allowed, command):
-            return String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
+            String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
         case .genericError:
-            return NSLocalizedString("Utils.genericError", comment: "")
+            NSLocalizedString("Utils.genericError", comment: "")
         }
     }
 }
@@ -130,7 +130,7 @@ class Utils {
             infoCode, output in
             if infoCode == 0 {
                 let driveSize = Utils.extractDriveSize(output)
-                if let driveSize = driveSize {
+                if let driveSize {
                     callback(infoCode, driveSize)
                 } else {
                     callback(infoCode, -1)
@@ -308,7 +308,7 @@ class Utils {
     }
 
     static func getDefaultVmFolderPath() -> String {
-        return NSHomeDirectory() + "/MacMulator"
+        NSHomeDirectory() + "/MacMulator"
     }
 
     static func getDefaultQemuFolderPath() -> String {
@@ -350,50 +350,50 @@ class Utils {
     static func getMachineArchitecture(_ qemuExecutable: String) -> String {
         switch qemuExecutable {
         case QemuConstants.ARCH_X86:
-            return QemuConstants.HOST_I386
+            QemuConstants.HOST_I386
         case QemuConstants.ARCH_X64:
-            return QemuConstants.HOST_X86_64
+            QemuConstants.HOST_X86_64
         case QemuConstants.ARCH_ARM:
-            return QemuConstants.HOST_ARM
+            QemuConstants.HOST_ARM
         case QemuConstants.ARCH_ARM64:
-            return QemuConstants.HOST_ARM64
+            QemuConstants.HOST_ARM64
         case QemuConstants.ARCH_PPC:
-            return QemuConstants.HOST_PPC
+            QemuConstants.HOST_PPC
         case QemuConstants.ARCH_PPC64:
-            return QemuConstants.HOST_PPC64
+            QemuConstants.HOST_PPC64
         case QemuConstants.ARCH_RISCV32:
-            return QemuConstants.HOST_RISCV32
+            QemuConstants.HOST_RISCV32
         case QemuConstants.ARCH_RISCV64:
-            return QemuConstants.HOST_RISCV64
+            QemuConstants.HOST_RISCV64
         case QemuConstants.ARCH_68K:
-            return QemuConstants.HOST_68K
+            QemuConstants.HOST_68K
         default:
-            return qemuExecutable
+            qemuExecutable
         }
     }
 
     static func describeArchitecture(_ architecture: String?) -> String {
         switch architecture {
         case QemuConstants.HOST_I386:
-            return QemuConstants.HOST_DESC_I386
+            QemuConstants.HOST_DESC_I386
         case QemuConstants.HOST_X86_64:
-            return QemuConstants.HOST_DESC_X86_64
+            QemuConstants.HOST_DESC_X86_64
         case QemuConstants.HOST_ARM:
-            return QemuConstants.HOST_DESC_ARM
+            QemuConstants.HOST_DESC_ARM
         case QemuConstants.HOST_ARM64:
-            return QemuConstants.HOST_DESC_ARM64
+            QemuConstants.HOST_DESC_ARM64
         case QemuConstants.HOST_PPC:
-            return QemuConstants.HOST_DESC_PPC
+            QemuConstants.HOST_DESC_PPC
         case QemuConstants.HOST_PPC64:
-            return QemuConstants.HOST_DESC_PPC64
+            QemuConstants.HOST_DESC_PPC64
         case QemuConstants.HOST_RISCV32:
-            return QemuConstants.HOST_DESC_RISCV32
+            QemuConstants.HOST_DESC_RISCV32
         case QemuConstants.HOST_RISCV64:
-            return QemuConstants.HOST_DESC_RISCV64
+            QemuConstants.HOST_DESC_RISCV64
         case QemuConstants.HOST_68K:
-            return QemuConstants.HOST_DESC_68K
+            QemuConstants.HOST_DESC_68K
         default:
-            return ""
+            ""
         }
     }
 
@@ -436,23 +436,23 @@ class Utils {
     static func getMacOSSubType(_ os: String?) -> String {
         switch os {
         case QemuConstants.DESC_MAC_SEQUOIA:
-            return QemuConstants.SUB_MAC_SEQUOIA
+            QemuConstants.SUB_MAC_SEQUOIA
         case QemuConstants.DESC_MAC_SONOMA:
-            return QemuConstants.SUB_MAC_SONOMA
+            QemuConstants.SUB_MAC_SONOMA
         case QemuConstants.DESC_MAC_VENTURA:
-            return QemuConstants.SUB_MAC_VENTURA
+            QemuConstants.SUB_MAC_VENTURA
         case QemuConstants.DESC_MAC_MONTEREY:
-            return QemuConstants.SUB_MAC_MONTEREY
+            QemuConstants.SUB_MAC_MONTEREY
         case QemuConstants.DESC_MAC_BIG_SUR:
-            return QemuConstants.SUB_MAC_BIG_SUR
+            QemuConstants.SUB_MAC_BIG_SUR
         case QemuConstants.DESC_MAC_CATALINA:
-            return QemuConstants.SUB_MAC_CATALINA
+            QemuConstants.SUB_MAC_CATALINA
         case QemuConstants.DESC_MAC_MOJAVE:
-            return QemuConstants.SUB_MAC_MOJAVE
+            QemuConstants.SUB_MAC_MOJAVE
         case QemuConstants.DESC_MAC_HIGH_SIERRA:
-            return QemuConstants.SUB_MAC_HIGH_SIERRA
+            QemuConstants.SUB_MAC_HIGH_SIERRA
         default:
-            return QemuConstants.SUB_MAC_GENERIC
+            QemuConstants.SUB_MAC_GENERIC
         }
     }
 
@@ -470,43 +470,43 @@ class Utils {
     }
 
     static func getIconForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OTHER
+        getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OTHER
     }
 
     static func getArchitectureForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 2) ?? QemuConstants.ARCH_X64
+        getStringValueForSubType(os, subtype, 2) ?? QemuConstants.ARCH_X64
     }
 
     static func getCpusForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 3, 1)
+        getIntValueForSubType(os, subtype, 3, 1)
     }
 
     static func getMinMemoryForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 4, 16)
+        getIntValueForSubType(os, subtype, 4, 16)
     }
 
     static func getMaxMemoryForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 5, 2048)
+        getIntValueForSubType(os, subtype, 5, 2048)
     }
 
     static func getDefaultMemoryForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 6, 1024)
+        getIntValueForSubType(os, subtype, 6, 1024)
     }
 
     static func getMinDiskSizeForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 7, 1)
+        getIntValueForSubType(os, subtype, 7, 1)
     }
 
     static func getMaxDiskSizeForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 8, 1024)
+        getIntValueForSubType(os, subtype, 8, 1024)
     }
 
     static func getDefaultDiskSizeForSubType(_ os: String, _ subtype: String?) -> Int {
-        return getIntValueForSubType(os, subtype, 9, 250)
+        getIntValueForSubType(os, subtype, 9, 250)
     }
 
     static func getMachineTypeForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 11) ?? QemuConstants.MACHINE_TYPE_Q35
+        getStringValueForSubType(os, subtype, 11) ?? QemuConstants.MACHINE_TYPE_Q35
     }
 
     static func getCpuTypeForSubType(_ os: String, _ subtype: String?, _ isNative: Bool) -> String {
@@ -519,49 +519,49 @@ class Utils {
     }
 
     static func getAccelForSubType(_ os: String, _ subtype: String?) -> Bool {
-        return getBoolValueForSubType(os, subtype, 13, true)
+        getBoolValueForSubType(os, subtype, 13, true)
     }
 
     static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
+        getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
 
     static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
+        getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
     }
 
     static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 15) ?? QemuConstants.SOUND_HDA
+        getStringValueForSubType(os, subtype, 15) ?? QemuConstants.SOUND_HDA
     }
 
     static func getIUrlForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 16) ?? QemuConstants.URL_APPLE_COM
+        getStringValueForSubType(os, subtype, 16) ?? QemuConstants.URL_APPLE_COM
     }
 
     static func getMediaTypeForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 17) ?? QemuConstants.MEDIATYPE_DISK
+        getStringValueForSubType(os, subtype, 17) ?? QemuConstants.MEDIATYPE_DISK
     }
 
     static func getTPMForSubType(_ os: String, _ subtype: String?) -> Bool {
-        return getBoolValueForSubType(os, subtype, 18, false)
+        getBoolValueForSubType(os, subtype, 18, false)
     }
 
     static func getBootModeForSubType(_ os: String, _ subtype: String?) -> String {
-        return getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
+        getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
     }
 
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0
         if let vm = virtualMachine {
             for drive in vm.drives {
-                if drive.mediaType != QemuConstants.MEDIATYPE_EFI &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE_VARS &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_NVRAM &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM &&
-                    drive.mediaType != QemuConstants.MEDIATYPE_NOR
+                if drive.mediaType != QemuConstants.MEDIATYPE_EFI,
+                   drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE,
+                   drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS,
+                   drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE_VARS,
+                   drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE,
+                   drive.mediaType != QemuConstants.MEDIATYPE_NVRAM,
+                   drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM,
+                   drive.mediaType != QemuConstants.MEDIATYPE_NOR
                 {
                     size += 1
                 }
@@ -605,7 +605,7 @@ class Utils {
     }
 
     static func getResolutionOnly(_ resolutionWithDepth: String) -> String {
-        return resolutionWithDepth.replacingOccurrences(of: "x32", with: "")
+        resolutionWithDepth.replacingOccurrences(of: "x32", with: "")
     }
 
     static func getResolutionElements(_ resolutionWithDepth: String) -> [Int] {
@@ -627,11 +627,11 @@ class Utils {
     }
 
     static func isIpswInstallMediaProvided(_ installMedia: String) -> Bool {
-        return installMedia != "" && installMedia.hasSuffix(".ipsw")
+        installMedia != "" && installMedia.hasSuffix(".ipsw")
     }
 
     static func isVirtualizationFrameworkPreferred(_ vm: VirtualMachine) -> Bool {
-        return Utils.isVirtualizationFrameworkPreferred(os: vm.os, subtype: vm.subtype, architecture: vm.architecture)
+        Utils.isVirtualizationFrameworkPreferred(os: vm.os, subtype: vm.subtype, architecture: vm.architecture)
     }
 
     static func isVirtualizationFrameworkPreferred(os: String, subtype: String, architecture: String) -> Bool {
@@ -659,15 +659,15 @@ class Utils {
     }
 
     static func isTrackpadSupported(_ vm: VirtualMachine) -> Bool {
-        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
+        vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
     }
 
     static func isMacKeyboardSupported(_ vm: VirtualMachine) -> Bool {
-        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SONOMA)
+        vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SONOMA)
     }
 
     static func isMacClipboardSharingSupported(_ vm: VirtualMachine) -> Bool {
-        return vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
+        vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
     }
 
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
@@ -676,7 +676,7 @@ class Utils {
             let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
             if hostArchitecture != vmArchitecture {
                 return String(format: NSLocalizedString("Utils.hostArchitectureNotGood", comment: ""), Utils.describeArchitecture(vmArchitecture), Utils.describeArchitecture(hostArchitecture))
-            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64, isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
                 return NSLocalizedString("Utils.appleSiliconOnly", comment: "")
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
@@ -684,7 +684,7 @@ class Utils {
         } else if #available(macOS 12.0, *) {
             if vm.os == QemuConstants.OS_LINUX {
                 return NSLocalizedString("Utils.linuxMonterey", comment: "")
-            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64 && isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+            } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64, isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
                 return NSLocalizedString("Utils.appleSiliconOnly", comment: "")
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
@@ -815,7 +815,7 @@ class Utils {
             return String(Int(secs)) + " " + NSLocalizedString("Utils.second", comment: "")
         } else if secs < 40 {
             return String(Int(secs)) + " " + NSLocalizedString("Utils.seconds", comment: "")
-        } else if secs > 40 && secs < 60 {
+        } else if secs > 40, secs < 60 {
             return NSLocalizedString("Utils.lessThanAMinute", comment: "")
         } else if secs == 60 {
             let minutes = Int(secs / 60)
@@ -824,11 +824,11 @@ class Utils {
             let minutes = Int(secs / 60)
             let seconds = Int(secs.truncatingRemainder(dividingBy: 60) / 10) * 10
 
-            if seconds > 0 && minutes > 1 {
+            if seconds > 0, minutes > 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.seconds", comment: "")
-            } else if seconds > 0 && minutes == 1 {
+            } else if seconds > 0, minutes == 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.seconds", comment: "")
-            } else if seconds == 1 && minutes == 1 {
+            } else if seconds == 1, minutes == 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "") + ", " + String(seconds) + " " + NSLocalizedString("Utils.second", comment: "")
             } else if minutes > 1 {
                 return String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
@@ -842,11 +842,11 @@ class Utils {
             let hours = Int(secs / 3600)
             let minutes = Int(secs.truncatingRemainder(dividingBy: 3600))
 
-            if minutes > 0 && hours > 1 {
+            if minutes > 0, hours > 1 {
                 return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
-            } else if minutes > 0 && hours == 1 {
+            } else if minutes > 0, hours == 1 {
                 return String(hours) + " " + NSLocalizedString("Utils.hour", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minutes", comment: "")
-            } else if minutes == 1 && hours == 1 {
+            } else if minutes == 1, hours == 1 {
                 return String(hours) + " " + NSLocalizedString("Utils.hour", comment: "") + ", " + String(minutes) + " " + NSLocalizedString("Utils.minute", comment: "")
             } else if hours > 1 {
                 return String(hours) + " " + NSLocalizedString("Utils.hours", comment: "")
@@ -859,12 +859,12 @@ class Utils {
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                return QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+                QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
             } else {
-                return QemuUtils.isBinaryAvailable(vm.architecture)
+                QemuUtils.isBinaryAvailable(vm.architecture)
             }
         } else {
-            return isVirtualizationFrameworkPreferred(vm)
+            isVirtualizationFrameworkPreferred(vm)
         }
     }
 
@@ -876,22 +876,22 @@ class Utils {
 
     static func truncateString(_ string: String, _ length: Int) -> String {
         if string.count <= length {
-            return string
+            string
         } else {
-            return string.prefix(length) + "..."
+            string.prefix(length) + "..."
         }
     }
 
     static func isVHDXImage(_ path: String) -> Bool {
         // Case insensitive check for vhdx extension
-        return path.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased())
+        path.uppercased().hasSuffix("." + QemuConstants.FORMAT_VHDX.uppercased())
     }
 
     static func isFullFeaturedMacOSVM(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 13.0, *) {
-            return Utils.isVMAvailable(vm) && Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+            Utils.isVMAvailable(vm) && Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
         } else {
-            return false
+            false
         }
     }
 
@@ -941,7 +941,7 @@ class Utils {
     }
 
     static func getCustomScreenSizeDesc(width: Int, heigh: Int) -> String {
-        return String(format: NSLocalizedString("Utils.lastUsed", comment: ""), width, heigh)
+        String(format: NSLocalizedString("Utils.lastUsed", comment: ""), width, heigh)
     }
 
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
@@ -963,7 +963,7 @@ class Utils {
 
     fileprivate static func getIntValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Int) -> Int {
         for vmDefault in QemuConstants.vmDefaults {
-            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+            if vmDefault[0] as? String == os, vmDefault[1] as? String == subtype {
                 return vmDefault[index] as! Int
             }
         }
@@ -972,7 +972,7 @@ class Utils {
 
     fileprivate static func getBoolValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Bool) -> Bool {
         for vmDefault in QemuConstants.vmDefaults {
-            if vmDefault[0] as? String == os && vmDefault[1] as? String == subtype {
+            if vmDefault[0] as? String == os, vmDefault[1] as? String == subtype {
                 return vmDefault[index] as! Bool
             }
         }
@@ -980,7 +980,7 @@ class Utils {
     }
 
     fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
-        return os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
+        os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
     }
 
     fileprivate static func isMacVersionGreaterOrEqualThan(subtype: String, target: String) -> Bool {
@@ -1014,7 +1014,7 @@ class Utils {
         let version = versions.firstIndex(of: subtype)
         let targetVersion = versions.firstIndex(of: target)
 
-        if let version = version, let targetVersion = targetVersion {
+        if let version, let targetVersion {
             return version >= targetVersion
         } else {
             return false

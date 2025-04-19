@@ -13,7 +13,7 @@ import Virtualization
     @available(macOS 12.0, *)
     class MacOSVirtualMachineConfigurationHelper {
         static func createBootLoader() -> VZMacOSBootLoader {
-            return VZMacOSBootLoader()
+            VZMacOSBootLoader()
         }
 
         static func createGraphicsDeviceConfiguration(witdh: Int, height: Int, ppi: Int) -> VZMacGraphicsDeviceConfiguration {
@@ -46,17 +46,17 @@ import Virtualization
 
         static func createPointingDeviceConfigurations(vm: VirtualMachine) -> [VZPointingDeviceConfiguration] {
             if #available(macOS 13.0, *), Utils.isTrackpadSupported(vm) {
-                return [VZMacTrackpadConfiguration()]
+                [VZMacTrackpadConfiguration()]
             } else {
-                return [VZUSBScreenCoordinatePointingDeviceConfiguration()]
+                [VZUSBScreenCoordinatePointingDeviceConfiguration()]
             }
         }
 
         static func createKeyboardConfiguration(vm: VirtualMachine) -> VZKeyboardConfiguration {
             if #available(macOS 14.0, *), Utils.isMacKeyboardSupported(vm) {
-                return VZMacKeyboardConfiguration()
+                VZMacKeyboardConfiguration()
             } else {
-                return VZUSBKeyboardConfiguration()
+                VZUSBKeyboardConfiguration()
             }
         }
 
@@ -89,7 +89,7 @@ import Virtualization
 
         @available(macOS 15.0, *)
         static func createUSBControllerConfiguration() -> VZUSBControllerConfiguration {
-            return VZXHCIControllerConfiguration()
+            VZXHCIControllerConfiguration()
         }
     }
 

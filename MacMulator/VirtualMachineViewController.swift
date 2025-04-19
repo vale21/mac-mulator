@@ -105,7 +105,7 @@ class VirtualMachineViewController: NSViewController {
 
         if #available(macOS 12.0, *) {
             if let vm = self.rootController?.currentVm {
-                if sender as? String == MacMulatorConstants.mainMenuSender && vm.type == MacMulatorConstants.APPLE_VM {
+                if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
                     let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
                     window = runner.vmView!.window!
                 }
@@ -128,7 +128,7 @@ class VirtualMachineViewController: NSViewController {
     func attachUSBImageToVM(sender: Any, virtualDrive: VirtualDrive) {
         if #available(macOS 15.0, *) {
             if let rootController = self.rootController, let vm = rootController.currentVm, rootController.isVMRunning(vm) {
-                if sender as? String == MacMulatorConstants.mainMenuSender && vm.type == MacMulatorConstants.APPLE_VM {
+                if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
                     let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
                     runner.attachUSBImageToVM(virtualDrive: virtualDrive)
                 }
@@ -201,7 +201,7 @@ class VirtualMachineViewController: NSViewController {
         if let vm = virtualMachine {
             vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
 
-            if let rootController = rootController {
+            if let rootController {
                 if rootController.isVMPaused(vm) {
                     vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
                 } else {
@@ -229,7 +229,7 @@ class VirtualMachineViewController: NSViewController {
                 if Utils.isVMAvailable(vm) {
                     startVMButton.isEnabled = true
                     qemuUnavailableLabel.isHidden = true
-                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11 && !QemuUtils.isBinaryAvailable(QemuConstants.SWTPM) {
+                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11, !QemuUtils.isBinaryAvailable(QemuConstants.SWTPM) {
                     startVMButton.isEnabled = false
                     qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.swTpmNotAvailable", comment: ""), vmArchitecture.stringValue)
                     qemuUnavailableLabel.isHidden = false
@@ -258,14 +258,14 @@ class VirtualMachineViewController: NSViewController {
         stopVMButton.isHidden = !running
         pauseVMButton.isHidden = !running
 
-        if let vm = vm {
+        if let vm {
             if Utils.isPauseSupported(vm) {
                 pauseVMButton.isEnabled = true
             } else {
                 pauseVMButton.isEnabled = false
             }
 
-            if let rootController = rootController {
+            if let rootController {
                 let filemanager = FileManager.default
                 let screenshotExists = filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
 
@@ -275,7 +275,7 @@ class VirtualMachineViewController: NSViewController {
                     vmName.stringValue = vm.displayName
                 }
 
-                if rootController.isVMPaused(vm) && screenshotExists {
+                if rootController.isVMPaused(vm), screenshotExists {
                     resizeCentralBox(true)
                     hideBoxControls(true)
 
@@ -374,7 +374,7 @@ class VirtualMachineViewController: NSViewController {
     }
 
     fileprivate func startVM(sender _: Any, inRecovery: Bool) {
-        if let rootController = rootController {
+        if let rootController {
             if let vm = rootController.currentVm {
                 listenPort += 1
                 let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm)

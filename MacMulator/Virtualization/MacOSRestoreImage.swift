@@ -41,7 +41,7 @@ class MacOSRestoreImage: NSObject {
 
         private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping (Error?) -> Void) {
             let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, _, error in
-                if let error = error {
+                if let error {
                     NSLog("Download failed. \(error.localizedDescription).")
                     completionHandler(error)
                     return

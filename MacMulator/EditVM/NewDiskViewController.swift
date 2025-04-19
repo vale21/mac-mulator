@@ -44,9 +44,9 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     fileprivate func updateView() {
-        if let parentController = parentController {
+        if let parentController {
             if let virtualMachine = parentController.virtualMachine {
-                if let newVirtualDrive = newVirtualDrive {
+                if let newVirtualDrive {
                     diskSizeSlider.intValue = newVirtualDrive.size
                     diskSizeStepper.intValue = newVirtualDrive.size
                     diskSizeTextField.intValue = newVirtualDrive.size
@@ -99,7 +99,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     @IBAction func sliderChanged(_ sender: Any) {
         if sender as? NSObject == diskSizeSlider {
-            if let newVirtualDrive = newVirtualDrive {
+            if let newVirtualDrive {
                 newVirtualDrive.size = diskSizeSlider.intValue
                 diskSizeTextField.intValue = diskSizeSlider.intValue
                 diskSizeStepper.intValue = diskSizeSlider.intValue
@@ -109,7 +109,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     @IBAction func stepperChanged(_ sender: Any) {
         if sender as? NSObject == diskSizeStepper {
-            if let newVirtualDrive = newVirtualDrive {
+            if let newVirtualDrive {
                 newVirtualDrive.size = diskSizeStepper.intValue
                 diskSizeTextField.intValue = diskSizeStepper.intValue
                 diskSizeSlider.intValue = diskSizeStepper.intValue
@@ -130,14 +130,14 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func controlTextDidEndEditing(_ notification: Notification) {
-        if (notification.object as! NSTextField) == diskSizeTextField && isVisible {
-            if let newVirtualDrive = newVirtualDrive {
+        if (notification.object as! NSTextField) == diskSizeTextField, isVisible {
+            if let newVirtualDrive {
                 let size = diskSizeTextField.intValue
                 newVirtualDrive.size = size
                 diskSizeStepper.intValue = size
                 diskSizeSlider.intValue = size
 
-                if let parentController = parentController {
+                if let parentController {
                     if let virtualMachine = parentController.virtualMachine {
                         if size < Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) || size > Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype) {
                             diskSizeStepper.isEnabled = false
@@ -154,7 +154,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if segue.identifier == MacMulatorConstants.CREATE_DISK_FILE_SEGUE {
-            if let newVirtualDrive = newVirtualDrive {
+            if let newVirtualDrive {
                 let destinationController = segue.destinationController as! CreateDiskFileViewController
                 destinationController.setNewVirtualDrive(newVirtualDrive)
                 destinationController.setOldVirtualDrive((mode == Mode.EDIT) ? oldVirtualDrive : nil)
@@ -164,7 +164,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func diskCreated() {
-        if let newVirtualDrive = newVirtualDrive {
+        if let newVirtualDrive {
             if mode == Mode.ADD {
                 parentController?.addVirtualDrive(newVirtualDrive)
             } else {

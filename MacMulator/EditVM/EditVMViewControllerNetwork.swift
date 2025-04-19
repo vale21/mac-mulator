@@ -23,7 +23,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func updateView() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             networkAdapterComboBox.reloadData()
             networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
 
@@ -36,14 +36,14 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func addPortmapping(_ portMapping: PortMapping) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             virtualMachine.portMappings?.append(portMapping)
             reloadPortMappings()
         }
     }
 
     @IBAction func deletePortmapping(_ sender: Any) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             let row = mappingsTableView.row(for: sender as! NSView)
             virtualMachine.portMappings?.remove(at: row)
             reloadPortMappings()
@@ -53,7 +53,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         let destinationController = segue.destinationController as! NewPortMappingViewController
         destinationController.setParentController(self)
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if let portMappings = virtualMachine.portMappings {
                 if segue.identifier == MacMulatorConstants.NEW_PORT_MAPPING_SEGUE {
                     destinationController.setMode(NewPortMappingViewController.Mode.ADD)
@@ -68,13 +68,13 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func numberOfRows(in _: NSTableView) -> Int {
-        return virtualMachine?.portMappings?.count ?? 0
+        virtualMachine?.portMappings?.count ?? 0
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self)
 
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if let portMappings = virtualMachine.portMappings {
                 let mapping = portMappings[row]
 
@@ -99,11 +99,11 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
-        return 30.0
+        30.0
     }
 
     func numberOfItems(in _: NSComboBox) -> Int {
-        return QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
+        QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
@@ -115,7 +115,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == networkAdapterComboBox {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem]
             }
         }

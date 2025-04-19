@@ -26,7 +26,7 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
 
     override func viewDidLoad() {
         let vm = parentRunner?.managedVm
-        if let vm = vm {
+        if let vm {
             vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
         }
 

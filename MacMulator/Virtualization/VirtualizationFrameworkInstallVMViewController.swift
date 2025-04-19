@@ -35,7 +35,7 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
 
     override func viewDidLoad() {
         let vm = parentRunner?.managedVm
-        if let vm = vm {
+        if let vm {
             vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installing", comment: "")
             estimateTimeRemainingLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating", comment: "")
@@ -51,12 +51,12 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     #if arch(arm64)
 
         fileprivate func isComplete() -> Bool {
-            return progress >= 100.0
+            progress >= 100.0
         }
 
         override func viewDidAppear() {
-            if let virtualMachine = virtualMachine {
-                if let restoreImageURL = restoreImageURL {
+            if let virtualMachine {
+                if let restoreImageURL {
                     DispatchQueue.main.async {
                         let installer = VZMacOSInstaller(virtualMachine: virtualMachine, restoringFromImageAt: restoreImageURL)
 

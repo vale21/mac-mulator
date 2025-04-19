@@ -166,7 +166,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func refreshVMMenus() {
         vmMenu.autoenablesItems = false
 
-        if let rootController = rootController {
+        if let rootController {
             #if arch(x86_64)
                 startVMInRecoveryMenuItem.isHidden = true
             #endif
@@ -184,7 +184,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 convertToAppleMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
-                if let vm = vm {
+                if let vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     editVMMenuItem.isEnabled = true
@@ -295,13 +295,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         initialized = true
 
-        if let fileName = fileName {
+        if let fileName {
             rootController?.addVirtualMachineFromFile(fileName)
         }
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
-        if let rootController = rootController {
+        if let rootController {
             if rootController.areThereRunningVMs() {
                 let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""))
                 if response.rawValue != Utils.ALERT_RESP_OK {
@@ -332,7 +332,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
-        return true
+        true
     }
 
     func rootControllerDidFinishLoading(_ rootController: RootViewController) {
@@ -378,7 +378,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let filemanager = FileManager.default
         var toRemove: [Int] = []
         for savedVM in savedVMs! {
-            if filemanager.fileExists(atPath: savedVM) && performSanityCheck(savedVM) {
+            if filemanager.fileExists(atPath: savedVM), performSanityCheck(savedVM) {
                 rootController?.addVirtualMachineFromFile(savedVM)
             } else {
                 toRemove.append((savedVMs?.lastIndex(of: savedVM))!)

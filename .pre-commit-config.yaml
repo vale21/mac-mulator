@@ -18,3 +18,4 @@ repos:
     rev: 0.55.5
     hooks:
       - id: swiftformat
+        args: ["--swiftversion", "6"]

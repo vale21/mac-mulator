@@ -47,7 +47,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     }
 
     func isComplete() -> Bool {
-        return complete
+        complete
     }
 
     func setProgress(_ progress: Double) {
@@ -55,17 +55,17 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     }
 
     func getProgress() -> Double {
-        return progress
+        progress
     }
 
     func getError() -> Error? {
-        return error
+        error
     }
 
     func cancelVMCreation(vm: VirtualMachine) {
         #if arch(arm64)
 
-            if let restoreImage = restoreImage {
+            if let restoreImage {
                 restoreImage.cancelDownload()
 
                 do {
@@ -174,6 +174,6 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     }
 
     fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
-        return Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
+        Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

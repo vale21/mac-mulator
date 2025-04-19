@@ -54,7 +54,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
 
     func updateView() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             updating = true
             vmType.stringValue = virtualMachine.os
             vmSubType.stringValue = virtualMachine.subtype
@@ -103,7 +103,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
 
     func numberOfRows(in tableView: NSTableView) -> Int {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if tableView == bootOrderTable {
                 if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
                     return QemuConstants.ALL_BOOT_MODES.count
@@ -121,7 +121,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     func tableView(_ tableView: NSTableView, viewFor _: NSTableColumn?, row: Int) -> NSView? {
         let cell = NSView()
 
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             if tableView == bootOrderTable {
                 if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
                     cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_BOOT_MODES_DESC[QemuConstants.ALL_BOOT_MODES[row]]!))
@@ -154,7 +154,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
 
     func tableView(_: NSTableView, shouldSelectRow _: Int) -> Bool {
-        return true
+        true
     }
 
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -199,10 +199,10 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     func tableViewSelectionDidChange(_ notification: Notification) {
         if !updating {
             if (notification.object as! NSTableView) == bootOrderTable {
-                if let virtualMachine = virtualMachine {
+                if let virtualMachine {
                     let row = bootOrderTable.selectedRow
                     if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
-                        if row >= 0 && row < QemuConstants.ALL_BOOT_MODES.count {
+                        if row >= 0, row < QemuConstants.ALL_BOOT_MODES.count {
                             virtualMachine.bootMode = QemuConstants.ALL_BOOT_MODES[row]
                         }
                     } else {

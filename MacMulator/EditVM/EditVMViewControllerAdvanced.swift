@@ -32,7 +32,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     }
 
     @IBAction func accelerateToggleChanged(_: Any) {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             virtualMachine.hvf = accelerateVM.state == NSButton.StateValue.on
             updateQemuCommand(virtualMachine)
         }
@@ -53,7 +53,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     }
 
     fileprivate func updateView() {
-        if let virtualMachine = virtualMachine {
+        if let virtualMachine {
             updateQemuCommand(virtualMachine)
 
             let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
@@ -79,7 +79,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
 
     func controlTextDidChange(_ notification: Notification) {
         if (notification.object as! NSTextField) == qemuPathView {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
 
                 if qemuPathView.stringValue != originalPath {
@@ -99,7 +99,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
 
     func textDidChange(_ notification: Notification) {
         if (notification.object as? NSTextView) == fullCommandView {
-            if let virtualMachine = virtualMachine {
+            if let virtualMachine {
                 let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
                 let originalCommand = runner.getQemuCommand()
 

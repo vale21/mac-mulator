@@ -106,7 +106,7 @@ class QemuUtils {
                     infoCode, output in
                     if infoCode == 0 {
                         let driveSize = Utils.extractDriveSize(output)
-                        if let driveSize = driveSize {
+                        if let driveSize {
                             callback(infoCode, driveSize)
                         } else {
                             callback(infoCode, -1)
@@ -185,7 +185,7 @@ class QemuUtils {
         if vm.architecture == QemuConstants.ARCH_ARM64 {
             try? FileManager.default.removeItem(atPath: vm.path + "/efi-0.fd")
             let efiDrive = Utils.findEfiDrive(vm.drives)
-            if let efiDrive = efiDrive {
+            if let efiDrive {
                 if let index = vm.drives.firstIndex(of: efiDrive) {
                     vm.drives.remove(at: index)
                 }
@@ -193,7 +193,7 @@ class QemuUtils {
 
             try? FileManager.default.removeItem(atPath: vm.path + "/nvram-0")
             let nvramDrive = Utils.findNvramDrive(vm.drives)
-            if let nvramDrive = nvramDrive {
+            if let nvramDrive {
                 if let index = vm.drives.firstIndex(of: nvramDrive) {
                     vm.drives.remove(at: index)
                 }
@@ -429,6 +429,6 @@ class QemuUtils {
     }
 
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
-        return vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
+        vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
 }

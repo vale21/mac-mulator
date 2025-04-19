@@ -29,7 +29,7 @@ class CreateDiskFileViewController: NSViewController {
     override func viewDidAppear() {
         progressBar.startAnimation(self)
 
-        if let newVirtualDrive = newVirtualDrive {
+        if let newVirtualDrive {
             var complete = false
 
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)

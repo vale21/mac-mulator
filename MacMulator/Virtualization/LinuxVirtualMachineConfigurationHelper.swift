@@ -39,11 +39,11 @@ class LinuxVirtualMachineConfigurationHelper {
     }
 
     static func createPointingDeviceConfiguration() -> VZUSBScreenCoordinatePointingDeviceConfiguration {
-        return VZUSBScreenCoordinatePointingDeviceConfiguration()
+        VZUSBScreenCoordinatePointingDeviceConfiguration()
     }
 
     static func createKeyboardConfiguration() -> VZUSBKeyboardConfiguration {
-        return VZUSBKeyboardConfiguration()
+        VZUSBKeyboardConfiguration()
     }
 
     static func createInputAudioDeviceConfiguration() -> VZVirtioSoundDeviceConfiguration {
@@ -97,6 +97,6 @@ class LinuxVirtualMachineConfigurationHelper {
 
     @available(macOS 15.0, *)
     static func createUSBControllerConfiguration() -> VZUSBControllerConfiguration {
-        return VZXHCIControllerConfiguration()
+        VZXHCIControllerConfiguration()
     }
 }

@@ -37,8 +37,8 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
         var uefiComplete = false
         var uefiSecureComplete = false
 
-        if let virtualMachine = virtualMachine {
-            if let vmRunner = vmRunner {
+        if let virtualMachine {
+            if let vmRunner {
                 if virtualMachine.bootMode == QemuConstants.BOOT_UEFI {
                     QemuUtils.removeUEFISecureConfig(virtualMachine: virtualMachine)
                     QemuUtils.populateUEFIConfig(virtualMachine: virtualMachine)

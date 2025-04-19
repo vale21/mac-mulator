@@ -21,7 +21,7 @@ class DriveInfoViewController: NSViewController {
     }
 
     override func viewWillAppear() {
-        if let virtualDrive = virtualDrive {
+        if let virtualDrive {
             driveName.stringValue = virtualDrive.name
             driveSize.stringValue = Utils.formatDisk(virtualDrive.size)
             driveFormat.stringValue = virtualDrive.format + " " + QemuUtils.getDriveFormatDescription(virtualDrive.format)
