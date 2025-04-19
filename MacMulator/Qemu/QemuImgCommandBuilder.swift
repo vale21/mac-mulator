@@ -8,95 +8,94 @@
 import Foundation
 
 class QemuImgCommandBuilder {
-    
-    var qemuPath: String;
-    var executable: String = QemuConstants.QEMU_IMG;
-    var command: String?;
-    var format: String?;
-    var targetFormat: String?;
-    var size: String?;
-    var name: String?;
-    var targetName: String?;
-    var shrinkArg: Bool?;
-    var shortSize: String?;
-    
+    var qemuPath: String
+    var executable: String = QemuConstants.QEMU_IMG
+    var command: String?
+    var format: String?
+    var targetFormat: String?
+    var size: String?
+    var name: String?
+    var targetName: String?
+    var shrinkArg: Bool?
+    var shortSize: String?
+
     init(qemuPath: String) {
-        self.qemuPath = qemuPath;
+        self.qemuPath = qemuPath
     }
-    
+
     func withCommand(_ command: String) -> QemuImgCommandBuilder {
-        self.command = command;
-        return self;
+        self.command = command
+        return self
     }
-    
+
     func withFormat(_ format: String) -> QemuImgCommandBuilder {
-        self.format = format;
-        return self;
+        self.format = format
+        return self
     }
-    
+
     func withTargetFormat(_ targetFormat: String) -> QemuImgCommandBuilder {
-        self.targetFormat = targetFormat;
-        return self;
+        self.targetFormat = targetFormat
+        return self
     }
-    
+
     func withSize(_ size: String) -> QemuImgCommandBuilder {
-        self.size = size;
-        return self;
+        self.size = size
+        return self
     }
-    
+
     func withName(_ name: String) -> QemuImgCommandBuilder {
-        self.name = Utils.escape(name);
-        return self;
+        self.name = Utils.escape(name)
+        return self
     }
-    
+
     func withTargetName(_ targetName: String) -> QemuImgCommandBuilder {
-        self.targetName = targetName;
-        return self;
+        self.targetName = targetName
+        return self
     }
-    
+
     func withShrinkArg(_ shrinkArg: Bool) -> QemuImgCommandBuilder {
-        self.shrinkArg = shrinkArg;
-        return self;
+        self.shrinkArg = shrinkArg
+        return self
     }
-    
+
     func withShortSize(_ shortSize: String) -> QemuImgCommandBuilder {
-        self.shortSize = shortSize;
-        return self;
+        self.shortSize = shortSize
+        return self
     }
-    
+
     func build() -> String {
-        var cmd = "";
-        if QemuUtils.isBinaryAvailable(self.executable) {
-            cmd = self.qemuPath + "/" + self.executable;
+        var cmd = ""
+        if QemuUtils.isBinaryAvailable(executable) {
+            cmd = qemuPath + "/" + executable
         } else {
-            cmd = Bundle.main.path(forResource: "qemu-img", ofType: nil)!;
+            cmd = Bundle.main.path(forResource: "qemu-img", ofType: nil)!
         }
-        
-        if let command = self.command {
-            cmd += " " + command;
+
+        if let command {
+            cmd += " " + command
         }
-        if let format = self.format {
-            cmd += " -f " + format;
+        if let format {
+            cmd += " -f " + format
         }
-        if let targetFormat = self.targetFormat {
-            cmd += " -O " + targetFormat;
+        if let targetFormat {
+            cmd += " -O " + targetFormat
         }
-        if let size = self.size {
-            cmd += " -o size=" + size;
+        if let size {
+            cmd += " -o size=" + size
         }
-        if let name = self.name {
-            cmd += " " + name;
+        if let name {
+            cmd += " " + name
         }
-        if let targetName = self.targetName {
-            cmd += " " + targetName;
+        if let targetName {
+            cmd += " " + targetName
         }
-        if let shrinkArg = self.shrinkArg {
-            cmd += shrinkArg ? " --shrink" : "";
+        if let shrinkArg {
+            cmd += shrinkArg ? " --shrink" : ""
         }
-        if let shortSize = self.shortSize {
+        if let shortSize {
             cmd += " " + shortSize
         }
-        
-        return cmd;
+
+        return cmd
     }
 }

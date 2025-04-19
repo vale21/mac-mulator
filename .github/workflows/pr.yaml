@@ -1,0 +1,16 @@
+name: 'Lint PR Title'
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  lint-pull-request-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint pull request title
+        uses: matthiashermsen/lint-pull-request-title@v1.0.0
+        with:
+          allowed-pull-request-types: chore,feat,fix,feat!

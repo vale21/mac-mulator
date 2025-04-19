@@ -52,7 +52,7 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 | Intel    | macOS Monterey    | x86_64             | 🚫 NOT WORKING  | 12.2 Does not boot. 12.0 and 12.1 do, if installed via an update to Big Sur |
 | Apple Silicon | macOS Monterey    | aarch64             | ✅ WORKING  | Works in Beta 14 or later using Apple Virtualization Framework |
 | Apple Silicon | macOS Ventura    | aarch64             | ✅ WORKING  | Works in Beta 14 or later using Apple Virtualization Framework |
-| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different architecture (32/64 bit). No 3D acceleration  |             
+| Intel    | Windows XP        | i386               | ✅ WORKING     | Works, but no HVF due to different architecture (32/64 bit). No 3D acceleration  |
 | Intel    | Windows Vista        | x86_64             | ✅ WORKING     | Works in Beta 14 or later with HVF support. No 3D acceleration                                                 |
 | Intel    | Windows 7        | x86_64             | ✅ WORKING     | Works in Beta 14 or later with HVF support. No 3D acceleration                                                 |
 | Intel    | Windows 8        | x86_64             | ✅ WORKING     | Works in Beta 14 or later with HVF support. No 3D acceleration                                                 |
@@ -61,9 +61,6 @@ Here is a summary of the testing done so far. If an OS is not in this table it m
 | Apple M1 | Windows 10 ARM    | aarch64            | ⚠️ WORKING WITH ISSUES | Works in Beta 15 or later with no networking, only if booted from a VHDX image                                                         |
 | Intel    | Ubuntu 21.04      | x86_64             | ⚠️ WORKING WITH ISSUES     | Works with HVF support. No 3D acceleration                                                 |
 | Intel    | Ubuntu 22.10      | x86_64             | ✅ WORKING     | Works in Beta 16 or later using Apple Virtualization Framework                                                 |
-| Intel    | Ubuntu 20.04 ARM  | aarch64            | ⚠️ WORKING WITH ISSUES     | Works, but no HVF due to different architecture. No 3D acceleration                   | 
-| Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ⚠️ WORKING WITH ISSUES     | Works with HVF support if using Qemu 6.2 or later. No 3D acceleration |  
-| Apple M1 | Ubuntu 22.10 ARM  | aarch64            | ✅ WORKING     | Works in Beta 16 or later using Apple Virtualization Framework |  
-
-
-
+| Intel    | Ubuntu 20.04 ARM  | aarch64            | ⚠️ WORKING WITH ISSUES     | Works, but no HVF due to different architecture. No 3D acceleration                   |
+| Apple M1 | Ubuntu 20.04 ARM  | aarch64            | ⚠️ WORKING WITH ISSUES     | Works with HVF support if using Qemu 6.2 or later. No 3D acceleration |
+| Apple M1 | Ubuntu 22.10 ARM  | aarch64            | ✅ WORKING     | Works in Beta 16 or later using Apple Virtualization Framework |

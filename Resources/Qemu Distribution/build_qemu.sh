@@ -207,7 +207,7 @@ install_name_tool -change /usr/local/opt/glib/lib/libgmodule-2.0.0.dylib @execut
 echo "Fixing dependencies for qemu-system-ppc"
 
 install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @executable_path/Libs/libusb-1.0.0.dylib qemu-system-ppc
-install_name_tool -change /usr/local/opt/pixman/lib/libpixman-1.0.dylib @executable_path/Libs/libpixman-1.0.dylib qemu-system-ppc 
+install_name_tool -change /usr/local/opt/pixman/lib/libpixman-1.0.dylib @executable_path/Libs/libpixman-1.0.dylib qemu-system-ppc
 install_name_tool -change /usr/local/opt/glib/lib/libgthread-2.0.0.dylib @executable_path/Libs/libgthread-2.0.0.dylib qemu-system-ppc
 install_name_tool -change /usr/local/opt/glib/lib/libglib-2.0.0.dylib @executable_path/Libs/libglib-2.0.0.dylib qemu-system-ppc
 install_name_tool -change /usr/local/opt/glib/lib/libgio-2.0.0.dylib @executable_path/Libs/libgio-2.0.0.dylib qemu-system-ppc
@@ -247,7 +247,7 @@ cd Libs
 
 echo "Fixing library dependencies"
 
-#fix dependencies of libgthread-2.0.0.dylib 
+#fix dependencies of libgthread-2.0.0.dylib
 
 install_name_tool -change /usr/local/Cellar/glib/2.68.3/lib/libglib-2.0.0.dylib @executable_path/Libs/libglib-2.0.0.dylib libgthread-2.0.0.dylib
 install_name_tool -change /usr/local/opt/pcre/lib/libpcre.1.dylib @executable_path/Libs/libpcre.1.dylib libgthread-2.0.0.dylib

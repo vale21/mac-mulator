@@ -1,5 +1,5 @@
 //
-//  GeneralEditVMViewController.swift
+//  EditVMViewControllerAdvanced.swift
 //  MacMulator
 //
 //  Created by Vale on 12/02/21.
@@ -8,114 +8,111 @@
 import Cocoa
 
 class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
-    
-    @IBOutlet weak var qemuPathView: NSTextField!
-    @IBOutlet weak var accelerateVM: NSButton!
-    @IBOutlet weak var qemuPathButton: NSButton!
+    @IBOutlet var qemuPathView: NSTextField!
+    @IBOutlet var accelerateVM: NSButton!
+    @IBOutlet var qemuPathButton: NSButton!
     @IBOutlet var fullCommandView: NSTextView!
 
-    var virtualMachine: VirtualMachine?;
-       
+    var virtualMachine: VirtualMachine?
+
     func setVirtualMachine(_ vm: VirtualMachine) {
-        virtualMachine = vm;
+        virtualMachine = vm
         updateView()
     }
-    
-    @IBAction func findButtonClicked(_ sender: Any) {
+
+    @IBAction func findButtonClicked(_: Any) {
         Utils.showDirectorySelector(uponSelection: {
             panel in
             if let path = panel.url?.path {
-                qemuPathView.stringValue = path;
-                virtualMachine?.qemuPath = path;
-                updateView();
+                qemuPathView.stringValue = path
+                virtualMachine?.qemuPath = path
+                updateView()
             }
-        });
+        })
     }
-    
-    @IBAction func accelerateToggleChanged(_ sender: Any) {
-        if let virtualMachine = self.virtualMachine {
-            virtualMachine.hvf = self.accelerateVM.state == NSButton.StateValue.on;
-            updateQemuCommand(virtualMachine);
-        }
-    }
-    
-    override func viewWillAppear() {
-        updateView();
-    }
-    
-    fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
-        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
-        fullCommandView.string = runner.getQemuCommand();
-        if let qemuPath = virtualMachine.qemuPath {
-            qemuPathView.stringValue = qemuPath;
-        } else {
-            qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!;
-        }
-    }
-    
-    fileprivate func updateView() {
-        if let virtualMachine = self.virtualMachine {
+
+    @IBAction func accelerateToggleChanged(_: Any) {
+        if let virtualMachine {
+            virtualMachine.hvf = accelerateVM.state == NSButton.StateValue.on
             updateQemuCommand(virtualMachine)
-            
-            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture);
-            
-            if (Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation()) {
-                self.accelerateVM.state = NSButton.StateValue.off;
-                self.accelerateVM.isEnabled = false;
+        }
+    }
+
+    override func viewWillAppear() {
+        updateView()
+    }
+
+    fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
+        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+        fullCommandView.string = runner.getQemuCommand()
+        if let qemuPath = virtualMachine.qemuPath {
+            qemuPathView.stringValue = qemuPath
+        } else {
+            qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        }
+    }
+
+    fileprivate func updateView() {
+        if let virtualMachine {
+            updateQemuCommand(virtualMachine)
+
+            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
+
+            if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() {
+                accelerateVM.state = NSButton.StateValue.off
+                accelerateVM.isEnabled = false
                 if Utils.isRunningInEmulation() {
-                    self.accelerateVM.toolTip = NSLocalizedString("EditVMViewControllerAdvanced.rosettaNotAvailable", comment: "")
+                    accelerateVM.toolTip = NSLocalizedString("EditVMViewControllerAdvanced.rosettaNotAvailable", comment: "")
                 } else {
-                    self.accelerateVM.toolTip = String(format: NSLocalizedString("EditVMViewControllerAdvanced.featureNotAvailable", comment: ""), vmArchitecture, Utils.hostArchitecture() ?? "")
+                    accelerateVM.toolTip = String(format: NSLocalizedString("EditVMViewControllerAdvanced.featureNotAvailable", comment: ""), vmArchitecture, Utils.hostArchitecture() ?? "")
                 }
             } else {
-                self.accelerateVM.isEnabled = true;
+                accelerateVM.isEnabled = true
                 if let hvf = virtualMachine.hvf {
-                    self.accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off;
+                    accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off
                 } else {
-                    self.accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off;
+                    accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off
                 }
             }
         }
     }
-    
+
     func controlTextDidChange(_ notification: Notification) {
-        if ((notification.object as! NSTextField) == qemuPathView) {
-            if let virtualMachine = self.virtualMachine {
-                let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH);
-               
+        if (notification.object as! NSTextField) == qemuPathView {
+            if let virtualMachine {
+                let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
+
                 if qemuPathView.stringValue != originalPath {
                     if qemuPathView.stringValue != "" {
-                        virtualMachine.qemuPath = qemuPathView.stringValue;
+                        virtualMachine.qemuPath = qemuPathView.stringValue
                     } else {
-                        virtualMachine.qemuPath = nil;
+                        virtualMachine.qemuPath = nil
                     }
                 } else {
-                    virtualMachine.qemuPath = nil;
+                    virtualMachine.qemuPath = nil
                 }
             }
         }
-        
-        updateView();
+
+        updateView()
     }
-    
+
     func textDidChange(_ notification: Notification) {
         if (notification.object as? NSTextView) == fullCommandView {
-            if let virtualMachine = self.virtualMachine {
-                let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine);
-                let originalCommand = runner.getQemuCommand();
-               
+            if let virtualMachine {
+                let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+                let originalCommand = runner.getQemuCommand()
+
                 if fullCommandView.string != originalCommand {
                     if fullCommandView.string != "" {
-                        virtualMachine.qemuCommand = fullCommandView.string;
+                        virtualMachine.qemuCommand = fullCommandView.string
                     } else {
-                        virtualMachine.qemuCommand = nil;
+                        virtualMachine.qemuCommand = nil
                     }
                 } else {
-                    virtualMachine.qemuCommand = nil;
+                    virtualMachine.qemuCommand = nil
                 }
             }
         }
     }
 }
-
-
