@@ -8,9 +8,9 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController, NSTextFieldDelegate {
-    @IBOutlet weak var vmFolderLabel: NSTextField!
+    @IBOutlet var vmFolderLabel: NSTextField!
     @IBOutlet var vmFolderField: NSTextField!
-    @IBOutlet weak var qemuFolderLabel: NSTextField!
+    @IBOutlet var qemuFolderLabel: NSTextField!
     @IBOutlet var qemuFolderField: NSTextField!
     @IBOutlet var vmFolderButton: NSButton!
     @IBOutlet var qemuFolderButton: NSButton!
@@ -86,7 +86,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewWillAppear() {
-        self.view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
+        view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")

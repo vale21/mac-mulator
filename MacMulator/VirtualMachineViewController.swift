@@ -33,12 +33,12 @@ class VirtualMachineViewController: NSViewController {
     var boxContentView: NSView?
 
     @IBOutlet var noVMsBox: NSBox!
-    @IBOutlet weak var noVMWelcomeMessage: NSTextField!
+    @IBOutlet var noVMWelcomeMessage: NSTextField!
     @IBOutlet var newVMButton: NSButton!
-    @IBOutlet weak var newVMLabel: NSButton!
+    @IBOutlet var newVMLabel: NSButton!
     @IBOutlet var importVMButton: NSButton!
-    @IBOutlet weak var importVMLabel: NSButton!
-    
+    @IBOutlet var importVMLabel: NSButton!
+
     @IBOutlet var vmName: NSTextField!
     @IBOutlet var vmDescription: NSTextField!
 
@@ -338,7 +338,7 @@ class VirtualMachineViewController: NSViewController {
         centralBox.isHidden = true
         startVMButton.isHidden = true
         qemuUnavailableLabel.isHidden = true
-        
+
         noVMWelcomeMessage.stringValue = NSLocalizedString("VirtualMachineViewController.noVMWelcomeMessage", comment: "")
         newVMLabel.title = NSLocalizedString("VirtualMachineViewController.newVMLabel", comment: "")
         importVMLabel.title = NSLocalizedString("VirtualMachineViewController.importVMLabel", comment: "")
@@ -352,7 +352,7 @@ class VirtualMachineViewController: NSViewController {
         centralBox.isHidden = false
         startVMButton.isHidden = false
         qemuUnavailableLabel.isHidden = false
-        
+
         centralBox.title = NSLocalizedString("VirtualMachineViewController.vmFeatures", comment: "")
         vmArchitectureDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmArchitecture", comment: "")
         vmTypeDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmType", comment: "")

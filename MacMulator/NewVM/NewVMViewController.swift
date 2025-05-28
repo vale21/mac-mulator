@@ -8,25 +8,25 @@
 import Cocoa
 
 class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextViewDelegate {
-    @IBOutlet weak var essentialInformationBox: NSBox!
-    @IBOutlet weak var vmNameLabel: NSTextField!
+    @IBOutlet var essentialInformationBox: NSBox!
+    @IBOutlet var vmNameLabel: NSTextField!
     @IBOutlet var vmName: NSTextField!
-    @IBOutlet weak var vmTypeLabel: NSTextField!
+    @IBOutlet var vmTypeLabel: NSTextField!
     @IBOutlet var vmType: NSComboBox!
-    @IBOutlet weak var vmSubTypeLabel: NSTextField!
+    @IBOutlet var vmSubTypeLabel: NSTextField!
     @IBOutlet var vmSubType: NSComboBox!
     @IBOutlet var vmDescription: NSTextView!
-    @IBOutlet weak var installMediaLabel: NSTextField!
+    @IBOutlet var installMediaLabel: NSTextField!
     @IBOutlet var installMedia: NSTextField!
-    @IBOutlet weak var findOSButton: NSButton!
+    @IBOutlet var findOSButton: NSButton!
     @IBOutlet var obtainOSButton: NSButton!
     @IBOutlet var fullConfiguration: NSButton!
-    @IBOutlet weak var createButton: NSButton!
-    
+    @IBOutlet var createButton: NSButton!
+
     var rootController: RootViewController?
 
     static let DESCRIPTION_DEFAULT_MESSAGE = NSLocalizedString("NewVMViewController.defaultMessage", comment: "")
-    
+
     var starting: Bool = true
 
     @IBAction func findInstallMedia(_: Any) {
@@ -71,7 +71,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     override func viewWillAppear() {
         starting = true
         vmSubType.stringValue = QemuConstants.SUB_OTHER_GENERIC
-        
+
         essentialInformationBox.title = NSLocalizedString("NewVMController.essentialInformationBox", comment: "")
         vmNameLabel.stringValue = NSLocalizedString("NewVMController.vmNameLabel", comment: "")
         vmTypeLabel.stringValue = NSLocalizedString("NewVMController.vmTypeLabel", comment: "")
@@ -124,7 +124,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     func textViewDidChangeSelection(_: Notification) {
-        if !starting && vmDescription.string == NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
+        if !starting, vmDescription.string == NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
             vmDescription.string = ""
         }
     }
