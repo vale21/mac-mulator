@@ -42,10 +42,14 @@
 "NewVMController.errorFeldsMissing" = "Non hai fornito un valore per Nome VM o Tipo VM. Questi campi sono nesessari per creare una Macchina Virtuale. Per favore fornisci un valore per entrambi e riprova.";
 "NewVMController.errorVMExisting" = "Una VM chiamata %@ esiste già. Per favore, scegli un nome diverso.";
 "NewVMController.errorFileExisting" = "Un file chiamato %@ esiste già. Per favore, scegli un nome diverso per la macchina virtuale.";
+"PreferencesViewController.livePreviewLabel" = "Mostra la preview live della VM in esecuzione (Sperimentale)";
 "PreferencesViewController.updateLivePreview" = "Aggiorna la preview live ogni: (%@ secondi)";
 "PreferencesViewController.pathDoesNotExists" = "Attenzione. La cartella %@ non esiste.";
 "PreferencesViewController.noQemuFound" = "Nessun Qemu trovato. Verrà usata la versione bundle di qemu-img per gestire le immagini dosco.";
 "PreferencesViewController.qemuFound" ="Trovato Qemu versione %@";
+"PreferencesViewController.vmFolderLabel" = "Cartella delle macchine virtuali";
+"PreferencesViewController.qemuFolderLabel" = "Cartella degli eseguibii Qemu";
+"PreferencesViewController.windowTitle" = "Preferenze di MacMulator";
 "QemuConstants.hd" = "Disco Rigido";
 "QemuConstants.usb" = "Drive USB";
 "QemuConstants.usb-cdrom" = "CD/DVD su USB";
