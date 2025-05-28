@@ -75,6 +75,7 @@
 "QemuConstants.bootDrive" = "Disco di avvio";
 "QemuConstants.bootMode" = "Modalità di avvio";
 "QemuConstants.uefiSecure" = "UEFI con Secure Boot";
+"RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "Utils.sudoNotAllowed" = "Il comando Qemu fornito è errato: L'uso del comando sudo non è consentito.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";
 "Utils.executableError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non è un esegfuibile Qemu. \n\nGli eseguibili consentiti sono: %@.\n\nIl comando fornito è: %@";
@@ -114,6 +115,8 @@
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Errore nella scrittura di Info.plist: %@";
+"VirtualMachineContainerViewController.vmExecutionError" = "L'esecuzione della VM è fallita con errore: %@";
+"VirtualMachineContainerViewController.forciblyClosing" = "Chiudere questa finestra causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineListViewController.delete" = "Elimina";
 "VirtualMachineListViewController.edit" = "Modifica";
 "VirtualMachineListViewController.start" = "Avvia";
@@ -122,7 +125,7 @@
 "VirtualMachineListViewController.pause" = "Pausa";
 "VirtualMachineListViewController.showInFinder" = "Mostra nel Finder";
 "VirtualMachineListViewController.clone" = "Clona";
-"VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggerimao di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
+"VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineViewController.startVM" = "Avvia questa VM";
 "VirtualMachineViewController.pauseNotSupported" = "La pausa è supportata solo da VM Apple Silicon con guest macOS";
 "VirtualMachineViewController.pauseVM" = "Metti in pausa questa VM";
@@ -134,3 +137,12 @@
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmFeatures" = "Caratteristiche Macchina Virtuale";
 "VirtualMachineViewController.vmExecutionFailed" = "L'esecuzione della VM è fallita con questo errore: %@";
+"VirtualMachineViewController.noVMWelcomeMessage" = "MacMulator ti da il benvenuto. Al momento non ci sono macchine virtuali configurate.";
+"VirtualMachineViewController.newVMLabel" = "Crea nuova VM";
+"VirtualMachineViewController.importVMLabel" = "Apri VM esistente";
+"VirtualMachineViewController.vmArchitecture" = "Architettura:";
+"VirtualMachineViewController.vmType" = "Tipo:";
+"VirtualMachineViewController.vmProcessors" = "Processori:";
+"VirtualMachineViewController.vmMemory" = "Memoria:";
+"VirtualMachineViewController.vmHardDrive" = "Disco:";
+"VirtualMachineViewController.editVMButton" = "Configura questa VM";

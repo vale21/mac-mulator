@@ -62,7 +62,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
                     result, _ in
                     DispatchQueue.main.async {
                         if result.exitCode != 0 {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: "VM execution failed with error: " + result.error!)
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineContainerViewController.vmExecutionError", comment: ""), result.error!))
                         }
                     }
                 })
@@ -85,7 +85,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
             // Window will be closed by the VM runner after the pausing will be complete
             return false
         } else {
-            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?")
+            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineContainerViewController.forciblyClosing", comment: ""))
             if response.rawValue != Utils.ALERT_RESP_OK {
                 return false
             } else {

@@ -76,6 +76,7 @@
 "QemuConstants.bootDrive" = "Boot Drive";
 "QemuConstants.bootMode" = "Boot Mode";
 "QemuConstants.uefiSecure" = "UEFI with Secure Boot";
+"RootViewController.forciblyClosing" = "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "Utils.sudoNotAllowed" = "Incorrect Qemu command provided: The usage of sudo command is not allowed.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";
 "Utils.executableError" = "Incorrect Qemu command provided: The provided executable Is not a Qemu Executable. \n\nAllowed executables are: %@.\n\nProvided command was: %@";
@@ -115,6 +116,8 @@
 "VirtualMachine.sshPortMapping" = "SSH port mapping";
 "VirtualMachine.infoPlistReadError" = "Error while reading Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Error while writing Info.plist: %@";
+"VirtualMachineContainerViewController.vmExecutionError" = "VM execution failed with error: %@";
+"VirtualMachineContainerViewController.forciblyClosing" = "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "VirtualMachineListViewController.delete" = "Delete";
 "VirtualMachineListViewController.edit" = "Edit";
 "VirtualMachineListViewController.start" = "Start";
@@ -135,3 +138,12 @@
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmFeatures" = "Virtual Machine Features";
 "VirtualMachineViewController.vmExecutionFailed" = "VM execution failed with error: %@";
+"VirtualMachineViewController.noVMWelcomeMessage" = "Welcome to MacMulator. There are no Virtual Machines configured as of now.";
+"VirtualMachineViewController.newVMLabel" = "Create new VM";
+"VirtualMachineViewController.importVMLabel" = "Open existing VM";
+"VirtualMachineViewController.vmArchitecture" = "Architecture:";
+"VirtualMachineViewController.vmType" = "Type:";
+"VirtualMachineViewController.vmProcessors" = "Processors:";
+"VirtualMachineViewController.vmMemory" = "Processors:";
+"VirtualMachineViewController.vmHardDrive" = "Hard drive size:";
+"VirtualMachineViewController.editVMButton" = "Configure this VM";
