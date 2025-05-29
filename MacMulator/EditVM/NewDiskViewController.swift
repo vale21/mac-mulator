@@ -14,12 +14,14 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     @IBOutlet var titleField: NSTextField!
+    @IBOutlet var diskSizeLabel: NSTextField!
     @IBOutlet var diskSizeTextField: NSTextField!
     @IBOutlet var diskSizeStepper: NSStepper!
     @IBOutlet var diskSizeSlider: NSSlider!
     @IBOutlet var minDiskSizeLabel: NSTextField!
     @IBOutlet var maxDiskSizeLabel: NSTextField!
     @IBOutlet var useCow: NSButton!
+    @IBOutlet var cowDescriptionLabel: NSTextField!
     @IBOutlet var okButton: NSButton!
 
     var oldVirtualDrive: VirtualDrive?
@@ -56,8 +58,10 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
                         useCow.intValue = 0
                         useCow.isEnabled = false
+                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
                         useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
                     } else {
+                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
                         if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {
                             useCow.intValue = 1
                         } else {
@@ -118,6 +122,10 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewWillAppear() {
+        diskSizeTextField.stringValue = NSLocalizedString("NewDiskViewController.diskSizeTextField", comment: "")
+        useCow.title = NSLocalizedString("NewDiskViewController.useCow", comment: "")
+        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
+
         updateView()
     }
 
@@ -129,7 +137,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         isVisible = false
     }
 
-    func controlTextDidEndEditing(_ notification: Notification) {
+    func controlTextDidChange(_ notification: Notification) {
         if (notification.object as! NSTextField) == diskSizeTextField, isVisible {
             if let newVirtualDrive {
                 let size = diskSizeTextField.intValue

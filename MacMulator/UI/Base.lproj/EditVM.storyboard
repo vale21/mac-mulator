@@ -10,7 +10,7 @@
         <!--Window Controller-->
         <scene sceneID="bwL-Fa-0OI">
             <objects>
-                <windowController id="sJi-6Q-Gmn" sceneMemberID="viewController">
+                <windowController showSeguePresentationStyle="single" id="sJi-6Q-Gmn" sceneMemberID="viewController">
                     <window key="window" title="Configure Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="84f-BE-UCM">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
@@ -448,7 +448,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" headerView="la4-XS-a2p" viewBased="YES" id="XFF-rf-sSL">
-                                            <rect key="frame" x="0.0" y="0.0" width="558" height="190"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="566" height="190"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -482,8 +482,8 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Name" width="67" minWidth="10" maxWidth="3.4028234663852886e+38" id="mUo-lv-Nhy">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Drive Name">
+                                                <tableColumn identifier="Name" width="51" minWidth="10" maxWidth="3.4028234663852886e+38" id="mUo-lv-Nhy">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -495,13 +495,13 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="KhP-eW-AEL" customClass="DrivesTableDriveNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="53" y="0.0" width="67" height="30"/>
+                                                            <rect key="frame" x="53" y="0.0" width="51" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WiN-RH-B9g">
-                                                                    <rect key="frame" x="0.0" y="7" width="67" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="7" width="51" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="disk-0" id="36V-of-uVC">
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="nvme-0" id="36V-of-uVC">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -515,8 +515,8 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Type" width="71" minWidth="10" maxWidth="3.4028234663852886e+38" id="o4C-Lm-P9O">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Drive type">
+                                                <tableColumn identifier="Type" width="79.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="o4C-Lm-P9O">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -528,7 +528,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Hcs-08-TrM" customClass="DrivesTableDriveTypeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="137" y="0.0" width="71" height="30"/>
+                                                            <rect key="frame" x="121" y="0.0" width="79" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ckm-MX-63N">
@@ -547,7 +547,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Size" width="54" minWidth="10" maxWidth="3.4028234663852886e+38" id="gG1-Fv-uJk">
+                                                <tableColumn identifier="Size" width="70" minWidth="10" maxWidth="3.4028234663852886e+38" id="gG1-Fv-uJk">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Size">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -560,7 +560,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="225" y="0.0" width="54" height="30"/>
+                                                            <rect key="frame" x="218" y="0.0" width="67" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -579,7 +579,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Path" width="149" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
+                                                <tableColumn identifier="Path" width="148" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="File location">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -592,11 +592,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="296" y="0.0" width="149" height="30"/>
+                                                            <rect key="frame" x="305" y="0.0" width="145" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CBk-hq-ylm">
-                                                                    <rect key="frame" x="1" y="7" width="151" height="16"/>
+                                                                    <rect key="frame" x="1" y="7" width="147" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/vale/documents/a/aaaaa/bla/deskytip/url/myFolder" id="8Sn-gW-gZi">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -628,7 +628,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="462" y="0.0" width="87" height="30"/>
+                                                            <rect key="frame" x="470" y="0.0" width="84" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -681,8 +681,8 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
-                                    <rect key="frame" x="1" y="180" width="558" height="16"/>
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
+                                    <rect key="frame" x="1" y="203" width="558" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9r1-6c-c5M">
@@ -690,7 +690,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="la4-XS-a2p">
-                                    <rect key="frame" x="0.0" y="0.0" width="558" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="566" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
@@ -786,8 +786,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="333" height="550"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="yiE-wD-9eP">
-                                <rect key="frame" x="18" y="514" width="47" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yiE-wD-9eP">
+                                <rect key="frame" x="18" y="514" width="83" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Name: " id="fUS-3r-6eL">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -795,7 +795,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wbv-Uw-n74">
-                                <rect key="frame" x="73" y="466" width="240" height="16"/>
+                                <rect key="frame" x="105" y="466" width="208" height="16"/>
                                 <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="mCl-p9-Cr0">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -803,7 +803,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="qOT-F7-RTk">
-                                <rect key="frame" x="73" y="442" width="240" height="16"/>
+                                <rect key="frame" x="105" y="442" width="208" height="16"/>
                                 <textFieldCell key="cell" title="Lorem ipsur dolor sit amen" id="6Lg-AO-OiO">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -811,7 +811,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4mj-in-AGf">
-                                <rect key="frame" x="73" y="490" width="240" height="16"/>
+                                <rect key="frame" x="105" y="490" width="208" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="SAJ-Ch-pi6">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -819,7 +819,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bbf-2M-Bbm">
-                                <rect key="frame" x="73" y="514" width="240" height="16"/>
+                                <rect key="frame" x="105" y="514" width="208" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsur dolor sit amen" id="D4y-ln-zuh">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -827,9 +827,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kOH-5v-H8G">
-                                <rect key="frame" x="18" y="490" width="34" height="16"/>
+                                <rect key="frame" x="18" y="490" width="83" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="LiQ-9M-Fmu"/>
+                                    <constraint firstAttribute="width" constant="79" id="LiQ-9M-Fmu"/>
                                 </constraints>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Size:" id="pG9-oX-KkH">
                                     <font key="font" metaFont="system"/>
@@ -837,16 +837,16 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dlY-Sa-DfD">
-                                <rect key="frame" x="18" y="466" width="51" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlY-Sa-DfD">
+                                <rect key="frame" x="18" y="466" width="83" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Format:" id="FeO-h6-43L">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3Dv-gT-Jae">
-                                <rect key="frame" x="18" y="442" width="36" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Dv-gT-Jae">
+                                <rect key="frame" x="18" y="442" width="83" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Path:" id="uIc-3d-PNR">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -917,7 +917,7 @@
                             <constraint firstItem="dlY-Sa-DfD" firstAttribute="baseline" secondItem="wbv-Uw-n74" secondAttribute="baseline" id="c9K-1c-j8O"/>
                             <constraint firstItem="bbf-2M-Bbm" firstAttribute="trailing" secondItem="4mj-in-AGf" secondAttribute="trailing" id="fYH-bD-Ubz"/>
                             <constraint firstItem="kOH-5v-H8G" firstAttribute="leading" secondItem="dlY-Sa-DfD" secondAttribute="leading" id="frY-Hx-azF"/>
-                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="trailing" constant="25" id="gsD-AJ-etZ"/>
+                            <constraint firstItem="4mj-in-AGf" firstAttribute="leading" secondItem="kOH-5v-H8G" secondAttribute="trailing" constant="8" id="gsD-AJ-etZ"/>
                             <constraint firstAttribute="trailing" secondItem="bbf-2M-Bbm" secondAttribute="trailing" constant="22" id="j7M-jv-Cao"/>
                             <constraint firstItem="4mj-in-AGf" firstAttribute="trailing" secondItem="wbv-Uw-n74" secondAttribute="trailing" id="rIv-Uk-R7p"/>
                             <constraint firstItem="Qja-ct-dGu" firstAttribute="top" secondItem="E00-i6-Vsl" secondAttribute="bottom" constant="8" symbolic="YES" id="rvm-Ek-3eJ"/>
@@ -928,15 +928,20 @@
                     </view>
                     <connections>
                         <outlet property="driveFormat" destination="wbv-Uw-n74" id="j24-XY-7n0"/>
+                        <outlet property="driveFormatLabel" destination="dlY-Sa-DfD" id="Ihj-9I-11g"/>
                         <outlet property="driveName" destination="bbf-2M-Bbm" id="RZj-dq-J8r"/>
+                        <outlet property="driveNameLabel" destination="yiE-wD-9eP" id="Kjv-km-W58"/>
                         <outlet property="drivePath" destination="qOT-F7-RTk" id="A2j-Lu-hza"/>
+                        <outlet property="drivePathLabel" destination="3Dv-gT-Jae" id="qTn-hn-nwS"/>
                         <outlet property="driveSize" destination="4mj-in-AGf" id="wZw-eh-HWN"/>
+                        <outlet property="driveSizeLabel" destination="kOH-5v-H8G" id="OUj-of-DpI"/>
                         <outlet property="infoView" destination="AMt-oY-ZGj" id="i5L-2t-TPz"/>
+                        <outlet property="infoViewLabel" destination="E00-i6-Vsl" id="FC8-DR-ovK"/>
                     </connections>
                 </viewController>
                 <customObject id="CTy-I5-vti" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2796" y="-2160"/>
+            <point key="canvasLocation" x="2795.5" y="-2160"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="Njf-SG-bvD">
@@ -971,11 +976,11 @@
             <objects>
                 <viewController id="jnj-BN-7iT" customClass="NewDiskViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="FKu-RT-N5p">
-                        <rect key="frame" x="0.0" y="0.0" width="444" height="241"/>
+                        <rect key="frame" x="0.0" y="0.0" width="444" height="216"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RsM-HF-gGy">
-                                <rect key="frame" x="18" y="200" width="408" height="21"/>
+                                <rect key="frame" x="18" y="175" width="408" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Create new disk" id="Vrn-mM-2tu">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -984,7 +989,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uEu-kH-YSK">
-                                <rect key="frame" x="18" y="169" width="61" height="16"/>
+                                <rect key="frame" x="18" y="142" width="61" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Size (GB)" id="SvX-Br-xQl">
                                     <font key="font" metaFont="system"/>
@@ -1004,7 +1009,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bww-7X-lcl">
-                                <rect key="frame" x="14" y="141" width="60" height="16"/>
+                                <rect key="frame" x="202" y="142" width="40" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="1 GB" id="iMm-Ju-x4p">
                                     <font key="font" metaFont="system"/>
@@ -1050,7 +1055,7 @@ Gw
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aEd-ol-QxY">
-                                <rect key="frame" x="85" y="166" width="96" height="21"/>
+                                <rect key="frame" x="85" y="141" width="96" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="luf-k8-X9k">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="xBx-ez-szl"/>
@@ -1063,7 +1068,7 @@ Gw
                                 </connections>
                             </textField>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fCN-Je-KJo">
-                                <rect key="frame" x="179" y="163" width="19" height="28"/>
+                                <rect key="frame" x="179" y="138" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="2000" doubleValue="256" id="jbF-MM-XzP"/>
                                 <connections>
@@ -1071,7 +1076,7 @@ Gw
                                 </connections>
                             </stepper>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bNl-Ln-zWW">
-                                <rect key="frame" x="83" y="133" width="279" height="28"/>
+                                <rect key="frame" x="246" y="134" width="126" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="1" maxValue="2000" doubleValue="256" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="W8O-bL-uSd"/>
                                 <connections>
@@ -1079,9 +1084,9 @@ Gw
                                 </connections>
                             </slider>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
-                                <rect key="frame" x="366" y="141" width="60" height="16"/>
+                                <rect key="frame" x="376" y="142" width="50" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="2 TB" id="CKc-j7-uhd">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="500 GB" id="CKc-j7-uhd">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1090,6 +1095,8 @@ Gw
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="cowDescriptionLabel" destination="Aca-LT-ADi" id="nda-qR-XY8"/>
+                        <outlet property="diskSizeLabel" destination="uEu-kH-YSK" id="lP4-Vq-lhH"/>
                         <outlet property="diskSizeSlider" destination="bNl-Ln-zWW" id="KpE-pH-6HV"/>
                         <outlet property="diskSizeStepper" destination="fCN-Je-KJo" id="c8a-vV-QOI"/>
                         <outlet property="diskSizeTextField" destination="aEd-ol-QxY" id="ThD-dI-BIo"/>
@@ -1102,7 +1109,7 @@ Gw
                 </viewController>
                 <customObject id="g3v-oM-ElA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2282" y="-1413.5"/>
+            <point key="canvasLocation" x="2282" y="-1426"/>
         </scene>
         <!--Create Disk File View Controller-->
         <scene sceneID="NyM-H2-c2N">
@@ -1113,9 +1120,9 @@ Gw
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3m2-bb-wv8">
-                                <rect key="frame" x="127" y="46" width="124" height="16"/>
+                                <rect key="frame" x="18" y="46" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Creating new disk..." id="re0-IZ-qYs">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Creating new disk..." id="re0-IZ-qYs">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1128,12 +1135,13 @@ Gw
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="diskProgressLabel" destination="3m2-bb-wv8" id="XxB-tt-U14"/>
                         <outlet property="progressBar" destination="FG4-oW-5kx" id="C1o-X6-MZQ"/>
                     </connections>
                 </viewController>
                 <customObject id="kPs-5W-4qs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2766" y="-1265"/>
+            <point key="canvasLocation" x="2765.5" y="-1265"/>
         </scene>
         <!--Advanced-->
         <scene sceneID="bTX-Uu-Afd">

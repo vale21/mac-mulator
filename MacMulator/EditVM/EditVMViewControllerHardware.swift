@@ -186,6 +186,21 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         openImageButton.title = NSLocalizedString("EditVMViewControllerHardware.openImageButton", comment: "")
         createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.createNewDiskButton", comment: "")
 
+        for column in drivesTableView.tableColumns {
+            if column.identifier.rawValue == "Name" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerHardware.drivesTableColumnName", comment: "")
+            }
+            if column.identifier.rawValue == "Type" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerHardware.drivesTableColumnType", comment: "")
+            }
+            if column.identifier.rawValue == "Size" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerHardware.drivesTableColumnSize", comment: "")
+            }
+            if column.identifier.rawValue == "Path" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerHardware.drivesTableColumnPath", comment: "")
+            }
+        }
+
         updateView()
     }
 
