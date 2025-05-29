@@ -8,13 +8,17 @@
 import Cocoa
 
 class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate {
+    @IBOutlet var architectureLabel: NSTextField!
     @IBOutlet var architectureComboBox: NSComboBox!
+    @IBOutlet var cpusLabel: NSTextField!
     @IBOutlet var cpusComboBox: NSComboBox!
+    @IBOutlet var memoryLabel: NSTextField!
     @IBOutlet var memoryTextView: NSTextField!
     @IBOutlet var memoryStepper: NSStepper!
     @IBOutlet var memorySlider: NSSlider!
     @IBOutlet var minMemoryLabel: NSTextField!
     @IBOutlet var maxMemoryLabel: NSTextField!
+    @IBOutlet var drivesTableLabel: NSTextField!
     @IBOutlet var drivesTableView: NSTableView!
     @IBOutlet var openImageButton: NSButton!
     @IBOutlet var createNewDiskButton: NSButton!
@@ -175,6 +179,13 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     override func viewWillAppear() {
+        architectureLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.architectureLabel", comment: "")
+        cpusLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.cpusLabel", comment: "")
+        memoryLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.memoryLabel", comment: "")
+        drivesTableLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.drivesTableLabel", comment: "")
+        openImageButton.title = NSLocalizedString("EditVMViewControllerHardware.openImageButton", comment: "")
+        createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.createNewDiskButton", comment: "")
+
         updateView()
     }
 

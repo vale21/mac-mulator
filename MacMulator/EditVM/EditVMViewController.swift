@@ -20,6 +20,12 @@ class EditVMViewController: NSTabViewController {
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
 
+        tabViewItems[0].label = NSLocalizedString("EditVMViewController.general", comment: "")
+        tabViewItems[1].label = NSLocalizedString("EditVMViewController.hardware", comment: "")
+        tabViewItems[2].label = NSLocalizedString("EditVMViewController.network", comment: "")
+        tabViewItems[3].label = NSLocalizedString("EditVMViewController.video", comment: "")
+        tabViewItems[4].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
+
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
         let network = tabViewItems[2].viewController as! EditVMViewControllerNetwork
