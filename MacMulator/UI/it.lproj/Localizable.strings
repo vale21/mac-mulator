@@ -50,7 +50,7 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Sei sicuro di voler rimuovere il drive virtuale \"%@\"? Questa operazione è irreversibile.";
 "EditVMViewControllerHardware.onlyOneDriveAvailable" =  "Questa macchina virtuale è basata su Apple Virtualization Framework. Con questo tipo di macchine virtuali al momento è possibile configurare un solo drive virtuale.";
 "EditVMViewControllerHardware.architectureLabel" = "Architettura";
-"EditVMViewControllerHardware.cpusLabel" = "Processori";
+"EditVMViewControllerHardware.cpusLabel" = "CPUs:";
 "EditVMViewControllerHardware.memoryLabel" = "Memoria (MB)";
 "EditVMViewControllerHardware.drivesTableLabel" = "Dischi e immagini";
 "EditVMViewControllerHardware.openImageButton" = "Apri immagine...";
