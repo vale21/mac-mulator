@@ -60,6 +60,13 @@
 "EditVMViewControllerHardware.drivesTableColumnType" = "Type";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Size";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "File location";
+"EditVMViewControllerNetwork.networkAdapterLabel" = "Network adapter";
+"EditVMViewControllerNetwork.portMappingsLabel" = "Port mappings";
+"EditVMViewControllerNetwork.portMappingsDescription" = "In the table below you will be able to define port mappings between the Virtual Machine and the Host Mac. The port defined in the \"Virtual Machine Port\" column will be mapped to the corresponding \"Host Mac Port\" on the host Mac.";
+"EditVMViewControllerNetwork.createMappingButton" = "Create new mapping...";
+"EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
+"EditVMViewControllerNetwork.mappingsTableColumnVM" = "Virtual Machine Port";
+"EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";
 "NewDiskViewController.cowNotSupported" = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported.";
@@ -70,6 +77,9 @@
 "NewDiskViewController.cowDescriptionLabel" = "The Copy On Write (COW) feature greatly reduces the amount of disk space used by the drive, and it is highly recommended";
 "NewPortMappingViewController.createMapping" = "Create new port mapping";
 "NewPortMappingViewController.editMapping" = "Edit port mapping %@";
+"NewPortMappingViewController.nameLabel" = "Mapping name:";
+"NewPortMappingViewController.virtualMachinePortLabel" = "Port on Virtual Machine:";
+"NewPortMappingViewController.hostMacPortLabel" = "Corresponding port on host Mac:";
 "NewVMViewController.defaultMessage" = "You can type here to write a description of your VM";
 "NewVMController.noMediaProvided" = "You did not specify an install media for macOS. MacMulator will download the latest supported version of %@ from Apple now. Do you agree?";
 "NewVMController.vmCreationFailed" = "VM creation failed: ";

@@ -13,10 +13,13 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         case EDIT
     }
 
-    @IBOutlet var nameField: NSTextField!
     @IBOutlet var titleField: NSTextField!
+    @IBOutlet var nameLabel: NSTextField!
+    @IBOutlet var nameField: NSTextField!
+    @IBOutlet var virtualMachinePortLabel: NSTextField!
     @IBOutlet var virtualMachinePortField: NSTextField!
     @IBOutlet var virtualMachinePortStepper: NSStepper!
+    @IBOutlet var hostMacPortLabel: NSTextField!
     @IBOutlet var hostMacPortField: NSTextField!
     @IBOutlet var hostMacPortStepper: NSStepper!
 
@@ -42,6 +45,10 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewWillAppear() {
+        nameLabel.stringValue = NSLocalizedString("NewPortMappingViewController.nameLabel", comment: "")
+        virtualMachinePortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.virtualMachinePortLabel", comment: "")
+        hostMacPortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.hostMacPortLabel", comment: "")
+
         let portNumberFormatter = NumberFormatter()
         portNumberFormatter.hasThousandSeparators = false
 

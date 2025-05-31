@@ -59,6 +59,13 @@
 "EditVMViewControllerHardware.drivesTableColumnType" = "Tipo";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Dimensione";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "Percorso del file";
+"EditVMViewControllerNetwork.networkAdapterLabel" = "Scheda di rete";
+"EditVMViewControllerNetwork.portMappingsLabel" = "Mappatura porte";
+"EditVMViewControllerNetwork.portMappingsDescription" = "Nella tabella qui sotto puoi definire delle mappature tra le porte della macchina virtuale e quelle del Mac. La porta specificata nella colonna \"Porta Macchina Virtuale\" viene mappata nella corrispondente \"Porta Host Mac\" sul tuo Mac.";
+"EditVMViewControllerNetwork.createMappingButton" = "Crea nuova mappatura...";
+"EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
+"EditVMViewControllerNetwork.mappingsTableColumnVM" = "Porta Macchina Virtuale";
+"EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "La Macchina Virtuale è uscita con errore: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "La Macchina Virtuale è stata fermata dal SO guest.";
 "NewDiskViewController.cowNotSupported" = "Questa macchina virtuale è basata su Apple Virtualization Framework. Con questo tipo di macchine virtuali Copy On Write non è supportato.";
@@ -69,6 +76,9 @@
 "NewDiskViewController.cowDescriptionLabel" = "La funzionalità di Copy On Write (COW) riduce di molto lo spazio disco usato dal drive virtuale, ed è altamente raccomandata";
 "NewPortMappingViewController.createMapping" = "Crea nuova mappatura porte";
 "NewPortMappingViewController.editMapping" = "Modifica mappatura %@";
+"NewPortMappingViewController.nameLabel" = "Nome mappatura:";
+"NewPortMappingViewController.virtualMachinePortLabel" = "Porta sulla macchine virtuale:";
+"NewPortMappingViewController.hostMacPortLabel" = "Porta corrispondente sul Mac:";
 "NewVMViewController.defaultMessage" = "Puoi digitare qui per aggiungere una descrizione della macchina virtuale";
 "NewVMController.noMediaProvided" = "Non hai specificato un installer di macOS. MacMulator scaricherà l'ultima versione supportata di %@ da Apple. Sei d'accordo?";
 "NewVMController.vmCreationFailed" = "Creazione della VM fallita: ";

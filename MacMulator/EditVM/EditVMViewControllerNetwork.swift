@@ -8,8 +8,12 @@
 import Cocoa
 
 class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+    @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
+    @IBOutlet var portMappingsLabel: NSTextField!
+    @IBOutlet var portMappingsDescription: NSTextField!
     @IBOutlet var mappingsTableView: NSTableView!
+    @IBOutlet var createMappingButton: NSButton!
 
     var virtualMachine: VirtualMachine?
 
@@ -19,6 +23,23 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     override func viewWillAppear() {
+        networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkAdapterLabel", comment: "")
+        portMappingsLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsLabel", comment: "")
+        portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsDescription", comment: "")
+        createMappingButton.title = NSLocalizedString("EditVMViewControllerNetwork.createMappingButton", comment: "")
+
+        for column in mappingsTableView.tableColumns {
+            if column.identifier.rawValue == "Name" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerNetwork.mappingsTableColumnName", comment: "")
+            }
+            if column.identifier.rawValue == "VM" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerNetwork.mappingsTableColumnVM", comment: "")
+            }
+            if column.identifier.rawValue == "Host" {
+                column.headerCell.title = NSLocalizedString("EditVMViewControllerNetwork.mappingsTableColumnHost", comment: "")
+            }
+        }
+
         updateView()
     }
 
