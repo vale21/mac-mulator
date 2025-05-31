@@ -371,7 +371,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hw3-U6-vgX">
-                                <rect key="frame" x="272" y="307" width="19" height="28"/>
+                                <rect key="frame" x="564" y="345" width="19" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <stepperCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="8192" doubleValue="512" id="s3C-lX-1tM"/>
                                 <connections>
@@ -379,7 +379,7 @@
                                 </connections>
                             </stepper>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C65-wD-Nee">
-                                <rect key="frame" x="18" y="310" width="91" height="16"/>
+                                <rect key="frame" x="312" y="351" width="91" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Memory (MB):" id="9ny-cB-w8q">
                                     <font key="font" metaFont="system"/>
@@ -406,7 +406,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TgZ-59-ml0">
-                                <rect key="frame" x="114" y="347" width="177" height="25"/>
+                                <rect key="frame" x="102" y="347" width="189" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="KZL-a3-vya">
                                     <font key="font" metaFont="system"/>
@@ -560,7 +560,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="218" y="0.0" width="29" height="30"/>
+                                                            <rect key="frame" x="218" y="0.0" width="40" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -592,11 +592,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="305" y="0.0" width="107" height="30"/>
+                                                            <rect key="frame" x="305" y="0.0" width="118" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="CBk-hq-ylm">
-                                                                    <rect key="frame" x="1" y="7" width="109" height="16"/>
+                                                                    <rect key="frame" x="1" y="7" width="121" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="/Users/vale/documents/a/aaaaa/bla/deskytip/url/myFolder" id="8Sn-gW-gZi">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -628,7 +628,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="470" y="0.0" width="46" height="30"/>
+                                                            <rect key="frame" x="470" y="0.0" width="57" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -695,7 +695,7 @@
                                 </tableHeaderView>
                             </scrollView>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bqq-6n-VM7">
-                                <rect key="frame" x="115" y="310" width="157" height="21"/>
+                                <rect key="frame" x="405" y="348" width="160" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="2Ik-4k-tBF">
                                     <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="m4c-1w-EHb"/>
@@ -708,7 +708,7 @@
                                 </connections>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b8h-92-h8a">
-                                <rect key="frame" x="312" y="351" width="47" height="16"/>
+                                <rect key="frame" x="50" y="307" width="47" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="CPUs" id="Trh-qG-Amw">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -717,7 +717,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="alY-XH-NeD">
-                                <rect key="frame" x="364" y="347" width="218" height="25"/>
+                                <rect key="frame" x="102" y="305" width="189" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="I6a-3R-eGS">
                                     <font key="font" metaFont="system"/>
@@ -730,7 +730,7 @@
                                 </connections>
                             </comboBox>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Or2-CQ-Js9">
-                                <rect key="frame" x="374" y="305" width="158" height="28"/>
+                                <rect key="frame" x="368" y="303" width="158" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <sliderCell key="cell" continuous="YES" alignment="left" minValue="32" maxValue="8192" doubleValue="512" tickMarkPosition="above" numberOfTickMarks="15" sliderType="linear" id="31d-fc-gp0"/>
                                 <connections>
@@ -738,7 +738,7 @@
                                 </connections>
                             </slider>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M9W-xr-RhF">
-                                <rect key="frame" x="536" y="313" width="66" height="16"/>
+                                <rect key="frame" x="530" y="311" width="66" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="32 GB" id="rNe-Z2-GIL">
                                     <font key="font" metaFont="system"/>
@@ -747,7 +747,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wr5-u2-BeG">
-                                <rect key="frame" x="300" y="313" width="70" height="16"/>
+                                <rect key="frame" x="294" y="311" width="70" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="32 MB" id="9wX-k6-vWC">
                                     <font key="font" metaFont="system"/>
