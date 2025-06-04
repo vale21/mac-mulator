@@ -53,7 +53,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     @IBAction func createVM(_: Any) {
         if validateInput() {
             if Utils.isMacVMWithOSVirtualizationFramework(os: vmType.stringValue, subtype: vmSubType.stringValue), !Utils.isIpswInstallMediaProvided(installMedia.stringValue) {
-                let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewVMController.noMediaProvided", comment: ""), Utils.getHostMacOSVersion()))
+                let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewVMController.noMediaProvided", comment: ""), Utils.getHostMacOSVersion()), virtualMachine: nil)
 
                 if response.rawValue == Utils.ALERT_RESP_OK {
                     vmSubType.stringValue = Utils.getMacOSSubType(Utils.getHostMacOSVersion())

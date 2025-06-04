@@ -85,7 +85,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
             // Window will be closed by the VM runner after the pausing will be complete
             return false
         } else {
-            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineContainerViewController.forciblyClosing", comment: ""))
+            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineContainerViewController.forciblyClosing", comment: ""), virtualMachine: virtualMachine)
             if response.rawValue != Utils.ALERT_RESP_OK {
                 return false
             } else {

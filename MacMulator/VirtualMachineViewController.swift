@@ -121,7 +121,7 @@ class VirtualMachineViewController: NSViewController {
                     self.rootController?.getRunnerForRunningVM(vm)?.stopVM(guestStopped: true)
                 }
             }
-        })
+        }, virtualMachine: rootController?.currentVm)
     }
 
     func startVMInRecovery(sender: Any) {

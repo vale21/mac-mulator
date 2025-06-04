@@ -85,8 +85,13 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler)
     }
 
-    static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
+    static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil, virtualMachine: VirtualMachine?) {
         let alert = NSAlert()
+
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+
         alert.alertStyle = style
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))
@@ -94,8 +99,13 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler)
     }
 
-    static func showPrompt(window _: NSWindow, style: NSAlert.Style, message: String) -> NSApplication.ModalResponse {
+    static func showPrompt(window _: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) -> NSApplication.ModalResponse {
         let alert = NSAlert()
+
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+
         alert.alertStyle = style
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))
@@ -904,7 +914,7 @@ class Utils {
                             virtualMachine.drives.remove(at: virtualMachine.drives.firstIndex(where: { vd in vd.name == drive.name })!)
                             virtualMachine.writeToPlist()
                         }
-                    })
+                    }, virtualMachine: virtualMachine)
                 }
             }
         }

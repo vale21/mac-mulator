@@ -8,9 +8,12 @@
 import Cocoa
 
 class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
+    @IBOutlet var qemuPathLabel: NSTextField!
     @IBOutlet var qemuPathView: NSTextField!
     @IBOutlet var accelerateVM: NSButton!
     @IBOutlet var qemuPathButton: NSButton!
+    @IBOutlet var qemuCommandLabel: NSTextField!
+    @IBOutlet var qemuCommandDescription: NSTextField!
     @IBOutlet var fullCommandView: NSTextView!
 
     var virtualMachine: VirtualMachine?
@@ -39,6 +42,12 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     }
 
     override func viewWillAppear() {
+        qemuPathLabel.stringValue = NSLocalizedString("EditVMViewControllerAdvanced.qemuPathLabel", comment: "")
+        accelerateVM.title = NSLocalizedString("EditVMViewControllerAdvanced.accelerateVM", comment: "")
+        qemuPathButton.title = NSLocalizedString("EditVMViewControllerAdvanced.qemuPathButton", comment: "")
+        qemuCommandLabel.stringValue = NSLocalizedString("EditVMViewControllerAdvanced.qemuCommandLabel", comment: "")
+        qemuCommandDescription.stringValue = NSLocalizedString("EditVMViewControllerAdvanced.qemuCommandDescription", comment: "")
+
         updateView()
     }
 

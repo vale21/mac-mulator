@@ -37,8 +37,14 @@
 "EditVMViewController.network" = "Network";
 "EditVMViewController.video" = "Video";
 "EditVMViewController.advanced" = "Avanzate";
+"EditVMViewController.windowTitle" = "Configura la VM %@";
 "EditVMViewControllerAdvanced.featureNotAvailable" = "Questa funzione non è disponibile perché la VM ha architettura  %@, che è diversa dall'achitettura del tuo Mac (%@)";
 "EditVMViewControllerAdvanced.rosettaNotAvailable" = "Questa funzione non è disponibile perché MacMulator sta girando sotto Rosetta";
+"EditVMViewControllerAdvanced.qemuPathLabel" = "Percorso di Qemu (Solo per questa VM)";
+"EditVMViewControllerAdvanced.accelerateVM" = "Accelera la VM usando Apple Hypervisor";
+"EditVMViewControllerAdvanced.qemuPathButton" = "Trova";
+"EditVMViewControllerAdvanced.qemuCommandLabel" = "Comando Qemu completo";
+"EditVMViewControllerAdvanced.qemuCommandDescription" = "Se modifichi il comando sotto, MacMulator lo userà per lanciare Qemu, indipendentemente dalle opzioni impostate negli altri tab. Usalo con cura, o la tua VM non partirà. Se cambi l'eseguibile, assicurati che sia affidabile. Per resettare il comando di default semplicemente cancella tutto il comando personalizzato.";
 "EditVMViewControllerGeneral.vmTypeLabel" = "Tipo VM";
 "EditVMViewControllerGeneral.vmSubTypeLabel" = "Sottotipo VM";
 "EditVMViewControllerGeneral.vmNameLabel" = "Nome VM";
@@ -133,7 +139,7 @@
 "RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "Utils.sudoNotAllowed" = "Il comando Qemu fornito è errato: L'uso del comando sudo non è consentito.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";
-"Utils.executableError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non è un esegfuibile Qemu. \n\nGli eseguibili consentiti sono: %@.\n\nIl comando fornito è: %@";
+"Utils.executableError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non è un eseguibile Qemu. \n\nGli eseguibili consentiti sono: %@.\n\nIl comando fornito è: %@";
 "Utils.genericError" = "L'eseguibile Qemu fornito è corrotto o non supportato.";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Annulla";
@@ -180,6 +186,7 @@
 "VirtualMachineListViewController.pause" = "Pausa";
 "VirtualMachineListViewController.showInFinder" = "Mostra nel Finder";
 "VirtualMachineListViewController.clone" = "Clona";
+"VirtualMachineListViewController.runningVM" = "La VM che stai cercando di eliminare è in esecuzione. Vuoi continuare?";
 "VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineViewController.startVM" = "Avvia questa VM";
 "VirtualMachineViewController.pauseNotSupported" = "La pausa è supportata solo da VM Apple Silicon con guest macOS";

@@ -40,7 +40,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func windowShouldClose(_: NSWindow) -> Bool {
         if areThereRunningVMs() {
-            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("RootViewController.forciblyClosing", comment: ""))
+            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("RootViewController.forciblyClosing", comment: ""), virtualMachine: nil)
             if response.rawValue != Utils.ALERT_RESP_OK {
                 return false
             } else {

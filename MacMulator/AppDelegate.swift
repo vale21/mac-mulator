@@ -306,7 +306,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
         if let rootController {
             if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""))
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""), virtualMachine: nil)
                 if response.rawValue != Utils.ALERT_RESP_OK {
                     return NSApplication.TerminateReply.terminateCancel
                 } else {

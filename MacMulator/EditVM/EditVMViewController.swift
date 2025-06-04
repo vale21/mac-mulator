@@ -18,6 +18,8 @@ class EditVMViewController: NSTabViewController {
     }
 
     func setVirtualMachine(_ vm: VirtualMachine) {
+        view.window?.title = String(format: NSLocalizedString("EditVMViewController.windowTitle", comment: ""), vm.displayName)
+
         virtualMachine = vm
 
         tabViewItems[0].label = NSLocalizedString("EditVMViewController.general", comment: "")

@@ -156,7 +156,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             print(error.localizedDescription)
                         }
                     }
-                })
+                }, virtualMachine: virtualMachine)
             }
         }
     }

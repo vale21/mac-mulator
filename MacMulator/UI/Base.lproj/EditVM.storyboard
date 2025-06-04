@@ -621,7 +621,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="215" y="0.0" width="0.0" height="30"/>
+                                                            <rect key="frame" x="214.5" y="0.0" width="0.0" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -653,7 +653,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="305" y="0.0" width="38" height="30"/>
+                                                            <rect key="frame" x="304.5" y="0.0" width="0.0" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CBk-hq-ylm">
@@ -685,7 +685,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="470" y="0.0" width="0.0" height="30"/>
+                                                            <rect key="frame" x="469.5" y="0.0" width="0.0" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -1147,8 +1147,8 @@ Gw
                         <rect key="frame" x="0.0" y="0.0" width="600" height="390"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sY4-Cv-rAg">
-                                <rect key="frame" x="20" y="354" width="180" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sY4-Cv-rAg">
+                                <rect key="frame" x="20" y="354" width="498" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Qemu path (Just for this VM)" id="7lz-b3-us7">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1227,8 +1227,8 @@ Gw
                                     <action selector="accelerateToggleChanged:" target="oyc-lN-MJc" id="Z3e-mK-149"/>
                                 </connections>
                             </button>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2O7-0C-bGw">
-                                <rect key="frame" x="20" y="258" width="129" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2O7-0C-bGw">
+                                <rect key="frame" x="20" y="258" width="562" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Full Qemu command" id="8h1-0K-9rT">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1272,7 +1272,10 @@ Gw
                     <connections>
                         <outlet property="accelerateVM" destination="5zY-4N-sHl" id="e8p-HG-KLz"/>
                         <outlet property="fullCommandView" destination="De0-qt-r8X" id="uGA-ju-eBp"/>
+                        <outlet property="qemuCommandDescription" destination="j79-Dl-JMY" id="dls-g4-jiJ"/>
+                        <outlet property="qemuCommandLabel" destination="2O7-0C-bGw" id="Bzl-9x-AL5"/>
                         <outlet property="qemuPathButton" destination="tro-ha-CHN" id="o3M-zd-EYW"/>
+                        <outlet property="qemuPathLabel" destination="sY4-Cv-rAg" id="OXs-lj-Jjn"/>
                         <outlet property="qemuPathView" destination="FOk-0b-UQ4" id="1FF-NT-JTq"/>
                     </connections>
                 </viewController>
