@@ -66,6 +66,9 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Porta Macchina Virtuale";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
+"EditVMViewControllerVideo.videoDescriptionText" = "La VM è creata con una scheda video default, ma ci sono varie schede che possono funzionare nella tua VM, a seconda dell'hardware emulato e del sistema operativo installato sulla VM. Qui puoi selezionare la scheda video da usare:";
+"EditVMViewControllerVideo.videoAdapterLabel" = "Scheda video da collegare alla VM:";
+"EditVMViewControllerVideo.windowsArmDescriptionText" = "Nota per gli utenti con Windows 11 ARM:\n\nLa macchina virtuale è creata con \"Ram framebuffer standalone device\". Questa scheda è necessaria per installare correttamente Windows 11 sulla VM. Una volta installato Windows, puoi selezionare \"VirtIO GPU PCI\". Questa scheda funziona meglio, e offre la possibilità di selezionare la risoluzione dello schermo, se installi il relativo driver. Il driver si trova nel DVD che trovi già collegato alla VM quando la crei.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "La Macchina Virtuale è uscita con errore: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "La Macchina Virtuale è stata fermata dal SO guest.";
 "NewDiskViewController.cowNotSupported" = "Questa macchina virtuale è basata su Apple Virtualization Framework. Con questo tipo di macchine virtuali Copy On Write non è supportato.";

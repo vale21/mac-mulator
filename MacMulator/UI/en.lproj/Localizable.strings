@@ -67,6 +67,9 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Virtual Machine Port";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
+"EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
+"EditVMViewControllerVideo.videoAdapterLabel" = "Video adapter to attach to the VM:";
+"EditVMViewControllerVideo.windowsArmDescriptionText" = "Note for Windows 11 ARM users:\n\nThe virtual machine is created with \"Ram framebuffer standalone device\". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the \"VirtIO GPU PCI\" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";
 "NewDiskViewController.cowNotSupported" = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported.";
