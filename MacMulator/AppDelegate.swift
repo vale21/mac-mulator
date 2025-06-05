@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if let path = panel.url?.path, let virtualMachine = rootController?.currentVm {
                 for virtualDrive in virtualMachine.drives {
                     if virtualDrive.path == path {
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path))
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path), virtualMachine: nil)
                         return
                     }
                 }
@@ -98,9 +98,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm = rootController?.currentVm {
                     do {
                         try ImportExportHerlper.exportVmToParallels(vm: vm, destinationPath: panel.url!.path)
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: NSLocalizedString("AppDelegate.exportToParallelsComplete", comment: ""))
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.informational, message: NSLocalizedString("AppDelegate.exportToParallelsComplete", comment: ""), virtualMachine: vm)
                     } catch {
-                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.exportFailed", comment: ""), error.localizedDescription))
+                        Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.exportFailed", comment: ""), error.localizedDescription), virtualMachine: vm)
                     }
                 }
             })
@@ -114,7 +114,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     let vm = try ImportExportHerlper.importVmFromParallels(sourcePath: panel.url!.path)
                     rootController?.addVirtualMachine(vm)
                 } catch {
-                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.importFailed", comment: ""), error.localizedDescription))
+                    Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("AppDelegate.importFailed", comment: ""), error.localizedDescription), virtualMachine: nil)
                 }
             })
         }
@@ -279,7 +279,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
             return true
         } else {
-            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename))
+            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename), virtualMachine: nil)
             return false
         }
     }
@@ -399,7 +399,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 removed.append((savedVMs?.remove(at: index))!)
             }
 
-            Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")))
+            Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")), virtualMachine: nil)
 
             let userDefaults = UserDefaults.standard
             userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)

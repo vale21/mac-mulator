@@ -62,7 +62,7 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
                     result, _ in
                     DispatchQueue.main.async {
                         if result.exitCode != 0 {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineContainerViewController.vmExecutionError", comment: ""), result.error!))
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineContainerViewController.vmExecutionError", comment: ""), result.error!), virtualMachine: virtualMachine)
                         }
                     }
                 })

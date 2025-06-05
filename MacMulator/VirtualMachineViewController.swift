@@ -424,7 +424,7 @@ class VirtualMachineViewController: NSViewController {
                         QemuUtils.removeOpenCoreConfig(virtualMachine: vm, uponCompletion: {
                             terminationCode in
                             if terminationCode != 0 {
-                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")))
+                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
                             }
                         })
                     }
@@ -432,7 +432,7 @@ class VirtualMachineViewController: NSViewController {
             }
 
             if result.exitCode != 0 {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")))
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
             }
         }
     }

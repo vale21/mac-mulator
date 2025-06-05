@@ -65,7 +65,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
     func instllationComplete(_ result: Result<Void, Error>) {
         if case let .failure(error) = result {
-            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription)
+            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription, virtualMachine: managedVm)
         } else {
             Utils.findMainDrive(managedVm.drives)!.setBlank(blank: false)
             managedVm.writeToPlist()
@@ -104,7 +104,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {
         if error != nil {
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) })
+            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         } else {
             attachUSBDrives()
         }
@@ -113,7 +113,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     fileprivate func handleVMStart(result: Result<Void, any Error>) {
         switch result {
         case let .failure(error):
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) })
+            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         default:
             attachUSBDrives()
         }
@@ -139,7 +139,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
-                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) })
+                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
                 }
                 NSLog(String(vzVirtualMachine.state.rawValue))
             })
@@ -263,7 +263,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             virtualDrive.vzDeviceUUID = usbMassStorageDevice.uuid.uuidString
             managedVm.writeToPlist()
         } catch {
-            Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription)
+            Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: managedVm)
         }
     }
 

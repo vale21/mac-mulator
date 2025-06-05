@@ -139,7 +139,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkFile(QemuConstants.ARCH_PPC, qemu_ppc_tick)
             checkFile(QemuConstants.ARCH_68K, qemu_68k_tick)
         } else {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), path))
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), path), virtualMachine: nil)
             qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "")
             setYellowCross(qemu_img_tick)
             setRedCross(swtpm_tick)

@@ -4548,9 +4548,9 @@ Rocky Linux</string>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             </progressIndicator>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bOR-Mz-m8E">
-                                <rect key="frame" x="108" y="46" width="163" height="16"/>
+                                <rect key="frame" x="18" y="46" width="343" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Starting VM. Please wait..." id="OCl-7C-wl7">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Starting VM. Please wait..." id="OCl-7C-wl7">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -4560,6 +4560,7 @@ Rocky Linux</string>
                     </view>
                     <connections>
                         <outlet property="progressBar" destination="wK0-cK-L5g" id="1tu-66-k8y"/>
+                        <outlet property="startVMLabel" destination="bOR-Mz-m8E" id="nTV-Gu-HVt"/>
                     </connections>
                 </viewController>
                 <customObject id="dsI-EX-obA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
