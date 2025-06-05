@@ -101,7 +101,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             currentVm.writeToPlist()
             vmController?.setVirtualMachine(currentVm)
             if showAlert {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to QEMU format.")
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: currentVm)
             }
         }
     }
@@ -114,7 +114,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             currentVm.type = MacMulatorConstants.APPLE_VM
             currentVm.writeToPlist()
             vmController?.setVirtualMachine(currentVm)
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "The VM was successfully converted to Apple format.")
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: currentVm)
         }
     }
 
@@ -216,12 +216,12 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func cloneVirtualMachineAt(_ index: Int) {
         let vmToClone = virtualMachines[index]
-        let newVMPath = Utils.computeVMPath(vmName: "Clone of " + vmToClone.displayName)
+        let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
         let shell = Shell()
         shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _ in
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
             if let tempVm = temp {
-                tempVm.displayName = "Clone of " + tempVm.displayName
+                tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)
                 tempVm.writeToPlist()
                 DispatchQueue.main.async {
                     self.addVirtualMachineFromFile(newVMPath)

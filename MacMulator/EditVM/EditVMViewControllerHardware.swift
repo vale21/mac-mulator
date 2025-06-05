@@ -61,7 +61,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 if let virtualMachine = self.virtualMachine {
                     for virtualDrive in virtualMachine.drives {
                         if virtualDrive.path == path {
-                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path))
+                            Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("EditVMViewControllerHardware.imageAlreadyLoaded", comment: ""), path), virtualMachine: virtualMachine)
                             return
                         }
                     }

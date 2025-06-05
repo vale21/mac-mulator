@@ -138,18 +138,18 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     func vmCreationfFailed(_: VirtualMachine, _ error: Error) {
-        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.vmCreationFailed", comment: "") + error.localizedDescription, completionHandler: { _ in self.view.window?.close() })
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.vmCreationFailed", comment: "") + error.localizedDescription, completionHandler: { _ in self.view.window?.close() }, virtualMachine: nil)
     }
 
     fileprivate func validateInput() -> Bool {
         if vmType.stringValue == "" || vmName.stringValue == "" {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.errorFeldsMissing", comment: ""))
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.errorFeldsMissing", comment: ""), virtualMachine: nil)
             return false
         } else if rootController?.getVirtualMachine(name: vmName.stringValue) != nil {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorVMExisting", comment: ""), vmName.stringValue))
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorVMExisting", comment: ""), vmName.stringValue), virtualMachine: nil)
             return false
         } else if FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: vmName.stringValue)) {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorFileExisting", comment: ""), Utils.computeVMPath(vmName: vmName.stringValue)))
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewVMController.errorFileExisting", comment: ""), Utils.computeVMPath(vmName: vmName.stringValue)), virtualMachine: nil)
             return false
         } else {
             return true

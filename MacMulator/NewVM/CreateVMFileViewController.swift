@@ -110,7 +110,7 @@ class CreateVMFileViewController: NSViewController {
                     } catch {
                         DispatchQueue.main.async {
                             Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical,
-                                            message: String(format: NSLocalizedString("CreateVMFileViewController.unableToCreate", comment: ""), vm.displayName, error.localizedDescription))
+                                            message: String(format: NSLocalizedString("CreateVMFileViewController.unableToCreate", comment: ""), vm.displayName, error.localizedDescription), virtualMachine: nil)
                         }
                     }
                 }

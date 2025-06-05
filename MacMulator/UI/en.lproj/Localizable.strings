@@ -1,7 +1,6 @@
 "AboutBoxViewController.version" = "Version";
 "AboutBoxViewController.licenseButton" = "View Apache 2.0 License";
 "AboutBoxViewController.descriptionLabel" = "MacMulator is a free, non-commercial software";
-"AboutBoxViewController.descriptionLabel" = "MacMulator is a free, non-commercial software";
 "AboutBoxViewController.descriptionText" = "MacMulator is the computer emulator for your Mac! It engages the power of Qemu and Apple Virtualization Framework, together with a nice, easy to use UI, to let you create any kind of Virtual Machines in a few clicks. Whatever OS you need to run on your Mac, MacMulator is the tool for you!";
 "AboutBoxViewController.creditsLabel" = "Credits";
 "AppDelegate.exportToParallelsComplete" = "Export to Parallels complete.";
@@ -138,6 +137,10 @@
 "QemuConstants.bootMode" = "Boot Mode";
 "QemuConstants.uefiSecure" = "UEFI with Secure Boot";
 "RootViewController.forciblyClosing" = "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
+"RootViewController.vmConvertedToQemu" = "The VM was successfully converted to QEMU format.";
+"RootViewController.vmConvertedToApple" = "The VM was successfully converted to Apple format.";
+"RootViewController.cloneOf" = "Clone of %@";
+"StartVMViewController.startVMLabel" = "Starting VM. Please wait...";
 "Utils.sudoNotAllowed" = "Incorrect Qemu command provided: The usage of sudo command is not allowed.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";
 "Utils.executableError" = "Incorrect Qemu command provided: The provided executable Is not a Qemu Executable. \n\nAllowed executables are: %@.\n\nProvided command was: %@";

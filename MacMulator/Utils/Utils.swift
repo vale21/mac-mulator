@@ -69,16 +69,26 @@ class Utils {
         }
     }
 
-    static func showAlert(window: NSWindow, style: NSAlert.Style, message: String) {
+    static func showAlert(window: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) {
         let alert = NSAlert()
+
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+
         alert.alertStyle = style
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))
         alert.beginSheetModal(for: window)
     }
 
-    static func showAlert(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
+    static func showAlert(window: NSWindow, style: NSAlert.Style, message: String, completionHandler handler: ((NSApplication.ModalResponse) -> Void)? = nil, virtualMachine: VirtualMachine?) {
         let alert = NSAlert()
+
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+
         alert.alertStyle = style
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))

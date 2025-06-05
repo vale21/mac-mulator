@@ -8,6 +8,7 @@
 import Cocoa
 
 class StartVMViewController: NSViewController, RunningVMManagerViewController {
+    @IBOutlet var startVMLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!
 
     var virtualMachine: VirtualMachine?
@@ -29,6 +30,10 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
 
     func setVmRunner(_ runner: VirtualMachineRunner) {
         vmRunner = runner
+    }
+
+    override func viewWillAppear() {
+        startVMLabel.stringValue = NSLocalizedString("StartVMViewController.startVMLabel", comment: "")
     }
 
     override func viewDidAppear() {
