@@ -8,9 +8,13 @@
 import Cocoa
 
 class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTextViewDelegate {
+    @IBOutlet var vmTypeLabel: NSTextField!
     @IBOutlet var vmType: NSComboBox!
+    @IBOutlet var vmSubTypeLabel: NSTextField!
     @IBOutlet var vmSubType: NSComboBox!
+    @IBOutlet var vmNameLabel: NSTextField!
     @IBOutlet var vmName: NSTextField!
+    @IBOutlet var vmDescriptionLabel: NSTextField!
     @IBOutlet var vmDescription: NSTextView!
     @IBOutlet var bootOrderLabel: NSTextField!
     @IBOutlet var bootOrderView: NSScrollView!
@@ -32,6 +36,14 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     }
 
     override func viewWillAppear() {
+        vmTypeLabel.stringValue = NSLocalizedString("EditVMViewControllerGeneral.vmTypeLabel", comment: "")
+        vmSubTypeLabel.stringValue = NSLocalizedString("EditVMViewControllerGeneral.vmSubTypeLabel", comment: "")
+        vmNameLabel.stringValue = NSLocalizedString("EditVMViewControllerGeneral.vmNameLabel", comment: "")
+        vmDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerGeneral.vmDescriptionLabel", comment: "")
+        bootOrderLabel.stringValue = NSLocalizedString("EditVMViewControllerGeneral.bootOrderLabel", comment: "")
+        resolutionlabelSide.stringValue = NSLocalizedString("EditVMViewControllerGeneral.resolutionlabelSide", comment: "")
+        resolutionLabelTop.stringValue = NSLocalizedString("EditVMViewControllerGeneral.resolutionLabelTop", comment: "")
+
         updateView()
     }
 

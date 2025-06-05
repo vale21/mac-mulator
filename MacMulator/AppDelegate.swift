@@ -15,19 +15,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var initialized = false
 
     @IBOutlet var vmMenu: NSMenu!
+    @IBOutlet var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet var startVMMenuItem: NSMenuItem!
     @IBOutlet var startVMInRecoveryMenuItem: NSMenuItem!
     @IBOutlet var stopVMMenuItem: NSMenuItem!
     @IBOutlet var pauseVMMenuItem: NSMenuItem!
-    @IBOutlet var editVMMenuItem: NSMenuItem!
+    @IBOutlet var settingsMenuItem: NSMenuItem!
     @IBOutlet var cloneVMMemuItem: NSMenuItem!
     @IBOutlet var showVMInFinderMenuItem: NSMenuItem!
     @IBOutlet var exportMenuItem: NSMenuItem!
     @IBOutlet var exportToParallelsMenuItem: NSMenuItem!
-    @IBOutlet var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet var usbDevicesMenuItem: NSMenuItem!
+    @IBOutlet var attachImageMenuItem: NSMenuItem!
+    @IBOutlet var configureMenuItem: NSMenuItem!
+    @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
@@ -176,7 +179,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 startVMMenuItem.isEnabled = false
                 startVMInRecoveryMenuItem.isEnabled = false
                 stopVMMenuItem.isEnabled = false
-                editVMMenuItem.isEnabled = false
+                settingsMenuItem.isEnabled = false
                 cloneVMMemuItem.isEnabled = false
                 showVMInFinderMenuItem.isEnabled = false
                 exportMenuItem.isEnabled = false
@@ -187,7 +190,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if let vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
-                    editVMMenuItem.isEnabled = true
+                    settingsMenuItem.isEnabled = true
 
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
@@ -303,7 +306,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
         if let rootController {
             if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""))
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""), virtualMachine: nil)
                 if response.rawValue != Utils.ALERT_RESP_OK {
                     return NSApplication.TerminateReply.terminateCancel
                 } else {

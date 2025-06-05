@@ -193,7 +193,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func deleteVirtualMachine(_ index: Int) {
         if let rootController {
             if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: "The VM you are trying to remove is running. Do you want to continue?")
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineListViewController.runningVM", comment: ""), virtualMachine: rootController.getVirtualMachineAt(index))
                 if response.rawValue == Utils.ALERT_RESP_OK {
                     table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
                     _ = rootController.removeVirtualMachineAt(index)

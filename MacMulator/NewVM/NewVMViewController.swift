@@ -8,17 +8,26 @@
 import Cocoa
 
 class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextViewDelegate {
-    @IBOutlet var vmType: NSComboBox!
-    @IBOutlet var vmSubType: NSComboBox!
+    @IBOutlet var essentialInformationBox: NSBox!
+    @IBOutlet var vmNameLabel: NSTextField!
     @IBOutlet var vmName: NSTextField!
+    @IBOutlet var vmTypeLabel: NSTextField!
+    @IBOutlet var vmType: NSComboBox!
+    @IBOutlet var vmSubTypeLabel: NSTextField!
+    @IBOutlet var vmSubType: NSComboBox!
     @IBOutlet var vmDescription: NSTextView!
+    @IBOutlet var installMediaLabel: NSTextField!
     @IBOutlet var installMedia: NSTextField!
+    @IBOutlet var findOSButton: NSButton!
     @IBOutlet var obtainOSButton: NSButton!
     @IBOutlet var fullConfiguration: NSButton!
+    @IBOutlet var createButton: NSButton!
 
     var rootController: RootViewController?
 
     static let DESCRIPTION_DEFAULT_MESSAGE = NSLocalizedString("NewVMViewController.defaultMessage", comment: "")
+
+    var starting: Bool = true
 
     @IBAction func findInstallMedia(_: Any) {
         if vmType.stringValue == QemuConstants.OS_IOS {
@@ -44,7 +53,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     @IBAction func createVM(_: Any) {
         if validateInput() {
             if Utils.isMacVMWithOSVirtualizationFramework(os: vmType.stringValue, subtype: vmSubType.stringValue), !Utils.isIpswInstallMediaProvided(installMedia.stringValue) {
-                let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewVMController.noMediaProvided", comment: ""), Utils.getHostMacOSVersion()))
+                let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewVMController.noMediaProvided", comment: ""), Utils.getHostMacOSVersion()), virtualMachine: nil)
 
                 if response.rawValue == Utils.ALERT_RESP_OK {
                     vmSubType.stringValue = Utils.getMacOSSubType(Utils.getHostMacOSVersion())
@@ -60,7 +69,20 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     override func viewWillAppear() {
+        starting = true
         vmSubType.stringValue = QemuConstants.SUB_OTHER_GENERIC
+
+        essentialInformationBox.title = NSLocalizedString("NewVMController.essentialInformationBox", comment: "")
+        vmNameLabel.stringValue = NSLocalizedString("NewVMController.vmNameLabel", comment: "")
+        vmTypeLabel.stringValue = NSLocalizedString("NewVMController.vmTypeLabel", comment: "")
+        vmSubTypeLabel.stringValue = NSLocalizedString("NewVMController.vmSubTypeLabel", comment: "")
+        vmDescription.string = NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE
+        installMediaLabel.stringValue = NSLocalizedString("NewVMController.installMediaLabel", comment: "")
+        findOSButton.title = NSLocalizedString("NewVMController.findOSButton", comment: "")
+        obtainOSButton.title = NSLocalizedString("NewVMController.obtainOSButton", comment: "")
+        fullConfiguration.title = NSLocalizedString("NewVMController.fullConfiguration", comment: "")
+        createButton.title = NSLocalizedString("NewVMController.createButton", comment: "")
+        starting = false
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
@@ -102,7 +124,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     func textViewDidChangeSelection(_: Notification) {
-        if vmDescription.string == NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
+        if !starting, vmDescription.string == NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
             vmDescription.string = ""
         }
     }

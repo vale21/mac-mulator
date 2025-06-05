@@ -9,7 +9,10 @@
 import Cocoa
 
 class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
+    @IBOutlet var videoDescriptionText: NSTextField!
+    @IBOutlet var videoAdapterLabel: NSTextField!
     @IBOutlet var videoAdapterComboBox: NSComboBox!
+    @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
 
@@ -19,6 +22,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     override func viewWillAppear() {
+        videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
+        videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
+        windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
         updateView()
     }
 

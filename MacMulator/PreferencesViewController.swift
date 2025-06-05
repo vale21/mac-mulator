@@ -8,7 +8,9 @@
 import Cocoa
 
 class PreferencesViewController: NSViewController, NSTextFieldDelegate {
+    @IBOutlet var vmFolderLabel: NSTextField!
     @IBOutlet var vmFolderField: NSTextField!
+    @IBOutlet var qemuFolderLabel: NSTextField!
     @IBOutlet var qemuFolderField: NSTextField!
     @IBOutlet var vmFolderButton: NSButton!
     @IBOutlet var qemuFolderButton: NSButton!
@@ -84,12 +86,16 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewWillAppear() {
+        view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
+        vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
+        qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
 
         let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
         livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off
         livePreviewTickChanged(livePreviewEnabledButton as Any)
+        livePreviewEnabledButton.title = NSLocalizedString("PreferencesViewController.livePreviewLabel", comment: "")
 
         let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
         livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(livePreviewRate))

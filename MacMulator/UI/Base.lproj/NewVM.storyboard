@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22155"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -43,7 +43,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-rW-Lt7">
-                                <rect key="frame" x="56" y="84" width="286" height="21"/>
+                                <rect key="frame" x="56" y="84" width="266" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="PeB-NW-smg">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -210,16 +210,8 @@ DQ
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hWZ-ut-31g">
-                                <rect key="frame" x="146" y="118" width="287" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="If you have an installation image, select it here:" id="QrW-Cv-p8F">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VtC-sa-i8Z">
-                                <rect key="frame" x="115" y="113" width="25" height="25"/>
+                                <rect key="frame" x="56" y="113" width="25" height="25"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="CD Icon" id="I3W-Cv-3Lw"/>
                             </imageView>
                             <button identifier="Dummy Button" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tka-U1-EMq">
@@ -236,18 +228,26 @@ DQ
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-LX-aa9">
-                                <rect key="frame" x="350" y="83" width="56" height="23"/>
+                                <rect key="frame" x="330" y="83" width="76" height="23"/>
                                 <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0WP-40-iBd">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="56" id="VGH-nm-Wln"/>
+                                    <constraint firstAttribute="width" constant="76" id="VGH-nm-Wln"/>
                                 </constraints>
                                 <connections>
                                     <action selector="findInstallMedia:" target="xGt-xo-6x3" id="mm9-8q-gyx"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hWZ-ut-31g">
+                                <rect key="frame" x="87" y="118" width="368" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="If you have an installation image, select it here:" id="QrW-Cv-p8F">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="Eob-Bk-Xrs" secondAttribute="bottom" constant="20" symbolic="YES" id="0mN-VV-p7h"/>
@@ -259,10 +259,10 @@ DQ
                             <constraint firstItem="Cpu-LX-aa9" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="trailing" constant="8" symbolic="YES" id="CUL-b5-ROa"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="baseline" secondItem="Hyj-Oh-hZP" secondAttribute="firstBaseline" id="DF4-Tu-3gO"/>
                             <constraint firstItem="Eob-Bk-Xrs" firstAttribute="top" secondItem="tka-U1-EMq" secondAttribute="top" id="EhW-sF-zkZ"/>
-                            <constraint firstItem="Hyj-Oh-hZP" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="trailing" constant="72" id="JUA-ix-y3z"/>
+                            <constraint firstItem="Hyj-Oh-hZP" firstAttribute="leading" secondItem="CSW-rW-Lt7" secondAttribute="trailing" constant="92" id="JUA-ix-y3z"/>
                             <constraint firstItem="hWZ-ut-31g" firstAttribute="leading" secondItem="VtC-sa-i8Z" secondAttribute="trailing" constant="8" symbolic="YES" id="NOm-CY-P9N"/>
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="centerX" secondItem="KND-mb-4GG" secondAttribute="centerX" id="NWV-61-bHc"/>
-                            <constraint firstItem="VtC-sa-i8Z" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="115" id="SFv-ic-vXj"/>
+                            <constraint firstItem="VtC-sa-i8Z" firstAttribute="leading" secondItem="rQV-Ib-82f" secondAttribute="leading" constant="56" id="SFv-ic-vXj"/>
                             <constraint firstItem="CSW-rW-Lt7" firstAttribute="bottom" secondItem="Hyj-Oh-hZP" secondAttribute="bottom" id="TvC-02-LBF"/>
                             <constraint firstItem="MKc-8o-Spu" firstAttribute="centerX" secondItem="Jhb-Rc-tJm" secondAttribute="centerX" id="Tzt-5u-7wV"/>
                             <constraint firstItem="Jhb-Rc-tJm" firstAttribute="trailing" secondItem="Hyj-Oh-hZP" secondAttribute="trailing" id="VVd-PE-wrN"/>
@@ -276,18 +276,25 @@ DQ
                             <constraint firstItem="VtC-sa-i8Z" firstAttribute="centerY" secondItem="hWZ-ut-31g" secondAttribute="centerY" id="qSO-ef-sXd"/>
                             <constraint firstItem="MKc-8o-Spu" firstAttribute="top" secondItem="rQV-Ib-82f" secondAttribute="top" constant="20" symbolic="YES" id="r0n-6p-iF2"/>
                             <constraint firstItem="VtC-sa-i8Z" firstAttribute="top" secondItem="Jhb-Rc-tJm" secondAttribute="bottom" constant="28" id="vDE-zc-lwr"/>
-                            <constraint firstItem="Jhb-Rc-tJm" firstAttribute="top" secondItem="MKc-8o-Spu" secondAttribute="bottom" constant="15" id="xYD-O9-8VO"/>
+                            <constraint firstItem="Jhb-Rc-tJm" firstAttribute="top" secondItem="MKc-8o-Spu" secondAttribute="bottom" constant="12" id="xYD-O9-8VO"/>
                             <constraint firstItem="Cpu-LX-aa9" firstAttribute="firstBaseline" secondItem="CSW-rW-Lt7" secondAttribute="baseline" id="yKu-Br-hIt"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="createButton" destination="Eob-Bk-Xrs" id="QLP-0F-7PN"/>
+                        <outlet property="essentialInformationBox" destination="MKc-8o-Spu" id="6FQ-jl-UVj"/>
+                        <outlet property="findOSButton" destination="Cpu-LX-aa9" id="EVu-b6-OTH"/>
                         <outlet property="fullConfiguration" destination="KND-mb-4GG" id="yHD-x3-ueL"/>
                         <outlet property="installMedia" destination="CSW-rW-Lt7" id="EeF-il-Nwr"/>
+                        <outlet property="installMediaLabel" destination="hWZ-ut-31g" id="Kb5-MB-fSC"/>
                         <outlet property="obtainOSButton" destination="Hyj-Oh-hZP" id="Qgf-1K-pgu"/>
                         <outlet property="vmDescription" destination="xiH-rE-LV3" id="cyW-US-sTi"/>
                         <outlet property="vmName" destination="0SJ-fj-RZf" id="i0K-t6-rah"/>
+                        <outlet property="vmNameLabel" destination="iCX-Oa-A09" id="GY6-9S-jld"/>
                         <outlet property="vmSubType" destination="lYf-G3-fke" id="ZKv-Qb-GWw"/>
+                        <outlet property="vmSubTypeLabel" destination="y77-4M-Cfa" id="btP-oX-XUO"/>
                         <outlet property="vmType" destination="LRv-Q5-G4W" id="PcH-1f-F8D"/>
+                        <outlet property="vmTypeLabel" destination="6kP-Dq-xSK" id="1eH-rx-pn4"/>
                     </connections>
                 </viewController>
                 <customObject id="mUs-v5-0Ew" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

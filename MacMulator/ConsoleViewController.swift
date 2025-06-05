@@ -18,6 +18,7 @@ class ConsoleViewController: NSViewController {
     }
 
     override func viewWillAppear() {
+        consoleView.string = NSLocalizedString("ConsoleViewController.loading", comment: "")
         isVisible = true
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer in
             if !self.isVisible {

@@ -40,7 +40,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func windowShouldClose(_: NSWindow) -> Bool {
         if areThereRunningVMs() {
-            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?")
+            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("RootViewController.forciblyClosing", comment: ""), virtualMachine: nil)
             if response.rawValue != Utils.ALERT_RESP_OK {
                 return false
             } else {
