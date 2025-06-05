@@ -86,9 +86,9 @@
                                             </textFieldCell>
                                         </textField>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
-                                            <rect key="frame" x="84" y="16" width="109" height="23"/>
+                                            <rect key="frame" x="84" y="16" width="87" height="23"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="105" id="SDE-4s-t9s"/>
+                                                <constraint firstAttribute="width" constant="83" id="SDE-4s-t9s"/>
                                             </constraints>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="d8T-RT-vAh">
                                                 <font key="font" metaFont="system"/>
@@ -101,7 +101,13 @@
                                             </connections>
                                         </comboBox>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
-                                            <rect key="frame" x="284" y="16" width="204" height="23"/>
+                                            <rect key="frame" x="314" y="16" width="174" height="23"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="170" id="8UA-w2-CAi"/>
+                                                <constraint firstAttribute="width" constant="170" id="gyH-f3-JaV"/>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="i74-j7-r9f"/>
+                                                <constraint firstAttribute="height" constant="20" id="pc5-DO-4Eu"/>
+                                            </constraints>
                                             <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="15" id="FWM-R2-PIQ">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -112,17 +118,17 @@
                                                 <outlet property="delegate" destination="xGt-xo-6x3" id="Vei-jz-igI"/>
                                             </connections>
                                         </comboBox>
-                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
-                                            <rect key="frame" x="202" y="19" width="77" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="VM subtype" id="j97-je-Te1">
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
+                                            <rect key="frame" x="18" y="19" width="55" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
-                                            <rect key="frame" x="18" y="19" width="55" height="16"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="ge1-Tl-Cs3">
+                                        <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
+                                            <rect key="frame" x="174" y="19" width="135" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Operating System" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -133,7 +139,7 @@
                                         <constraint firstAttribute="bottom" secondItem="LRv-Q5-G4W" secondAttribute="bottom" constant="18" id="10k-iQ-Neg"/>
                                         <constraint firstItem="lYf-G3-fke" firstAttribute="leading" secondItem="y77-4M-Cfa" secondAttribute="trailing" constant="8" symbolic="YES" id="1tQ-SA-Nab"/>
                                         <constraint firstItem="iCX-Oa-A09" firstAttribute="leading" secondItem="sVp-sP-rw6" secondAttribute="leading" constant="20" symbolic="YES" id="3sR-e6-4Td"/>
-                                        <constraint firstItem="y77-4M-Cfa" firstAttribute="leading" secondItem="LRv-Q5-G4W" secondAttribute="trailing" constant="14" id="4cU-p9-jWn"/>
+                                        <constraint firstItem="y77-4M-Cfa" firstAttribute="leading" secondItem="LRv-Q5-G4W" secondAttribute="trailing" constant="8" id="4cU-p9-jWn"/>
                                         <constraint firstItem="0SJ-fj-RZf" firstAttribute="leading" secondItem="LRv-Q5-G4W" secondAttribute="leading" id="6xk-Iz-S2q"/>
                                         <constraint firstItem="iCX-Oa-A09" firstAttribute="leading" secondItem="6kP-Dq-xSK" secondAttribute="leading" id="L8F-Zl-f3X"/>
                                         <constraint firstItem="6kP-Dq-xSK" firstAttribute="baseline" secondItem="y77-4M-Cfa" secondAttribute="baseline" id="QMI-Ke-nzc"/>

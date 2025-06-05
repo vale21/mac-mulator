@@ -46,7 +46,7 @@
 "EditVMViewControllerAdvanced.qemuCommandLabel" = "Comando Qemu completo";
 "EditVMViewControllerAdvanced.qemuCommandDescription" = "Se modifichi il comando sotto, MacMulator lo userà per lanciare Qemu, indipendentemente dalle opzioni impostate negli altri tab. Usalo con cura, o la tua VM non partirà. Se cambi l'eseguibile, assicurati che sia affidabile. Per resettare il comando di default semplicemente cancella tutto il comando personalizzato.";
 "EditVMViewControllerGeneral.vmTypeLabel" = "Tipo VM";
-"EditVMViewControllerGeneral.vmSubTypeLabel" = "Sottotipo VM";
+"EditVMViewControllerGeneral.vmSubTypeLabel" = "Sistema Operativo";
 "EditVMViewControllerGeneral.vmNameLabel" = "Nome VM";
 "EditVMViewControllerGeneral.vmDescriptionLabel" = "Descrizione";
 "EditVMViewControllerGeneral.bootOrderLabel" = "Disco di avvio";
@@ -97,7 +97,7 @@
 "NewVMController.essentialInformationBox" = "Informazioni essenziali";
 "NewVMController.vmNameLabel" = "Nome VM";
 "NewVMController.vmTypeLabel" = "Tipo VM";
-"NewVMController.vmSubTypeLabel" = "Sottotipo VM";
+"NewVMController.vmSubTypeLabel" = "Sistema Operativo";
 "NewVMController.installMediaLabel" = "Se hai un'immagine di installazione, selezionala qui:";
 "NewVMController.findOSButton" = "Seleziona";
 "NewVMController.obtainOSButton" = "Ottieni...";
@@ -179,7 +179,7 @@
 "VirtualMachineContainerViewController.vmExecutionError" = "L'esecuzione della VM è fallita con errore: %@";
 "VirtualMachineContainerViewController.forciblyClosing" = "Chiudere questa finestra causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineListViewController.delete" = "Elimina";
-"VirtualMachineListViewController.edit" = "Modifica";
+"VirtualMachineListViewController.edit" = "Configura";
 "VirtualMachineListViewController.start" = "Avvia";
 "VirtualMachineListViewController.startInRecovery" = "Avvia in modalità di recupero";
 "VirtualMachineListViewController.stop" = "Arresta";
