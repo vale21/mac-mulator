@@ -47,7 +47,7 @@
 "EditVMViewControllerAdvanced.qemuCommandLabel" = "Full Qemu command";
 "EditVMViewControllerAdvanced.qemuCommandDescription" = "If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. If you are changing the executable, be sure that it is trusted. To reset it to default you can just wipe the text box.";
 "EditVMViewControllerGeneral.vmTypeLabel" = "VM type";
-"EditVMViewControllerGeneral.vmSubTypeLabel" = "VM subtype";
+"EditVMViewControllerGeneral.vmSubTypeLabel" = "Operating System";
 "EditVMViewControllerGeneral.vmNameLabel" = "VM name";
 "EditVMViewControllerGeneral.vmDescriptionLabel" = "Description";
 "EditVMViewControllerGeneral.bootOrderLabel" = "Boot drive";
@@ -98,7 +98,7 @@
 "NewVMController.essentialInformationBox" = "Essential information";
 "NewVMController.vmNameLabel" = "VM name";
 "NewVMController.vmTypeLabel" = "VM type";
-"NewVMController.vmSubTypeLabel" = "VM subtype";
+"NewVMController.vmSubTypeLabel" = "Operating system";
 "NewVMController.installMediaLabel" = "If you have an installation image, select it here:";
 "NewVMController.findOSButton" = "Select";
 "NewVMController.obtainOSButton" = "Obtain...";
@@ -180,7 +180,7 @@
 "VirtualMachineContainerViewController.vmExecutionError" = "VM execution failed with error: %@";
 "VirtualMachineContainerViewController.forciblyClosing" = "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "VirtualMachineListViewController.delete" = "Delete";
-"VirtualMachineListViewController.edit" = "Edit";
+"VirtualMachineListViewController.edit" = "Configure";
 "VirtualMachineListViewController.start" = "Start";
 "VirtualMachineListViewController.startInRecovery" = "Start in Recovery Mode";
 "VirtualMachineListViewController.stop" = "Stop";
