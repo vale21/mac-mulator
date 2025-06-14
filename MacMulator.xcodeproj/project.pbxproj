@@ -213,6 +213,8 @@
 		3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_x64.fd; sourceTree = "<group>"; };
 		3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
 		3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "macos-guest-tools.img.zip"; sourceTree = "<group>"; };
+		3BE706152DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3BE706162DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				en,
 				it,
 				Base,
+				fr,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
 			packageReferences = (
@@ -664,6 +667,7 @@
 			children = (
 				3B75C7EB29DF06C4007C3781 /* en */,
 				3BBA2BBD2DA329FE00EBE373 /* it */,
+				3BE706162DFD6B7F00AC2203 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -681,6 +685,7 @@
 			children = (
 				3B39124F2DA9C65000BF8794 /* en */,
 				3B39124E2DA9C64500BF8794 /* it */,
+				3BE706152DFD6B7F00AC2203 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
