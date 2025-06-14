@@ -455,6 +455,8 @@ class Utils {
 
     static func getMacOSSubType(_ os: String?) -> String {
         switch os {
+        case QemuConstants.DESC_MAC_TAHOE:
+            QemuConstants.SUB_MAC_TAHOE
         case QemuConstants.DESC_MAC_SEQUOIA:
             QemuConstants.SUB_MAC_SEQUOIA
         case QemuConstants.DESC_MAC_SONOMA:
@@ -711,12 +713,6 @@ class Utils {
             }
         } else if #available(macOS 11.0, *) {
             return NSLocalizedString("Utils.virtualizationBigSur", comment: "")
-        } else if #available(macOS 10.15, *) {
-            return NSLocalizedString("Utils.virtualizationCatalina", comment: "")
-        } else if #available(macOS 10.14, *) {
-            return NSLocalizedString("Utils.virtualizationMojave", comment: "")
-        } else if #available(macOS 10.13, *) {
-            return NSLocalizedString("Utils.virtualizationHighSierra", comment: "")
         } else {
             return NSLocalizedString("Utils.virtualizationGeneric", comment: "")
         }
@@ -725,6 +721,8 @@ class Utils {
     static func getHostMacOSVersion() -> String {
         let version = ProcessInfo.processInfo.operatingSystemVersion
         switch (version.majorVersion, version.minorVersion) {
+        case (26, _):
+            return QemuConstants.DESC_MAC_TAHOE
         case (15, _):
             return QemuConstants.DESC_MAC_SEQUOIA
         case (14, _):
@@ -1029,6 +1027,7 @@ class Utils {
             QemuConstants.SUB_MAC_VENTURA,
             QemuConstants.SUB_MAC_SONOMA,
             QemuConstants.SUB_MAC_SEQUOIA,
+            QemuConstants.SUB_MAC_TAHOE,
         ]
 
         let version = versions.firstIndex(of: subtype)
