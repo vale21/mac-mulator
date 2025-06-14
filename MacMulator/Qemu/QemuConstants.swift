@@ -85,6 +85,7 @@ class QemuConstants {
     static let SUB_MAC_VENTURA = "macOS 13.x (Ventura)"
     static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)"
     static let SUB_MAC_SEQUOIA = "macOS 15.x (Sequoia)"
+    static let SUB_MAC_TAHOE = "macOS 26.x (Tahoe)"
     static let SUB_MAC_OS_9 = "Mac OS 9"
     static let SUB_MAC_OS_8 = "Mac OS 8"
     static let SUB_SYSTEM_7 = "System 7"
@@ -103,6 +104,7 @@ class QemuConstants {
     static let DESC_MAC_VENTURA = "macOS Ventura"
     static let DESC_MAC_SONOMA = "macOS Sonoma"
     static let DESC_MAC_SEQUOIA = "macOS Sequoia"
+    static let DESC_MAC_TAHOE = "macOS Tahoe"
 
     static let SUB_WIN_GENERIC = NSLocalizedString("QemuConstants.windows", comment: "")
     static let SUB_WINDOWS_11 = "Windows 11"
@@ -192,6 +194,7 @@ class QemuConstants {
     static let ICON_VENTURA = "ventura"
     static let ICON_SONOMA = "sonoma"
     static let ICON_SEQUOIA = "sequoia"
+    static let ICON_TAHOE = "tahoe"
 
     static let ICON_WINDOWS_XP = "windows.xp"
     static let ICON_WINDOWS_VISTA = "windows.vista"
@@ -251,6 +254,7 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
 
     static let URL_APPLE_COM = "https://www.apple.com"
+    static let URL_MAC_TAHOE = "https://developer.apple.com"
     static let URL_MAC_SEQUOIA = "https://apps.apple.com/it/app/id6596773750"
     static let URL_MAC_SONOMA = "https://apps.apple.com/it/app/macos-sonoma/id6450717509"
     static let URL_MAC_VENTURA = "https://apps.apple.com/it/app/macos-ventura/id1638787999"
@@ -555,6 +559,7 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL", "default media type", "tpm required", "video device", "boot mode"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM, MEDIATYPE_DISK, false, nil, nil],
+        [OS_MAC, SUB_MAC_TAHOE, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_TAHOE, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_TAHOE, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_SEQUOIA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SEQUOIA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SEQUOIA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
