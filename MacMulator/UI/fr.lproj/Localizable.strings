@@ -44,10 +44,10 @@
 "EditVMViewControllerAdvanced.accelerateVM" = "Accélérer la VM avec Apple Hypervisor";
 "EditVMViewControllerAdvanced.qemuPathButton" = "Parcourir";
 "EditVMViewControllerAdvanced.qemuCommandLabel" = "Commande Qemu complète";
-"EditVMViewControllerAdvanced.qemuCommandDescription" = "Si vous modifiez la commande ci-dessous, MacMulator l’utilisera pour exécuter Qemu, indépendamment des options des autres onglets. Modifiez-la avec précaution, sinon votre VM pourrait ne pas démarrer. Si vous changez l’exécutable, assurez-vous qu’il est fiable. Pour revenir à la valeur par défaut, effacez la zone de texte.";
+"EditVMViewControllerAdvanced.qemuCommandDescription" = "Si vous modifiez la commande ci-dessous, MacMulator l’utilisera pour exécuter Qemu, quelle que soit la configuration des onglets. Modifiez-la avec précaution : la VM pourrait ne pas démarrer. Si vous changez l’exécutable, assurez-vous qu’il est fiable. Pour rétablir la valeur par défaut, effacez la zone de texte.Installa";
 "EditVMViewControllerGeneral.vmTypeLabel" = "Type de VM";
 "EditVMViewControllerGeneral.vmSubTypeLabel" = "Système d’exploitation";
-"EditVMViewControllerGeneral.vmNameLabel" = "Nom de la VM";
+"EditVMViewControllerGeneral.vmNameLabel" = "Nom";
 "EditVMViewControllerGeneral.vmDescriptionLabel" = "Description";
 "EditVMViewControllerGeneral.bootOrderLabel" = "Lecteur de démarrage";
 "EditVMViewControllerGeneral.resolutionlabelSide" = "Résolution";
@@ -166,7 +166,7 @@
 "Utils.unexistingDrive" = "Le lecteur %@ est introuvable. Voulez-vous le supprimer ?";
 "Utils.macMainScreen" = "%d x %d (Écran du Mac)";
 "Utils.lastUsed" = "%d x %d (Dernier utilisé)";
-"VirtualizationFrameworkInstallVMViewController.installing" = "Installation de macOS sur la machine virtuelle. Le processus commencera dans quelques secondes...";
+"VirtualizationFrameworkInstallVMViewController.installing" = "Installation de macOS sur la VM. Le processus commencera dans quelques secondes...";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Temps restant estimé : Calcul en cours...";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Démarrage de l’installation.";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Échec de l’installation avec l’erreur : %@";
@@ -210,5 +210,5 @@
 "VirtualMachineViewController.vmType" = "Type :";
 "VirtualMachineViewController.vmProcessors" = "Processeurs :";
 "VirtualMachineViewController.vmMemory" = "Mémoire :";
-"VirtualMachineViewController.vmHardDrive" = "Taille du disque dur :";
+"VirtualMachineViewController.vmHardDrive" = "Disque dur :";
 "VirtualMachineViewController.editVMButton" = "Configurer cette VM";
