@@ -86,6 +86,7 @@
 		3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
+		3BF4C69B2E01BFD900050E73 /* MacMulator.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3BF4C69A2E01BFD900050E73 /* MacMulator.icon */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFB1F862CD3F1B400EBF67D /* windows-11-drivers.iso.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */; };
 		3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
@@ -217,6 +218,7 @@
 		3BE706162DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
+		3BF4C69A2E01BFD900050E73 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = MacMulator.icon; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "windows-11-drivers.iso.zip"; sourceTree = "<group>"; };
 		3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMappingsTableCells.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 		3B391EE025C075F50030E914 = {
 			isa = PBXGroup;
 			children = (
+				3BF4C69A2E01BFD900050E73 /* MacMulator.icon */,
 				3B3624FD266F6253007857FB /* Frameworks */,
 				3B391EEB25C075F50030E914 /* MacMulator */,
 				3B391EFE25C075F50030E914 /* MacMulatorTests */,
@@ -552,6 +555,7 @@
 				3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
+				3BF4C69B2E01BFD900050E73 /* MacMulator.icon in Resources */,
 				3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */,
 				3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */,
 				3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */,
@@ -829,8 +833,9 @@
 		3B391F1025C075F50030E914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
 				CODE_SIGN_IDENTITY = "-";
@@ -862,8 +867,9 @@
 		3B391F1125C075F50030E914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
 				CODE_SIGN_IDENTITY = "-";
