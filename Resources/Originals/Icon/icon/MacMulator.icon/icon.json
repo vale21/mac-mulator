@@ -7,8 +7,27 @@
       "blur-material" : null,
       "layers" : [
         {
+          "image-name" : "curl_dark.png",
+          "name" : "curl_dark",
+          "opacity-specializations" : [
+            {
+              "value" : 0
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ]
+        },
+        {
           "image-name" : "Curl.png",
-          "name" : "Curl",
+          "name" : "curl_light",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0
+            }
+          ],
           "position" : {
             "scale" : 0.9,
             "translation-in-points" : [
@@ -19,51 +38,58 @@
         },
         {
           "image-name" : "Border_cut_2.png",
-          "name" : "Border_cut_2"
+          "name" : "border"
         },
         {
-          "fill-specializations" : [
+          "image-name" : "Wallpaper-dark.png",
+          "name" : "wallpaper_dark",
+          "opacity-specializations" : [
             {
-              "appearance" : "tinted",
-              "value" : "none"
+              "value" : 0
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
+            }
+          ]
+        },
+        {
+          "image-name" : "Wallpaper-light.png",
+          "name" : "wallpaper_light",
+          "opacity-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : 0
+            }
+          ]
+        },
+        {
+          "image-name" : "binary_dark.png",
+          "name" : "binary_dark",
+          "opacity-specializations" : [
+            {
+              "value" : 0
+            },
+            {
+              "appearance" : "dark",
+              "value" : 1
             }
           ],
-          "image-name" : "Wallpaper_dark.png",
-          "name" : "Wallpaper_dark",
-          "opacity-specializations" : [
-            {
-              "value" : 0
-            },
-            {
-              "appearance" : "dark",
-              "value" : 1
-            },
-            {
-              "appearance" : "tinted",
-              "value" : 0
-            }
-          ]
-        },
-        {
-          "image-name" : "Wallpaper.png",
-          "name" : "Wallpaper",
-          "opacity-specializations" : [
-            {
-              "value" : 1
-            },
-            {
-              "appearance" : "dark",
-              "value" : 0
-            }
-          ]
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              -132.0859375,
+              2.6796875
+            ]
+          }
         },
         {
           "image-name" : "Binary.png",
-          "name" : "Binary",
+          "name" : "binary_light",
           "opacity-specializations" : [
             {
               "appearance" : "dark",
-              "value" : 1
+              "value" : 0
             }
           ],
           "position" : {
