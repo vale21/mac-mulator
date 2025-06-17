@@ -360,7 +360,7 @@
                                 <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" bordered="YES" sizingBehavior="auto" id="F8q-EA-dwq">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
-                                        <rect key="frame" x="18" y="15" width="26" height="23"/>
+                                        <rect key="frame" x="13" y="14" width="26" height="23"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

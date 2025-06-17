@@ -3910,7 +3910,7 @@ Rocky Linux</string>
                                             <rect key="frame" x="0.0" y="0.0" width="220" height="499"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
-                                            <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
                                                 <tableColumn width="180" minWidth="40" maxWidth="1000" id="YZh-2P-LJL">
@@ -3972,6 +3972,7 @@ Rocky Linux</string>
                                             </connections>
                                         </tableView>
                                     </subviews>
+                                    <nil key="backgroundColor"/>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bzP-m2-KN0">
                                     <rect key="frame" x="-100" y="-100" width="220" height="16"/>
@@ -4002,7 +4003,7 @@ Rocky Linux</string>
                         <rect key="frame" x="0.0" y="0.0" width="580" height="500"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-TB-oGo">
+                            <box boxType="custom" borderType="none" cornerRadius="4" title="Box" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BYi-TB-oGo">
                                 <rect key="frame" x="0.0" y="0.0" width="580" height="500"/>
                                 <view key="contentView" id="Qga-Ob-GTN">
                                     <rect key="frame" x="0.0" y="0.0" width="580" height="500"/>
