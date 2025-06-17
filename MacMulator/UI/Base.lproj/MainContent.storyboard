@@ -13,7 +13,7 @@
             <objects>
                 <windowController storyboardIdentifier="NSWindowController-DJS-zH-ZBC" id="DJS-zH-ZBC" sceneMemberID="viewController">
                     <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="VIH-r7-T0P">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <rect key="contentRect" x="440" y="364" width="642" height="482"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
@@ -3894,7 +3894,7 @@ Rocky Linux</string>
         <!--Virtual Machines List View Controller-->
         <scene sceneID="2N4-O2-zee">
             <objects>
-                <viewController id="MaW-A6-dOb" customClass="VirtualMachinesListViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController showSeguePresentationStyle="single" id="MaW-A6-dOb" customClass="VirtualMachinesListViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" misplaced="YES" id="nLr-hu-ybJ">
                         <rect key="frame" x="0.0" y="0.0" width="220" height="499"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -4287,8 +4287,8 @@ Rocky Linux</string>
                                                 <constraint firstAttribute="height" priority="750" constant="210" id="SjJ-QF-abR"/>
                                                 <constraint firstAttribute="width" priority="750" constant="468" id="caV-KT-BHh"/>
                                             </constraints>
-                                            <color key="borderColor" name="quaternarySystemFillColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="fillColor" name="quaternarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="borderColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="fillColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
                                         </box>
                                         <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drX-xb-Fr1">
                                             <rect key="frame" x="297" y="15" width="36" height="42"/>
@@ -4372,6 +4372,8 @@ Rocky Linux</string>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" priority="750" constant="56" id="mG7-z2-hX3"/>
                                     </constraints>
                                 </view>
+                                <color key="borderColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="fillColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
                             </box>
                         </subviews>
                         <constraints>
