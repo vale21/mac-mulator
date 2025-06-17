@@ -4138,14 +4138,14 @@ Rocky Linux</string>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <box title="Virtual Machine features" translatesAutoresizingMaskIntoConstraints="NO" id="cI4-jO-AFz">
-                                            <rect key="frame" x="53" y="71" width="474" height="214"/>
+                                        <box boxType="custom" cornerRadius="16" title="Virtual Machine features" translatesAutoresizingMaskIntoConstraints="NO" id="cI4-jO-AFz">
+                                            <rect key="frame" x="56" y="75" width="468" height="210"/>
                                             <view key="contentView" id="CHj-Vr-vtb">
-                                                <rect key="frame" x="4" y="5" width="466" height="194"/>
+                                                <rect key="frame" x="1" y="1" width="466" height="208"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="crb-Lz-Aot">
-                                                        <rect key="frame" x="129" y="158" width="105" height="16"/>
+                                                        <rect key="frame" x="129" y="172" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Architecture:" id="37H-Uq-o6b">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4153,7 +4153,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Xaw-fC-Wcz">
-                                                        <rect key="frame" x="129" y="134" width="105" height="16"/>
+                                                        <rect key="frame" x="129" y="148" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Type:" id="zBD-yY-AwV">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4161,7 +4161,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bJS-UN-Auk">
-                                                        <rect key="frame" x="129" y="110" width="105" height="16"/>
+                                                        <rect key="frame" x="129" y="124" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Processors:" id="8AW-y2-6Bd">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4169,7 +4169,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bwd-IX-dSu">
-                                                        <rect key="frame" x="129" y="86" width="105" height="16"/>
+                                                        <rect key="frame" x="129" y="100" width="105" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Memory:" id="DVq-k5-x3l">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4177,7 +4177,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ynO-41-Zwf">
-                                                        <rect key="frame" x="129" y="62" width="105" height="16"/>
+                                                        <rect key="frame" x="129" y="76" width="105" height="16"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="101" id="Ext-q8-D7w"/>
                                                         </constraints>
@@ -4188,7 +4188,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zVS-87-mlR">
-                                                        <rect key="frame" x="20" y="84" width="90" height="90"/>
+                                                        <rect key="frame" x="20" y="98" width="90" height="90"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="90" id="9kK-fi-Odf"/>
                                                             <constraint firstAttribute="width" constant="90" id="Yo8-30-26G"/>
@@ -4206,7 +4206,7 @@ Rocky Linux</string>
                                                         </connections>
                                                     </button>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PNo-Km-ykM">
-                                                        <rect key="frame" x="238" y="86" width="210" height="16"/>
+                                                        <rect key="frame" x="238" y="100" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="2 GB" id="pvp-0w-XJp">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4214,7 +4214,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pDO-9H-D7g">
-                                                        <rect key="frame" x="238" y="62" width="210" height="16"/>
+                                                        <rect key="frame" x="238" y="76" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="500 GB" id="2Kz-yJ-7FH">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4222,7 +4222,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ibh-ZQ-tyo">
-                                                        <rect key="frame" x="238" y="110" width="210" height="16"/>
+                                                        <rect key="frame" x="238" y="124" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="2" id="rXz-ns-Bhh">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4230,7 +4230,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="R79-YR-ULi">
-                                                        <rect key="frame" x="238" y="134" width="210" height="16"/>
+                                                        <rect key="frame" x="238" y="148" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" title="Tiger" id="Ero-Oa-CWH">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4238,7 +4238,7 @@ Rocky Linux</string>
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hm8-Zq-L4L">
-                                                        <rect key="frame" x="238" y="158" width="210" height="16"/>
+                                                        <rect key="frame" x="238" y="172" width="210" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="PowerPC" id="miw-4e-d3D">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -4286,10 +4286,12 @@ Rocky Linux</string>
                                                 <constraint firstAttribute="height" priority="750" constant="210" id="SjJ-QF-abR"/>
                                                 <constraint firstAttribute="width" priority="750" constant="468" id="caV-KT-BHh"/>
                                             </constraints>
+                                            <color key="borderColor" name="quinaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="fillColor" name="quinaryLabelColor" catalog="System" colorSpace="catalog"/>
                                         </box>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WwV-tF-8bO">
                                             <rect key="frame" x="272" y="17" width="36" height="42"/>
-                                            <buttonCell key="cell" type="bevel" title="Start" bezelStyle="rounded" image="play.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Hfv-NR-yhQ">
+                                            <buttonCell key="cell" type="bevel" title="Start" bezelStyle="regularSquare" image="play.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Hfv-NR-yhQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
