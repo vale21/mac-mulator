@@ -357,12 +357,12 @@
                         <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
-                                <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" catalog="system" sizingBehavior="auto" id="F8q-EA-dwq">
+                                <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" bordered="YES" sizingBehavior="auto" id="F8q-EA-dwq">
                                     <nil key="toolTip"/>
                                     <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
-                                        <rect key="frame" x="18" y="14.5" width="14.5" height="13"/>
+                                        <rect key="frame" x="18" y="15" width="26" height="23"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -373,10 +373,10 @@
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button (Console View)" paletteLabel="Dummy Button (Console View)" title="Button" sizingBehavior="auto" id="REK-Zf-PKp">
                                     <nil key="toolTip"/>
-                                    <button key="view" verticalHuggingPriority="750" id="G5X-is-yFQ">
-                                        <rect key="frame" x="69" y="14" width="30" height="32"/>
+                                    <button key="view" id="G5X-is-yFQ">
+                                        <rect key="frame" x="84" y="14" width="0.0" height="0.0"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" transparent="YES" imageScaling="proportionallyDown" inset="2" id="hfN-Fy-w6b">
+                                        <buttonCell key="cell" type="bevel" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="hfN-Fy-w6b">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -388,12 +388,12 @@
                                         <segue destination="Wt2-zD-2a7" kind="show" identifier="showConsoleSegue" id="Udw-X1-3SD"/>
                                     </connections>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="9CBC8438-A8DF-4B4C-9046-686C85D969B6" label="Dummy Button (Preferences)" paletteLabel="Dummy Button (Preferences)" bordered="YES" title="Button" sizingBehavior="auto" id="d3T-L5-Hv7">
+                                <toolbarItem implicitItemIdentifier="9CBC8438-A8DF-4B4C-9046-686C85D969B6" label="Dummy Button (Preferences)" paletteLabel="Dummy Button (Preferences)" title="Button" sizingBehavior="auto" id="d3T-L5-Hv7">
                                     <nil key="toolTip"/>
-                                    <button key="view" verticalHuggingPriority="750" id="ynN-ZP-XcQ">
-                                        <rect key="frame" x="65" y="14" width="30" height="32"/>
+                                    <button key="view" id="ynN-ZP-XcQ">
+                                        <rect key="frame" x="80" y="14" width="0.0" height="0.0"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" borderStyle="border" transparent="YES" imageScaling="proportionallyDown" inset="2" id="s7b-cm-gUJ">
+                                        <buttonCell key="cell" type="bevel" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="s7b-cm-gUJ">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
@@ -473,6 +473,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="plus" catalog="system" width="14" height="13"/>
+        <image name="plus" width="14" height="14"/>
     </resources>
 </document>
