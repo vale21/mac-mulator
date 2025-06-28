@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24093.8" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.8"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
@@ -4289,8 +4289,8 @@ Rocky Linux</string>
                                                 <constraint firstAttribute="height" priority="750" constant="210" id="SjJ-QF-abR"/>
                                                 <constraint firstAttribute="width" priority="750" constant="468" id="caV-KT-BHh"/>
                                             </constraints>
-                                            <color key="borderColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="fillColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="borderColor" name="tertiarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="fillColor" name="tertiarySystemFillColor" catalog="System" colorSpace="catalog"/>
                                         </box>
                                         <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drX-xb-Fr1">
                                             <rect key="frame" x="297" y="15" width="36" height="42"/>
