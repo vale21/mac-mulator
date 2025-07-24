@@ -250,26 +250,61 @@ class QemuUtils {
         return fileManager.fileExists(atPath: qemuPath + "/" + binary)
     }
 
+//    static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
+//        if !isBinaryAvailable(QemuConstants.QEMU_IMG) {
+//            callback(nil)
+//        } else {
+//            let shell = Shell()
+//            let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+//                .withCommand(QemuConstants.IMAGE_CMD_VERSION)
+//                .build()
+//            shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
+//                if terminationCode == 0 {
+//                    let result = shell.readFromStandardOutput()
+//                    if result.count > 22 {
+//                        let version = result[result.index(result.startIndex, offsetBy: 17) ..< result.index(result.startIndex, offsetBy: 22)]
+//                        callback(String(version))
+//                    }
+//                } else {
+//                    callback(nil)
+//                }
+//            })
+//        }
+//    }
+
     static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
         if !isBinaryAvailable(QemuConstants.QEMU_IMG) {
             callback(nil)
-        } else {
-            let shell = Shell()
-            let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-                .withCommand(QemuConstants.IMAGE_CMD_VERSION)
-                .build()
-            shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
-                if terminationCode == 0 {
-                    let result = shell.readFromStandardOutput()
-                    if result.count > 22 {
-                        let version = result[result.index(result.startIndex, offsetBy: 17) ..< result.index(result.startIndex, offsetBy: 22)]
-                        callback(String(version))
-                    }
-                } else {
-                    callback(nil)
-                }
-            })
+            return
         }
+
+        let shell = Shell()
+        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
+            .withCommand(QemuConstants.IMAGE_CMD_VERSION)
+            .build()
+
+        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
+            guard terminationCode == 0 else {
+                callback(nil)
+                return
+            }
+
+            let output = shell.readFromStandardOutput()
+
+            let pattern = #"qemu-img version (\d+\.\d+(\.\d+)?)"#
+            if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
+                let range = NSRange(output.startIndex ..< output.endIndex, in: output)
+                if let match = regex.firstMatch(in: output, options: [], range: range),
+                   let versionRange = Range(match.range(at: 1), in: output)
+                {
+                    let version = String(output[versionRange])
+                    callback(version)
+                    return
+                }
+            }
+
+            callback(nil)
+        })
     }
 
     static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
