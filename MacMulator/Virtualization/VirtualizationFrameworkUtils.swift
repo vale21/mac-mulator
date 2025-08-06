@@ -45,7 +45,7 @@ class VirtualizationFrameworkUtils {
     static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink _: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
         let shell = Shell()
 
-        let command = "/usr/sbin/diskutil image resize --size " + String(virtualDrive.size) + "GiB " + virtualDrive.path
+        let command = "/usr/sbin/diskutil image resize --size " + String(virtualDrive.size) + "GiB " + Utils.escape(virtualDrive.path)
 
         shell.runCommand(command, path, uponCompletion: callback)
     }
@@ -57,7 +57,7 @@ class VirtualizationFrameworkUtils {
     static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
         let shell = Shell()
 
-        let command = "diskutil image info " + drivePath
+        let command = "diskutil image info " + Utils.escape(drivePath)
 
         shell.runCommand(command, path, uponCompletion: { terminationCcode in
             callback(terminationCcode, shell.readFromStandardOutput())

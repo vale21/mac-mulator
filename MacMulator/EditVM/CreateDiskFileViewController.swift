@@ -59,7 +59,7 @@ class CreateDiskFileViewController: NSViewController {
                     newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)
-                    if self.isVirtualizaionFrameworkInUse {
+                    if self.isVirtualizaionFrameworkInUse, newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
                         VirtualizationFrameworkUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
                             complete = true
                         })

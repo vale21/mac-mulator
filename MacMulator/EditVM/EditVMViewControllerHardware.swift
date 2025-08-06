@@ -424,10 +424,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             let cellView = cell as! DrivesTableButtonsCell
             if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND {
                 cellView.editButton.isEnabled = false
-                cellView.infoButton.isEnabled = false
             } else {
                 cellView.editButton.isEnabled = true
-                cellView.infoButton.isEnabled = true
             }
         }
 
