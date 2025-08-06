@@ -355,9 +355,9 @@ class QemuConstants {
         ARCH_PPC: 1,
         ARCH_PPC64: 1,
         ARCH_X86: 4,
-        ARCH_X64: 16,
+        ARCH_X64: ProcessInfo.processInfo.processorCount,
         ARCH_ARM: 2,
-        ARCH_ARM64: 8,
+        ARCH_ARM64: ProcessInfo.processInfo.processorCount,
         ARCH_68K: 1,
     ]
 
