@@ -14,6 +14,7 @@ class CreateDiskFileViewController: NSViewController {
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
     var parentController: NewDiskViewController?
+    var isVirtualizaionFrameworkInUse: Bool = false
 
     func setOldVirtualDrive(_ virtualDrive: VirtualDrive?) {
         oldVirtualDrive = virtualDrive
@@ -34,13 +35,27 @@ class CreateDiskFileViewController: NSViewController {
             var complete = false
 
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
-            dispatchQueue.async {
+            DispatchQueue.main.async {
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
-                    QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                        _ in
-                        complete = true
-                    })
+                    if self.isVirtualizaionFrameworkInUse {
+                        if #available(macOS 26.0, *), newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
+                            VirtualizationFrameworkUtils.createASIFDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
+                                _ in
+                                complete = true
+                            })
+                        } else {
+                            VirtualizationFrameworkUtils.createRAWDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
+                                _ in
+                                complete = true
+                            })
+                        }
+                    } else {
+                        QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
+                            _ in
+                            complete = true
+                        })
+                    }
                     newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)

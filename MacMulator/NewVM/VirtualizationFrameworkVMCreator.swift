@@ -79,10 +79,15 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     }
 
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
+        var format = QemuConstants.FORMAT_RAW
+        if #available(macOS 26.0, *) {
+            format = QemuConstants.FORMAT_ASIF
+        }
+        
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
-            format: QemuConstants.FORMAT_RAW,
+            format: format,
             mediaType: QemuConstants.MEDIATYPE_DISK,
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype))
         )
@@ -127,13 +132,14 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             vm.addVirtualDrive(installMedia)
         }
 
-        if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {
-            QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+
+        if #available(macOS 26.0, *) {
+            VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 callback(terminationCcode)
             })
         } else {
-            VirtualizationFrameworkUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+            VirtualizationFrameworkUtils.createRAWDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 callback(terminationCcode)
             })

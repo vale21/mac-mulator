@@ -54,12 +54,26 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                     diskSizeTextField.intValue = newVirtualDrive.size
 
                     if isVirtualizaionFrameworkInUse {
-                        newVirtualDrive.format = QemuConstants.FORMAT_RAW
+                        if #available(macOS 26.0, *) {
+                            newVirtualDrive.format = QemuConstants.FORMAT_ASIF
+                            
+                            useCow.title = "Use ASIF format"
+                            cowDescriptionLabel.stringValue = "The ASIF image format greatly reduces the amount of disk space used by the drive, and it is highly recommended"
+                            if newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
+                                useCow.intValue = 1
+                            } else {
+                                useCow.intValue = 0
+                            }
+                        } else {
+                            newVirtualDrive.format = QemuConstants.FORMAT_RAW
+                            
+                            useCow.intValue = 0
+                            useCow.isEnabled = false
+                            cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                            useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                        }
 
-                        useCow.intValue = 0
-                        useCow.isEnabled = false
-                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
-                        useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                        
                     } else {
                         cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
                         if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {
@@ -91,7 +105,11 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     @IBAction func cowCheckboxChanged(_: Any) {
         if useCow.intValue == 1 {
-            newVirtualDrive?.format = QemuConstants.FORMAT_QCOW2
+            if #available(macOS 26.0, *), isVirtualizaionFrameworkInUse {
+                newVirtualDrive?.format = QemuConstants.FORMAT_ASIF
+            } else {
+                newVirtualDrive?.format = QemuConstants.FORMAT_QCOW2
+            }
         } else {
             newVirtualDrive?.format = QemuConstants.FORMAT_RAW
         }
@@ -167,6 +185,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                 destinationController.setNewVirtualDrive(newVirtualDrive)
                 destinationController.setOldVirtualDrive((mode == Mode.EDIT) ? oldVirtualDrive : nil)
                 destinationController.setParentController(self)
+                destinationController.isVirtualizaionFrameworkInUse = isVirtualizaionFrameworkInUse
             }
         }
     }
