@@ -83,7 +83,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         if #available(macOS 26.0, *) {
             format = QemuConstants.FORMAT_ASIF
         }
-        
+
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
@@ -131,7 +131,6 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             )
             vm.addVirtualDrive(installMedia)
         }
-
 
         if #available(macOS 26.0, *) {
             VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {

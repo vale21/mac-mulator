@@ -280,7 +280,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE {
                 let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
                 let diskName = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
-            
+
                 var format = QemuConstants.FORMAT_RAW
                 if virtualMachine.type == MacMulatorConstants.QEMU_VM {
                     format = QemuConstants.FORMAT_QCOW2

@@ -31,7 +31,7 @@ class DriveInfoViewController: NSViewController {
         driveSizeLabel.stringValue = NSLocalizedString("DriveInfoViewController.driveSizeLabel", comment: "")
         driveFormatLabel.stringValue = NSLocalizedString("DriveInfoViewController.driveFormatLabel", comment: "")
         drivePathLabel.stringValue = NSLocalizedString("DriveInfoViewController.drivePathLabel", comment: "")
-        infoViewLabel.stringValue = isVirtualizaionFrameworkInUse ? NSLocalizedString("DriveInfoViewController.infoViewLabelApple", comment: ""):  NSLocalizedString("DriveInfoViewController.infoViewLabelQemu", comment: "")
+        infoViewLabel.stringValue = isVirtualizaionFrameworkInUse ? NSLocalizedString("DriveInfoViewController.infoViewLabelApple", comment: "") : NSLocalizedString("DriveInfoViewController.infoViewLabelQemu", comment: "")
         infoView.string = NSLocalizedString("DriveInfoViewController.infoViewDefault", comment: "")
 
         if let virtualDrive {

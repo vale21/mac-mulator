@@ -13,7 +13,7 @@ class VirtualizationFrameworkUtils {
         let shell = Shell()
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
         let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + drivePath
-        
+
         shell.runCommand(command, path, uponCompletion: callback)
     }
 
@@ -35,21 +35,21 @@ class VirtualizationFrameworkUtils {
         }
         callback(0)
     }
-    
+
     static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
         if newVirtualDrive.size != oldVirtualDrive.size {
             resizeDiskImage(newVirtualDrive, path, shrink: newVirtualDrive.size < oldVirtualDrive.size, uponCompletion: callback)
         }
     }
-    
-    static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
+
+    static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink _: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
         let shell = Shell()
 
         let command = "/usr/sbin/diskutil image resize --size " + String(virtualDrive.size) + "GiB " + virtualDrive.path
 
         shell.runCommand(command, path, uponCompletion: callback)
     }
-    
+
     static func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
         getDiskImageInfo(virtualDrive.path, path, uponCompletion: callback)
     }

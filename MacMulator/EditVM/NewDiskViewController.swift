@@ -68,7 +68,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                             }
                         } else {
                             newVirtualDrive.format = QemuConstants.FORMAT_RAW
-                            
+
                             useCow.intValue = 0
                             useCow.isEnabled = false
                             cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
