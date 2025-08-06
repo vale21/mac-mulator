@@ -55,14 +55,16 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
                     if isVirtualizaionFrameworkInUse {
                         if #available(macOS 26.0, *) {
-                            newVirtualDrive.format = QemuConstants.FORMAT_ASIF
-                            
                             useCow.title = "Use ASIF format"
                             cowDescriptionLabel.stringValue = "The ASIF image format greatly reduces the amount of disk space used by the drive, and it is highly recommended"
                             if newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
                                 useCow.intValue = 1
                             } else {
                                 useCow.intValue = 0
+                            }
+                            if mode == Mode.EDIT {
+                                useCow.isEnabled = false
+                                useCow.toolTip = "Updating this property on an existing drive is not supported at the moment"
                             }
                         } else {
                             newVirtualDrive.format = QemuConstants.FORMAT_RAW
@@ -73,7 +75,6 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                             useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
                         }
 
-                        
                     } else {
                         cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
                         if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {

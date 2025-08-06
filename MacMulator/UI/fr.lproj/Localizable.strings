@@ -30,7 +30,8 @@
 "DriveInfoViewController.driveSizeLabel" = "Taille :";
 "DriveInfoViewController.driveFormatLabel" = "Format :";
 "DriveInfoViewController.drivePathLabel" = "Chemin :";
-"DriveInfoViewController.infoViewLabel" = "Sortie de la commande Qemu img info :";
+"DriveInfoViewController.infoViewLabelQemu" = "Sortie de la commande Qemu img info:";
+"DriveInfoViewController.infoViewLabelApple" = "Sortie de la commande Diskutil image info:";
 "DriveInfoViewController.infoViewDefault" = "Exécution de la commande...";
 "EditVMViewController.general" = "Général";
 "EditVMViewController.hardware" = "Matériel";

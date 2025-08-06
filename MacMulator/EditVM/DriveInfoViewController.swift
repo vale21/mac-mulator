@@ -20,6 +20,7 @@ class DriveInfoViewController: NSViewController {
     @IBOutlet var infoView: NSTextView!
 
     var virtualDrive: VirtualDrive?
+    var isVirtualizaionFrameworkInUse: Bool = false
 
     func setVirtualDrive(_ virtualDrive: VirtualDrive) {
         self.virtualDrive = virtualDrive
@@ -30,7 +31,7 @@ class DriveInfoViewController: NSViewController {
         driveSizeLabel.stringValue = NSLocalizedString("DriveInfoViewController.driveSizeLabel", comment: "")
         driveFormatLabel.stringValue = NSLocalizedString("DriveInfoViewController.driveFormatLabel", comment: "")
         drivePathLabel.stringValue = NSLocalizedString("DriveInfoViewController.drivePathLabel", comment: "")
-        infoViewLabel.stringValue = NSLocalizedString("DriveInfoViewController.infoViewLabel", comment: "")
+        infoViewLabel.stringValue = isVirtualizaionFrameworkInUse ? NSLocalizedString("DriveInfoViewController.infoViewLabelApple", comment: ""):  NSLocalizedString("DriveInfoViewController.infoViewLabelQemu", comment: "")
         infoView.string = NSLocalizedString("DriveInfoViewController.infoViewDefault", comment: "")
 
         if let virtualDrive {
@@ -38,12 +39,21 @@ class DriveInfoViewController: NSViewController {
             driveSize.stringValue = Utils.formatDisk(virtualDrive.size)
             driveFormat.stringValue = virtualDrive.format + " " + QemuUtils.getDriveFormatDescription(virtualDrive.format)
             drivePath.stringValue = Utils.unescape(virtualDrive.path)
-            QemuUtils.getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
-                _, info in
-                DispatchQueue.main.async {
-                    self.infoView.string = info
-                }
-            })
+            if isVirtualizaionFrameworkInUse {
+                VirtualizationFrameworkUtils.getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
+                    _, info in
+                    DispatchQueue.main.async {
+                        self.infoView.string = info
+                    }
+                })
+            } else {
+                QemuUtils.getDiskImageInfo(virtualDrive, NSHomeDirectory(), uponCompletion: {
+                    _, info in
+                    DispatchQueue.main.async {
+                        self.infoView.string = info
+                    }
+                })
+            }
         }
     }
 }

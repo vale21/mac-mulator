@@ -280,7 +280,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE {
                 let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
                 let diskName = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
-                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: QemuConstants.FORMAT_QCOW2, mediaType: mediaType, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)))
+            
+                var format = QemuConstants.FORMAT_RAW
+                if virtualMachine.type == MacMulatorConstants.QEMU_VM {
+                    format = QemuConstants.FORMAT_QCOW2
+                } else if virtualMachine.type == MacMulatorConstants.APPLE_VM, #available(macOS 26.0, *) {
+                    format = QemuConstants.FORMAT_ASIF
+                }
+                let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: format, mediaType: mediaType, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)))
 
                 let destinationController = segue.destinationController as! NewDiskViewController
                 destinationController.setVirtualDrive(virtualDrive)
@@ -299,6 +306,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 let destinationController = segue.destinationController as! NSWindowController
                 let contentController = destinationController.contentViewController as! DriveInfoViewController
                 let driveTableRow: Int = drivesTableView.row(for: sender as! NSView)
+                contentController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
                 contentController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)])
             }
         }
