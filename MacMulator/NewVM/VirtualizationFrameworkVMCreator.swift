@@ -80,7 +80,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
 
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
         var format = QemuConstants.FORMAT_RAW
-        if #available(macOS 26.0, *) {
+        if Utils.isAsifSupported(vm) {
             format = QemuConstants.FORMAT_ASIF
         }
 
@@ -132,7 +132,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             vm.addVirtualDrive(installMedia)
         }
 
-        if #available(macOS 26.0, *) {
+        if #available(macOS 26.0, *), Utils.isAsifSupported(vm) {
             VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 callback(terminationCcode)

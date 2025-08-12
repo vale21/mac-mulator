@@ -691,9 +691,19 @@ class Utils {
     static func isMacClipboardSharingSupported(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
     }
+    
+    static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 26.0, *)  {
+            return vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC
+        } else {
+            return false
+        }
+    }
 
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
-        if #available(macOS 13.0, *) {
+        if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF && isAsifSupported(vm) {
+            return NSLocalizedString("Utils.asifNotSupported", comment: "")
+        } else if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()
             let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
             if hostArchitecture != vmArchitecture {
@@ -877,12 +887,16 @@ class Utils {
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+                return QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
             } else {
-                QemuUtils.isBinaryAvailable(vm.architecture)
+                return QemuUtils.isBinaryAvailable(vm.architecture)
             }
         } else {
-            isVirtualizationFrameworkPreferred(vm)
+            if isVirtualizationFrameworkPreferred(vm) {
+                return Utils.findMainDrive(vm.drives)?.format != QemuConstants.FORMAT_ASIF || isAsifSupported(vm)
+            } else {
+                return false
+            }
         }
     }
 

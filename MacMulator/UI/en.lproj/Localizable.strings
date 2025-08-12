@@ -148,6 +148,7 @@
 "Utils.genericError" = "The provided Qemu executable is broken or unsupported";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Cancel";
+"Utils.asifNotSupported" = "The VM cannot be started because it uses ASIF image format. ASIF requires macOS Tahoe or higher.";
 "Utils.hostArchitectureNotGood" = "The VM cannot be started because it is an %@ VM and cannot run on an %@ Mac.";
 "Utils.appleSiliconOnly" = "The VM cannot be started because it can run only on Apple Silicon hardware.";
 "Utils.virtualizationNotSupported" = "The VM cannot be started because Apple Virtualization Framework is not supported with this VM.";

@@ -148,6 +148,7 @@
 "Utils.genericError" = "L’exécutable Qemu fourni est défectueux ou non pris en charge";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Annuler";
+"Utils.asifNotSupported" = "La VM ne peut pas démarrée car elle utilise le format d’image ASIF. ASIF nécessite macOS Tahoe ou plus récent.";
 "Utils.hostArchitectureNotGood" = "La VM ne peut pas démarrer car il s’agit d’une VM %@ qui ne peut pas fonctionner sur un Mac %@.";
 "Utils.appleSiliconOnly" = "La machine virtuelle ne peut pas démarrer car elle ne fonctionne que sur le matériel Apple Silicon.";
 "Utils.virtualizationNotSupported" = "La machine virtuelle ne peut pas démarrer car Apple Virtualization Framework n’est pas pris en charge avec cette VM.";

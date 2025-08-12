@@ -284,7 +284,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 var format = QemuConstants.FORMAT_RAW
                 if virtualMachine.type == MacMulatorConstants.QEMU_VM {
                     format = QemuConstants.FORMAT_QCOW2
-                } else if virtualMachine.type == MacMulatorConstants.APPLE_VM, #available(macOS 26.0, *) {
+                } else if Utils.isAsifSupported(virtualMachine) {
                     format = QemuConstants.FORMAT_ASIF
                 }
                 let virtualDrive = VirtualDrive(path: virtualMachine.path, name: diskName, format: format, mediaType: mediaType, size: Int32(Utils.getDefaultDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)))
@@ -292,7 +292,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 let destinationController = segue.destinationController as! NewDiskViewController
                 destinationController.setVirtualDrive(virtualDrive)
                 destinationController.setparentController(self)
-                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if segue.identifier == MacMulatorConstants.EDIT_DISK_SEGUE {
                 let destinationController = segue.destinationController as! NewDiskViewController
@@ -300,7 +299,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 destinationController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)])
                 destinationController.setparentController(self)
                 destinationController.setMode(NewDiskViewController.Mode.EDIT)
-                destinationController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
             }
             if segue.identifier == MacMulatorConstants.SHOW_DRIVE_INFO_SEGUE {
                 let destinationController = segue.destinationController as! NSWindowController
