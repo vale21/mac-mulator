@@ -105,7 +105,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     @IBAction func cowCheckboxChanged(_: Any) {
         newVirtualDrive?.format = QemuConstants.FORMAT_RAW
-        
+
         if useCow.intValue == 1 {
             if let parentController {
                 if let virtualMachine = parentController.virtualMachine {

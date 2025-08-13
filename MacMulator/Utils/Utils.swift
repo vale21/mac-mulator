@@ -691,17 +691,17 @@ class Utils {
     static func isMacClipboardSharingSupported(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
     }
-    
+
     static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
-        if #available(macOS 26.0, *)  {
-            return vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC
+        if #available(macOS 26.0, *) {
+            vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
         } else {
-            return false
+            false
         }
     }
 
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
-        if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF && isAsifSupported(vm) {
+        if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF, !isAsifSupported(vm) {
             return NSLocalizedString("Utils.asifNotSupported", comment: "")
         } else if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()
@@ -887,15 +887,15 @@ class Utils {
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
         if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                return QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+                QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
             } else {
-                return QemuUtils.isBinaryAvailable(vm.architecture)
+                QemuUtils.isBinaryAvailable(vm.architecture)
             }
         } else {
             if isVirtualizationFrameworkPreferred(vm) {
-                return Utils.findMainDrive(vm.drives)?.format != QemuConstants.FORMAT_ASIF || isAsifSupported(vm)
+                Utils.findMainDrive(vm.drives)?.format != QemuConstants.FORMAT_ASIF || isAsifSupported(vm)
             } else {
-                return false
+                false
             }
         }
     }
