@@ -26,7 +26,6 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
-    var isVirtualizaionFrameworkInUse: Bool = false
 
     var parentController: EditVMViewControllerHardware?
     var isVisible: Bool = false
@@ -53,13 +52,28 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                     diskSizeStepper.intValue = newVirtualDrive.size
                     diskSizeTextField.intValue = newVirtualDrive.size
 
-                    if isVirtualizaionFrameworkInUse {
-                        newVirtualDrive.format = QemuConstants.FORMAT_RAW
+                    if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                        if Utils.isAsifSupported(virtualMachine) {
+                            useCow.title = "Use ASIF format"
+                            cowDescriptionLabel.stringValue = "The ASIF image format greatly reduces the amount of disk space used by the drive, and it is highly recommended"
+                            if newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
+                                useCow.intValue = 1
+                            } else {
+                                useCow.intValue = 0
+                            }
+                            if mode == Mode.EDIT {
+                                useCow.isEnabled = false
+                                useCow.toolTip = "Updating this property on an existing drive is not supported at the moment"
+                            }
+                        } else {
+                            newVirtualDrive.format = QemuConstants.FORMAT_RAW
 
-                        useCow.intValue = 0
-                        useCow.isEnabled = false
-                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
-                        useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                            useCow.intValue = 0
+                            useCow.isEnabled = false
+                            cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                            useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                        }
+
                     } else {
                         cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
                         if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {
@@ -90,10 +104,18 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     @IBAction func cowCheckboxChanged(_: Any) {
+        newVirtualDrive?.format = QemuConstants.FORMAT_RAW
+
         if useCow.intValue == 1 {
-            newVirtualDrive?.format = QemuConstants.FORMAT_QCOW2
-        } else {
-            newVirtualDrive?.format = QemuConstants.FORMAT_RAW
+            if let parentController {
+                if let virtualMachine = parentController.virtualMachine {
+                    if Utils.isAsifSupported(virtualMachine) {
+                        newVirtualDrive?.format = QemuConstants.FORMAT_ASIF
+                    } else {
+                        newVirtualDrive?.format = QemuConstants.FORMAT_QCOW2
+                    }
+                }
+            }
         }
     }
 
@@ -167,6 +189,12 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                 destinationController.setNewVirtualDrive(newVirtualDrive)
                 destinationController.setOldVirtualDrive((mode == Mode.EDIT) ? oldVirtualDrive : nil)
                 destinationController.setParentController(self)
+                destinationController.isVirtualizaionFrameworkInUse = false
+                if let parentController {
+                    if let virtualMachine = parentController.virtualMachine {
+                        destinationController.isVirtualizaionFrameworkInUse = virtualMachine.type == MacMulatorConstants.APPLE_VM
+                    }
+                }
             }
         }
     }

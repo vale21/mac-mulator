@@ -99,7 +99,7 @@ class CreateVMFileViewController: NSViewController {
                     }
 
                     guard !self.vmCreator!.isComplete() else {
-                        self.creationComplete(timer, error, vm)
+                        self.creationComplete(timer, self.vmCreator?.getError(), vm)
                         return
                     }
                 })

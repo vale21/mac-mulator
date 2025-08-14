@@ -692,8 +692,18 @@ class Utils {
         vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_SEQUOIA)
     }
 
+    static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 26.0, *) {
+            vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC
+        } else {
+            false
+        }
+    }
+
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
-        if #available(macOS 13.0, *) {
+        if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF, !isAsifSupported(vm) {
+            return NSLocalizedString("Utils.asifNotSupported", comment: "")
+        } else if #available(macOS 13.0, *) {
             let hostArchitecture = Utils.hostArchitecture()
             let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
             if hostArchitecture != vmArchitecture {
@@ -882,7 +892,11 @@ class Utils {
                 QemuUtils.isBinaryAvailable(vm.architecture)
             }
         } else {
-            isVirtualizationFrameworkPreferred(vm)
+            if isVirtualizationFrameworkPreferred(vm) {
+                Utils.findMainDrive(vm.drives)?.format != QemuConstants.FORMAT_ASIF || isAsifSupported(vm)
+            } else {
+                false
+            }
         }
     }
 

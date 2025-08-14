@@ -79,10 +79,15 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     }
 
     fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
+        var format = QemuConstants.FORMAT_RAW
+        if Utils.isAsifSupported(vm) {
+            format = QemuConstants.FORMAT_ASIF
+        }
+
         let virtualHDD = VirtualDrive(
             path: vm.path + "/" + QemuConstants.MEDIATYPE_DISK + "-0." + MacMulatorConstants.DISK_EXTENSION,
             name: QemuConstants.MEDIATYPE_DISK + "-0",
-            format: QemuConstants.FORMAT_RAW,
+            format: format,
             mediaType: QemuConstants.MEDIATYPE_DISK,
             size: Int32(Utils.getDefaultDiskSizeForSubType(vm.os, vm.subtype))
         )
@@ -127,13 +132,13 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             vm.addVirtualDrive(installMedia)
         }
 
-        if QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG) {
-            QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+        if #available(macOS 26.0, *), Utils.isAsifSupported(vm) {
+            VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 callback(terminationCcode)
             })
         } else {
-            VirtualizationFrameworkUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+            VirtualizationFrameworkUtils.createRAWDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                 terminationCcode in
                 callback(terminationCcode)
             })
@@ -155,7 +160,13 @@ class VirtualizationFrameworkVMCreator: VMCreator {
                 VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self] (result: Result<VZMacOSRestoreImage, Error>) in
                     switch result {
                     case let .failure(error):
-                        fatalError(error.localizedDescription)
+                        do {
+                            try Utils.removeDocumentPackage(vm.path)
+                        } catch {
+                            print("Error while deleting" + vm.path + ": " + error.localizedDescription)
+                        }
+                        self.error = error
+                        complete = true
 
                     case let .success(restoreImage):
                         VirtualizationFrameworkMacOSSupport.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage)
