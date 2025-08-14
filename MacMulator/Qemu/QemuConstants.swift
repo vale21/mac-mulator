@@ -34,6 +34,7 @@ class QemuConstants {
 
     static let FORMAT_QCOW2 = "qcow2"
     static let FORMAT_RAW = "raw"
+    static let FORMAT_ASIF = "asif"
     static let FORMAT_UNKNOWN = "unknown"
     static let FORMAT_VHDX = "vhdx"
     static let FORMAT_DIR = "directory"
@@ -354,9 +355,9 @@ class QemuConstants {
         ARCH_PPC: 1,
         ARCH_PPC64: 1,
         ARCH_X86: 4,
-        ARCH_X64: 16,
+        ARCH_X64: ProcessInfo.processInfo.processorCount,
         ARCH_ARM: 2,
-        ARCH_ARM64: 8,
+        ARCH_ARM64: ProcessInfo.processInfo.processorCount,
         ARCH_68K: 1,
     ]
 
