@@ -160,7 +160,13 @@ class VirtualizationFrameworkVMCreator: VMCreator {
                 VZMacOSRestoreImage.load(from: ipswURL, completionHandler: { [self] (result: Result<VZMacOSRestoreImage, Error>) in
                     switch result {
                     case let .failure(error):
-                        fatalError(error.localizedDescription)
+                        do {
+                            try Utils.removeDocumentPackage(vm.path)
+                        } catch {
+                            print("Error while deleting" + vm.path + ": " + error.localizedDescription)
+                        }
+                        self.error = error
+                        complete = true
 
                     case let .success(restoreImage):
                         VirtualizationFrameworkMacOSSupport.createMacOSVirtualMachineData(vm: vm, restoreImage: restoreImage)
