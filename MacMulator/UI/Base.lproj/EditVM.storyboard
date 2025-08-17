@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24118.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24118.1"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -49,6 +49,9 @@
                         <tabViewItem label="Network" identifier="network" id="FK0-cD-72z">
                             <imageReference key="image" image="network" catalog="system" symbolScale="default" renderingMode="template"/>
                         </tabViewItem>
+                        <tabViewItem label="Network" identifier="networkVF" id="6cM-Cd-doi">
+                            <imageReference key="image" image="network" catalog="system" symbolScale="default" renderingMode="template"/>
+                        </tabViewItem>
                         <tabViewItem label="Video" image="display" catalog="system" id="gv9-9f-bNO"/>
                         <tabViewItem label="Advanced" identifier="advanced" id="rXL-e0-tcc">
                             <imageReference key="image" image="gear" catalog="system" symbolScale="default" renderingMode="template"/>
@@ -67,6 +70,7 @@
                         <segue destination="67A-Mm-B6X" kind="relationship" relationship="tabItems" id="ahe-hb-HW7"/>
                         <segue destination="fBa-tq-xkS" kind="relationship" relationship="tabItems" id="8HZ-3j-S1y"/>
                         <segue destination="CC8-R8-wkI" kind="relationship" relationship="tabItems" id="HIp-WZ-HvB"/>
+                        <segue destination="mu6-Mz-lIx" kind="relationship" relationship="tabItems" id="Wun-Jh-d0I"/>
                         <segue destination="bME-KN-L8y" kind="relationship" relationship="tabItems" id="uZ4-te-MXt"/>
                         <segue destination="oyc-lN-MJc" kind="relationship" relationship="tabItems" id="v2w-Tj-EVa"/>
                     </connections>
@@ -84,7 +88,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sDH-bT-UFA">
-                                <rect key="frame" x="18" y="311" width="88" height="16"/>
+                                <rect key="frame" x="18" y="307" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="aoT-fS-Tty"/>
                                 </constraints>
@@ -95,7 +99,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ncg-hL-CsH">
-                                <rect key="frame" x="18" y="350" width="88" height="16"/>
+                                <rect key="frame" x="18" y="346" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="XdL-I4-fZk"/>
                                 </constraints>
@@ -106,7 +110,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q4Z-4h-oHK">
-                                <rect key="frame" x="18" y="277" width="88" height="16"/>
+                                <rect key="frame" x="18" y="273" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="fk2-9w-z8B"/>
                                 </constraints>
@@ -117,7 +121,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lRI-vi-tcA">
-                                <rect key="frame" x="113" y="311" width="467" height="24"/>
+                                <rect key="frame" x="113" y="307" width="467" height="24"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="I5t-Ia-qr4">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -128,7 +132,7 @@
                                 </connections>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kEK-er-2EU">
-                                <rect key="frame" x="112" y="348" width="114" height="23"/>
+                                <rect key="frame" x="113" y="346" width="110" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="aMD-sa-Q70"/>
                                 </constraints>
@@ -143,17 +147,17 @@
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
-                                <rect key="frame" x="113" y="204" width="467" height="89"/>
+                                <rect key="frame" x="113" y="204" width="467" height="85"/>
                                 <clipView key="contentView" drawsBackground="NO" id="wJp-Vh-QSF">
-                                    <rect key="frame" x="1" y="1" width="465" height="87"/>
+                                    <rect key="frame" x="1" y="1" width="465" height="83"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="6NK-mS-sgm">
-                                            <rect key="frame" x="0.0" y="0.0" width="465" height="87"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="465" height="83"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="465" height="87"/>
+                                            <size key="minSize" width="465" height="83"/>
                                             <size key="maxSize" width="467" height="10000000"/>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
@@ -167,7 +171,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Yu4-v9-rNq">
-                                    <rect key="frame" x="449" y="1" width="17" height="87"/>
+                                    <rect key="frame" x="449" y="1" width="17" height="83"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -237,7 +241,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="196" translatesAutoresizingMaskIntoConstraints="NO" id="bsO-Gd-aoR">
-                                <rect key="frame" x="383" y="348" width="200" height="23"/>
+                                <rect key="frame" x="384" y="346" width="196" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="gzI-6e-dMB"/>
                                     <constraint firstAttribute="width" constant="196" id="mlW-pN-A5G"/>
@@ -317,7 +321,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="37M-Tq-FH2">
-                                <rect key="frame" x="232" y="352" width="146" height="16"/>
+                                <rect key="frame" x="232" y="348" width="146" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Operating System" id="tfe-YT-kPF">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1005,7 +1009,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uEu-kH-YSK">
-                                <rect key="frame" x="18" y="143" width="61" height="16"/>
+                                <rect key="frame" x="18" y="140" width="61" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Size (GB)" id="SvX-Br-xQl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1071,7 +1075,7 @@ Gw
                                 </connections>
                             </stepper>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bNl-Ln-zWW">
-                                <rect key="frame" x="268" y="140" width="102" height="22"/>
+                                <rect key="frame" x="268" y="140" width="102" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="102" id="r2h-Gv-arU"/>
                                 </constraints>
@@ -1081,7 +1085,7 @@ Gw
                                 </connections>
                             </slider>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
-                                <rect key="frame" x="376" y="143" width="50" height="16"/>
+                                <rect key="frame" x="376" y="140" width="50" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="500 GB" id="CKc-j7-uhd">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1324,7 +1328,7 @@ Gw
                 </viewController>
                 <customObject id="Z8l-Yt-bRq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="-83"/>
+            <point key="canvasLocation" x="1636" y="408"/>
         </scene>
         <!--Network-->
         <scene sceneID="3Tm-y0-dlA">
@@ -1774,7 +1778,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
-                                <rect key="frame" x="130" y="277" width="342" height="25"/>
+                                <rect key="frame" x="131" y="279" width="338" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="Be0-7s-0eK"/>
                                     <constraint firstAttribute="width" constant="338" id="LX6-Tw-6uM"/>
@@ -1812,7 +1816,80 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                 </viewController>
                 <customObject id="crX-hl-RdI" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1636" y="-541"/>
+            <point key="canvasLocation" x="1636" y="-57"/>
+        </scene>
+        <!--Network-->
+        <scene sceneID="Wol-WD-2aQ">
+            <objects>
+                <viewController title="Network" id="mu6-Mz-lIx" customClass="EditVMViewControllerNetworkVF" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="yXI-7a-2N6">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="390"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dUp-QD-1Jc">
+                                <rect key="frame" x="89" y="280" width="93" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Network mode" id="Xub-7K-8vW">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m7W-DI-2ac">
+                                <rect key="frame" x="201" y="274" width="308" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="2Yq-Ok-iyQ">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                                <connections>
+                                    <outlet property="dataSource" destination="CC8-R8-wkI" id="Nxn-Ew-J04"/>
+                                    <outlet property="delegate" destination="CC8-R8-wkI" id="xYZ-QP-iJ2"/>
+                                </connections>
+                            </comboBox>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T0M-Tv-Uth">
+                                <rect key="frame" x="89" y="247" width="94" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Phisical device" id="gNW-va-iRk">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3IS-ql-EAi">
+                                <rect key="frame" x="201" y="241" width="308" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="W9b-a9-Rys">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </comboBoxCell>
+                                <connections>
+                                    <outlet property="dataSource" destination="CC8-R8-wkI" id="cDg-TM-vMS"/>
+                                    <outlet property="delegate" destination="CC8-R8-wkI" id="aeD-ms-exC"/>
+                                </connections>
+                            </comboBox>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAC-FU-SHc">
+                                <rect key="frame" x="89" y="90" width="422" height="115"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" id="LWy-9s-Omm">
+                                    <font key="font" metaFont="system"/>
+                                    <string key="title">A Shared network is the sim plest networ mode. It sets up the VM network to be shared with the host Mac network. The VM will nott see any other device on the host ;ac network, except from the host Mac itself.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="networkAdapterComboBox" destination="m7W-DI-2ac" id="XYk-kn-cXd"/>
+                        <outlet property="networkAdapterLabel" destination="dUp-QD-1Jc" id="5o4-kF-Qfw"/>
+                    </connections>
+                </viewController>
+                <customObject id="aCj-AV-GzQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1636" y="-524"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
