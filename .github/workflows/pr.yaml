@@ -11,6 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint pull request title
-        uses: matthiashermsen/lint-pull-request-title@v1.0.0
+        uses: dreampulse/action-lint-pull-request-title@master
         with:
           allowed-pull-request-types: chore,feat,fix,feat!
