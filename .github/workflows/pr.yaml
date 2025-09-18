@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Lint pull request title
-        uses: dreampulse/action-lint-pull-request-title@master
+      - uses: dreampulse/action-lint-pull-request-title@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           allowed-pull-request-types: chore,feat,fix,feat!
