@@ -12,7 +12,7 @@ class VirtualizationFrameworkUtils {
     static func createASIFDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
         let shell = Shell()
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-        let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + drivePath
+        let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
 
         shell.runCommand(command, path, uponCompletion: callback)
     }
