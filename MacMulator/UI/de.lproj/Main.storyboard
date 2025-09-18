@@ -16,7 +16,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="MacMulator" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About MacMulator" id="5kV-Vb-QxS">
+                                        <menuItem title="Über MacMulator" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
@@ -24,36 +24,36 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                        <menuItem title="Einstellungen..." keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
                                                 <action selector="preferencesMenuBarClicked:" target="Voe-Tx-rLC" id="qPp-UL-ZcE"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                                        <menuItem title="Services" id="NMo-om-nkz">
+                                        <menuItem title="Dienste" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
+                                            <menu key="submenu" title="Dienste" systemMenu="services" id="hz9-B4-Xy5"/>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                                        <menuItem title="Hide MacMulator" keyEquivalent="h" id="Olw-nP-bQN">
+                                        <menuItem title="MacMulator ausblenden" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                        <menuItem title="Andere ausblenden" keyEquivalent="h" id="Vdr-fp-XzO">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="hideOtherApplications:" target="Ady-hI-5gd" id="VT4-aY-XCT"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Show All" id="Kd2-mp-pUS">
+                                        <menuItem title="Alle anzeigen" id="Kd2-mp-pUS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="unhideAllApplications:" target="Ady-hI-5gd" id="Dhg-Le-xox"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit MacMulator" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="MacMulator beenden" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
                                             </connections>
@@ -61,11 +61,11 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="File" id="dMs-cI-mzQ">
+                            <menuItem title="Datei" id="dMs-cI-mzQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="File" id="bib-Uj-vzu">
+                                <menu key="submenu" title="Datei" id="bib-Uj-vzu">
                                     <items>
-                                        <menuItem title="New" keyEquivalent="n" id="Was-JA-tGl">
+                                        <menuItem title="Neuer" keyEquivalent="n" id="Was-JA-tGl">
                                             <connections>
                                                 <action selector="newVMMenuBarClicked:" target="Voe-Tx-rLC" id="naq-Tn-pRu"/>
                                             </connections>
@@ -90,7 +90,7 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="yNP-ow-gwT"/>
-                                        <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
+                                        <menuItem title="Drucken" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
                                             </connections>
@@ -98,49 +98,49 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Edit" id="5Va-YG-7Yh">
+                            <menuItem title="Bearbeiten" id="5Va-YG-7Yh">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Edit" id="cJV-C9-WJp">
+                                <menu key="submenu" title="Bearbeiten" id="cJV-C9-WJp">
                                     <items>
-                                        <menuItem title="Undo" keyEquivalent="z" id="kcV-18-eIr">
+                                        <menuItem title="Rückgängig" keyEquivalent="z" id="kcV-18-eIr">
                                             <connections>
                                                 <action selector="undo:" target="Ady-hI-5gd" id="Efp-Ib-Jo8"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Redo" keyEquivalent="Z" id="cqK-H6-x5S">
+                                        <menuItem title="Weiderholen" keyEquivalent="Z" id="cqK-H6-x5S">
                                             <connections>
                                                 <action selector="redo:" target="Ady-hI-5gd" id="ljp-lk-McW"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="LUF-OY-qOP"/>
-                                        <menuItem title="Cut" keyEquivalent="x" id="6VH-bp-5pg">
+                                        <menuItem title="Ausschneiden" keyEquivalent="x" id="6VH-bp-5pg">
                                             <connections>
                                                 <action selector="cut:" target="Ady-hI-5gd" id="jKI-e4-jnP"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Copy" keyEquivalent="c" id="4wb-NG-JAH">
+                                        <menuItem title="Kopieren" keyEquivalent="c" id="4wb-NG-JAH">
                                             <connections>
                                                 <action selector="copy:" target="Ady-hI-5gd" id="Gdm-lU-GsN"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Paste" keyEquivalent="v" id="mnq-ik-LZC">
+                                        <menuItem title="Einfügen" keyEquivalent="v" id="mnq-ik-LZC">
                                             <connections>
                                                 <action selector="paste:" target="Ady-hI-5gd" id="YrN-HV-Pzh"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Paste and Match Style" keyEquivalent="V" id="LIg-Z1-EYg">
+                                        <menuItem title="Einfügen und Stil anpassen" keyEquivalent="V" id="LIg-Z1-EYg">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="pasteAsPlainText:" target="Ady-hI-5gd" id="tHb-1d-vKi"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Delete" id="IDo-RT-0Vk">
+                                        <menuItem title="Löschen" id="IDo-RT-0Vk">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="delete:" target="Ady-hI-5gd" id="d3L-SF-ZrN"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Select All" keyEquivalent="a" id="taQ-Ih-G8N">
+                                        <menuItem title="Alles auswählen" keyEquivalent="a" id="taQ-Ih-G8N">
                                             <connections>
                                                 <action selector="selectAll:" target="Ady-hI-5gd" id="rpx-xe-I26"/>
                                             </connections>
@@ -252,17 +252,17 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="View" id="H8h-7b-M4v">
+                            <menuItem title="Darstellung" id="H8h-7b-M4v">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="View" id="HyV-fh-RgO">
+                                <menu key="submenu" title="Darstellung" id="HyV-fh-RgO">
                                     <items>
-                                        <menuItem title="Show Sidebar" keyEquivalent="s" id="kIP-vf-haE">
+                                        <menuItem title="Seitenleiste ausblended" keyEquivalent="s" id="kIP-vf-haE">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
                                                 <action selector="toggleSidebar:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
+                                        <menuItem title="Vollbildmodus" keyEquivalent="f" id="4J7-dP-txa">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
                                                 <action selector="toggleFullScreen:" target="Ady-hI-5gd" id="dU3-MA-1Rq"/>
@@ -271,23 +271,23 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Window" id="aUF-d1-5bR">
+                            <menuItem title="Fenster" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
+                                <menu key="submenu" title="Fenster" systemMenu="window" id="Td7-aD-5lo">
                                     <items>
-                                        <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
+                                        <menuItem title="Im Dock ablegen" keyEquivalent="m" id="OY7-WF-poV">
                                             <connections>
                                                 <action selector="performMiniaturize:" target="Ady-hI-5gd" id="VwT-WD-YPe"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Zoom" id="R4o-n2-Eq4">
+                                        <menuItem title="Zoomen" id="R4o-n2-Eq4">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="performZoom:" target="Ady-hI-5gd" id="DIl-cC-cCs"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
-                                        <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
+                                        <menuItem title="Alle nach vorne bringen" id="LE2-aR-0XJ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
@@ -296,11 +296,11 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Help" id="wpr-3q-Mcd">
+                            <menuItem title="Hilfe" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
+                                <menu key="submenu" title="Hilfe" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
-                                        <menuItem title="MacMulator Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                        <menuItem title="MacMulator-Hilfe" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
                                                 <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
                                             </connections>
