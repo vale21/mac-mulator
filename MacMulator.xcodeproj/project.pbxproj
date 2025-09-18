@@ -165,6 +165,8 @@
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B672E6627C788AE00732C46 /* SystemProfilerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProfilerData.swift; sourceTree = "<group>"; };
+		3B6A6E432E7C15B000548768 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = de; path = de.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3B6A6E442E7C15B000548768 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3B6A9E0925CBFD8300123D6B /* ObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjC.h; sourceTree = "<group>"; };
 		3B6A9E1225CBFDDC00123D6B /* MacMulator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MacMulator-Bridging-Header.h"; sourceTree = "<group>"; };
 		3B6A9E1325CBFDDC00123D6B /* ObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjC.m; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				it,
 				Base,
 				fr,
+				de,
 			);
 			mainGroup = 3B391EE025C075F50030E914;
 			packageReferences = (
@@ -672,6 +675,7 @@
 				3B75C7EB29DF06C4007C3781 /* en */,
 				3BBA2BBD2DA329FE00EBE373 /* it */,
 				3BE706162DFD6B7F00AC2203 /* fr */,
+				3B6A6E442E7C15B000548768 /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -690,6 +694,7 @@
 				3B39124F2DA9C65000BF8794 /* en */,
 				3B39124E2DA9C64500BF8794 /* it */,
 				3BE706152DFD6B7F00AC2203 /* fr */,
+				3B6A6E432E7C15B000548768 /* de */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
