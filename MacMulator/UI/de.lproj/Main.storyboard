@@ -76,9 +76,9 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="deE-4G-lIz"/>
-                                        <menuItem title="Import VM from" id="wy3-tx-Ofd">
+                                        <menuItem title="VM importieren von" id="wy3-tx-Ofd">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Import VM from" id="OGd-wn-S60">
+                                            <menu key="submenu" title="VM importieren von" id="OGd-wn-S60">
                                                 <items>
                                                     <menuItem title="Parallels" id="BlF-ys-fL5">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
@@ -152,62 +152,62 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="VM" autoenablesItems="NO" id="Ah7-Df-n96">
                                     <items>
-                                        <menuItem title="Start" keyEquivalent="S" id="rPi-T3-q1r">
+                                        <menuItem title="Starten" keyEquivalent="S" id="rPi-T3-q1r">
                                             <connections>
                                                 <action selector="startVMMenuBarClicked:" target="Voe-Tx-rLC" id="Mzs-wT-he4"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Start in Recovery Mode" id="zpB-kc-SoG">
+                                        <menuItem title="Im Wiederherstellungsmodus starten" id="zpB-kc-SoG">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="startVMInRecoveryMenuBarClicked:" target="Voe-Tx-rLC" id="5bP-75-hRk"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Stop" keyEquivalent="S" id="Q3F-uG-aFl">
+                                        <menuItem title="Anhalten" keyEquivalent="S" id="Q3F-uG-aFl">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="stopVMMenubarClicked:" target="Voe-Tx-rLC" id="uWd-US-sGv"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Pause" id="ETl-HI-ZzZ">
+                                        <menuItem title="Pausieren" id="ETl-HI-ZzZ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="pauseVMMenuBarClicked:" target="Voe-Tx-rLC" id="s59-NA-j1r"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
-                                        <menuItem title="Configure..." id="Qce-a5-l81">
+                                        <menuItem title="Konfigurieren..." id="Qce-a5-l81">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VMT-mp-0Y3"/>
-                                        <menuItem title="Clone" id="HJ6-jY-EPi">
+                                        <menuItem title="Klonen" id="HJ6-jY-EPi">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="cloneVMMenuBarClicked:" target="Voe-Tx-rLC" id="6cZ-Az-kca"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Show in Finder" id="kcm-AV-ZBa">
+                                        <menuItem title="Im Finder anzeigen" id="kcm-AV-ZBa">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showVMInFinderMenuBarClicked:" target="Voe-Tx-rLC" id="Ln8-pD-taY"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="Yf2-Qx-Hk7"/>
-                                        <menuItem title="USB devices" id="S7C-pL-vez">
+                                        <menuItem title="USB-Geräte" id="S7C-pL-vez">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="USB devices" id="M5G-y6-hvW">
+                                            <menu key="submenu" title="USB-Geräte" id="M5G-y6-hvW">
                                                 <items>
-                                                    <menuItem title="Attach image..." id="Xwl-s4-O9v">
+                                                    <menuItem title="Image einbinden" id="Xwl-s4-O9v">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="attachUSBImageMenuBarClicked:" target="Voe-Tx-rLC" id="b1f-Bg-fc4"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="BWP-T9-TOD"/>
-                                                    <menuItem title="Configure..." keyEquivalent="" id="vyi-Nn-ga9">
+                                                    <menuItem title="Konfigurieren..." keyEquivalent="" id="vyi-Nn-ga9">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="Jzh-OX-vA0"/>
@@ -217,12 +217,11 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
-                                        <menuItem title="Export as" id="cZp-mO-IqY">
+                                        <menuItem title="Exportieren als" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Export as" id="3Ko-t4-AGP">
+                                            <menu key="submenu" title="Exportieren als" id="3Ko-t4-AGP">
                                                 <items>
-                                                    <menuItem title="Parallels VM" id="FzN-3M-7zL">
-                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    <menuItem title="Parallels-VM" id="FzN-3M-7zL">
                                                         <connections>
                                                             <action selector="exportVMToParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="FXO-G3-Gh1"/>
                                                         </connections>
@@ -230,20 +229,20 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
-                                        <menuItem title="Convert to QEMU VM" id="R2R-CL-gW6">
+                                        <menuItem title="In QEMU-VM konvertieren" id="R2R-CL-gW6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="convertToQemuMenuBarClicked:" target="Voe-Tx-rLC" id="dX9-Ns-BmD"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Convert to Apple VM" id="lrY-sV-Nll">
+                                        <menuItem title=" In Apple-VM konvertieren" id="lrY-sV-Nll">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
-                                        <menuItem title="Show Console Output" id="7ko-iP-uk6">
+                                        <menuItem title="Konsolenausgabe anzeigen" id="7ko-iP-uk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>

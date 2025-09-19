@@ -1,7 +1,7 @@
 "AboutBoxViewController.version" = "Version";
-"AboutBoxViewController.licenseButton" = "Apache 2.0-Lizenz anzeigen";
-"AboutBoxViewController.descriptionLabel" = "MacMulator ist eine kostenlose, nicht-kommerzielle Software";
-"AboutBoxViewController.descriptionText" = "MacMulator ist der Computer-Emulator für deinen Mac! Er nutzt die Leistung von Qemu und dem Apple Virtualization Framework zusammen mit einer benutzerfreundlichen Oberfläche, um dir die Erstellung beliebiger virtueller Maschinen mit nur wenigen Klicks zu ermöglichen. Welches Betriebssystem du auch immer auf deinem Mac ausführen musst – MacMulator ist das richtige Werkzeug dafür!";
+"AboutBoxViewController.licenseButton" = "Apache 2.0-Lizenz";
+"AboutBoxViewController.descriptionLabel" = "MacMulator ist kostenlose, nicht-kommerzielle Software";
+"AboutBoxViewController.descriptionText" = "MacMulator ist der Emulator für deinen Mac! Er nutzt die Leistung von Qemu und dem Apple Virtualization Framework sowie eine benutzerfreundliche Oberfläche, um dir die Erstellung virtueller Maschinen mit wenigen Klicks zu ermöglichen. Welches Betriebssystem du auch auf deinem Mac ausführen musst – MacMulator ist das richtige Werkzeug!";
 "AboutBoxViewController.creditsLabel" = "Danksagungen";
 "AppDelegate.exportToParallelsComplete" = "Export nach Parallels abgeschlossen.";
 "AppDelegate.exportToParallelsFailed" = "Export fehlgeschlagen mit Fehler: %@";
@@ -44,7 +44,7 @@
 "EditVMViewControllerAdvanced.accelerateVM" = "VM mit Apple Hypervisor beschleunigen";
 "EditVMViewControllerAdvanced.qemuPathButton" = "Suchen";
 "EditVMViewControllerAdvanced.qemuCommandLabel" = "Voller Qemu-Befehl";
-"EditVMViewControllerAdvanced.qemuCommandDescription" = "Wenn du den untenstehenden Befehl änderst, wird MacMulator ihn verwenden, um Qemu zu starten – unabhängig von den anderen Konfigurationsoptionen in den übrigen Tabs. Sei vorsichtig bei Änderungen, sonst startet deine VM möglicherweise nicht. Wenn du das ausführbare Programm änderst, stelle sicher, dass es vertrauenswürdig ist. Um den Standard wiederherzustellen, kannst du einfach das Textfeld leeren.";
+"EditVMViewControllerAdvanced.qemuCommandDescription" = "Wenn du den Befehl unten änderst, verwendet MacMulator ihn zum Start von Qemu, unabhängig von anderen Optionen. Sei vorsichtig, sonst startet die VM evtl. nicht. Ändere die ausführbare Datei nur, wenn sie vertrauenswürdig ist. Um den Standard wiederherzustellen, lösche einfach das Textfeld.";
 "EditVMViewControllerGeneral.vmTypeLabel" = "VM-Typ";
 "EditVMViewControllerGeneral.vmSubTypeLabel" = "Betriebssystem";
 "EditVMViewControllerGeneral.vmNameLabel" = "VM-Name";
