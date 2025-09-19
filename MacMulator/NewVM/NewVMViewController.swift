@@ -69,6 +69,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     override func viewWillAppear() {
+        view.window?.title = NSLocalizedString("NewVMController.title", comment: "")
         starting = true
         vmSubType.stringValue = QemuConstants.SUB_OTHER_GENERIC
 

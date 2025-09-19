@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Application-->
+        <scene sceneID="JPo-4y-FX3">
+            <objects>
+                <application id="hnw-xV-0zn" sceneMemberID="viewController">
+                    <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+                        <items>
+                            <menuItem title="MacMulator" id="1Xt-HY-uBw">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="MacMulator" systemMenu="apple" id="uQy-DD-JDr">
+                                    <items>
+                                        <menuItem title="Über MacMulator" id="5kV-Vb-QxS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
+                                                <segue destination="BcM-Dv-lzx" kind="show" id="l8L-Ly-Weh"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                                        <menuItem title="Einstellungen..." keyEquivalent="," id="BOF-NM-1cW">
+                                            <connections>
+                                                <action selector="preferencesMenuBarClicked:" target="Voe-Tx-rLC" id="qPp-UL-ZcE"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
+                                        <menuItem title="Dienste" id="NMo-om-nkz">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Dienste" systemMenu="services" id="hz9-B4-Xy5"/>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
+                                        <menuItem title="MacMulator ausblenden" keyEquivalent="h" id="Olw-nP-bQN">
+                                            <connections>
+                                                <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Andere ausblenden" keyEquivalent="h" id="Vdr-fp-XzO">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="hideOtherApplications:" target="Ady-hI-5gd" id="VT4-aY-XCT"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Alle anzeigen" id="Kd2-mp-pUS">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="unhideAllApplications:" target="Ady-hI-5gd" id="Dhg-Le-xox"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                                        <menuItem title="MacMulator beenden" keyEquivalent="q" id="4sb-4s-VLi">
+                                            <connections>
+                                                <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Datei" id="dMs-cI-mzQ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Datei" id="bib-Uj-vzu">
+                                    <items>
+                                        <menuItem title="Neuer" keyEquivalent="n" id="Was-JA-tGl">
+                                            <connections>
+                                                <action selector="newVMMenuBarClicked:" target="Voe-Tx-rLC" id="naq-Tn-pRu"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open" keyEquivalent="o" id="IAo-SY-fd9">
+                                            <connections>
+                                                <action selector="openVMMenuBarClicked:" target="Voe-Tx-rLC" id="R1l-9m-Y15"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="deE-4G-lIz"/>
+                                        <menuItem title="VM importieren von" id="wy3-tx-Ofd">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="VM importieren von" id="OGd-wn-S60">
+                                                <items>
+                                                    <menuItem title="Parallels" id="BlF-ys-fL5">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="importVMFromParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="dvq-Lw-sgY"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="yNP-ow-gwT"/>
+                                        <menuItem title="Drucken" keyEquivalent="w" id="DVo-aG-piG">
+                                            <connections>
+                                                <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Bearbeiten" id="5Va-YG-7Yh">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Bearbeiten" id="cJV-C9-WJp">
+                                    <items>
+                                        <menuItem title="Rückgängig" keyEquivalent="z" id="kcV-18-eIr">
+                                            <connections>
+                                                <action selector="undo:" target="Ady-hI-5gd" id="Efp-Ib-Jo8"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Weiderholen" keyEquivalent="Z" id="cqK-H6-x5S">
+                                            <connections>
+                                                <action selector="redo:" target="Ady-hI-5gd" id="ljp-lk-McW"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="LUF-OY-qOP"/>
+                                        <menuItem title="Ausschneiden" keyEquivalent="x" id="6VH-bp-5pg">
+                                            <connections>
+                                                <action selector="cut:" target="Ady-hI-5gd" id="jKI-e4-jnP"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Kopieren" keyEquivalent="c" id="4wb-NG-JAH">
+                                            <connections>
+                                                <action selector="copy:" target="Ady-hI-5gd" id="Gdm-lU-GsN"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Einfügen" keyEquivalent="v" id="mnq-ik-LZC">
+                                            <connections>
+                                                <action selector="paste:" target="Ady-hI-5gd" id="YrN-HV-Pzh"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Einfügen und Stil anpassen" keyEquivalent="V" id="LIg-Z1-EYg">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="pasteAsPlainText:" target="Ady-hI-5gd" id="tHb-1d-vKi"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Löschen" id="IDo-RT-0Vk">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="delete:" target="Ady-hI-5gd" id="d3L-SF-ZrN"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Alles auswählen" keyEquivalent="a" id="taQ-Ih-G8N">
+                                            <connections>
+                                                <action selector="selectAll:" target="Ady-hI-5gd" id="rpx-xe-I26"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="VM" id="0zK-Vf-XkJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="VM" autoenablesItems="NO" id="Ah7-Df-n96">
+                                    <items>
+                                        <menuItem title="Starten" keyEquivalent="S" id="rPi-T3-q1r">
+                                            <connections>
+                                                <action selector="startVMMenuBarClicked:" target="Voe-Tx-rLC" id="Mzs-wT-he4"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Im Wiederherstellungsmodus starten" id="zpB-kc-SoG">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="startVMInRecoveryMenuBarClicked:" target="Voe-Tx-rLC" id="5bP-75-hRk"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Anhalten" keyEquivalent="S" id="Q3F-uG-aFl">
+                                            <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="stopVMMenubarClicked:" target="Voe-Tx-rLC" id="uWd-US-sGv"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Pausieren" id="ETl-HI-ZzZ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="pauseVMMenuBarClicked:" target="Voe-Tx-rLC" id="s59-NA-j1r"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Cqf-f6-wTR"/>
+                                        <menuItem title="Konfigurieren..." id="Qce-a5-l81">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="kyI-bi-KaY"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="VMT-mp-0Y3"/>
+                                        <menuItem title="Klonen" id="HJ6-jY-EPi">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="cloneVMMenuBarClicked:" target="Voe-Tx-rLC" id="6cZ-Az-kca"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Im Finder anzeigen" id="kcm-AV-ZBa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="showVMInFinderMenuBarClicked:" target="Voe-Tx-rLC" id="Ln8-pD-taY"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Yf2-Qx-Hk7"/>
+                                        <menuItem title="USB-Geräte" id="S7C-pL-vez">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="USB-Geräte" id="M5G-y6-hvW">
+                                                <items>
+                                                    <menuItem title="Image einbinden" id="Xwl-s4-O9v">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="attachUSBImageMenuBarClicked:" target="Voe-Tx-rLC" id="b1f-Bg-fc4"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem isSeparatorItem="YES" id="BWP-T9-TOD"/>
+                                                    <menuItem title="Konfigurieren..." keyEquivalent="" id="vyi-Nn-ga9">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="Jzh-OX-vA0"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Exportieren als" id="cZp-mO-IqY">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Exportieren als" id="3Ko-t4-AGP">
+                                                <items>
+                                                    <menuItem title="Parallels-VM" id="FzN-3M-7zL">
+                                                        <connections>
+                                                            <action selector="exportVMToParallelsMenuBarClicked:" target="Voe-Tx-rLC" id="FXO-G3-Gh1"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem title="In QEMU-VM konvertieren" id="R2R-CL-gW6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToQemuMenuBarClicked:" target="Voe-Tx-rLC" id="dX9-Ns-BmD"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title=" In Apple-VM konvertieren" id="lrY-sV-Nll">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
+                                        <menuItem title="Konsolenausgabe anzeigen" id="7ko-iP-uk6">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Darstellung" id="H8h-7b-M4v">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Darstellung" id="HyV-fh-RgO">
+                                    <items>
+                                        <menuItem title="Seitenleiste ausblended" keyEquivalent="s" id="kIP-vf-haE">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleSidebar:" target="Ady-hI-5gd" id="iwa-gc-5KM"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Vollbildmodus" keyEquivalent="f" id="4J7-dP-txa">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="toggleFullScreen:" target="Ady-hI-5gd" id="dU3-MA-1Rq"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Fenster" id="aUF-d1-5bR">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Fenster" systemMenu="window" id="Td7-aD-5lo">
+                                    <items>
+                                        <menuItem title="Im Dock ablegen" keyEquivalent="m" id="OY7-WF-poV">
+                                            <connections>
+                                                <action selector="performMiniaturize:" target="Ady-hI-5gd" id="VwT-WD-YPe"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Zoomen" id="R4o-n2-Eq4">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="performZoom:" target="Ady-hI-5gd" id="DIl-cC-cCs"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
+                                        <menuItem title="Alle nach vorne bringen" id="LE2-aR-0XJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="arrangeInFront:" target="Ady-hI-5gd" id="DRN-fu-gQh"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Hilfe" id="wpr-3q-Mcd">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Hilfe" systemMenu="help" id="F2S-fz-NVQ">
+                                    <items>
+                                        <menuItem title="MacMulator-Hilfe" keyEquivalent="?" id="FKE-Sm-Kum">
+                                            <connections>
+                                                <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                        </items>
+                    </menu>
+                    <connections>
+                        <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
+                    </connections>
+                </application>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
+                    <connections>
+                        <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
+                        <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
+                        <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
+                        <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
+                        <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
+                        <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
+                        <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
+                        <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="dCY-FF-mSN"/>
+                        <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
+                        <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
+                        <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
+                        <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="Wwm-kT-UN6"/>
+                        <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="CMy-19-2tg"/>
+                        <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
+                        <outlet property="usbDevicesMenuItem" destination="S7C-pL-vez" id="Cyf-X7-X0C"/>
+                        <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
+                    </connections>
+                </customObject>
+                <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+                <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2830" y="-1037"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="qnX-XH-1U0">
+            <objects>
+                <windowController id="xsA-Pr-uKN" customClass="MainWindowController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="zD6-kL-rGm">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" fullSizeContentView="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="254" y="390" width="800" height="500"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
+                        <value key="minSize" type="size" width="600" height="450"/>
+                        <view key="contentView" id="MsF-c8-dtd">
+                            <rect key="frame" x="0.0" y="0.0" width="800" height="500"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="regular" id="LRO-Wk-yyP">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="PWA-N2-g1r"/>
+                                <toolbarItem implicitItemIdentifier="DC012B4B-0B06-4B16-B34B-E1E79454ED7E" label="New VM" paletteLabel="New VM" image="plus" bordered="YES" sizingBehavior="auto" id="F8q-EA-dwq">
+                                    <nil key="toolTip"/>
+                                    <button key="view" verticalHuggingPriority="750" id="h2j-1P-5jP">
+                                        <rect key="frame" x="13" y="14" width="26" height="23"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="plus" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhM-Ib-zQC">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <segue destination="oYE-q0-uX8" kind="show" identifier="newVMSegue" id="qFr-w4-uB3"/>
+                                        </connections>
+                                    </button>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="A254B6D0-37AD-47A2-9014-7C4CD9C8726E" label="Dummy Button (Console View)" paletteLabel="Dummy Button (Console View)" title="Button" sizingBehavior="auto" id="REK-Zf-PKp">
+                                    <nil key="toolTip"/>
+                                    <button key="view" id="G5X-is-yFQ">
+                                        <rect key="frame" x="84" y="14" width="0.0" height="0.0"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="bevel" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="hfN-Fy-w6b">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <segue destination="BzT-Xz-QxF" kind="show" identifier="editVMSegue" id="scP-fk-l3l"/>
+                                        </connections>
+                                    </button>
+                                    <connections>
+                                        <segue destination="Wt2-zD-2a7" kind="show" identifier="showConsoleSegue" id="Udw-X1-3SD"/>
+                                    </connections>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="9CBC8438-A8DF-4B4C-9046-686C85D969B6" label="Dummy Button (Preferences)" paletteLabel="Dummy Button (Preferences)" title="Button" sizingBehavior="auto" id="d3T-L5-Hv7">
+                                    <nil key="toolTip"/>
+                                    <button key="view" id="ynN-ZP-XcQ">
+                                        <rect key="frame" x="80" y="14" width="0.0" height="0.0"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="bevel" title="Button" bezelStyle="rounded" imagePosition="only" alignment="center" enabled="NO" transparent="YES" imageScaling="proportionallyDown" inset="2" id="s7b-cm-gUJ">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <connections>
+                                        <segue destination="T2u-Qx-76b" kind="show" identifier="preferencesSegue" id="Bvl-Km-NWV"/>
+                                    </connections>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="PWA-N2-g1r"/>
+                                <toolbarItem reference="REK-Zf-PKp"/>
+                                <toolbarItem reference="d3T-L5-Hv7"/>
+                                <toolbarItem reference="PWA-N2-g1r"/>
+                                <toolbarItem reference="F8q-EA-dwq"/>
+                            </defaultToolbarItems>
+                        </toolbar>
+                        <connections>
+                            <outlet property="delegate" destination="xsA-Pr-uKN" id="GNG-zd-kdE"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="UrI-1o-1C6" kind="relationship" relationship="window.shadowedContentViewController" id="AOI-UJ-PyP"/>
+                    </connections>
+                </windowController>
+                <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2473" y="-608"/>
+        </scene>
+        <!--EditVM-->
+        <scene sceneID="Bwp-hB-HEO">
+            <objects>
+                <controllerPlaceholder storyboardName="EditVM" id="BzT-Xz-QxF" sceneMemberID="viewController"/>
+                <customObject id="s1W-Ko-ipS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1759" y="-602"/>
+        </scene>
+        <!--NewVM-->
+        <scene sceneID="yBO-JT-jb1">
+            <objects>
+                <controllerPlaceholder storyboardName="NewVM" id="oYE-q0-uX8" sceneMemberID="viewController"/>
+                <customObject id="CVB-f0-Med" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1757" y="-654"/>
+        </scene>
+        <!--NSWindowController-DJS-zH-ZBC-->
+        <scene sceneID="IxV-8C-Tdx">
+            <objects>
+                <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-DJS-zH-ZBC" id="BcM-Dv-lzx" sceneMemberID="viewController"/>
+                <customObject id="Ixz-2P-r3V" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3040" y="-885"/>
+        </scene>
+        <!--NSSplitViewController-xUp-dP-QjM-->
+        <scene sceneID="fSq-gU-X88">
+            <objects>
+                <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSSplitViewController-xUp-dP-QjM" id="UrI-1o-1C6" sceneMemberID="viewController"/>
+                <customObject id="jhY-Jw-mQ3" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1672" y="-504"/>
+        </scene>
+        <!--NSWindowController-yhg-XN-9MI-->
+        <scene sceneID="AkN-ky-dXb">
+            <objects>
+                <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-yhg-XN-9MI" id="Wt2-zD-2a7" sceneMemberID="viewController"/>
+                <customObject id="xLp-6H-4z6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1677" y="-555"/>
+        </scene>
+        <!--NSWindowController-Fkf-Y0-JDu-->
+        <scene sceneID="utZ-j1-pWG">
+            <objects>
+                <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-Fkf-Y0-JDu" id="T2u-Qx-76b" sceneMemberID="viewController"/>
+                <customObject id="kiY-Zu-CzC" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1679" y="-704"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="plus" width="14" height="14"/>
+    </resources>
+</document>

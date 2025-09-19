@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -84,7 +84,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sDH-bT-UFA">
-                                <rect key="frame" x="18" y="311" width="88" height="16"/>
+                                <rect key="frame" x="18" y="307" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="aoT-fS-Tty"/>
                                 </constraints>
@@ -95,7 +95,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ncg-hL-CsH">
-                                <rect key="frame" x="18" y="350" width="88" height="16"/>
+                                <rect key="frame" x="18" y="346" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="XdL-I4-fZk"/>
                                 </constraints>
@@ -106,7 +106,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="q4Z-4h-oHK">
-                                <rect key="frame" x="18" y="277" width="88" height="16"/>
+                                <rect key="frame" x="18" y="273" width="88" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="84" id="fk2-9w-z8B"/>
                                 </constraints>
@@ -117,7 +117,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lRI-vi-tcA">
-                                <rect key="frame" x="113" y="311" width="467" height="24"/>
+                                <rect key="frame" x="113" y="307" width="467" height="24"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="I5t-Ia-qr4">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -128,7 +128,7 @@
                                 </connections>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kEK-er-2EU">
-                                <rect key="frame" x="112" y="348" width="114" height="23"/>
+                                <rect key="frame" x="113" y="346" width="110" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="110" id="aMD-sa-Q70"/>
                                 </constraints>
@@ -143,17 +143,17 @@
                                 </connections>
                             </comboBox>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W6i-Xp-m1z">
-                                <rect key="frame" x="113" y="204" width="467" height="89"/>
+                                <rect key="frame" x="113" y="204" width="467" height="85"/>
                                 <clipView key="contentView" drawsBackground="NO" id="wJp-Vh-QSF">
-                                    <rect key="frame" x="1" y="1" width="465" height="87"/>
+                                    <rect key="frame" x="1" y="1" width="465" height="83"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" allowsUndo="YES" spellingCorrection="YES" smartInsertDelete="YES" id="6NK-mS-sgm">
-                                            <rect key="frame" x="0.0" y="0.0" width="465" height="87"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="465" height="83"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="465" height="87"/>
+                                            <size key="minSize" width="465" height="83"/>
                                             <size key="maxSize" width="467" height="10000000"/>
                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <connections>
@@ -167,7 +167,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Yu4-v9-rNq">
-                                    <rect key="frame" x="449" y="1" width="17" height="87"/>
+                                    <rect key="frame" x="449" y="1" width="17" height="83"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -237,7 +237,7 @@
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" preferredMaxLayoutWidth="196" translatesAutoresizingMaskIntoConstraints="NO" id="bsO-Gd-aoR">
-                                <rect key="frame" x="383" y="348" width="200" height="23"/>
+                                <rect key="frame" x="384" y="346" width="196" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="gzI-6e-dMB"/>
                                     <constraint firstAttribute="width" constant="196" id="mlW-pN-A5G"/>
@@ -317,7 +317,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="37M-Tq-FH2">
-                                <rect key="frame" x="232" y="352" width="146" height="16"/>
+                                <rect key="frame" x="232" y="348" width="146" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Operating System" id="tfe-YT-kPF">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1005,7 +1005,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uEu-kH-YSK">
-                                <rect key="frame" x="18" y="143" width="61" height="16"/>
+                                <rect key="frame" x="18" y="140" width="61" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Size (GB)" id="SvX-Br-xQl">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1071,7 +1071,7 @@ Gw
                                 </connections>
                             </stepper>
                             <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bNl-Ln-zWW">
-                                <rect key="frame" x="268" y="140" width="102" height="22"/>
+                                <rect key="frame" x="268" y="140" width="102" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="102" id="r2h-Gv-arU"/>
                                 </constraints>
@@ -1081,7 +1081,7 @@ Gw
                                 </connections>
                             </slider>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vqw-pb-Mn8">
-                                <rect key="frame" x="376" y="143" width="50" height="16"/>
+                                <rect key="frame" x="376" y="140" width="50" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="500 GB" id="CKc-j7-uhd">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -1774,7 +1774,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
-                                <rect key="frame" x="130" y="277" width="342" height="25"/>
+                                <rect key="frame" x="131" y="279" width="338" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="Be0-7s-0eK"/>
                                     <constraint firstAttribute="width" constant="338" id="LX6-Tw-6uM"/>

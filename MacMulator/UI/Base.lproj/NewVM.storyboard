@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24093.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="oEd-tg-l1q">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24093.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -64,13 +64,13 @@
                                 </connections>
                             </button>
                             <box title="Essential information" translatesAutoresizingMaskIntoConstraints="NO" id="MKc-8o-Spu">
-                                <rect key="frame" x="17" y="271" width="566" height="109"/>
+                                <rect key="frame" x="20" y="275" width="560" height="105"/>
                                 <view key="contentView" id="sVp-sP-rw6">
-                                    <rect key="frame" x="4" y="5" width="558" height="89"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="560" height="93"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iCX-Oa-A09">
-                                            <rect key="frame" x="18" y="53" width="61" height="16"/>
+                                            <rect key="frame" x="18" y="57" width="61" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="VM name" id="ufg-Q8-INQ">
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -78,7 +78,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0SJ-fj-RZf">
-                                            <rect key="frame" x="97" y="53" width="441" height="24"/>
+                                            <rect key="frame" x="97" y="57" width="443" height="24"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="tWV-Kd-eiT">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -86,7 +86,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lYf-G3-fke">
-                                            <rect key="frame" x="348" y="16" width="193" height="23"/>
+                                            <rect key="frame" x="351" y="18" width="189" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="189" id="gyH-f3-JaV"/>
                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="i74-j7-r9f"/>
@@ -104,7 +104,7 @@
                                             </connections>
                                         </comboBox>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6kP-Dq-xSK">
-                                            <rect key="frame" x="18" y="19" width="55" height="16"/>
+                                            <rect key="frame" x="18" y="23" width="55" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="VM type" id="ge1-Tl-Cs3">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -112,7 +112,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LRv-Q5-G4W">
-                                            <rect key="frame" x="96" y="16" width="100" height="23"/>
+                                            <rect key="frame" x="97" y="18" width="96" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="96" id="SDE-4s-t9s"/>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="87" id="wT8-jC-yY7"/>
@@ -128,7 +128,7 @@
                                             </connections>
                                         </comboBox>
                                         <textField focusRingType="none" horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y77-4M-Cfa">
-                                            <rect key="frame" x="199" y="19" width="144" height="16"/>
+                                            <rect key="frame" x="199" y="23" width="146" height="16"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Operating System" id="j97-je-Te1">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
