@@ -39,6 +39,7 @@ class EditVMViewController: NSTabViewController {
         general.setVirtualMachine(vm)
         hardware.setVirtualMachine(vm)
         network.setVirtualMachine(vm)
+        networkVF.setVirtualMachine(vm)
         video.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 

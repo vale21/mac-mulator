@@ -46,7 +46,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
         )]
 
         virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
-        virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+        virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT, phisicalDevice: nil)]
         virtualMachineConfiguration.pointingDevices = [LinuxVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createInputAudioDeviceConfiguration(), LinuxVirtualMachineConfigurationHelper.createOutputAudioDeviceConfiguration()]
@@ -65,7 +65,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
                     vm.pauseSupported = true
                 } catch {
                     NSLog("VM Pause is not supported: " + error.localizedDescription)
-                    vm.pauseSupported = false
+                    vm.pauseSupported = falseQemu
                 }
             #else
                 vm.pauseSupported = false

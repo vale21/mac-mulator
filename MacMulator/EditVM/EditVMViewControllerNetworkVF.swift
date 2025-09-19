@@ -7,10 +7,14 @@
 //
 
 import Cocoa
+import Virtualization
 
-class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
     @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
+    @IBOutlet var phisicalDeviceComboBox: NSComboBox!
+    @IBOutlet var physicalDeviceLabel: NSTextField!
+    @IBOutlet var descriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
 
@@ -25,25 +29,46 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         updateView()
     }
 
+    fileprivate func updateSecondaryBox(attachment: String) {
+        if attachment == QemuConstants.ATTACHMENT_BRIDGED {
+            phisicalDeviceComboBox.isEnabled = true
+        } else {
+            phisicalDeviceComboBox.isEnabled = false
+            phisicalDeviceComboBox.deselectItem(at: phisicalDeviceComboBox.indexOfSelectedItem)
+        }
+    }
+
     func updateView() {
         if let virtualMachine {
             networkAdapterComboBox.reloadData()
-            networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+            networkAdapterComboBox.selectItem(at: QemuConstants.APPLE_NETWORK_ATTACHMENTS.firstIndex(of: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT) ?? 0)
+
+            updateSecondaryBox(attachment: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT)
+        }
+    }
+
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        if comboBox == networkAdapterComboBox {
+            QemuConstants.APPLE_NETWORK_ATTACHMENTS.count
+        } else {
+            VZBridgedNetworkInterface.networkInterfaces.count
         }
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == networkAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : ""
+            index >= 0 ? QemuConstants.APPLE_NETWORK_ATTACHMENTS_DESC[QemuConstants.APPLE_NETWORK_ATTACHMENTS[index]] : ""
+        } else {
+            VZBridgedNetworkInterface.networkInterfaces[index].localizedDisplayName
         }
-        return index + 1
     }
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == networkAdapterComboBox {
             if let virtualMachine {
-                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem]
+                virtualMachine.networkDevice = QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem]
+                updateSecondaryBox(attachment: QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem])
             }
-        }
+        } else {}
     }
 }

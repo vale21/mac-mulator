@@ -38,7 +38,7 @@ class CreateVMFileViewController: NSViewController {
             let cpus = Utils.getCpusForSubType(os, subtype)
             let displayResolution = QemuConstants.RES_1280_768
             let displayOrigin = QemuConstants.ORIGIN
-            let networkDevice = Utils.getNetworkForSubType(os, subtype)
+            let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)

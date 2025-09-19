@@ -444,6 +444,18 @@ class QemuConstants {
         OS_OTHER,
     ]
 
+    static let APPLE_NETWORK_ATTACHMENTS = [
+        ATTACHMENT_NAT,
+        ATTACHMENT_BRIDGED,
+        ATTACHMENT_VMNET,
+    ]
+
+    static let APPLE_NETWORK_ATTACHMENTS_DESC: [String: String] = [
+        ATTACHMENT_NAT: "NAT",
+        ATTACHMENT_BRIDGED: "Bridged Network",
+        ATTACHMENT_VMNET: "Vmnet",
+    ]
+
     static let ALL_NETWORK_ADAPTERS = [
         NETWORK_E1000,
         NETWORK_E1000_82544GC,
@@ -711,6 +723,10 @@ class QemuConstants {
     static let NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL = "virtio-net-pci-non-transitional"
     static let NETWORK_VIRTIO_NET_PCI_TRANSITIONAL = "virtio-net-pci-transitional"
     static let NETWORK_VMXNET3 = "vmxnet3"
+
+    static let ATTACHMENT_NAT = "VZNATNetworkDeviceAttachment"
+    static let ATTACHMENT_BRIDGED = "VZBridgedNetworkDeviceAttachment"
+    static let ATTACHMENT_VMNET = "VZVmnetNetworkDeviceAttachment"
 
     // Intel and ARM:
     static let VGA_ATI_RAGE = "ati-vga,model=rage128p"
