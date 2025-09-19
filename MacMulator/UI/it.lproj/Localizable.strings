@@ -104,6 +104,7 @@
 "NewVMController.obtainOSButton" = "Ottieni...";
 "NewVMController.fullConfiguration" = "Rivedi la configurazione della VM dopo la creazione";
 "NewVMController.createButton" = "Crea";
+"NewVMController.title" = "Nuova Macchina Virtuale";
 "PreferencesViewController.livePreviewLabel" = "Mostra la preview live della VM in esecuzione (Sperimentale)";
 "PreferencesViewController.updateLivePreview" = "Aggiorna la preview live ogni: (%@ secondi)";
 "PreferencesViewController.pathDoesNotExists" = "Attenzione. La cartella %@ non esiste.";

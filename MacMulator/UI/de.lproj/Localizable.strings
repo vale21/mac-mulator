@@ -103,6 +103,7 @@
 "NewVMController.obtainOSButton" = "Beziehen...";
 "NewVMController.fullConfiguration" = "Konfiguration der neuen VM nach der Erstellung überprüfen";
 "NewVMController.createButton" = "Erstellen";
+"NewVMController.title" = "Neue Virtuelle Maschine";
 "PreferencesViewController.livePreviewLabel" = "Live-Vorschau laufender VMs anzeigen (experimentell)";
 "PreferencesViewController.updateLivePreview" = "Live-Vorschau aktualisieren alle: (%@ Sekunden)";
 "PreferencesViewController.pathDoesNotExists" = "Achtung. Ordner %@ existiert nicht.";
