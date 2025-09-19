@@ -65,7 +65,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
                     vm.pauseSupported = true
                 } catch {
                     NSLog("VM Pause is not supported: " + error.localizedDescription)
-                    vm.pauseSupported = falseQemu
+                    vm.pauseSupported = false
                 }
             #else
                 vm.pauseSupported = false
