@@ -19,6 +19,7 @@ class VirtualMachine: Codable, Hashable {
     var displayResolution: String
     var displayOrigin: String?
     var networkDevice: String?
+    var physicalBridgeNetworkDevice: String?
     var videoDevice: String?
     var drives: [VirtualDrive]
     var qemuPath: String?
@@ -31,10 +32,10 @@ class VirtualMachine: Codable, Hashable {
     var bootMode: String?
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
     }
 
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -46,6 +47,7 @@ class VirtualMachine: Codable, Hashable {
         self.displayResolution = displayResolution
         self.displayOrigin = displayOrigin
         self.networkDevice = networkDevice
+        self.physicalBridgeNetworkDevice = physicalBridgeNetworkDevice
         self.videoDevice = videoDevice
         self.hvf = hvf
         drives = []
@@ -66,7 +68,7 @@ class VirtualMachine: Codable, Hashable {
     }
 
     func containsVirtualDrive(_ path: String) -> Bool {
-        if let index = drives.firstIndex(where: { $0.path == path }) {
+        if drives.firstIndex(where: { $0.path == path }) != nil {
             return true
         }
         return false

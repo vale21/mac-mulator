@@ -30,11 +30,17 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     }
 
     fileprivate func updateSecondaryBox(attachment: String) {
-        if attachment == QemuConstants.ATTACHMENT_BRIDGED {
-            phisicalDeviceComboBox.isEnabled = true
-        } else {
-            phisicalDeviceComboBox.isEnabled = false
-            phisicalDeviceComboBox.deselectItem(at: phisicalDeviceComboBox.indexOfSelectedItem)
+        if let virtualMachine {
+            if attachment == QemuConstants.ATTACHMENT_BRIDGED {
+                phisicalDeviceComboBox.isEnabled = true
+                if let device = virtualMachine.physicalBridgeNetworkDevice, let idx = VZBridgedNetworkInterface.networkInterfaces.firstIndex(where: { $0.identifier == device }) {
+                    phisicalDeviceComboBox.selectItem(at: idx)
+                } else {
+                    phisicalDeviceComboBox.selectItem(at: 0)
+                }
+            } else {
+                phisicalDeviceComboBox.isEnabled = false
+            }
         }
     }
 
@@ -64,11 +70,13 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     }
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        if (notification.object as! NSComboBox) == networkAdapterComboBox {
-            if let virtualMachine {
+        if let virtualMachine {
+            if (notification.object as! NSComboBox) == networkAdapterComboBox {
                 virtualMachine.networkDevice = QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem]
                 updateSecondaryBox(attachment: QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem])
+            } else if (notification.object as! NSComboBox) == phisicalDeviceComboBox {
+                virtualMachine.physicalBridgeNetworkDevice = VZBridgedNetworkInterface.networkInterfaces[phisicalDeviceComboBox.indexOfSelectedItem].identifier
             }
-        } else {}
+        }
     }
 }
