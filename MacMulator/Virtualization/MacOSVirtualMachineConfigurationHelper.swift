@@ -35,10 +35,19 @@ import Virtualization
             }
         }
 
-        static func createNetworkDeviceConfiguration(macAddress: String) -> VZVirtioNetworkDeviceConfiguration {
+        static func createNetworkDeviceConfiguration(macAddress: String, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
             let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
-            let networkAttachment = VZNATNetworkDeviceAttachment()
+            var networkAttachment: VZNetworkDeviceAttachment = VZNATNetworkDeviceAttachment()
+            if device == QemuConstants.ATTACHMENT_BRIDGED {
+                let interfaces = VZBridgedNetworkInterface.networkInterfaces
+                let interface = interfaces.first { $0.identifier == phisicalDevice } ?? interfaces[0]
+
+                networkAttachment = VZBridgedNetworkDeviceAttachment(interface: interface)
+            } else if device == QemuConstants.ATTACHMENT_VMNET {
+                // networkAttachment = VZVmnetNetworkDeviceAttachment()
+            }
+
             networkDevice.attachment = networkAttachment
             networkDevice.macAddress = VZMACAddress(string: macAddress)!
             return networkDevice
