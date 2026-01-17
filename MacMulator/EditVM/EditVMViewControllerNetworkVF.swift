@@ -24,12 +24,10 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     }
 
     override func viewWillAppear() {
-//        networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkAdapterLabel", comment: "")
-
         updateView()
     }
 
-    fileprivate func updateSecondaryBox(attachment: String) {
+    fileprivate func updateSecondaryBoxAndDescription(attachment: String) {
         if let virtualMachine {
             if attachment == QemuConstants.ATTACHMENT_BRIDGED {
                 phisicalDeviceComboBox.isEnabled = true
@@ -38,8 +36,10 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
                 } else {
                     phisicalDeviceComboBox.selectItem(at: 0)
                 }
+                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionBridged", comment: "")
             } else {
                 phisicalDeviceComboBox.isEnabled = false
+                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionNat", comment: "")
             }
         }
     }
@@ -49,7 +49,10 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
             networkAdapterComboBox.reloadData()
             networkAdapterComboBox.selectItem(at: QemuConstants.APPLE_NETWORK_ATTACHMENTS.firstIndex(of: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT) ?? 0)
 
-            updateSecondaryBox(attachment: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT)
+            updateSecondaryBoxAndDescription(attachment: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT)
+
+            networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.networkMode", comment: "")
+            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
         }
     }
 
@@ -73,7 +76,7 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         if let virtualMachine {
             if (notification.object as! NSComboBox) == networkAdapterComboBox {
                 virtualMachine.networkDevice = QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem]
-                updateSecondaryBox(attachment: QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem])
+                updateSecondaryBoxAndDescription(attachment: QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem])
             } else if (notification.object as! NSComboBox) == phisicalDeviceComboBox {
                 virtualMachine.physicalBridgeNetworkDevice = VZBridgedNetworkInterface.networkInterfaces[phisicalDeviceComboBox.indexOfSelectedItem].identifier
             }

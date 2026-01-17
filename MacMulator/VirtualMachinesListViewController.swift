@@ -37,11 +37,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func tableView(_: NSTableView, rowActionsForRow _: Int, edge _: NSTableView.RowActionEdge) -> [NSTableViewRowAction] {
-        let actions = [
+        [
             NSTableViewRowAction(style: NSTableViewRowAction.Style.destructive, title: NSLocalizedString("VirtualMachineListViewController.delete", comment: ""), handler: { _, index in self.deleteVirtualMachine(index) }),
             NSTableViewRowAction(style: NSTableViewRowAction.Style.regular, title: NSLocalizedString("VirtualMachineListViewController.edit", comment: ""), handler: { _, index in self.editVirtualMachine(index) }),
         ]
-        return actions
     }
 
     func tableViewSelectionDidChange(_ notification: Notification) {

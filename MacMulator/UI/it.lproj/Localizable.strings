@@ -73,6 +73,13 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Porta Macchina Virtuale";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
+"EditVMViewControllerNetworkVF.networkMode" = "Modalità";
+"EditVMViewControllerNetworkVF.networkModeNAT" = "NAT";
+"EditVMViewControllerNetworkVF.networkModeBridged" = "Rete bridged";
+"EditVMViewControllerNetworkVF.phisicalDevice" = "Dispositivo";
+"EditVMViewControllerNetworkVF.descriptionNat" = "La NAT è la rete più semplice per la tua VM. In questo caso il tuo Mac agisce da router di rete per la VM, offrendole connettività a internet. Gli altri dispositivi sulla rete del tuo Mac non saranno visibili alla VM, e viceversa. Il tuo Mac apparirà alla VM come un dispositivo di rete. Questo è l'approccio più sicuro ed è quello consigliato.";
+"EditVMViewControllerNetworkVF.descriptionBridged" = "Nella rete bridged, consenti alla VM di usare uno dei dispositivi di rete fisici collegati al tuo Mac per collegarsi al network. La VM si comporterà esattamente come un dispositivo collegato alla rete del Mac, sarà visibile e potrà vedere gli altri dispositivi di rete. La banda è condivisa tra la VM e il tuo Mac.";
+"EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoDescriptionText" = "La VM è creata con una scheda video default, ma ci sono varie schede che possono funzionare nella tua VM, a seconda dell'hardware emulato e del sistema operativo installato sulla VM. Qui puoi selezionare la scheda video da usare:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Scheda video da collegare alla VM:";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Nota per gli utenti con Windows 11 ARM:\n\nLa macchina virtuale è creata con \"Ram framebuffer standalone device\". Questa scheda è necessaria per installare correttamente Windows 11 sulla VM. Una volta installato Windows, puoi selezionare \"VirtIO GPU PCI\". Questa scheda funziona meglio, e offre la possibilità di selezionare la risoluzione dello schermo, se installi il relativo driver. Il driver si trova nel DVD che trovi già collegato alla VM quando la crei.";

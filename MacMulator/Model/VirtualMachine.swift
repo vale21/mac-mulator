@@ -98,7 +98,7 @@ class VirtualMachine: Codable, Hashable {
         vm.path = plistFilePath
         for drive in vm.drives {
             if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
-                if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
+                if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
                     drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
