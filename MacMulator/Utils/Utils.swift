@@ -544,8 +544,13 @@ class Utils {
         getBoolValueForSubType(os, subtype, 13, true)
     }
 
-    static func getNetworkForSubType(_ os: String, _ subtype: String?) -> String {
-        getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
+    static func getNetworkForSubType(_ os: String, _ subtype: String, _ architecture: String) -> String {
+        let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
+        if vmType == MacMulatorConstants.QEMU_VM {
+            return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
+        } else {
+            return QemuConstants.ATTACHMENT_NAT
+        }
     }
 
     static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {

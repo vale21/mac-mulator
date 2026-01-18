@@ -73,6 +73,12 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Virtual Machine Port";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
+"EditVMViewControllerNetworkVF.networkMode" = "Network mode";
+"EditVMViewControllerNetworkVF.networkModeNAT" = "NAT";
+"EditVMViewControllerNetworkVF.networkModeBridged" = "Bridged network";
+"EditVMViewControllerNetworkVF.phisicalDevice" = "Phisical device";
+"EditVMViewControllerNetworkVF.descriptionNat" = "A NAT is the simplest network mode for your VM. In this case you Mac acts as a network router for the VM, offering internet connectivity to it. The other devices on yor Mac network will not be visible by the VM, and viceversa. Your Mac will appear to the VM as a network device. This is the safest apprach and the suggested one.";
+"EditVMViewControllerNetworkVF.descriptionBridged" = "In Bridge network you let the VM use one of the physical network devices connected to your Mac to reach the network. The VM will behave exactly as a computer connected to the Mac network, and it will both see and be visible by the other network devices. The bandwdth is shared between th VM and your Mac.";
 "EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Video adapter to attach to the VM:";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Note for Windows 11 ARM users:\n\nThe virtual machine is created with \"Ram framebuffer standalone device\". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the \"VirtIO GPU PCI\" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.";

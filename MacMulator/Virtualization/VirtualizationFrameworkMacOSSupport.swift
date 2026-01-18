@@ -67,11 +67,37 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
             }
 
             virtualMachineConfiguration.storageDevices = disks
+
+            // Resolve bridged network interface identifier to pass as String?
+            let selectedBridgedInterfaceIdentifier: String? = {
+                // If a specific physical bridge device identifier is configured on the VM, try to find it
+                if let desiredIdentifier = vm.physicalBridgeNetworkDevice, !desiredIdentifier.isEmpty {
+                    if let match = VZBridgedNetworkInterface.networkInterfaces.first(where: { $0.identifier == desiredIdentifier }) {
+                        return match.identifier
+                    }
+                }
+                // Otherwise, if there are any interfaces, default to the first one's identifier for bridging
+                return VZBridgedNetworkInterface.networkInterfaces.first?.identifier
+            }()
+
             if let macAddress = vm.macAddress {
-                virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(macAddress: macAddress)]
+                virtualMachineConfiguration.networkDevices = [
+                    MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                        macAddress: macAddress,
+                        device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
+                        phisicalDevice: selectedBridgedInterfaceIdentifier
+                    ),
+                ]
             } else {
-                virtualMachineConfiguration.networkDevices = [MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(macAddress: VZMACAddress.randomLocallyAdministered().string)]
+                virtualMachineConfiguration.networkDevices = [
+                    MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                        macAddress: VZMACAddress.randomLocallyAdministered().string,
+                        device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
+                        phisicalDevice: selectedBridgedInterfaceIdentifier
+                    ),
+                ]
             }
+
             virtualMachineConfiguration.pointingDevices = MacOSVirtualMachineConfigurationHelper.createPointingDeviceConfigurations(vm: vm)
             virtualMachineConfiguration.keyboards = [MacOSVirtualMachineConfigurationHelper.createKeyboardConfiguration(vm: vm)]
             virtualMachineConfiguration.audioDevices = [MacOSVirtualMachineConfigurationHelper.createAudioDeviceConfiguration()]

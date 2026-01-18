@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */; };
 		3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */; };
 		3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07C284A4FCE002D465F /* PortMapping.swift */; };
 		3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */; };
@@ -130,6 +131,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetworkVF.swift; sourceTree = "<group>"; };
 		3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetwork.swift; sourceTree = "<group>"; };
 		3B03B07C284A4FCE002D465F /* PortMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortMapping.swift; sourceTree = "<group>"; };
 		3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkSupport.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */,
 				3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */,
 				3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */,
+				3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */,
 				3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
@@ -611,6 +614,7 @@
 				3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
 				3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */,
 				3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
+				3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */,
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,

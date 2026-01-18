@@ -38,7 +38,7 @@ class CreateVMFileViewController: NSViewController {
             let cpus = Utils.getCpusForSubType(os, subtype)
             let displayResolution = QemuConstants.RES_1280_768
             let displayOrigin = QemuConstants.ORIGIN
-            let networkDevice = Utils.getNetworkForSubType(os, subtype)
+            let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
@@ -48,7 +48,7 @@ class CreateVMFileViewController: NSViewController {
             if #available(macOS 11.0, *) {
                 macAddress = VZMACAddress.randomLocallyAdministered().string
             }
-            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
+            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
 
             if let vm {
                 let installMedia = parentController.installMedia.stringValue

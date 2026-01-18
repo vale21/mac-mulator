@@ -72,6 +72,12 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Name der Zuordnung";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "VM-Port";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host-Mac-Port";
+"EditVMViewControllerNetworkVF.networkMode" = "Netzwerkmodus";
+"EditVMViewControllerNetworkVF.networkModeNAT" = "NAT";
+"EditVMViewControllerNetworkVF.networkModeBridged" = "Bridged network";
+"EditVMViewControllerNetworkVF.phisicalDevice" = "Physisches Gerät";
+"EditVMViewControllerNetworkVF.descriptionNat" = "NAT ist der einfachste Netzwerkmodus für Ihre virtuelle Maschine. In diesem Fall fungiert Ihr Mac als Netzwerkrouter für die VM und stellt ihr eine Internetverbindung zur Verfügung. Andere Geräte im Netzwerk Ihres Macs sind für die VM nicht sichtbar und umgekehrt. Ihr Mac erscheint der VM als Netzwerkgerät. Dies ist der sicherste Ansatz und die empfohlene Option.";
+"EditVMViewControllerNetworkVF.descriptionBridged" = "Im Bridged network verwendet die VM eines der physischen Netzwerkgeräte, die mit Ihrem Mac verbunden sind, um auf das Netzwerk zuzugreifen. Die VM verhält sich genau wie ein Computer, der mit dem Netzwerk des Macs verbunden ist, und kann andere Netzwerkgeräte sehen und von ihnen gesehen werden. Die Bandbreite wird zwischen der VM und Ihrem Mac geteilt.";
 "EditVMViewControllerVideo.videoDescriptionText" = "Die VM wird mit einem Standard-Video-Adapter erstellt, aber verschiedene Adapter können in deiner VM funktionieren, abhängig von der emulierten Hardware und dem Gastbetriebssystem. Hier kannst du den zu verwendenden Video-Adapter ändern:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Video-Adapter, der an die VM angeschlossen werden soll:";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Hinweis für Windows-11-ARM-Nutzer:\n\nDie virtuelle Maschine wird mit einem „Ram framebuffer standalone device“ erstellt. Dies ist erforderlich, um Windows 11 korrekt in der VM zu installieren. Sobald Windows installiert ist, kann der Adapter „VirtIO GPU PCI“ ausgewählt werden. Dieser Adapter funktioniert besser und bietet die Möglichkeit, die Bildschirmauflösung auszuwählen, wenn du den entsprechenden Treiber installierst. Den Treiber findest du auf der DVD, die der VM beim Erstellen beigefügt wird.";

@@ -46,7 +46,26 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
         )]
 
         virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
-        virtualMachineConfiguration.networkDevices = [LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration()]
+
+        // Resolve bridged network interface identifier to pass as String?
+        let selectedBridgedInterfaceIdentifier: String? = {
+            // If a specific physical bridge device identifier is configured on the VM, try to find it
+            if let desiredIdentifier = vm.physicalBridgeNetworkDevice, !desiredIdentifier.isEmpty {
+                if let match = VZBridgedNetworkInterface.networkInterfaces.first(where: { $0.identifier == desiredIdentifier }) {
+                    return match.identifier
+                }
+            }
+            // Otherwise, if there are any interfaces, default to the first one's identifier for bridging
+            return VZBridgedNetworkInterface.networkInterfaces.first?.identifier
+        }()
+
+        virtualMachineConfiguration.networkDevices = [
+            LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
+                phisicalDevice: selectedBridgedInterfaceIdentifier
+            ),
+        ]
+
         virtualMachineConfiguration.pointingDevices = [LinuxVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createInputAudioDeviceConfiguration(), LinuxVirtualMachineConfigurationHelper.createOutputAudioDeviceConfiguration()]
