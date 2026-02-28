@@ -50,6 +50,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         if let virtualMachine {
             videoAdapterComboBox.reloadData()
             videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+            qemuDisplayComboBox.reloadData()
             if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
                 windowsArmDescriptionText.isHidden = false
             } else {
@@ -58,13 +59,20 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
-    func numberOfItems(in _: NSComboBox) -> Int {
-        buildAdaptersList().count
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        if comboBox == videoAdapterComboBox {
+            return buildAdaptersList().count
+        } else if comboBox == qemuDisplayComboBox {
+            return QemuConstants.ALL_DISPLAYS.count
+        }
+        return 0
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == videoAdapterComboBox {
             return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[buildAdaptersList()[index]] : ""
+        } else if comboBox == qemuDisplayComboBox {
+            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[QemuConstants.ALL_DISPLAYS[index]] : ""
         }
         return index + 1
     }

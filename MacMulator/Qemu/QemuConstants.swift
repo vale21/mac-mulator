@@ -555,6 +555,26 @@ class QemuConstants {
         VGA_VMWARE: "VMware SVGA-II",
     ]
 
+    static let ALL_DISPLAYS = [
+        DISPLAY_DEFAULT,
+        DISPLAY_NONE,
+        DISPLAY_SDL,
+        DISPLAY_EGL_HEADLESS,
+        DISPLAY_CURSES,
+        DISPLAY_COCOA,
+        DISPLAY_SPICE_APP,
+    ]
+
+    static let ALL_DISPLAYS_DESC = [
+        DISPLAY_DEFAULT: "Default",
+        DISPLAY_NONE: "None",
+        DISPLAY_SDL: "SDL",
+        DISPLAY_EGL_HEADLESS: "EGL Headless",
+        DISPLAY_CURSES: "Curses",
+        DISPLAY_COCOA: "Cocoa",
+        DISPLAY_SPICE_APP: "Spice",
+    ]
+
     static let ALL_BOOT_MODES = [
         BOOT_BIOS,
         BOOT_UEFI,
@@ -745,7 +765,12 @@ class QemuConstants {
     static let VGA_QXL = "qxl-vga"
 
     static let DISPLAY_DEFAULT = "default"
+    static let DISPLAY_NONE = "none"
+    static let DISPLAY_SDL = "sdl"
+    static let DISPLAY_EGL_HEADLESS = "egl-headless"
+    static let DISPLAY_CURSES = "curses"
     static let DISPLAY_COCOA = "cocoa"
+    static let DISPLAY_SPICE_APP = "spice-app"
 
     static let CPU_HOST = "host"
     static let CPU_HOST_PDPE_1GB = "host,-pdpe1gb"
