@@ -81,6 +81,9 @@
 "EditVMViewControllerNetworkVF.descriptionBridged" = "In Bridge network you let the VM use one of the physical network devices connected to your Mac to reach the network. The VM will behave exactly as a computer connected to the Mac network, and it will both see and be visible by the other network devices. The bandwdth is shared between th VM and your Mac.";
 "EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Video adapter to attach to the VM:";
+"EditVMViewControllerVideo.qemuDisplayLabel" = "Qemu display to use:";
+"EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator can try to enable 3D acceleration in the guest VM, if it detects that the underlying Qemu supports it. This might make the VM unstable.";
+"EditVMViewControllerVideo.accelDescriptionLabel" = "Enable 3D acceleration";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Note for Windows 11 ARM users:\n\nThe virtual machine is created with \"Ram framebuffer standalone device\". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the \"VirtIO GPU PCI\" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";

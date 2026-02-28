@@ -81,6 +81,9 @@
 "EditVMViewControllerNetworkVF.descriptionBridged" = "En mode réseau 'bridged', vous permettez à la VM d’utiliser l’un des périphériques réseau physiques connectés à votre Mac pour accéder au réseau. La VM se comportera exactement comme un ordinateur connecté au réseau du Mac et pourra à la fois voir et être vue par les autres appareils du réseau. La bande passante est partagée entre la VM et votre Mac.";
 "EditVMViewControllerVideo.videoDescriptionText" = "La machine virtuelle est créée avec un adaptateur vidéo par défaut, mais différents adaptateurs peuvent fonctionner selon le matériel émulé et le système d’exploitation invité. Vous pouvez changer ici l’adaptateur vidéo à utiliser :";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Adaptateur vidéo à connecter à la VM :";
+"EditVMViewControllerVideo.qemuDisplayLabel" = "Display QEMU à utiliser :";
+"EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator peut essayer d’activer l’accélération 3D dans la machine virtuelle invitée s’il détecte que le QEMU sous-jacent la prend en charge. Cela peut rendre la machine virtuelle instable.";
+"EditVMViewControllerVideo.accelDescriptionLabel" = "Activer l’accélération 3D";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Note pour les utilisateurs de Windows 11 ARM :\n\nLa machine virtuelle est créée avec le « périphérique autonome Ram framebuffer ». Ceci est requis pour installer correctement Windows 11 sur la VM. Une fois l’installation terminée, l’adaptateur « VirtIO GPU PCI » peut être sélectionné. Cet adaptateur offre de meilleures performances et permet de choisir la résolution de l’écran, à condition d’installer le pilote approprié. Ce pilote se trouve dans le DVD attaché à la VM lors de sa création.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "La machine virtuelle s’est arrêtée avec une erreur : %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Le système invité a arrêté la machine virtuelle.";

@@ -12,6 +12,11 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var videoDescriptionText: NSTextField!
     @IBOutlet var videoAdapterLabel: NSTextField!
     @IBOutlet var videoAdapterComboBox: NSComboBox!
+    @IBOutlet var qemuDisplayLabel: NSTextField!
+    @IBOutlet var qemuDisplayComboBox: NSComboBox!
+    @IBOutlet var accelDescriptiontext: NSTextField!
+    @IBOutlet var accelDescriptionLabel: NSTextField!
+    @IBOutlet var accelDescriptionSwitch: NSSwitch!
     @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
@@ -24,6 +29,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     override func viewWillAppear() {
         videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
         videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
+        qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
+        accelDescriptiontext.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
+        accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
         windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
         updateView()
     }
@@ -42,6 +50,11 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         if let virtualMachine {
             videoAdapterComboBox.reloadData()
             videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+            if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
+                windowsArmDescriptionText.isHidden = false
+            } else {
+                windowsArmDescriptionText.isHidden = true
+            }
         }
     }
 
