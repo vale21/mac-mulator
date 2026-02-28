@@ -209,8 +209,8 @@
 "VirtualMachineViewController.stopVM" = "Die Ausführung dieser VM beenden";
 "VirtualMachineViewController.pausedVMName" = "%@ (Pausiert)";
 "VirtualMachineViewController.notSpecified" = "Nicht angegeben";
-"VirtualMachineViewController.binaryNotAvaiable" = "Die VM kann nicht gestartet werden, da das Qemu-Binary für die Architektur %@ nicht verfügbar ist.";
-"VirtualMachineViewController.swTpmNotAvailable" = "Die VM kann nicht gestartet werden, da swtpm erforderlich ist, das ausführbare Programm jedoch nicht gefunden wurde.";
+"VirtualMachineViewController.binaryNotAvaiable" = "Die VM kann nicht gestartet werden: Qemu-Binary für Architektur %@ nicht verfügbar.";
+"VirtualMachineViewController.swTpmNotAvailable" = "Die VM kann nicht gestartet werden: swtpm erforderlich, aber nicht gefunden.";
 "VirtualMachineViewController.vmPaused" = "VM pausiert";
 "VirtualMachineViewController.vmFeatures" = "Funktionen der virtuellen Maschine";
 "VirtualMachineViewController.vmExecutionFailed" = "VM-Ausführung fehlgeschlagen mit Fehler: %@";
