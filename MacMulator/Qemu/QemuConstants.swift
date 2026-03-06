@@ -756,6 +756,8 @@ class QemuConstants {
     static let VGA_STANDARD = "VGA"
     static let VGA_VIRTIO_GPU = "virtio-gpu"
     static let VGA_VIRTIO_GPU_DEVICE = "virtio-gpu-device"
+    static let VGA_VIRTIO_GPU_GL = "virtio-gpu-gl"
+    static let VGA_VIRTIO_GPU_GL_DEVICE = "virtio-gpu-gl-device"
 
     // Intel only:
     static let VGA_ISA = "isa-vga"
@@ -763,6 +765,7 @@ class QemuConstants {
     static let VGA_VIRTIO = "virtio-vga"
     static let VGA_VMWARE = "vmware-svga"
     static let VGA_QXL = "qxl-vga"
+    static let VGA_VIRTIO_GL = "virtio-vga-gl"
 
     static let DISPLAY_DEFAULT = "default"
     static let DISPLAY_NONE = "none"

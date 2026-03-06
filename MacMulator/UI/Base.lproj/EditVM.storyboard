@@ -202,7 +202,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="8m3-3W-z8X">
-                                                            <rect key="frame" x="18" y="0.0" width="199" height="24"/>
+                                                            <rect key="frame" x="8" y="0.0" width="199" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -283,7 +283,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="fFT-bn-ENt">
-                                                            <rect key="frame" x="18" y="0.0" width="198" height="24"/>
+                                                            <rect key="frame" x="8" y="0.0" width="198" height="24"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -1365,7 +1365,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Tjs-rh-ma1" customClass="MappingsNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="18" y="0.0" width="185" height="30"/>
+                                                            <rect key="frame" x="8" y="0.0" width="185" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-7P-40p">
@@ -1402,7 +1402,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="5A0-IO-Y5j" customClass="VirtualMachinePortCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="220" y="0.0" width="122" height="30"/>
+                                                            <rect key="frame" x="210" y="0.0" width="122" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="QCJ-E5-jLx">
@@ -1439,7 +1439,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="kvA-W5-Oy4" customClass="HostMacPortCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="359" y="0.0" width="116" height="30"/>
+                                                            <rect key="frame" x="349" y="0.0" width="116" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Uyp-Wz-0dz">
@@ -1476,7 +1476,7 @@ Gw
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="UCs-g1-oAH">
-                                                            <rect key="frame" x="492" y="0.0" width="89" height="30"/>
+                                                            <rect key="frame" x="482" y="0.0" width="89" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LRy-RB-Pa6">
@@ -1791,6 +1791,9 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                             </textField>
                             <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="5V6-3d-7RZ">
                                 <rect key="frame" x="179" y="165" width="54" height="24"/>
+                                <connections>
+                                    <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
+                                </connections>
                             </switch>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
                                 <rect key="frame" x="301" y="294" width="244" height="22"/>
@@ -1870,7 +1873,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                     <connections>
                         <outlet property="accelDescriptionLabel" destination="bHD-eX-M1v" id="1Th-4z-4oK"/>
                         <outlet property="accelDescriptionSwitch" destination="5V6-3d-7RZ" id="rxv-3C-dw3"/>
-                        <outlet property="accelDescriptiontext" destination="Cvm-OW-d8w" id="y7A-Q8-TWJ"/>
+                        <outlet property="accelDescriptionText" destination="Cvm-OW-d8w" id="y7A-Q8-TWJ"/>
                         <outlet property="qemuDisplayComboBox" destination="ECR-CG-ZXO" id="SfU-RY-PSA"/>
                         <outlet property="qemuDisplayLabel" destination="TFC-on-HFs" id="Ebg-Rh-8Be"/>
                         <outlet property="videoAdapterComboBox" destination="Kgv-EH-4Vd" id="OQY-oe-xTd"/>

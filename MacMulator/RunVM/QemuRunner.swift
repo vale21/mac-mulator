@@ -181,7 +181,6 @@ class QemuRunner: VirtualMachineRunner {
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
-            .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(sanitizeMachineTypeForPPC(), [])
             .withMemory(virtualMachine.memory)
@@ -214,7 +213,6 @@ class QemuRunner: VirtualMachineRunner {
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
-            .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_PC, [])
             .withMemory(virtualMachine.memory)
@@ -231,7 +229,10 @@ class QemuRunner: VirtualMachineRunner {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation()
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype)
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
-        let videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
+        var videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
+        if virtualMachine.enable3DAcceleration ?? false {
+            videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
+        }
 
         if virtualMachine.os == QemuConstants.OS_MAC {
             return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice, videoDevice)
@@ -241,7 +242,8 @@ class QemuRunner: VirtualMachineRunner {
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(virtualMachine.cpus)
             .withBootArg(computeBootArg(virtualMachine))
-            .withDisplay(QemuConstants.DISPLAY_COCOA)
+            .withDisplay(virtualMachine.qemuDisplay)
+            .withEnable3D(virtualMachine.enable3DAcceleration ?? false)
             .withShowCursor(false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(virtualMachine.memory)
@@ -312,7 +314,10 @@ class QemuRunner: VirtualMachineRunner {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation()
         let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype)
         let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
-        let videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
+        var videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
+        if virtualMachine.enable3DAcceleration ?? false {
+            videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
+        }
 
         return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
             .withCpus(virtualMachine.cpus)
@@ -320,7 +325,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(virtualMachine.memory)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
-            .withDisplay(virtualMachine.os == QemuConstants.OS_LINUX ? QemuConstants.DISPLAY_DEFAULT : nil)
+            .withDisplay(virtualMachine.qemuDisplay)
+            .withEnable3D(virtualMachine.enable3DAcceleration ?? false)
             .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)

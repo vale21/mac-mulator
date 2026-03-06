@@ -14,7 +14,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var videoAdapterComboBox: NSComboBox!
     @IBOutlet var qemuDisplayLabel: NSTextField!
     @IBOutlet var qemuDisplayComboBox: NSComboBox!
-    @IBOutlet var accelDescriptiontext: NSTextField!
+    @IBOutlet var accelDescriptionText: NSTextField!
     @IBOutlet var accelDescriptionLabel: NSTextField!
     @IBOutlet var accelDescriptionSwitch: NSSwitch!
     @IBOutlet var windowsArmDescriptionText: NSTextField!
@@ -30,7 +30,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
         videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
         qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
-        accelDescriptiontext.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
+        accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
         accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
         windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
         updateView()
@@ -51,10 +51,23 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
             videoAdapterComboBox.reloadData()
             videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
             qemuDisplayComboBox.reloadData()
+            qemuDisplayComboBox.selectItem(at: QemuConstants.ALL_DISPLAYS.firstIndex(of: virtualMachine.qemuDisplay ?? QemuConstants.DISPLAY_DEFAULT) ?? 0)
+            accelDescriptionSwitch.state = virtualMachine.enable3DAcceleration ?? false ? .on : .off
+
             if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
                 windowsArmDescriptionText.isHidden = false
             } else {
                 windowsArmDescriptionText.isHidden = true
+            }
+            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
+            if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() {
+                accelDescriptionText.isHidden = true
+                accelDescriptionLabel.isHidden = true
+                accelDescriptionSwitch.isHidden = true
+            } else {
+                accelDescriptionText.isHidden = false
+                accelDescriptionLabel.isHidden = false
+                accelDescriptionSwitch.isHidden = false
             }
         }
     }
@@ -78,10 +91,18 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        if (notification.object as! NSComboBox) == videoAdapterComboBox {
-            if let virtualMachine {
+        if let virtualMachine {
+            if (notification.object as! NSComboBox) == videoAdapterComboBox {
                 virtualMachine.videoDevice = buildAdaptersList()[videoAdapterComboBox.indexOfSelectedItem]
+            } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
+                virtualMachine.qemuDisplay = QemuConstants.ALL_DISPLAYS[qemuDisplayComboBox.indexOfSelectedItem]
             }
+        }
+    }
+
+    @IBAction func enable3DAccelerationToggleChanged(_: Any) {
+        if let virtualMachine {
+            virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
         }
     }
 }
