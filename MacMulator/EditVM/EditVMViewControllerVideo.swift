@@ -36,6 +36,10 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         updateView()
     }
 
+    override func viewDidAppear() {
+        verifyOpenGLSupport()
+    }
+
     fileprivate func buildAdaptersList() -> [String] {
         var videoAdapters = QemuConstants.ALL_VIDEO_ADAPTERS
         if let virtualMachine {
@@ -103,6 +107,29 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBAction func enable3DAccelerationToggleChanged(_: Any) {
         if let virtualMachine {
             virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
+        }
+    }
+
+    fileprivate func verifyOpenGLSupport() {
+        if let virtualMachine {
+            let shell = Shell()
+            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+
+            if let qemuExecutable = runner.getQemuCommand().split(separator: " ").first {
+                let command = qemuExecutable + " -device help"
+                print(command)
+
+                shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
+                    let devices = shell.readFromStandardOutput()
+                    print(devices)
+
+                    if devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl") {
+                        print("OpenGL SUPPORTED")
+                    } else {
+                        print("OpenGL NOT SUPPORTED")
+                    }
+                })
+            }
         }
     }
 }
