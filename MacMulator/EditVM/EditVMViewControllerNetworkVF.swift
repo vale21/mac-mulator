@@ -20,7 +20,9 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
-        updateView()
+        if virtualMachine?.type == MacMulatorConstants.APPLE_VM {
+            updateView()
+        }
     }
 
     override func viewWillAppear() {
