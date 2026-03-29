@@ -221,6 +221,6 @@
 "VirtualMachineViewController.vmArchitecture" = "Architecture:";
 "VirtualMachineViewController.vmType" = "Type:";
 "VirtualMachineViewController.vmProcessors" = "Processors:";
-"VirtualMachineViewController.vmMemory" = "Processors:";
+"VirtualMachineViewController.vmMemory" = "Memory:";
 "VirtualMachineViewController.vmHardDrive" = "Hard drive size:";
 "VirtualMachineViewController.editVMButton" = "Configure this VM";
