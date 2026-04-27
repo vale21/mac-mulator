@@ -84,6 +84,8 @@
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Qemu display to use:";
 "EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator can try to enable 3D acceleration in the guest VM, if it detects that the underlying Qemu supports it. This might make the VM unstable.";
 "EditVMViewControllerVideo.accelDescriptionLabel" = "Enable 3D acceleration";
+"EditVMViewControllerVideo.accelAvailabilityTooltipDisabled" = "3D acceleration is not enabled, either because Qemu does not support it, or because you are using a VM of an achitecture that is different from the one of your host Mac.";
+"EditVMViewControllerVideo.accelAvailabilityTooltipEnabled" = "Try to enable 3D acceleration in the VM.";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Note for Windows 11 ARM users:\n\nThe virtual machine is created with \"Ram framebuffer standalone device\". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the \"VirtIO GPU PCI\" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";
