@@ -21,6 +21,8 @@ class VirtualMachine: Codable, Hashable {
     var networkDevice: String?
     var physicalBridgeNetworkDevice: String?
     var videoDevice: String?
+    var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
+    var enable3DAcceleration: Bool? = false
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
@@ -32,10 +34,10 @@ class VirtualMachine: Codable, Hashable {
     var bootMode: String?
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
     }
 
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -49,6 +51,8 @@ class VirtualMachine: Codable, Hashable {
         self.networkDevice = networkDevice
         self.physicalBridgeNetworkDevice = physicalBridgeNetworkDevice
         self.videoDevice = videoDevice
+        self.qemuDisplay = qemuDisplay
+        self.enable3DAcceleration = enable3DAcceleration
         self.hvf = hvf
         drives = []
         portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]

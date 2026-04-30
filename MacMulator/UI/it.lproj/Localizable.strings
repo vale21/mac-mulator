@@ -82,6 +82,9 @@
 "EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoDescriptionText" = "La VM è creata con una scheda video default, ma ci sono varie schede che possono funzionare nella tua VM, a seconda dell'hardware emulato e del sistema operativo installato sulla VM. Qui puoi selezionare la scheda video da usare:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Scheda video da collegare alla VM:";
+"EditVMViewControllerVideo.qemuDisplayLabel" = "Display Qemu da usare:";
+"EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator può provare ad abilitare l'accelerazione 3D nella VM guest, se si accorge che la versione di Qemu fornita la supporta. La VM può diventare instabile.";
+"EditVMViewControllerVideo.accelDescriptionLabel" = "Abilita accelerazione 3D";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Nota per gli utenti con Windows 11 ARM:\n\nLa macchina virtuale è creata con \"Ram framebuffer standalone device\". Questa scheda è necessaria per installare correttamente Windows 11 sulla VM. Una volta installato Windows, puoi selezionare \"VirtIO GPU PCI\". Questa scheda funziona meglio, e offre la possibilità di selezionare la risoluzione dello schermo, se installi il relativo driver. Il driver si trova nel DVD che trovi già collegato alla VM quando la crei.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "La Macchina Virtuale è uscita con errore: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "La Macchina Virtuale è stata fermata dal SO guest.";

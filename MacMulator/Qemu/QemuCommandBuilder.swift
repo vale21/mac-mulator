@@ -18,6 +18,7 @@ class QemuCommandBuilder {
     var accel: String?
     var vga: String?
     var display: String?
+    var enable3d: Bool?
     var cpu: String?
     var usb: Bool?
     var device: [String] = []
@@ -79,6 +80,11 @@ class QemuCommandBuilder {
 
     func withDisplay(_ display: String?) -> QemuCommandBuilder {
         self.display = display
+        return self
+    }
+
+    func withEnable3D(_ enable3D: Bool) -> QemuCommandBuilder {
+        enable3d = enable3D
         return self
     }
 
@@ -269,6 +275,9 @@ class QemuCommandBuilder {
                 cmd += "on"
             } else {
                 cmd += "off"
+            }
+            if enable3d ?? false {
+                cmd += ",gl=on"
             }
         }
         if let cpu {

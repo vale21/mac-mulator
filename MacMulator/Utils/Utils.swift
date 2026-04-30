@@ -981,6 +981,18 @@ class Utils {
         String(format: NSLocalizedString("Utils.lastUsed", comment: ""), width, heigh)
     }
 
+    static func convertDeviceToGLVariant(_ videoDevice: String) -> String {
+        if videoDevice == QemuConstants.VGA_VIRTIO_GPU {
+            QemuConstants.VGA_VIRTIO_GPU_GL
+        } else if videoDevice == QemuConstants.VGA_VIRTIO_GPU_DEVICE {
+            QemuConstants.VGA_VIRTIO_GPU_GL_DEVICE
+        } else if videoDevice == QemuConstants.VGA_VIRTIO {
+            QemuConstants.VGA_VIRTIO_GL
+        } else {
+            videoDevice
+        }
+    }
+
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
         if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
             let filemanager = FileManager.default

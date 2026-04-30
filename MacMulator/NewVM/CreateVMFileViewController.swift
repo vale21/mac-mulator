@@ -40,6 +40,8 @@ class CreateVMFileViewController: NSViewController {
             let displayOrigin = QemuConstants.ORIGIN
             let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
+            let qemuDisplay = QemuConstants.DISPLAY_DEFAULT
+            let enable3DAcceleration = false
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             let bootMode = Utils.getBootModeForSubType(os, subtype)
@@ -48,7 +50,7 @@ class CreateVMFileViewController: NSViewController {
             if #available(macOS 11.0, *) {
                 macAddress = VZMACAddress.randomLocallyAdministered().string
             }
-            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
+            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
 
             if let vm {
                 let installMedia = parentController.installMedia.stringValue
