@@ -1,4 +1,3 @@
-
 //
 //  EditVMViewControllerVideo.swift
 //  MacMulator
@@ -52,33 +51,36 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     func updateView() {
-        if let virtualMachine {
-            videoAdapterComboBox.reloadData()
-            videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
-            qemuDisplayComboBox.reloadData()
-            qemuDisplayComboBox.selectItem(at: QemuConstants.ALL_DISPLAYS.firstIndex(of: virtualMachine.qemuDisplay ?? QemuConstants.DISPLAY_DEFAULT) ?? 0)
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if let virtualMachine {
+                videoAdapterComboBox.reloadData()
+                videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+                qemuDisplayComboBox.reloadData()
+                qemuDisplayComboBox.selectItem(at: QemuConstants.ALL_DISPLAYS.firstIndex(of: virtualMachine.qemuDisplay ?? QemuConstants.DISPLAY_DEFAULT) ?? 0)
 
-            if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
-                windowsArmDescriptionText.isHidden = false
-            } else {
-                windowsArmDescriptionText.isHidden = true
-            }
-            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
-            if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
-                accelDescriptionText.isEnabled = false
-                accelDescriptionLabel.isEnabled = false
-                accelDescriptionSwitch.isEnabled = false
-                accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipDisabled", comment: "")
+                if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
+                    windowsArmDescriptionText.isHidden = false
+                } else {
+                    windowsArmDescriptionText.isHidden = true
+                }
+                let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
+                if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
+                    accelDescriptionText.isEnabled = false
+                    accelDescriptionLabel.isEnabled = false
+                    accelDescriptionSwitch.isEnabled = false
+                    accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipDisabled", comment: "")
 
-                accelDescriptionSwitch.state = .off
-                virtualMachine.enable3DAcceleration = false
-            } else {
-                accelDescriptionText.isEnabled = true
-                accelDescriptionLabel.isEnabled = true
-                accelDescriptionSwitch.isEnabled = true
-                accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipEnabled", comment: "")
+                    accelDescriptionSwitch.state = .off
+                    virtualMachine.enable3DAcceleration = false
+                } else {
+                    accelDescriptionText.isEnabled = true
+                    accelDescriptionLabel.isEnabled = true
+                    accelDescriptionSwitch.isEnabled = true
+                    accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipEnabled", comment: "")
 
-                accelDescriptionSwitch.state = virtualMachine.enable3DAcceleration ?? false ? .on : .off
+                    accelDescriptionSwitch.state = (virtualMachine.enable3DAcceleration ?? false) ? .on : .off
+                }
             }
         }
     }
@@ -131,12 +133,18 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
                     if devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl") {
                         print("OpenGL SUPPORTED")
-                        self.accelerationSuported = true
-                        self.updateView()
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self else { return }
+                            accelerationSuported = true
+                            updateView()
+                        }
                     } else {
                         print("OpenGL NOT SUPPORTED")
-                        self.accelerationSuported = false
-                        self.updateView()
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self else { return }
+                            accelerationSuported = false
+                            updateView()
+                        }
                     }
                 })
             }
