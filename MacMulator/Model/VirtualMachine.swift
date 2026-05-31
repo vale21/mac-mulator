@@ -32,9 +32,10 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     var pauseSupported: Bool? = false
     var bootMode: String?
+    var snapshots: [VirtualMachineSnapshot]?
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
@@ -59,6 +60,7 @@ class VirtualMachine: Codable, Hashable {
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
+        snapshots = []
     }
 
     func addVirtualDrive(_ drive: VirtualDrive) {
@@ -76,6 +78,16 @@ class VirtualMachine: Codable, Hashable {
             return true
         }
         return false
+    }
+
+    func addSnapshot(_ snapshot: VirtualMachineSnapshot) {
+        snapshots?.append(snapshot)
+    }
+
+    func removeSnapshot(_ timestamp: Int64) {
+        if let index = snapshots?.firstIndex(where: { $0.timestamp == timestamp }) {
+            snapshots?.remove(at: index)
+        }
     }
 
     func addPortMapping(_ portMapping: PortMapping) {
