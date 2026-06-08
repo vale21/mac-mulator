@@ -35,6 +35,8 @@ protocol VirtualMachineRunner {
 
     func pauseVM()
 
+    func createVMSnapshot()
+
     func abort()
 
     func getConsoleOutput() -> String

@@ -124,6 +124,17 @@ class VirtualMachineViewController: NSViewController {
         }, virtualMachine: rootController?.currentVm)
     }
 
+    func createVMSnapshot(sender _: Any) {
+        if let vm = rootController?.currentVm, let rootController {
+            if rootController.isVMRunning(vm) {
+                self.rootController?.getRunnerForRunningVM(vm)?.createVMSnapshot()
+            } else {
+                let tempRunner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm)
+                tempRunner.createVMSnapshot()
+            }
+        }
+    }
+
     func startVMInRecovery(sender: Any) {
         startVM(sender: sender, inRecovery: true)
     }

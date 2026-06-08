@@ -102,6 +102,8 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
+    func createVMSnapshot() {}
+
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {
         if error != nil {
             Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
