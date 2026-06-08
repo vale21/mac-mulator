@@ -78,6 +78,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [sender, currentVm]) // The sender here determines which tab to show
     }
 
+    func createVMSnapshot(sender: Any) {
+        vmController?.createVMSnapshot(sender: sender)
+    }
+
     @IBAction func cloneVMMenuBarClicked(_: Any) {
         if let currentVm {
             if let vmIndex = getIndex(of: currentVm) {

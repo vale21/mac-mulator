@@ -28,8 +28,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet var usbDevicesMenuItem: NSMenuItem!
-    @IBOutlet var attachImageMenuItem: NSMenuItem!
-    @IBOutlet var configureMenuItem: NSMenuItem!
+    @IBOutlet var usbAttachImageMenuItem: NSMenuItem!
+    @IBOutlet var usbConfigureMenuItem: NSMenuItem!
+    @IBOutlet var snapshotsMenuItem: NSMenuItem!
+    @IBOutlet var snapshotCreateMenuItem: NSMenuItem!
+    @IBOutlet var snapshotsViewRestoreMenuItem: NSMenuItem!
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
@@ -185,12 +188,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 exportMenuItem.isEnabled = false
                 convertToQemuMenuItem.isEnabled = false
                 convertToAppleMenuItem.isEnabled = false
+                snapshotsMenuItem.isEnabled = false
+                snapshotCreateMenuItem.isEnabled = false
+                snapshotsViewRestoreMenuItem.isEnabled = false
             } else {
                 let vm = rootController.currentVm
                 if let vm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     settingsMenuItem.isEnabled = true
+                    snapshotsMenuItem.isEnabled = true
+                    snapshotCreateMenuItem.isEnabled = true
+                    snapshotsViewRestoreMenuItem.isEnabled = true
 
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)

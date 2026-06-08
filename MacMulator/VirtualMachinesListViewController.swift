@@ -73,6 +73,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Create new snapshot", action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType])
         table.allowsMultipleSelection = false
@@ -163,6 +165,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         cloneVirtualMachine(table.clickedRow)
     }
 
+    @objc func tableViewTakeSnapshotItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        createVMSnapshot(table.clickedRow)
+    }
+
     @objc func tableViewStartItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         startVirtualMachine(table.clickedRow)
@@ -246,6 +253,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     func cloneVirtualMachine(_ index: Int) {
         rootController?.cloneVirtualMachineAt(index)
+    }
+
+    func createVMSnapshot(_ index: Int) {
+        if let rootController {
+            _ = rootController.getVirtualMachineAt(index)
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.createVMSnapshot(sender: self)
+        }
     }
 
     func selectElement(_ index: Int) {
