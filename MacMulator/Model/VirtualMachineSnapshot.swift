@@ -9,12 +9,16 @@ import Foundation
 
 class VirtualMachineSnapshot: Codable, Equatable {
     var timestamp: Int64
+    var name: String
+    var description: String
     var driveSnapshotPath: String
     var memorySnapshotPath: String?
     var screenshotPath: String
 
-    init(timestamp: Int64, driveSnapshotPath: String, memorySnapshotPath: String?, screenshotPath: String) {
+    init(timestamp: Int64, name: String, description: String, driveSnapshotPath: String, memorySnapshotPath: String?, screenshotPath: String) {
         self.timestamp = timestamp
+        self.name = name
+        self.description = description
         self.driveSnapshotPath = driveSnapshotPath
         self.memorySnapshotPath = memorySnapshotPath
         self.screenshotPath = screenshotPath

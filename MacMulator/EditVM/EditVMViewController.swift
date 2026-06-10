@@ -27,24 +27,27 @@ class EditVMViewController: NSTabViewController {
         tabViewItems[2].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[3].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[4].label = NSLocalizedString("EditVMViewController.video", comment: "")
-        tabViewItems[5].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
+        tabViewItems[5].label = "Snapshots"
+        tabViewItems[6].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
 
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
         let network = tabViewItems[2].viewController as! EditVMViewControllerNetwork
         let networkVF = tabViewItems[3].viewController as! EditVMViewControllerNetworkVF
         let video = tabViewItems[4].viewController as! EditVMViewControllerVideo
-        let advanced = tabViewItems[5].viewController as! EditVMViewControllerAdvanced
+        let snapshots = tabViewItems[5].viewController as! EditVMViewControllerSnapshots
+        let advanced = tabViewItems[6].viewController as! EditVMViewControllerAdvanced
 
         general.setVirtualMachine(vm)
         hardware.setVirtualMachine(vm)
         network.setVirtualMachine(vm)
         networkVF.setVirtualMachine(vm)
         video.setVirtualMachine(vm)
+        snapshots.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 
         if vm.type == MacMulatorConstants.APPLE_VM {
-            removeTabViewItem(tabViewItems[5])
+            removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[2])
         } else if vm.os == QemuConstants.OS_IOS {

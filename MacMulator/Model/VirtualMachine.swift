@@ -61,6 +61,8 @@ class VirtualMachine: Codable, Hashable {
         self.type = type
         self.bootMode = bootMode
         snapshots = []
+
+        snapshots?.append(VirtualMachineSnapshot(timestamp: Int64(Date().timeIntervalSince1970 * 1000), name: "test", description: "this is a test description", driveSnapshotPath: "", memorySnapshotPath: "", screenshotPath: "/Users/vale/Downloads/Screenshot.png"))
     }
 
     func addVirtualDrive(_ drive: VirtualDrive) {
