@@ -29,7 +29,14 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
 
     @IBAction func restoreFromSnapshot(_: Any) {}
 
-    @IBAction func deleteSnapshot(_: Any) {}
+    @IBAction func deleteSnapshot(_: Any) {
+        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to delete snapshot \(currentSnapshot!.name)?", virtualMachine: virtualMachine)
+        if response.rawValue == Utils.ALERT_RESP_OK {
+            virtualMachine?.removeSnapshot(currentSnapshot!.timestamp)
+            currentSnapshot = nil
+            updateView()
+        }
+    }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self)
@@ -62,8 +69,8 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
     }
 
     fileprivate func updateView() {
+        snapshotsTableView.reloadData()
         if let currentSnapshot {
-            snapshotTitleLabel.isHidden = false
             snapshotScreenshotView.isHidden = false
             snapshotDescriptionScrollView.isHidden = false
             restoreButton.isHidden = false
@@ -73,7 +80,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: currentSnapshot.screenshotPath))
             snapshotDescriptionTextView.string = currentSnapshot.description
         } else {
-            snapshotTitleLabel.isHidden = true
+            snapshotTitleLabel.stringValue = "Please select a snapshot from the table on the left"
             snapshotScreenshotView.isHidden = true
             snapshotDescriptionScrollView.isHidden = true
             restoreButton.isHidden = true
