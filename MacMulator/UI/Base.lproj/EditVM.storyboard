@@ -2029,7 +2029,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="g2m-56-VQ0">
-                                    <rect key="frame" x="1" y="288" width="185" height="17"/>
+                                    <rect key="frame" x="1" y="302" width="185" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="biV-Ng-0n4">
@@ -2041,11 +2041,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bA-V2-R6Q">
-                                <rect key="frame" x="231" y="147" width="352" height="226"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="H0J-UO-gZy"/>
-                            </imageView>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ivs-Ff-Qer">
                                 <rect key="frame" x="19" y="20" width="189" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2058,10 +2053,10 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </connections>
                             </button>
                             <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="993-Vz-zsK">
-                                <rect key="frame" x="234" y="64" width="346" height="81"/>
+                                <rect key="frame" x="234" y="64" width="346" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <clipView key="contentView" drawsBackground="NO" id="dyR-Po-oHv">
-                                    <rect key="frame" x="1" y="1" width="344" height="79"/>
+                                    <rect key="frame" x="1" y="1" width="344" height="62"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" baseWritingDirection="leftToRight" spellingCorrection="YES" smartInsertDelete="YES" id="cgj-zE-5Z6">
@@ -2069,7 +2064,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" red="0.12548999999999999" green="0.12941" blue="0.13333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="344" height="79"/>
+                                            <size key="minSize" width="344" height="62"/>
                                             <size key="maxSize" width="346" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment>
@@ -2094,7 +2089,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="zbB-wV-LX6">
-                                    <rect key="frame" x="328" y="1" width="17" height="79"/>
+                                    <rect key="frame" x="328" y="1" width="17" height="62"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
@@ -2122,14 +2117,30 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <action selector="deleteSnapshot:" target="OTc-Xm-wkq" id="56x-qu-NnC"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NhF-y0-7TR">
+                                <rect key="frame" x="232" y="354" width="350" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="DL4-7V-l8b">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bA-V2-R6Q">
+                                <rect key="frame" x="231" y="145" width="352" height="204"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="H0J-UO-gZy"/>
+                            </imageView>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="deleteButton" destination="9Eo-gn-1Vh" id="T0U-UG-Nuw"/>
                         <outlet property="newSnapshotButton" destination="Ivs-Ff-Qer" id="pnE-LO-w1R"/>
                         <outlet property="restoreButton" destination="HKk-e8-Y2d" id="kSG-u8-7BW"/>
-                        <outlet property="snapshotDescriptionTextView" destination="993-Vz-zsK" id="Ufe-qC-jwf"/>
+                        <outlet property="snapshotDescriptionScrollView" destination="993-Vz-zsK" id="pSt-fv-Yzq"/>
+                        <outlet property="snapshotDescriptionTextView" destination="cgj-zE-5Z6" id="9JA-2c-FvY"/>
                         <outlet property="snapshotScreenshotView" destination="4bA-V2-R6Q" id="ako-vc-9iL"/>
+                        <outlet property="snapshotTitleLabel" destination="NhF-y0-7TR" id="yEZ-je-vZo"/>
                         <outlet property="snapshotsTableView" destination="Qqw-MA-7Qo" id="7la-gl-CFg"/>
                     </connections>
                 </viewController>

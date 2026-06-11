@@ -9,8 +9,10 @@ import Cocoa
 
 class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
     @IBOutlet var snapshotsTableView: NSTableView!
+    @IBOutlet var snapshotTitleLabel: NSTextField!
     @IBOutlet var snapshotScreenshotView: NSImageView!
-    @IBOutlet var snapshotDescriptionTextView: NSScrollView!
+    @IBOutlet var snapshotDescriptionScrollView: NSScrollView!
+    @IBOutlet var snapshotDescriptionTextView: NSTextView!
     @IBOutlet var newSnapshotButton: NSButton!
     @IBOutlet var restoreButton: NSButton!
     @IBOutlet var deleteButton: NSButton!
@@ -36,13 +38,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             if let snapshots = virtualMachine.snapshots {
                 let snapshot = snapshots[row]
                 if let cell = cell as? NSTableCellView {
-                    let date = Date(timeIntervalSince1970: TimeInterval(snapshot.timestamp))
-                    let formatter = DateFormatter()
-                    formatter.locale = .current
-                    formatter.dateStyle = .medium
-                    formatter.timeStyle = .short
-                    let dateString = formatter.string(from: date)
-                    cell.textField?.stringValue = snapshot.name + " (" + dateString + ")"
+                    cell.textField?.stringValue = snapshot.name + " (" + formatTimestamp(snapshot) + ")"
                 }
             }
         }
@@ -56,5 +52,41 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         return 0
     }
 
-    fileprivate func updateView() {}
+    func tableViewSelectionDidChange(_ notification: Notification) {
+        guard let tableView = notification.object as? NSTableView else { return }
+        let selectedRow = tableView.selectedRow
+        if selectedRow >= 0 {
+            currentSnapshot = virtualMachine?.snapshots?[selectedRow]
+            updateView()
+        }
+    }
+
+    fileprivate func updateView() {
+        if let currentSnapshot {
+            snapshotTitleLabel.isHidden = false
+            snapshotScreenshotView.isHidden = false
+            snapshotDescriptionScrollView.isHidden = false
+            restoreButton.isHidden = false
+            deleteButton.isHidden = false
+
+            snapshotTitleLabel.stringValue = currentSnapshot.name + " (" + formatTimestamp(currentSnapshot) + ")"
+            snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: currentSnapshot.screenshotPath))
+            snapshotDescriptionTextView.string = currentSnapshot.description
+        } else {
+            snapshotTitleLabel.isHidden = true
+            snapshotScreenshotView.isHidden = true
+            snapshotDescriptionScrollView.isHidden = true
+            restoreButton.isHidden = true
+            deleteButton.isHidden = true
+        }
+    }
+
+    fileprivate func formatTimestamp(_ snapshot: VirtualMachineSnapshot) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(snapshot.timestamp) / 1000.0)
+        let formatter = DateFormatter()
+        formatter.locale = .current
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
 }
