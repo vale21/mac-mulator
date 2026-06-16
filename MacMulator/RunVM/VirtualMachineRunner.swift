@@ -35,7 +35,7 @@ protocol VirtualMachineRunner {
 
     func pauseVM()
 
-    func createVMSnapshot()
+    func createVMSnapshot() throws
 
     func abort()
 

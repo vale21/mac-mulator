@@ -14,14 +14,16 @@ class VirtualMachineSnapshot: Codable, Equatable {
     var driveSnapshotPath: String
     var memorySnapshotPath: String?
     var screenshotPath: String
+    var running: Bool
 
-    init(timestamp: Int64, name: String, description: String, driveSnapshotPath: String, memorySnapshotPath: String?, screenshotPath: String) {
+    init(timestamp: Int64, name: String, description: String, driveSnapshotPath: String, memorySnapshotPath: String?, screenshotPath: String, running: Bool) {
         self.timestamp = timestamp
         self.name = name
         self.description = description
         self.driveSnapshotPath = driveSnapshotPath
         self.memorySnapshotPath = memorySnapshotPath
         self.screenshotPath = screenshotPath
+        self.running = running
     }
 
     static func == (lhs: VirtualMachineSnapshot, rhs: VirtualMachineSnapshot) -> Bool {
@@ -29,5 +31,6 @@ class VirtualMachineSnapshot: Codable, Equatable {
             && lhs.driveSnapshotPath == rhs.driveSnapshotPath
             && lhs.memorySnapshotPath == rhs.memorySnapshotPath
             && lhs.screenshotPath == rhs.screenshotPath
+            && lhs.running == rhs.running
     }
 }

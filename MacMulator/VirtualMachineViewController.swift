@@ -126,11 +126,15 @@ class VirtualMachineViewController: NSViewController {
 
     func createVMSnapshot(sender _: Any) {
         if let vm = rootController?.currentVm, let rootController {
-            if rootController.isVMRunning(vm) {
-                self.rootController?.getRunnerForRunningVM(vm)?.createVMSnapshot()
-            } else {
-                let tempRunner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm)
-                tempRunner.createVMSnapshot()
+            do {
+                if rootController.isVMRunning(vm) {
+                    try self.rootController?.getRunnerForRunningVM(vm)?.createVMSnapshot()
+                } else {
+                    let tempRunner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm)
+                    try tempRunner.createVMSnapshot()
+                }
+            } catch {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: vm)
             }
         }
     }

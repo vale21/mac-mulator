@@ -15,6 +15,9 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
 
     var parentRunner: VirtualizationFrameworkVirtualMachineRunner?
     var operation: String?
+    var dismissalCriteria: () -> Bool = { false }
+    var dismissInProgress = false
+    var alertMessage: String?
 
     func setParentRunner(_ parentRunner: VirtualizationFrameworkVirtualMachineRunner) {
         self.parentRunner = parentRunner
@@ -22,6 +25,14 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
 
     func setOperation(_ operation: String) {
         self.operation = operation
+    }
+
+    func setDismissalCriteria(_ dismissalCriteria: @escaping () -> Bool = { false }) {
+        self.dismissalCriteria = dismissalCriteria
+    }
+
+    func setAlertMessage(_ alertMessage: String?) {
+        self.alertMessage = alertMessage
     }
 
     override func viewDidLoad() {
@@ -34,14 +45,19 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
 
         if operation == "Pausing" {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.pausing", comment: "")
-        } else {
+        } else if operation == "Resuming" {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.resuming", comment: "")
+        } else {
+            descriptionLabel.stringValue = "Creating VM snapshot..."
         }
 
         DispatchQueue.main.async {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
-                if let parentRunner = self.parentRunner {
-                    if parentRunner.isVMRunning() {
+                if self.dismissalCriteria(), !self.dismissInProgress {
+                    self.dismissInProgress = true
+                    if self.alertMessage != nil {
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: self.alertMessage!, completionHandler: { _ in self.dismiss(self) }, virtualMachine: nil)
+                    } else {
                         self.dismiss(self)
                     }
                 }

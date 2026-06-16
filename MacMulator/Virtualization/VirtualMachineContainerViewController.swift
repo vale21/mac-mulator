@@ -8,6 +8,18 @@
 import Cocoa
 import Virtualization
 
+class BusyViewInformation {
+    let operation: String
+    let dismissalCriteria: () -> Bool
+    let alertMessage: String?
+
+    init(operation: String, dismissalCriteria: @escaping () -> Bool, alertMessage: String?) {
+        self.operation = operation
+        self.dismissalCriteria = dismissalCriteria
+        self.alertMessage = alertMessage
+    }
+}
+
 @available(macOS 12.0, *)
 class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate, RunningVMManagerViewController {
     var virtualMachine: VirtualMachine?
@@ -71,11 +83,15 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
     }
 
     func showPausingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Pausing")
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Pausing", dismissalCriteria: { false }, alertMessage: nil))
     }
 
     func showResumingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: "Resuming")
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Resuming", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: nil))
+    }
+
+    func showSnapshottingView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: "Snapshot successfully created."))
     }
 
     func windowShouldClose(_: NSWindow) -> Bool {
@@ -164,7 +180,9 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
             if let vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 destinationController.setParentRunner(runner)
-                destinationController.setOperation(sender as! String)
+                destinationController.setOperation((sender as! BusyViewInformation).operation)
+                destinationController.setDismissalCriteria((sender as! BusyViewInformation).dismissalCriteria)
+                destinationController.setAlertMessage((sender as! BusyViewInformation).alertMessage)
             }
         }
     }
