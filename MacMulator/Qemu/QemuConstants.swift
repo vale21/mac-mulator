@@ -158,6 +158,7 @@ class QemuConstants {
     static let SUB_NEPTUNE = "Neptune Linux"
     static let SUB_ALMA_LINUX = "Alma Linux"
     static let SUB_ROCKY_LINUX = "Rocky Linux"
+    static let SUB_OMARCHY = "Omarchy"
 
     static let SUB_IOS_GENERIC = NSLocalizedString("QemuConstants.ios", comment: "")
     static let SUB_IOS_1 = "iOS 1.x"
@@ -238,6 +239,7 @@ class QemuConstants {
     static let ICON_RASPBERRY_OS = "raspberry.os"
     static let ICON_ALMA_LINUX = "alma.linux"
     static let ICON_ROCKY_LINUX = "rocky.linux"
+    static let ICON_OMARCHY = "omarchy"
 
     static let ICON_IOS = "ios"
 
@@ -328,6 +330,7 @@ class QemuConstants {
     static let URL_REACT_OS = "https://reactos.org/download/"
     static let URL_ALMA_LINUX = "https://almalinux.org/get-almalinux/"
     static let URL_ROCKY_LINUX = "https://rockylinux.org/it-IT/download/"
+    static let URL_OMARCHY = "https://omarchy.org"
     static let URL_RASPBERRY_OS = "https://www.raspberrypi.com/software/operating-systems/"
     static let URL_QEMU_IOS = "https://github.com/devos50/qemu-ios/releases/"
 
@@ -646,6 +649,7 @@ class QemuConstants {
         [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MX_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NEPTUNE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NETRUNNER, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
+        [OS_LINUX, SUB_OMARCHY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_OMARCHY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OMARCHY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_OPENSUSE, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_OPENSUSE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_OPENSUSE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_POP_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_POP_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_POP_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
         [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PUPPY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
