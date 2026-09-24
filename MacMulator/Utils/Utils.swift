@@ -577,6 +577,10 @@ class Utils {
         getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
     }
 
+    static func getDisplaySubType(_ os: String, _ subtype: String?) -> String {
+        getStringValueForSubType(os, subtype, 21) ?? QemuConstants.DISPLAY_DEFAULT
+    }
+
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0
         if let vm = virtualMachine {
