@@ -590,7 +590,7 @@ class QemuConstants {
     static let vmDefaults = [
         // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL", "default media type", "tpm required", "video device", "boot mode"],
         [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_TAHOE, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_TAHOE, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_TAHOE, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
+        [OS_MAC, SUB_MAC_TAHOE, ARCH_ARM64, 6, 4096, 32768, 4096, 60, 8192, 120, ICON_TAHOE, QemuConstants.NETWORK_VIRTIO_NET_PCI, nil, true, NETWORK_VMXNET3, nil, URL_MAC_TAHOE, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_SEQUOIA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SEQUOIA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SEQUOIA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
         [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
@@ -758,6 +758,7 @@ class QemuConstants {
     static let VGA_VIRTIO_GPU_DEVICE = "virtio-gpu-device"
     static let VGA_VIRTIO_GPU_GL = "virtio-gpu-gl"
     static let VGA_VIRTIO_GPU_GL_DEVICE = "virtio-gpu-gl-device"
+    static let VGA_APPLE = "'{\"driver\":\"apple-gfx-pci\",\"display-modes\":[\"1680x1050@60\",\"1280x768@60\",\"1280x800@60\",\"1440x900@60\"]}' -vga none"
 
     // Intel only:
     static let VGA_ISA = "isa-vga"

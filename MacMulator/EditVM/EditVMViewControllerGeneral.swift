@@ -28,6 +28,9 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     let accountPasteboardType = NSPasteboard.PasteboardType.string
     var updating = false
     var currentResolution: [Int] = []
+    
+    let availableResolutions = Utils.getAvailableResolutions()
+    let availableResolutionsDesc = Utils.getAvailableResolutionsDesc()
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
@@ -124,7 +127,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 }
             }
             if tableView == resolutionTable {
-                return QemuConstants.ALL_RESOLUTIONS_DESC.count + 1
+                return availableResolutionsDesc.count + 1
             }
         }
         return 0
@@ -146,7 +149,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 if row == 0 {
                     cell.addSubview(NSTextField(labelWithString: Utils.getCustomScreenSizeDesc(width: currentResolution[0], heigh: currentResolution[1])))
                 } else {
-                    cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_RESOLUTIONS_DESC[QemuConstants.ALL_RESOLUTIONS[row - 1]]!))
+                    cell.addSubview(NSTextField(labelWithString: availableResolutionsDesc[availableResolutions[row - 1]]!))
                 }
             }
         }
@@ -232,7 +235,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             }
             if (notification.object as! NSTableView) == resolutionTable {
                 if resolutionTable.selectedRow > 0 {
-                    virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow - 1]
+                    virtualMachine?.displayResolution = availableResolutions[resolutionTable.selectedRow - 1]
                     virtualMachine?.displayOrigin = QemuConstants.ORIGIN
                 }
             }

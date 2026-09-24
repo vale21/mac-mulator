@@ -931,6 +931,10 @@ class Utils {
             false
         }
     }
+    
+    static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
+        Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
+    }
 
     static func removeUnexistingDrives(_ virtualMachine: VirtualMachine) {
         if let window = NSApp.mainWindow {
@@ -991,6 +995,69 @@ class Utils {
         } else {
             videoDevice
         }
+    }
+    
+    private static func parseDimensions(_ res: String) -> (width: Int, height: Int)? {
+        let parts = res
+            .split(whereSeparator: { !$0.isNumber })
+            .compactMap { Int($0) }
+
+        guard parts.count >= 2 else { return nil }
+        return (parts[0], parts[1])
+    }
+
+    static func getAvailableResolutions() -> [String] {
+        let mainScreen = getMainScreenSize()
+
+        guard let mainDims = parseDimensions(mainScreen) else {
+            return [mainScreen] + QemuConstants.ALL_RESOLUTIONS
+        }
+
+        let filtered = QemuConstants.ALL_RESOLUTIONS.filter { res in
+            guard let dims = parseDimensions(res) else { return false }
+            return dims.width <= mainDims.width && dims.height <= mainDims.height
+        }
+
+        return filtered
+    }
+    
+    static func getAvailableResolutionsDesc() -> [String: String] {
+        let mainScreen = Utils.getMainScreenSize()
+
+        guard let mainDims = parseDimensions(mainScreen) else {
+            return QemuConstants.ALL_RESOLUTIONS_DESC
+        }
+
+        return QemuConstants.ALL_RESOLUTIONS_DESC.filter { key, _ in
+            guard let dims = parseDimensions(key) else { return false }
+            return dims.width <= mainDims.width && dims.height <= mainDims.height
+        }
+    }
+    
+    static func buildParavirtualizedVgaString(displayResolution: String) -> String {
+        func toDisplayMode(_ res: String) -> String {
+            guard let dims = parseDimensions(res) else { return res }
+            return "\(dims.width)x\(dims.height)@60"
+        }
+
+        var modes: [String] = []
+        var seen = Set<String>()
+
+        let first = toDisplayMode(displayResolution)
+        modes.append(first)
+        seen.insert(first)
+
+        for res in getAvailableResolutions() {
+            let mode = toDisplayMode(res)
+            if !seen.contains(mode) {
+                modes.append(mode)
+                seen.insert(mode)
+            }
+        }
+
+        let modesJSON = modes.map { "\"\($0)\"" }.joined(separator: ",")
+        let json = "{\"driver\":\"apple-gfx-pci\",\"display-modes\":[\(modesJSON)]}"
+        return "'\(json)' -vga none"
     }
 
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {

@@ -41,7 +41,7 @@ class CreateVMFileViewController: NSViewController {
             let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
             let qemuDisplay = QemuConstants.DISPLAY_DEFAULT
-            let enable3DAcceleration = false
+            let enable3DAcceleration = true
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             let bootMode = Utils.getBootModeForSubType(os, subtype)

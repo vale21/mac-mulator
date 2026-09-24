@@ -22,7 +22,7 @@ class VirtualMachine: Codable, Hashable {
     var physicalBridgeNetworkDevice: String?
     var videoDevice: String?
     var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
-    var enable3DAcceleration: Bool? = false
+    var enable3DAcceleration: Bool? = true
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
