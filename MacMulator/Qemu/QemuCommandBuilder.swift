@@ -19,6 +19,7 @@ class QemuCommandBuilder {
     var vga: String?
     var display: String?
     var enable3d: Bool?
+    var enableAppleParavirtualizedGraphics: Bool?
     var cpu: String?
     var usb: Bool?
     var device: [String] = []
@@ -85,6 +86,11 @@ class QemuCommandBuilder {
 
     func withEnable3D(_ enable3D: Bool) -> QemuCommandBuilder {
         enable3d = enable3D
+        return self
+    }
+
+    func withEnableAppleParavirtualizedGraphics(_ enableAppleParavirtualizedGraphics: Bool) -> QemuCommandBuilder {
+        self.enableAppleParavirtualizedGraphics = enableAppleParavirtualizedGraphics
         return self
     }
 

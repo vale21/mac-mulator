@@ -83,7 +83,12 @@
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Zu verwendendes QEMU-Display:";
 "EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator kann versuchen, die 3D-Beschleunigung in der Gast-VM zu aktivieren, wenn erkannt wird, dass das zugrunde liegende QEMU sie unterstützt. Dies kann die VM instabil machen.";
 "EditVMViewControllerVideo.accelDescriptionLabel" = "3D-Beschleunigung aktivieren";
+"EditVMViewControllerVideo.accelAvailabilityTooltipDisabled" = "Die 3D-Beschleunigung ist nicht aktiviert, entweder weil QEMU sie nicht unterstützt oder weil Sie eine VM mit einer anderen Architektur als der Ihres Host-Macs verwenden.";
+"EditVMViewControllerVideo.accelAvailabilityTooltipEnabled" = "Versuchen Sie, die 3D-Beschleunigung in der VM zu aktivieren.";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Hinweis für Windows-11-ARM-Nutzer:\n\nDie virtuelle Maschine wird mit einem „Ram framebuffer standalone device“ erstellt. Dies ist erforderlich, um Windows 11 korrekt in der VM zu installieren. Sobald Windows installiert ist, kann der Adapter „VirtIO GPU PCI“ ausgewählt werden. Dieser Adapter funktioniert besser und bietet die Möglichkeit, die Bildschirmauflösung auszuwählen, wenn du den entsprechenden Treiber installierst. Den Treiber findest du auf der DVD, die der VM beim Erstellen beigefügt wird.";
+"EditVMViewControllerVideo.enableAppleParavirtualizedGraphics" = "Apple Paravirtualized Graphics aktivieren";
+"EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipDisabled" = "Apple Paravirtualized Graphics ist nicht aktiviert, da QEMU dies nicht unterstützt oder Sie eine macOS-Version verwenden, die älter als macOS Big Sur ist.";
+"EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipEnabled" = "Versuchen Sie, Apple Paravirtualized Graphics zu aktivieren, um 3D-Beschleunigung in der VM zu nutzen.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtuelle Maschine wurde mit Fehler beendet: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Gast hat die virtuelle Maschine beendet.";
 "NewDiskViewController.cowNotSupported" = "Diese virtuelle Maschine basiert auf dem Apple Virtualization Framework. Bei diesem Typ virtueller Maschinen wird Copy On Write derzeit nicht unterstützt.";
