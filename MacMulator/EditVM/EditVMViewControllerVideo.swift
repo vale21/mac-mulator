@@ -68,7 +68,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     accelDescriptionText.isHidden = false
                     accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
                 }
-                                    
+
                 if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
                     windowsArmDescriptionText.isHidden = false
                 } else {

@@ -931,7 +931,7 @@ class Utils {
             false
         }
     }
-    
+
     static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
         Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
     }
@@ -996,7 +996,7 @@ class Utils {
             videoDevice
         }
     }
-    
+
     private static func parseDimensions(_ res: String) -> (width: Int, height: Int)? {
         let parts = res
             .split(whereSeparator: { !$0.isNumber })
@@ -1020,7 +1020,7 @@ class Utils {
 
         return filtered
     }
-    
+
     static func getAvailableResolutionsDesc() -> [String: String] {
         let mainScreen = Utils.getMainScreenSize()
 
@@ -1033,7 +1033,7 @@ class Utils {
             return dims.width <= mainDims.width && dims.height <= mainDims.height
         }
     }
-    
+
     static func buildParavirtualizedVgaString(displayResolution: String) -> String {
         func toDisplayMode(_ res: String) -> String {
             guard let dims = parseDimensions(res) else { return res }

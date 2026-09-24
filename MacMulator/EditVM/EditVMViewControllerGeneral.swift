@@ -28,7 +28,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     let accountPasteboardType = NSPasteboard.PasteboardType.string
     var updating = false
     var currentResolution: [Int] = []
-    
+
     let availableResolutions = Utils.getAvailableResolutions()
     let availableResolutionsDesc = Utils.getAvailableResolutionsDesc()
 
