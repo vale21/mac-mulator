@@ -122,27 +122,82 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        if #available(macOS 14.0, *) {
+            if let vzVirtualMachine = self.vzVirtualMachine {
+                if vzVirtualMachine.state == .running {
+                    vmViewController?.showRestoringView()
+                    pauseAndSaveVirtualMachine(completionHandler: {
+                        let snapshot = try? self.restoreVMSnapshotFiles(snapshot: snapshot)
+                        self.resumeVM()
+                    })
+                }
+            }
+        }
+    }
+
     fileprivate func copyVMSnapshotFiles() throws -> VirtualMachineSnapshot {
         let currentMillis = Int64(Date().timeIntervalSince1970 * 1000)
-        let snapshotsFolderPath = URL(fileURLWithPath: Utils.escape(managedVm.path) + "/Snapshots")
+        let snapshotsFolderPath = URL(fileURLWithPath: managedVm.path + "/Snapshots")
         let currentSnapshotFolderPath = snapshotsFolderPath.appendingPathComponent(String(currentMillis))
 
         let fileManager = FileManager.default
-        try? fileManager.createDirectory(at: currentSnapshotFolderPath, withIntermediateDirectories: true, attributes: nil)
-        try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME))
-        try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME))
+        do {
+            try fileManager.createDirectory(at: currentSnapshotFolderPath, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            // Directory creation failure is not fatal here (the folder may already exist), but log it for troubleshooting
+            NSLog("Snapshot: failed to create directory \(currentSnapshotFolderPath.path): \(error.localizedDescription)")
+        }
+
+        let memorySnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
+        do {
+            try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
+        } catch {
+            NSLog("Snapshot: failed to move memory save file from \(saveFileURL.path) to \(memorySnapshotURL.path): \(error.localizedDescription)")
+            throw error
+        }
+
+        let screenshotSnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
+        do {
+            try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
+        } catch {
+            NSLog("Snapshot: failed to move screenshot from \(screenshotFileURL.path) to \(screenshotSnapshotURL.path): \(error.localizedDescription)")
+            throw error
+        }
+
+        var drivePaths: [String] = []
         for drive in managedVm.drives {
             if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
-                try fileManager.copyItem(at: URL(fileURLWithPath: drive.path), to: currentSnapshotFolderPath.appendingPathComponent(drive.name + "." + MacMulatorConstants.DISK_EXTENSION))
+                let driveSnapshotURL = currentSnapshotFolderPath.appendingPathComponent(drive.name + "." + MacMulatorConstants.DISK_EXTENSION)
+                do {
+                    try fileManager.copyItem(at: URL(fileURLWithPath: drive.path), to: driveSnapshotURL)
+                } catch {
+                    NSLog("Snapshot: failed to copy drive \(drive.name) from \(drive.path) to \(driveSnapshotURL.path): \(error.localizedDescription)")
+                    throw error
+                }
+                drivePaths.append(driveSnapshotURL.path)
             }
         }
         if managedVm.snapshots == nil {
             managedVm.snapshots = []
         }
 
-        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot", description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPath: "", memorySnapshotPath: "", screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
+        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot " + String(managedVm.snapshots!.count + 1), description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPaths: drivePaths, memorySnapshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path, screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
         managedVm.snapshots!.append(snapshot)
         return snapshot
+    }
+
+    fileprivate func restoreVMSnapshotFiles(snapshot: VirtualMachineSnapshot) throws {
+        let fileManager = FileManager.default
+
+        if let memorySnapshotPath = snapshot.memorySnapshotPath {
+            try fileManager.moveItem(at: URL(fileURLWithPath: memorySnapshotPath), to: URL(fileURLWithPath: saveFileURL.path))
+        }
+        for drive in managedVm.drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
+                // try fileManager.copyItem(at: snapshot.driveSnapshotPath, to: URL(fileURLWithPath: drive.path))
+            }
+        }
     }
 
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {

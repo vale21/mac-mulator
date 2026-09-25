@@ -37,6 +37,8 @@ protocol VirtualMachineRunner {
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)?) throws
 
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot) throws
+
     func abort()
 
     func getConsoleOutput() -> String

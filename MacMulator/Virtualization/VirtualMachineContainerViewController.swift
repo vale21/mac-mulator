@@ -94,6 +94,10 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
         performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: "Snapshot successfully created."))
     }
 
+    func showRestoringView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: "VM successfully restored from snasphot."))
+    }
+
     func windowShouldClose(_: NSWindow) -> Bool {
         if Utils.isPauseSupported(vmRunner!.getManagedVM()) {
             pauseVM()

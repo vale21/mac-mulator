@@ -50,6 +50,8 @@ class QemuRunner: VirtualMachineRunner {
 
     func createVMSnapshot(_: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
 
+    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot) {}
+
     func getQemuCommand() -> String {
         if let command = virtualMachine.qemuCommand {
             return command
