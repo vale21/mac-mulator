@@ -110,27 +110,25 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 if vzVirtualMachine.state == .running {
                     vmViewController?.takeScreenshot()
                     vmViewController?.showSnapshottingView()
-                    pauseAndSaveVirtualMachine(completionHandler: {
-                        let snapshot = try? self.copyVMSnapshotFiles()
-                        self.resumeVM()
-                        if let underlyingHandler {
-                            underlyingHandler(snapshot)
-                        }
-                    })
+                    #if arch(arm64)
+                        pauseAndSaveVirtualMachine(completionHandler: {
+                            let snapshot = try? self.copyVMSnapshotFiles()
+                            self.resumeVM()
+                            if let underlyingHandler {
+                                underlyingHandler(snapshot)
+                            }
+                        })
+                    #endif
                 }
             }
         }
     }
 
-    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot) throws {
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
                     vmViewController?.showRestoringView()
-                    pauseAndSaveVirtualMachine(completionHandler: {
-                        let snapshot = try? self.restoreVMSnapshotFiles(snapshot: snapshot)
-                        self.resumeVM()
-                    })
                 }
             }
         }
