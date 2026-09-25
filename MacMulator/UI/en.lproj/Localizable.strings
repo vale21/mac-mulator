@@ -87,6 +87,9 @@
 "EditVMViewControllerVideo.accelAvailabilityTooltipDisabled" = "3D acceleration is not enabled, either because Qemu does not support it, or because you are using a VM of an achitecture that is different from the one of your host Mac.";
 "EditVMViewControllerVideo.accelAvailabilityTooltipEnabled" = "Try to enable 3D acceleration in the VM.";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Note for Windows 11 ARM users:\n\nThe virtual machine is created with \"Ram framebuffer standalone device\". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the \"VirtIO GPU PCI\" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.";
+"EditVMViewControllerVideo.enableAppleParavirtualizedGraphics" = "Enable Apple Paravirtualized Graphics";
+"EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipDisabled" = "Apple Paravirtualized Graphics is not enabled, either because Qemu does not support it, or because you are using a guest version of macOS that is older than macOS Big Sur.";
+"EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipEnabled" = "Try to enable Apple Paravirtualized Graphics, to have 3D acceleration in the VM.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";
 "NewDiskViewController.cowNotSupported" = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines Copy On Write is not yet supported.";

@@ -46,6 +46,7 @@ class EditVMViewController: NSTabViewController {
         snapshots.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 
+        let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
         if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[4])
@@ -54,7 +55,7 @@ class EditVMViewController: NSTabViewController {
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
-        } else if vm.os != QemuConstants.OS_LINUX, vm.subtype != QemuConstants.SUB_WINDOWS_11 {
+        } else if vmArchitecture != Utils.hostArchitecture() {
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
         } else {

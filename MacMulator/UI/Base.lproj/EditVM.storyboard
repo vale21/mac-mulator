@@ -1783,22 +1783,16 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bHD-eX-M1v">
-                                <rect key="frame" x="239" y="169" width="184" height="16"/>
+                                <rect key="frame" x="30" y="164" width="265" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="180" id="Nve-gV-5oq"/>
+                                    <constraint firstAttribute="width" constant="261" id="Nve-gV-5oq"/>
                                 </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Enable 3D acceleration" id="ujU-6w-70y">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Enable 3D acceleration" id="ujU-6w-70y">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="5V6-3d-7RZ">
-                                <rect key="frame" x="179" y="165" width="54" height="24"/>
-                                <connections>
-                                    <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
-                                </connections>
-                            </switch>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
                                 <rect key="frame" x="301" y="294" width="244" height="22"/>
                                 <constraints>
@@ -1847,6 +1841,12 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="5V6-3d-7RZ">
+                                <rect key="frame" x="301" y="160" width="54" height="24"/>
+                                <connections>
+                                    <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <constraints>
                             <constraint firstItem="TFC-on-HFs" firstAttribute="baseline" secondItem="ECR-CG-ZXO" secondAttribute="baseline" id="34i-yW-h9i"/>
@@ -1855,9 +1855,9 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                             <constraint firstAttribute="trailing" secondItem="Kgv-EH-4Vd" secondAttribute="trailing" constant="55" id="GtP-77-qqt"/>
                             <constraint firstItem="Kgv-EH-4Vd" firstAttribute="top" secondItem="kMz-L0-DKD" secondAttribute="bottom" constant="26" id="H1l-rc-YFj"/>
                             <constraint firstItem="5V6-3d-7RZ" firstAttribute="centerY" secondItem="bHD-eX-M1v" secondAttribute="centerY" id="Igv-LD-a3i"/>
-                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="179" id="L20-DV-ZaL"/>
+                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="301" id="L20-DV-ZaL"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="centerY" secondItem="Kgv-EH-4Vd" secondAttribute="centerY" id="MtP-Rd-fpO"/>
-                            <constraint firstItem="m8g-Mx-rE1" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="43" id="d8u-D7-MGG"/>
+                            <constraint firstItem="m8g-Mx-rE1" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="38" id="d8u-D7-MGG"/>
                             <constraint firstItem="ECR-CG-ZXO" firstAttribute="top" secondItem="Kgv-EH-4Vd" secondAttribute="bottom" constant="8" symbolic="YES" id="dBv-jL-w82"/>
                             <constraint firstItem="kMz-L0-DKD" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="20" symbolic="YES" id="fvp-Uu-WPd"/>
                             <constraint firstAttribute="trailing" secondItem="kMz-L0-DKD" secondAttribute="trailing" constant="20" symbolic="YES" id="gVm-ml-uXD"/>
@@ -1866,11 +1866,11 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                             <constraint firstItem="kMz-L0-DKD" firstAttribute="leading" secondItem="m8g-Mx-rE1" secondAttribute="leading" id="khz-0Q-yVD"/>
                             <constraint firstItem="kMz-L0-DKD" firstAttribute="trailing" secondItem="m8g-Mx-rE1" secondAttribute="trailing" id="kkm-Cv-jnh"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="32" id="lbn-G1-cYw"/>
-                            <constraint firstItem="bHD-eX-M1v" firstAttribute="leading" secondItem="5V6-3d-7RZ" secondAttribute="trailing" constant="8" symbolic="YES" id="m2g-bm-PAb"/>
+                            <constraint firstItem="bHD-eX-M1v" firstAttribute="leading" secondItem="5V6-3d-7RZ" secondAttribute="trailing" constant="-323" id="m2g-bm-PAb"/>
                             <constraint firstItem="Cvm-OW-d8w" firstAttribute="trailing" secondItem="kMz-L0-DKD" secondAttribute="trailing" id="ne5-Og-DVI"/>
                             <constraint firstItem="Kgv-EH-4Vd" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="trailing" constant="23" id="o3W-rH-SE3"/>
                             <constraint firstItem="Cvm-OW-d8w" firstAttribute="leading" secondItem="kMz-L0-DKD" secondAttribute="leading" id="opb-26-ovX"/>
-                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="top" secondItem="Cvm-OW-d8w" secondAttribute="bottom" constant="8" symbolic="YES" id="pOa-9U-RIb"/>
+                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="top" secondItem="Cvm-OW-d8w" secondAttribute="bottom" constant="13" id="pOa-9U-RIb"/>
                             <constraint firstAttribute="bottom" secondItem="m8g-Mx-rE1" secondAttribute="bottom" constant="20" symbolic="YES" id="sxd-NR-ija"/>
                         </constraints>
                     </view>
