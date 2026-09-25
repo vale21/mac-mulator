@@ -8,13 +8,11 @@
 import Cocoa
 
 class EditVMViewController: NSTabViewController {
-    var rootController: RootViewController?
+    var vmRunner: VirtualMachineRunner?
     var virtualMachine: VirtualMachine?
 
-    func setRootController(_ rootController: RootViewController) {
-        self.rootController = rootController
-        let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
-        hardware.setRootController(rootController)
+    func setVmRunner(_ vmRunner: VirtualMachineRunner) {
+        self.vmRunner = vmRunner
     }
 
     func setVirtualMachine(_ vm: VirtualMachine) {
@@ -46,6 +44,11 @@ class EditVMViewController: NSTabViewController {
         snapshots.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 
+        if let vmRunner {
+            hardware.setVmRunner(vmRunner)
+            snapshots.setVmRunner(vmRunner)
+        }
+
         let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
         if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[6])
@@ -70,7 +73,6 @@ class EditVMViewController: NSTabViewController {
     override func viewDidDisappear() {
         if let virtualMachine {
             virtualMachine.writeToPlist()
-            rootController?.refreshViewForVM(virtualMachine)
         }
     }
 }

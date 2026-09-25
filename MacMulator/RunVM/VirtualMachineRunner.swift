@@ -35,9 +35,16 @@ protocol VirtualMachineRunner {
 
     func pauseVM()
 
-    func createVMSnapshot() throws
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)?) throws
 
     func abort()
 
     func getConsoleOutput() -> String
+}
+
+extension VirtualMachineRunner {
+    /// Convenience overload so callers can take a snapshot without providing a handler.
+    func createVMSnapshot() throws {
+        try createVMSnapshot(nil)
+    }
 }

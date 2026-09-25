@@ -48,7 +48,7 @@ class QemuRunner: VirtualMachineRunner {
         listenPort
     }
 
-    func createVMSnapshot() {}
+    func createVMSnapshot(_: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
 
     func getQemuCommand() -> String {
         if let command = virtualMachine.qemuCommand {

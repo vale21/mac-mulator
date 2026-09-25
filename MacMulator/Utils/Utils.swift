@@ -1064,6 +1064,10 @@ class Utils {
         return "'\(json)' -vga none"
     }
 
+    static func createDummyRunnerForStoppedVM(_ vm: VirtualMachine) -> VirtualMachineRunner {
+        VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm)
+    }
+
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
         if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
             let filemanager = FileManager.default

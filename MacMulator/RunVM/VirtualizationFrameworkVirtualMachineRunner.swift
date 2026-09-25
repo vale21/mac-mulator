@@ -104,22 +104,25 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    func createVMSnapshot() throws {
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
                     vmViewController?.takeScreenshot()
                     vmViewController?.showSnapshottingView()
                     pauseAndSaveVirtualMachine(completionHandler: {
-                        try? self.copyVMSnapshotFiles()
+                        let snapshot = try? self.copyVMSnapshotFiles()
                         self.resumeVM()
+                        if let underlyingHandler {
+                            underlyingHandler(snapshot)
+                        }
                     })
                 }
             }
         }
     }
 
-    fileprivate func copyVMSnapshotFiles() throws {
+    fileprivate func copyVMSnapshotFiles() throws -> VirtualMachineSnapshot {
         let currentMillis = Int64(Date().timeIntervalSince1970 * 1000)
         let snapshotsFolderPath = URL(fileURLWithPath: Utils.escape(managedVm.path) + "/Snapshots")
         let currentSnapshotFolderPath = snapshotsFolderPath.appendingPathComponent(String(currentMillis))
@@ -136,7 +139,10 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if managedVm.snapshots == nil {
             managedVm.snapshots = []
         }
-        managedVm.snapshots!.append(VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot", description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPath: "", memorySnapshotPath: "", screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true))
+
+        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot", description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPath: "", memorySnapshotPath: "", screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
+        managedVm.snapshots!.append(snapshot)
+        return snapshot
     }
 
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {

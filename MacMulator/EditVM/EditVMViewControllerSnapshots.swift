@@ -17,15 +17,29 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
     @IBOutlet var restoreButton: NSButton!
     @IBOutlet var deleteButton: NSButton!
 
-    var virtualMachine: VirtualMachine?
     var currentSnapshot: VirtualMachineSnapshot? = nil
+    var virtualMachine: VirtualMachine?
+    var vmRunner: VirtualMachineRunner?
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
         updateView()
     }
 
-    @IBAction func createNewSnapshot(_: Any) {}
+    func setVmRunner(_ vmRunner: VirtualMachineRunner) {
+        self.vmRunner = vmRunner
+    }
+
+    @IBAction func createNewSnapshot(_: Any) {
+        do {
+            try vmRunner?.createVMSnapshot { snapshot in
+                self.currentSnapshot = snapshot
+                self.updateView()
+            }
+        } catch {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
+        }
+    }
 
     @IBAction func restoreFromSnapshot(_: Any) {}
 
