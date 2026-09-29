@@ -91,16 +91,28 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         let selectedRow = tableView.selectedRow
         if selectedRow >= 0 {
             currentSnapshot = virtualMachine?.snapshots?[selectedRow]
-            updateView()
+        } else {
+            currentSnapshot = nil
         }
+
+        updateDetails()
     }
 
-    func textDidEndEditing(_: Notification) {
+    func textDidChange(_: Notification) {
         currentSnapshot?.description = snapshotDescriptionTextView.string
     }
 
     fileprivate func updateView() {
         snapshotsTableView.reloadData()
+        if let currentSnapshot, let index = virtualMachine?.snapshots?.firstIndex(of: currentSnapshot) {
+            snapshotsTableView.selectRowIndexes(IndexSet(integer: index), byExtendingSelection: false)
+        } else {
+            snapshotsTableView.deselectAll(nil)
+        }
+        updateDetails()
+    }
+
+    fileprivate func updateDetails() {
         if let currentSnapshot {
             snapshotScreenshotView.isHidden = false
             snapshotDescriptionScrollView.isHidden = false
