@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
+class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSTextViewDelegate {
     @IBOutlet var snapshotsTableView: NSTableView!
     @IBOutlet var snapshotTitleLabel: NSTextField!
     @IBOutlet var snapshotScreenshotView: NSImageView!
@@ -41,14 +41,27 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         }
     }
 
-    @IBAction func restoreFromSnapshot(_: Any) {}
+    @IBAction func restoreFromSnapshot(_: Any) {
+        if let snapshot = currentSnapshot {
+            do {
+                try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
+                updateView()
+            } catch {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
+            }
+        }
+    }
 
     @IBAction func deleteSnapshot(_: Any) {
         let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to delete snapshot \(currentSnapshot!.name)?", virtualMachine: virtualMachine)
-        if response.rawValue == Utils.ALERT_RESP_OK {
-            virtualMachine?.removeSnapshot(currentSnapshot!.timestamp)
-            currentSnapshot = nil
-            updateView()
+        if let snapshot = currentSnapshot, response.rawValue == Utils.ALERT_RESP_OK {
+            do {
+                try vmRunner?.deleteVMSnapshot(snapshot: snapshot)
+                currentSnapshot = nil
+                updateView()
+            } catch {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
+            }
         }
     }
 
@@ -80,6 +93,10 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             currentSnapshot = virtualMachine?.snapshots?[selectedRow]
             updateView()
         }
+    }
+
+    func textDidEndEditing(_: Notification) {
+        currentSnapshot?.description = snapshotDescriptionTextView.string
     }
 
     fileprivate func updateView() {

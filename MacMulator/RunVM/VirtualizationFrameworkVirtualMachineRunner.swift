@@ -108,9 +108,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
-                    vmViewController?.takeScreenshot()
-                    vmViewController?.showSnapshottingView()
                     #if arch(arm64)
+                        vmViewController?.takeScreenshot()
+                        vmViewController?.showSnapshottingView()
                         pauseAndSaveVirtualMachine(completionHandler: {
                             let snapshot = try? self.copyVMSnapshotFiles()
                             self.resumeVM()
@@ -124,11 +124,34 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot) throws {
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        managedVm.removeSnapshot(snapshot.timestamp)
+        try deleteVMSnapshotFiles(snapshot: snapshot)
+    }
+
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
-                    vmViewController?.showRestoringView()
+                    #if arch(arm64)
+                        vmViewController?.showRestoringView()
+                        stopVM(guestStopped: false, uponCompletion: { _ in
+                            try? self.restoreVMSnapshotFiles(snapshot: snapshot)
+                            vzVirtualMachine.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
+                                let fileManager = FileManager.default
+                                try? fileManager.removeItem(at: self.saveFileURL)
+
+                                if error == nil {
+                                    self.resumeVM()
+                                } else {
+                                    self.startVM()
+                                }
+                            })
+                            if let underlyingHandler {
+                                underlyingHandler(snapshot)
+                            }
+                        })
+                    #endif
                 }
             }
         }
@@ -182,18 +205,59 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
         let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot " + String(managedVm.snapshots!.count + 1), description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPaths: drivePaths, memorySnapshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path, screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
         managedVm.snapshots!.append(snapshot)
+        managedVm.writeToPlist()
         return snapshot
+    }
+
+    fileprivate func deleteVMSnapshotFiles(snapshot: VirtualMachineSnapshot) throws {
+        let fileManager = FileManager.default
+
+        var filePaths: [String] = snapshot.driveSnapshotPaths
+        if let memorySnapshotPath = snapshot.memorySnapshotPath {
+            filePaths.append(memorySnapshotPath)
+        }
+        filePaths.append(snapshot.screenshotPath)
+
+        for filePath in filePaths where fileManager.fileExists(atPath: filePath) {
+            do {
+                try fileManager.removeItem(atPath: filePath)
+            } catch {
+                NSLog("Snapshot: failed to delete file \(filePath): \(error.localizedDescription)")
+                throw error
+            }
+        }
+
+        let snapshotFolderURL = URL(fileURLWithPath: managedVm.path)
+            .appendingPathComponent("Snapshots")
+            .appendingPathComponent(String(snapshot.timestamp))
+        if fileManager.fileExists(atPath: snapshotFolderURL.path) {
+            do {
+                try fileManager.removeItem(at: snapshotFolderURL)
+            } catch {
+                NSLog("Snapshot: failed to delete folder \(snapshotFolderURL.path): \(error.localizedDescription)")
+                throw error
+            }
+        }
     }
 
     fileprivate func restoreVMSnapshotFiles(snapshot: VirtualMachineSnapshot) throws {
         let fileManager = FileManager.default
 
         if let memorySnapshotPath = snapshot.memorySnapshotPath {
-            try fileManager.moveItem(at: URL(fileURLWithPath: memorySnapshotPath), to: URL(fileURLWithPath: saveFileURL.path))
+            do {
+                try? fileManager.removeItem(at: URL(fileURLWithPath: saveFileURL.path))
+                try fileManager.copyItem(at: URL(fileURLWithPath: memorySnapshotPath), to: URL(fileURLWithPath: saveFileURL.path))
+            } catch {
+                NSLog("Snapshot: failed to move save file \(memorySnapshotPath): \(error.localizedDescription)")
+            }
         }
-        for drive in managedVm.drives {
-            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
-                // try fileManager.copyItem(at: snapshot.driveSnapshotPath, to: URL(fileURLWithPath: drive.path))
+        for drivePath in snapshot.driveSnapshotPaths {
+            do {
+                let destDrivePath = URL(fileURLWithPath: managedVm.path).appendingPathComponent(URL(fileURLWithPath: drivePath).lastPathComponent)
+                try fileManager.removeItem(at: destDrivePath)
+                try fileManager.copyItem(at: URL(fileURLWithPath: drivePath), to: destDrivePath)
+            } catch {
+                NSLog("Snapshot: failed to move disk file \(drivePath): \(error.localizedDescription)")
             }
         }
     }
@@ -242,8 +306,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    func stopVM(guestStopped: Bool) {
-        vzVirtualMachine?.stop(completionHandler: { _ in })
+    func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if let uponCompletion {
+            vzVirtualMachine?.stop(completionHandler: uponCompletion)
+        } else {
+            vzVirtualMachine?.stop(completionHandler: { _ in })
+        }
         vmViewController?.stopVM(guestStopped)
     }
 

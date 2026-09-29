@@ -47,8 +47,12 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.pausing", comment: "")
         } else if operation == "Resuming" {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.resuming", comment: "")
-        } else {
+        } else if operation == "Snapshotting" {
             descriptionLabel.stringValue = "Creating VM snapshot..."
+        } else if operation == "Restoring snapshot" {
+            descriptionLabel.stringValue = "Restoring VM from snapshot..."
+        } else {
+            descriptionLabel.stringValue = "Operating..."
         }
 
         DispatchQueue.main.async {

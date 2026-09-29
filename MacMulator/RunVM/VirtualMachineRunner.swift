@@ -29,7 +29,7 @@ protocol VirtualMachineRunner {
 
     func isVMRunning() -> Bool
 
-    func stopVM(guestStopped: Bool)
+    func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?)
 
     func stopVMGracefully()
 
@@ -37,7 +37,9 @@ protocol VirtualMachineRunner {
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)?) throws
 
-    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot) throws
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws
+
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)?) throws
 
     func abort()
 
@@ -48,5 +50,9 @@ extension VirtualMachineRunner {
     /// Convenience overload so callers can take a snapshot without providing a handler.
     func createVMSnapshot() throws {
         try createVMSnapshot(nil)
+    }
+
+    func stopVM(guestStopped: Bool) {
+        stopVM(guestStopped: guestStopped, uponCompletion: nil)
     }
 }

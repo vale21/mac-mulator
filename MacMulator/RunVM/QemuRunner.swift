@@ -50,7 +50,9 @@ class QemuRunner: VirtualMachineRunner {
 
     func createVMSnapshot(_: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
 
-    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot) {}
+    func deleteVMSnapshot(snapshot _: VirtualMachineSnapshot) {}
+
+    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot, _: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
 
     func getQemuCommand() -> String {
         if let command = virtualMachine.qemuCommand {
@@ -453,7 +455,7 @@ class QemuRunner: VirtualMachineRunner {
         shell.isRunning()
     }
 
-    func stopVM(guestStopped _: Bool) {
+    func stopVM(guestStopped _: Bool, uponCompletion _: (((any Error)?) -> Void)?) {
         shell.kill()
     }
 
