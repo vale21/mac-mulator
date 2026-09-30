@@ -40,7 +40,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
                 self.updateView()
             }
         } catch {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: virtualMachine)
         }
     }
 
@@ -49,8 +49,9 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             do {
                 try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
                 updateView()
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
             } catch {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: virtualMachine)
             }
         }
     }

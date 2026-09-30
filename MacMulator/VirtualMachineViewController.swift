@@ -134,7 +134,7 @@ class VirtualMachineViewController: NSViewController {
                     }
                 }
             } catch {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: vm)
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: vm)
             }
         }
     }

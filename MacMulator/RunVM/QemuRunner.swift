@@ -13,26 +13,26 @@ class QemuRunner: VirtualMachineRunner {
     let shell = Shell()
     let qemuPath: String
     let livePreviewEnabled: Bool
-    let virtualMachine: VirtualMachine
+    let managedVm: VirtualMachine
 
     init(listenPort: Int32, virtualMachine: VirtualMachine) {
         qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
         livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
         self.listenPort = listenPort
-        self.virtualMachine = virtualMachine
+        managedVm = virtualMachine
     }
 
     func runVM(recoveryMode _: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
         let command = getQemuCommand()
         do {
-            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: virtualMachine.qemuPath) {
+            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: managedVm.qemuPath) {
                 validationResult, error in
                 if validationResult {
-                    self.shell.runCommand(command, self.virtualMachine.path, uponCompletion: { result in
-                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.virtualMachine)
+                    self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result in
+                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
                     })
                 } else {
-                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.virtualMachine)
+                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.managedVm)
                 }
             }
         } catch {
@@ -41,24 +41,45 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     func getManagedVM() -> VirtualMachine {
-        virtualMachine
+        managedVm
     }
 
     func getListenPort() -> Int32 {
         listenPort
     }
 
-    func createVMSnapshot(_: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if isVMRunning() {
+            throw ValidationError.snapshotError
+        }
 
-    func deleteVMSnapshot(snapshot _: VirtualMachineSnapshot) {}
+        let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
+        if let underlyingHandler {
+            underlyingHandler(snapshot)
+        }
+    }
 
-    func restoreVMSnapshot(snapshot _: VirtualMachineSnapshot, _: ((VirtualMachineSnapshot?) -> Void)? = nil) {}
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        managedVm.removeSnapshot(snapshot.timestamp)
+        try deleteVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+    }
+
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if isVMRunning() {
+            throw ValidationError.snapshotError
+        }
+
+        try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+        if let underlyingHandler {
+            underlyingHandler(snapshot)
+        }
+    }
 
     func getQemuCommand() -> String {
-        if let command = virtualMachine.qemuCommand {
+        if let command = managedVm.qemuCommand {
             return command
         } else {
-            var builder: QemuCommandBuilder = switch virtualMachine.architecture {
+            var builder: QemuCommandBuilder = switch managedVm.architecture {
             case QemuConstants.ARCH_PPC:
                 createBuilderForPPC()
             case QemuConstants.ARCH_PPC64:
@@ -78,11 +99,11 @@ class QemuRunner: VirtualMachineRunner {
             }
 
             var index = 1
-            Utils.removeUnexistingDrives(virtualMachine)
-            Utils.sortDrives(virtualMachine)
+            Utils.removeUnexistingDrives(managedVm)
+            Utils.sortDrives(managedVm)
 
-            if virtualMachine.os != QemuConstants.OS_IOS { // iOS has no drives, but uses the NAND
-                for drive in virtualMachine.drives {
+            if managedVm.os != QemuConstants.OS_IOS { // iOS has no drives, but uses the NAND
+                for drive in managedVm.drives {
                     var driveIndex = 0
                     if !drive.isBootDrive {
                         driveIndex = index
@@ -96,8 +117,8 @@ class QemuRunner: VirtualMachineRunner {
                     } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
                         builder = builder.withEfiVars(file: drive.path, global: false)
                     } else {
-                        let mediaType = setupMediaType(virtualMachine.subtype, drive)
-                        let path = setupPath(drive, virtualMachine)
+                        let mediaType = setupMediaType(managedVm.subtype, drive)
+                        let path = setupPath(drive, managedVm)
 
                         builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType)
                     }
@@ -181,88 +202,88 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func createBuilderForPPC() -> QemuCommandBuilder {
-        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
+        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        return QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(sanitizeMachineTypeForPPC(), [])
-            .withMemory(virtualMachine.memory)
-            .withGraphics(virtualMachine.displayResolution)
+            .withMemory(managedVm.memory)
+            .withGraphics(managedVm.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withPortMappings(virtualMachine.portMappings)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withPortMappings(managedVm.portMappings)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
     fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
-        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
+        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+        return QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_PSERIES, [])
-            .withMemory(virtualMachine.memory)
-            .withGraphics(virtualMachine.displayResolution)
+            .withMemory(managedVm.memory)
+            .withGraphics(managedVm.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
     fileprivate func createBuilderForI386() -> QemuCommandBuilder {
-        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
+        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        return QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_PC, [])
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
             .withSound(QemuConstants.SOUND_AC97)
             .withUsb(true)
-            .withPortMappings(virtualMachine.portMappings)
+            .withPortMappings(managedVm.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
     fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation()
-        let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype)
-        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
-        var videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
-        if virtualMachine.enable3DAcceleration ?? false {
+        let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
+        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        var videoDevice = managedVm.videoDevice != nil ? managedVm.videoDevice! : Utils.getVideoForSubType(managedVm.os, managedVm.subtype)
+        if managedVm.enable3DAcceleration ?? false {
             videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
         }
 
-        if virtualMachine.os == QemuConstants.OS_MAC {
+        if managedVm.os == QemuConstants.OS_MAC {
             return createBuilderForMacGuestX86_64(isNative, hvfConfigured, networkDevice, videoDevice)
         }
 
-        var builder = QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        var builder = QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withDisplay(virtualMachine.qemuDisplay)
-            .withEnable3D(virtualMachine.enable3DAcceleration ?? true)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withDisplay(managedVm.qemuDisplay)
+            .withEnable3D(managedVm.enable3DAcceleration ?? true)
             .withShowCursor(false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
             .withVga(videoDevice)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
             .withCpu(sanitizeCPUTypeForIntel(isNative && hvfConfigured))
             .withUsb(true)
-            .withPortMappings(virtualMachine.portMappings)
+            .withPortMappings(managedVm.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
-            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil, QemuConstants.TPM_TIS)
-        let sound = Utils.getSoundForSubType(virtualMachine.os, virtualMachine.subtype)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS)
+        let sound = Utils.getSoundForSubType(managedVm.os, managedVm.subtype)
         if sound == QemuConstants.SOUND_HDA {
             builder = builder.withSound(QemuConstants.SOUND_HDA).withSound(QemuConstants.SOUND_HDA_DUPLEX)
         } else {
@@ -272,70 +293,70 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String, _ videoDevice: String) -> QemuCommandBuilder {
-        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
-            .withCpu(Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative && hvfConfigured))
-            .withCpus(virtualMachine.cpus)
+            .withCpu(Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative && hvfConfigured))
+            .withCpus(managedVm.cpus)
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
-            .withMemory(virtualMachine.memory)
-            .withVga((virtualMachine.enable3DAcceleration ?? true) ? Utils.buildParavirtualizedVgaString(displayResolution: virtualMachine.displayResolution) : videoDevice)
-            .withDisplay(virtualMachine.qemuDisplay)
-            .withEnableAppleParavirtualizedGraphics(virtualMachine.enable3DAcceleration ?? true)
+            .withMemory(managedVm.memory)
+            .withVga((managedVm.enable3DAcceleration ?? true) ? Utils.buildParavirtualizedVgaString(displayResolution: managedVm.displayResolution) : videoDevice)
+            .withDisplay(managedVm.qemuDisplay)
+            .withEnableAppleParavirtualizedGraphics(managedVm.enable3DAcceleration ?? true)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : QemuConstants.ACCEL_TCG)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withUsb(true)
-            .withPortMappings(virtualMachine.portMappings)
+            .withPortMappings(managedVm.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
     fileprivate func createBuilderForARM() -> QemuCommandBuilder {
-        if virtualMachine.os == QemuConstants.OS_IOS {
+        if managedVm.os == QemuConstants.OS_IOS {
             return createBuilderForIOSGuests()
         }
 
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        return QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withSerial(QemuConstants.SERIAL_STDIO)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB, [])
             .withCpu(sanitizeCPUTypeForARM())
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
     }
 
     fileprivate func createBuilderForIOSGuests() -> QemuCommandBuilder {
-        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
+        QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
             .withSerial(QemuConstants.SERIAL_MON_STDIO)
-            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(virtualMachine.drives[1].path), "nand=" + Utils.escape(virtualMachine.drives[0].path), "nor=" + Utils.escape(virtualMachine.drives[2].path)])
+            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(managedVm.drives[1].path), "nand=" + Utils.escape(managedVm.drives[0].path), "nor=" + Utils.escape(managedVm.drives[2].path)])
             .withCpu(sanitizeCPUTypeForARM())
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
             .withRtcEnabled(false)
             .withLogging(QemuConstants.LOG_UNIMPLEMENTED)
     }
 
     fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation()
-        let hvfConfigured = virtualMachine.hvf != nil ? virtualMachine.hvf! : Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype)
-        let networkDevice = virtualMachine.networkDevice != nil ? virtualMachine.networkDevice! : Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)
-        var videoDevice = virtualMachine.videoDevice != nil ? virtualMachine.videoDevice! : Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)
-        if virtualMachine.enable3DAcceleration ?? false {
+        let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
+        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        var videoDevice = managedVm.videoDevice != nil ? managedVm.videoDevice! : Utils.getVideoForSubType(managedVm.os, managedVm.subtype)
+        if managedVm.enable3DAcceleration ?? false {
             videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
         }
 
-        return QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-            .withCpus(virtualMachine.cpus)
+        return QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
+            .withCpus(managedVm.cpus)
             .withMachine(QemuConstants.MACHINE_TYPE_VIRT_HIGHMEM, [])
             .withCpu(sanitizeCPUTypeForARM64(isNative))
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
-            .withDisplay(virtualMachine.qemuDisplay)
-            .withEnable3D(virtualMachine.enable3DAcceleration ?? false)
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+            .withDisplay(managedVm.qemuDisplay)
+            .withEnable3D(managedVm.enable3DAcceleration ?? false)
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
             .withDevice(QemuConstants.NEC_USB_XHCI)
@@ -343,17 +364,17 @@ class QemuRunner: VirtualMachineRunner {
             .withDevice(QemuConstants.USB_TABLET)
             .withVga(videoDevice)
             .withNic(QemuConstants.NIC_VIRTIO)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: virtualMachine.macAddress)
-            .withTpm(Utils.getTPMForSubType(virtualMachine.os, virtualMachine.subtype) ? virtualMachine.path : nil, QemuConstants.TPM_TIS_DEVICE)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS_DEVICE)
     }
 
     fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
-        QemuCommandBuilder(qemuPath: virtualMachine.qemuPath != nil ? virtualMachine.qemuPath! : qemuPath, architecture: virtualMachine.architecture)
-            .withCpus(virtualMachine.cpus)
-            .withBootArg(computeBootArg(virtualMachine))
-            .withShowCursor(virtualMachine.os == QemuConstants.OS_LINUX ? true : false)
+        QemuCommandBuilder(qemuPath: managedVm.qemuPath != nil ? managedVm.qemuPath! : qemuPath, architecture: managedVm.architecture)
+            .withCpus(managedVm.cpus)
+            .withBootArg(computeBootArg(managedVm))
+            .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q800, [])
-            .withMemory(virtualMachine.memory)
+            .withMemory(managedVm.memory)
     }
 
     fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
@@ -381,7 +402,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func sanitizeMachineTypeForPPC() -> String {
-        var machineType = Utils.getMachineTypeForSubType(virtualMachine.os, virtualMachine.subtype)
+        var machineType = Utils.getMachineTypeForSubType(managedVm.os, managedVm.subtype)
         if machineType != QemuConstants.MACHINE_TYPE_MAC99, machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU {
             machineType = QemuConstants.MACHINE_TYPE_MAC99_PMU
         }
@@ -389,7 +410,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative)
+        var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative)
         if cpuType != QemuConstants.CPU_HOST_PDPE_1GB,
            cpuType != QemuConstants.CPU_PENRYN,
            cpuType != QemuConstants.CPU_PENRYN_SSE,
@@ -406,7 +427,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func sanitizeCPUTypeForARM() -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, false)
+        var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, false)
         if cpuType != QemuConstants.CPU_ARM1176,
            cpuType != QemuConstants.CPU_MAX
         {
@@ -416,7 +437,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
-        var cpuType = Utils.getCpuTypeForSubType(virtualMachine.os, virtualMachine.subtype, isNative)
+        var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative)
         if cpuType != QemuConstants.CPU_HOST,
            cpuType != QemuConstants.CPU_CORTEX_A72,
            cpuType != QemuConstants.CPU_MAX

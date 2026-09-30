@@ -12,6 +12,7 @@ enum ValidationError: Error, CustomStringConvertible {
     case sudoNotAllowed
     case workingPathError(qemuPath: String, command: String)
     case executableError(allowed: String, command: String)
+    case snapshotError
     case genericError
 
     var description: String {
@@ -22,6 +23,8 @@ enum ValidationError: Error, CustomStringConvertible {
             String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25))
         case let .executableError(allowed, command):
             String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
+        case let .snapshotError:
+            "Live snapshots are not supported in QEMU VMs"
         case .genericError:
             NSLocalizedString("Utils.genericError", comment: "")
         }
