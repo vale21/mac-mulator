@@ -13,10 +13,10 @@ class VirtualMachineSnapshot: Codable, Equatable {
     var description: String
     var driveSnapshotPaths: [String]
     var memorySnapshotPath: String?
-    var screenshotPath: String
+    var screenshotPath: String?
     var running: Bool
 
-    init(timestamp: Int64, name: String, description: String, driveSnapshotPaths: [String], memorySnapshotPath: String?, screenshotPath: String, running: Bool) {
+    init(timestamp: Int64, name: String, description: String, driveSnapshotPaths: [String], memorySnapshotPath: String?, screenshotPath: String?, running: Bool) {
         self.timestamp = timestamp
         self.name = name
         self.description = description

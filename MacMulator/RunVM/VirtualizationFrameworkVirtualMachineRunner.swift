@@ -105,23 +105,27 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if let vzVirtualMachine {
-            if #available(macOS 14.0, *), vzVirtualMachine.state == .running {
-                #if arch(arm64)
-                    vmViewController?.takeScreenshot()
-                    vmViewController?.showSnapshottingView()
-                    pauseAndSaveVirtualMachine(completionHandler: {
-                        let snapshot = try? self.copyVMSnapshotFiles()
-                        self.resumeVM()
-                        if let underlyingHandler {
-                            underlyingHandler(snapshot)
-                        }
-                    })
-                #else
-                    // caso > sonoma vm running intel (linux su intel in pratica)
-                #endif
-            } else {
-                // caso monterey, ventura o vm spenta (si gestisce come sopra)
+        if #available(macOS 14.0, *), isVMRunning() {
+            #if arch(arm64)
+                vmViewController?.takeScreenshot()
+                vmViewController?.showSnapshottingView()
+                pauseAndSaveVirtualMachine(completionHandler: {
+                    let snapshot = try? self.copyVMSnapshotFiles(running: true)
+                    self.resumeVM()
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #else
+                let snapshot = try? self.copyVMSnapshotFiles(running: false)
+                if let underlyingHandler {
+                    underlyingHandler(snapshot)
+                }
+            #endif
+        } else {
+            let snapshot = try? copyVMSnapshotFiles(running: false)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
             }
         }
     }
@@ -132,34 +136,40 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if #available(macOS 14.0, *) {
-            if let vzVirtualMachine = self.vzVirtualMachine {
-                if vzVirtualMachine.state == .running {
-                    #if arch(arm64)
-                        vmViewController?.showRestoringView()
-                        stopVM(guestStopped: false, uponCompletion: { _ in
-                            try? self.restoreVMSnapshotFiles(snapshot: snapshot)
-                            vzVirtualMachine.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
-                                let fileManager = FileManager.default
-                                try? fileManager.removeItem(at: self.saveFileURL)
+        if #available(macOS 14.0, *), isVMRunning() {
+            #if arch(arm64)
+                vmViewController?.showRestoringView()
+                stopVM(guestStopped: false, uponCompletion: { _ in
+                    try? self.restoreVMSnapshotFiles(snapshot: snapshot)
+                    self.vzVirtualMachine?.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
+                        let fileManager = FileManager.default
+                        try? fileManager.removeItem(at: self.saveFileURL)
 
-                                if error == nil {
-                                    self.resumeVM()
-                                } else {
-                                    self.startVM()
-                                }
-                            })
-                            if let underlyingHandler {
-                                underlyingHandler(snapshot)
-                            }
-                        })
-                    #endif
+                        if error == nil {
+                            self.resumeVM()
+                        } else {
+                            self.startVM()
+                        }
+                    })
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #else
+                try? self.restoreVMSnapshotFiles(snapshot: snapshot)
+                if let underlyingHandler {
+                    underlyingHandler(snapshot)
                 }
+            #endif
+        } else {
+            try? restoreVMSnapshotFiles(snapshot: snapshot)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
             }
         }
     }
 
-    fileprivate func copyVMSnapshotFiles() throws -> VirtualMachineSnapshot {
+    fileprivate func copyVMSnapshotFiles(running: Bool) throws -> VirtualMachineSnapshot {
         let currentMillis = Int64(Date().timeIntervalSince1970 * 1000)
         let snapshotsFolderPath = URL(fileURLWithPath: managedVm.path + "/Snapshots")
         let currentSnapshotFolderPath = snapshotsFolderPath.appendingPathComponent(String(currentMillis))
@@ -168,24 +178,27 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         do {
             try fileManager.createDirectory(at: currentSnapshotFolderPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
-            // Directory creation failure is not fatal here (the folder may already exist), but log it for troubleshooting
             NSLog("Snapshot: failed to create directory \(currentSnapshotFolderPath.path): \(error.localizedDescription)")
         }
 
-        let memorySnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
-        do {
-            try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
-        } catch {
-            NSLog("Snapshot: failed to move memory save file from \(saveFileURL.path) to \(memorySnapshotURL.path): \(error.localizedDescription)")
-            throw error
+        if fileManager.fileExists(atPath: saveFileURL.path) {
+            let memorySnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
+            do {
+                try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
+            } catch {
+                NSLog("Snapshot: failed to move memory save file from \(saveFileURL.path) to \(memorySnapshotURL.path): \(error.localizedDescription)")
+                throw error
+            }
         }
 
-        let screenshotSnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
-        do {
-            try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
-        } catch {
-            NSLog("Snapshot: failed to move screenshot from \(screenshotFileURL.path) to \(screenshotSnapshotURL.path): \(error.localizedDescription)")
-            throw error
+        if fileManager.fileExists(atPath: screenshotFileURL.path) {
+            let screenshotSnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
+            do {
+                try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
+            } catch {
+                NSLog("Snapshot: failed to move screenshot from \(screenshotFileURL.path) to \(screenshotSnapshotURL.path): \(error.localizedDescription)")
+                throw error
+            }
         }
 
         var drivePaths: [String] = []
@@ -205,7 +218,13 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.snapshots = []
         }
 
-        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "", description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPaths: drivePaths, memorySnapshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path, screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
+        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis,
+                                              name: "",
+                                              description: "This snapsot was taken on " + Date().formatted(),
+                                              driveSnapshotPaths: drivePaths,
+                                              memorySnapshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path : nil,
+                                              screenshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path : nil,
+                                              running: running)
         managedVm.snapshots!.append(snapshot)
         managedVm.writeToPlist()
         return snapshot
@@ -218,7 +237,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if let memorySnapshotPath = snapshot.memorySnapshotPath {
             filePaths.append(memorySnapshotPath)
         }
-        filePaths.append(snapshot.screenshotPath)
+        if let screenshotPath = snapshot.screenshotPath {
+            filePaths.append(screenshotPath)
+        }
 
         for filePath in filePaths where fileManager.fileExists(atPath: filePath) {
             do {
@@ -251,6 +272,14 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 try fileManager.copyItem(at: URL(fileURLWithPath: memorySnapshotPath), to: URL(fileURLWithPath: saveFileURL.path))
             } catch {
                 NSLog("Snapshot: failed to move save file \(memorySnapshotPath): \(error.localizedDescription)")
+            }
+        }
+        if let screenshotPath = snapshot.screenshotPath {
+            do {
+                try? fileManager.removeItem(at: URL(fileURLWithPath: screenshotFileURL.path))
+                try fileManager.copyItem(at: URL(fileURLWithPath: screenshotPath), to: URL(fileURLWithPath: screenshotFileURL.path))
+            } catch {
+                NSLog("Snapshot: failed to move save file \(screenshotPath): \(error.localizedDescription)")
             }
         }
         for drivePath in snapshot.driveSnapshotPaths {

@@ -34,6 +34,9 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         do {
             try vmRunner?.createVMSnapshot { snapshot in
                 self.currentSnapshot = snapshot
+                if !(snapshot?.running ?? false) {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "VM Snapshot created successfully!", virtualMachine: self.virtualMachine)
+                }
                 self.updateView()
             }
         } catch {
@@ -72,7 +75,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             if let snapshots = virtualMachine.snapshots {
                 let snapshot = snapshots[row]
                 if let cell = cell as? NSTableCellView {
-                    cell.textField?.stringValue = formatTimestamp(snapshot)
+                    cell.textField?.stringValue = formatTimestamp(snapshot) + " - " + (snapshot.running ? "Live" : "At rest")
                 }
             }
         }
@@ -119,8 +122,12 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             restoreButton.isHidden = false
             deleteButton.isHidden = false
 
-            snapshotTitleLabel.stringValue = "Snapshot - " + currentSnapshot.name + formatTimestamp(currentSnapshot)
-            snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: currentSnapshot.screenshotPath))
+            snapshotTitleLabel.stringValue = (currentSnapshot.running ? "Live " : "At rest ") + "snapshot - " + currentSnapshot.name + formatTimestamp(currentSnapshot)
+            if let screenshotPath = currentSnapshot.screenshotPath {
+                snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: screenshotPath))
+            } else {
+                snapshotScreenshotView.image = nil
+            }
             snapshotDescriptionTextView.string = currentSnapshot.description
         } else {
             snapshotTitleLabel.stringValue = "Please select a snapshot from the table on the left"
