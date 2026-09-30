@@ -669,17 +669,11 @@ class Utils {
         if #available(macOS 13.0, *) {
             return (os == QemuConstants.OS_LINUX && Utils.hostArchitecture() == Utils.getMachineArchitecture(architecture)) || isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
         }
-        if #available(macOS 12.0, *) {
-            return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
-        }
-        return false
+        return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
     }
 
     static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
-        if #available(macOS 12.0, *) {
-            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
-        }
-        return false
+        Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
     }
 
     static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
@@ -722,7 +716,7 @@ class Utils {
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
-        } else if #available(macOS 12.0, *) {
+        } else {
             if vm.os == QemuConstants.OS_LINUX {
                 return NSLocalizedString("Utils.linuxMonterey", comment: "")
             } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64, isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
@@ -730,10 +724,6 @@ class Utils {
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
-        } else if #available(macOS 11.0, *) {
-            return NSLocalizedString("Utils.virtualizationBigSur", comment: "")
-        } else {
-            return NSLocalizedString("Utils.virtualizationGeneric", comment: "")
         }
     }
 

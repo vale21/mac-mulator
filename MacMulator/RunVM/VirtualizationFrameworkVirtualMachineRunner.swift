@@ -105,21 +105,23 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if #available(macOS 14.0, *) {
-            if let vzVirtualMachine = self.vzVirtualMachine {
-                if vzVirtualMachine.state == .running {
-                    #if arch(arm64)
-                        vmViewController?.takeScreenshot()
-                        vmViewController?.showSnapshottingView()
-                        pauseAndSaveVirtualMachine(completionHandler: {
-                            let snapshot = try? self.copyVMSnapshotFiles()
-                            self.resumeVM()
-                            if let underlyingHandler {
-                                underlyingHandler(snapshot)
-                            }
-                        })
-                    #endif
-                }
+        if let vzVirtualMachine {
+            if #available(macOS 14.0, *), vzVirtualMachine.state == .running {
+                #if arch(arm64)
+                    vmViewController?.takeScreenshot()
+                    vmViewController?.showSnapshottingView()
+                    pauseAndSaveVirtualMachine(completionHandler: {
+                        let snapshot = try? self.copyVMSnapshotFiles()
+                        self.resumeVM()
+                        if let underlyingHandler {
+                            underlyingHandler(snapshot)
+                        }
+                    })
+                #else
+                    // caso > sonoma vm running intel (linux su intel in pratica)
+                #endif
+            } else {
+                // caso monterey, ventura o vm spenta (si gestisce come sopra)
             }
         }
     }
@@ -203,7 +205,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.snapshots = []
         }
 
-        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "Snapshot " + String(managedVm.snapshots!.count + 1), description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPaths: drivePaths, memorySnapshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path, screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
+        let snapshot = VirtualMachineSnapshot(timestamp: currentMillis, name: "", description: "This snapsot was taken on " + Date().formatted(), driveSnapshotPaths: drivePaths, memorySnapshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path, screenshotPath: currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path, running: true)
         managedVm.snapshots!.append(snapshot)
         managedVm.writeToPlist()
         return snapshot

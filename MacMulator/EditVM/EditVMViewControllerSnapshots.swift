@@ -72,7 +72,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             if let snapshots = virtualMachine.snapshots {
                 let snapshot = snapshots[row]
                 if let cell = cell as? NSTableCellView {
-                    cell.textField?.stringValue = snapshot.name + " (" + formatTimestamp(snapshot) + ")"
+                    cell.textField?.stringValue = formatTimestamp(snapshot)
                 }
             }
         }
@@ -119,7 +119,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             restoreButton.isHidden = false
             deleteButton.isHidden = false
 
-            snapshotTitleLabel.stringValue = currentSnapshot.name + " (" + formatTimestamp(currentSnapshot) + ")"
+            snapshotTitleLabel.stringValue = "Snapshot - " + currentSnapshot.name + formatTimestamp(currentSnapshot)
             snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: currentSnapshot.screenshotPath))
             snapshotDescriptionTextView.string = currentSnapshot.description
         } else {

@@ -106,12 +106,10 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func stopVM(_ sender: Any) {
         var window = view.window!
 
-        if #available(macOS 12.0, *) {
-            if let vm = self.rootController?.currentVm {
-                if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
-                    let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
-                    window = runner.vmView!.window!
-                }
+        if let vm = rootController?.currentVm {
+            if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
+                let runner = rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
+                window = runner.vmView!.window!
             }
         }
 
@@ -158,17 +156,15 @@ class VirtualMachineViewController: NSViewController {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE {
-            if #available(macOS 12.0, *) {
-                let source = segue.sourceController as! VirtualMachineViewController
-                let dest = segue.destinationController as! VirtualMachineContainerViewController
-                let vmToStart = sender as! VMToStart
+            let source = segue.sourceController as! VirtualMachineViewController
+            let dest = segue.destinationController as! VirtualMachineContainerViewController
+            let vmToStart = sender as! VMToStart
 
-                dest.setVirtualMachine(vmToStart.vm)
-                dest.setRecoveryMode(vmToStart.inRecovery)
-                dest.setVmRunner(vmToStart.runner)
-                dest.setVmController(source)
-                dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
-            }
+            dest.setVirtualMachine(vmToStart.vm)
+            dest.setRecoveryMode(vmToStart.inRecovery)
+            dest.setVmRunner(vmToStart.runner)
+            dest.setVmController(source)
+            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController
