@@ -39,6 +39,7 @@
 		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57F5B82E01D2C400B68CE7 /* MacMulator.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
+		3B66C6CA306D1B280031A733 /* DeleteSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B66C6C9306D1B280031A733 /* DeleteSnapshotViewController.swift */; };
 		3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B672E6627C788AE00732C46 /* SystemProfilerData.swift */; };
 		3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
 		3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */; };
@@ -169,6 +170,7 @@
 		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
+		3B66C6C9306D1B280031A733 /* DeleteSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSnapshotViewController.swift; sourceTree = "<group>"; };
 		3B672E6627C788AE00732C46 /* SystemProfilerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemProfilerData.swift; sourceTree = "<group>"; };
 		3B6A6E432E7C15B000548768 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = de; path = de.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B6A6E442E7C15B000548768 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
+				3B66C6C9306D1B280031A733 /* DeleteSnapshotViewController.swift */,
 				3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */,
 				3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */,
 				3B477A9425D69525008685BE /* EditVMViewController.swift */,
@@ -659,6 +662,7 @@
 				3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */,
 				3BD212272FCC363C007CB895 /* VirtualMachineSnapshot.swift in Sources */,
 				3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
+				3B66C6CA306D1B280031A733 /* DeleteSnapshotViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2117,7 +2117,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </buttonCell>
                                 <color key="bezelColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                 <connections>
-                                    <action selector="deleteSnapshot:" target="OTc-Xm-wkq" id="56x-qu-NnC"/>
+                                    <segue destination="pg6-9y-LWk" kind="sheet" id="Lw2-22-Rxj"/>
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NhF-y0-7TR">
@@ -2151,9 +2151,41 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
             </objects>
             <point key="canvasLocation" x="1636" y="-35"/>
         </scene>
+        <!--Delete Snapshot View Controller-->
+        <scene sceneID="lFg-KT-jz3">
+            <objects>
+                <viewController id="pg6-9y-LWk" customClass="DeleteSnapshotViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="8tJ-Of-QRf">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d4u-vN-tgz">
+                                <rect key="frame" x="18" y="46" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Deleting snapshot..." id="yYo-EE-2pa">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="J4M-Oa-tev">
+                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="diskProgressLabel" destination="d4u-vN-tgz" id="6Ss-4z-PJv"/>
+                        <outlet property="progressBar" destination="J4M-Oa-tev" id="mJn-bD-q5S"/>
+                    </connections>
+                </viewController>
+                <customObject id="EKT-x1-2uY" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2308" y="15"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="dAG-Lk-g12"/>
+        <segue reference="NWI-dl-alA"/>
         <segue reference="qMP-wa-FjT"/>
     </inferredMetricsTieBreakers>
     <resources>

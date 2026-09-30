@@ -55,17 +55,9 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         }
     }
 
-    @IBAction func deleteSnapshot(_: Any) {
-        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.informational, message: "Are you sure you want to delete snapshot \(currentSnapshot!.name)?", virtualMachine: virtualMachine)
-        if let snapshot = currentSnapshot, response.rawValue == Utils.ALERT_RESP_OK {
-            do {
-                try vmRunner?.deleteVMSnapshot(snapshot: snapshot)
-                currentSnapshot = nil
-                updateView()
-            } catch {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot", virtualMachine: virtualMachine)
-            }
-        }
+    func snapshotDeleted() {
+        currentSnapshot = nil
+        updateView()
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -103,6 +95,15 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
 
     func textDidChange(_: Notification) {
         currentSnapshot?.description = snapshotDescriptionTextView.string
+    }
+
+    override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
+        if segue.identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
+            let destinationController = segue.destinationController as! DeleteSnapshotViewController
+            destinationController.setSnapshot(currentSnapshot)
+            destinationController.setVmRunner(vmRunner)
+            destinationController.setParentController(self)
+        }
     }
 
     fileprivate func updateView() {
