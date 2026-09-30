@@ -2117,7 +2117,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </buttonCell>
                                 <color key="bezelColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                                 <connections>
-                                    <segue destination="pg6-9y-LWk" kind="sheet" id="Lw2-22-Rxj"/>
+                                    <segue destination="pg6-9y-LWk" kind="sheet" identifier="deleteSnapshotSegue" id="Lw2-22-Rxj"/>
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NhF-y0-7TR">

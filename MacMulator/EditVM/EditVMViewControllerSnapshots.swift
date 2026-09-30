@@ -97,6 +97,15 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         currentSnapshot?.description = snapshotDescriptionTextView.string
     }
 
+    override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
+        if identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
+            let message = "Are you sure you want to delete this snapshot? This operation cannot be undone."
+            let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, virtualMachine: virtualMachine)
+            return response.rawValue == Utils.ALERT_RESP_OK
+        }
+        return true
+    }
+
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
         if segue.identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
             let destinationController = segue.destinationController as! DeleteSnapshotViewController

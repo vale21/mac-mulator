@@ -109,7 +109,7 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler)
     }
 
-    static func showPrompt(window _: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) -> NSApplication.ModalResponse {
+    static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) -> NSApplication.ModalResponse {
         let alert = NSAlert()
 
         if let virtualMachine {
@@ -120,7 +120,13 @@ class Utils {
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))
         alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
-        return alert.runModal()
+
+        // Present the alert as a sheet, but block until the user responds so that
+        // synchronous callers can use the returned response directly.
+        alert.beginSheetModal(for: window) { response in
+            NSApp.stopModal(withCode: response)
+        }
+        return NSApp.runModal(for: alert.window)
     }
 
     static func escape(_ string: String) -> String {
