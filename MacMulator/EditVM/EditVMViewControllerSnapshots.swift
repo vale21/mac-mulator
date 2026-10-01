@@ -39,26 +39,21 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
                 }
                 self.updateView()
             }
+        } catch let error as ValidationError {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.description, virtualMachine: virtualMachine)
         } catch {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: virtualMachine)
-        }
-    }
-
-    @IBAction func restoreFromSnapshot(_: Any) {
-        if let snapshot = currentSnapshot {
-            do {
-                try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
-                updateView()
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
-            } catch {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: virtualMachine)
-            }
         }
     }
 
     func snapshotDeleted() {
         currentSnapshot = nil
         updateView()
+    }
+
+    func snapshotRestored() {
+        updateView()
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -103,16 +98,19 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             let message = "Are you sure you want to delete this snapshot? This operation cannot be undone."
             let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, virtualMachine: virtualMachine)
             return response.rawValue == Utils.ALERT_RESP_OK
+        } else if identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
+            return vmRunner != nil && (vmRunner!.isVMRunning() == false || Utils.isPauseSupported(vmRunner!.getManagedVM()) == false)
         }
         return true
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender _: Any?) {
-        if segue.identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-            let destinationController = segue.destinationController as! DeleteSnapshotViewController
+        if segue.identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE || segue.identifier == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
+            let destinationController = segue.destinationController as! ManageSnapshotViewController
             destinationController.setSnapshot(currentSnapshot)
             destinationController.setVmRunner(vmRunner)
             destinationController.setParentController(self)
+            destinationController.setOperation(segue.identifier!)
         }
     }
 

@@ -95,6 +95,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @IBAction func createNewSnapshotMenuBarClicked(_: Any) {}
+
+    @IBAction func viewRestoreSnapshotMenuBarClicked(_: Any) {}
+
     @IBAction func exportVMToParallelsMenuBarClicked(_: Any) {
         if #available(macOS 11.0, *) {
             Utils.showDirectorySelector(uponSelection: { panel in
@@ -192,8 +196,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 snapshotCreateMenuItem.isEnabled = false
                 snapshotsViewRestoreMenuItem.isEnabled = false
             } else {
-                let vm = rootController.currentVm
-                if let vm {
+                if let vm = rootController.currentVm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     settingsMenuItem.isEnabled = true

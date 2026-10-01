@@ -105,7 +105,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if #available(macOS 14.0, *), isVMRunning() {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
             #if arch(arm64)
                 vmViewController?.takeScreenshot()
                 vmViewController?.showSnapshottingView()
@@ -116,13 +116,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         underlyingHandler(snapshot)
                     }
                 })
-            #else
-                let snapshot = try? self.copyVMSnapshotFiles(running: false, managedVm: managedVm)
-                if let underlyingHandler {
-                    underlyingHandler(snapshot)
-                }
             #endif
         } else {
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
             let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
             if let underlyingHandler {
                 underlyingHandler(snapshot)
@@ -136,7 +135,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if #available(macOS 14.0, *), isVMRunning() {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
             #if arch(arm64)
                 vmViewController?.showRestoringView()
                 stopVM(guestStopped: false, uponCompletion: { _ in
@@ -155,13 +154,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         underlyingHandler(snapshot)
                     }
                 })
-            #else
-                try? self.restoreVMSnapshotFiles(snapshot: snapshot)
-                if let underlyingHandler {
-                    underlyingHandler(snapshot)
-                }
             #endif
         } else {
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
             try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
             if let underlyingHandler {
                 underlyingHandler(snapshot)

@@ -133,6 +133,8 @@ class VirtualMachineViewController: NSViewController {
                         Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "VM Snapshot created successfully!", virtualMachine: vm)
                     }
                 }
+            } catch let error as ValidationError {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.description, virtualMachine: vm)
             } catch {
                 Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: vm)
             }

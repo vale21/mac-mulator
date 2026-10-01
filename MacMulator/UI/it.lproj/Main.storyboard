@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -216,6 +217,20 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Istantanee" id="fVR-SM-VVJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Istantanee" id="rfh-AS-cP7">
+                                                <items>
+                                                    <menuItem title="Crea nuova" keyEquivalent="" id="6O5-2K-XTT">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                    <menuItem title="Visualizza o ripristina..." id="SQO-VP-Dic">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="gL4-jK-ibL"/>
                                         <menuItem title="Esporta come" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Esporta come" id="3Ko-t4-AGP">
@@ -420,7 +435,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2473" y="-608"/>
+            <point key="canvasLocation" x="-2554" y="-319"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">

@@ -37,6 +37,7 @@ class MacMulatorConstants {
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     static let START_VM_SEGUE = "startVMSegue"
     static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
+    static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"

@@ -50,7 +50,7 @@ class QemuRunner: VirtualMachineRunner {
 
     func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
         if isVMRunning() {
-            throw ValidationError.snapshotError
+            throw ValidationError.snapshotError(vmType: "QEMU")
         }
 
         let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
@@ -66,7 +66,7 @@ class QemuRunner: VirtualMachineRunner {
 
     func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
         if isVMRunning() {
-            throw ValidationError.snapshotError
+            throw ValidationError.snapshotError(vmType: "QEMU")
         }
 
         try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)

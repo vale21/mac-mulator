@@ -220,9 +220,16 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Snapshots" id="rrP-s6-baf">
                                                 <items>
-                                                    <menuItem title="Create new" keyEquivalent="S" id="S13-EC-pqC"/>
+                                                    <menuItem title="Create new" keyEquivalent="S" id="S13-EC-pqC">
+                                                        <connections>
+                                                            <action selector="createNewSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="TSe-Fb-Bk1"/>
+                                                        </connections>
+                                                    </menuItem>
                                                     <menuItem title="View or restore..." id="3Up-Wp-qQq">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="viewRestoreSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="mdk-hE-6td"/>
+                                                        </connections>
                                                     </menuItem>
                                                 </items>
                                             </menu>
@@ -435,7 +442,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2473" y="-608"/>
+            <point key="canvasLocation" x="-2346" y="-254"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">
