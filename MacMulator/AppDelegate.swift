@@ -204,6 +204,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 snapshotsMenuItem.isEnabled = false
                 snapshotCreateMenuItem.isEnabled = false
                 snapshotsViewRestoreMenuItem.isEnabled = false
+                usbDevicesMenuItem.isEnabled = false
+                showConsoleOutputmenuItem.isEnabled = false
             } else {
                 if let vm = rootController.currentVm {
                     cloneVMMemuItem.isEnabled = true
