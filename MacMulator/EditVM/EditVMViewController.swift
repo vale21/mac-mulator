@@ -75,4 +75,9 @@ class EditVMViewController: NSTabViewController {
             virtualMachine.writeToPlist()
         }
     }
+
+    func selectTab(tabIdentifier: String) {
+        guard let idx = tabViewItems.firstIndex(where: { ($0.identifier as? String) == tabIdentifier }) else { return }
+        selectedTabViewItemIndex = idx
+    }
 }

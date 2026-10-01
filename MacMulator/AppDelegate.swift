@@ -95,7 +95,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    @IBAction func createNewSnapshotMenuBarClicked(_: Any) {}
+    @IBAction func createNewSnapshotMenuBarClicked(_: Any) {
+        rootController?.createVMSnapshot(sender: self)
+    }
 
     @IBAction func viewRestoreSnapshotMenuBarClicked(_: Any) {}
 
@@ -154,7 +156,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked(sender) // The sender here determines which tab to show
+        var tabIdentifier = "general"
+        if sender as? NSMenuItem == usbConfigureMenuItem {
+            tabIdentifier = "hardware"
+        } else if sender as? NSMenuItem == snapshotsViewRestoreMenuItem {
+            tabIdentifier = "snapshots"
+        }
+
+        rootController?.editVMmenuBarClicked(tabIdentifier) // The sender here determines which tab to show
     }
 
     @IBAction func showConsolemenuBarClicked(_: Any) {

@@ -228,7 +228,7 @@
                                                     <menuItem title="View or restore..." id="3Up-Wp-qQq">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
-                                                            <action selector="viewRestoreSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="mdk-hE-6td"/>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="zwI-4O-wyI"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
