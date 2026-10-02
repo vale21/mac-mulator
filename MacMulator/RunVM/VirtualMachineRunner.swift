@@ -151,10 +151,6 @@ extension VirtualMachineRunner {
                 drivePaths.append(driveSnapshotURL.path)
             }
         }
-        if managedVm.snapshots == nil {
-            managedVm.snapshots = []
-        }
-
         let snapshot = VirtualMachineSnapshot(timestamp: currentMillis,
                                               name: "",
                                               description: String(format: NSLocalizedString("VirtualMachineRunner.snapshotTaken", comment: ""), Date().formatted()),
@@ -162,7 +158,7 @@ extension VirtualMachineRunner {
                                               memorySnapshotPath: saveFileExists ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path : nil,
                                               screenshotPath: screenshotExists ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path : nil,
                                               running: running)
-        managedVm.snapshots!.append(snapshot)
+        managedVm.addSnapshot(snapshot)
         managedVm.writeToPlist()
         return snapshot
     }

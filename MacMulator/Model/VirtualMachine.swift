@@ -81,13 +81,23 @@ class VirtualMachine: Codable, Hashable {
     }
 
     func addSnapshot(_ snapshot: VirtualMachineSnapshot) {
+        if snapshots == nil {
+            snapshots = []
+        }
         snapshots?.append(snapshot)
+        notifySnapshotsChanged()
     }
 
     func removeSnapshot(_ timestamp: Int64) {
         if let index = snapshots?.firstIndex(where: { $0.timestamp == timestamp }) {
             snapshots?.remove(at: index)
+            notifySnapshotsChanged()
         }
+    }
+
+    // Lets any open UI showing this VM's snapshots (e.g. the Edit VM window) refresh itself
+    private func notifySnapshotsChanged() {
+        NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 
     func addPortMapping(_ portMapping: PortMapping) {

@@ -30,6 +30,27 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         self.vmRunner = vmRunner
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Refresh the table when a snapshot is created or deleted outside this view (e.g. via the app menu)
+        NotificationCenter.default.addObserver(self, selector: #selector(snapshotsChanged(_:)), name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func snapshotsChanged(_ notification: Notification) {
+        guard let changedVM = notification.object as? VirtualMachine, changedVM === virtualMachine else { return }
+        DispatchQueue.main.async {
+            // Drop the selection if the selected snapshot no longer exists
+            if let currentSnapshot = self.currentSnapshot, !(self.virtualMachine?.snapshots?.contains(currentSnapshot) ?? false) {
+                self.currentSnapshot = nil
+            }
+            self.updateView()
+        }
+    }
+
     override func viewWillAppear() {
         newSnapshotButton.title = NSLocalizedString("EditVMViewControllerSnapshots.createNewSnapshot", comment: "")
         restoreButton.title = NSLocalizedString("EditVMViewControllerSnapshots.restore", comment: "")
@@ -120,8 +141,9 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
                         Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: nil)
                     }
                 }
+                return performSegue
             }
-            return performSegue
+            return true
         }
         return true
     }
