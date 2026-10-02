@@ -42,6 +42,8 @@ class ManageSnapshotViewController: NSViewController {
 
     override func viewDidAppear() {
         var complete = false
+        var errorFound = false
+
         progressBar.startAnimation(self)
 
         if let snapshot {
@@ -49,15 +51,18 @@ class ManageSnapshotViewController: NSViewController {
                 do {
                     try vmRunner?.deleteVMSnapshot(snapshot: snapshot)
                 } catch {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not delete snapshot", virtualMachine: nil)
+                    errorFound = true
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not delete snapshot", virtualMachine: vmRunner?.getManagedVM())
                 }
             } else if operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
                 do {
                     try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
                 } catch let error as ValidationError {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.description, virtualMachine: nil)
+                    errorFound = true
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.description, virtualMachine: vmRunner?.getManagedVM())
                 } catch {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.localizedDescription, virtualMachine: nil)
+                    errorFound = true
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.localizedDescription, virtualMachine: vmRunner?.getManagedVM())
                 }
             }
         }
@@ -69,11 +74,14 @@ class ManageSnapshotViewController: NSViewController {
                 self.progressBar.stopAnimation(self)
                 self.dismiss(self)
 
-                if self.operation == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-                    self.parentController!.snapshotDeleted()
-                } else if self.operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
-                    self.parentController!.snapshotRestored()
+                if !errorFound {
+                    if self.operation == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
+                        self.parentController!.snapshotDeleted()
+                    } else if self.operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
+                        self.parentController!.snapshotRestored(showAlert: true)
+                    }
                 }
+
                 return
             }
         })

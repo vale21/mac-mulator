@@ -51,9 +51,11 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         updateView()
     }
 
-    func snapshotRestored() {
+    func snapshotRestored(showAlert: Bool) {
         updateView()
-        Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
+        if showAlert {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
+        }
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -98,8 +100,19 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             let message = "Are you sure you want to delete this snapshot? This operation cannot be undone."
             let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, virtualMachine: virtualMachine)
             return response.rawValue == Utils.ALERT_RESP_OK
-        } else if identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-            return vmRunner != nil && (vmRunner!.isVMRunning() == false || Utils.isPauseSupported(vmRunner!.getManagedVM()) == false)
+        } else if identifier == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
+            let performSegue = vmRunner != nil && (vmRunner!.isVMRunning() == false || Utils.isPauseSupported(vmRunner!.getManagedVM()) == false)
+            if !performSegue, let currentSnapshot {
+                do {
+                    try vmRunner?.restoreVMSnapshot(snapshot: currentSnapshot, nil)
+                    snapshotRestored(showAlert: false)
+                } catch let error as ValidationError {
+                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.description, virtualMachine: nil)
+                } catch {
+                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.localizedDescription, virtualMachine: nil)
+                }
+            }
+            return performSegue
         }
         return true
     }

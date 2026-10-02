@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -216,6 +217,25 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Snapshots" id="ixG-sO-ySc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Snapshots" id="Led-Ho-InN">
+                                                <items>
+                                                    <menuItem title="Neuen erstellen" keyEquivalent="S" id="CRX-9n-Wma">
+                                                        <connections>
+                                                            <action selector="createNewSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="9Nc-bn-yGd"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Anzeigen oder wiederherstellen..." id="KAq-ax-Oah">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="ilw-IA-7Jo"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="V3V-kT-wur"/>
                                         <menuItem title="Exportieren als" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Exportieren als" id="3Ko-t4-AGP">
@@ -324,6 +344,9 @@
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
+                        <outlet property="snapshotCreateMenuItem" destination="CRX-9n-Wma" id="qpD-gb-6vS"/>
+                        <outlet property="snapshotsMenuItem" destination="ixG-sO-ySc" id="P9e-T6-5gC"/>
+                        <outlet property="snapshotsViewRestoreMenuItem" destination="KAq-ax-Oah" id="sVU-Uk-4B8"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="Wwm-kT-UN6"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="CMy-19-2tg"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
@@ -336,7 +359,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2830" y="-1037"/>
+            <point key="canvasLocation" x="-3148" y="-1365"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
