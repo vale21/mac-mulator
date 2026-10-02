@@ -30,6 +30,13 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         self.vmRunner = vmRunner
     }
 
+    override func viewWillAppear() {
+        newSnapshotButton.title = NSLocalizedString("EditVMViewControllerSnapshots.createNewSnapshot", comment: "")
+        restoreButton.title = NSLocalizedString("EditVMViewControllerSnapshots.restore", comment: "")
+        deleteButton.title = NSLocalizedString("EditVMViewControllerSnapshots.delete", comment: "")
+        snapshotsTableView.tableColumns[0].headerCell.title = NSLocalizedString("EditVMViewControllerSnapshots.availableSnapshots", comment: "")
+    }
+
     @IBAction func createNewSnapshot(_: Any) {
         do {
             try vmRunner?.createVMSnapshot { snapshot in

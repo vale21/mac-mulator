@@ -130,13 +130,13 @@ class VirtualMachineViewController: NSViewController {
                 } else {
                     let tempRunner = Utils.createDummyRunnerForStoppedVM(vm)
                     _ = try tempRunner.createVMSnapshot { _ in
-                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "VM Snapshot created successfully!", virtualMachine: vm)
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("VirtualMachineViewController.snapshotCreatedSuccessfully", comment: ""), virtualMachine: vm)
                     }
                 }
             } catch let error as ValidationError {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.description, virtualMachine: vm)
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.couldNotCreateSnapshot", comment: ""), error.description), virtualMachine: vm)
             } catch {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: vm)
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.couldNotCreateSnapshot", comment: ""), error.localizedDescription), virtualMachine: vm)
             }
         }
     }

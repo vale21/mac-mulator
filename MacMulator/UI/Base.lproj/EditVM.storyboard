@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
@@ -1834,7 +1834,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TFC-on-HFs">
-                                <rect key="frame" x="30" y="268" width="250" height="16"/>
+                                <rect key="frame" x="30" y="264" width="250" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Qemu Display to use:" id="rw5-Ta-Kng">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -2196,7 +2196,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
         <image name="cpu" catalog="system" width="16" height="15"/>
         <image name="display" catalog="system" width="19" height="15"/>
         <image name="folder.fill" catalog="system" width="18" height="14"/>
-        <image name="gear" catalog="system" width="17" height="17"/>
+        <image name="gear" catalog="system" width="17" height="16"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="network" catalog="system" width="15" height="15"/>
         <image name="plus.app.fill" catalog="system" width="15" height="14"/>

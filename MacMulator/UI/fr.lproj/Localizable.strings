@@ -89,7 +89,11 @@
 "EditVMViewControllerSnapshots.liveSnapshot" = "Instantané à chaud";
 "EditVMViewControllerSnapshots.atRestSnapshot" = "Instantané à froid";
 "EditVMViewControllerSnapshots.deletionConfirmMessage" = "Voulez-vous vraiment supprimer cet instantané ? Cette opération est irréversible.";
-"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Veuillez sélectionner un instantané dans le tableau de gauche";
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Sélectionnez un instantané dans le tableau de gauche";
+"EditVMViewControllerSnapshots.createNewSnapshot" = "Créer un nouvel instantané";
+"EditVMViewControllerSnapshots.restore" = "Restaurer";
+"EditVMViewControllerSnapshots.delete" = "Supprimer";
+"EditVMViewControllerSnapshots.availableSnapshots" = "Instantanés disponibles";
 "EditVMViewControllerVideo.videoDescriptionText" = "La machine virtuelle est créée avec un adaptateur vidéo par défaut, mais différents adaptateurs peuvent fonctionner selon le matériel émulé et le système d’exploitation invité. Vous pouvez changer ici l’adaptateur vidéo à utiliser :";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Adaptateur vidéo à connecter à la VM :";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Display QEMU à utiliser :";
@@ -175,6 +179,7 @@
 "Utils.sudoNotAllowed" = "Commande Qemu incorrecte fournie : L’utilisation de la commande sudo n’est pas autorisée.";
 "Utils.workingPathError" = "Commande Qemu incorrecte fournie : L’exécutable fourni ne s’exécute pas dans le chemin attendu.\n\nChemin attendu : \"%@\".\n\nCommande fournie : %@";
 "Utils.executableError" = "Commande Qemu incorrecte fournie : L’exécutable fourni n’est pas un exécutable Qemu valide.\n\nExécutables autorisés : %@.\n\nCommande fournie : %@";
+"Utils.snapshotError" = "Les instantanés à chaud ne sont pas pris en charge pour les VM %@";
 "Utils.genericError" = "L’exécutable Qemu fourni est défectueux ou non pris en charge";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Annuler";
@@ -222,7 +227,9 @@
 "VirtualMachineListViewController.pause" = "Mettre en pause";
 "VirtualMachineListViewController.showInFinder" = "Afficher dans le Finder";
 "VirtualMachineListViewController.clone" = "Cloner";
+"VirtualMachineListViewController.createSnapshot" = "Créer un instantané";
 "VirtualMachineListViewController.runningVM" = "La VM que vous essayez de supprimer est en cours d’exécution. Voulez-vous continuer ?";
+"VirtualMachineRunner.snapshotTaken" = "Cet instantané a été pris le %@";
 "VirtualMachineViewController.forciblyClosing" = "Attention.\nCette opération arrêtera brutalement la VM en cours d’exécution.\nIl est fortement recommandé d’éteindre la VM proprement via le système invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "VirtualMachineViewController.startVM" = "Démarrer cette VM";
 "VirtualMachineViewController.pauseNotSupported" = "La mise en pause est uniquement prise en charge pour les invités macOS sur Apple Silicon";
@@ -244,3 +251,5 @@
 "VirtualMachineViewController.vmMemory" = "Mémoire :";
 "VirtualMachineViewController.vmHardDrive" = "Disque dur :";
 "VirtualMachineViewController.editVMButton" = "Configurer cette VM";
+"VirtualMachineViewController.snapshotCreatedSuccessfully" = "Instantané de VM créé avec succès !";
+"VirtualMachineViewController.couldNotCreateSnapshot" = "Impossible de créer l’instantané de la VM : %@";

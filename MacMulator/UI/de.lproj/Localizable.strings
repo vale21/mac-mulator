@@ -88,7 +88,11 @@
 "EditVMViewControllerSnapshots.liveSnapshot" = "Snapshot im laufenden Betrieb";
 "EditVMViewControllerSnapshots.atRestSnapshot" = "Snapshot bei ausgeschalteter VM";
 "EditVMViewControllerSnapshots.deletionConfirmMessage" = "Möchten Sie diesen Snapshot wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.";
-"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Bitte wählen Sie einen Snapshot aus der Tabelle auf der linken Seite aus.";
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Snapshot aus der linken Tabelle auswählen";
+"EditVMViewControllerSnapshots.createNewSnapshot" = "Neuen Snapshot erstellen";
+"EditVMViewControllerSnapshots.restore" = "Wiederherstellen";
+"EditVMViewControllerSnapshots.delete" = "Löschen";
+"EditVMViewControllerSnapshots.availableSnapshots" = "Verfügbare Snapshots";
 "EditVMViewControllerVideo.videoDescriptionText" = "Die VM wird mit einem Standard-Video-Adapter erstellt, aber verschiedene Adapter können in deiner VM funktionieren, abhängig von der emulierten Hardware und dem Gastbetriebssystem. Hier kannst du den zu verwendenden Video-Adapter ändern:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Anzuschließender VM-Videoadapter:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Zu verwendendes QEMU-Display:";
@@ -174,6 +178,7 @@
 "Utils.sudoNotAllowed" = "Falscher Qemu-Befehl angegeben: Die Verwendung von sudo ist nicht erlaubt.";
 "Utils.workingPathError" = "Falscher Qemu-Befehl angegeben: Das angegebene Programm läuft nicht im richtigen Pfad. \n\nErwarteter Pfad: \"%@\".\n\nAngegebener Befehl: %@";
 "Utils.executableError" = "Falscher Qemu-Befehl angegeben: Das angegebene Programm ist kein Qemu-Programm. \n\nZulässige Programme sind: %@.\n\nAngegebener Befehl: %@";
+"Utils.snapshotError" = "Snapshots im laufenden Betrieb werden für %@-VMs nicht unterstützt";
 "Utils.genericError" = "Das angegebene Qemu-Programm ist beschädigt oder nicht unterstützt";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Abbrechen";
@@ -221,7 +226,9 @@
 "VirtualMachineListViewController.pause" = "Pause";
 "VirtualMachineListViewController.showInFinder" = "Im Finder anzeigen";
 "VirtualMachineListViewController.clone" = "Klonen";
+"VirtualMachineListViewController.createSnapshot" = "Snapshot erstellen";
 "VirtualMachineListViewController.runningVM" = "Die VM, die du entfernen möchtest, wird gerade ausgeführt. Möchtest du fortfahren?";
+"VirtualMachineRunner.snapshotTaken" = "Dieser Snapshot wurde am %@ erstellt";
 "VirtualMachineViewController.forciblyClosing" = "Achtung.\nDieser Vorgang wird die laufende VM zwangsweise beenden.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "VirtualMachineViewController.startVM" = "Diese VM starten";
 "VirtualMachineViewController.pauseNotSupported" = "Die Pausenfunktion wird nur für macOS-Gäste auf Apple Silicon unterstützt";
@@ -243,3 +250,5 @@
 "VirtualMachineViewController.vmMemory" = "Arbeitsspeicher:";
 "VirtualMachineViewController.vmHardDrive" = "Festplattengröße:";
 "VirtualMachineViewController.editVMButton" = "Diese VM konfigurieren";
+"VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM-Snapshot erfolgreich erstellt!";
+"VirtualMachineViewController.couldNotCreateSnapshot" = "VM-Snapshot konnte nicht erstellt werden: %@";

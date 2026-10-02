@@ -74,7 +74,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Create new snapshot", action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType])
         table.allowsMultipleSelection = false

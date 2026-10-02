@@ -24,7 +24,7 @@ enum ValidationError: Error, CustomStringConvertible {
         case let .executableError(allowed, command):
             String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
         case let .snapshotError(vmType):
-            "Live snapshots are not supported in " + vmType + " VMs"
+            String(format: NSLocalizedString("Utils.snapshotError", comment: ""), vmType)
         case .genericError:
             NSLocalizedString("Utils.genericError", comment: "")
         }

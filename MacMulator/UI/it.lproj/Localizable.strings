@@ -89,7 +89,11 @@
 "EditVMViewControllerSnapshots.liveSnapshot" = "Istantananea live";
 "EditVMViewControllerSnapshots.atRestSnapshot" = "Istantanea da fermo";
 "EditVMViewControllerSnapshots.deletionConfirmMessage" = "Sei sicuro di voler eliminare questa istantanea? Questa operazione non può essere annullata.";
-"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Seleziona un'istantanea dalla tabella a sinistra"
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Seleziona un'istantanea dalla tabella a sinistra";
+"EditVMViewControllerSnapshots.createNewSnapshot" = "Crea nuova istantanea";
+"EditVMViewControllerSnapshots.restore" = "Ripristina";
+"EditVMViewControllerSnapshots.delete" = "Cancella";
+"EditVMViewControllerSnapshots.availableSnapshots" = "Istantanee disponibili";
 "EditVMViewControllerVideo.videoDescriptionText" = "La VM è creata con una scheda video default, ma ci sono varie schede che possono funzionare nella tua VM, a seconda dell'hardware emulato e del sistema operativo installato sulla VM. Qui puoi selezionare la scheda video da usare:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Scheda video da collegare alla VM:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Display Qemu da usare:";
@@ -130,8 +134,8 @@
 "NewVMController.fullConfiguration" = "Rivedi la configurazione della VM dopo la creazione";
 "NewVMController.createButton" = "Crea";
 "NewVMController.title" = "Nuova Macchina Virtuale";
-"ManageSnapshotViewController.deletingSnapshot" = "Elimino l'istantanea VM..."
-"ManageSnapshotViewController.restoringSnapshot" = "Ripristino l'istantanea VM..."
+"ManageSnapshotViewController.deletingSnapshot" = "Elimino l'istantanea VM...";
+"ManageSnapshotViewController.restoringSnapshot" = "Ripristino l'istantanea VM...";
 "ManageSnapshotViewController.couldNotDeleteSnapshot" = "Non è stato possibile eliminare l'istantanea.";
 "ManageSnapshotViewController.couldNotRestoreSnapshot" = "Non è stato possibile ripristinare l'istantanea: %@";
 "PreferencesViewController.livePreviewLabel" = "Mostra la preview live della VM in esecuzione (Sperimentale)";
@@ -175,6 +179,7 @@
 "Utils.sudoNotAllowed" = "Il comando Qemu fornito è errato: L'uso del comando sudo non è consentito.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";
 "Utils.executableError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non è un eseguibile Qemu. \n\nGli eseguibili consentiti sono: %@.\n\nIl comando fornito è: %@";
+"Utils.snapshotError" = "Le istantanee live non sono supportate dalle VM %@";
 "Utils.genericError" = "L'eseguibile Qemu fornito è corrotto o non supportato.";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Annulla";
@@ -222,7 +227,9 @@
 "VirtualMachineListViewController.pause" = "Pausa";
 "VirtualMachineListViewController.showInFinder" = "Mostra nel Finder";
 "VirtualMachineListViewController.clone" = "Crea clone";
+"VirtualMachineListViewController.createSnapshot" = "Crea nuova istantanea";
 "VirtualMachineListViewController.runningVM" = "La VM che stai cercando di eliminare è in esecuzione. Vuoi continuare?";
+"VirtualMachineRunner.snapshotTaken" = "Questa istantanea è stata presa il %@";
 "VirtualMachineViewController.forciblyClosing" = "Attenzione.\nQuesta operazione causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
 "VirtualMachineViewController.startVM" = "Avvia questa VM";
 "VirtualMachineViewController.pauseNotSupported" = "La pausa è supportata solo da VM Apple Silicon con guest macOS";
@@ -244,3 +251,5 @@
 "VirtualMachineViewController.vmMemory" = "Memoria:";
 "VirtualMachineViewController.vmHardDrive" = "Disco:";
 "VirtualMachineViewController.editVMButton" = "Configura questa VM";
+"VirtualMachineViewController.snapshotCreatedSuccessfully" = "Istantanea VM creata con successo!";
+"VirtualMachineViewController.couldNotCreateSnapshot" = "Non è stato possibile creare l'istantanea: %@";

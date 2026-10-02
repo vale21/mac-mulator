@@ -89,7 +89,11 @@
 "EditVMViewControllerSnapshots.liveSnapshot" = "Live snapshot";
 "EditVMViewControllerSnapshots.atRestSnapshot" = "At rest snapshot";
 "EditVMViewControllerSnapshots.deletionConfirmMessage" = "Are you sure you want to delete this snapshot? This operation cannot be undone.";
-"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Please select a snapshot from the table on the left"
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Please select a snapshot from the table on the left";
+"EditVMViewControllerSnapshots.createNewSnapshot" = "Create new snapshot";
+"EditVMViewControllerSnapshots.restore" = "Restore";
+"EditVMViewControllerSnapshots.delete" = "Delete";
+"EditVMViewControllerSnapshots.availableSnapshots" = "Available Snapshots";
 "EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Video adapter to attach to the VM:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Qemu display to use:";
@@ -130,9 +134,9 @@
 "NewVMController.fullConfiguration" = "Review configuration of the new VM after the creation";
 "NewVMController.createButton" = "Create";
 "NewVMController.title" = "New Virtual machine";
-"ManageSnapshotViewController.deletingSnapshot" = "Deleting VM snapshot..."
-"ManageSnapshotViewController.restoringSnapshot" = "Restoring VM snapshot..."
-"ManageSnapshotViewController.couldNotDeleteSnapshot" = "Could not delete snapshot"
+"ManageSnapshotViewController.deletingSnapshot" = "Deleting VM snapshot...";
+"ManageSnapshotViewController.restoringSnapshot" = "Restoring VM snapshot...";
+"ManageSnapshotViewController.couldNotDeleteSnapshot" = "Could not delete snapshot";
 "ManageSnapshotViewController.couldNotRestoreSnapshot" = "Could not restore VM snapshot: %@";
 "PreferencesViewController.livePreviewLabel" = "Show Live Preview of running VM (Experimental)";
 "PreferencesViewController.updateLivePreview" = "Update Live Preview every: (%@ seconds)";
@@ -175,6 +179,7 @@
 "Utils.sudoNotAllowed" = "Incorrect Qemu command provided: The usage of sudo command is not allowed.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";
 "Utils.executableError" = "Incorrect Qemu command provided: The provided executable Is not a Qemu Executable. \n\nAllowed executables are: %@.\n\nProvided command was: %@";
+"Utils.snapshotError" = "Live snapshots are not supported in %@ VMs";
 "Utils.genericError" = "The provided Qemu executable is broken or unsupported";
 "Utils.ok" = "OK";
 "Utils.calcel" = "Cancel";
@@ -222,7 +227,9 @@
 "VirtualMachineListViewController.pause" = "Pause";
 "VirtualMachineListViewController.showInFinder" = "Show in Finder";
 "VirtualMachineListViewController.clone" = "Clone";
+"VirtualMachineListViewController.createSnapshot" = "Create new snapshot";
 "VirtualMachineListViewController.runningVM" = "The VM you are trying to remove is running. Do you want to continue?";
+"VirtualMachineRunner.snapshotTaken" = "This snapsot was taken on %@";
 "VirtualMachineViewController.forciblyClosing" = "Attention.\nThis operation will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shuit down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "VirtualMachineViewController.startVM" = "Start this VM";
 "VirtualMachineViewController.pauseNotSupported" = "Pause feature is supported only for Apple Silicon macOS Guests";
@@ -244,3 +251,5 @@
 "VirtualMachineViewController.vmMemory" = "Memory:";
 "VirtualMachineViewController.vmHardDrive" = "Hard drive size:";
 "VirtualMachineViewController.editVMButton" = "Configure this VM";
+"VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM Snapshot created successfully!";
+"VirtualMachineViewController.couldNotCreateSnapshot" = "Could not create VM snapshot: %@";

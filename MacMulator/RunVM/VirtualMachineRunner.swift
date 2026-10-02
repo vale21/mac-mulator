@@ -142,7 +142,7 @@ extension VirtualMachineRunner {
 
         let snapshot = VirtualMachineSnapshot(timestamp: currentMillis,
                                               name: "",
-                                              description: "This snapsot was taken on " + Date().formatted(),
+                                              description: String(format: NSLocalizedString("VirtualMachineRunner.snapshotTaken", comment: ""), Date().formatted()),
                                               driveSnapshotPaths: drivePaths,
                                               memorySnapshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path : nil,
                                               screenshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path : nil,
