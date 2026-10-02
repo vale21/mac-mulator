@@ -35,6 +35,7 @@
 "EditVMViewController.general" = "Allgemein";
 "EditVMViewController.hardware" = "Hardware";
 "EditVMViewController.network" = "Netzwerk";
+"EditVMViewController.snapshots" = "Snapshots";
 "EditVMViewController.video" = "Video";
 "EditVMViewController.advanced" = "Erweitert";
 "EditVMViewController.windowTitle" = "%@-VM konfigurieren";
@@ -78,6 +79,16 @@
 "EditVMViewControllerNetworkVF.phisicalDevice" = "Physisches Gerät";
 "EditVMViewControllerNetworkVF.descriptionNat" = "NAT ist der einfachste Netzwerkmodus für Ihre virtuelle Maschine. In diesem Fall fungiert Ihr Mac als Netzwerkrouter für die VM und stellt ihr eine Internetverbindung zur Verfügung. Andere Geräte im Netzwerk Ihres Macs sind für die VM nicht sichtbar und umgekehrt. Ihr Mac erscheint der VM als Netzwerkgerät. Dies ist der sicherste Ansatz und die empfohlene Option.";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "Im Bridged network verwendet die VM eines der physischen Netzwerkgeräte, die mit Ihrem Mac verbunden sind, um auf das Netzwerk zuzugreifen. Die VM verhält sich genau wie ein Computer, der mit dem Netzwerk des Macs verbunden ist, und kann andere Netzwerkgeräte sehen und von ihnen gesehen werden. Die Bandbreite wird zwischen der VM und Ihrem Mac geteilt.";
+"EditVMViewControllerSnapshots.snapshotCreatedSuccessfully" = "VM-Snapshot erfolgreich erstellt!";
+"EditVMViewControllerSnapshots.couldNotCreateSnapshot" = "VM-Snapshot konnte nicht erstellt werden: %@";
+"EditVMViewControllerSnapshots.snapshotRestoredSuccessfully" = "VM-Snapshot erfolgreich wiederhergestellt!";
+"EditVMViewControllerSnapshots.couldNotRestoreSnapshot" = "VM-Snapshot konnte nicht wiederhergestellt werden: %@";
+"EditVMViewControllerSnapshots.live" = "Im laufenden Betrieb";
+"EditVMViewControllerSnapshots.atRest" = "Bei ausgeschalteter VM";
+"EditVMViewControllerSnapshots.liveSnapshot" = "Snapshot im laufenden Betrieb";
+"EditVMViewControllerSnapshots.atRestSnapshot" = "Snapshot bei ausgeschalteter VM";
+"EditVMViewControllerSnapshots.deletionConfirmMessage" = "Möchten Sie diesen Snapshot wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.";
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Bitte wählen Sie einen Snapshot aus der Tabelle auf der linken Seite aus.";
 "EditVMViewControllerVideo.videoDescriptionText" = "Die VM wird mit einem Standard-Video-Adapter erstellt, aber verschiedene Adapter können in deiner VM funktionieren, abhängig von der emulierten Hardware und dem Gastbetriebssystem. Hier kannst du den zu verwendenden Video-Adapter ändern:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Anzuschließender VM-Videoadapter:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Zu verwendendes QEMU-Display:";
@@ -118,6 +129,10 @@
 "NewVMController.fullConfiguration" = "Konfiguration der neuen VM nach der Erstellung überprüfen";
 "NewVMController.createButton" = "Erstellen";
 "NewVMController.title" = "Neue Virtuelle Maschine";
+"ManageSnapshotViewController.deletingSnapshot" = "VM-Snapshot wird gelöscht...";
+"ManageSnapshotViewController.restoringSnapshot" = "VM-Snapshot wird wiederhergestellt...";
+"ManageSnapshotViewController.couldNotDeleteSnapshot" = "Snapshot konnte nicht gelöscht werden";
+"ManageSnapshotViewController.couldNotRestoreSnapshot" = "VM-Snapshot konnte nicht wiederhergestellt werden: %@";
 "PreferencesViewController.livePreviewLabel" = "Live-Vorschau laufender VMs anzeigen (experimentell)";
 "PreferencesViewController.updateLivePreview" = "Live-Vorschau aktualisieren alle: (%@ Sekunden)";
 "PreferencesViewController.pathDoesNotExists" = "Achtung. Ordner %@ existiert nicht.";

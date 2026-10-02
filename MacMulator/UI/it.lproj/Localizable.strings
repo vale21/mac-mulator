@@ -36,6 +36,7 @@
 "EditVMViewController.general" = "Generali";
 "EditVMViewController.hardware" = "Hardware";
 "EditVMViewController.network" = "Network";
+"EditVMViewController.snapshots" = "Istantanee";
 "EditVMViewController.video" = "Video";
 "EditVMViewController.advanced" = "Avanzate";
 "EditVMViewController.windowTitle" = "Configura la VM %@";
@@ -79,6 +80,16 @@
 "EditVMViewControllerNetworkVF.phisicalDevice" = "Dispositivo";
 "EditVMViewControllerNetworkVF.descriptionNat" = "La NAT è la rete più semplice per la tua VM. In questo caso il tuo Mac agisce da router di rete per la VM, offrendole connettività a internet. Gli altri dispositivi sulla rete del tuo Mac non saranno visibili alla VM, e viceversa. Il tuo Mac apparirà alla VM come un dispositivo di rete. Questo è l'approccio più sicuro ed è quello consigliato.";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "Nella rete bridged, consenti alla VM di usare uno dei dispositivi di rete fisici collegati al tuo Mac per collegarsi al network. La VM si comporterà esattamente come un dispositivo collegato alla rete del Mac, sarà visibile e potrà vedere gli altri dispositivi di rete. La banda è condivisa tra la VM e il tuo Mac.";
+"EditVMViewControllerSnapshots.snapshotCreatedSuccessfully" = "Istantanea VM creata con successo!";
+"EditVMViewControllerSnapshots.couldNotCreateSnapshot" = "Non è stato possibile creare l'istantanea: %@";
+"EditVMViewControllerSnapshots.snapshotRestoredSuccessfully" = "Istantanea VM ripristinata con successo!";
+"EditVMViewControllerSnapshots.couldNotRestoreSnapshot" = "Non è stato possibile ripristinare l'istantanea: %@";
+"EditVMViewControllerSnapshots.live" = "Live";
+"EditVMViewControllerSnapshots.atRest" = "Da fermo";
+"EditVMViewControllerSnapshots.liveSnapshot" = "Istantananea live";
+"EditVMViewControllerSnapshots.atRestSnapshot" = "Istantanea da fermo";
+"EditVMViewControllerSnapshots.deletionConfirmMessage" = "Sei sicuro di voler eliminare questa istantanea? Questa operazione non può essere annullata.";
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Seleziona un'istantanea dalla tabella a sinistra"
 "EditVMViewControllerVideo.videoDescriptionText" = "La VM è creata con una scheda video default, ma ci sono varie schede che possono funzionare nella tua VM, a seconda dell'hardware emulato e del sistema operativo installato sulla VM. Qui puoi selezionare la scheda video da usare:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Scheda video da collegare alla VM:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Display Qemu da usare:";
@@ -119,6 +130,10 @@
 "NewVMController.fullConfiguration" = "Rivedi la configurazione della VM dopo la creazione";
 "NewVMController.createButton" = "Crea";
 "NewVMController.title" = "Nuova Macchina Virtuale";
+"ManageSnapshotViewController.deletingSnapshot" = "Elimino l'istantanea VM..."
+"ManageSnapshotViewController.restoringSnapshot" = "Ripristino l'istantanea VM..."
+"ManageSnapshotViewController.couldNotDeleteSnapshot" = "Non è stato possibile eliminare l'istantanea.";
+"ManageSnapshotViewController.couldNotRestoreSnapshot" = "Non è stato possibile ripristinare l'istantanea: %@";
 "PreferencesViewController.livePreviewLabel" = "Mostra la preview live della VM in esecuzione (Sperimentale)";
 "PreferencesViewController.updateLivePreview" = "Aggiorna la preview live ogni: (%@ secondi)";
 "PreferencesViewController.pathDoesNotExists" = "Attenzione. La cartella %@ non esiste.";

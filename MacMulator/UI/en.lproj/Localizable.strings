@@ -36,6 +36,7 @@
 "EditVMViewController.general" = "General";
 "EditVMViewController.hardware" = "Hardware";
 "EditVMViewController.network" = "Network";
+"EditVMViewController.snapshots" = "Snapshots";
 "EditVMViewController.video" = "Video";
 "EditVMViewController.advanced" = "Advanced";
 "EditVMViewController.windowTitle" = "Configure %@ VM";
@@ -79,6 +80,16 @@
 "EditVMViewControllerNetworkVF.phisicalDevice" = "Phisical device";
 "EditVMViewControllerNetworkVF.descriptionNat" = "A NAT is the simplest network mode for your VM. In this case you Mac acts as a network router for the VM, offering internet connectivity to it. The other devices on yor Mac network will not be visible by the VM, and viceversa. Your Mac will appear to the VM as a network device. This is the safest apprach and the suggested one.";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "In Bridge network you let the VM use one of the physical network devices connected to your Mac to reach the network. The VM will behave exactly as a computer connected to the Mac network, and it will both see and be visible by the other network devices. The bandwdth is shared between th VM and your Mac.";
+"EditVMViewControllerSnapshots.snapshotCreatedSuccessfully" = "VM Snapshot created successfully!";
+"EditVMViewControllerSnapshots.couldNotCreateSnapshot" = "Could not create VM snapshot: %@";
+"EditVMViewControllerSnapshots.snapshotRestoredSuccessfully" = "VM Snapshot restored successfully!";
+"EditVMViewControllerSnapshots.couldNotRestoreSnapshot" = "Could not restore VM snapshot: %@";
+"EditVMViewControllerSnapshots.live" = "Live";
+"EditVMViewControllerSnapshots.atRest" = "At rest";
+"EditVMViewControllerSnapshots.liveSnapshot" = "Live snapshot";
+"EditVMViewControllerSnapshots.atRestSnapshot" = "At rest snapshot";
+"EditVMViewControllerSnapshots.deletionConfirmMessage" = "Are you sure you want to delete this snapshot? This operation cannot be undone.";
+"EditVMViewControllerSnapshots.selectSnapshotmessage" = "Please select a snapshot from the table on the left"
 "EditVMViewControllerVideo.videoDescriptionText" = "The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:";
 "EditVMViewControllerVideo.videoAdapterLabel" = "Video adapter to attach to the VM:";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Qemu display to use:";
@@ -119,6 +130,10 @@
 "NewVMController.fullConfiguration" = "Review configuration of the new VM after the creation";
 "NewVMController.createButton" = "Create";
 "NewVMController.title" = "New Virtual machine";
+"ManageSnapshotViewController.deletingSnapshot" = "Deleting VM snapshot..."
+"ManageSnapshotViewController.restoringSnapshot" = "Restoring VM snapshot..."
+"ManageSnapshotViewController.couldNotDeleteSnapshot" = "Could not delete snapshot"
+"ManageSnapshotViewController.couldNotRestoreSnapshot" = "Could not restore VM snapshot: %@";
 "PreferencesViewController.livePreviewLabel" = "Show Live Preview of running VM (Experimental)";
 "PreferencesViewController.updateLivePreview" = "Update Live Preview every: (%@ seconds)";
 "PreferencesViewController.pathDoesNotExists" = "Attention. Folder %@ does not exist.";

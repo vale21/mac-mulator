@@ -34,9 +34,9 @@ class ManageSnapshotViewController: NSViewController {
 
     override func viewWillAppear() {
         if operation == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-            progressLabel.stringValue = "Deleting VM snapshot..."
+            progressLabel.stringValue = NSLocalizedString("ManageSnapshotViewController.deletingSnapshot", comment: "")
         } else if operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
-            progressLabel.stringValue = "Restoring VM snapshot..."
+            progressLabel.stringValue = NSLocalizedString("ManageSnapshotViewController.restoringSnapshot", comment: "")
         }
     }
 
@@ -52,17 +52,17 @@ class ManageSnapshotViewController: NSViewController {
                     try vmRunner?.deleteVMSnapshot(snapshot: snapshot)
                 } catch {
                     errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not delete snapshot", virtualMachine: vmRunner?.getManagedVM())
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: NSLocalizedString("ManageSnapshotViewController.couldNotDeleteSnapshot", comment: ""), virtualMachine: vmRunner?.getManagedVM())
                 }
             } else if operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
                 do {
                     try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
                 } catch let error as ValidationError {
                     errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.description, virtualMachine: vmRunner?.getManagedVM())
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: vmRunner?.getManagedVM())
                 } catch {
                     errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.localizedDescription, virtualMachine: vmRunner?.getManagedVM())
+                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: vmRunner?.getManagedVM())
                 }
             }
         }

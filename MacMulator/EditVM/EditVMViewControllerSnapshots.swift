@@ -35,14 +35,14 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             try vmRunner?.createVMSnapshot { snapshot in
                 self.currentSnapshot = snapshot
                 if !(snapshot?.running ?? false) {
-                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: "VM Snapshot created successfully!", virtualMachine: self.virtualMachine)
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("EditVMViewControllerSnapshots.snapshotCreatedSuccessfully", comment: ""), virtualMachine: self.virtualMachine)
                 }
                 self.updateView()
             }
         } catch let error as ValidationError {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.description, virtualMachine: virtualMachine)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotCreateSnapshot", comment: ""), error.description), virtualMachine: virtualMachine)
         } catch {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not create VM snapshot: " + error.localizedDescription, virtualMachine: virtualMachine)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotCreateSnapshot", comment: ""), error.localizedDescription), virtualMachine: virtualMachine)
         }
     }
 
@@ -54,7 +54,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
     func snapshotRestored(showAlert: Bool) {
         updateView()
         if showAlert {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Snapshot restored successfully!", virtualMachine: virtualMachine)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("EditVMViewControllerSnapshots.snapshotRestoredSuccessfully", comment: ""), virtualMachine: virtualMachine)
         }
     }
 
@@ -65,7 +65,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             if let snapshots = virtualMachine.snapshots {
                 let snapshot = snapshots[row]
                 if let cell = cell as? NSTableCellView {
-                    cell.textField?.stringValue = formatTimestamp(snapshot) + " - " + (snapshot.running ? "Live" : "At rest")
+                    cell.textField?.stringValue = formatTimestamp(snapshot) + " - " + (snapshot.running ? NSLocalizedString("EditVMViewControllerSnapshots.live", comment: "") : NSLocalizedString("EditVMViewControllerSnapshots.atRest", comment: ""))
                 }
             }
         }
@@ -97,7 +97,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
 
     override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
         if identifier == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-            let message = "Are you sure you want to delete this snapshot? This operation cannot be undone."
+            let message = NSLocalizedString("EditVMViewControllerSnapshots.deletionConfirmMessage", comment: "")
             let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, virtualMachine: virtualMachine)
             return response.rawValue == Utils.ALERT_RESP_OK
         } else if identifier == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
@@ -107,9 +107,9 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
                     try vmRunner?.restoreVMSnapshot(snapshot: currentSnapshot, nil)
                     snapshotRestored(showAlert: false)
                 } catch let error as ValidationError {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.description, virtualMachine: nil)
+                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: nil)
                 } catch {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: "Could not restore VM snapshot: " + error.localizedDescription, virtualMachine: nil)
+                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: nil)
                 }
             }
             return performSegue
@@ -144,7 +144,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             restoreButton.isHidden = false
             deleteButton.isHidden = false
 
-            snapshotTitleLabel.stringValue = (currentSnapshot.running ? "Live " : "At rest ") + "snapshot - " + currentSnapshot.name + formatTimestamp(currentSnapshot)
+            snapshotTitleLabel.stringValue = (currentSnapshot.running ? NSLocalizedString("EditVMViewControllerSnapshots.liveSnapshot", comment: "") : NSLocalizedString("EditVMViewControllerSnapshots.atRestSnapshot", comment: "")) + " - " + currentSnapshot.name + formatTimestamp(currentSnapshot)
             if let screenshotPath = currentSnapshot.screenshotPath {
                 snapshotScreenshotView.image = NSImage(contentsOf: NSURL.fileURL(withPath: screenshotPath))
             } else {
@@ -152,7 +152,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             }
             snapshotDescriptionTextView.string = currentSnapshot.description
         } else {
-            snapshotTitleLabel.stringValue = "Please select a snapshot from the table on the left"
+            snapshotTitleLabel.stringValue = NSLocalizedString("EditVMViewControllerSnapshots.selectSnapshotmessage", comment: "")
             snapshotScreenshotView.isHidden = true
             snapshotDescriptionScrollView.isHidden = true
             restoreButton.isHidden = true

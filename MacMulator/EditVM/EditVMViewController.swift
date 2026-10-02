@@ -25,7 +25,7 @@ class EditVMViewController: NSTabViewController {
         tabViewItems[2].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[3].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[4].label = NSLocalizedString("EditVMViewController.video", comment: "")
-        tabViewItems[5].label = "Snapshots"
+        tabViewItems[5].label = NSLocalizedString("EditVMViewController.snapshots", comment: "")
         tabViewItems[6].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
 
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
