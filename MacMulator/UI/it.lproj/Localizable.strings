@@ -214,11 +214,16 @@
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Tempo stimato rimanente: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.pausing" = "Metto in pausa la VM e salvo lo stato...";
 "VirtualizationFrameworkPauseResumeVMViewController.resuming" = "Recupero la VM dallo stato salvato...";
+"VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Creo l'istantanea VM...";
+"VirtualizationFrameworkPauseResumeVMViewController.restoringSnapshot" = "Ripristino la VM dall'istantanea...";
+"VirtualizationFrameworkPauseResumeVMViewController.operating" = "Eseguo...";
 "VirtualMachine.sshPortMapping" = "Mappatura SSH";
 "VirtualMachine.infoPlistReadError" = "Errore nella lettura di Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Errore nella scrittura di Info.plist: %@";
 "VirtualMachineContainerViewController.vmExecutionError" = "L'esecuzione della VM è fallita con errore: %@";
 "VirtualMachineContainerViewController.forciblyClosing" = "Chiudere questa finestra causerà la chiusura forzata della VM in esecuzione.\nSuggeriamo di terminarla correttamente, utilizzando la procedura di spegnimento del sistema operativo, o potresti perdere i dati non salvati.\n\nVuoi continuare?";
+"VirtualMachineContainerViewController.snapshotCreated" = "Istantanea creata con successo.";
+"VirtualMachineContainerViewController.snapshotRestored" = "VM ripristinata dall'istantanea con successo.";
 "VirtualMachineListViewController.delete" = "Elimina";
 "VirtualMachineListViewController.edit" = "Configura";
 "VirtualMachineListViewController.start" = "Avvia";

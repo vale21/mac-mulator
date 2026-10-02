@@ -46,27 +46,37 @@ class ManageSnapshotViewController: NSViewController {
 
         progressBar.startAnimation(self)
 
-        if let snapshot {
-            if operation == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
-                do {
-                    try vmRunner?.deleteVMSnapshot(snapshot: snapshot)
-                } catch {
-                    errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: NSLocalizedString("ManageSnapshotViewController.couldNotDeleteSnapshot", comment: ""), virtualMachine: vmRunner?.getManagedVM())
-                }
-            } else if operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
-                do {
-                    try vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
-                } catch let error as ValidationError {
-                    errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: vmRunner?.getManagedVM())
-                } catch {
-                    errorFound = true
-                    Utils.showAlert(window: (parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: vmRunner?.getManagedVM())
+        // Run the snapshot operation off the main thread so the progress UI stays responsive.
+        // Alerts are UI work, so they are dispatched back to the main queue.
+        DispatchQueue.global().async {
+            if let snapshot = self.snapshot {
+                if self.operation == MacMulatorConstants.DELETE_SNAPSHOT_SEGUE {
+                    do {
+                        try self.vmRunner?.deleteVMSnapshot(snapshot: snapshot)
+                    } catch {
+                        errorFound = true
+                        DispatchQueue.main.async {
+                            Utils.showAlert(window: (self.parentController?.view.window)!, style: NSAlert.Style.critical, message: NSLocalizedString("ManageSnapshotViewController.couldNotDeleteSnapshot", comment: ""), virtualMachine: self.vmRunner?.getManagedVM())
+                        }
+                    }
+                } else if self.operation == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
+                    do {
+                        try self.vmRunner?.restoreVMSnapshot(snapshot: snapshot, nil)
+                    } catch let error as ValidationError {
+                        errorFound = true
+                        DispatchQueue.main.async {
+                            Utils.showAlert(window: (self.parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: self.vmRunner?.getManagedVM())
+                        }
+                    } catch {
+                        errorFound = true
+                        DispatchQueue.main.async {
+                            Utils.showAlert(window: (self.parentController?.view.window)!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("ManageSnapshotViewController.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: self.vmRunner?.getManagedVM())
+                        }
+                    }
                 }
             }
+            complete = true
         }
-        complete = true
 
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
             guard !complete else {

@@ -91,11 +91,11 @@ class VirtualMachineContainerViewController: NSViewController, NSWindowDelegate,
     }
 
     func showSnapshottingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: "Snapshot successfully created."))
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotCreated", comment: "")))
     }
 
     func showRestoringView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: "VM successfully restored from snasphot."))
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotRestored", comment: "")))
     }
 
     func windowShouldClose(_: NSWindow) -> Bool {

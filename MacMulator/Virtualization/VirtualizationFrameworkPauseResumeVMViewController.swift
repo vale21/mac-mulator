@@ -48,11 +48,11 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
         } else if operation == "Resuming" {
             descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.resuming", comment: "")
         } else if operation == "Snapshotting" {
-            descriptionLabel.stringValue = "Creating VM snapshot..."
+            descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot", comment: "")
         } else if operation == "Restoring snapshot" {
-            descriptionLabel.stringValue = "Restoring VM from snapshot..."
+            descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.restoringSnapshot", comment: "")
         } else {
-            descriptionLabel.stringValue = "Operating..."
+            descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkPauseResumeVMViewController.operating", comment: "")
         }
 
         DispatchQueue.main.async {
@@ -60,7 +60,7 @@ class VirtualizationFrameworkPauseResumeVMViewController: NSViewController {
                 if self.dismissalCriteria(), !self.dismissInProgress {
                     self.dismissInProgress = true
                     if self.alertMessage != nil {
-                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: self.alertMessage!, completionHandler: { _ in self.dismiss(self) }, virtualMachine: nil)
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: self.alertMessage!, completionHandler: { _ in self.dismiss(self) }, virtualMachine: self.parentRunner?.getManagedVM())
                     } else {
                         self.dismiss(self)
                     }

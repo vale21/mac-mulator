@@ -214,11 +214,16 @@
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Estimate time remaining: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.pausing" = "Pausing VM and saving state...";
 "VirtualizationFrameworkPauseResumeVMViewController.resuming" = "Resuming VM from saved state...";
+"VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Creating VM snapshot...";
+"VirtualizationFrameworkPauseResumeVMViewController.restoringSnapshot" = "Restoring VM from snapshot...";
+"VirtualizationFrameworkPauseResumeVMViewController.operating" = "Operating...";
 "VirtualMachine.sshPortMapping" = "SSH port mapping";
 "VirtualMachine.infoPlistReadError" = "Error while reading Info.plist: %@";
 "VirtualMachine.infoPlistWriteError" = "Error while writing Info.plist: %@";
 "VirtualMachineContainerViewController.vmExecutionError" = "VM execution failed with error: %@";
 "VirtualMachineContainerViewController.forciblyClosing" = "Closing this window will forcibly kill the running VM.\nIt is strogly suggested to shut it down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
+"VirtualMachineContainerViewController.snapshotCreated" = "Snapshot successfully created.";
+"VirtualMachineContainerViewController.snapshotRestored" = "VM successfully restored from snasphot.";
 "VirtualMachineListViewController.delete" = "Delete";
 "VirtualMachineListViewController.edit" = "Configure";
 "VirtualMachineListViewController.start" = "Start";

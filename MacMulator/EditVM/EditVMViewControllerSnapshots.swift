@@ -108,15 +108,17 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
             let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, virtualMachine: virtualMachine)
             return response.rawValue == Utils.ALERT_RESP_OK
         } else if identifier == MacMulatorConstants.RESTORE_SNAPSHOT_SEGUE {
-            let performSegue = vmRunner != nil && (vmRunner!.isVMRunning() == false || Utils.isPauseSupported(vmRunner!.getManagedVM()) == false)
-            if !performSegue, let currentSnapshot {
-                do {
-                    try vmRunner?.restoreVMSnapshot(snapshot: currentSnapshot, nil)
-                    snapshotRestored(showAlert: false)
-                } catch let error as ValidationError {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: nil)
-                } catch {
-                    Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: nil)
+            if let vmRunner {
+                let performSegue = !vmRunner.isVMRunning() || !Utils.isPauseSupported(vmRunner.getManagedVM())
+                if !performSegue, let currentSnapshot {
+                    do {
+                        try vmRunner.restoreVMSnapshot(snapshot: currentSnapshot, nil)
+                        snapshotRestored(showAlert: false)
+                    } catch let error as ValidationError {
+                        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.description), virtualMachine: nil)
+                    } catch {
+                        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("EditVMViewControllerSnapshots.couldNotRestoreSnapshot", comment: ""), error.localizedDescription), virtualMachine: nil)
+                    }
                 }
             }
             return performSegue

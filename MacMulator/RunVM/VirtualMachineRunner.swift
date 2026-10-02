@@ -103,20 +103,35 @@ extension VirtualMachineRunner {
             NSLog("Snapshot: failed to create directory \(currentSnapshotFolderPath.path): \(error.localizedDescription)")
         }
 
-        if fileManager.fileExists(atPath: saveFileURL.path) {
+        let saveFileExists = fileManager.fileExists(atPath: saveFileURL.path)
+        let screenshotExists = fileManager.fileExists(atPath: screenshotFileURL.path)
+
+        if saveFileExists {
             let memorySnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
             do {
-                try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
+                if running {
+                    try fileManager.moveItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
+                } else {
+                    // If VM is not running but save file exists it means that VM is paused
+                    // We don't want to move the save file, but just to copy it
+                    try fileManager.copyItem(at: URL(fileURLWithPath: saveFileURL.path), to: memorySnapshotURL)
+                }
             } catch {
                 NSLog("Snapshot: failed to move memory save file from \(saveFileURL.path) to \(memorySnapshotURL.path): \(error.localizedDescription)")
                 throw error
             }
         }
 
-        if fileManager.fileExists(atPath: screenshotFileURL.path) {
+        if screenshotExists {
             let screenshotSnapshotURL = currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
             do {
-                try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
+                if running {
+                    try fileManager.moveItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
+                } else {
+                    // If VM is not running but screenshot exists it means that VM is paused
+                    // We don't want to move the screenshot, but just to copy it
+                    try fileManager.copyItem(at: URL(fileURLWithPath: screenshotFileURL.path), to: screenshotSnapshotURL)
+                }
             } catch {
                 NSLog("Snapshot: failed to move screenshot from \(screenshotFileURL.path) to \(screenshotSnapshotURL.path): \(error.localizedDescription)")
                 throw error
@@ -144,8 +159,8 @@ extension VirtualMachineRunner {
                                               name: "",
                                               description: String(format: NSLocalizedString("VirtualMachineRunner.snapshotTaken", comment: ""), Date().formatted()),
                                               driveSnapshotPaths: drivePaths,
-                                              memorySnapshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path : nil,
-                                              screenshotPath: running ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path : nil,
+                                              memorySnapshotPath: saveFileExists ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME).path : nil,
+                                              screenshotPath: screenshotExists ? currentSnapshotFolderPath.appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME).path : nil,
                                               running: running)
         managedVm.snapshots!.append(snapshot)
         managedVm.writeToPlist()
