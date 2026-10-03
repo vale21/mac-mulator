@@ -19,13 +19,13 @@ class MainWindowController: NSWindowController {
         }
         if segue.identifier == MacMulatorConstants.EDIT_VM_SEGUE {
             let args = sender as! [Any]
-            let originalSender = args[0] as? NSMenuItem
+            let tabToShow = args[0] as? String ?? "general"
             let vmToEdit = args[1] as! VirtualMachine
 
             let destinationController = dest.contentViewController as! EditVMViewController
+            destinationController.setVmRunner(sourceController.getRunnerForRunningVM(vmToEdit) ?? Utils.createDummyRunnerForStoppedVM(vmToEdit))
             destinationController.setVirtualMachine(vmToEdit)
-            destinationController.setRootController(sourceController)
-            destinationController.selectedTabViewItemIndex = originalSender?.title == NSLocalizedString("AppDelegate.configure", comment: "") ? 1 : 0
+            destinationController.selectTab(tabIdentifier: tabToShow)
         }
         if segue.identifier == MacMulatorConstants.PREFERENCES_SEGUE {
             let destinationController = dest.contentViewController as! PreferencesViewController

@@ -82,8 +82,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 bootOrderTable.isHidden = true
                 bootOrderView.isHidden = true
 
-                resolutionView.setFrameSize(NSSize(width: 464, height: 165))
-                resolutionTable.setFrameSize(NSSize(width: 464, height: 165))
+                resolutionView.setFrameSize(NSSize(width: 617, height: 250))
+                resolutionTable.setFrameSize(NSSize(width: 617, height: 250))
                 resolutionLabelTop.isHidden = true
                 resolutionlabelSide.isHidden = false
 
@@ -92,8 +92,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 bootOrderTable.isHidden = false
                 bootOrderView.isHidden = false
 
-                resolutionView.setFrameSize(NSSize(width: 218, height: 141))
-                resolutionTable.setFrameSize(NSSize(width: 218, height: 141))
+                resolutionView.setFrameSize(NSSize(width: 290, height: 250))
+                resolutionTable.setFrameSize(NSSize(width: 290, height: 250))
                 resolutionLabelTop.isHidden = false
                 resolutionlabelSide.isHidden = true
             }

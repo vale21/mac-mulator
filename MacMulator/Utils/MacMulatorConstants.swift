@@ -36,6 +36,11 @@ class MacMulatorConstants {
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     static let START_VM_SEGUE = "startVMSegue"
+    static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
+    static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
+
+    // Posted by VirtualMachine when its snapshots list changes. The notification object is the VirtualMachine.
+    static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"
