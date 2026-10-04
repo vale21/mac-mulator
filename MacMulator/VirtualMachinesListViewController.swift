@@ -78,6 +78,12 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType])
         table.allowsMultipleSelection = false
+
+        NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -275,6 +281,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
             cellView.setRunning(running)
+        }
+    }
+
+    @objc private func vmPauseStateChanged(_ notification: Notification) {
+        let changedVM = notification.object as? VirtualMachine
+        if changedVM != rootController?.currentVm || rootController?.isCurrentVMRunning() == true {
+            return
+        }
+
+        DispatchQueue.main.async {
+            if let changedVM {
+                self.rootController?.unsetRunningVM(changedVM)
+            }
         }
     }
 }

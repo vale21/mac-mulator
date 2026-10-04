@@ -95,7 +95,6 @@ class VirtualMachine: Codable, Hashable {
         }
     }
 
-    // Lets any open UI showing this VM's snapshots (e.g. the Edit VM window) refresh itself
     private func notifySnapshotsChanged() {
         NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }

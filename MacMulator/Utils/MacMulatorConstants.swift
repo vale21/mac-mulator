@@ -39,8 +39,8 @@ class MacMulatorConstants {
     static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
 
-    // Posted by VirtualMachine when its snapshots list changes. The notification object is the VirtualMachine.
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
+    static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"

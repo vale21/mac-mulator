@@ -168,9 +168,11 @@ extension VirtualMachineRunner {
         let screenshotFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
         let fileManager = FileManager.default
 
+        try? fileManager.removeItem(at: URL(fileURLWithPath: saveFileURL.path))
+        try? fileManager.removeItem(at: URL(fileURLWithPath: screenshotFileURL.path))
+
         if let memorySnapshotPath = snapshot.memorySnapshotPath {
             do {
-                try? fileManager.removeItem(at: URL(fileURLWithPath: saveFileURL.path))
                 try fileManager.copyItem(at: URL(fileURLWithPath: memorySnapshotPath), to: URL(fileURLWithPath: saveFileURL.path))
             } catch {
                 NSLog("Snapshot: failed to move save file \(memorySnapshotPath): \(error.localizedDescription)")
@@ -178,7 +180,6 @@ extension VirtualMachineRunner {
         }
         if let screenshotPath = snapshot.screenshotPath {
             do {
-                try? fileManager.removeItem(at: URL(fileURLWithPath: screenshotFileURL.path))
                 try fileManager.copyItem(at: URL(fileURLWithPath: screenshotPath), to: URL(fileURLWithPath: screenshotFileURL.path))
             } catch {
                 NSLog("Snapshot: failed to move save file \(screenshotPath): \(error.localizedDescription)")
@@ -193,5 +194,10 @@ extension VirtualMachineRunner {
                 NSLog("Snapshot: failed to move disk file \(drivePath): \(error.localizedDescription)")
             }
         }
+        notifyPauseStatusChanged(virtualMachine: managedVm)
+    }
+
+    private func notifyPauseStatusChanged(virtualMachine: VirtualMachine) {
+        NotificationCenter.default.post(name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: virtualMachine)
     }
 }

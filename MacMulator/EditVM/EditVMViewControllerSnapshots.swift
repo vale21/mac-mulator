@@ -32,7 +32,6 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Refresh the table when a snapshot is created or deleted outside this view (e.g. via the app menu)
         NotificationCenter.default.addObserver(self, selector: #selector(snapshotsChanged(_:)), name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: nil)
     }
 
@@ -43,7 +42,6 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
     @objc private func snapshotsChanged(_ notification: Notification) {
         guard let changedVM = notification.object as? VirtualMachine, changedVM === virtualMachine else { return }
         DispatchQueue.main.async {
-            // Drop the selection if the selected snapshot no longer exists
             if let currentSnapshot = self.currentSnapshot, !(self.virtualMachine?.snapshots?.contains(currentSnapshot) ?? false) {
                 self.currentSnapshot = nil
             }
