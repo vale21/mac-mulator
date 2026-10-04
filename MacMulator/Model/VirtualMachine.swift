@@ -32,9 +32,10 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     var pauseSupported: Bool? = false
     var bootMode: String?
+    var snapshots: [VirtualMachineSnapshot]?
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
@@ -59,6 +60,7 @@ class VirtualMachine: Codable, Hashable {
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
+        snapshots = []
     }
 
     func addVirtualDrive(_ drive: VirtualDrive) {
@@ -76,6 +78,25 @@ class VirtualMachine: Codable, Hashable {
             return true
         }
         return false
+    }
+
+    func addSnapshot(_ snapshot: VirtualMachineSnapshot) {
+        if snapshots == nil {
+            snapshots = []
+        }
+        snapshots?.append(snapshot)
+        notifySnapshotsChanged()
+    }
+
+    func removeSnapshot(_ timestamp: Int64) {
+        if let index = snapshots?.firstIndex(where: { $0.timestamp == timestamp }) {
+            snapshots?.remove(at: index)
+            notifySnapshotsChanged()
+        }
+    }
+
+    private func notifySnapshotsChanged() {
+        NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 
     func addPortMapping(_ portMapping: PortMapping) {
@@ -101,13 +122,21 @@ class VirtualMachine: Codable, Hashable {
     static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
         vm.path = plistFilePath
         for drive in vm.drives {
-            if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
-                if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
+            } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
+            } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION
+            }
+        }
+        if let snapshots = vm.snapshots {
+            for snapshot in snapshots {
+                let snapshotFolderPath = plistFilePath + "/Snapshots/" + String(snapshot.timestamp)
+                snapshot.memorySnapshotPath = snapshotFolderPath + "/" + MacMulatorConstants.SAVE_FILE_NAME
+                snapshot.screenshotPath = snapshotFolderPath + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME
+                snapshot.driveSnapshotPaths = snapshot.driveSnapshotPaths.map { drivePath in
+                    snapshotFolderPath + "/" + URL(fileURLWithPath: drivePath).lastPathComponent
                 }
             }
         }

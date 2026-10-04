@@ -9,12 +9,9 @@ import Foundation
 
 class VMCreatorFactory {
     func create(vm: VirtualMachine) -> VMCreator {
-        if #available(macOS 12.0, *) {
-            if vm.type == MacMulatorConstants.APPLE_VM {
-                return VirtualizationFrameworkVMCreator()
-            }
+        if vm.type == MacMulatorConstants.APPLE_VM {
+            return VirtualizationFrameworkVMCreator()
         }
-
         return QemuVMCreator()
     }
 

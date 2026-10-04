@@ -106,12 +106,10 @@ class VirtualMachineViewController: NSViewController {
     @IBAction func stopVM(_ sender: Any) {
         var window = view.window!
 
-        if #available(macOS 12.0, *) {
-            if let vm = self.rootController?.currentVm {
-                if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
-                    let runner = self.rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
-                    window = runner.vmView!.window!
-                }
+        if let vm = rootController?.currentVm {
+            if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
+                let runner = rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
+                window = runner.vmView!.window!
             }
         }
 
@@ -122,6 +120,25 @@ class VirtualMachineViewController: NSViewController {
                 }
             }
         }, virtualMachine: rootController?.currentVm)
+    }
+
+    func createVMSnapshot(sender _: Any) {
+        if let vm = rootController?.currentVm, let rootController {
+            do {
+                if rootController.isVMRunning(vm) {
+                    _ = try rootController.getRunnerForRunningVM(vm)?.createVMSnapshot()
+                } else {
+                    let tempRunner = Utils.createDummyRunnerForStoppedVM(vm)
+                    _ = try tempRunner.createVMSnapshot { _ in
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("VirtualMachineViewController.snapshotCreatedSuccessfully", comment: ""), virtualMachine: vm)
+                    }
+                }
+            } catch let error as ValidationError {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.couldNotCreateSnapshot", comment: ""), error.description), virtualMachine: vm)
+            } catch {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.couldNotCreateSnapshot", comment: ""), error.localizedDescription), virtualMachine: vm)
+            }
+        }
     }
 
     func startVMInRecovery(sender: Any) {
@@ -141,17 +158,15 @@ class VirtualMachineViewController: NSViewController {
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE {
-            if #available(macOS 12.0, *) {
-                let source = segue.sourceController as! VirtualMachineViewController
-                let dest = segue.destinationController as! VirtualMachineContainerViewController
-                let vmToStart = sender as! VMToStart
+            let source = segue.sourceController as! VirtualMachineViewController
+            let dest = segue.destinationController as! VirtualMachineContainerViewController
+            let vmToStart = sender as! VMToStart
 
-                dest.setVirtualMachine(vmToStart.vm)
-                dest.setRecoveryMode(vmToStart.inRecovery)
-                dest.setVmRunner(vmToStart.runner)
-                dest.setVmController(source)
-                dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
-            }
+            dest.setVirtualMachine(vmToStart.vm)
+            dest.setRecoveryMode(vmToStart.inRecovery)
+            dest.setVmRunner(vmToStart.runner)
+            dest.setVmController(source)
+            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController
@@ -198,6 +213,11 @@ class VirtualMachineViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
@@ -253,6 +273,17 @@ class VirtualMachineViewController: NSViewController {
             }
         } else {
             showNoVmsLayout()
+        }
+    }
+
+    @objc private func vmPauseStateChanged(_ notification: Notification) {
+        let changedVM = notification.object as? VirtualMachine
+        if changedVM != rootController?.currentVm || rootController?.isCurrentVMRunning() == true {
+            return
+        }
+
+        DispatchQueue.main.async {
+            self.setVirtualMachine(self.rootController?.currentVm)
         }
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -217,6 +217,25 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Istantanee" id="fVR-SM-VVJ">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Istantanee" id="rfh-AS-cP7">
+                                                <items>
+                                                    <menuItem title="Crea nuova" keyEquivalent="S" id="6O5-2K-XTT">
+                                                        <connections>
+                                                            <action selector="createNewSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="EFo-st-uhe"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Visualizza o ripristina..." id="SQO-VP-Dic">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="uSi-Zf-KtZ"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="gL4-jK-ibL"/>
                                         <menuItem title="Esporta come" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Esporta come" id="3Ko-t4-AGP">
@@ -316,9 +335,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
-                        <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
-                        <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
@@ -328,9 +345,14 @@
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
+                        <outlet property="snapshotCreateMenuItem" destination="6O5-2K-XTT" id="3Hn-wT-YwE"/>
+                        <outlet property="snapshotsMenuItem" destination="fVR-SM-VVJ" id="ENL-hq-bkQ"/>
+                        <outlet property="snapshotsViewRestoreMenuItem" destination="SQO-VP-Dic" id="RVu-af-bcT"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="Wwm-kT-UN6"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="CMy-19-2tg"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
+                        <outlet property="usbAttachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
+                        <outlet property="usbConfigureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="usbDevicesMenuItem" destination="S7C-pL-vez" id="Cyf-X7-X0C"/>
                         <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
                     </connections>
@@ -338,7 +360,7 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2830" y="-1037"/>
+            <point key="canvasLocation" x="-2849" y="-1126"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
@@ -421,7 +443,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2473" y="-608"/>
+            <point key="canvasLocation" x="-2554" y="-319"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">

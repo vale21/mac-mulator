@@ -73,9 +73,17 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType])
         table.allowsMultipleSelection = false
+
+        NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -163,6 +171,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         cloneVirtualMachine(table.clickedRow)
     }
 
+    @objc func tableViewTakeSnapshotItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        createVMSnapshot(table.clickedRow)
+    }
+
     @objc func tableViewStartItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         startVirtualMachine(table.clickedRow)
@@ -248,6 +261,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         rootController?.cloneVirtualMachineAt(index)
     }
 
+    func createVMSnapshot(_ index: Int) {
+        if let rootController {
+            _ = rootController.getVirtualMachineAt(index)
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.createVMSnapshot(sender: self)
+        }
+    }
+
     func selectElement(_ index: Int) {
         table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
     }
@@ -260,6 +281,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
             cellView.setRunning(running)
+        }
+    }
+
+    @objc private func vmPauseStateChanged(_ notification: Notification) {
+        let changedVM = notification.object as? VirtualMachine
+        if changedVM != rootController?.currentVm || rootController?.isCurrentVMRunning() == true {
+            return
+        }
+
+        DispatchQueue.main.async {
+            if let changedVM {
+                self.rootController?.unsetRunningVM(changedVM)
+            }
         }
     }
 }

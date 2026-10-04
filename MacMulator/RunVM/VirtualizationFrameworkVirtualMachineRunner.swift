@@ -12,6 +12,7 @@ import Virtualization
 class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
     let managedVm: VirtualMachine
     let saveFileURL: URL
+    let screenshotFileURL: URL
     var vzVirtualMachine: VZVirtualMachine?
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
@@ -20,6 +21,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine
         saveFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
+        screenshotFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
     }
 
     func getManagedVM() -> VirtualMachine {
@@ -102,6 +104,69 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
+            #if arch(arm64)
+                vmViewController?.takeScreenshot()
+                vmViewController?.showSnapshottingView()
+                pauseAndSaveVirtualMachine(completionHandler: {
+                    let snapshot = try? self.copyVMSnapshotFiles(running: true, managedVm: self.managedVm)
+                    self.resumeVM()
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #endif
+        } else {
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
+            let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
+            }
+        }
+    }
+
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        managedVm.removeSnapshot(snapshot.timestamp)
+        try deleteVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+    }
+
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
+            #if arch(arm64)
+                vmViewController?.showRestoringView()
+                stopVM(guestStopped: false, uponCompletion: { _ in
+                    try? self.restoreVMSnapshotFiles(snapshot: snapshot, managedVm: self.managedVm)
+                    self.vzVirtualMachine?.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
+                        let fileManager = FileManager.default
+                        try? fileManager.removeItem(at: self.saveFileURL)
+
+                        if error == nil {
+                            self.resumeVM()
+                        } else {
+                            self.startVM()
+                        }
+                    })
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #endif
+        } else {
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
+            try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
+            }
+        }
+    }
+
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {
         if error != nil {
             Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
@@ -146,8 +211,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    func stopVM(guestStopped: Bool) {
-        vzVirtualMachine?.stop(completionHandler: { _ in })
+    func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if let uponCompletion {
+            vzVirtualMachine?.stop(completionHandler: uponCompletion)
+        } else {
+            vzVirtualMachine?.stop(completionHandler: { _ in })
+        }
         vmViewController?.stopVM(guestStopped)
     }
 

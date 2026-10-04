@@ -12,6 +12,7 @@ enum ValidationError: Error, CustomStringConvertible {
     case sudoNotAllowed
     case workingPathError(qemuPath: String, command: String)
     case executableError(allowed: String, command: String)
+    case snapshotError(vmType: String)
     case genericError
 
     var description: String {
@@ -22,6 +23,8 @@ enum ValidationError: Error, CustomStringConvertible {
             String(format: NSLocalizedString("Utils.workingPathError", comment: ""), qemuPath, Utils.truncateString(command, 25))
         case let .executableError(allowed, command):
             String(format: NSLocalizedString("Utils.executableError", comment: ""), allowed, Utils.truncateString(command, 50))
+        case let .snapshotError(vmType):
+            String(format: NSLocalizedString("Utils.snapshotError", comment: ""), vmType)
         case .genericError:
             NSLocalizedString("Utils.genericError", comment: "")
         }
@@ -109,7 +112,7 @@ class Utils {
         alert.beginSheetModal(for: window, completionHandler: handler)
     }
 
-    static func showPrompt(window _: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) -> NSApplication.ModalResponse {
+    static func showPrompt(window: NSWindow, style: NSAlert.Style, message: String, virtualMachine: VirtualMachine?) -> NSApplication.ModalResponse {
         let alert = NSAlert()
 
         if let virtualMachine {
@@ -120,7 +123,13 @@ class Utils {
         alert.messageText = message
         alert.addButton(withTitle: NSLocalizedString("Utils.ok", comment: ""))
         alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
-        return alert.runModal()
+
+        // Present the alert as a sheet, but block until the user responds so that
+        // synchronous callers can use the returned response directly.
+        alert.beginSheetModal(for: window) { response in
+            NSApp.stopModal(withCode: response)
+        }
+        return NSApp.runModal(for: alert.window)
     }
 
     static func escape(_ string: String) -> String {
@@ -669,17 +678,11 @@ class Utils {
         if #available(macOS 13.0, *) {
             return (os == QemuConstants.OS_LINUX && Utils.hostArchitecture() == Utils.getMachineArchitecture(architecture)) || isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
         }
-        if #available(macOS 12.0, *) {
-            return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
-        }
-        return false
+        return isMacVMWithOSVirtualizationFramework(os: os, subtype: subtype)
     }
 
     static func isMacVMWithOSVirtualizationFramework(os: String, subtype: String) -> Bool {
-        if #available(macOS 12.0, *) {
-            return Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
-        }
-        return false
+        Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && Utils.isMacVersionWithVirtualizationFramework(os: os, subtype: subtype)
     }
 
     static func isPauseSupported(_ vm: VirtualMachine) -> Bool {
@@ -709,6 +712,10 @@ class Utils {
         }
     }
 
+    static func areLiveSnapshotsSupported(_ vm: VirtualMachine) -> Bool {
+        isPauseSupported(vm)
+    }
+
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF, !isAsifSupported(vm) {
             return NSLocalizedString("Utils.asifNotSupported", comment: "")
@@ -722,7 +729,7 @@ class Utils {
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
-        } else if #available(macOS 12.0, *) {
+        } else {
             if vm.os == QemuConstants.OS_LINUX {
                 return NSLocalizedString("Utils.linuxMonterey", comment: "")
             } else if Utils.hostArchitecture() != QemuConstants.HOST_ARM64, isMacVersionWithVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
@@ -730,10 +737,6 @@ class Utils {
             } else {
                 return NSLocalizedString("Utils.virtualizationNotSupported", comment: "")
             }
-        } else if #available(macOS 11.0, *) {
-            return NSLocalizedString("Utils.virtualizationBigSur", comment: "")
-        } else {
-            return NSLocalizedString("Utils.virtualizationGeneric", comment: "")
         }
     }
 
@@ -1062,6 +1065,10 @@ class Utils {
         let modesJSON = modes.map { "\"\($0)\"" }.joined(separator: ",")
         let json = "{\"driver\":\"apple-gfx-pci\",\"display-modes\":[\(modesJSON)]}"
         return "'\(json)' -vga none"
+    }
+
+    static func createDummyRunnerForStoppedVM(_ vm: VirtualMachine) -> VirtualMachineRunner {
+        VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm)
     }
 
     fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {

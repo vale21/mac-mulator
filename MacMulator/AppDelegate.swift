@@ -28,8 +28,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet var usbDevicesMenuItem: NSMenuItem!
-    @IBOutlet var attachImageMenuItem: NSMenuItem!
-    @IBOutlet var configureMenuItem: NSMenuItem!
+    @IBOutlet var usbAttachImageMenuItem: NSMenuItem!
+    @IBOutlet var usbConfigureMenuItem: NSMenuItem!
+    @IBOutlet var snapshotsMenuItem: NSMenuItem!
+    @IBOutlet var snapshotCreateMenuItem: NSMenuItem!
+    @IBOutlet var snapshotsViewRestoreMenuItem: NSMenuItem!
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
@@ -92,6 +95,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @IBAction func createNewSnapshotMenuBarClicked(_: Any) {
+        rootController?.createVMSnapshot(sender: self)
+    }
+
+    @IBAction func viewRestoreSnapshotMenuBarClicked(_: Any) {}
+
     @IBAction func exportVMToParallelsMenuBarClicked(_: Any) {
         if #available(macOS 11.0, *) {
             Utils.showDirectorySelector(uponSelection: { panel in
@@ -147,7 +156,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func editVMmenuBarClicked(_ sender: Any) {
-        rootController?.editVMmenuBarClicked(sender) // The sender here determines which tab to show
+        var tabIdentifier = "general"
+        if sender as? NSMenuItem == usbConfigureMenuItem {
+            tabIdentifier = "hardware"
+        } else if sender as? NSMenuItem == snapshotsViewRestoreMenuItem {
+            tabIdentifier = "snapshots"
+        }
+
+        rootController?.editVMmenuBarClicked(tabIdentifier) // The sender here determines which tab to show
     }
 
     @IBAction func showConsolemenuBarClicked(_: Any) {
@@ -185,12 +201,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 exportMenuItem.isEnabled = false
                 convertToQemuMenuItem.isEnabled = false
                 convertToAppleMenuItem.isEnabled = false
+                snapshotsMenuItem.isEnabled = false
+                snapshotCreateMenuItem.isEnabled = false
+                snapshotsViewRestoreMenuItem.isEnabled = false
+                usbDevicesMenuItem.isEnabled = false
+                showConsoleOutputmenuItem.isEnabled = false
             } else {
-                let vm = rootController.currentVm
-                if let vm {
+                if let vm = rootController.currentVm {
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     settingsMenuItem.isEnabled = true
+                    snapshotsMenuItem.isEnabled = true
+                    snapshotCreateMenuItem.isEnabled = true
+                    snapshotsViewRestoreMenuItem.isEnabled = true
 
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)

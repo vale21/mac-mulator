@@ -23,16 +23,16 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet var openImageButton: NSButton!
     @IBOutlet var createNewDiskButton: NSButton!
 
-    var rootController: RootViewController?
     var virtualMachine: VirtualMachine?
-
-    func setRootController(_ rootController: RootViewController) {
-        self.rootController = rootController
-    }
+    var vmRunner: VirtualMachineRunner?
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
         updateView()
+    }
+
+    func setVmRunner(_ vmRunner: VirtualMachineRunner) {
+        self.vmRunner = vmRunner
     }
 
     @IBAction func sliderChanged(_ sender: Any) {
@@ -101,9 +101,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             size: 0
                         )
 
-                        if #available(macOS 15.0, *), rootController?.isVMRunning(virtualMachine) == true {
-                            let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
-                            runner.attachUSBImageToVM(virtualDrive: newDrive)
+                        if #available(macOS 15.0, *), vmRunner?.isVMRunning() == true,
+                           let vfRunner = vmRunner as? VirtualizationFrameworkVirtualMachineRunner
+                        {
+                            vfRunner.attachUSBImageToVM(virtualDrive: newDrive)
                         }
                     } else if virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
                         newDrive = VirtualDrive(
@@ -168,9 +169,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             virtualMachine.writeToPlist()
             updateView()
 
-            if #available(macOS 15.0, *), virtualMachine.type == MacMulatorConstants.APPLE_VM, rootController?.isVMRunning(virtualMachine) == true {
-                let runner = rootController?.getRunnerForRunningVM(virtualMachine) as! VirtualizationFrameworkVirtualMachineRunner
-                runner.detachUSBImageFromVM(virtualDrive: removedDrive)
+            if #available(macOS 15.0, *), virtualMachine.type == MacMulatorConstants.APPLE_VM, vmRunner?.isVMRunning() == true,
+               let vfRunner = vmRunner as? VirtualizationFrameworkVirtualMachineRunner
+            {
+                vfRunner.detachUSBImageFromVM(virtualDrive: removedDrive)
 
                 let appDelegate = NSApp.delegate as! AppDelegate
                 appDelegate.refreshVMMenus()
