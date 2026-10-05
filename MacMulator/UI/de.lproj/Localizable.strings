@@ -3,6 +3,7 @@
 "AboutBoxViewController.descriptionLabel" = "MacMulator ist kostenlose, nicht-kommerzielle Software";
 "AboutBoxViewController.descriptionText" = "MacMulator ist der Emulator für deinen Mac! Er nutzt die Leistung von Qemu und dem Apple Virtualization Framework sowie eine benutzerfreundliche Oberfläche, um dir die Erstellung virtueller Maschinen mit wenigen Klicks zu ermöglichen. Welches Betriebssystem du auch auf deinem Mac ausführen musst – MacMulator ist das richtige Werkzeug!";
 "AboutBoxViewController.creditsLabel" = "Danksagungen";
+"AboutBoxViewController.copyright" = "Copyright © %@ the MacMulator Project. macmulator@gmail.com";
 "AppDelegate.exportToParallelsComplete" = "Export nach Parallels abgeschlossen.";
 "AppDelegate.exportToParallelsFailed" = "Export fehlgeschlagen mit Fehler: %@";
 "AppDelegate.importFromParallelsFailed" = "Import fehlgeschlagen mit Fehler: %@";

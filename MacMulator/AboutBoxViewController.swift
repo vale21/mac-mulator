@@ -13,6 +13,7 @@ class AboutBoxViewController: NSViewController {
     @IBOutlet var descriptionLabel: NSTextField!
     @IBOutlet var descriptionText: NSTextField!
     @IBOutlet var creditsLabel: NSTextField!
+    @IBOutlet var copyrightLabel: NSTextField!
 
     @IBAction func openLicense(_: Any) {
         if let url = URL(string: "https://www.apache.org/licenses/LICENSE-2.0.txt") {
@@ -33,5 +34,9 @@ class AboutBoxViewController: NSViewController {
         descriptionLabel.stringValue = NSLocalizedString("AboutBoxViewController.descriptionLabel", comment: "")
         descriptionText.stringValue = NSLocalizedString("AboutBoxViewController.descriptionText", comment: "")
         creditsLabel.stringValue = NSLocalizedString("AboutBoxViewController.creditsLabel", comment: "")
+
+        // Keep the copyright year current instead of hardcoding it in the storyboard
+        let year = String(Calendar.current.component(.year, from: Date()))
+        copyrightLabel.stringValue = String(format: NSLocalizedString("AboutBoxViewController.copyright", comment: ""), year)
     }
 }
