@@ -90,3 +90,6 @@ fastlane/test_output
 iOSInjectionProject/
 .DS_Store
 # MacMulator.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+# Prebuilt UTM sysroot (see scripts/fetch_sysroot.sh)
+Sysroot/

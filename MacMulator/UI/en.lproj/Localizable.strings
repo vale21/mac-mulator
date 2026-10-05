@@ -258,3 +258,10 @@
 "VirtualMachineViewController.editVMButton" = "Configure this VM";
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM Snapshot created successfully!";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "Could not create VM snapshot: %@";
+"QemuSpiceViewerViewController.windowTitle" = "SPICE viewer - %@";
+"QemuSpiceViewerViewController.connecting" = "Connecting to %@…";
+"QemuSpiceViewerViewController.connectionFailed" = "Unable to connect to %@";
+"QemuSpiceViewerViewController.disconnected" = "Disconnected from %@";
+"QemuSpiceViewerViewController.error" = "SPICE error: %@";
+"QemuSpiceViewerViewController.spiceStartFailed" = "Unable to start the SPICE client";
+"QemuSpiceViewerViewController.noMetal" = "Metal is not available on this Mac";
