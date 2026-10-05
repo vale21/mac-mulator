@@ -1,14 +1,19 @@
 #!/bin/sh
 #
 # Downloads the prebuilt universal (arm64 + x86_64) macOS sysroot that the UTM
-# project publishes from its CI, and unpacks it into Sysroot/ at the repository
-# root. MacMulator links the SPICE / GLib / GStreamer frameworks from this
-# sysroot and embeds them into the application bundle.
+# project publishes from its CI, and unpacks the parts MacMulator needs into
+# Sysroot/ at the repository root. MacMulator links the SPICE / GLib / GStreamer
+# frameworks and the static GStreamer plugins from this sysroot and embeds the
+# frameworks into the application bundle.
+#
+# Only Frameworks/ (minus QEMU and GPU bits), lib/gstreamer-1.0/, lib/glib-2.0/
+# and include/ are extracted; the full sysroot is 2.6 GB, most of it QEMU.
 #
 # GitHub Actions artifacts can only be downloaded with an authenticated request.
 # The token is taken from, in order: $GH_TOKEN, $GITHUB_TOKEN, `gh auth token`,
 # or the git credential helper for github.com (the keychain entry that `git
-# push` uses).
+# push` uses). On Xcode Cloud, define GH_TOKEN as a secret environment variable
+# of the workflow; ci_scripts/ci_post_clone.sh then runs this script.
 #
 # Usage: scripts/fetch_sysroot.sh [artifact-id]
 #
@@ -31,7 +36,8 @@ github_token () {
     elif command -v gh >/dev/null 2>&1 && gh auth token >/dev/null 2>&1; then
         gh auth token
     else
-        printf "protocol=https\nhost=github.com\n\n" | git credential fill 2>/dev/null | sed -n 's/^password=//p'
+        # GIT_TERMINAL_PROMPT=0 / GIT_ASKPASS keep git from asking interactively on a CI machine.
+        printf "protocol=https\nhost=github.com\n\n" | GIT_TERMINAL_PROMPT=0 GIT_ASKPASS=/usr/bin/false git credential fill 2>/dev/null | sed -n 's/^password=//p'
     fi
 }
 
@@ -67,16 +73,34 @@ if [ -z "$ARTIFACT_ID" ]; then
     exit 1
 fi
 
-mkdir -p "$DEST"
-ZIP="$DEST/$ARTIFACT_NAME.zip"
-echo "Downloading artifact $ARTIFACT_ID${HEAD_SHA:+ (UTM commit $HEAD_SHA, built $CREATED_AT)}..."
-api -o "$ZIP" "https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT_ID/zip"
+WORK="$(mktemp -d "${TMPDIR:-/tmp}/macmulator-sysroot.XXXXXX")"
+trap 'rm -rf "$WORK"' EXIT
 
-echo "Unpacking into $DEST/$SYSROOT_NAME..."
+echo "Downloading artifact $ARTIFACT_ID${HEAD_SHA:+ (UTM commit $HEAD_SHA, built $CREATED_AT)}..."
+api -o "$WORK/$ARTIFACT_NAME.zip" "https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT_ID/zip"
+unzip -oq "$WORK/$ARTIFACT_NAME.zip" -d "$WORK"
+rm -f "$WORK/$ARTIFACT_NAME.zip"
+
+echo "Extracting the SPICE, GLib and GStreamer parts..."
+mkdir -p "$WORK/out"
+tar -xzf "$WORK/sysroot.tgz" -C "$WORK/out" \
+    --exclude="$SYSROOT_NAME/Frameworks/qemu-*" \
+    --exclude="$SYSROOT_NAME/Frameworks/D3DMetal.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/d3dmetal-native.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/dxmt-native.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/LTO.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/Remarks.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/MoltenVK.framework" \
+    --exclude="$SYSROOT_NAME/Frameworks/vulkan*" \
+    --exclude="$SYSROOT_NAME/Frameworks/virglrenderer*" \
+    "$SYSROOT_NAME/Frameworks" \
+    "$SYSROOT_NAME/lib/gstreamer-1.0" \
+    "$SYSROOT_NAME/lib/glib-2.0" \
+    "$SYSROOT_NAME/include"
+
+mkdir -p "$DEST"
 rm -rf "$DEST/$SYSROOT_NAME"
-unzip -oq "$ZIP" -d "$DEST"
-tar -xzf "$DEST/sysroot.tgz" -C "$DEST"
-rm -f "$DEST/sysroot.tgz" "$ZIP"
+mv "$WORK/out/$SYSROOT_NAME" "$DEST/$SYSROOT_NAME"
 
 {
     echo "artifact: $ARTIFACT_ID"
@@ -85,4 +109,4 @@ rm -f "$DEST/sysroot.tgz" "$ZIP"
     echo "source: https://github.com/$REPO/actions"
 } > "$DEST/VERSION"
 
-echo "Done. Sysroot is at $DEST/$SYSROOT_NAME"
+echo "Done. Sysroot is at $DEST/$SYSROOT_NAME ($(du -sh "$DEST/$SYSROOT_NAME" | cut -f1))"
