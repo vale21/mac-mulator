@@ -31,6 +31,7 @@ class MacMulatorConstants {
     static let PREFERENCES_SEGUE = "preferencesSegue"
     static let SHOW_CONSOLE_SEGUE = "showConsoleSegue"
     static let SHOW_VM_VIEW_SEGUE = "showVMViewSegue"
+    static let SHOW_SPICE_VIEW_SEGUE = "showSpiceViewSegue"
     static let SHOW_INSTALLING_OS_SEGUE = "showInstallingOSSegue"
     static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"

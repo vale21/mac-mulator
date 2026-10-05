@@ -27,12 +27,25 @@ class QemuSpiceViewerViewController: NSViewController {
     private var input: CSInput?
     private var displaySizeObservation: NSKeyValueObservation?
     private var windowResignKeyObserver: NSObjectProtocol?
+    private var commandKeyUpMonitor: Any?
     private var agentSupportsMonitorsConfig = false
     private var lastErrorMessage: String?
 
     private var pressedMouseButtons: CSInputButton = []
     private var pressedModifierKeyCodes = Set<UInt16>()
     private var resolutionRequestTask: Task<Void, Never>?
+
+    /// Task waiting for the socket to show up or for the next connection attempt
+    private var connectTask: Task<Void, Never>?
+    /// Connection attempts stop once this instant has passed. `nil` when no connection is being established
+    private var connectionDeadline: Date?
+    /// True once the main channel has been opened at least once on the current connection
+    private var hasConnected = false
+
+    /// How long to keep trying to reach the SPICE server before reporting a failure
+    private static let connectionTimeout: TimeInterval = 30
+    /// Pause between two consecutive socket checks or connection attempts
+    private static let connectionRetryInterval: UInt64 = 500_000_000
 
     // MARK: - Lifecycle
 
@@ -88,6 +101,20 @@ class QemuSpiceViewerViewController: NSViewController {
             }
         }
 
+        if commandKeyUpMonitor == nil {
+            // AppKit does not deliver keyUp to views while ⌘ is held down: catch those releases
+            // before dispatch so that keys pressed as part of a ⌘ shortcut do not stay stuck in the guest
+            commandKeyUpMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyUp) { [weak self] event in
+                guard let self, input != nil, event.modifierFlags.contains(.command),
+                      event.window === self.view.window, view.window?.firstResponder === self.displayView
+                else {
+                    return event
+                }
+                sendKey(event.keyCode, pressed: false)
+                return nil
+            }
+        }
+
         connect()
     }
 
@@ -97,6 +124,10 @@ class QemuSpiceViewerViewController: NSViewController {
         if let observer = windowResignKeyObserver {
             NotificationCenter.default.removeObserver(observer)
             windowResignKeyObserver = nil
+        }
+        if let monitor = commandKeyUpMonitor {
+            NSEvent.removeMonitor(monitor)
+            commandKeyUpMonitor = nil
         }
         disconnect()
     }
@@ -129,19 +160,77 @@ class QemuSpiceViewerViewController: NSViewController {
         Self.restoreEnvironment(launchEnvironment)
 
         lastErrorMessage = nil
+        hasConnected = false
         showStatus(String(format: NSLocalizedString("QemuSpiceViewerViewController.connecting", comment: ""), socketPath))
 
+        // QEMU is usually still starting when the viewer is shown: keep trying for a while
+        connectionDeadline = Date().addingTimeInterval(Self.connectionTimeout)
+        attemptConnection()
+    }
+
+    /// Waits for the socket to exist, then opens a connection to it. Gives up once `connectionDeadline` has passed
+    private func attemptConnection(after delay: UInt64 = 0) {
+        connectTask?.cancel()
+        connectTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: delay)
+            // The socket is created by QEMU only once its SPICE server is listening
+            while !Task.isCancelled, let self, !FileManager.default.fileExists(atPath: self.socketPath) {
+                if connectionTimedOut {
+                    failConnection()
+                    return
+                }
+                try? await Task.sleep(nanoseconds: Self.connectionRetryInterval)
+            }
+            guard !Task.isCancelled, let self else {
+                return
+            }
+            connectTask = nil
+            openConnection()
+        }
+    }
+
+    private func openConnection() {
         let newConnection = CSConnection(unixSocketFile: URL(fileURLWithPath: socketPath))
         newConnection.delegate = self
         connection = newConnection
 
         if !newConnection.connect() {
             connection = nil
-            showStatus(String(format: NSLocalizedString("QemuSpiceViewerViewController.connectionFailed", comment: ""), socketPath))
+            retryConnection()
         }
     }
 
+    /// True while a connection is being established and no attempt has succeeded yet
+    private var isConnecting: Bool {
+        connectionDeadline != nil && !hasConnected
+    }
+
+    private var connectionTimedOut: Bool {
+        guard let connectionDeadline else {
+            return true
+        }
+        return Date() >= connectionDeadline
+    }
+
+    /// Schedules another attempt, or reports the failure if the deadline has passed
+    private func retryConnection() {
+        if connectionTimedOut {
+            failConnection()
+        } else {
+            attemptConnection(after: Self.connectionRetryInterval)
+        }
+    }
+
+    private func failConnection() {
+        connectTask = nil
+        connectionDeadline = nil
+        showStatus(lastErrorMessage ?? String(format: NSLocalizedString("QemuSpiceViewerViewController.connectionFailed", comment: ""), socketPath))
+    }
+
     private func disconnect() {
+        connectTask?.cancel()
+        connectTask = nil
+        connectionDeadline = nil
         resolutionRequestTask?.cancel()
         resolutionRequestTask = nil
         releaseAllKeys()
@@ -554,21 +643,34 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
     nonisolated func spiceConnected(_: CSConnection) {
         Task { @MainActor in
             self.lastErrorMessage = nil
+            self.hasConnected = true
+            self.connectionDeadline = nil
         }
     }
 
-    nonisolated func spiceDisconnected(_: CSConnection) {
+    nonisolated func spiceDisconnected(_ connection: CSConnection) {
         Task { @MainActor in
+            guard self.connection === connection else {
+                return
+            }
             self.detachDisplay()
             self.input = nil
+            self.displayView.capturesKeyEquivalents = false
             self.connection = nil
-            self.view.window?.close()
+            if self.isConnecting {
+                // A failed attempt has been torn down (see spiceError): try again rather than closing the viewer
+                self.retryConnection()
+            } else {
+                self.view.window?.close()
+            }
         }
     }
 
     nonisolated func spiceInputAvailable(_: CSConnection, input: CSInput) {
         Task { @MainActor in
             self.input = input
+            // ⌘ shortcuts belong to the guest from now on
+            self.displayView.capturesKeyEquivalents = true
             // Ask for absolute mouse positioning (client mode), which maps naturally onto a windowed viewer
             input.requestMouseMode(false)
         }
@@ -578,15 +680,22 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
         Task { @MainActor in
             if self.input === input {
                 self.input = nil
+                self.displayView.capturesKeyEquivalents = false
             }
         }
     }
 
-    nonisolated func spiceError(_: CSConnection, code: CSConnectionError, message: String?) {
+    nonisolated func spiceError(_ connection: CSConnection, code: CSConnectionError, message: String?) {
         Task { @MainActor in
             let text = String(format: NSLocalizedString("QemuSpiceViewerViewController.error", comment: ""), message ?? "\(code.rawValue)")
             self.lastErrorMessage = text
-            self.showStatus(text)
+            if self.isConnecting, self.connection === connection {
+                // CocoaSpice does not tear the session down after a failed connect: do it here so that
+                // spiceDisconnected(_:) fires and schedules the next attempt. Keep showing "Connecting…" meanwhile
+                connection.disconnect()
+            } else {
+                self.showStatus(text)
+            }
         }
     }
 
@@ -656,8 +765,21 @@ private final class SpiceDisplayView: MTKView {
 
     private var trackingArea: NSTrackingArea?
 
+    /// When true, Command key combinations are forwarded to the guest instead of triggering menu items
+    var capturesKeyEquivalents = false
+
     override var acceptsFirstResponder: Bool {
         true
+    }
+
+    /// Key equivalents (Command combinations such as ⌘Q or ⌘W) are offered to the views before the menu bar
+    /// and never reach `keyDown`: claim them here so that the guest receives them
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        guard capturesKeyEquivalents, window?.firstResponder === self, event.modifierFlags.contains(.command) else {
+            return super.performKeyEquivalent(with: event)
+        }
+        inputDelegate?.displayView(self, didReceive: event)
+        return true
     }
 
     override func updateTrackingAreas() {

@@ -395,6 +395,9 @@ class VirtualMachineViewController: NSViewController {
 
     func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         startVM_internal(runner, inRecovery, vm)
+        if vm.qemuDisplay == "spice-app" {
+            performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+        }
     }
 
     fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
@@ -434,12 +437,13 @@ class VirtualMachineViewController: NSViewController {
 
                 if vm.type == MacMulatorConstants.APPLE_VM {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+                } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                    performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+                } else if vm.qemuDisplay == "spice-app" {
+                    startVM_internal(runner, inRecovery, vm)
+                    performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else {
-                    if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
-                    } else {
-                        startVM_internal(runner, inRecovery, vm)
-                    }
+                    startVM_internal(runner, inRecovery, vm)
                 }
             }
         }

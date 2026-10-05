@@ -4464,6 +4464,7 @@ Rocky Linux</string>
                         <outlet property="vmTypeDesc" destination="Xaw-fC-Wcz" id="aCd-x2-2kJ"/>
                         <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
                         <segue destination="cvb-zf-bpY" kind="sheet" identifier="startVMSegue" id="xJM-1W-fcJ"/>
+                        <segue destination="XEm-KJ-Oor" kind="show" identifier="showSpiceViewSegue" id="e7k-B8-t4V"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -4486,6 +4487,19 @@ Rocky Linux</string>
                 <customObject id="gDK-sg-7Zg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="680" y="912"/>
+        </scene>
+        <!--Qemu Spice Viewer View Controller-->
+        <scene sceneID="ySi-2d-UZm">
+            <objects>
+                <viewController id="XEm-KJ-Oor" customClass="QemuSpiceViewerViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="gIz-Li-axh">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="WhY-Ty-5CU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="680" y="1299"/>
         </scene>
         <!--Virtualization Framework Pause ResumeVM View Controller-->
         <scene sceneID="R36-g7-VFt">
@@ -4614,7 +4628,7 @@ Rocky Linux</string>
                 </viewController>
                 <customObject id="dsI-EX-obA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="285.5" y="1502"/>
+            <point key="canvasLocation" x="-19" y="1682"/>
         </scene>
     </scenes>
     <resources>
