@@ -1,6 +1,14 @@
 {
-  "originHash" : "e4e7eb0d2b3ba548824a1ed0a8e427465ae4dc8413252a790a0343f4bd479c6e",
+  "originHash" : "df4bf6ec029f43b61c3a69b128b113b773dd50362ac2e4e2776640959debcec5",
   "pins" : [
+    {
+      "identity" : "cocoaspice",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/utmapp/CocoaSpice.git",
+      "state" : {
+        "revision" : "d8d29fc810047a3ddcebb351cdadc8fe4b4f308d"
+      }
+    },
     {
       "identity" : "socket.swift",
       "kind" : "remoteSourceControl",

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -556,7 +556,7 @@
 			packageReferences = (
 				3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */,
 				3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
-				3BC0C5A1307400000000A001 /* XCLocalSwiftPackageReference "Packages/CocoaSpice" */,
+				3B6BD7163073ACF0004DB26B /* XCRemoteSwiftPackageReference "CocoaSpice" */,
 			);
 			productRefGroup = 3B391EEA25C075F50030E914 /* Products */;
 			projectDirPath = "";
@@ -1179,14 +1179,15 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		3BC0C5A1307400000000A001 /* XCLocalSwiftPackageReference "Packages/CocoaSpice" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/CocoaSpice;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
+		3B6BD7163073ACF0004DB26B /* XCRemoteSwiftPackageReference "CocoaSpice" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/utmapp/CocoaSpice.git";
+			requirement = {
+				kind = revision;
+				revision = d8d29fc810047a3ddcebb351cdadc8fe4b4f308d;
+			};
+		};
 		3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/BiAtoms/Socket.swift.git";

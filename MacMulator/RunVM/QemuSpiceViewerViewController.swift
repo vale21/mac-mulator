@@ -116,10 +116,17 @@ class QemuSpiceViewerViewController: NSViewController {
             showStatus(NSLocalizedString("QemuSpiceViewerViewController.noMetal", comment: ""))
             return
         }
+        // CocoaSpice's GStreamer initialisation is written for the iOS sandbox and rewrites HOME,
+        // TMPDIR and the XDG_* variables of the whole process from its worker thread. Wait for the
+        // worker thread to be up, then undo that so the app and the processes it spawns (QEMU,
+        // qemu-img) keep the environment they were launched with.
+        let launchEnvironment = ProcessInfo.processInfo.environment
         guard CSMain.shared.spiceStart() else {
             showStatus(NSLocalizedString("QemuSpiceViewerViewController.spiceStartFailed", comment: ""))
             return
         }
+        CSMain.shared.sync {}
+        Self.restoreEnvironment(launchEnvironment)
 
         lastErrorMessage = nil
         showStatus(String(format: NSLocalizedString("QemuSpiceViewerViewController.connecting", comment: ""), socketPath))
@@ -146,6 +153,24 @@ class QemuSpiceViewerViewController: NSViewController {
     private func showStatus(_ text: String?) {
         statusLabel.stringValue = text ?? ""
         statusLabel.isHidden = text == nil
+    }
+
+    /// Environment variables that CocoaSpice's `gst_ios_init()` overwrites.
+    private static let environmentKeysChangedBySpice = [
+        "HOME", "TMP", "TEMP", "TMPDIR",
+        "XDG_RUNTIME_DIR", "XDG_CACHE_HOME", "XDG_DATA_DIRS", "XDG_CONFIG_DIRS", "XDG_CONFIG_HOME", "XDG_DATA_HOME",
+        "FONTCONFIG_PATH", "CA_CERTIFICATES",
+    ]
+
+    /// Puts the variables listed in `environmentKeysChangedBySpice` back to the values they had in `environment`.
+    private static func restoreEnvironment(_ environment: [String: String]) {
+        for key in environmentKeysChangedBySpice {
+            if let value = environment[key] {
+                setenv(key, value, 1)
+            } else {
+                unsetenv(key)
+            }
+        }
     }
 
     // MARK: - Display
