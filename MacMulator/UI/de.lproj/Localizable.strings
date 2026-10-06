@@ -171,6 +171,12 @@
 "QemuConstants.bootDrive" = "Startlaufwerk";
 "QemuConstants.bootMode" = "Startmodus";
 "QemuConstants.uefiSecure" = "UEFI mit Secure Boot";
+"QemuSpiceViewerViewController.connecting" = "Verbindung zu %@ wird hergestellt…";
+"QemuSpiceViewerViewController.connectionFailed" = "Verbindung zu %@ nicht möglich";
+"QemuSpiceViewerViewController.disconnected" = "Verbindung zu %@ getrennt";
+"QemuSpiceViewerViewController.error" = "SPICE-Fehler: %@";
+"QemuSpiceViewerViewController.spiceStartFailed" = "Der SPICE-Client konnte nicht gestartet werden";
+"QemuSpiceViewerViewController.noMetal" = "Metal ist auf diesem Mac nicht verfügbar";
 "RootViewController.forciblyClosing" = "Es sind VMs aktiv.\nWenn du MacMulator schließt, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "RootViewController.vmConvertedToQemu" = "Die VM wurde erfolgreich ins QEMU-Format konvertiert.";
 "RootViewController.vmConvertedToApple" = "Die VM wurde erfolgreich ins Apple-Format konvertiert.";
@@ -258,10 +264,3 @@
 "VirtualMachineViewController.editVMButton" = "Diese VM konfigurieren";
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM-Snapshot erfolgreich erstellt!";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "VM-Snapshot konnte nicht erstellt werden: %@";
-"QemuSpiceViewerViewController.windowTitle" = "SPICE-Anzeige - %@";
-"QemuSpiceViewerViewController.connecting" = "Verbindung zu %@ wird hergestellt…";
-"QemuSpiceViewerViewController.connectionFailed" = "Verbindung zu %@ nicht möglich";
-"QemuSpiceViewerViewController.disconnected" = "Verbindung zu %@ getrennt";
-"QemuSpiceViewerViewController.error" = "SPICE-Fehler: %@";
-"QemuSpiceViewerViewController.spiceStartFailed" = "Der SPICE-Client konnte nicht gestartet werden";
-"QemuSpiceViewerViewController.noMetal" = "Metal ist auf diesem Mac nicht verfügbar";

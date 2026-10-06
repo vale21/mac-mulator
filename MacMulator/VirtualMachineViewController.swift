@@ -7,13 +7,6 @@
 
 import Cocoa
 
-protocol RunningVMManagerViewController {
-    func setVirtualMachine(_ vm: VirtualMachine)
-    func setRecoveryMode(_ recoveryMode: Bool)
-    func setVmController(_ controller: VirtualMachineViewController)
-    func setVmRunner(_ runner: VirtualMachineRunner)
-}
-
 class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
@@ -167,6 +160,16 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmRunner(vmToStart.runner)
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
+        } else if segue.identifier == MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE {
+            let source = segue.sourceController as! VirtualMachineViewController
+            let dest = segue.destinationController as! QemuSpiceViewerViewController
+            let vmToStart = sender as! VMToStart
+
+            dest.setVirtualMachine(vmToStart.vm)
+            dest.setRecoveryMode(vmToStart.inRecovery)
+            dest.setVmRunner(vmToStart.runner)
+            dest.setVmController(source)
+            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController

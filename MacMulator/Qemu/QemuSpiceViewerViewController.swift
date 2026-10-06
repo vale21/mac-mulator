@@ -10,12 +10,7 @@ import CocoaSpiceNoUsb
 import CocoaSpiceRenderer
 import MetalKit
 
-/// Shows the display of a running QEMU VM over SPICE and forwards keyboard and mouse input to it.
-///
-/// The VM has to be started with a SPICE server listening on a unix socket, for example
-/// `-spice unix=on,addr=/tmp/debian.spice,disable-ticketing=on`.
-class QemuSpiceViewerViewController: NSViewController {
-    /// Path of the unix socket the SPICE server is listening on.
+class QemuSpiceViewerViewController: RunningVMManagerViewController {
     var socketPath = "/tmp/debian.spice"
 
     private let displayView = SpiceDisplayView(frame: .zero, device: MTLCreateSystemDefaultDevice())
@@ -46,8 +41,6 @@ class QemuSpiceViewerViewController: NSViewController {
     private static let connectionTimeout: TimeInterval = 30
     /// Pause between two consecutive socket checks or connection attempts
     private static let connectionRetryInterval: UInt64 = 500_000_000
-
-    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,9 +81,6 @@ class QemuSpiceViewerViewController: NSViewController {
 
     override func viewDidAppear() {
         super.viewDidAppear()
-
-        view.window?.title = String(format: NSLocalizedString("QemuSpiceViewerViewController.windowTitle", comment: ""), socketPath)
-        view.window?.makeFirstResponder(displayView)
 
         if let window = view.window, windowResignKeyObserver == nil {
             // Release every pressed key when the window loses focus so that no key stays stuck in the guest
@@ -136,8 +126,6 @@ class QemuSpiceViewerViewController: NSViewController {
         super.viewDidLayout()
         updateViewport()
     }
-
-    // MARK: - Connection
 
     private func connect() {
         guard connection == nil else {
@@ -661,7 +649,7 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
                 // A failed attempt has been torn down (see spiceError): try again rather than closing the viewer
                 self.retryConnection()
             } else {
-                self.view.window?.close()
+                stopVM(true)
             }
         }
     }
