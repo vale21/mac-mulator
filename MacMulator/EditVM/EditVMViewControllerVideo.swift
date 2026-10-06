@@ -16,6 +16,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var accelDescriptionText: NSTextField!
     @IBOutlet var accelDescriptionLabel: NSTextField!
     @IBOutlet var accelDescriptionSwitch: NSSwitch!
+    @IBOutlet var spiceDescriptionText: NSTextField!
+    @IBOutlet var spiceDescriptionLabel: NSTextField!
+    @IBOutlet var spiceDescriptionSwitch: NSSwitch!
     @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
@@ -37,7 +40,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     override func viewDidAppear() {
-        verifyOpenGLSupport()
+        verifyOpenGLAndSpiceSupport()
     }
 
     fileprivate func buildAdaptersList() -> [String] {
@@ -127,9 +130,26 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         if let virtualMachine {
             virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
         }
+
+        if accelDescriptionSwitch.state == .on, spiceDescriptionSwitch.state == .on {
+            spiceDescriptionSwitch.state = .off
+            enableSpiceSupport(self)
+        }
     }
 
-    fileprivate func verifyOpenGLSupport() {
+    @IBAction func enableSpiceSupport(_: Any) {
+        if spiceDescriptionSwitch.state == .on {
+            if accelDescriptionSwitch.state == .on {
+                accelDescriptionSwitch.state = .off
+                enable3DAccelerationToggleChanged(self)
+            }
+            qemuDisplayComboBox.isEnabled = false
+        } else {
+            qemuDisplayComboBox.isEnabled = true
+        }
+    }
+
+    fileprivate func verifyOpenGLAndSpiceSupport() {
         if let virtualMachine {
             let shell = Shell()
             let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)

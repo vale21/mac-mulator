@@ -562,7 +562,6 @@ class QemuConstants {
         DISPLAY_EGL_HEADLESS,
         DISPLAY_CURSES,
         DISPLAY_COCOA,
-        DISPLAY_SPICE_APP,
     ]
 
     static let ALL_DISPLAYS_DESC = [
@@ -572,7 +571,6 @@ class QemuConstants {
         DISPLAY_EGL_HEADLESS: "EGL Headless",
         DISPLAY_CURSES: "Curses",
         DISPLAY_COCOA: "Cocoa",
-        DISPLAY_SPICE_APP: "Spice",
     ]
 
     static let ALL_BOOT_MODES = [

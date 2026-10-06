@@ -593,7 +593,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Hcs-08-TrM" customClass="DrivesTableDriveTypeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="170" y="0.0" width="126" height="30"/>
+                                                            <rect key="frame" x="169.5" y="0.0" width="126" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ckm-MX-63N">
@@ -1847,18 +1847,51 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
                                 </connections>
                             </switch>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7UL-Jt-MFG">
+                                <rect key="frame" x="30" y="178" width="265" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="261" id="u5h-Ds-8vv"/>
+                                </constraints>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Use Spice display" id="lGb-kd-Yah">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="1wK-z5-mVp">
+                                <rect key="frame" x="301" y="174" width="54" height="24"/>
+                                <connections>
+                                    <action selector="enableSpiceSupport:" target="bME-KN-L8y" id="Can-13-19W"/>
+                                </connections>
+                            </switch>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qQO-GM-gW4">
+                                <rect key="frame" x="30" y="206" width="714" height="28"/>
+                                <textFieldCell key="cell" selectable="YES" id="Z2W-Ns-2AK">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <string key="title">With Spice display MacMulator manages the VM window in place of Qemu. It offers better integration, dynamic resolution in the VM and clipboard sharing. It is suggested if the underlying Qemu supports Spice. It is not compatible with 3D acceleration.</string>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="TFC-on-HFs" firstAttribute="baseline" secondItem="ECR-CG-ZXO" secondAttribute="baseline" id="34i-yW-h9i"/>
+                            <constraint firstItem="1wK-z5-mVp" firstAttribute="top" secondItem="qQO-GM-gW4" secondAttribute="bottom" constant="8" symbolic="YES" id="3lH-E1-3Pn"/>
+                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="centerY" secondItem="43X-1U-j2N" secondAttribute="centerY" constant="64" id="40u-Hw-vDW"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="trailing" secondItem="TFC-on-HFs" secondAttribute="trailing" id="46K-vU-rjn"/>
+                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="leading" secondItem="bHD-eX-M1v" secondAttribute="leading" id="86L-al-Stb"/>
+                            <constraint firstItem="qQO-GM-gW4" firstAttribute="trailing" secondItem="Cvm-OW-d8w" secondAttribute="trailing" id="9DE-zw-3EI"/>
                             <constraint firstItem="ECR-CG-ZXO" firstAttribute="leading" secondItem="Kgv-EH-4Vd" secondAttribute="leading" id="G2b-qo-nCd"/>
                             <constraint firstAttribute="trailing" secondItem="Kgv-EH-4Vd" secondAttribute="trailing" constant="55" id="GtP-77-qqt"/>
                             <constraint firstItem="Kgv-EH-4Vd" firstAttribute="top" secondItem="kMz-L0-DKD" secondAttribute="bottom" constant="26" id="H1l-rc-YFj"/>
                             <constraint firstItem="5V6-3d-7RZ" firstAttribute="centerY" secondItem="bHD-eX-M1v" secondAttribute="centerY" id="Igv-LD-a3i"/>
+                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="leading" secondItem="1wK-z5-mVp" secondAttribute="trailing" constant="-323" id="IlD-dM-cE2"/>
                             <constraint firstItem="5V6-3d-7RZ" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="301" id="L20-DV-ZaL"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="centerY" secondItem="Kgv-EH-4Vd" secondAttribute="centerY" id="MtP-Rd-fpO"/>
+                            <constraint firstItem="1wK-z5-mVp" firstAttribute="centerY" secondItem="7UL-Jt-MFG" secondAttribute="centerY" id="ZZZ-Qb-EDm"/>
                             <constraint firstItem="m8g-Mx-rE1" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="151" id="d8u-D7-MGG"/>
                             <constraint firstItem="ECR-CG-ZXO" firstAttribute="top" secondItem="Kgv-EH-4Vd" secondAttribute="bottom" constant="8" symbolic="YES" id="dBv-jL-w82"/>
+                            <constraint firstItem="qQO-GM-gW4" firstAttribute="leading" secondItem="7UL-Jt-MFG" secondAttribute="leading" id="fMP-pr-b2p"/>
                             <constraint firstItem="kMz-L0-DKD" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="20" symbolic="YES" id="fvp-Uu-WPd"/>
                             <constraint firstAttribute="trailing" secondItem="kMz-L0-DKD" secondAttribute="trailing" constant="20" symbolic="YES" id="gVm-ml-uXD"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="TFC-on-HFs" secondAttribute="leading" id="i6Z-9O-zRs"/>
@@ -1880,6 +1913,9 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                         <outlet property="accelDescriptionText" destination="Cvm-OW-d8w" id="y7A-Q8-TWJ"/>
                         <outlet property="qemuDisplayComboBox" destination="ECR-CG-ZXO" id="SfU-RY-PSA"/>
                         <outlet property="qemuDisplayLabel" destination="TFC-on-HFs" id="Ebg-Rh-8Be"/>
+                        <outlet property="spiceDescriptionLabel" destination="7UL-Jt-MFG" id="v0D-Md-Fdk"/>
+                        <outlet property="spiceDescriptionSwitch" destination="1wK-z5-mVp" id="lnK-Tl-4W1"/>
+                        <outlet property="spiceDescriptionText" destination="qQO-GM-gW4" id="uMD-CU-SSG"/>
                         <outlet property="videoAdapterComboBox" destination="Kgv-EH-4Vd" id="OQY-oe-xTd"/>
                         <outlet property="videoAdapterLabel" destination="9dJ-3u-qn2" id="h0c-A0-8Wz"/>
                         <outlet property="videoDescriptionText" destination="kMz-L0-DKD" id="ozo-yo-EDr"/>
