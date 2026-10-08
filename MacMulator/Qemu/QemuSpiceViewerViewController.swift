@@ -30,6 +30,15 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     private var pressedModifierKeyCodes = Set<UInt16>()
     private var resolutionRequestTask: Task<Void, Never>?
 
+    /// When true the guest is asked for relative (server) mouse mode and clicking the display grabs the host pointer
+    private var mouseCaptureEnabled = false
+    private var isMouseCaptured = false
+    /// Where the pointer was (in Core Graphics coordinates) when it was grabbed, to put it back on release
+    private var locationBeforeCapture: CGPoint?
+    private var windowTitleBeforeCapture: String?
+    /// Warping the pointer into the display reports a spurious delta: drop the first motion event after a grab
+    private var skipNextMotionDelta = false
+
     /// Task waiting for the socket to show up or for the next connection attempt
     private var connectTask: Task<Void, Never>?
     /// Connection attempts stop once this instant has passed. `nil` when no connection is being established
@@ -45,6 +54,17 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     override func setVirtualMachine(_ vm: VirtualMachine) {
         super.setVirtualMachine(vm)
         socketPath = vm.path + "/socket.spice"
+    }
+
+    /// Turns mouse capture on or off. When enabled, the guest is asked for relative mouse positioning and
+    /// clicking the display grabs the host pointer until ⌃⌥ is pressed or the window loses focus.
+    /// When disabled (the default), the host pointer is mapped onto the guest display in absolute mode.
+    func setMouseCaptureEnabled(_ enabled: Bool) {
+        mouseCaptureEnabled = enabled
+        if !enabled {
+            releaseMouseCapture()
+        }
+        input?.requestMouseMode(enabled)
     }
 
     override func viewDidLoad() {
@@ -87,10 +107,15 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     override func viewDidAppear() {
         super.viewDidAppear()
 
+        // Take the focus right away so that typing works without clicking into the window first
+        view.window?.makeKeyAndOrderFront(nil)
+        view.window?.makeFirstResponder(displayView)
+
         if let window = view.window, windowResignKeyObserver == nil {
             // Release every pressed key when the window loses focus so that no key stays stuck in the guest
             windowResignKeyObserver = NotificationCenter.default.addObserver(forName: NSWindow.didResignKeyNotification, object: window, queue: .main) { [weak self] _ in
                 Task { @MainActor in
+                    self?.releaseMouseCapture()
                     self?.releaseAllKeys()
                 }
             }
@@ -226,6 +251,7 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         connectionDeadline = nil
         resolutionRequestTask?.cancel()
         resolutionRequestTask = nil
+        releaseMouseCapture()
         releaseAllKeys()
         detachDisplay()
         // The connection is released in spiceDisconnected(_:), once SPICE confirms the disconnection
@@ -272,6 +298,8 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         }
 
         displayView.isHidden = false
+        // A hidden view cannot be first responder: claim the focus now that the display is visible
+        view.window?.makeFirstResponder(displayView)
         showStatus(nil)
         displaySizeChanged()
     }
@@ -390,11 +418,70 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         displayView.hidesHostCursor = guestCursor != nil
 
         if input.serverModeCursor {
+            // In relative mode the guest only gets deltas, and only while it owns the pointer
+            guard isMouseCaptured else {
+                return
+            }
+            if skipNextMotionDelta {
+                skipNextMotionDelta = false
+                return
+            }
             input.sendMouseMotion(pressedMouseButtons, relativePoint: CGPoint(x: event.deltaX, y: event.deltaY))
         } else if let point = displayPoint(for: event) {
             input.sendMousePosition(pressedMouseButtons, absolutePoint: point)
             guestCursor?.move(to: point)
         }
+    }
+
+    // MARK: - Mouse capture
+
+    /// True when a click on the display should grab the pointer rather than being forwarded
+    private var shouldCaptureMouseOnClick: Bool {
+        mouseCaptureEnabled && !isMouseCaptured && (input?.serverModeCursor ?? false)
+    }
+
+    /// Pins the host pointer in the middle of the display and hides it. The system keeps reporting motion
+    /// deltas while the pointer stays put, which is exactly what relative mode needs
+    private func captureMouse() {
+        guard !isMouseCaptured, let window = view.window else {
+            return
+        }
+        isMouseCaptured = true
+        locationBeforeCapture = Self.coreGraphicsPoint(NSEvent.mouseLocation)
+        windowTitleBeforeCapture = window.title
+        window.title = String(format: NSLocalizedString("QemuSpiceViewerViewController.mouseCaptured", comment: ""), window.title)
+
+        let center = displayView.convert(CGPoint(x: displayView.bounds.midX, y: displayView.bounds.midY), to: nil)
+        _ = CGAssociateMouseAndMouseCursorPosition(0)
+        _ = CGWarpMouseCursorPosition(Self.coreGraphicsPoint(window.convertPoint(toScreen: center)))
+        skipNextMotionDelta = true
+        NSCursor.hide()
+    }
+
+    /// Gives the pointer back to the host, putting it where it was before the grab
+    private func releaseMouseCapture() {
+        guard isMouseCaptured else {
+            return
+        }
+        isMouseCaptured = false
+        skipNextMotionDelta = false
+        NSCursor.unhide()
+        _ = CGAssociateMouseAndMouseCursorPosition(1)
+        if let locationBeforeCapture {
+            _ = CGWarpMouseCursorPosition(locationBeforeCapture)
+        }
+        locationBeforeCapture = nil
+        if let windowTitleBeforeCapture {
+            view.window?.title = windowTitleBeforeCapture
+        }
+        windowTitleBeforeCapture = nil
+    }
+
+    /// Converts a point from AppKit screen coordinates (origin at the bottom left of the primary display)
+    /// to Core Graphics ones (origin at its top left), as used by the pointer warping functions
+    private static func coreGraphicsPoint(_ point: NSPoint) -> CGPoint {
+        let primaryHeight = NSScreen.screens.first?.frame.height ?? 0
+        return CGPoint(x: point.x, y: primaryHeight - point.y)
     }
 
     /// Cursor channel of the current display, if the guest exposes one.
@@ -434,16 +521,42 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     // MARK: - Keyboard
 
     private func handleFlagsChanged(_ event: NSEvent) {
-        // flagsChanged is sent both on press and on release of a modifier key: alternate between the two
         let keyCode = event.keyCode
-        if pressedModifierKeyCodes.contains(keyCode) {
-            pressedModifierKeyCodes.remove(keyCode)
-            sendKey(keyCode, pressed: false)
+
+        if isMouseCaptured, event.modifierFlags.contains([.control, .option]) {
+            // ⌃⌥ releases the pointer. The first of the two modifiers already reached the guest: let go of it there
+            releaseMouseCapture()
+            releaseAllKeys()
+            return
+        }
+
+        // flagsChanged is sent both on press and on release of a modifier key. The device dependent bits of the
+        // flags tell which one it is for the keys we know; for the others alternate between the two
+        let pressed: Bool = if let bit = Self.deviceModifierBits[keyCode] {
+            event.modifierFlags.rawValue & bit != 0
         } else {
+            !pressedModifierKeyCodes.contains(keyCode)
+        }
+        if pressed, !pressedModifierKeyCodes.contains(keyCode) {
             pressedModifierKeyCodes.insert(keyCode)
             sendKey(keyCode, pressed: true)
+        } else if !pressed, pressedModifierKeyCodes.contains(keyCode) {
+            pressedModifierKeyCodes.remove(keyCode)
+            sendKey(keyCode, pressed: false)
         }
     }
+
+    /// Device dependent `NSEvent.modifierFlags` bits (NX_DEVICE*KEYMASK) by macOS virtual key code of the modifier
+    private static let deviceModifierBits: [UInt16: UInt] = [
+        0x3B: 0x0001, // Left Control
+        0x3E: 0x2000, // Right Control
+        0x38: 0x0002, // Left Shift
+        0x3C: 0x0004, // Right Shift
+        0x3A: 0x0020, // Left Option
+        0x3D: 0x0040, // Right Option
+        0x37: 0x0008, // Left Command
+        0x36: 0x0010, // Right Command
+    ]
 
     private func sendKey(_ keyCode: UInt16, pressed: Bool) {
         guard let input else {
@@ -600,6 +713,9 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
 extension QemuSpiceViewerViewController: SpiceDisplayViewInputDelegate {
     fileprivate func displayView(_: SpiceDisplayView, didReceive event: NSEvent) {
         switch event.type {
+        case .leftMouseDown where shouldCaptureMouseOnClick:
+            // The click that grabs the pointer is not forwarded to the guest
+            captureMouse()
         case .leftMouseDown:
             handleMouseButton(.left, pressed: true)
         case .leftMouseUp:
@@ -646,6 +762,7 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
             guard self.connection === connection else {
                 return
             }
+            self.releaseMouseCapture()
             self.detachDisplay()
             self.input = nil
             self.displayView.capturesKeyEquivalents = false
@@ -664,14 +781,16 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
             self.input = input
             // ⌘ shortcuts belong to the guest from now on
             self.displayView.capturesKeyEquivalents = true
-            // Ask for absolute mouse positioning (client mode), which maps naturally onto a windowed viewer
-            input.requestMouseMode(false)
+            // Relative positioning (server mode) when the pointer is to be captured, otherwise absolute
+            // positioning (client mode), which maps naturally onto a windowed viewer
+            input.requestMouseMode(self.mouseCaptureEnabled)
         }
     }
 
     nonisolated func spiceInputUnavailable(_: CSConnection, input: CSInput) {
         Task { @MainActor in
             if self.input === input {
+                self.releaseMouseCapture()
                 self.input = nil
                 self.displayView.capturesKeyEquivalents = false
             }

@@ -170,6 +170,7 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmRunner(vmToStart.runner)
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
+            dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController

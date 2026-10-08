@@ -178,6 +178,7 @@
 "QemuSpiceViewerViewController.error" = "Errore SPICE: %@";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossibile avviare il client SPICE";
 "QemuSpiceViewerViewController.noMetal" = "Metal non è disponibile su questo Mac";
+"QemuSpiceViewerViewController.mouseCaptured" = "%@ (premi ⌃⌥ per rilasciare il mouse)";
 "RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "RootViewController.vmConvertedToQemu" = "La VM è stata convertita con successo al formato QEMU.";
 "RootViewController.vmConvertedToApple" = "La VM è stata convertita con successo al formato Apple.";
