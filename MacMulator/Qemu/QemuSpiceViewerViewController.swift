@@ -11,7 +11,7 @@ import CocoaSpiceRenderer
 import MetalKit
 
 class QemuSpiceViewerViewController: RunningVMManagerViewController {
-    var socketPath = "/tmp/debian.spice"
+    private var socketPath = ""
 
     private let displayView = SpiceDisplayView(frame: .zero, device: MTLCreateSystemDefaultDevice())
     private let statusLabel = NSTextField(labelWithString: "")
@@ -41,6 +41,11 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     private static let connectionTimeout: TimeInterval = 30
     /// Pause between two consecutive socket checks or connection attempts
     private static let connectionRetryInterval: UInt64 = 500_000_000
+
+    override func setVirtualMachine(_ vm: VirtualMachine) {
+        super.setVirtualMachine(vm)
+        socketPath = vm.path + "/socket.spice"
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

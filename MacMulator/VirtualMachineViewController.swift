@@ -398,7 +398,7 @@ class VirtualMachineViewController: NSViewController {
 
     func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         startVM_internal(runner, inRecovery, vm)
-        if vm.qemuDisplay == "spice-app" {
+        if vm.enableSpiceDisplay == true {
             performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
         }
     }
@@ -442,7 +442,7 @@ class VirtualMachineViewController: NSViewController {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                     performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
-                } else if vm.qemuDisplay == "spice-app" {
+                } else if vm.enableSpiceDisplay == true {
                     startVM_internal(runner, inRecovery, vm)
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else {

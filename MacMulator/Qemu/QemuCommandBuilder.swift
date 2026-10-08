@@ -19,7 +19,6 @@ class QemuCommandBuilder {
     var vga: String?
     var display: String?
     var enable3d: Bool?
-    var enableAppleParavirtualizedGraphics: Bool?
     var cpu: String?
     var usb: Bool?
     var device: [String] = []
@@ -36,6 +35,7 @@ class QemuCommandBuilder {
     var globalClause: String?
     var drives: [String] = []
     var network: String?
+    var spice: String?
     var portMappings: [PortMapping] = []
     var managementPort: Int32?
     var nic: String?
@@ -43,6 +43,8 @@ class QemuCommandBuilder {
     var tpmDevice: String?
     var rtcEnabled: Bool = true
     var logging: String?
+
+    let FORMATTER = " \\\n    "
 
     init(qemuPath: String, architecture: String) {
         self.qemuPath = qemuPath
@@ -89,8 +91,16 @@ class QemuCommandBuilder {
         return self
     }
 
-    func withEnableAppleParavirtualizedGraphics(_ enableAppleParavirtualizedGraphics: Bool) -> QemuCommandBuilder {
-        self.enableAppleParavirtualizedGraphics = enableAppleParavirtualizedGraphics
+    func withEnableSpice(_ enableSpice: Bool?, basePath: String?) -> QemuCommandBuilder {
+        if let enableSpice, enableSpice, let basePath {
+            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(basePath) + "/socket.spice,disable-ticketing=on" +
+                FORMATTER + "-device virtio-serial-pci" +
+                FORMATTER + "-chardev spicevmc,id=spicechannel0,name=vdagent" +
+                FORMATTER + "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0" +
+                FORMATTER + "-chardev spiceport,id=webdav0,name=org.spice-space.webdav.0" +
+                FORMATTER + "-device virtserialport,chardev=webdav0,name=org.spice-space.webdav.0" +
+                FORMATTER + "-nic user,model=virtio"
+        }
         return self
     }
 
@@ -166,27 +176,27 @@ class QemuCommandBuilder {
 
     func withDrive(file: String, format: String, index: Int, media: String) -> QemuCommandBuilder {
         if media == QemuConstants.MEDIATYPE_USB_CDROM {
-            var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=true,bootindex=" + String(index) + ",bus=usb-bus.0"
-            driveString.append(" -drive \"if=none,format=raw,media=cdrom,id=drive" + String(index) + ",file.filename=" + file + ",file.locking=off,readonly=on\"")
+            var driveString = FORMATTER + "-device usb-storage,drive=drive" + String(index) + ",removable=true,bootindex=" + String(index) + ",bus=usb-bus.0"
+            driveString.append(FORMATTER + " -drive \"if=none,format=raw,media=cdrom,id=drive" + String(index) + ",file.filename=" + file + ",file.locking=off,readonly=on\"")
             drives.append(driveString)
         } else if media == QemuConstants.MEDIATYPE_USB {
-            var driveString = "-device usb-storage,drive=drive" + String(index) + ",removable=false"
+            var driveString = FORMATTER + "-device usb-storage,drive=drive" + String(index) + ",removable=false"
             driveString.append(" -drive \"if=none,media=disk,id=drive" + String(index) + ",file=" + file + ",cache=writethrough\"")
             drives.append(driveString)
         } else if media == QemuConstants.MEDIATYPE_NVME {
-            var driveString = "-drive file=" + Utils.escape(file)
+            var driveString = FORMATTER + "-drive file=" + Utils.escape(file)
             driveString.append(",if=none,id=nvme_" + String(index) + ",index=" + String(index) + ",cache=writethrough")
             driveString.append(" -device nvme,drive=nvme_" + String(index) + ",serial=MACMULATOR_NVME_" + String(index))
             drives.append(driveString)
         } else if media == QemuConstants.MEDIATYPE_NVRAM {
-            var driveString = "-drive file=" + Utils.escape(file)
+            var driveString = FORMATTER + "-drive file=" + Utils.escape(file)
             if format != QemuConstants.FORMAT_UNKNOWN {
                 driveString.append(",format=" + format)
             }
             driveString.append(",if=pflash,index=1")
             drives.append(driveString)
         } else {
-            var driveString = "-drive file=" + Utils.escape(file)
+            var driveString = FORMATTER + "-drive file=" + Utils.escape(file)
             if format != QemuConstants.FORMAT_UNKNOWN {
                 driveString.append(",format=" + format)
             }
@@ -208,7 +218,7 @@ class QemuCommandBuilder {
 
     func withEfiVars(file: String, global: Bool) -> QemuCommandBuilder {
         efiVars = Utils.escape(file)
-        globalClause = global ? " -global driver=cfi.pflash01,property=secure,value=on" : ""
+        globalClause = global ? FORMATTER + "-global driver=cfi.pflash01,property=secure,value=on" : ""
         return self
     }
 
@@ -220,16 +230,16 @@ class QemuCommandBuilder {
     }
 
     func withNetwork(name: String, device: String, macAddress: String?) -> QemuCommandBuilder {
-        network = "-netdev user,id=" + name
+        network = FORMATTER + "-netdev user,id=" + name
 
         for mapping in portMappings {
             network = network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
         }
 
         if let macAddress {
-            network = network! + " -device " + device + ",netdev=" + name + ",mac=" + macAddress
+            network = network! + FORMATTER + "-device " + device + ",netdev=" + name + ",mac=" + macAddress
         } else {
-            network = network! + " -device " + device + ",netdev=" + name
+            network = network! + FORMATTER + "-device " + device + ",netdev=" + name
         }
         return self
     }
@@ -258,25 +268,25 @@ class QemuCommandBuilder {
     func build() -> String {
         var cmd = qemuPath + "/" + executable
         if let serial {
-            cmd += " -serial " + serial
+            cmd += FORMATTER + "-serial " + serial
         }
         if let bios {
-            cmd += " -L " + bios
+            cmd += FORMATTER + "-L " + bios
         }
         if let cpus {
-            cmd += " -smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus)
+            cmd += FORMATTER + "-smp cores=" + String(cpus) + ",threads=1,sockets=1,maxcpus=" + String(cpus)
         }
         if let bootArg {
-            cmd += " -boot " + bootArg
+            cmd += FORMATTER + "-boot " + bootArg
         }
         if let accel {
-            cmd += " -accel " + accel
+            cmd += FORMATTER + "-accel " + accel
         }
         if let vga {
-            cmd += " -device " + vga
+            cmd += FORMATTER + "-device " + vga
         }
         if let display {
-            cmd += " -display " + display + ",show-cursor="
+            cmd += FORMATTER + "-display " + display + ",show-cursor="
             if let showCursor, showCursor {
                 cmd += "on"
             } else {
@@ -287,43 +297,43 @@ class QemuCommandBuilder {
             }
         }
         if let cpu {
-            cmd += " -cpu " + cpu
+            cmd += FORMATTER + "-cpu " + cpu
         }
         if let usb, usb {
-            cmd += " -usb"
+            cmd += FORMATTER + "-usb"
         }
         if let nic {
-            cmd += " -nic user,model=" + nic
+            cmd += FORMATTER + "-nic user,model=" + nic
         }
         for device in device {
-            cmd += " -device " + device
+            cmd += FORMATTER + "-device " + device
         }
         if let machine {
-            cmd += " -M " + machine
+            cmd += FORMATTER + "-M " + machine
         }
         if let memory {
-            cmd += " -m " + String(memory)
+            cmd += FORMATTER + "-m " + String(memory)
         }
         if let graphics {
-            cmd += " -g " + graphics
+            cmd += FORMATTER + "-g " + graphics
         }
         for sound in sound {
-            cmd += " -device " + sound
+            cmd += FORMATTER + "-device " + sound
         }
         if let autoBoot {
-            cmd += " -prom-env 'auto-boot?=" + String(autoBoot) + "'"
+            cmd += FORMATTER + "-prom-env 'auto-boot?=" + String(autoBoot) + "'"
         }
         if let vgaEnabled {
-            cmd += " -prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'"
+            cmd += FORMATTER + "-prom-env 'vga-ndrv?=" + String(vgaEnabled) + "'"
         }
         if let efi {
-            cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efi + ",file.locking=off"
+            cmd += FORMATTER + "-drive if=pflash,format=raw,unit=0,file.filename=" + efi + ",file.locking=off"
         }
         if let efiSecure {
-            cmd += " -drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off"
+            cmd += FORMATTER + "-drive if=pflash,format=raw,unit=0,file.filename=" + efiSecure + ",file.locking=off"
         }
         if let efiVars {
-            cmd += " -drive if=pflash,unit=1,file=" + efiVars + globalClause!
+            cmd += FORMATTER + "-drive if=pflash,unit=1,file=" + efiVars + globalClause!
         }
         for drive in drives {
             cmd += " " + drive
@@ -331,18 +341,21 @@ class QemuCommandBuilder {
         if let network {
             cmd += " " + network
         }
+        if let spice {
+            cmd += " " + spice
+        }
         if addQmpString == true, let managementPort {
-            cmd += " -qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait"
+            cmd += FORMATTER + "-qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait"
         }
         if rtcEnabled {
-            cmd += " -rtc base=localtime,clock=host"
+            cmd += FORMATTER + "-rtc base=localtime,clock=host"
         }
         if let tpmPath {
             let device = tpmDevice != nil ? tpmDevice! : QemuConstants.TPM_TIS_DEVICE
-            cmd += " -chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
+            cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
         }
         if let logging {
-            cmd += " -d " + logging
+            cmd += FORMATTER + "-d " + logging
         }
 
         return cmd
