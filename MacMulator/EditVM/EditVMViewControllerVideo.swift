@@ -154,11 +154,6 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         if let virtualMachine {
             virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
         }
-
-        if accelDescriptionSwitch.state == .on, spiceDescriptionSwitch.state == .on {
-            spiceDescriptionSwitch.state = .off
-            enableSpiceSupport(self)
-        }
     }
 
     @IBAction func enableSpiceSupport(_: Any) {
@@ -167,10 +162,6 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
 
         if spiceDescriptionSwitch.state == .on {
-            if accelDescriptionSwitch.state == .on {
-                accelDescriptionSwitch.state = .off
-                enable3DAccelerationToggleChanged(self)
-            }
             qemuDisplayComboBox.isEnabled = false
         } else {
             qemuDisplayComboBox.isEnabled = true
