@@ -243,6 +243,7 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         connectTask = nil
         connectionDeadline = nil
         showStatus(lastErrorMessage ?? String(format: NSLocalizedString("QemuSpiceViewerViewController.connectionFailed", comment: ""), socketPath))
+        view.window?.close()
     }
 
     private func disconnect() {
