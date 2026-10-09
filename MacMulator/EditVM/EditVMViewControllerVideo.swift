@@ -102,6 +102,14 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     virtualMachine.enableSpiceDisplay = false
                     qemuDisplayComboBox.isEnabled = true
                 }
+                #if APPSTORE
+                    // The bundled Qemu has no native display: the Spice display is the only option.
+                    spiceDescriptionSwitch.state = .on
+                    spiceDescriptionSwitch.isEnabled = false
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
+                    qemuDisplayComboBox.isEnabled = false
+                    virtualMachine.enableSpiceDisplay = true
+                #endif
 
                 let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
                 if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
@@ -182,7 +190,13 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                 shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
                     let devices = shell.readFromStandardOutput()
 
-                    if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && (devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl")) || virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && devices.contains("apple-gfx-pci") {
+                    #if APPSTORE
+                        // The bundled Qemu only has the Spice display, which cannot provide OpenGL to virtio-gpu-gl.
+                        let glDisplayAvailable = false
+                    #else
+                        let glDisplayAvailable = true
+                    #endif
+                    if glDisplayAvailable && (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && (devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl")) || virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && devices.contains("apple-gfx-pci") {
                         print("OpenGL SUPPORTED")
                         DispatchQueue.main.async {
                             self.accelerationSuported = true

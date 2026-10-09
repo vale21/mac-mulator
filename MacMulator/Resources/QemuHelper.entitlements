@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	Entitlements of the Qemu executables bundled in the App Store flavor
+	(qemu-system-* and qemu-img in Contents/MacOS). They are launched by the
+	application and inherit its sandbox; Hypervisor.framework (HVF) and the
+	TCG JIT need their own entitlements on the executable that uses them.
+	-->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.inherit</key>
+	<true/>
+	<key>com.apple.security.hypervisor</key>
+	<true/>
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+</dict>
+</plist>

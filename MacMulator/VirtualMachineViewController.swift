@@ -403,7 +403,7 @@ class VirtualMachineViewController: NSViewController {
 
     func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         startVM_internal(runner, inRecovery, vm)
-        if vm.enableSpiceDisplay == true {
+        if QemuUtils.isSpiceDisplayEnabled(vm) {
             performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
         }
     }
@@ -411,8 +411,7 @@ class VirtualMachineViewController: NSViewController {
     fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         do {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-                let swTpmPath = vm.qemuPath != nil ? vm.qemuPath! : qemuPath
+                let swTpmPath = QemuUtils.getQemuPath(for: vm)
                 let shell = Shell()
                 shell.runCommand(swTpmPath + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(vm.path) + "/tpm/socket  --log level=20 --tpm2", vm.path, uponCompletion: { _ in
                     print("swtpm done")
@@ -447,7 +446,7 @@ class VirtualMachineViewController: NSViewController {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                     performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
-                } else if vm.enableSpiceDisplay == true {
+                } else if QemuUtils.isSpiceDisplayEnabled(vm) {
                     startVM_internal(runner, inRecovery, vm)
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else {

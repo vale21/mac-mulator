@@ -183,10 +183,6 @@
 		3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */; };
 		3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
 		3BFB2B843078F067005A4B51 /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
-		3BFB2B863078F067005A4B51 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3BFB2B883078F067005A4B51 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3BFB2B893078F067005A4B51 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3BFB2B8A3078F067005A4B51 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 		3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */; };
@@ -222,28 +218,6 @@
 			dstSubfolderSpec = 7;
 			files = (
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3BFB2B853078F067005A4B51 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-				3BFB2B863078F067005A4B51 /* qemu-img in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3BFB2B873078F067005A4B51 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Libs;
-			dstSubfolderSpec = 7;
-			files = (
-				3BFB2B883078F067005A4B51 /* libglib-2.0.0.dylib in CopyFiles */,
-				3BFB2B893078F067005A4B51 /* libpcre.1.dylib in CopyFiles */,
-				3BFB2B8A3078F067005A4B51 /* libintl.8.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +282,7 @@
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachinesListViewController.swift; sourceTree = "<group>"; };
 		3B89B6ED2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_ARM.fd; sourceTree = "<group>"; };
+		3B9796343078F85C00577824 /* QemuHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QemuHelper.entitlements; sourceTree = "<group>"; };
 		3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineTableCellView.swift; sourceTree = "<group>"; };
 		3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSRestoreImage.swift; sourceTree = "<group>"; };
 		3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineConfigurationHelper.swift; sourceTree = "<group>"; };
@@ -568,6 +543,7 @@
 				3BBB473925CABDCB00A4DBA7 /* Info.plist */,
 				3BBB473825CABDCB00A4DBA7 /* MacMulator-Enthusiast.entitlements */,
 				3BFB2B243078EFA0005A4B51 /* MacMulator-AppStore.entitlements */,
+				3B9796343078F85C00577824 /* QemuHelper.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -660,8 +636,6 @@
 				3BFB2B2B3078F067005A4B51 /* Sources */,
 				3BFB2B6C3078F067005A4B51 /* Frameworks */,
 				3BFB2B713078F067005A4B51 /* Resources */,
-				3BFB2B853078F067005A4B51 /* CopyFiles */,
-				3BFB2B873078F067005A4B51 /* CopyFiles */,
 				3BFB2B8B3078F067005A4B51 /* Embed Sysroot */,
 			);
 			buildRules = (

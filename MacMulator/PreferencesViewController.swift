@@ -90,7 +90,14 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
-        qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
+        #if APPSTORE
+            // The App Store flavor only runs the Qemu bundled in the application: there is no path to configure.
+            qemuFolderLabel.isHidden = true
+            qemuFolderField.isHidden = true
+            qemuFolderButton.isHidden = true
+        #else
+            qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
+        #endif
 
         let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
         livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off
@@ -128,7 +135,11 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     fileprivate func checkForQemuBinaries() {
         let fileManager = FileManager.default
-        let path = qemuFolderField.stringValue
+        #if APPSTORE
+            let path = QemuUtils.getQemuPath()
+        #else
+            let path = qemuFolderField.stringValue
+        #endif
         if fileManager.fileExists(atPath: path) {
             checkFile(QemuConstants.SWTPM, swtpm_tick)
             checkFileAndGetVersion(QemuConstants.QEMU_IMG, qemu_img_tick)
@@ -164,8 +175,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
         checkFile(path, image)
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-        QemuUtils.getQemuVersion(qemuPath: qemuPath!, uponCompletion: { version in
+        QemuUtils.getQemuVersion(qemuPath: QemuUtils.getQemuPath(), uponCompletion: { version in
             DispatchQueue.main.async {
                 if version == nil {
                     self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "")

@@ -45,7 +45,7 @@ class QemuUtils {
     }
 
     static func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command: String =
@@ -60,7 +60,7 @@ class QemuUtils {
     }
 
     static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -74,7 +74,7 @@ class QemuUtils {
     }
 
     static func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -89,7 +89,7 @@ class QemuUtils {
     }
 
     static func convertVHDXToDiskImage(vhdxPath: String, vmPath: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -230,7 +230,7 @@ class QemuUtils {
     }
 
     static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -243,8 +243,46 @@ class QemuUtils {
         })
     }
 
+    #if APPSTORE
+        /// The bundled qemu-system-* and qemu-img executables live next to the main executable (Contents/MacOS).
+        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
+        /// Firmware and data files of the bundled Qemu (Contents/Resources/qemu), passed to Qemu with -L.
+        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
+    #endif
+
+    /// Directory containing the qemu-system-* and qemu-img executables used by the application.
+    /// The App Store flavor only ever runs the Qemu bundled inside the application; the Enthusiast
+    /// flavor runs the Qemu installation configured in the Preferences.
+    static func getQemuPath() -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        #endif
+    }
+
+    /// Directory containing the Qemu executables to use for a given VM: the per-VM override when
+    /// the user configured one (Enthusiast flavor only), the global directory otherwise.
+    static func getQemuPath(for vm: VirtualMachine) -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return vm.qemuPath ?? getQemuPath()
+        #endif
+    }
+
+    /// Whether a VM is shown through the Spice display. The bundled Qemu of the App Store flavor has
+    /// no native (Cocoa) display, so there the Spice display is the only option, whatever the VM says.
+    static func isSpiceDisplayEnabled(_ vm: VirtualMachine) -> Bool {
+        #if APPSTORE
+            return true
+        #else
+            return vm.enableSpiceDisplay == true
+        #endif
+    }
+
     static func isBinaryAvailable(_ binary: String) -> Bool {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = getQemuPath()
         let fileManager = FileManager.default
 
         return fileManager.fileExists(atPath: qemuPath + "/" + binary)

@@ -93,7 +93,14 @@ class QemuCommandBuilder {
 
     func withEnableSpice(_ enableSpice: Bool?, basePath: String?) -> QemuCommandBuilder {
         if let enableSpice, enableSpice, let basePath {
-            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(basePath) + "/socket.spice,disable-ticketing=on" +
+            #if APPSTORE
+                // The bundled (UTM) Qemu crashes at startup unless the gl option is given explicitly,
+                // and its "none" display cannot do OpenGL anyway.
+                let glOption = ",gl=off"
+            #else
+                let glOption = ""
+            #endif
+            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(basePath) + "/socket.spice,disable-ticketing=on" + glOption +
                 FORMATTER + "-device virtio-serial-pci" +
                 FORMATTER + "-chardev spicevmc,id=spicechannel0,name=vdagent" +
                 FORMATTER + "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0" +
@@ -266,7 +273,14 @@ class QemuCommandBuilder {
     }
 
     func build() -> String {
-        var cmd = qemuPath + "/" + executable
+        var cmd = Utils.escape(qemuPath) + "/" + executable
+        #if APPSTORE
+            // The bundled Qemu cannot locate its firmware relative to the executable: point it to the app's copy.
+            cmd += FORMATTER + "-L " + Utils.escape(QemuUtils.bundledQemuDataPath)
+            // The bundled Qemu has no default audio backend; without one, any sound device
+            // (and machines with built-in audio, such as mac99) refuses to start.
+            cmd += FORMATTER + "-audio coreaudio"
+        #endif
         if let serial {
             cmd += FORMATTER + "-serial " + serial
         }
@@ -292,9 +306,12 @@ class QemuCommandBuilder {
             } else {
                 cmd += "off"
             }
-            if enable3d ?? false {
-                cmd += ",gl=on"
-            }
+            #if !APPSTORE
+                // The "none" display of the bundled (UTM) Qemu refuses gl=on.
+                if enable3d ?? false {
+                    cmd += ",gl=on"
+                }
+            #endif
         }
         if let cpu {
             cmd += FORMATTER + "-cpu " + cpu
