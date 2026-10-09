@@ -100,7 +100,7 @@ class QemuCommandBuilder {
             #else
                 let glOption = ""
             #endif
-            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(basePath) + "/socket.spice,disable-ticketing=on" + glOption +
+            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(QemuUtils.spiceSocketPath(forVMAt: basePath)) + ",disable-ticketing=on" + glOption +
                 FORMATTER + "-device virtio-serial-pci" +
                 FORMATTER + "-chardev spicevmc,id=spicechannel0,name=vdagent" +
                 FORMATTER + "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0" +

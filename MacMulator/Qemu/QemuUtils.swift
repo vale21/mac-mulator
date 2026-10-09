@@ -281,6 +281,24 @@ class QemuUtils {
         #endif
     }
 
+    /// Path of the unix socket on which Qemu's Spice server listens for a VM.
+    /// The Enthusiast flavor keeps it next to the VM. A sandboxed app can only bind unix sockets
+    /// inside its own container, so the App Store flavor keeps it in the container's temporary
+    /// directory, with a short name derived from the VM path (sun_path is limited to 104 bytes).
+    static func spiceSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
+            var hash: UInt64 = 0xCBF2_9CE4_8422_2325
+            for byte in vmPath.utf8 {
+                hash ^= UInt64(byte)
+                hash = hash &* 0x0000_0100_0000_01B3
+            }
+            return NSTemporaryDirectory() + "spice-" + String(hash, radix: 16) + ".sock"
+        #else
+            return vmPath + "/socket.spice"
+        #endif
+    }
+
     static func isBinaryAvailable(_ binary: String) -> Bool {
         let qemuPath = getQemuPath()
         let fileManager = FileManager.default
