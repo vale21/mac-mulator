@@ -6,8 +6,9 @@
 #
 # The App Store flavor (APPSTORE in SWIFT_ACTIVE_COMPILATION_CONDITIONS) also
 # gets the UTM build of Qemu from the same sysroot: the qemu-*-softmmu
-# frameworks, the qemu-system-* and qemu-img executables (Contents/MacOS) and
-# the firmware Qemu loads at run time (Contents/Resources/qemu). The Enthusiast
+# frameworks, the qemu-system-* and qemu-img executables (Contents/MacOS), the
+# firmware Qemu loads at run time (Contents/Resources/qemu) and a swtpm
+# executable built around the swtpm library of the sysroot. The Enthusiast
 # flavor runs the Qemu installed by the user and bundles none of this.
 #
 # Binaries are thinned to the architecture being built when there is only one
@@ -29,6 +30,7 @@ DST_DIR="${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}"
 EXEC_DIR="${TARGET_BUILD_DIR}/${EXECUTABLE_FOLDER_PATH}"
 DATA_DIR="${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/qemu"
 QEMU_ENTITLEMENTS="${PROJECT_DIR}/MacMulator/Resources/QemuHelper.entitlements"
+SWTPM_SRC="${PROJECT_DIR}/scripts/swtpm_launcher.c"
 
 # Qemu system emulators bundled in the App Store flavor. Keep in sync with
 # QemuConstants.ARCH_* and with scripts/fetch_sysroot.sh.
@@ -77,6 +79,15 @@ is_current () {
     fi
 }
 
+# Signs the executable $1, launched by the application and inheriting its
+# sandbox, with the entitlements of QemuHelper.entitlements (HVF, JIT).
+sign_helper () {
+    if [ -n "${SIGN}" ]; then
+        codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" ${RUNTIME_FLAGS} ${OTHER_CODE_SIGN_FLAGS} \
+            --identifier "${PRODUCT_BUNDLE_IDENTIFIER}.$2" --entitlements "${QEMU_ENTITLEMENTS}" "$1"
+    fi
+}
+
 # Frameworks linked by the application / CocoaSpice. Keep in sync with OTHER_LDFLAGS.
 SEEDS="spice-client-glib-2.0.8 glib-2.0.0 gobject-2.0.0 gio-2.0.0 gmodule-2.0.0 gthread-2.0.0 intl.8 \
 gstreamer-1.0.0 gstbase-1.0.0 gstaudio-1.0.0 gstvideo-1.0.0 gstapp-1.0.0 gstpbutils-1.0.0 gsttag-1.0.0 \
@@ -87,7 +98,8 @@ if [ -n "${BUNDLE_QEMU}" ]; then
         SEEDS="${SEEDS} qemu-${t}-softmmu"
     done
     # ANGLE (EGL / GLESv2) is loaded at run time by epoxy for 3D accelerated guests, not linked.
-    SEEDS="${SEEDS} EGL GLESv2"
+    # swtpm.0 is the library behind the swtpm executable built below.
+    SEEDS="${SEEDS} EGL GLESv2 swtpm.0"
 fi
 
 # Follow @rpath/<name>.framework/... load commands to compute the dependency closure.
@@ -159,7 +171,7 @@ done
 
 if [ -z "${BUNDLE_QEMU}" ]; then
     rm -rf "${DATA_DIR}"
-    for NAME in ${QEMU_EXECUTABLES}; do
+    for NAME in ${QEMU_EXECUTABLES} swtpm; do
         rm -f "${EXEC_DIR}/${NAME}"
     done
     exit 0
@@ -208,14 +220,28 @@ for NAME in ${QEMU_EXECUTABLES}; do
     chmod 755 "${DST}.tmp"
     thin_binary "${DST}.tmp"
     fix_load_commands "${DST}.tmp"
-    if [ -n "${SIGN}" ]; then
-        # Launched by the application, these executables inherit its sandbox; their own
-        # entitlements grant them Hypervisor.framework and JIT access (QemuHelper.entitlements).
-        codesign --force --sign "${EXPANDED_CODE_SIGN_IDENTITY}" ${RUNTIME_FLAGS} ${OTHER_CODE_SIGN_FLAGS} \
-            --identifier "${PRODUCT_BUNDLE_IDENTIFIER}.${NAME}" --entitlements "${QEMU_ENTITLEMENTS}" "${DST}.tmp"
-    fi
+    sign_helper "${DST}.tmp" "${NAME}"
     mv -f "${DST}.tmp" "${DST}"
 done
+
+# swtpm: the sysroot ships it as a library (swtpm.0.framework) exposing
+# swtpm_main(), the way UTM runs it. Build a small executable around it so that
+# MacMulator can run it like the swtpm command of a regular Qemu installation.
+DST="${EXEC_DIR}/swtpm"
+if [ ! -f "${DST}" ] || [ "${SWTPM_SRC}" -nt "${DST}" ] || [ "${QEMU_ENTITLEMENTS}" -nt "${DST}" ] \
+    || [ "$(lipo -archs "${DST}")" != "${ARCHS}" ]; then
+    echo "Building swtpm"
+    ARCH_FLAGS=
+    for a in ${ARCHS}; do
+        ARCH_FLAGS="${ARCH_FLAGS} -arch ${a}"
+    done
+    rm -f "${DST}" "${DST}.tmp"
+    xcrun clang ${ARCH_FLAGS} -isysroot "${SDKROOT}" -mmacosx-version-min="${MACOSX_DEPLOYMENT_TARGET}" \
+        -Os -Wall -F "${SRC_DIR}" -framework swtpm.0 -Wl,-rpath,@executable_path/../Frameworks \
+        -o "${DST}.tmp" "${SWTPM_SRC}"
+    sign_helper "${DST}.tmp" "swtpm"
+    mv -f "${DST}.tmp" "${DST}"
+fi
 
 # Firmware and data files Qemu loads at run time; the application passes this
 # directory to Qemu with -L. The sysroot has files for every architecture Qemu

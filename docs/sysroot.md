@@ -30,6 +30,7 @@ The sysroot lives in `Sysroot/sysroot-macOS-arm64_x86_64/` at the root of the re
 | `Frameworks/qemu-*-softmmu.framework` | App Store flavor | embedded into `Contents/Frameworks` |
 | `bin/qemu-system-*`, `bin/qemu-img` | App Store flavor | copied to `Contents/MacOS`, load commands rewritten, signed with `MacMulator/Resources/QemuHelper.entitlements` |
 | `share/qemu/` | App Store flavor | firmware subset copied to `Contents/Resources/qemu`, passed to Qemu with `-L` |
+| `Frameworks/swtpm.0.framework` | App Store flavor | embedded; `scripts/swtpm_launcher.c` is compiled around it into `Contents/MacOS/swtpm`, since the sysroot has no swtpm executable |
 
 Two scripts do all the work:
 
@@ -167,6 +168,10 @@ Qemu therefore affects both flavors, not only the App Store one.
    "$APP"/Contents/MacOS/qemu-system-aarch64 -display help
    "$APP"/Contents/MacOS/qemu-system-aarch64 -audiodev help
    ```
+
+   Also check that `Contents/MacOS/swtpm socket --help` still works: the launcher calls the
+   `swtpm_main(argc, argv, prgname, iface)` function of UTM's swtpm library, whose signature may
+   change.
 
    The App Store command line relies on a few properties of UTM's Qemu build that may change with a
    new version: there is no `cocoa` display (the Spice display is forced on), `-spice` needs an

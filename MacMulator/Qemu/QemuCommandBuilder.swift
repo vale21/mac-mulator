@@ -369,7 +369,7 @@ class QemuCommandBuilder {
         }
         if let tpmPath {
             let device = tpmDevice != nil ? tpmDevice! : QemuConstants.TPM_TIS_DEVICE
-            cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
+            cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: tpmPath)) + " -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
         }
         if let logging {
             cmd += FORMATTER + "-d " + logging

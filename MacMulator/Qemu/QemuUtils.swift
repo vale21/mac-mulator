@@ -287,17 +287,34 @@ class QemuUtils {
     /// directory, with a short name derived from the VM path (sun_path is limited to 104 bytes).
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
+            return containerSocketPath("spice", vmPath)
+        #else
+            return vmPath + "/socket.spice"
+        #endif
+    }
+
+    /// Path of the control socket through which Qemu talks to the swtpm process emulating a VM's TPM.
+    /// Same considerations as for the Spice socket.
+    static func tpmSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("tpm", vmPath)
+        #else
+            return vmPath + "/tpm/socket"
+        #endif
+    }
+
+    #if APPSTORE
+        /// A unix socket path inside the sandbox container, unique per VM and short enough for sun_path.
+        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
             // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
             var hash: UInt64 = 0xCBF2_9CE4_8422_2325
             for byte in vmPath.utf8 {
                 hash ^= UInt64(byte)
                 hash = hash &* 0x0000_0100_0000_01B3
             }
-            return NSTemporaryDirectory() + "spice-" + String(hash, radix: 16) + ".sock"
-        #else
-            return vmPath + "/socket.spice"
-        #endif
-    }
+            return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
+        }
+    #endif
 
     static func isBinaryAvailable(_ binary: String) -> Bool {
         let qemuPath = getQemuPath()
