@@ -23,6 +23,9 @@ class VirtualMachineViewController: NSViewController {
     var listenPort: Int32 = 4444
     var rootController: RootViewController?
 
+    /// SPICE viewer shown for the VM that is being run, closed automatically when QEMU exits with an error
+    private weak var spiceViewer: QemuSpiceViewerViewController?
+
     var boxContentView: NSView?
 
     @IBOutlet var noVMsBox: NSBox!
@@ -171,6 +174,7 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
             dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
+            spiceViewer = dest
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController
@@ -463,7 +467,7 @@ class VirtualMachineViewController: NSViewController {
                         QemuUtils.removeOpenCoreConfig(virtualMachine: vm, uponCompletion: {
                             terminationCode in
                             if terminationCode != 0 {
-                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
+                                self.closeSpiceWindowAndShowAlert(result: result, virtualMachine: virtualMachine)
                             }
                         })
                     }
@@ -471,8 +475,16 @@ class VirtualMachineViewController: NSViewController {
             }
 
             if result.exitCode != 0 {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
+                self.closeSpiceWindowAndShowAlert(result: result, virtualMachine: virtualMachine)
             }
         }
+    }
+
+    fileprivate func closeSpiceWindowAndShowAlert(result: VMExecutionResult, virtualMachine: VirtualMachine) {
+        if let spiceViewer, spiceViewer.virtualMachine == virtualMachine {
+            spiceViewer.closeWindow()
+            self.spiceViewer = nil
+        }
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
     }
 }

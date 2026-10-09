@@ -146,6 +146,11 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         connect()
     }
 
+    /// Closes the viewer without asking for confirmation. Used when QEMU has already exited
+    func closeWindow() {
+        view.window?.close()
+    }
+
     override func viewWillDisappear() {
         super.viewWillDisappear()
 
