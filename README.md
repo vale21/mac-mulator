@@ -28,13 +28,13 @@ MacMulator is a Universal app that works on Intel and Apple Silicon macs. It is 
 
 ### Building from source
 
-The SPICE display viewer links against the SPICE, GLib and GStreamer frameworks from the prebuilt universal sysroot that [UTM](https://github.com/utmapp/UTM) publishes from its CI. They are not part of this repository: before the first build run
+The SPICE display viewer links against the SPICE, GLib and GStreamer frameworks from the prebuilt universal sysroot that [UTM](https://github.com/utmapp/UTM) publishes from its CI; the App Store flavor also takes its bundled Qemu from it. They are not part of this repository: before the first build run
 
 ```sh
 scripts/fetch_sysroot.sh
 ```
 
-which downloads them into the git-ignored `Sysroot/` directory. The download needs a GitHub token (`GH_TOKEN`, `gh auth login`, or the git credential helper). Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh` and expects `GH_TOKEN` as a secret environment variable of the workflow.
+which downloads them into the git-ignored `Sysroot/` directory. The download needs a GitHub token (`GH_TOKEN`, `gh auth login`, or the git credential helper). Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh` and expects `GH_TOKEN` as a secret environment variable of the workflow. How to pick a sysroot version, pin it, and update Qemu and CocoaSpice when UTM releases a new version is described in [docs/sysroot.md](docs/sysroot.md).
 
 ### Testing Status
 
