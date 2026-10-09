@@ -49,7 +49,6 @@ class EditVMViewController: NSTabViewController {
             snapshots.setVmRunner(vmRunner)
         }
 
-        let vmArchitecture = Utils.getMachineArchitecture(vm.architecture)
         if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[4])
@@ -58,9 +57,6 @@ class EditVMViewController: NSTabViewController {
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
-        } else if vmArchitecture != Utils.hostArchitecture() {
-            removeTabViewItem(tabViewItems[4])
-            removeTabViewItem(tabViewItems[3])
         } else {
             removeTabViewItem(tabViewItems[3])
         }

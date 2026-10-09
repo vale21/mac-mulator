@@ -90,6 +90,13 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="yNP-ow-gwT"/>
+                                        <menuItem title="Connect to running VM" id="lOz-n7-MXp">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="5pa-o4-OMC" kind="show" id="pl9-Cp-3RB"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="g26-lY-0gZ"/>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
@@ -359,7 +366,45 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2830" y="-1037"/>
+            <point key="canvasLocation" x="-2828" y="-1114"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="PoJ-HA-dA6">
+            <objects>
+                <windowController id="5pa-o4-OMC" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="rUd-k1-ve3">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="211" y="270" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
+                        <view key="contentView" id="TZH-dq-IQm">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="5pa-o4-OMC" id="Kb4-J6-M1V"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="gBZ-gf-hfc" kind="relationship" relationship="window.shadowedContentViewController" id="Vfs-8t-hiu"/>
+                    </connections>
+                </windowController>
+                <customObject id="ep7-AN-Ldt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2181" y="-990"/>
+        </scene>
+        <!--Qemu Spice Viewer View Controller-->
+        <scene sceneID="hkI-4Y-Hea">
+            <objects>
+                <viewController id="gBZ-gf-hfc" customClass="QemuSpiceViewerViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="YpP-kh-Zmp">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="I4Y-tY-Kqh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1474" y="-1025"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">

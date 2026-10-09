@@ -7,13 +7,6 @@
 
 import Cocoa
 
-protocol RunningVMManagerViewController {
-    func setVirtualMachine(_ vm: VirtualMachine)
-    func setRecoveryMode(_ recoveryMode: Bool)
-    func setVmController(_ controller: VirtualMachineViewController)
-    func setVmRunner(_ runner: VirtualMachineRunner)
-}
-
 class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
@@ -29,6 +22,9 @@ class VMToStart {
 class VirtualMachineViewController: NSViewController {
     var listenPort: Int32 = 4444
     var rootController: RootViewController?
+
+    /// SPICE viewer shown for the VM that is being run, closed automatically when QEMU exits with an error
+    private weak var spiceViewer: QemuSpiceViewerViewController?
 
     var boxContentView: NSView?
 
@@ -167,6 +163,18 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmRunner(vmToStart.runner)
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
+        } else if segue.identifier == MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE {
+            let source = segue.sourceController as! VirtualMachineViewController
+            let dest = segue.destinationController as! QemuSpiceViewerViewController
+            let vmToStart = sender as! VMToStart
+
+            dest.setVirtualMachine(vmToStart.vm)
+            dest.setRecoveryMode(vmToStart.inRecovery)
+            dest.setVmRunner(vmToStart.runner)
+            dest.setVmController(source)
+            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
+            dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
+            spiceViewer = dest
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController
@@ -395,6 +403,9 @@ class VirtualMachineViewController: NSViewController {
 
     func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         startVM_internal(runner, inRecovery, vm)
+        if vm.enableSpiceDisplay == true {
+            performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+        }
     }
 
     fileprivate func startVM_internal(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
@@ -434,12 +445,13 @@ class VirtualMachineViewController: NSViewController {
 
                 if vm.type == MacMulatorConstants.APPLE_VM {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+                } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
+                    performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
+                } else if vm.enableSpiceDisplay == true {
+                    startVM_internal(runner, inRecovery, vm)
+                    performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else {
-                    if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
-                        performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
-                    } else {
-                        startVM_internal(runner, inRecovery, vm)
-                    }
+                    startVM_internal(runner, inRecovery, vm)
                 }
             }
         }
@@ -455,7 +467,7 @@ class VirtualMachineViewController: NSViewController {
                         QemuUtils.removeOpenCoreConfig(virtualMachine: vm, uponCompletion: {
                             terminationCode in
                             if terminationCode != 0 {
-                                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
+                                self.closeSpiceWindowAndShowAlert(result: result, virtualMachine: virtualMachine)
                             }
                         })
                     }
@@ -463,8 +475,16 @@ class VirtualMachineViewController: NSViewController {
             }
 
             if result.exitCode != 0 {
-                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
+                self.closeSpiceWindowAndShowAlert(result: result, virtualMachine: virtualMachine)
             }
         }
+    }
+
+    fileprivate func closeSpiceWindowAndShowAlert(result: VMExecutionResult, virtualMachine: VirtualMachine) {
+        if let spiceViewer, spiceViewer.virtualMachine == virtualMachine {
+            spiceViewer.closeWindow()
+            self.spiceViewer = nil
+        }
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineViewController.vmExecutionFailed", comment: ""), result.error?.localizedCapitalized ?? NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")), virtualMachine: virtualMachine)
     }
 }

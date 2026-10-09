@@ -45,11 +45,12 @@ class ImportExportHerlper {
         let videoDevice = Utils.getVideoForSubType(os, subtype)
         let qemuDisplay = Utils.getDisplaySubType(os, subtype)
         let enable3DAcceleration = true
+        let enableSpiceDisplay = true
         let hvf = Utils.getAccelForSubType(os, subtype)
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         let bootMode = Utils.getBootModeForSubType(os, subtype)
 
-        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode)
+        let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, enableSpiceDisplay: enableSpiceDisplay, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode)
 
         try! Utils.createDocumentPackage(vm.path)
 

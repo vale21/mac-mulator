@@ -3,6 +3,7 @@
 "AboutBoxViewController.descriptionLabel" = "MacMulator è un software gratuito e non commerciale";
 "AboutBoxViewController.descriptionText" = "MacMulator è l'emulatore di computer per il tuo Mac! Grazie alla sua interfaccia intuitva e alla potenza di Qemu e di Apple Virtualization Framework, ti offre la possibilità di creare qualsiasi Macchina Virtuale in pochi click. Qualunque sia il sistema che devi emulare sul tuo Mac, MacMulator è lo strumento per te!";
 "AboutBoxViewController.creditsLabel" = "Ringraziamenti";
+"AboutBoxViewController.copyright" = "Copyright © %@ the MacMulator Project. macmulator@gmail.com";
 "AppDelegate.exportToParallelsComplete" = "Esportazione completata.";
 "AppDelegate.exportToParallelsFailed" = "Esportazione fallita con errore: %@";
 "AppDelegate.importFromParallelsFailed" = "Importazione fallita con errore: %@";
@@ -99,8 +100,12 @@
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Display Qemu da usare:";
 "EditVMViewControllerVideo.accelDescriptiontext" = "MacMulator può provare ad abilitare l'accelerazione 3D nella VM guest, se si accorge che la versione di Qemu fornita la supporta. La VM può diventare instabile.";
 "EditVMViewControllerVideo.accelDescriptionLabel" = "Abilita accelerazione 3D";
+"EditVMViewControllerVideo.spiceDescriptionText" = "Con il display Spice, La finestra della VM è gestita da MacMulator invece che da Qemu. Offre migliore integrazione, risoluzione dinamica nella VM e appunti condivisi (se la VM li supporta). E' abilitato per default se Qemu supporta Spice. Potrebbe non essere compatibile con l'accelerazione 3D.";
+"EditVMViewControllerVideo.spiceDescriptionLabel" = "Usa il display Spice";
 "EditVMViewControllerVideo.accelAvailabilityTooltipDisabled" = "L'accelerazione 3D non è abilitata, perché Qemu non la supporta, oppure perché stai usando una VM la cui architettura è diversa dsa quella del Mac host.";
 "EditVMViewControllerVideo.accelAvailabilityTooltipEnabled" = "Prova ad abilitare l'accelerazione 3D nella VM.";
+"EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled" = "Il supporto Spice non è abilitato, perché Qemu non lo supporta.";
+"EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled" = "Usa il display Spice per mostrare la VM.";
 "EditVMViewControllerVideo.windowsArmDescriptionText" = "Nota per gli utenti con Windows 11 ARM:\n\nLa macchina virtuale è creata con \"Ram framebuffer standalone device\". Questa scheda è necessaria per installare correttamente Windows 11 sulla VM. Una volta installato Windows, puoi selezionare \"VirtIO GPU PCI\". Questa scheda funziona meglio, e offre la possibilità di selezionare la risoluzione dello schermo, se installi il relativo driver. Il driver si trova nel DVD che trovi già collegato alla VM quando la crei.";
 "EditVMViewControllerVideo.enableAppleParavirtualizedGraphics" = "Abilita Apple Paravirtualized Graphics";
 "EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipDisabled" = "Apple Paravirtualized Graphics non è abilitata, perché Qemu non la supporta, oppure perché stai usando una versione di macOS più vecchia di macOS Big Sur.";
@@ -171,6 +176,13 @@
 "QemuConstants.bootDrive" = "Disco di avvio";
 "QemuConstants.bootMode" = "Modalità di avvio";
 "QemuConstants.uefiSecure" = "UEFI con Secure Boot";
+"QemuSpiceViewerViewController.connecting" = "Connessione a %@…";
+"QemuSpiceViewerViewController.connectionFailed" = "Impossibile connettersi a %@";
+"QemuSpiceViewerViewController.disconnected" = "Disconnesso da %@";
+"QemuSpiceViewerViewController.error" = "Errore SPICE: %@";
+"QemuSpiceViewerViewController.spiceStartFailed" = "Impossibile avviare il client SPICE";
+"QemuSpiceViewerViewController.noMetal" = "Metal non è disponibile su questo Mac";
+"QemuSpiceViewerViewController.mouseCaptured" = "%@ (premi ⌃⌥ per rilasciare il mouse)";
 "RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "RootViewController.vmConvertedToQemu" = "La VM è stata convertita con successo al formato QEMU.";
 "RootViewController.vmConvertedToApple" = "La VM è stata convertita con successo al formato Apple.";

@@ -23,6 +23,7 @@
 		3B200DAC2802F2B400F7159E /* VirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */; };
 		3B200DAE2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */; };
 		3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */; };
+		3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */; };
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
@@ -75,6 +76,7 @@
 		3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
 		3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
+		3BC0C5A3307400000000A003 /* CocoaSpiceNoUsb in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */; };
 		3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */; };
 		3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
@@ -89,6 +91,7 @@
 		3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
 		3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */; };
 		3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
+		3BE72EDC3074F0D600599EBB /* RunningVMManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */; };
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
@@ -150,6 +153,7 @@
 		3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineRunner.swift; sourceTree = "<group>"; };
 		3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineRunnerFactory.swift; sourceTree = "<group>"; };
 		3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkLinuxSupport.swift; sourceTree = "<group>"; };
+		3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuSpiceViewerViewController.swift; sourceTree = "<group>"; };
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
@@ -227,6 +231,7 @@
 		3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "macos-guest-tools.img.zip"; sourceTree = "<group>"; };
 		3BE706152DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3BE706162DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningVMManagerViewController.swift; sourceTree = "<group>"; };
 		3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVMCreator.swift; sourceTree = "<group>"; };
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
@@ -245,6 +250,7 @@
 				3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */,
 				3B6FF876266F791700368BAB /* SocketSwift in Frameworks */,
 				3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */,
+				3BC0C5A3307400000000A003 /* CocoaSpiceNoUsb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +318,7 @@
 				3BB10092266F5293005D0E44 /* Qemu */,
 				3BBB473625CABDCB00A4DBA7 /* Resources */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
+				3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */,
 				3B200DAA2802F28D00F7159E /* RunVM */,
 				3BBB472F25CABDC600A4DBA7 /* UI */,
 				3BBB471C25CABDAE00A4DBA7 /* Utils */,
@@ -382,6 +389,7 @@
 				3BBC4BB525DE74020001CA02 /* QemuUtils.swift */,
 				3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */,
 				3BB10093266F52D8005D0E44 /* QemuMonitor.swift */,
+				3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */,
 			);
 			path = Qemu;
 			sourceTree = "<group>";
@@ -483,6 +491,7 @@
 				3B391EE725C075F50030E914 /* Resources */,
 				3B57855E2665275C0003C3C8 /* CopyFiles */,
 				3B57855C266527400003C3C8 /* CopyFiles */,
+				3B246AFB3073A91800EA2B5C /* Embed Sysroot */,
 			);
 			buildRules = (
 			);
@@ -492,6 +501,7 @@
 			packageProductDependencies = (
 				3B6FF875266F791700368BAB /* SocketSwift */,
 				3B559E6526EB54730071E5B5 /* ZIPFoundation */,
+				3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */,
 			);
 			productName = MacMulator;
 			productReference = 3B391EE925C075F50030E914 /* MacMulator.app */;
@@ -549,6 +559,7 @@
 			packageReferences = (
 				3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */,
 				3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				3B6BD7163073ACF0004DB26B /* XCRemoteSwiftPackageReference "CocoaSpice" */,
 			);
 			productRefGroup = 3B391EEA25C075F50030E914 /* Products */;
 			projectDirPath = "";
@@ -596,6 +607,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3B246AFB3073A91800EA2B5C /* Embed Sysroot */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Sysroot";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/scripts/embed_sysroot_frameworks.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3B391EE525C075F50030E914 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -614,6 +647,7 @@
 				3BD9CCEE262DCDDD008341D9 /* NewVMViewController.swift in Sources */,
 				3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */,
 				3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */,
+				3BE72EDC3074F0D600599EBB /* RunningVMManagerViewController.swift in Sources */,
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
 				3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */,
 				3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */,
@@ -635,6 +669,7 @@
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
 				3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */,
+				3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */,
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
 				3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
@@ -866,6 +901,10 @@
 				CURRENT_PROJECT_VERSION = 248;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -873,9 +912,80 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = "1.0.0 Beta 27";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"spice-client-glib-2.0.8",
+					"-framework",
+					"glib-2.0.0",
+					"-framework",
+					"gobject-2.0.0",
+					"-framework",
+					"gio-2.0.0",
+					"-framework",
+					"gmodule-2.0.0",
+					"-framework",
+					"gthread-2.0.0",
+					"-framework",
+					intl.8,
+					"-framework",
+					"gstreamer-1.0.0",
+					"-framework",
+					"gstbase-1.0.0",
+					"-framework",
+					"gstaudio-1.0.0",
+					"-framework",
+					"gstvideo-1.0.0",
+					"-framework",
+					"gstapp-1.0.0",
+					"-framework",
+					"gstpbutils-1.0.0",
+					"-framework",
+					"gsttag-1.0.0",
+					"-framework",
+					"gstriff-1.0.0",
+					"-framework",
+					"gstfft-1.0.0",
+					"-framework",
+					"gstcontroller-1.0.0",
+					"-framework",
+					"gstnet-1.0.0",
+					"-framework",
+					"gstallocators-1.0.0",
+					"-framework",
+					jpeg.62,
+					"-framework",
+					CoreAudio,
+					"-framework",
+					AudioUnit,
+					"-framework",
+					AudioToolbox,
+					"-lgstcoreelements",
+					"-lgstadder",
+					"-lgstapp",
+					"-lgstaudioconvert",
+					"-lgstaudiorate",
+					"-lgstaudioresample",
+					"-lgstaudiotestsrc",
+					"-lgstgio",
+					"-lgsttypefindfunctions",
+					"-lgstvideoconvert",
+					"-lgstvideorate",
+					"-lgstvideoscale",
+					"-lgstvideotestsrc",
+					"-lgstvolume",
+					"-lgstautodetect",
+					"-lgstvideofilter",
+					"-lgstosxaudio",
+					"-lgstplayback",
+					"-lgstjpeg",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -900,6 +1010,10 @@
 				CURRENT_PROJECT_VERSION = 248;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -907,9 +1021,80 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = "1.0.0 Beta 27";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"spice-client-glib-2.0.8",
+					"-framework",
+					"glib-2.0.0",
+					"-framework",
+					"gobject-2.0.0",
+					"-framework",
+					"gio-2.0.0",
+					"-framework",
+					"gmodule-2.0.0",
+					"-framework",
+					"gthread-2.0.0",
+					"-framework",
+					intl.8,
+					"-framework",
+					"gstreamer-1.0.0",
+					"-framework",
+					"gstbase-1.0.0",
+					"-framework",
+					"gstaudio-1.0.0",
+					"-framework",
+					"gstvideo-1.0.0",
+					"-framework",
+					"gstapp-1.0.0",
+					"-framework",
+					"gstpbutils-1.0.0",
+					"-framework",
+					"gsttag-1.0.0",
+					"-framework",
+					"gstriff-1.0.0",
+					"-framework",
+					"gstfft-1.0.0",
+					"-framework",
+					"gstcontroller-1.0.0",
+					"-framework",
+					"gstnet-1.0.0",
+					"-framework",
+					"gstallocators-1.0.0",
+					"-framework",
+					jpeg.62,
+					"-framework",
+					CoreAudio,
+					"-framework",
+					AudioUnit,
+					"-framework",
+					AudioToolbox,
+					"-lgstcoreelements",
+					"-lgstadder",
+					"-lgstapp",
+					"-lgstaudioconvert",
+					"-lgstaudiorate",
+					"-lgstaudioresample",
+					"-lgstaudiotestsrc",
+					"-lgstgio",
+					"-lgsttypefindfunctions",
+					"-lgstvideoconvert",
+					"-lgstvideorate",
+					"-lgstvideoscale",
+					"-lgstvideotestsrc",
+					"-lgstvolume",
+					"-lgstautodetect",
+					"-lgstvideofilter",
+					"-lgstosxaudio",
+					"-lgstplayback",
+					"-lgstjpeg",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -999,6 +1184,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		3B6BD7163073ACF0004DB26B /* XCRemoteSwiftPackageReference "CocoaSpice" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/utmapp/CocoaSpice.git";
+			requirement = {
+				kind = revision;
+				revision = d8d29fc810047a3ddcebb351cdadc8fe4b4f308d;
+			};
+		};
 		3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/BiAtoms/Socket.swift.git";
@@ -1027,6 +1220,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */;
 			productName = SocketSwift;
+		};
+		3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CocoaSpiceNoUsb;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

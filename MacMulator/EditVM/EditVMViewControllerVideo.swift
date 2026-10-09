@@ -16,10 +16,14 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var accelDescriptionText: NSTextField!
     @IBOutlet var accelDescriptionLabel: NSTextField!
     @IBOutlet var accelDescriptionSwitch: NSSwitch!
+    @IBOutlet var spiceDescriptionText: NSTextField!
+    @IBOutlet var spiceDescriptionLabel: NSTextField!
+    @IBOutlet var spiceDescriptionSwitch: NSSwitch!
     @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
     var accelerationSuported: Bool = true
+    var spiceSuported: Bool = true
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
@@ -32,12 +36,15 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
         accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
         accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
+        spiceDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionText", comment: "")
+        spiceDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionLabel", comment: "")
         windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
         updateView()
     }
 
     override func viewDidAppear() {
         verifyOpenGLSupport()
+        verifySpiceSuport()
     }
 
     fileprivate func buildAdaptersList() -> [String] {
@@ -74,6 +81,28 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                 } else {
                     windowsArmDescriptionText.isHidden = true
                 }
+
+                if spiceSuported {
+                    spiceDescriptionText.isEnabled = true
+                    spiceDescriptionLabel.isEnabled = true
+                    spiceDescriptionSwitch.isEnabled = true
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
+
+                    spiceDescriptionSwitch.state = (virtualMachine.enableSpiceDisplay ?? true) ? .on : .off
+                    if virtualMachine.enableSpiceDisplay == true {
+                        enableSpiceSupport(self)
+                    }
+                } else {
+                    spiceDescriptionText.isEnabled = false
+                    spiceDescriptionLabel.isEnabled = false
+                    spiceDescriptionSwitch.isEnabled = false
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled", comment: "")
+
+                    spiceDescriptionSwitch.state = .off
+                    virtualMachine.enableSpiceDisplay = false
+                    qemuDisplayComboBox.isEnabled = true
+                }
+
                 let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
                 if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
                     accelDescriptionText.isEnabled = false
@@ -129,6 +158,18 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
+    @IBAction func enableSpiceSupport(_: Any) {
+        if let virtualMachine {
+            virtualMachine.enableSpiceDisplay = spiceDescriptionSwitch.state == .on
+        }
+
+        if spiceDescriptionSwitch.state == .on {
+            qemuDisplayComboBox.isEnabled = false
+        } else {
+            qemuDisplayComboBox.isEnabled = true
+        }
+    }
+
     fileprivate func verifyOpenGLSupport() {
         if let virtualMachine {
             let shell = Shell()
@@ -143,17 +184,45 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
                     if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && (devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl")) || virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && devices.contains("apple-gfx-pci") {
                         print("OpenGL SUPPORTED")
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self else { return }
-                            accelerationSuported = true
-                            updateView()
+                        DispatchQueue.main.async {
+                            self.accelerationSuported = true
+                            self.updateView()
                         }
                     } else {
                         print("OpenGL NOT SUPPORTED")
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self else { return }
-                            accelerationSuported = false
-                            updateView()
+                        DispatchQueue.main.async {
+                            self.accelerationSuported = false
+                            self.updateView()
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    fileprivate func verifySpiceSuport() {
+        if let virtualMachine {
+            let shell = Shell()
+            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+
+            if let qemuExecutable = runner.getQemuCommand().split(separator: " ").first {
+                let command = qemuExecutable + " -help"
+                print(command)
+
+                shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
+                    let options = shell.readFromStandardOutput()
+
+                    if options.contains("spice") {
+                        print("Spice SUPPORTED")
+                        DispatchQueue.main.async {
+                            self.spiceSuported = true
+                            self.updateView()
+                        }
+                    } else {
+                        print("Spice NOT SUPPORTED")
+                        DispatchQueue.main.async {
+                            self.spiceSuported = false
+                            self.updateView()
                         }
                     }
                 })

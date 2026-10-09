@@ -26,6 +26,16 @@ MacMulator is a Universal app that works on Intel and Apple Silicon macs. It is 
 
 ![Screenshot 2021-08-30 at 16 30 30](https://user-images.githubusercontent.com/47688632/131355571-5dc96899-357b-4faa-838d-23e0be8a3904.png)
 
+### Building from source
+
+The SPICE display viewer links against the SPICE, GLib and GStreamer frameworks from the prebuilt universal sysroot that [UTM](https://github.com/utmapp/UTM) publishes from its CI. They are not part of this repository: before the first build run
+
+```sh
+scripts/fetch_sysroot.sh
+```
+
+which downloads them into the git-ignored `Sysroot/` directory. The download needs a GitHub token (`GH_TOKEN`, `gh auth login`, or the git credential helper). Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh` and expects `GH_TOKEN` as a secret environment variable of the workflow.
+
 ### Testing Status
 
 Here is a summary of the testing done so far. If an OS is not in this table it means that it has not been tested at all

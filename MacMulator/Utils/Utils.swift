@@ -590,6 +590,16 @@ class Utils {
         getStringValueForSubType(os, subtype, 21) ?? QemuConstants.DISPLAY_DEFAULT
     }
 
+    static func getCaptureMouseForSubType(_: String, _ subtype: String?) -> Bool {
+        subtype == QemuConstants.SUB_MAC_LEOPARD ||
+            subtype == QemuConstants.SUB_MAC_TIGER ||
+            subtype == QemuConstants.SUB_MAC_PANTHER ||
+            subtype == QemuConstants.SUB_MAC_PUMA ||
+            subtype == QemuConstants.SUB_MAC_CHEETAH ||
+            subtype == QemuConstants.SUB_MAC_OS_9 ||
+            subtype == QemuConstants.SUB_MAC_OS_8
+    }
+
     static func computeDrivesTableSize(_ virtualMachine: VirtualMachine?) -> Int {
         var size = 0
         if let vm = virtualMachine {
