@@ -96,6 +96,97 @@
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
 		3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
 		3BFB1F862CD3F1B400EBF67D /* windows-11-drivers.iso.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */; };
+		3BFB2B2C3078F067005A4B51 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
+		3BFB2B2D3078F067005A4B51 /* StartVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */; };
+		3BFB2B2E3078F067005A4B51 /* NewPortMappingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */; };
+		3BFB2B2F3078F067005A4B51 /* ObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B6A9E1325CBFDDC00123D6B /* ObjC.m */; };
+		3BFB2B303078F067005A4B51 /* ImportExportHerlper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */; };
+		3BFB2B313078F067005A4B51 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
+		3BFB2B323078F067005A4B51 /* SystemProfilerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B672E6627C788AE00732C46 /* SystemProfilerData.swift */; };
+		3BFB2B333078F067005A4B51 /* MacOSRestoreImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5A2804638900C9510B /* MacOSRestoreImage.swift */; };
+		3BFB2B343078F067005A4B51 /* VMCreatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */; };
+		3BFB2B353078F067005A4B51 /* QemuConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B15E94725CD87760046891B /* QemuConstants.swift */; };
+		3BFB2B363078F067005A4B51 /* NewVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD9CCED262DCDDD008341D9 /* NewVMViewController.swift */; };
+		3BFB2B373078F067005A4B51 /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */; };
+		3BFB2B383078F067005A4B51 /* AboutBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD88E0D26DCF0A500B4A0E5 /* AboutBoxViewController.swift */; };
+		3BFB2B393078F067005A4B51 /* RunningVMManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */; };
+		3BFB2B3A3078F067005A4B51 /* VirtualMachinesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F94A125C2B4B700A13B26 /* VirtualMachinesListViewController.swift */; };
+		3BFB2B3B3078F067005A4B51 /* VirtualizationFrameworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */; };
+		3BFB2B3C3078F067005A4B51 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471E25CABDAE00A4DBA7 /* Utils.swift */; };
+		3BFB2B3D3078F067005A4B51 /* VirtualMachineContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */; };
+		3BFB2B3E3078F067005A4B51 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
+		3BFB2B3F3078F067005A4B51 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
+		3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */; };
+		3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
+		3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
+		3BFB2B433078F067005A4B51 /* EditVMViewControllerNetworkVF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */; };
+		3BFB2B443078F067005A4B51 /* DrivesTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */; };
+		3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
+		3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B72856C27C782ED009D6F8E /* HostMachineDetails.swift */; };
+		3BFB2B473078F067005A4B51 /* EditVMViewControllerNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */; };
+		3BFB2B483078F067005A4B51 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
+		3BFB2B493078F067005A4B51 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
+		3BFB2B4A3078F067005A4B51 /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
+		3BFB2B4B3078F067005A4B51 /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
+		3BFB2B4C3078F067005A4B51 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
+		3BFB2B4D3078F067005A4B51 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6D1A0729326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift */; };
+		3BFB2B4E3078F067005A4B51 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
+		3BFB2B4F3078F067005A4B51 /* QemuSpiceViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */; };
+		3BFB2B503078F067005A4B51 /* MacMulatorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */; };
+		3BFB2B513078F067005A4B51 /* PortMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07C284A4FCE002D465F /* PortMapping.swift */; };
+		3BFB2B523078F067005A4B51 /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
+		3BFB2B533078F067005A4B51 /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
+		3BFB2B543078F067005A4B51 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
+		3BFB2B553078F067005A4B51 /* VMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA62802EEDE00F7159E /* VMCreator.swift */; };
+		3BFB2B563078F067005A4B51 /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
+		3BFB2B573078F067005A4B51 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
+		3BFB2B583078F067005A4B51 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
+		3BFB2B593078F067005A4B51 /* VirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */; };
+		3BFB2B5A3078F067005A4B51 /* QemuVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA42802E58200F7159E /* QemuVMCreator.swift */; };
+		3BFB2B5B3078F067005A4B51 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */; };
+		3BFB2B5C3078F067005A4B51 /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
+		3BFB2B5D3078F067005A4B51 /* QemuImgCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */; };
+		3BFB2B5E3078F067005A4B51 /* VirtualMachineTableCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */; };
+		3BFB2B5F3078F067005A4B51 /* VirtualizationFrameworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */; };
+		3BFB2B603078F067005A4B51 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */; };
+		3BFB2B613078F067005A4B51 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
+		3BFB2B623078F067005A4B51 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB471D25CABDAE00A4DBA7 /* Shell.swift */; };
+		3BFB2B633078F067005A4B51 /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */; };
+		3BFB2B643078F067005A4B51 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
+		3BFB2B653078F067005A4B51 /* EditVMViewControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */; };
+		3BFB2B663078F067005A4B51 /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
+		3BFB2B673078F067005A4B51 /* VirtualMachineRunnerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */; };
+		3BFB2B683078F067005A4B51 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
+		3BFB2B693078F067005A4B51 /* VirtualMachineSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD212262FCC363C007CB895 /* VirtualMachineSnapshot.swift */; };
+		3BFB2B6A3078F067005A4B51 /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
+		3BFB2B6B3078F067005A4B51 /* ManageSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */; };
+		3BFB2B6D3078F067005A4B51 /* Virtualization.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B9E42A72806178500981297 /* Virtualization.framework */; };
+		3BFB2B6E3078F067005A4B51 /* SocketSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3BFB2B263078F067005A4B51 /* SocketSwift */; };
+		3BFB2B6F3078F067005A4B51 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3BFB2B283078F067005A4B51 /* ZIPFoundation */; };
+		3BFB2B703078F067005A4B51 /* CocoaSpiceNoUsb in Frameworks */ = {isa = PBXBuildFile; productRef = 3BFB2B2A3078F067005A4B51 /* CocoaSpiceNoUsb */; };
+		3BFB2B723078F067005A4B51 /* SECURE_EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B89B6ED2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd */; };
+		3BFB2B733078F067005A4B51 /* windows-11-drivers.iso.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */; };
+		3BFB2B743078F067005A4B51 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B3DF81B2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd */; };
+		3BFB2B753078F067005A4B51 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
+		3BFB2B763078F067005A4B51 /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
+		3BFB2B773078F067005A4B51 /* MacMulator.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */; };
+		3BFB2B783078F067005A4B51 /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
+		3BFB2B793078F067005A4B51 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
+		3BFB2B7A3078F067005A4B51 /* EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */; };
+		3BFB2B7B3078F067005A4B51 /* OPENCORE.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */; };
+		3BFB2B7C3078F067005A4B51 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */; };
+		3BFB2B7D3078F067005A4B51 /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
+		3BFB2B7E3078F067005A4B51 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E12DA32AE80067415E /* Main.storyboard */; };
+		3BFB2B7F3078F067005A4B51 /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E02DA32AE80067415E /* EditVM.storyboard */; };
+		3BFB2B803078F067005A4B51 /* MainContent.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BCFF7332DA9C520008E01D3 /* MainContent.storyboard */; };
+		3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E22DA32AE80067415E /* NewVM.storyboard */; };
+		3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */; };
+		3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
+		3BFB2B843078F067005A4B51 /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
+		3BFB2B863078F067005A4B51 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3BFB2B883078F067005A4B51 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3BFB2B893078F067005A4B51 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		3BFB2B8A3078F067005A4B51 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 		3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */; };
@@ -131,6 +222,28 @@
 			dstSubfolderSpec = 7;
 			files = (
 				3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BFB2B853078F067005A4B51 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				3BFB2B863078F067005A4B51 /* qemu-img in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BFB2B873078F067005A4B51 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Libs;
+			dstSubfolderSpec = 7;
+			files = (
+				3BFB2B883078F067005A4B51 /* libglib-2.0.0.dylib in CopyFiles */,
+				3BFB2B893078F067005A4B51 /* libpcre.1.dylib in CopyFiles */,
+				3BFB2B8A3078F067005A4B51 /* libintl.8.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +322,7 @@
 		3BBB471D25CABDAE00A4DBA7 /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
 		3BBB471E25CABDAE00A4DBA7 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3BBB473825CABDCB00A4DBA7 /* MacMulator.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MacMulator.entitlements; sourceTree = "<group>"; };
+		3BBB473825CABDCB00A4DBA7 /* MacMulator-Enthusiast.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "MacMulator-Enthusiast.entitlements"; sourceTree = "<group>"; };
 		3BBB473925CABDCB00A4DBA7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
 		3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
@@ -236,6 +349,8 @@
 		3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleViewController.swift; sourceTree = "<group>"; };
 		3BF8F62325E40224006E2C1C /* DrivesTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrivesTableCells.swift; sourceTree = "<group>"; };
 		3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "windows-11-drivers.iso.zip"; sourceTree = "<group>"; };
+		3BFB2B243078EFA0005A4B51 /* MacMulator-AppStore.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "MacMulator-AppStore.entitlements"; sourceTree = "<group>"; };
+		3BFB2B8F3078F067005A4B51 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMappingsTableCells.swift; sourceTree = "<group>"; };
 		3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineViewController.swift; sourceTree = "<group>"; };
 		3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilsTest.swift; sourceTree = "<group>"; };
@@ -258,6 +373,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3BFB2B6C3078F067005A4B51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BFB2B6D3078F067005A4B51 /* Virtualization.framework in Frameworks */,
+				3BFB2B6E3078F067005A4B51 /* SocketSwift in Frameworks */,
+				3BFB2B6F3078F067005A4B51 /* ZIPFoundation in Frameworks */,
+				3BFB2B703078F067005A4B51 /* CocoaSpiceNoUsb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +426,7 @@
 			children = (
 				3B391EE925C075F50030E914 /* MacMulator.app */,
 				3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */,
+				3BFB2B8F3078F067005A4B51 /* MacMulator.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -438,8 +565,9 @@
 				3B578557266526460003C3C8 /* Libs */,
 				3B578555266523780003C3C8 /* qemu-img */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
-				3BBB473825CABDCB00A4DBA7 /* MacMulator.entitlements */,
 				3BBB473925CABDCB00A4DBA7 /* Info.plist */,
+				3BBB473825CABDCB00A4DBA7 /* MacMulator-Enthusiast.entitlements */,
+				3BFB2B243078EFA0005A4B51 /* MacMulator-AppStore.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -482,9 +610,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3B391EE825C075F50030E914 /* MacMulator */ = {
+		3B391EE825C075F50030E914 /* MacMulator Enthusiast */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3B391F0F25C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulator" */;
+			buildConfigurationList = 3B391F0F25C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulator Enthusiast" */;
 			buildPhases = (
 				3B391EE525C075F50030E914 /* Sources */,
 				3B391EE625C075F50030E914 /* Frameworks */,
@@ -497,7 +625,7 @@
 			);
 			dependencies = (
 			);
-			name = MacMulator;
+			name = "MacMulator Enthusiast";
 			packageProductDependencies = (
 				3B6FF875266F791700368BAB /* SocketSwift */,
 				3B559E6526EB54730071E5B5 /* ZIPFoundation */,
@@ -524,6 +652,31 @@
 			productName = MacMulatorTests;
 			productReference = 3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3BFB2B253078F067005A4B51 /* MacMulator App Store */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3BFB2B8C3078F067005A4B51 /* Build configuration list for PBXNativeTarget "MacMulator App Store" */;
+			buildPhases = (
+				3BFB2B2B3078F067005A4B51 /* Sources */,
+				3BFB2B6C3078F067005A4B51 /* Frameworks */,
+				3BFB2B713078F067005A4B51 /* Resources */,
+				3BFB2B853078F067005A4B51 /* CopyFiles */,
+				3BFB2B873078F067005A4B51 /* CopyFiles */,
+				3BFB2B8B3078F067005A4B51 /* Embed Sysroot */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MacMulator App Store";
+			packageProductDependencies = (
+				3BFB2B263078F067005A4B51 /* SocketSwift */,
+				3BFB2B283078F067005A4B51 /* ZIPFoundation */,
+				3BFB2B2A3078F067005A4B51 /* CocoaSpiceNoUsb */,
+			);
+			productName = MacMulator;
+			productReference = 3BFB2B8F3078F067005A4B51 /* MacMulator.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -565,7 +718,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3B391EE825C075F50030E914 /* MacMulator */,
+				3B391EE825C075F50030E914 /* MacMulator Enthusiast */,
+				3BFB2B253078F067005A4B51 /* MacMulator App Store */,
 				3B391EFA25C075F50030E914 /* MacMulatorTests */,
 			);
 		};
@@ -605,10 +759,55 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3BFB2B713078F067005A4B51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BFB2B723078F067005A4B51 /* SECURE_EFI_ARM.fd in Resources */,
+				3BFB2B733078F067005A4B51 /* windows-11-drivers.iso.zip in Resources */,
+				3BFB2B743078F067005A4B51 /* SECURE_EFI_VARS_ARM.fd in Resources */,
+				3BFB2B753078F067005A4B51 /* Localizable.strings in Resources */,
+				3BFB2B763078F067005A4B51 /* nor_n72ap.bin in Resources */,
+				3BFB2B773078F067005A4B51 /* MacMulator.icon in Resources */,
+				3BFB2B783078F067005A4B51 /* EFI_VARS_ARM.fd in Resources */,
+				3BFB2B793078F067005A4B51 /* macos-guest-tools.img.zip in Resources */,
+				3BFB2B7A3078F067005A4B51 /* EFI_ARM.fd in Resources */,
+				3BFB2B7B3078F067005A4B51 /* OPENCORE.zip in Resources */,
+				3BFB2B7C3078F067005A4B51 /* Assets.xcassets in Resources */,
+				3BFB2B7D3078F067005A4B51 /* parallels_template in Resources */,
+				3BFB2B7E3078F067005A4B51 /* Main.storyboard in Resources */,
+				3BFB2B7F3078F067005A4B51 /* EditVM.storyboard in Resources */,
+				3BFB2B803078F067005A4B51 /* MainContent.storyboard in Resources */,
+				3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */,
+				3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */,
+				3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */,
+				3BFB2B843078F067005A4B51 /* bootrom_240_4 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		3B246AFB3073A91800EA2B5C /* Embed Sysroot */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Sysroot";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PROJECT_DIR}/scripts/embed_sysroot_frameworks.sh\"\n";
+		};
+		3BFB2B8B3078F067005A4B51 /* Embed Sysroot */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -709,12 +908,83 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3BFB2B2B3078F067005A4B51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BFB2B2C3078F067005A4B51 /* NewDiskViewController.swift in Sources */,
+				3BFB2B2D3078F067005A4B51 /* StartVMViewController.swift in Sources */,
+				3BFB2B2E3078F067005A4B51 /* NewPortMappingViewController.swift in Sources */,
+				3BFB2B2F3078F067005A4B51 /* ObjC.m in Sources */,
+				3BFB2B303078F067005A4B51 /* ImportExportHerlper.swift in Sources */,
+				3BFB2B313078F067005A4B51 /* QemuRunner.swift in Sources */,
+				3BFB2B323078F067005A4B51 /* SystemProfilerData.swift in Sources */,
+				3BFB2B333078F067005A4B51 /* MacOSRestoreImage.swift in Sources */,
+				3BFB2B343078F067005A4B51 /* VMCreatorFactory.swift in Sources */,
+				3BFB2B353078F067005A4B51 /* QemuConstants.swift in Sources */,
+				3BFB2B363078F067005A4B51 /* NewVMViewController.swift in Sources */,
+				3BFB2B373078F067005A4B51 /* VirtualMachine.swift in Sources */,
+				3BFB2B383078F067005A4B51 /* AboutBoxViewController.swift in Sources */,
+				3BFB2B393078F067005A4B51 /* RunningVMManagerViewController.swift in Sources */,
+				3BFB2B3A3078F067005A4B51 /* VirtualMachinesListViewController.swift in Sources */,
+				3BFB2B3B3078F067005A4B51 /* VirtualizationFrameworkUtils.swift in Sources */,
+				3BFB2B3C3078F067005A4B51 /* Utils.swift in Sources */,
+				3BFB2B3D3078F067005A4B51 /* VirtualMachineContainerViewController.swift in Sources */,
+				3BFB2B3E3078F067005A4B51 /* EditVMViewControllerHardware.swift in Sources */,
+				3BFB2B3F3078F067005A4B51 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */,
+				3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
+				3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */,
+				3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
+				3BFB2B433078F067005A4B51 /* EditVMViewControllerNetworkVF.swift in Sources */,
+				3BFB2B443078F067005A4B51 /* DrivesTableCells.swift in Sources */,
+				3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
+				3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */,
+				3BFB2B473078F067005A4B51 /* EditVMViewControllerNetwork.swift in Sources */,
+				3BFB2B483078F067005A4B51 /* NetworkMappingsTableCells.swift in Sources */,
+				3BFB2B493078F067005A4B51 /* RootViewController.swift in Sources */,
+				3BFB2B4A3078F067005A4B51 /* EditVMViewControllerVideo.swift in Sources */,
+				3BFB2B4B3078F067005A4B51 /* VirtualMachineViewController.swift in Sources */,
+				3BFB2B4C3078F067005A4B51 /* AppDelegate.swift in Sources */,
+				3BFB2B4D3078F067005A4B51 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
+				3BFB2B4E3078F067005A4B51 /* EditVMViewControllerAdvanced.swift in Sources */,
+				3BFB2B4F3078F067005A4B51 /* QemuSpiceViewerViewController.swift in Sources */,
+				3BFB2B503078F067005A4B51 /* MacMulatorConstants.swift in Sources */,
+				3BFB2B513078F067005A4B51 /* PortMapping.swift in Sources */,
+				3BFB2B523078F067005A4B51 /* EditVMViewController.swift in Sources */,
+				3BFB2B533078F067005A4B51 /* QemuCommandBuilder.swift in Sources */,
+				3BFB2B543078F067005A4B51 /* VirtualizationFrameworkVMCreator.swift in Sources */,
+				3BFB2B553078F067005A4B51 /* VMCreator.swift in Sources */,
+				3BFB2B563078F067005A4B51 /* ConsoleViewController.swift in Sources */,
+				3BFB2B573078F067005A4B51 /* QemuUtils.swift in Sources */,
+				3BFB2B583078F067005A4B51 /* MacOSVirtualMachineDelegate.swift in Sources */,
+				3BFB2B593078F067005A4B51 /* VirtualMachineRunner.swift in Sources */,
+				3BFB2B5A3078F067005A4B51 /* QemuVMCreator.swift in Sources */,
+				3BFB2B5B3078F067005A4B51 /* PreferencesViewController.swift in Sources */,
+				3BFB2B5C3078F067005A4B51 /* EditVMViewControllerGeneral.swift in Sources */,
+				3BFB2B5D3078F067005A4B51 /* QemuImgCommandBuilder.swift in Sources */,
+				3BFB2B5E3078F067005A4B51 /* VirtualMachineTableCellView.swift in Sources */,
+				3BFB2B5F3078F067005A4B51 /* VirtualizationFrameworkSupport.swift in Sources */,
+				3BFB2B603078F067005A4B51 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */,
+				3BFB2B613078F067005A4B51 /* QemuMonitor.swift in Sources */,
+				3BFB2B623078F067005A4B51 /* Shell.swift in Sources */,
+				3BFB2B633078F067005A4B51 /* VirtualDrive.swift in Sources */,
+				3BFB2B643078F067005A4B51 /* MainWindowController.swift in Sources */,
+				3BFB2B653078F067005A4B51 /* EditVMViewControllerSnapshots.swift in Sources */,
+				3BFB2B663078F067005A4B51 /* CreateDiskFileViewController.swift in Sources */,
+				3BFB2B673078F067005A4B51 /* VirtualMachineRunnerFactory.swift in Sources */,
+				3BFB2B683078F067005A4B51 /* CreateVMFileViewController.swift in Sources */,
+				3BFB2B693078F067005A4B51 /* VirtualMachineSnapshot.swift in Sources */,
+				3BFB2B6A3078F067005A4B51 /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
+				3BFB2B6B3078F067005A4B51 /* ManageSnapshotViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		3B391EFD25C075F50030E914 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3B391EE825C075F50030E914 /* MacMulator */;
+			target = 3B391EE825C075F50030E914 /* MacMulator Enthusiast */;
 			targetProxy = 3B391EFC25C075F50030E914 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -893,7 +1163,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "MacMulator/Resources/MacMulator-Enthusiast.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -904,6 +1174,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
@@ -987,8 +1261,10 @@
 					"-lgstjpeg",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = MacMulator;
+				PRODUCT_NAME = MacMulator;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ENTHUSIAST";
 				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1002,7 +1278,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = MacMulator/Resources/MacMulator.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "MacMulator/Resources/MacMulator-Enthusiast.entitlements";
 				CODE_SIGN_IDENTITY = "-";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -1013,6 +1289,10 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
@@ -1096,8 +1376,10 @@
 					"-lgstjpeg",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = MacMulator;
+				PRODUCT_NAME = MacMulator;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ENTHUSIAST";
 				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
@@ -1151,6 +1433,245 @@
 			};
 			name = Release;
 		};
+		3BFB2B8D3078F067005A4B51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "MacMulator/Resources/MacMulator-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 248;
+				DEVELOPMENT_TEAM = 43L3TB7GWV;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"APPSTORE=1",
+				);
+				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = "1.0.0 Beta 27";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"spice-client-glib-2.0.8",
+					"-framework",
+					"glib-2.0.0",
+					"-framework",
+					"gobject-2.0.0",
+					"-framework",
+					"gio-2.0.0",
+					"-framework",
+					"gmodule-2.0.0",
+					"-framework",
+					"gthread-2.0.0",
+					"-framework",
+					intl.8,
+					"-framework",
+					"gstreamer-1.0.0",
+					"-framework",
+					"gstbase-1.0.0",
+					"-framework",
+					"gstaudio-1.0.0",
+					"-framework",
+					"gstvideo-1.0.0",
+					"-framework",
+					"gstapp-1.0.0",
+					"-framework",
+					"gstpbutils-1.0.0",
+					"-framework",
+					"gsttag-1.0.0",
+					"-framework",
+					"gstriff-1.0.0",
+					"-framework",
+					"gstfft-1.0.0",
+					"-framework",
+					"gstcontroller-1.0.0",
+					"-framework",
+					"gstnet-1.0.0",
+					"-framework",
+					"gstallocators-1.0.0",
+					"-framework",
+					jpeg.62,
+					"-framework",
+					CoreAudio,
+					"-framework",
+					AudioUnit,
+					"-framework",
+					AudioToolbox,
+					"-lgstcoreelements",
+					"-lgstadder",
+					"-lgstapp",
+					"-lgstaudioconvert",
+					"-lgstaudiorate",
+					"-lgstaudioresample",
+					"-lgstaudiotestsrc",
+					"-lgstgio",
+					"-lgsttypefindfunctions",
+					"-lgstvideoconvert",
+					"-lgstvideorate",
+					"-lgstvideoscale",
+					"-lgstvideotestsrc",
+					"-lgstvolume",
+					"-lgstautodetect",
+					"-lgstvideofilter",
+					"-lgstosxaudio",
+					"-lgstplayback",
+					"-lgstjpeg",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator.appstore;
+				PRODUCT_MODULE_NAME = MacMulator;
+				PRODUCT_NAME = MacMulator;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) APPSTORE";
+				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		3BFB2B8E3078F067005A4B51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "MacMulator/Resources/MacMulator-AppStore.entitlements";
+				CODE_SIGN_IDENTITY = "-";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 248;
+				DEVELOPMENT_TEAM = 43L3TB7GWV;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SELECTED_FILES = readwrite;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"APPSTORE=1",
+				);
+				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = "1.0.0 Beta 27";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"spice-client-glib-2.0.8",
+					"-framework",
+					"glib-2.0.0",
+					"-framework",
+					"gobject-2.0.0",
+					"-framework",
+					"gio-2.0.0",
+					"-framework",
+					"gmodule-2.0.0",
+					"-framework",
+					"gthread-2.0.0",
+					"-framework",
+					intl.8,
+					"-framework",
+					"gstreamer-1.0.0",
+					"-framework",
+					"gstbase-1.0.0",
+					"-framework",
+					"gstaudio-1.0.0",
+					"-framework",
+					"gstvideo-1.0.0",
+					"-framework",
+					"gstapp-1.0.0",
+					"-framework",
+					"gstpbutils-1.0.0",
+					"-framework",
+					"gsttag-1.0.0",
+					"-framework",
+					"gstriff-1.0.0",
+					"-framework",
+					"gstfft-1.0.0",
+					"-framework",
+					"gstcontroller-1.0.0",
+					"-framework",
+					"gstnet-1.0.0",
+					"-framework",
+					"gstallocators-1.0.0",
+					"-framework",
+					jpeg.62,
+					"-framework",
+					CoreAudio,
+					"-framework",
+					AudioUnit,
+					"-framework",
+					AudioToolbox,
+					"-lgstcoreelements",
+					"-lgstadder",
+					"-lgstapp",
+					"-lgstaudioconvert",
+					"-lgstaudiorate",
+					"-lgstaudioresample",
+					"-lgstaudiotestsrc",
+					"-lgstgio",
+					"-lgsttypefindfunctions",
+					"-lgstvideoconvert",
+					"-lgstvideorate",
+					"-lgstvideoscale",
+					"-lgstvideotestsrc",
+					"-lgstvolume",
+					"-lgstautodetect",
+					"-lgstvideofilter",
+					"-lgstosxaudio",
+					"-lgstplayback",
+					"-lgstjpeg",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator.appstore;
+				PRODUCT_MODULE_NAME = MacMulator;
+				PRODUCT_NAME = MacMulator;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) APPSTORE";
+				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1163,7 +1684,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3B391F0F25C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulator" */ = {
+		3B391F0F25C075F50030E914 /* Build configuration list for PBXNativeTarget "MacMulator Enthusiast" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3B391F1025C075F50030E914 /* Debug */,
@@ -1177,6 +1698,15 @@
 			buildConfigurations = (
 				3B391F1325C075F50030E914 /* Debug */,
 				3B391F1425C075F50030E914 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3BFB2B8C3078F067005A4B51 /* Build configuration list for PBXNativeTarget "MacMulator App Store" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3BFB2B8D3078F067005A4B51 /* Debug */,
+				3BFB2B8E3078F067005A4B51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1208,6 +1738,22 @@
 				version = 0.9.18;
 			};
 		};
+		3BFB2B273078F067005A4B51 /* XCRemoteSwiftPackageReference "Socket.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/BiAtoms/Socket.swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 2.4.0;
+			};
+		};
+		3BFB2B293078F067005A4B51 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.9.18;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1222,6 +1768,20 @@
 			productName = SocketSwift;
 		};
 		3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CocoaSpiceNoUsb;
+		};
+		3BFB2B263078F067005A4B51 /* SocketSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BFB2B273078F067005A4B51 /* XCRemoteSwiftPackageReference "Socket.swift" */;
+			productName = SocketSwift;
+		};
+		3BFB2B283078F067005A4B51 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BFB2B293078F067005A4B51 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		3BFB2B2A3078F067005A4B51 /* CocoaSpiceNoUsb */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CocoaSpiceNoUsb;
 		};
