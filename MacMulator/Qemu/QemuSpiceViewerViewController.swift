@@ -47,7 +47,7 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     private var hasConnected = false
 
     /// How long to keep trying to reach the SPICE server before reporting a failure
-    private static let connectionTimeout: TimeInterval = 30
+    private static let connectionTimeout: TimeInterval = 3
     /// Pause between two consecutive socket checks or connection attempts
     private static let connectionRetryInterval: UInt64 = 500_000_000
 
@@ -65,6 +65,14 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
             releaseMouseCapture()
         }
         input?.requestMouseMode(enabled)
+    }
+
+    override func windowShouldClose(_: NSWindow) -> Bool {
+        if isConnecting {
+            true
+        } else {
+            super.windowShouldClose(view.window!)
+        }
     }
 
     override func viewDidLoad() {

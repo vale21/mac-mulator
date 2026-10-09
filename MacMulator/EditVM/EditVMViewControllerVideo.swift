@@ -36,6 +36,8 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
         accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
         accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
+        spiceDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionText", comment: "")
+        spiceDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionLabel", comment: "")
         windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
         updateView()
     }
@@ -84,7 +86,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     spiceDescriptionText.isEnabled = true
                     spiceDescriptionLabel.isEnabled = true
                     spiceDescriptionSwitch.isEnabled = true
-                    spiceDescriptionSwitch.toolTip = "Spice supported"
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
 
                     spiceDescriptionSwitch.state = (virtualMachine.enableSpiceDisplay ?? true) ? .on : .off
                     if virtualMachine.enableSpiceDisplay == true {
@@ -94,7 +96,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     spiceDescriptionText.isEnabled = false
                     spiceDescriptionLabel.isEnabled = false
                     spiceDescriptionSwitch.isEnabled = false
-                    spiceDescriptionSwitch.toolTip = "Spice not supported"
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled", comment: "")
 
                     spiceDescriptionSwitch.state = .off
                     virtualMachine.enableSpiceDisplay = false
