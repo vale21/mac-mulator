@@ -1,0 +1,20 @@
+MacMulator
+Copyright (c) the MacMulator Project
+
+This product includes software developed by the UTM project
+(https://github.com/utmapp/UTM), licensed under the Apache License 2.0:
+CocoaSpice (https://github.com/utmapp/CocoaSpice), the prebuilt SPICE, GLib and
+GStreamer frameworks of UTM's macOS sysroot and, in the App Store flavor, UTM's
+build of QEMU and swtpm. The swtpm launcher in scripts/swtpm_launcher.c and the
+entitlements of the bundled QEMU executables follow the design of UTM's
+QEMULauncher.
+
+This product includes software developed by the OpenSSL Project for use in the
+OpenSSL Toolkit (http://www.openssl.org/).
+
+QEMU and part of the firmware bundled in the App Store flavor are licensed under
+the GNU General Public License version 2; the SPICE, GLib, GStreamer and related
+libraries under the GNU Lesser General Public License. Their source code, and the
+complete list of third-party components with their licenses, is given in
+MacMulator/Resources/ThirdPartyLicenses.txt, which is also shipped inside the
+application bundle.

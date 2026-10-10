@@ -187,6 +187,45 @@ Qemu therefore affects both flavors, not only the App Store one.
 7. Update the [Current pin](#current-pin) table, the `SYSROOT_ARTIFACT_ID` of the Xcode Cloud
    workflow if one is set, and commit.
 
+## License obligations
+
+Everything in the sysroot is third-party software, and some of it is copyleft. Shipping it brings
+these obligations, which the repository already satisfies for the current pin and which every
+update must keep satisfied:
+
+- **Notices.** `MacMulator/Resources/ThirdPartyLicenses.txt` lists every component with version,
+  license, copyright holder and source location, and reproduces all license texts. It is bundled
+  in the app and opened from the About box. `NOTICE` at the repository root carries the Apache
+  License attributions (UTM, CocoaSpice) and the OpenSSL attribution sentence. After a sysroot
+  update, refresh the versions in that file from UTM's `patches/sources` at the new commit:
+
+  ```sh
+  COMMIT=$(sed -n 's/^utm-commit: //p' Sysroot/VERSION)
+  curl -sL "https://raw.githubusercontent.com/utmapp/UTM/$COMMIT/patches/sources"
+  ```
+
+  Also compare the frameworks embedded by each flavor (`Contents/Frameworks` of a build) with the
+  "Flavor" column: a new dependency pulled in by the closure must be added to the list.
+- **Source code (GPL and LGPL).** QEMU and part of the firmware are GPL-2.0; SPICE, GLib,
+  GStreamer and most other libraries are LGPL-2.1. The notices file points to the upstream release
+  archives, to UTM's patches and build script at the pinned commit, and makes a written offer at
+  `macmulator@gmail.com`. Keep the pinned UTM commit in this document accurate, since that is what
+  identifies the corresponding source. UTM's artifacts expire and its history can be rewritten:
+  for a build that is distributed, consider attaching the exact upstream archives and UTM patches
+  to the MacMulator GitHub release, so the offer can always be honoured.
+- **Attribution in code.** Files whose design follows UTM code say so in their header
+  (`scripts/swtpm_launcher.c`, `MacMulator/Resources/QemuHelper.entitlements`). If code is copied
+  from UTM or CocoaSpice, keep their Apache License header and copyright line in the file.
+- **App Store distribution.** The GPL requires that recipients can redistribute the GPL
+  components; Apple's standard App Store EULA has been considered incompatible with that in the
+  past. UTM ships QEMU on the Mac App Store, but this is a legal decision for the project, not a
+  technical one: get advice before submitting, and consider a custom EULA in App Store Connect
+  that does not restrict the rights the GPL grants.
+- **Not from UTM.** `bootrom_240_4` and `nor_n72ap.bin` are iPod touch ROM images owned by Apple,
+  with no redistribution license. The App Store target leaves them out of the bundle
+  (`EXCLUDED_SOURCE_FILE_NAMES`) and does not offer iPod touch guests; the Enthusiast flavor still
+  ships them, which is a risk for any public distribution and is not covered by the notices file.
+
 ## Updating CocoaSpice when UTM releases a new version
 
 CocoaSpice is a Swift package, not a CocoaPod. The project references

@@ -74,6 +74,10 @@
 		3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */; };
 		3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */; };
 		3BBB474325CABDD000A4DBA7 /* VirtualDrive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */; };
+		3BBC26A6307A83E200603BA6 /* SandboxBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */; };
+		3BBC26A7307A83E200603BA6 /* SandboxBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */; };
+		3BBC26A9307A970600603BA6 /* ThirdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3BBC26A8307A970600603BA6 /* ThirdPartyLicenses.txt */; };
+		3BBC26AA307A970600603BA6 /* ThirdPartyLicenses.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3BBC26A8307A970600603BA6 /* ThirdPartyLicenses.txt */; };
 		3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBC4BB525DE74020001CA02 /* QemuUtils.swift */; };
 		3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */; };
 		3BC0C5A3307400000000A003 /* CocoaSpiceNoUsb in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */; };
@@ -301,6 +305,8 @@
 		3BBB473925CABDCB00A4DBA7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3BBB474025CABDD000A4DBA7 /* VirtualMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualMachine.swift; sourceTree = "<group>"; };
 		3BBB474125CABDD000A4DBA7 /* VirtualDrive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualDrive.swift; sourceTree = "<group>"; };
+		3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SandboxBookmarks.swift; sourceTree = "<group>"; };
+		3BBC26A8307A970600603BA6 /* ThirdPartyLicenses.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ThirdPartyLicenses.txt; sourceTree = "<group>"; };
 		3BBC4BB525DE74020001CA02 /* QemuUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuUtils.swift; sourceTree = "<group>"; };
 		3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkVirtualMachineRunner.swift; sourceTree = "<group>"; };
 		3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_ARM.fd; sourceTree = "<group>"; };
@@ -506,6 +512,7 @@
 				3BBB471E25CABDAE00A4DBA7 /* Utils.swift */,
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
 				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
+				3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -544,6 +551,7 @@
 				3BBB473825CABDCB00A4DBA7 /* MacMulator-Enthusiast.entitlements */,
 				3BFB2B243078EFA0005A4B51 /* MacMulator-AppStore.entitlements */,
 				3B9796343078F85C00577824 /* QemuHelper.entitlements */,
+				3BBC26A8307A970600603BA6 /* ThirdPartyLicenses.txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -717,6 +725,7 @@
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */,
+				3BBC26A9307A970600603BA6 /* ThirdPartyLicenses.txt in Resources */,
 				3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */,
 				3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */,
 				3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */,
@@ -750,6 +759,7 @@
 				3BFB2B7C3078F067005A4B51 /* Assets.xcassets in Resources */,
 				3BFB2B7D3078F067005A4B51 /* parallels_template in Resources */,
 				3BFB2B7E3078F067005A4B51 /* Main.storyboard in Resources */,
+				3BBC26AA307A970600603BA6 /* ThirdPartyLicenses.txt in Resources */,
 				3BFB2B7F3078F067005A4B51 /* EditVM.storyboard in Resources */,
 				3BFB2B803078F067005A4B51 /* MainContent.storyboard in Resources */,
 				3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */,
@@ -827,6 +837,7 @@
 				3B1BDFC5280804A000E353CE /* VirtualMachineContainerViewController.swift in Sources */,
 				3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */,
 				3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */,
+				3BBC26A7307A83E200603BA6 /* SandboxBookmarks.swift in Sources */,
 				3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
 				3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */,
 				3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
@@ -906,6 +917,7 @@
 				3BFB2B3D3078F067005A4B51 /* VirtualMachineContainerViewController.swift in Sources */,
 				3BFB2B3E3078F067005A4B51 /* EditVMViewControllerHardware.swift in Sources */,
 				3BFB2B3F3078F067005A4B51 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */,
+				3BBC26A6307A83E200603BA6 /* SandboxBookmarks.swift in Sources */,
 				3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
 				3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */,
 				3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
@@ -1427,6 +1439,10 @@
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					bootrom_240_4,
+					nor_n72ap.bin,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
@@ -1547,6 +1563,10 @@
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
+				EXCLUDED_SOURCE_FILE_NAMES = (
+					bootrom_240_4,
+					nor_n72ap.bin,
+				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",

@@ -36,6 +36,16 @@ scripts/fetch_sysroot.sh
 
 which downloads them into the git-ignored `Sysroot/` directory. The download needs a GitHub token (`GH_TOKEN`, `gh auth login`, or the git credential helper). Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh` and expects `GH_TOKEN` as a secret environment variable of the workflow. How to pick a sysroot version, pin it, and update Qemu and CocoaSpice when UTM releases a new version is described in [docs/sysroot.md](docs/sysroot.md).
 
+### Licenses and credits
+
+MacMulator is released under the [Apache License 2.0](LICENSE). It is built on the work of other projects:
+
+- [UTM](https://github.com/utmapp/UTM) and [CocoaSpice](https://github.com/utmapp/CocoaSpice) by osy and the UTM contributors (Apache License 2.0): the SPICE display client, the prebuilt SPICE, GLib and GStreamer frameworks and, in the App Store flavor, the QEMU and swtpm builds come from UTM's macOS sysroot.
+- [QEMU](https://www.qemu.org) by Fabrice Bellard and the QEMU Project developers (GNU GPL version 2), bundled in the App Store flavor together with its firmware (SeaBIOS, iPXE, OpenBIOS, SLOF, OpenSBI).
+- [SPICE](https://www.spice-space.org), [GLib](https://gitlab.gnome.org/GNOME/glib), [GStreamer](https://gstreamer.freedesktop.org) and the other libraries they depend on (GNU LGPL and BSD/MIT-style licenses), including OpenSSL: this product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit.
+
+The complete list of third-party components, their versions, licenses, source code locations and license texts is in [MacMulator/Resources/ThirdPartyLicenses.txt](MacMulator/Resources/ThirdPartyLicenses.txt), which is also shipped inside the application and reachable from its About box. The [NOTICE](NOTICE) file carries the attributions required by the Apache License.
+
 ### Testing Status
 
 Here is a summary of the testing done so far. If an OS is not in this table it means that it has not been tested at all

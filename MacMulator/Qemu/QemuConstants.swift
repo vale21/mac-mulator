@@ -436,13 +436,23 @@ class QemuConstants {
         RES_6016_3384: "6K (6016 x 3384)",
     ]
 
-    static let supportedVMTypes: [String] = [
-        OS_MAC,
-        OS_WIN,
-        OS_LINUX,
-        OS_IOS,
-        OS_OTHER,
-    ]
+    #if APPSTORE
+        // iPod touch guests need Apple's ROM images, which the App Store flavor does not ship.
+        static let supportedVMTypes: [String] = [
+            OS_MAC,
+            OS_WIN,
+            OS_LINUX,
+            OS_OTHER,
+        ]
+    #else
+        static let supportedVMTypes: [String] = [
+            OS_MAC,
+            OS_WIN,
+            OS_LINUX,
+            OS_IOS,
+            OS_OTHER,
+        ]
+    #endif
 
     static let APPLE_NETWORK_ATTACHMENTS = [
         ATTACHMENT_NAT,

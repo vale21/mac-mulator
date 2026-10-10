@@ -56,6 +56,9 @@ class Utils {
 
         let wasOk = panel.runModal()
         if wasOk == NSApplication.ModalResponse.OK {
+            if let url = panel.url {
+                SandboxBookmarks.remember(url)
+            }
             uponSelection(panel)
         }
     }
@@ -68,6 +71,9 @@ class Utils {
 
         let wasOk = panel.runModal()
         if wasOk == NSApplication.ModalResponse.OK {
+            if let url = panel.url {
+                SandboxBookmarks.remember(url)
+            }
             uponSelection(panel)
         }
     }
@@ -907,7 +913,13 @@ class Utils {
     }
 
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
-        if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
+        #if APPSTORE
+            // iPod touch guests are not supported by the App Store flavor (no Apple ROM images are shipped).
+            if vm.os == QemuConstants.OS_IOS {
+                return false
+            }
+        #endif
+        return if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
                 QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
             } else {

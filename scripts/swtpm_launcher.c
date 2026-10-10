@@ -1,5 +1,8 @@
 //
 // swtpm_launcher.c
+// MacMulator
+//
+// Copyright (c) the MacMulator Project. Licensed under the Apache License 2.0.
 //
 // The UTM sysroot ships swtpm as a library (swtpm.0.framework) that exposes a
 // swtpm_main() entry point, which is how UTM itself runs it. This small
@@ -8,6 +11,12 @@
 // command that MacMulator runs for VMs with an emulated TPM:
 //
 //     swtpm socket --tpmstate dir=... --ctrl type=unixio,path=... --tpm2
+//
+// The way the library is driven (the swtpm_main signature and the "socket"
+// interface parameter) follows QEMULauncher/Bootstrap.c of UTM
+// (https://github.com/utmapp/UTM, Copyright (c) osy, Apache License 2.0).
+// swtpm itself is Copyright (c) IBM Corporation, BSD 3-Clause License; see
+// MacMulator/Resources/ThirdPartyLicenses.txt.
 //
 #include <string.h>
 
