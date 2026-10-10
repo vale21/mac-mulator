@@ -14,6 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var fileName: String?
     private var initialized = false
 
+    @IBOutlet var preferencesMenuItem: NSMenuItem!
+    @IBOutlet var preferencesSeparator: NSMenuItem!
     @IBOutlet var vmMenu: NSMenu!
     @IBOutlet var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet var startVMMenuItem: NSMenuItem!
@@ -184,6 +186,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func refreshVMMenus() {
         vmMenu.autoenablesItems = false
+        #if APPSTORE
+            preferencesMenuItem.isHidden = true
+            preferencesSeparator.isHidden = true
+        #endif
 
         if let rootController {
             #if arch(x86_64)

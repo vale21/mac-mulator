@@ -342,6 +342,8 @@
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="dCY-FF-mSN"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="preferencesMenuItem" destination="BOF-NM-1cW" id="tk6-8Y-asl"/>
+                        <outlet property="preferencesSeparator" destination="wFC-TO-SCJ" id="EGA-Jd-0Ek"/>
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
