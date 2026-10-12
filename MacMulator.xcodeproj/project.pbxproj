@@ -38,7 +38,6 @@
 		3B57855F2665275F0003C3C8 /* qemu-img in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B578555266523780003C3C8 /* qemu-img */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57F5B82E01D2C400B68CE7 /* MacMulator.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
 		3B66C6CA306D1B280031A733 /* ManageSnapshotViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */; };
 		3B672E6727C788AE00732C46 /* SystemProfilerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B672E6627C788AE00732C46 /* SystemProfilerData.swift */; };
@@ -66,6 +65,7 @@
 		3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E12DA32AE80067415E /* Main.storyboard */; };
 		3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E02DA32AE80067415E /* EditVM.storyboard */; };
 		3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E22DA32AE80067415E /* NewVM.storyboard */; };
+		3BA935EC307D51B800B56D61 /* MacMulator-EE.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3BA935EB307D51B800B56D61 /* MacMulator-EE.icon */; };
 		3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */; };
 		3BB10094266F52D8005D0E44 /* QemuMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB10093266F52D8005D0E44 /* QemuMonitor.swift */; };
 		3BB2A73E2AF68E260043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */; };
@@ -292,6 +292,7 @@
 		3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVMViewController.swift; sourceTree = "<group>"; };
 		3BA6C6E32DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/NewVM.storyboard; sourceTree = "<group>"; };
 		3BA6C6E42DA32AE80067415E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EditVM.storyboard; sourceTree = "<group>"; };
+		3BA935EB307D51B800B56D61 /* MacMulator-EE.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = "MacMulator-EE.icon"; path = "Resources/Originals/Icon/icon/MacMulator-EE.icon"; sourceTree = "<group>"; };
 		3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkUtils.swift; sourceTree = "<group>"; };
 		3BB10093266F52D8005D0E44 /* QemuMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuMonitor.swift; sourceTree = "<group>"; };
 		3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkPauseResumeVMViewController.swift; sourceTree = "<group>"; };
@@ -393,6 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */,
+				3BA935EB307D51B800B56D61 /* MacMulator-EE.icon */,
 				3B3624FD266F6253007857FB /* Frameworks */,
 				3B391EEB25C075F50030E914 /* MacMulator */,
 				3B391EFE25C075F50030E914 /* MacMulatorTests */,
@@ -715,7 +717,6 @@
 				3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
 				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
-				3B57F5B82E01D2C400B68CE7 /* MacMulator.icon in Resources */,
 				3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */,
 				3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */,
 				3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */,
@@ -723,6 +724,7 @@
 				3BBB473A25CABDCB00A4DBA7 /* Assets.xcassets in Resources */,
 				3B7F3C2429326F9900F1396D /* parallels_template in Resources */,
 				3BA6C6E62DA32AE80067415E /* Main.storyboard in Resources */,
+				3BA935EC307D51B800B56D61 /* MacMulator-EE.icon in Resources */,
 				3BBC26A9307A970600603BA6 /* ThirdPartyLicenses.txt in Resources */,
 				3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */,
 				3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */,
@@ -1141,7 +1143,7 @@
 		3B391F1025C075F50030E914 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "MacMulator-EE";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -1256,7 +1258,7 @@
 		3B391F1125C075F50030E914 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = MacMulator;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "MacMulator-EE";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
