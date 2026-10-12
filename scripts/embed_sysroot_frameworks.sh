@@ -228,8 +228,9 @@ done
 # swtpm_main(), the way UTM runs it. Build a small executable around it so that
 # MacMulator can run it like the swtpm command of a regular Qemu installation.
 DST="${EXEC_DIR}/swtpm"
+sorted_words () { echo "$@" | tr ' ' '\n' | sort | tr '\n' ' '; }
 if [ ! -f "${DST}" ] || [ "${SWTPM_SRC}" -nt "${DST}" ] || [ "${QEMU_ENTITLEMENTS}" -nt "${DST}" ] \
-    || [ "$(lipo -archs "${DST}")" != "${ARCHS}" ]; then
+    || [ "$(sorted_words $(lipo -archs "${DST}"))" != "$(sorted_words ${ARCHS})" ]; then
     echo "Building swtpm"
     ARCH_FLAGS=
     for a in ${ARCHS}; do

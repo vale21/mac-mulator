@@ -93,8 +93,11 @@ Xcode Cloud starts from a clean clone, so it downloads the sysroot on every buil
   variable `SYSROOT_ARTIFACT_ID` with the artifact id. Keep it equal to the
   [Current pin](#current-pin). Remember that artifacts expire (see below): when the pinned one
   expires, the build fails at the post-clone step until the variable is updated.
-- Workflows must use the `MacMulator Enthusiast` or `MacMulator App Store` scheme. The App Store
-  scheme is arm64-only and produces the sandboxed, Qemu-bundling app.
+- Workflows must use the `MacMulator Enthusiast` or `MacMulator App Store` scheme. Both are
+  universal (arm64 + x86_64); the App Store scheme produces the sandboxed, Qemu-bundling app.
+  Being universal costs the App Store flavor about 210 MB (the embedded binaries go from 206 MB
+  to 414 MB); to make it Apple Silicon only again, set `ARCHS = arm64` on the App Store target
+  and the embed script thins everything it embeds.
 
 The download adds roughly a minute and a half to each build.
 
