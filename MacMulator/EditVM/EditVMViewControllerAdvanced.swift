@@ -47,15 +47,38 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         qemuPathButton.title = NSLocalizedString("EditVMViewControllerAdvanced.qemuPathButton", comment: "")
         qemuCommandLabel.stringValue = NSLocalizedString("EditVMViewControllerAdvanced.qemuCommandLabel", comment: "")
         qemuCommandDescription.stringValue = NSLocalizedString("EditVMViewControllerAdvanced.qemuCommandDescription", comment: "")
+
+        updateView()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
         #if APPSTORE
             // The App Store flavor always runs the bundled Qemu: a per-VM Qemu path makes no sense.
             qemuPathLabel.isHidden = true
             qemuPathView.isHidden = true
             qemuPathButton.isHidden = true
+            collapseQemuPathSpace()
         #endif
-
-        updateView()
     }
+
+    #if APPSTORE
+        /// Hidden views still take part in Auto Layout, so the controls anchored below the Qemu path field
+        /// are re-anchored to fill the space left by the hidden Qemu path controls.
+        fileprivate func collapseQemuPathSpace() {
+            let anchoredToPathField = view.constraints.filter {
+                ($0.firstItem === accelerateVM || $0.firstItem === qemuCommandLabel) &&
+                    $0.firstAttribute == .top &&
+                    $0.secondItem === qemuPathView
+            }
+            NSLayoutConstraint.deactivate(anchoredToPathField)
+
+            NSLayoutConstraint.activate([
+                accelerateVM.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                qemuCommandLabel.topAnchor.constraint(equalTo: accelerateVM.bottomAnchor, constant: 24),
+            ])
+        }
+    #endif
 
     fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
         let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
