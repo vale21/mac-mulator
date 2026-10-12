@@ -277,8 +277,6 @@ class QemuCommandBuilder {
         #if APPSTORE
             // The bundled Qemu cannot locate its firmware relative to the executable: point it to the app's copy.
             cmd += FORMATTER + "-L " + Utils.escape(QemuUtils.bundledQemuDataPath)
-            // The bundled Qemu has no default audio backend; without one, any sound device
-            // (and machines with built-in audio, such as mac99) refuses to start.
             cmd += FORMATTER + "-audio coreaudio"
         #endif
         if let serial {
