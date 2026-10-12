@@ -172,7 +172,6 @@
 		3BFB2B733078F067005A4B51 /* windows-11-drivers.iso.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */; };
 		3BFB2B743078F067005A4B51 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B3DF81B2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd */; };
 		3BFB2B753078F067005A4B51 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
-		3BFB2B763078F067005A4B51 /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
 		3BFB2B773078F067005A4B51 /* MacMulator.icon in Resources */ = {isa = PBXBuildFile; fileRef = 3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */; };
 		3BFB2B783078F067005A4B51 /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
 		3BFB2B793078F067005A4B51 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
@@ -186,7 +185,6 @@
 		3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BA6C6E22DA32AE80067415E /* NewVM.storyboard */; };
 		3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB18FB2CDE25B700B8D3A6 /* EFI_x64.fd */; };
 		3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
-		3BFB2B843078F067005A4B51 /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
 		3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */; };
 		3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */; };
 		3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */; };
@@ -750,7 +748,6 @@
 				3BFB2B733078F067005A4B51 /* windows-11-drivers.iso.zip in Resources */,
 				3BFB2B743078F067005A4B51 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3BFB2B753078F067005A4B51 /* Localizable.strings in Resources */,
-				3BFB2B763078F067005A4B51 /* nor_n72ap.bin in Resources */,
 				3BFB2B773078F067005A4B51 /* MacMulator.icon in Resources */,
 				3BFB2B783078F067005A4B51 /* EFI_VARS_ARM.fd in Resources */,
 				3BFB2B793078F067005A4B51 /* macos-guest-tools.img.zip in Resources */,
@@ -765,7 +762,6 @@
 				3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */,
 				3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */,
 				3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */,
-				3BFB2B843078F067005A4B51 /* bootrom_240_4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1166,7 +1162,7 @@
 					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
+				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator Enthusiast Edition";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1281,7 +1277,7 @@
 					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = MacMulator;
+				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator Enthusiast Edition";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
