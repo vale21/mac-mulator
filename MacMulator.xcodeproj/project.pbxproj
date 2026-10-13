@@ -248,7 +248,7 @@
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B39124E2DA9C64500BF8794 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B39124F2DA9C65000BF8794 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3B391EE925C075F50030E914 /* MacMulator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacMulator.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B391EE925C075F50030E914 /* MacMulator EE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MacMulator EE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B391EEC25C075F50030E914 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3B391EEE25C075F50030E914 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacMulatorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -405,7 +405,7 @@
 		3B391EEA25C075F50030E914 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3B391EE925C075F50030E914 /* MacMulator.app */,
+				3B391EE925C075F50030E914 /* MacMulator EE.app */,
 				3B391EFB25C075F50030E914 /* MacMulatorTests.xctest */,
 				3BFB2B8F3078F067005A4B51 /* MacMulator.app */,
 			);
@@ -616,7 +616,7 @@
 				3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */,
 			);
 			productName = MacMulator;
-			productReference = 3B391EE925C075F50030E914 /* MacMulator.app */;
+			productReference = 3B391EE925C075F50030E914 /* MacMulator EE.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3B391EFA25C075F50030E914 /* MacMulatorTests */ = {
@@ -1152,7 +1152,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 248;
+				CURRENT_PROJECT_VERSION = 308;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1164,7 +1164,7 @@
 					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator Enthusiast Edition";
+				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator EE";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1175,7 +1175,7 @@
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = "1.0.0 Beta 27";
+				MARKETING_VERSION = "1.0.0 Beta 28";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -1246,7 +1246,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_MODULE_NAME = MacMulator;
-				PRODUCT_NAME = MacMulator;
+				PRODUCT_NAME = "MacMulator EE";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ENTHUSIAST";
 				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
@@ -1267,7 +1267,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 248;
+				CURRENT_PROJECT_VERSION = 308;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1279,7 +1279,7 @@
 					"ENTHUSIAST=1",
 				);
 				INFOPLIST_FILE = MacMulator/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator Enthusiast Edition";
+				INFOPLIST_KEY_CFBundleDisplayName = "MacMulator EE";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1290,7 +1290,7 @@
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = "1.0.0 Beta 27";
+				MARKETING_VERSION = "1.0.0 Beta 28";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -1361,7 +1361,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulator;
 				PRODUCT_MODULE_NAME = MacMulator;
-				PRODUCT_NAME = MacMulator;
+				PRODUCT_NAME = "MacMulator EE";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ENTHUSIAST";
 				SWIFT_OBJC_BRIDGING_HEADER = "MacMulator/Utils/MacMulator-Bridging-Header.h";
@@ -1389,7 +1389,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator.app/Contents/MacOS/MacMulator";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator EE.app/Contents/MacOS/MacMulator EE";
 			};
 			name = Debug;
 		};
@@ -1413,7 +1413,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator.app/Contents/MacOS/MacMulator";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MacMulator EE.app/Contents/MacOS/MacMulator EE";
 			};
 			name = Release;
 		};
@@ -1429,7 +1429,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 248;
+				CURRENT_PROJECT_VERSION = 307;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1460,7 +1460,7 @@
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = "1.0.0 Beta 27";
+				MARKETING_VERSION = "1.0.0 Beta 28";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -1552,7 +1552,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 248;
+				CURRENT_PROJECT_VERSION = 307;
 				DEVELOPMENT_TEAM = 43L3TB7GWV;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -1583,7 +1583,7 @@
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/lib/gstreamer-1.0\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = "1.0.0 Beta 27";
+				MARKETING_VERSION = "1.0.0 Beta 28";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
