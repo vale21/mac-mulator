@@ -23,7 +23,6 @@ class VirtualMachineViewController: NSViewController {
     var listenPort: Int32 = 4444
     var rootController: RootViewController?
 
-    /// SPICE viewer shown for the VM that is being run, closed automatically when QEMU exits with an error
     private weak var spiceViewer: QemuSpiceViewerViewController?
 
     var boxContentView: NSView?
@@ -58,6 +57,7 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet var centralBoxWidth: NSLayoutConstraint?
     @IBOutlet var centralBoxBottomSpace: NSLayoutConstraint?
 
+    @IBOutlet var bottomConfigureVMButton: NSButton!
     @IBOutlet var qemuUnavailableLabel: NSTextField!
     @IBOutlet var pauseVMButton: NSButton!
     @IBOutlet var startVMButton: NSButton!
@@ -327,11 +327,13 @@ class VirtualMachineViewController: NSViewController {
                         screenshotView = NSImageView(image: image)
                         centralBox.contentView = screenshotView
                     }
+                    bottomConfigureVMButton.isHidden = false
                 } else {
                     resizeCentralBox(false)
                     hideBoxControls(false)
 
                     centralBox.contentView = boxContentView
+                    bottomConfigureVMButton.isHidden = true
                 }
             }
         }
