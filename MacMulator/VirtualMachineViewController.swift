@@ -221,6 +221,7 @@ class VirtualMachineViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCentralBoxConstraints()
         NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
     }
 
@@ -324,8 +325,13 @@ class VirtualMachineViewController: NSViewController {
                     centralBox.title = NSLocalizedString("VirtualMachineViewController.vmPaused", comment: "")
                     let imagefile = NSImage(contentsOfFile: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
                     if let image = imagefile {
-                        screenshotView = NSImageView(image: image)
-                        centralBox.contentView = screenshotView
+                        let imageView = NSImageView(image: image)
+                        // Let the box size drive the image, not the screenshot's intrinsic size
+                        imageView.imageScaling = .scaleProportionallyUpOrDown
+                        imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                        screenshotView = imageView
+                        centralBox.contentView = imageView
                     }
                     bottomConfigureVMButton.isHidden = false
                 } else {
@@ -336,6 +342,40 @@ class VirtualMachineViewController: NSViewController {
                     bottomConfigureVMButton.isHidden = true
                 }
             }
+        }
+    }
+
+    /// Creates the constraints used by resizeCentralBox when they are not connected in the storyboard.
+    /// Fixed width/height keep the box compact when showing VM features, while leading/trailing/bottom
+    /// spaces let it fill the window when showing the paused VM screenshot. Priorities are toggled at runtime.
+    fileprivate func setupCentralBoxConstraints() {
+        guard let container = centralBox.superview else { return }
+
+        // The storyboard defines fixed width/height constraints on the box: reuse them, so that they
+        // are not left as required constraints preventing the box from growing
+        let sizeConstraints = centralBox.constraints.filter { $0.firstItem === centralBox && $0.secondItem == nil && $0.relation == .equal }
+        if centralBoxWidth == nil {
+            centralBoxWidth = sizeConstraints.first { $0.firstAttribute == .width } ?? centralBox.widthAnchor.constraint(equalToConstant: 468)
+        }
+        if centralBoxHeight == nil {
+            centralBoxHeight = sizeConstraints.first { $0.firstAttribute == .height } ?? centralBox.heightAnchor.constraint(equalToConstant: 210)
+        }
+        if centralBoxLeadingSpace == nil {
+            centralBoxLeadingSpace = centralBox.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 56)
+        }
+        if centralBoxTrailingSpace == nil {
+            centralBoxTrailingSpace = container.trailingAnchor.constraint(equalTo: centralBox.trailingAnchor, constant: 56)
+        }
+        if centralBoxBottomSpace == nil {
+            centralBoxBottomSpace = bottomConfigureVMButton.topAnchor.constraint(equalTo: centralBox.bottomAnchor, constant: 20)
+        }
+
+        let constraints = [centralBoxWidth, centralBoxHeight, centralBoxLeadingSpace, centralBoxTrailingSpace, centralBoxBottomSpace].compactMap(\.self)
+        for constraint in constraints {
+            // Priority cannot be changed between required and optional while a constraint is active
+            constraint.isActive = false
+            constraint.priority = .defaultLow
+            constraint.isActive = true
         }
     }
 
