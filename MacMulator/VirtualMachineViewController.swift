@@ -296,7 +296,7 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    fileprivate func setRunningStatus(_ vm: VirtualMachine?, _ running: Bool) {
+    func setRunningStatus(_ vm: VirtualMachine?, _ running: Bool) {
         startVMButton.isHidden = running
         stopVMButton.isHidden = !running
         pauseVMButton.isHidden = !running
@@ -312,13 +312,9 @@ class VirtualMachineViewController: NSViewController {
                 let filemanager = FileManager.default
                 let screenshotExists = filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
 
-                if rootController.isVMPaused(vm) {
-                    vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
-                } else {
-                    vmName.stringValue = vm.displayName
-                }
-
                 if rootController.isVMPaused(vm), screenshotExists {
+                    vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
+
                     resizeCentralBox(true)
                     hideBoxControls(true)
 
@@ -335,6 +331,8 @@ class VirtualMachineViewController: NSViewController {
                     }
                     bottomConfigureVMButton.isHidden = false
                 } else {
+                    vmName.stringValue = vm.displayName
+
                     resizeCentralBox(false)
                     hideBoxControls(false)
 
@@ -476,8 +474,8 @@ class VirtualMachineViewController: NSViewController {
                 listenPort += 1
                 let runner: VirtualMachineRunner = VirtualMachineRunnerFactory().create(listenPort: listenPort, vm: vm)
 
-                setRunningStatus(vm, true)
                 rootController.setRunningVM(vm, runner)
+                setRunningStatus(vm, true)
 
                 if vm.bootMode == nil {
                     vm.bootMode = Utils.getBootModeForSubType(vm.os, vm.subtype)

@@ -4398,12 +4398,16 @@ Rocky Linux</string>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TgC-ff-dnC">
-                                            <rect key="frame" x="259" y="68" width="133" height="24"/>
+                                            <rect key="frame" x="221" y="80" width="208" height="24"/>
                                             <buttonCell key="cell" type="push" title="Configure this VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o7c-gE-LqP">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <color key="bezelColor" name="controlAccentColor" catalog="System" colorSpace="catalog"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="208" id="Ehw-w8-EiB"/>
+                                                <constraint firstAttribute="height" constant="24" id="rSZ-wY-nVo"/>
+                                            </constraints>
                                             <connections>
                                                 <action selector="editVM:" target="Urh-Tu-1Cq" id="fxk-Ey-QyQ"/>
                                             </connections>
@@ -4432,7 +4436,7 @@ Rocky Linux</string>
                                         <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="25" id="nqw-eF-VrR"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="19" id="tci-Rk-0aL"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="top" secondItem="gzW-c5-Oke" secondAttribute="bottom" constant="19" id="uEf-L3-9pJ"/>
-                                        <constraint firstItem="f2n-08-TYD" firstAttribute="bottom" secondItem="TgC-ff-dnC" secondAttribute="bottom" id="vhx-en-ddS"/>
+                                        <constraint firstItem="f2n-08-TYD" firstAttribute="bottom" secondItem="TgC-ff-dnC" secondAttribute="bottom" constant="12" id="vhx-en-ddS"/>
                                         <constraint firstItem="Fft-jP-dG6" firstAttribute="top" secondItem="drX-xb-Fr1" secondAttribute="top" id="yhQ-k4-iX1"/>
                                     </constraints>
                                 </view>
