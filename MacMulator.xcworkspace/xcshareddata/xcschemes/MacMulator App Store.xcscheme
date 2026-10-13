@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B391EE825C075F50030E914"
+               BlueprintIdentifier = "3BFB2B253078F067005A4B51"
                BuildableName = "MacMulator.app"
-               BlueprintName = "MacMulator"
+               BlueprintName = "MacMulator App Store"
                ReferencedContainer = "container:MacMulator.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,26 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B391EFA25C075F50030E914"
-               BuildableName = "MacMulatorTests.xctest"
-               BlueprintName = "MacMulatorTests"
-               ReferencedContainer = "container:MacMulator.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3B391F0525C075F50030E914"
-               BuildableName = "MacMulatorUITests.xctest"
-               BlueprintName = "MacMulatorUITests"
-               ReferencedContainer = "container:MacMulator.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -66,9 +46,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B391EE825C075F50030E914"
+            BlueprintIdentifier = "3BFB2B253078F067005A4B51"
             BuildableName = "MacMulator.app"
-            BlueprintName = "MacMulator"
+            BlueprintName = "MacMulator App Store"
             ReferencedContainer = "container:MacMulator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -90,9 +70,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3B391EE825C075F50030E914"
+            BlueprintIdentifier = "3BFB2B253078F067005A4B51"
             BuildableName = "MacMulator.app"
-            BlueprintName = "MacMulator"
+            BlueprintName = "MacMulator App Store"
             ReferencedContainer = "container:MacMulator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

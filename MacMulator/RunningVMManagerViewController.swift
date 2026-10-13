@@ -75,6 +75,14 @@ class RunningVMManagerViewController: NSViewController, NSWindowDelegate {
         virtualMachine?.writeToPlist()
     }
 
+    func windowDidEnterFullScreen(_: Notification) {
+        isFullScreen = true
+    }
+
+    func windowDidExitFullScreen(_: Notification) {
+        isFullScreen = false
+    }
+
     func stopVM(_ closeWindow: Bool) {
         if let vmRunner {
             if vmRunner.isVMRunning() {

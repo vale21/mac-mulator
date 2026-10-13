@@ -14,6 +14,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var fileName: String?
     private var initialized = false
 
+    @IBOutlet var preferencesMenuItem: NSMenuItem!
+    @IBOutlet var preferencesSeparator: NSMenuItem!
     @IBOutlet var vmMenu: NSMenu!
     @IBOutlet var importFromParallelsMenuItem: NSMenuItem!
     @IBOutlet var startVMMenuItem: NSMenuItem!
@@ -184,6 +186,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func refreshVMMenus() {
         vmMenu.autoenablesItems = false
+        #if APPSTORE
+            preferencesMenuItem.isHidden = true
+            preferencesSeparator.isHidden = true
+        #endif
 
         if let rootController {
             #if arch(x86_64)
@@ -294,6 +300,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+        // Opened from the Finder or an open panel: keep the access to it across launches.
+        SandboxBookmarks.remember(URL(fileURLWithPath: filename))
         if performSanityCheck(filename) {
             if initialized {
                 rootController?.addVirtualMachineFromFile(filename)
@@ -310,6 +318,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_: Notification) {
         let userDefaults = UserDefaults.standard
 
+        // Before touching any VM file: regain access to the folders and files the user picked (App Store flavor).
+        SandboxBookmarks.restoreAll()
         setupDefaultsPreferences(userDefaults)
 
         savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)

@@ -102,6 +102,14 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     virtualMachine.enableSpiceDisplay = false
                     qemuDisplayComboBox.isEnabled = true
                 }
+                #if APPSTORE
+                    // The bundled Qemu has no native display: the Spice display is the only option.
+                    spiceDescriptionSwitch.state = .on
+                    spiceDescriptionSwitch.isEnabled = false
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
+                    qemuDisplayComboBox.isEnabled = false
+                    virtualMachine.enableSpiceDisplay = true
+                #endif
 
                 let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
                 if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {

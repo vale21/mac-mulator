@@ -128,7 +128,11 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     fileprivate func checkForQemuBinaries() {
         let fileManager = FileManager.default
-        let path = qemuFolderField.stringValue
+        #if APPSTORE
+            let path = QemuUtils.getQemuPath()
+        #else
+            let path = qemuFolderField.stringValue
+        #endif
         if fileManager.fileExists(atPath: path) {
             checkFile(QemuConstants.SWTPM, swtpm_tick)
             checkFileAndGetVersion(QemuConstants.QEMU_IMG, qemu_img_tick)
@@ -164,8 +168,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
         checkFile(path, image)
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-        QemuUtils.getQemuVersion(qemuPath: qemuPath!, uponCompletion: { version in
+        QemuUtils.getQemuVersion(qemuPath: QemuUtils.getQemuPath(), uponCompletion: { version in
             DispatchQueue.main.async {
                 if version == nil {
                     self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "")

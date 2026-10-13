@@ -58,12 +58,15 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
         performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotRestored", comment: "")))
     }
 
-    func windowDidEnterFullScreen(_: Notification) {
-        isFullScreen = true
-    }
+    override func windowShouldClose(_: NSWindow) -> Bool {
+        if Utils.isPauseSupported(vmRunner!.getManagedVM()) {
+            pauseVM()
 
-    func windowDidExitFullScreen(_: Notification) {
-        isFullScreen = false
+            // Window will be closed by the VM runner after the pausing will be complete
+            return false
+        } else {
+            return super.windowShouldClose(view.window!)
+        }
     }
 
     func takeScreenshot() {

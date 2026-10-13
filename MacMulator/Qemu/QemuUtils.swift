@@ -45,7 +45,7 @@ class QemuUtils {
     }
 
     static func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command: String =
@@ -60,7 +60,7 @@ class QemuUtils {
     }
 
     static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -74,7 +74,7 @@ class QemuUtils {
     }
 
     static func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -89,7 +89,7 @@ class QemuUtils {
     }
 
     static func convertVHDXToDiskImage(vhdxPath: String, vmPath: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -157,28 +157,31 @@ class QemuUtils {
             vm.addVirtualDrive(openCore)
         }
 
-        if vm.os == QemuConstants.OS_IOS {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0")
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "nor_n72ap.bin", ofType: nil)!, toPath: vm.path + "/nor-0.bin")
+        #if !APPSTORE
+            // iPod touch guests need Apple's boot ROM and NOR images, which the App Store flavor does not ship.
+            if vm.os == QemuConstants.OS_IOS {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0")
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "nor_n72ap.bin", ofType: nil)!, toPath: vm.path + "/nor-0.bin")
 
-            let virtualBootRom = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                name: QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_BOOTROM,
-                size: 0
-            )
-            vm.addVirtualDrive(virtualBootRom)
+                let virtualBootRom = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_BOOTROM + "-0",
+                    name: QemuConstants.MEDIATYPE_BOOTROM + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_BOOTROM,
+                    size: 0
+                )
+                vm.addVirtualDrive(virtualBootRom)
 
-            let virtualNor = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_NOR + "-0." + MacMulatorConstants.BIN_EXTENSION,
-                name: QemuConstants.MEDIATYPE_NOR + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_NOR,
-                size: 0
-            )
-            vm.addVirtualDrive(virtualNor)
-        }
+                let virtualNor = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_NOR + "-0." + MacMulatorConstants.BIN_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_NOR + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_NOR,
+                    size: 0
+                )
+                vm.addVirtualDrive(virtualNor)
+            }
+        #endif
     }
 
     static func deleteAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
@@ -230,7 +233,7 @@ class QemuUtils {
     }
 
     static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
@@ -243,8 +246,81 @@ class QemuUtils {
         })
     }
 
+    #if APPSTORE
+        /// The bundled qemu-system-* and qemu-img executables live next to the main executable (Contents/MacOS).
+        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
+        /// Firmware and data files of the bundled Qemu (Contents/Resources/qemu), passed to Qemu with -L.
+        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
+    #endif
+
+    /// Directory containing the qemu-system-* and qemu-img executables used by the application.
+    /// The App Store flavor only ever runs the Qemu bundled inside the application; the Enthusiast
+    /// flavor runs the Qemu installation configured in the Preferences.
+    static func getQemuPath() -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        #endif
+    }
+
+    /// Directory containing the Qemu executables to use for a given VM: the per-VM override when
+    /// the user configured one (Enthusiast flavor only), the global directory otherwise.
+    static func getQemuPath(for vm: VirtualMachine) -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return vm.qemuPath ?? getQemuPath()
+        #endif
+    }
+
+    /// Whether a VM is shown through the Spice display. The bundled Qemu of the App Store flavor has
+    /// no native (Cocoa) display, so there the Spice display is the only option, whatever the VM says.
+    static func isSpiceDisplayEnabled(_ vm: VirtualMachine) -> Bool {
+        #if APPSTORE
+            return true
+        #else
+            return vm.enableSpiceDisplay == true
+        #endif
+    }
+
+    /// Path of the unix socket on which Qemu's Spice server listens for a VM.
+    /// The Enthusiast flavor keeps it next to the VM. A sandboxed app can only bind unix sockets
+    /// inside its own container, so the App Store flavor keeps it in the container's temporary
+    /// directory, with a short name derived from the VM path (sun_path is limited to 104 bytes).
+    static func spiceSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("spice", vmPath)
+        #else
+            return vmPath + "/socket.spice"
+        #endif
+    }
+
+    /// Path of the control socket through which Qemu talks to the swtpm process emulating a VM's TPM.
+    /// Same considerations as for the Spice socket.
+    static func tpmSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("tpm", vmPath)
+        #else
+            return vmPath + "/tpm/socket"
+        #endif
+    }
+
+    #if APPSTORE
+        /// A unix socket path inside the sandbox container, unique per VM and short enough for sun_path.
+        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
+            // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
+            var hash: UInt64 = 0xCBF2_9CE4_8422_2325
+            for byte in vmPath.utf8 {
+                hash ^= UInt64(byte)
+                hash = hash &* 0x0000_0100_0000_01B3
+            }
+            return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
+        }
+    #endif
+
     static func isBinaryAvailable(_ binary: String) -> Bool {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+        let qemuPath = getQemuPath()
         let fileManager = FileManager.default
 
         return fileManager.fileExists(atPath: qemuPath + "/" + binary)

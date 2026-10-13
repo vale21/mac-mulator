@@ -93,7 +93,14 @@ class QemuCommandBuilder {
 
     func withEnableSpice(_ enableSpice: Bool?, basePath: String?) -> QemuCommandBuilder {
         if let enableSpice, enableSpice, let basePath {
-            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(basePath) + "/socket.spice,disable-ticketing=on" +
+            var glOption = ""
+            #if APPSTORE
+                glOption = ",gl=off"
+            #endif
+            if enable3d ?? false {
+                glOption = ",gl=on"
+            }
+            spice = FORMATTER + "-spice unix=on,addr=" + Utils.escape(QemuUtils.spiceSocketPath(forVMAt: basePath)) + ",disable-ticketing=on" + glOption +
                 FORMATTER + "-device virtio-serial-pci" +
                 FORMATTER + "-chardev spicevmc,id=spicechannel0,name=vdagent" +
                 FORMATTER + "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0" +
@@ -266,7 +273,12 @@ class QemuCommandBuilder {
     }
 
     func build() -> String {
-        var cmd = qemuPath + "/" + executable
+        var cmd = Utils.escape(qemuPath) + "/" + executable
+        #if APPSTORE
+            // The bundled Qemu cannot locate its firmware relative to the executable: point it to the app's copy.
+            cmd += FORMATTER + "-L " + Utils.escape(QemuUtils.bundledQemuDataPath)
+            cmd += FORMATTER + "-audio coreaudio"
+        #endif
         if let serial {
             cmd += FORMATTER + "-serial " + serial
         }
@@ -292,9 +304,12 @@ class QemuCommandBuilder {
             } else {
                 cmd += "off"
             }
-            if enable3d ?? false {
-                cmd += ",gl=on"
-            }
+            #if !APPSTORE
+                // The "none" display of the bundled (UTM) Qemu refuses gl=on.
+                if enable3d ?? false {
+                    cmd += ",gl=on"
+                }
+            #endif
         }
         if let cpu {
             cmd += FORMATTER + "-cpu " + cpu
@@ -352,7 +367,7 @@ class QemuCommandBuilder {
         }
         if let tpmPath {
             let device = tpmDevice != nil ? tpmDevice! : QemuConstants.TPM_TIS_DEVICE
-            cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(tpmPath) + "/tpm/socket -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
+            cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: tpmPath)) + " -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
         }
         if let logging {
             cmd += FORMATTER + "-d " + logging

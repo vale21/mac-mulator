@@ -7,6 +7,17 @@
 
 import Foundation
 
+// MacMulator ships in two flavors, selected by the build target through
+// SWIFT_ACTIVE_COMPILATION_CONDITIONS (and GCC_PREPROCESSOR_DEFINITIONS for ObjC):
+//  - ENTHUSIAST: universal binary, not sandboxed, runs Qemu from a user-provided directory.
+//  - APPSTORE:   Apple Silicon only, sandboxed, bundles Qemu inside the app.
+// Guard against a target that defines both or neither.
+#if APPSTORE && ENTHUSIAST
+    #error("Only one of APPSTORE and ENTHUSIAST may be defined for a target")
+#elseif !APPSTORE && !ENTHUSIAST
+    #error("Either APPSTORE or ENTHUSIAST must be defined in SWIFT_ACTIVE_COMPILATION_CONDITIONS")
+#endif
+
 class MacMulatorConstants {
     static let VM_EXTENSION = "qvm"
     static let DISK_EXTENSION = "qvd"

@@ -1,5 +1,7 @@
 "AboutBoxViewController.version" = "Versione";
 "AboutBoxViewController.licenseButton" = "Vedi la licenza Apache 2.0";
+"AboutBoxViewController.thirdPartyText" = "MacMulator include software di UTM, CocoaSpice, QEMU, SPICE, GLib, GStreamer, OpenSSL e di altri progetti open source, con le rispettive licenze. ";
+"AboutBoxViewController.thirdPartyLink" = "Vedi le licenze di terze parti";
 "AboutBoxViewController.descriptionLabel" = "MacMulator è un software gratuito e non commerciale";
 "AboutBoxViewController.descriptionText" = "MacMulator è l'emulatore di computer per il tuo Mac! Grazie alla sua interfaccia intuitva e alla potenza di Qemu e di Apple Virtualization Framework, ti offre la possibilità di creare qualsiasi Macchina Virtuale in pochi click. Qualunque sia il sistema che devi emulare sul tuo Mac, MacMulator è lo strumento per te!";
 "AboutBoxViewController.creditsLabel" = "Ringraziamenti";

@@ -53,7 +53,7 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
 
     override func setVirtualMachine(_ vm: VirtualMachine) {
         super.setVirtualMachine(vm)
-        socketPath = vm.path + "/socket.spice"
+        socketPath = QemuUtils.spiceSocketPath(forVMAt: vm.path)
     }
 
     /// Turns mouse capture on or off. When enabled, the guest is asked for relative mouse positioning and

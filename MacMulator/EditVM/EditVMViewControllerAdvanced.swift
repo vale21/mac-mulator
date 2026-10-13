@@ -51,14 +51,39 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         updateView()
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        #if APPSTORE
+            // The App Store flavor always runs the bundled Qemu: a per-VM Qemu path makes no sense.
+            qemuPathLabel.isHidden = true
+            qemuPathView.isHidden = true
+            qemuPathButton.isHidden = true
+            collapseQemuPathSpace()
+        #endif
+    }
+
+    #if APPSTORE
+        /// Hidden views still take part in Auto Layout, so the controls anchored below the Qemu path field
+        /// are re-anchored to fill the space left by the hidden Qemu path controls.
+        fileprivate func collapseQemuPathSpace() {
+            let anchoredToPathField = view.constraints.filter {
+                ($0.firstItem === accelerateVM || $0.firstItem === qemuCommandLabel) &&
+                    $0.firstAttribute == .top &&
+                    $0.secondItem === qemuPathView
+            }
+            NSLayoutConstraint.deactivate(anchoredToPathField)
+
+            NSLayoutConstraint.activate([
+                accelerateVM.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                qemuCommandLabel.topAnchor.constraint(equalTo: accelerateVM.bottomAnchor, constant: 24),
+            ])
+        }
+    #endif
+
     fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
         let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
         fullCommandView.string = runner.getQemuCommand()
-        if let qemuPath = virtualMachine.qemuPath {
-            qemuPathView.stringValue = qemuPath
-        } else {
-            qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        }
+        qemuPathView.stringValue = QemuUtils.getQemuPath(for: virtualMachine)
     }
 
     fileprivate func updateView() {
@@ -89,7 +114,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     func controlTextDidChange(_ notification: Notification) {
         if (notification.object as! NSTextField) == qemuPathView {
             if let virtualMachine {
-                let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
+                let originalPath = QemuUtils.getQemuPath()
 
                 if qemuPathView.stringValue != originalPath {
                     if qemuPathView.stringValue != "" {

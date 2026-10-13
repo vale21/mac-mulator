@@ -15,6 +15,8 @@ class AboutBoxViewController: NSViewController {
     @IBOutlet var creditsLabel: NSTextField!
     @IBOutlet var copyrightLabel: NSTextField!
 
+    private var thirdPartyCreditsAppended = false
+
     @IBAction func openLicense(_: Any) {
         if let url = URL(string: "https://www.apache.org/licenses/LICENSE-2.0.txt") {
             NSWorkspace.shared.open(url)
@@ -38,5 +40,45 @@ class AboutBoxViewController: NSViewController {
         // Keep the copyright year current instead of hardcoding it in the storyboard
         let year = String(Calendar.current.component(.year, from: Date()))
         copyrightLabel.stringValue = String(format: NSLocalizedString("AboutBoxViewController.copyright", comment: ""), year)
+
+        appendThirdPartyCredits()
+    }
+
+    /// Adds the third-party software credits to the credits text, with a link that opens the
+    /// bundled ThirdPartyLicenses.txt (the notices and license texts the third-party licenses require).
+    private func appendThirdPartyCredits() {
+        guard !thirdPartyCreditsAppended,
+              let textView = findTextView(in: view),
+              let storage = textView.textStorage,
+              let licensesURL = Bundle.main.url(forResource: "ThirdPartyLicenses", withExtension: "txt")
+        else {
+            return
+        }
+        thirdPartyCreditsAppended = true
+
+        // Same look as the credits already in the storyboard.
+        var attributes: [NSAttributedString.Key: Any] = [.font: NSFont.systemFont(ofSize: 12), .foregroundColor: NSColor.textColor]
+        if storage.length > 0 {
+            attributes = storage.attributes(at: storage.length - 1, effectiveRange: nil)
+            attributes.removeValue(forKey: .link)
+        }
+        var linkAttributes = attributes
+        linkAttributes[.link] = licensesURL
+
+        let credits = NSMutableAttributedString(string: "\n\n" + NSLocalizedString("AboutBoxViewController.thirdPartyText", comment: ""), attributes: attributes)
+        credits.append(NSAttributedString(string: NSLocalizedString("AboutBoxViewController.thirdPartyLink", comment: ""), attributes: linkAttributes))
+        storage.append(credits)
+    }
+
+    private func findTextView(in view: NSView) -> NSTextView? {
+        if let textView = view as? NSTextView {
+            return textView
+        }
+        for subview in view.subviews {
+            if let textView = findTextView(in: subview) {
+                return textView
+            }
+        }
+        return nil
     }
 }
