@@ -201,7 +201,6 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             vmView?.virtualMachine = vzVirtualMachine
             vmView?.automaticallyReconfiguresDisplay = true
             vmView?.capturesSystemKeys = true
-
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
                     Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
@@ -289,6 +288,8 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 } else {
                     self.startVM()
                 }
+
+                self.vmViewController?.vmController?.setRunningStatus(self.managedVm, true)
             })
         }
 
