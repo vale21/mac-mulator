@@ -319,11 +319,34 @@ class QemuUtils {
         }
     #endif
 
-    static func isBinaryAvailable(_ binary: String) -> Bool {
-        let qemuPath = getQemuPath()
+    static func isBinaryAvailable(_ binary: String, qemuPath: String? = nil) -> Bool {
+        let rootPath = qemuPath != nil ? qemuPath! : getQemuPath()
         let fileManager = FileManager.default
 
-        return fileManager.fileExists(atPath: qemuPath + "/" + binary)
+        return fileManager.fileExists(atPath: rootPath + "/" + binary)
+    }
+
+    static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
+        let aliases = [
+            QemuConstants.VGA_VIRTIO_GPU_PCI: QemuConstants.VGA_VIRTIO_GPU,
+            QemuConstants.VGA_VIRTIO_GPU_GL_PCI: QemuConstants.VGA_VIRTIO_GPU_GL,
+        ]
+        let normalized = adapters.map { aliases[$0] ?? $0 }
+        let available = Set(normalized)
+
+        var seen = Set<String>()
+        return normalized.filter { adapter in
+            if adapter.hasSuffix("-gl") || adapter.contains("-gl-") {
+                let base = adapter.replacingOccurrences(of: "-gl", with: "")
+                if available.contains(base) {
+                    return false
+                }
+            }
+            if adapter == QemuConstants.VGA_APPLE_GFX_PCI || adapter == QemuConstants.VGA_APPLE_GFX_MMIO {
+                return false
+            }
+            return seen.insert(adapter).inserted
+        }
     }
 
     static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {

@@ -334,6 +334,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let fileName {
             rootController?.addVirtualMachineFromFile(fileName)
         }
+
+        let qemuPath = QemuUtils.getQemuPath()
+        Task {
+            _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            if let rootController {
+                for vm in rootController.virtualMachines {
+                    _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+                }
+            }
+        }
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {

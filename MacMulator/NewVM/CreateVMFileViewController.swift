@@ -40,7 +40,7 @@ class CreateVMFileViewController: NSViewController {
             let displayOrigin = QemuConstants.ORIGIN
             let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
-            let qemuDisplay = Utils.getDisplaySubType(os, subtype)
+            let qemuDisplay = Utils.getDisplayForSubType(os, subtype)
             let enable3DAcceleration = true
             let enableSpiceDisplay = true
             let hvf = Utils.getAccelForSubType(os, subtype)

@@ -123,6 +123,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     func controlTextDidEndEditing(_ obj: Notification) {
         if obj.object as? NSObject == qemuFolderField {
             checkForQemuBinaries()
+            Task {
+                _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue)
+            }
         }
     }
 

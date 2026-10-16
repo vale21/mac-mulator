@@ -44,8 +44,6 @@ class AboutBoxViewController: NSViewController {
         appendThirdPartyCredits()
     }
 
-    /// Adds the third-party software credits to the credits text, with a link that opens the
-    /// bundled ThirdPartyLicenses.txt (the notices and license texts the third-party licenses require).
     private func appendThirdPartyCredits() {
         guard !thirdPartyCreditsAppended,
               let textView = findTextView(in: view),

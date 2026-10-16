@@ -569,7 +569,7 @@ class Utils {
     }
 
     static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
-        getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
+        getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO_GPU
     }
 
     static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
@@ -592,7 +592,7 @@ class Utils {
         getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
     }
 
-    static func getDisplaySubType(_ os: String, _ subtype: String?) -> String {
+    static func getDisplayForSubType(_ os: String, _ subtype: String?) -> String {
         getStringValueForSubType(os, subtype, 21) ?? QemuConstants.DISPLAY_DEFAULT
     }
 

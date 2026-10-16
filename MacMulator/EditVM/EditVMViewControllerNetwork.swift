@@ -16,9 +16,12 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     @IBOutlet var createMappingButton: NSButton!
 
     var virtualMachine: VirtualMachine?
+    var adaptersList: [String] = []
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
+
+        loadAdaptersList()
         updateView()
     }
 
@@ -124,12 +127,12 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func numberOfItems(in _: NSComboBox) -> Int {
-        QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
+        adaptersList.count
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == networkAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : ""
+            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[adaptersList[index]] : ""
         }
         return index + 1
     }
@@ -137,8 +140,18 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == networkAdapterComboBox {
             if let virtualMachine {
-                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem]
+                virtualMachine.networkDevice = adaptersList[networkAdapterComboBox.indexOfSelectedItem]
             }
+        }
+    }
+
+    fileprivate func loadAdaptersList() {
+        guard let virtualMachine else { return }
+
+        Task {
+            let adapters = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableNetworkDevices ?? QemuConstants.ALL_NETWORK_ADAPTERS
+            self.adaptersList = adapters
+            self.updateView()
         }
     }
 }
