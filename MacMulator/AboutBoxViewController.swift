@@ -14,6 +14,7 @@ class AboutBoxViewController: NSViewController {
     @IBOutlet var descriptionText: NSTextField!
     @IBOutlet var creditsLabel: NSTextField!
     @IBOutlet var copyrightLabel: NSTextField!
+    @IBOutlet var qemuVersionLabel: NSTextField!
 
     private var thirdPartyCreditsAppended = false
 
@@ -42,6 +43,7 @@ class AboutBoxViewController: NSViewController {
         copyrightLabel.stringValue = String(format: NSLocalizedString("AboutBoxViewController.copyright", comment: ""), year)
 
         appendThirdPartyCredits()
+        refreshQemuVersion()
     }
 
     private func appendThirdPartyCredits() {
@@ -78,5 +80,17 @@ class AboutBoxViewController: NSViewController {
             }
         }
         return nil
+    }
+
+    private func refreshQemuVersion() {
+        let qemuPath = QemuUtils.getQemuPath()
+        Task {
+            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            if let version = capabilities?.qemuVersion, !version.isEmpty {
+                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
+            } else {
+                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
+            }
+        }
     }
 }

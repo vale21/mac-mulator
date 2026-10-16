@@ -3411,6 +3411,15 @@ Rocky Linux</string>
                                     <action selector="openLicense:" target="7e0-Bt-54A" id="s6X-kK-3TI"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GAk-eH-dhx">
+                                <rect key="frame" x="503" y="404" width="121" height="15"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="QEMU version 10.0.2" id="WVk-pa-JBn">
+                                    <font key="font" metaFont="system" size="12"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
                             <constraint firstItem="bNY-9B-VBP" firstAttribute="top" secondItem="aym-Bj-JQj" secondAttribute="bottom" constant="8" symbolic="YES" id="0WU-An-mtc"/>
@@ -3446,6 +3455,7 @@ Rocky Linux</string>
                         <outlet property="descriptionLabel" destination="BHS-cg-DeE" id="GLn-G4-Apt"/>
                         <outlet property="descriptionText" destination="bNY-9B-VBP" id="6bV-72-d9I"/>
                         <outlet property="licenseButton" destination="E7N-rW-Fzz" id="phu-nW-VTF"/>
+                        <outlet property="qemuVersionLabel" destination="GAk-eH-dhx" id="Th7-Be-ybX"/>
                         <outlet property="versionLabel" destination="nbc-Cc-IYr" id="QWc-rl-OHS"/>
                     </connections>
                 </viewController>

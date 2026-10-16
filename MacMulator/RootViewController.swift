@@ -15,6 +15,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     var virtualMachines: [VirtualMachine] = []
     var runningVMs: [VirtualMachine: VirtualMachineRunner] = [:]
 
+    private let qemuVersionLabel = NSTextField(labelWithString: "")
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,8 +32,74 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             vmController.setRootController(self)
         }
 
+        setupQemuVersionFooter()
+
         let delegate = NSApp.delegate as! AppDelegate
         delegate.rootControllerDidFinishLoading(self)
+    }
+
+    /// Shows the Qemu version at the bottom of the VM list. On macOS 26+ the label floats over the list,
+    /// which scrolls under it and fades out (no split view accessory: its edge effect blurs the rows
+    /// with a hard boundary). On older systems the list simply ends above the label.
+    private func setupQemuVersionFooter() {
+        #if APPSTORE
+            qemuVersionLabel.isHidden = true
+        #else
+            qemuVersionLabel.font = NSFont.systemFont(ofSize: 13)
+            qemuVersionLabel.textColor = .labelColor
+            qemuVersionLabel.lineBreakMode = .byTruncatingTail
+            qemuVersionLabel.translatesAutoresizingMaskIntoConstraints = false
+
+            let footer = NSView()
+            footer.translatesAutoresizingMaskIntoConstraints = false
+            footer.addSubview(qemuVersionLabel)
+            NSLayoutConstraint.activate([
+                qemuVersionLabel.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: 13),
+                qemuVersionLabel.trailingAnchor.constraint(lessThanOrEqualTo: footer.trailingAnchor, constant: -13),
+                qemuVersionLabel.topAnchor.constraint(equalTo: footer.topAnchor, constant: 8),
+                qemuVersionLabel.bottomAnchor.constraint(equalTo: footer.bottomAnchor, constant: -9),
+            ])
+
+            guard let listView = listController?.view, let scrollView = listController?.table.enclosingScrollView else { return }
+
+            if #available(macOS 26.0, *) {
+                listView.addSubview(footer, positioned: .above, relativeTo: scrollView)
+                NSLayoutConstraint.activate([
+                    footer.leadingAnchor.constraint(equalTo: listView.leadingAnchor),
+                    footer.trailingAnchor.constraint(equalTo: listView.trailingAnchor),
+                    footer.bottomAnchor.constraint(equalTo: listView.bottomAnchor),
+                ])
+                // The extra bottom safe area makes the scroll view inset its content, so the last row can
+                // still be scrolled above the label.
+                let footerHeight = footer.fittingSize.height
+                listView.additionalSafeAreaInsets = NSEdgeInsets(top: 0, left: 0, bottom: footerHeight, right: 0)
+                listController?.bottomFadeHeight = footerHeight
+            } else {
+                listView.addSubview(footer)
+                scrollView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    footer.leadingAnchor.constraint(equalTo: listView.leadingAnchor),
+                    footer.trailingAnchor.constraint(equalTo: listView.trailingAnchor),
+                    footer.bottomAnchor.constraint(equalTo: listView.bottomAnchor),
+                    scrollView.topAnchor.constraint(equalTo: listView.topAnchor),
+                    scrollView.leadingAnchor.constraint(equalTo: listView.leadingAnchor),
+                    scrollView.trailingAnchor.constraint(equalTo: listView.trailingAnchor),
+                    scrollView.bottomAnchor.constraint(equalTo: footer.topAnchor),
+                ])
+            }
+        #endif
+    }
+
+    func refreshQemuVersion() {
+        let qemuPath = QemuUtils.getQemuPath()
+        Task {
+            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            if let version = capabilities?.qemuVersion, !version.isEmpty {
+                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
+            } else {
+                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
+            }
+        }
     }
 
     override func viewWillAppear() {

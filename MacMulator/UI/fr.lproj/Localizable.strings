@@ -189,6 +189,8 @@
 "RootViewController.vmConvertedToQemu" = "La machine virtuelle a été convertie avec succès au format QEMU.";
 "RootViewController.vmConvertedToApple" = "La machine virtuelle a été convertie avec succès au format Apple.";
 "RootViewController.cloneOf" = "Clone de %@";
+"RootViewController.qemuVersion" = "QEMU version %@";
+"RootViewController.qemuNotFound" = "QEMU introuvable";
 "StartVMViewController.startVMLabel" = "Démarrage de la VM. Veuillez patienter...";
 "Utils.sudoNotAllowed" = "Commande Qemu incorrecte fournie : L’utilisation de la commande sudo n’est pas autorisée.";
 "Utils.workingPathError" = "Commande Qemu incorrecte fournie : L’exécutable fourni ne s’exécute pas dans le chemin attendu.\n\nChemin attendu : \"%@\".\n\nCommande fournie : %@";

@@ -10,7 +10,7 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var savedVMs: [String]? = []
-    private var rootController: RootViewController?
+    private(set) var rootController: RootViewController?
     private var fileName: String?
     private var initialized = false
 
@@ -339,6 +339,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Task {
             _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
             if let rootController {
+                rootController.refreshQemuVersion()
                 for vm in rootController.virtualMachines {
                     _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
                 }

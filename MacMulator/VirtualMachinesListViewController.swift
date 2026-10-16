@@ -57,6 +57,20 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
 
+    var bottomFadeHeight: CGFloat = 0 {
+        didSet { view.needsLayout = true }
+    }
+
+    private let bottomFadeMask = CAGradientLayer()
+
+    override func viewDidLayout() {
+        super.viewDidLayout()
+
+        #if ENTHUSIAST
+            updateBottomFade()
+        #endif
+    }
+
     override func viewDidLoad() {
         let menu = NSMenu()
         menu.autoenablesItems = false
@@ -295,5 +309,44 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 self.rootController?.unsetRunningVM(changedVM)
             }
         }
+    }
+
+    private func updateBottomFade() {
+        guard let scrollView = table.enclosingScrollView else { return }
+        guard bottomFadeHeight > 0, scrollView.bounds.height > 0 else {
+            scrollView.layer?.mask = nil
+            return
+        }
+
+        scrollView.wantsLayer = true
+        let height = scrollView.bounds.height
+        // Rows keep a faint residual opacity behind the label, so it stays readable, and fade in
+        // over a short ramp just above it.
+        let minimumOpacity: CGFloat = 0.1
+        let fadeStart = min(bottomFadeHeight * 0.85, height)
+        let fadeEnd = min(bottomFadeHeight + 14, height)
+        var colors: [CGColor] = [NSColor.black.withAlphaComponent(minimumOpacity).cgColor]
+        var locations: [NSNumber] = [0]
+        // Smoothstep-like curve sampled at a few points to avoid a visible band at either end.
+        for t: CGFloat in [0, 0.25, 0.5, 0.75, 1] {
+            let eased = t * t * (3 - 2 * t)
+            let opacity = minimumOpacity + (1 - minimumOpacity) * eased
+            colors.append(NSColor.black.withAlphaComponent(opacity).cgColor)
+            locations.append(NSNumber(value: Double((fadeStart + t * (fadeEnd - fadeStart)) / height)))
+        }
+        colors.append(NSColor.black.cgColor)
+        locations.append(1)
+
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        bottomFadeMask.frame = scrollView.bounds
+        bottomFadeMask.colors = colors
+        bottomFadeMask.locations = locations
+        // Unit coordinates: y = 0 is the bottom edge, unless the layer geometry is flipped.
+        let flipped = scrollView.layer?.contentsAreFlipped() ?? false
+        bottomFadeMask.startPoint = CGPoint(x: 0.5, y: flipped ? 1 : 0)
+        bottomFadeMask.endPoint = CGPoint(x: 0.5, y: flipped ? 0 : 1)
+        scrollView.layer?.mask = bottomFadeMask
+        CATransaction.commit()
     }
 }

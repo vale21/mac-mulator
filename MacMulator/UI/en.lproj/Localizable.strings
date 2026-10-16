@@ -189,6 +189,8 @@
 "RootViewController.vmConvertedToQemu" = "The VM was successfully converted to QEMU format.";
 "RootViewController.vmConvertedToApple" = "The VM was successfully converted to Apple format.";
 "RootViewController.cloneOf" = "Clone of %@";
+"RootViewController.qemuVersion" = "QEMU version %@";
+"RootViewController.qemuNotFound" = "QEMU not found";
 "StartVMViewController.startVMLabel" = "Starting VM. Please wait...";
 "Utils.sudoNotAllowed" = "Incorrect Qemu command provided: The usage of sudo command is not allowed.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";

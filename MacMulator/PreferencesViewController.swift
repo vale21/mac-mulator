@@ -125,6 +125,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             checkForQemuBinaries()
             Task {
                 _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue)
+                (NSApp.delegate as? AppDelegate)?.rootController?.refreshQemuVersion()
             }
         }
     }
