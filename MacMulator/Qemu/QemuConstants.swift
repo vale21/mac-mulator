@@ -483,6 +483,7 @@ class QemuConstants {
         NETWORK_I82562,
         NETWORK_I82801,
         NETWORK_IGB,
+        NETWORK_NE2K_ISA,
         NETWORK_NE2K_PCI,
         NETWORK_PCNET,
         NETWORK_ROCKER,
@@ -516,6 +517,7 @@ class QemuConstants {
         NETWORK_I82562: "Intel i82562 Ethernet",
         NETWORK_I82801: "Intel i82801 Ethernet",
         NETWORK_IGB: "Intel Gigabit Ethernet (New)",
+        NETWORK_NE2K_ISA: "NE2000, bus ISA",
         NETWORK_NE2K_PCI: "NE2000, bus PCI",
         NETWORK_PCNET: "AMD PCnet FAST III Ethernet",
         NETWORK_ROCKER: "Rocker Device",
@@ -564,6 +566,7 @@ class QemuConstants {
         VGA_ISA: "Standard VGA on ISA bus",
         VGA_ISA_CIRRUS: "Cirrus VGA on ISA bus",
         VGA_QXL: "QXL Vga",
+        VGA_QXL_VGA: "QXL Vga",
         VGA_VIRTIO: "VirtIO VGA device",
         VGA_VMWARE: "VMware SVGA-II",
     ]
@@ -744,6 +747,7 @@ class QemuConstants {
     static let NETWORK_I82562 = "i82562"
     static let NETWORK_I82801 = "i82801"
     static let NETWORK_IGB = "igb"
+    static let NETWORK_NE2K_ISA = "ne2k_isa"
     static let NETWORK_NE2K_PCI = "ne2k_pci"
     static let NETWORK_PCNET = "pcnet"
     static let NETWORK_ROCKER = "rocker"
@@ -792,7 +796,8 @@ class QemuConstants {
     static let VGA_ISA_CIRRUS = "isa-cirrus-vga"
     static let VGA_VIRTIO = "virtio-vga"
     static let VGA_VMWARE = "vmware-svga"
-    static let VGA_QXL = "qxl-vga"
+    static let VGA_QXL_VGA = "qxl-vga"
+    static let VGA_QXL = "qxl"
     static let VGA_VIRTIO_GL = "virtio-vga-gl"
 
     static let DISPLAY_DEFAULT = "default"

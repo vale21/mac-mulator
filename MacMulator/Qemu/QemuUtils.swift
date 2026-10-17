@@ -330,6 +330,7 @@ class QemuUtils {
         let aliases = [
             QemuConstants.VGA_VIRTIO_GPU_PCI: QemuConstants.VGA_VIRTIO_GPU,
             QemuConstants.VGA_VIRTIO_GPU_GL_PCI: QemuConstants.VGA_VIRTIO_GPU_GL,
+            QemuConstants.VGA_QXL: QemuConstants.VGA_QXL_VGA,
         ]
         let normalized = adapters.map { aliases[$0] ?? $0 }
         let available = Set(normalized)

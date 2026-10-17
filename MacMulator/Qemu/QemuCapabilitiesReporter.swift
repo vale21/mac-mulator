@@ -71,50 +71,110 @@ class QemuCapabilitiesReporter {
             let qemuVersion = await verifyQemuVersion(forQemuPath: qemuPath)
             print("Found QEMU version: \(qemuVersion)")
 
-            let virGLSupported = await verifyOpenGLSupport(forQemuPath: qemuPath)
-            print("OPENGL Supported: \(virGLSupported)")
+            #if ENTHUSIAST
+                let virGLSupported = await verifyOpenGLSupport(forQemuPath: qemuPath)
+                print("OPENGL Supported: \(virGLSupported)")
+            #else
+                let virGLSupported = true
+            #endif
 
-            let appleParavirtualizedGraphicsSupported = await verifyParavirtualizedGraphicsSupport(forQemuPath: qemuPath)
-            print("Apple Paravirtualized Graphics Supported: \(appleParavirtualizedGraphicsSupported)")
+            #if ENTHUSIAST
+                let appleParavirtualizedGraphicsSupported = await verifyParavirtualizedGraphicsSupport(forQemuPath: qemuPath)
+                print("Apple Paravirtualized Graphics Supported: \(appleParavirtualizedGraphicsSupported)")
+            #else
+                let appleParavirtualizedGraphicsSupported = true
+            #endif
 
-            let spiceSupported = await verifySpiceSupport(forQemuPath: qemuPath)
-            print("SPICE Supported: \(spiceSupported)")
+            #if ENTHUSIAST
+                let spiceSupported = await verifySpiceSupport(forQemuPath: qemuPath)
+                print("SPICE Supported: \(spiceSupported)")
+            #else
+                let spiceSupported = true
+            #endif
 
-            let vmnetSupported = await verifyVmnetSupport(forQemuPath: qemuPath)
-            print("vmnet Supported: \(vmnetSupported)")
+            #if ENTHUSIAST
+                let vmnetSupported = await verifyVmnetSupport(forQemuPath: qemuPath)
+                print("vmnet Supported: \(vmnetSupported)")
+            #else
+                let vmnetSupported = true
+            #endif
 
-            let hasX86Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_X86, qemuPath: qemuPath)
-            print("x86 binary found: \(hasX86Binary)")
+            #if ENTHUSIAST
+                let hasX86Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_X86, qemuPath: qemuPath)
+                print("x86 binary found: \(hasX86Binary)")
+            #else
+                let hasX86Binary = true
+            #endif
 
-            let hasx86_64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_X64, qemuPath: qemuPath)
-            print("x86 64 binary found: \(hasx86_64Binary)")
+            #if ENTHUSIAST
+                let hasx86_64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_X64, qemuPath: qemuPath)
+                print("x86 64 binary found: \(hasx86_64Binary)")
+            #else
+                let hasx86_64Binary = true
+            #endif
 
-            let hasArmBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_ARM, qemuPath: qemuPath)
-            print("ARM binary found: \(hasArmBinary)")
+            #if ENTHUSIAST
+                let hasArmBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_ARM, qemuPath: qemuPath)
+                print("ARM binary found: \(hasArmBinary)")
+            #else
+                let hasArmBinary = true
+            #endif
 
-            let hasAarch64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_ARM64, qemuPath: qemuPath)
-            print("ARM 64 binary found: \(hasAarch64Binary)")
+            #if ENTHUSIAST
+                let hasAarch64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_ARM64, qemuPath: qemuPath)
+                print("ARM 64 binary found: \(hasAarch64Binary)")
+            #else
+                let hasAarch64Binary = true
+            #endif
 
-            let hasPowerPCBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_PPC, qemuPath: qemuPath)
-            print("PowerPC binary found: \(hasPowerPCBinary)")
+            #if ENTHUSIAST
+                let hasPowerPCBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_PPC, qemuPath: qemuPath)
+                print("PowerPC binary found: \(hasPowerPCBinary)")
+            #else
+                let hasPowerPCBinary = true
+            #endif
 
-            let hasPowerPC64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_PPC64, qemuPath: qemuPath)
-            print("PowerPC 64 binary found: \(hasPowerPC64Binary)")
+            #if ENTHUSIAST
+                let hasPowerPC64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_PPC64, qemuPath: qemuPath)
+                print("PowerPC 64 binary found: \(hasPowerPC64Binary)")
+            #else
+                let hasPowerPC64Binary = true
+            #endif
 
-            let hasRiscvBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_RISCV32, qemuPath: qemuPath)
-            print("RISCV binary found: \(hasRiscvBinary)")
+            #if ENTHUSIAST
+                let hasRiscvBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_RISCV32, qemuPath: qemuPath)
+                print("RISCV binary found: \(hasRiscvBinary)")
+            #else
+                let hasRiscvBinary = true
+            #endif
 
-            let hasRiscv64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_RISCV64, qemuPath: qemuPath)
-            print("RISCV 64 binary found: \(hasRiscv64Binary)")
+            #if ENTHUSIAST
+                let hasRiscv64Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_RISCV64, qemuPath: qemuPath)
+                print("RISCV 64 binary found: \(hasRiscv64Binary)")
+            #else
+                let hasRiscv64Binary = true
+            #endif
 
-            let hasM68kBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_68K, qemuPath: qemuPath)
-            print("m68k 64 binary found: \(hasM68kBinary)")
+            #if ENTHUSIAST
+                let hasM68kBinary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_68K, qemuPath: qemuPath)
+                print("m68k 64 binary found: \(hasM68kBinary)")
+            #else
+                let hasM68kBinary = true
+            #endif
 
-            let hasQemuImgBinary = QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG, qemuPath: qemuPath)
-            print("qemu-img binary found: \(hasQemuImgBinary)")
+            #if ENTHUSIAST
+                let hasQemuImgBinary = QemuUtils.isBinaryAvailable(QemuConstants.QEMU_IMG, qemuPath: qemuPath)
+                print("qemu-img binary found: \(hasQemuImgBinary)")
+            #else
+                let hasQemuImgBinary = true
+            #endif
 
-            let hasSwtpmBinary = QemuUtils.isBinaryAvailable(QemuConstants.SWTPM, qemuPath: qemuPath)
-            print("swtpm binary found: \(hasSwtpmBinary)")
+            #if ENTHUSIAST
+                let hasSwtpmBinary = QemuUtils.isBinaryAvailable(QemuConstants.SWTPM, qemuPath: qemuPath)
+                print("swtpm binary found: \(hasSwtpmBinary)")
+            #else
+                let hasSwtpmBinary = true
+            #endif
 
             let availableDisplays = await getDisplays(forQemuPath: qemuPath)
             print("Found displays: \(availableDisplays)")
