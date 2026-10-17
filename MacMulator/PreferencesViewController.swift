@@ -82,7 +82,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         if obj.object as? NSObject == qemuFolderField {
             Task {
                 _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue)
-                (NSApp.delegate as? AppDelegate)?.rootController?.refreshQemuVersion()
             }
         }
     }

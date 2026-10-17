@@ -339,7 +339,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         Task {
             _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
             if let rootController {
-                rootController.refreshQemuVersion()
                 for vm in rootController.virtualMachines {
                     _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
                 }
