@@ -14,11 +14,13 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet var qemuFolderField: NSTextField!
     @IBOutlet var vmFolderButton: NSButton!
     @IBOutlet var qemuFolderButton: NSButton!
+    @IBOutlet var qemuVersionLabel: NSTextField!
 
-    @IBOutlet var qemuIntelLabel: NSTextField!
-    @IBOutlet var qemuARMLabel: NSTextField!
-    @IBOutlet var virGLRendererLabel: NSTextField!
-    @IBOutlet var spiceLabel: NSTextField!
+    @IBOutlet var qemuIntelIndicator: NSImageView!
+    @IBOutlet var qemuArmIndicator: NSImageView!
+    @IBOutlet var virGLRendererIndicator: NSImageView!
+    @IBOutlet var spiceIndicator: NSImageView!
+
     @IBOutlet var viewQemuCapabilitiesButton: NSButton!
 
     var userDefaults: UserDefaults = .standard
@@ -60,7 +62,19 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
 
-        dirty = false
+        Task {
+            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
+            updateView(with: capabilities)
+        }
+    }
+
+    private func updateView(with capabilities: QemuCapabilitiesReporter?) {
+        refreshQemuVersion(with: capabilities)
+
+        setIndicator(qemuIntelIndicator, capabilities?.hasx86_64Binary ?? false)
+        setIndicator(qemuArmIndicator, capabilities?.hasAarch64Binary ?? false)
+        setIndicator(virGLRendererIndicator, capabilities?.virGLSupported ?? false)
+        setIndicator(spiceIndicator, capabilities?.spiceSupported ?? false)
     }
 
     override func viewDidDisappear() {
@@ -81,8 +95,46 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     func controlTextDidEndEditing(_ obj: Notification) {
         if obj.object as? NSObject == qemuFolderField {
             Task {
-                _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue)
+                let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
+                updateView(with: capabilities)
             }
+        }
+    }
+
+    private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {
+        let qemuPath = QemuUtils.getQemuPath()
+        Task {
+            if let version = capabilities?.qemuVersion, !version.isEmpty {
+                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
+            } else {
+                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
+            }
+        }
+    }
+
+    private func setIndicator(_ view: NSImageView, _ value: Bool) {
+        if value {
+            setGreenTick(view)
+        } else {
+            setRedCross(view)
+        }
+    }
+
+    private func setGreenTick(_ view: NSImageView) {
+        if #available(macOS 11, *) {
+            view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil)
+            view.contentTintColor = NSColor.systemGreen
+        } else {
+            view.image = NSImage(named: "checkmark.circle.fill")
+        }
+    }
+
+    private func setRedCross(_ view: NSImageView) {
+        if #available(macOS 11, *) {
+            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
+            view.contentTintColor = NSColor.systemRed
+        } else {
+            view.image = NSImage(named: "xmark.circle.fill")
         }
     }
 }

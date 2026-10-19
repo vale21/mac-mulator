@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -3797,16 +3797,16 @@ Rocky Linux</string>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="qemuARMLabel" destination="Q6s-7c-wCb" id="reH-dK-EnZ"/>
+                        <outlet property="qemuArmIndicator" destination="8O0-SH-CV8" id="U4P-jG-IrT"/>
                         <outlet property="qemuFolderButton" destination="ZSk-8V-9fP" id="YTN-tX-3SX"/>
                         <outlet property="qemuFolderField" destination="u1x-Fr-N6k" id="9zG-id-6wl"/>
                         <outlet property="qemuFolderLabel" destination="SXs-MC-95b" id="9W2-Pf-TBh"/>
-                        <outlet property="qemuIntelLabel" destination="TbL-Ch-oZB" id="1Z3-JJ-cmU"/>
-                        <outlet property="qemu_img_label" destination="Q6s-7c-wCb" id="BS5-61-Oiz"/>
+                        <outlet property="qemuIntelIndicator" destination="Mno-7U-prL" id="dFc-fb-f9J"/>
+                        <outlet property="qemuVersionLabel" destination="rM6-Gc-oyU" id="ARu-yV-7m5"/>
                         <outlet property="qemu_ppc_tick" destination="5pp-fD-eqK" id="COv-b4-lqO"/>
-                        <outlet property="spiceLabel" destination="Cad-QZ-tB8" id="V8T-FC-VR2"/>
+                        <outlet property="spiceIndicator" destination="h3K-6a-f4h" id="pU4-Zc-fnK"/>
                         <outlet property="viewQemuCapabilitiesButton" destination="BOU-nj-ujh" id="M5K-JZ-Ocb"/>
-                        <outlet property="virGLRendererLabel" destination="lNI-RH-lWM" id="RK1-ID-DmN"/>
+                        <outlet property="virGLRendererIndicator" destination="sEJ-fi-wqq" id="aRd-R3-zZp"/>
                         <outlet property="vmFolderButton" destination="7Ih-Ef-1Mh" id="0Dq-hQ-2W8"/>
                         <outlet property="vmFolderField" destination="FWM-lN-Jy4" id="uEA-dE-Kbk"/>
                         <outlet property="vmFolderLabel" destination="wzh-YA-iXF" id="i5Z-GY-C0C"/>
@@ -4011,13 +4011,13 @@ Rocky Linux</string>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="4rd-DP-pGj" viewBased="YES" id="EsZ-IG-RrW">
-                                            <rect key="frame" x="0.0" y="0.0" width="227" height="365"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="432" height="365"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="215" minWidth="40" maxWidth="1000" id="Eze-Qa-o0x">
+                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="420" minWidth="40" maxWidth="1000" id="Eze-Qa-o0x">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="QEMU Video adapters">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4030,11 +4030,11 @@ Rocky Linux</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="hl3-0J-fBn">
-                                                            <rect key="frame" x="8" y="0.0" width="210" height="25"/>
+                                                            <rect key="frame" x="8" y="0.0" width="415" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="FS3-8Z-r5f">
-                                                                    <rect key="frame" x="0.0" y="5" width="210" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="5" width="415" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Table View Cell" id="iOP-5Z-4al">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -4065,7 +4065,7 @@ Rocky Linux</string>
                                     <constraint firstAttribute="width" constant="212" id="hhn-q0-axM"/>
                                     <constraint firstAttribute="height" constant="395" id="kHr-MM-eeQ"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.47058823529411764" horizontal="YES" id="Vma-21-TPa">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Vma-21-TPa">
                                     <rect key="frame" x="1" y="377" width="210" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -4074,24 +4074,24 @@ Rocky Linux</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="4rd-DP-pGj">
-                                    <rect key="frame" x="0.0" y="0.0" width="227" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="432" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <scrollView autohidesScrollers="YES" horizontalLineScroll="80" horizontalPageScroll="10" verticalLineScroll="80" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4tP-AU-cgd">
+                            <scrollView autohidesScrollers="YES" horizontalLineScroll="25" horizontalPageScroll="10" verticalLineScroll="25" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4tP-AU-cgd">
                                 <rect key="frame" x="889" y="20" width="212" height="395"/>
                                 <clipView key="contentView" id="f86-TY-hHO">
                                     <rect key="frame" x="1" y="1" width="210" height="393"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="80" rowSizeStyle="automatic" headerView="abe-ym-DKT" viewBased="YES" id="RIc-zL-HdA">
-                                            <rect key="frame" x="0.0" y="0.0" width="210" height="365"/>
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="abe-ym-DKT" viewBased="YES" id="RIc-zL-HdA">
+                                            <rect key="frame" x="0.0" y="0.0" width="432" height="365"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="separatorColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="198" minWidth="40" maxWidth="1000" id="Wyr-bP-f6h">
+                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="420" minWidth="40" maxWidth="1000" id="Wyr-bP-f6h">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="QEMU Video adapters">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -4104,11 +4104,11 @@ Rocky Linux</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="neQ-L9-rIP">
-                                                            <rect key="frame" x="8" y="0.0" width="193" height="25"/>
+                                                            <rect key="frame" x="8" y="0.0" width="415" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yd2-9p-ehw">
-                                                                    <rect key="frame" x="0.0" y="5" width="193" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="5" width="415" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Table View Cell" id="Mw0-ZV-xaW">
                                                                         <font key="font" usesAppearanceFont="YES"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -4141,7 +4141,7 @@ Rocky Linux</string>
                                     <constraint firstAttribute="height" constant="395" id="w93-gs-tVi"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="212" id="zK1-PJ-HB8"/>
                                 </constraints>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="eZr-9I-xfl">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="eZr-9I-xfl">
                                     <rect key="frame" x="1" y="377" width="210" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -4150,17 +4150,17 @@ Rocky Linux</string>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="abe-ym-DKT">
-                                    <rect key="frame" x="0.0" y="0.0" width="210" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="432" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="25" horizontalPageScroll="10" verticalLineScroll="25" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Okh-6H-i0Y">
                                 <rect key="frame" x="445" y="20" width="212" height="395"/>
-                                <clipView key="contentView" id="QVb-vb-mKo">
+                                <clipView key="contentView" ambiguous="YES" id="QVb-vb-mKo">
                                     <rect key="frame" x="1" y="1" width="210" height="393"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="CNR-6t-MTl" viewBased="YES" id="Tlo-dI-vDC">
+                                        <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="CNR-6t-MTl" viewBased="YES" id="Tlo-dI-vDC">
                                             <rect key="frame" x="0.0" y="0.0" width="210" height="365"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
@@ -4180,7 +4180,7 @@ Rocky Linux</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Ry6-PU-m2R">
-                                                            <rect key="frame" x="8" y="0.0" width="193" height="25"/>
+                                                            <rect key="frame" x="8" y="0.0" width="415" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qSA-O3-2Cv">

@@ -61,7 +61,7 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
     }
 
     private func updateView(with capabilities: QemuCapabilitiesReporter?) {
-        refreshQemuVersion()
+        refreshQemuVersion(with: capabilities)
 
         setIndicator(qemuSystemX86_64Indicator, capabilities?.hasx86_64Binary ?? false)
         setIndicator(qemuSystemI386Indicator, capabilities?.hasX86Binary ?? false)
@@ -80,21 +80,19 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
         setIndicator(spiceIndicator, capabilities?.spiceSupported ?? false)
         setIndicator(vmNetIndicator, capabilities?.vmnetSupported ?? false)
 
-        displays = capabilities?.availableDisplays ?? []
-        videoAdapters = capabilities?.availableVideoDevices ?? []
-        networkAdapters = capabilities?.availableNetworkDevices ?? []
+        displays = (capabilities?.availableDisplays ?? []).map {
+            "\($0) (\(QemuConstants.ALL_DISPLAYS_DESC[$0] ?? $0))"
+        }
+        videoAdapters = (capabilities?.availableVideoDevices ?? []).map {
+            "\($0) (\(QemuConstants.ALL_VIDEO_ADAPTERS_DESC[$0] ?? $0))"
+        }
+        networkAdapters = (capabilities?.availableNetworkDevices ?? []).map {
+            "\($0) (\(QemuConstants.ALL_NETWORK_ADAPTERS_DESC[$0] ?? $0))"
+        }
 
         qemuDisplaysTableView.reloadData()
         qemuVideopAdapterTableView.reloadData()
         qemuNetworkAdaptersTableView.reloadData()
-    }
-
-    private func setIndicator(_ view: NSImageView, _ value: Bool) {
-        if value {
-            setGreenTick(view)
-        } else {
-            setRedCross(view)
-        }
     }
 
     private func items(for tableView: NSTableView) -> [String] {
@@ -118,14 +116,14 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
         else {
             return nil
         }
+
         cell.textField?.stringValue = items(for: tableView)[row]
         return cell
     }
 
-    private func refreshQemuVersion() {
+    private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {
         let qemuPath = QemuUtils.getQemuPath()
         Task {
-            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
             if let version = capabilities?.qemuVersion, !version.isEmpty {
                 qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
             } else {
@@ -134,7 +132,15 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
         }
     }
 
-    fileprivate func setGreenTick(_ view: NSImageView) {
+    private func setIndicator(_ view: NSImageView, _ value: Bool) {
+        if value {
+            setGreenTick(view)
+        } else {
+            setRedCross(view)
+        }
+    }
+
+    private func setGreenTick(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil)
             view.contentTintColor = NSColor.systemGreen
@@ -143,16 +149,7 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
         }
     }
 
-    fileprivate func setYellowCross(_ view: NSImageView) {
-        if #available(macOS 11, *) {
-            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
-            view.contentTintColor = NSColor.systemYellow
-        } else {
-            view.image = NSImage(named: NSImage.Name("xmark.circle.fill.yellow"))
-        }
-    }
-
-    fileprivate func setRedCross(_ view: NSImageView) {
+    private func setRedCross(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
             view.contentTintColor = NSColor.systemRed
