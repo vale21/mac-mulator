@@ -31,9 +31,8 @@ class QemuCapabilitiesReporter {
     let availableDisplays: [String]
     let availableVideoDevices: [String]
     let availableNetworkDevices: [String]
-    let availableSoundDevices: [String]
 
-    init(qemuVersion: String, spiceSupported: Bool, virGLSupported: Bool, appleParavirtualizedGraphicsSupported: Bool, vmnetSupported: Bool, hasX86Binary: Bool, hasx86_64Binary: Bool, hasArmBinary: Bool, hasAarch64Binary: Bool, hasRiscvBinary: Bool, hasRiscv64Binary: Bool, hasPowerPCBinary: Bool, hasPowerPC64Binary: Bool, hasM68kBinary: Bool, hasQemuImgBinary: Bool, hasSwtpmBinary: Bool, availableDisplays: [String], availableVideoDevices: [String], availableNetworkDevices: [String], availableSoundDevices: [String]) {
+    init(qemuVersion: String, spiceSupported: Bool, virGLSupported: Bool, appleParavirtualizedGraphicsSupported: Bool, vmnetSupported: Bool, hasX86Binary: Bool, hasx86_64Binary: Bool, hasArmBinary: Bool, hasAarch64Binary: Bool, hasRiscvBinary: Bool, hasRiscv64Binary: Bool, hasPowerPCBinary: Bool, hasPowerPC64Binary: Bool, hasM68kBinary: Bool, hasQemuImgBinary: Bool, hasSwtpmBinary: Bool, availableDisplays: [String], availableVideoDevices: [String], availableNetworkDevices: [String]) {
         self.qemuVersion = qemuVersion
         self.spiceSupported = spiceSupported
         self.virGLSupported = virGLSupported
@@ -53,11 +52,12 @@ class QemuCapabilitiesReporter {
         self.availableDisplays = availableDisplays
         self.availableVideoDevices = availableVideoDevices
         self.availableNetworkDevices = availableNetworkDevices
-        self.availableSoundDevices = availableSoundDevices
     }
 
     static var INSTANCES: [String: QemuCapabilitiesReporter] = [:]
     private static var cachedCommands: [String: [String]] = [:]
+    // Availability of each qemu-system-* binary, keyed by qemu path. Filled in getInstance before probing features.
+    private static var availableBinaries: [String: [String: Bool]] = [:]
 
     static func getInstance(forQemuPath qemuPath: String) async -> QemuCapabilitiesReporter? {
         if INSTANCES.contains(where: { $0.key == qemuPath }) {
@@ -67,37 +67,6 @@ class QemuCapabilitiesReporter {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: qemuPath) {
             let startTimestamp = Date()
-
-            let qemuVersion = await verifyQemuVersion(forQemuPath: qemuPath)
-            print("Found QEMU version: \(qemuVersion)")
-
-            #if ENTHUSIAST
-                let virGLSupported = await verifyOpenGLSupport(forQemuPath: qemuPath)
-                print("OPENGL Supported: \(virGLSupported)")
-            #else
-                let virGLSupported = true
-            #endif
-
-            #if ENTHUSIAST
-                let appleParavirtualizedGraphicsSupported = await verifyParavirtualizedGraphicsSupport(forQemuPath: qemuPath)
-                print("Apple Paravirtualized Graphics Supported: \(appleParavirtualizedGraphicsSupported)")
-            #else
-                let appleParavirtualizedGraphicsSupported = true
-            #endif
-
-            #if ENTHUSIAST
-                let spiceSupported = await verifySpiceSupport(forQemuPath: qemuPath)
-                print("SPICE Supported: \(spiceSupported)")
-            #else
-                let spiceSupported = true
-            #endif
-
-            #if ENTHUSIAST
-                let vmnetSupported = await verifyVmnetSupport(forQemuPath: qemuPath)
-                print("vmnet Supported: \(vmnetSupported)")
-            #else
-                let vmnetSupported = true
-            #endif
 
             #if ENTHUSIAST
                 let hasX86Binary = QemuUtils.isBinaryAvailable(QemuConstants.ARCH_X86, qemuPath: qemuPath)
@@ -176,6 +145,49 @@ class QemuCapabilitiesReporter {
                 let hasSwtpmBinary = true
             #endif
 
+            availableBinaries[qemuPath] = [
+                QemuConstants.ARCH_X86: hasX86Binary,
+                QemuConstants.ARCH_X64: hasx86_64Binary,
+                QemuConstants.ARCH_ARM: hasArmBinary,
+                QemuConstants.ARCH_ARM64: hasAarch64Binary,
+                QemuConstants.ARCH_PPC: hasPowerPCBinary,
+                QemuConstants.ARCH_PPC64: hasPowerPC64Binary,
+                QemuConstants.ARCH_RISCV32: hasRiscvBinary,
+                QemuConstants.ARCH_RISCV64: hasRiscv64Binary,
+                QemuConstants.ARCH_68K: hasM68kBinary,
+            ]
+
+            let qemuVersion = await verifyQemuVersion(forQemuPath: qemuPath)
+            print("Found QEMU version: \(qemuVersion)")
+
+            #if ENTHUSIAST
+                let virGLSupported = await verifyOpenGLSupport(forQemuPath: qemuPath)
+                print("OPENGL Supported: \(virGLSupported)")
+            #else
+                let virGLSupported = true
+            #endif
+
+            #if ENTHUSIAST
+                let appleParavirtualizedGraphicsSupported = await verifyParavirtualizedGraphicsSupport(forQemuPath: qemuPath)
+                print("Apple Paravirtualized Graphics Supported: \(appleParavirtualizedGraphicsSupported)")
+            #else
+                let appleParavirtualizedGraphicsSupported = true
+            #endif
+
+            #if ENTHUSIAST
+                let spiceSupported = await verifySpiceSupport(forQemuPath: qemuPath)
+                print("SPICE Supported: \(spiceSupported)")
+            #else
+                let spiceSupported = true
+            #endif
+
+            #if ENTHUSIAST
+                let vmnetSupported = await verifyVmnetSupport(forQemuPath: qemuPath)
+                print("vmnet Supported: \(vmnetSupported)")
+            #else
+                let vmnetSupported = true
+            #endif
+
             let availableDisplays = await getDisplays(forQemuPath: qemuPath)
             print("Found displays: \(availableDisplays)")
 
@@ -185,10 +197,7 @@ class QemuCapabilitiesReporter {
             let availableNetworkDevices = await getNetworkDevices(forQemuPath: qemuPath)
             print("Found network devices: \(availableNetworkDevices)")
 
-            let availableSoundDevices = await getSoundDevices(forQemuPath: qemuPath)
-            print("Found sound devices: \(availableSoundDevices)")
-
-            INSTANCES[qemuPath] = QemuCapabilitiesReporter(qemuVersion: qemuVersion, spiceSupported: spiceSupported, virGLSupported: virGLSupported, appleParavirtualizedGraphicsSupported: appleParavirtualizedGraphicsSupported, vmnetSupported: vmnetSupported, hasX86Binary: hasX86Binary, hasx86_64Binary: hasx86_64Binary, hasArmBinary: hasArmBinary, hasAarch64Binary: hasAarch64Binary, hasRiscvBinary: hasRiscvBinary, hasRiscv64Binary: hasRiscv64Binary, hasPowerPCBinary: hasPowerPCBinary, hasPowerPC64Binary: hasPowerPC64Binary, hasM68kBinary: hasM68kBinary, hasQemuImgBinary: hasQemuImgBinary, hasSwtpmBinary: hasSwtpmBinary, availableDisplays: availableDisplays, availableVideoDevices: availableVideoDevices, availableNetworkDevices: availableNetworkDevices, availableSoundDevices: availableSoundDevices)
+            INSTANCES[qemuPath] = QemuCapabilitiesReporter(qemuVersion: qemuVersion, spiceSupported: spiceSupported, virGLSupported: virGLSupported, appleParavirtualizedGraphicsSupported: appleParavirtualizedGraphicsSupported, vmnetSupported: vmnetSupported, hasX86Binary: hasX86Binary, hasx86_64Binary: hasx86_64Binary, hasArmBinary: hasArmBinary, hasAarch64Binary: hasAarch64Binary, hasRiscvBinary: hasRiscvBinary, hasRiscv64Binary: hasRiscv64Binary, hasPowerPCBinary: hasPowerPCBinary, hasPowerPC64Binary: hasPowerPC64Binary, hasM68kBinary: hasM68kBinary, hasQemuImgBinary: hasQemuImgBinary, hasSwtpmBinary: hasSwtpmBinary, availableDisplays: availableDisplays, availableVideoDevices: availableVideoDevices, availableNetworkDevices: availableNetworkDevices)
 
             let endTimestamp = Date()
             print("Time elapsed: \(endTimestamp.timeIntervalSince(startTimestamp) * 1000) milliseconds")
@@ -200,13 +209,21 @@ class QemuCapabilitiesReporter {
     }
 
     private static func getQemuExecutable(forQemuPath qemuPath: String) -> String {
-        let hostArchitecture = Utils.hostArchitecture()
+        let hostBinary = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 ? QemuConstants.ARCH_X64 : QemuConstants.ARCH_ARM64
+        let binaries = availableBinaries[qemuPath] ?? [:]
 
-        if hostArchitecture == QemuConstants.HOST_X86_64 {
-            return qemuPath + "/" + QemuConstants.ARCH_X64
-        } else {
-            return qemuPath + "/" + QemuConstants.ARCH_ARM64
+        if binaries[hostBinary] == true {
+            return qemuPath + "/" + hostBinary
         }
+
+        let fallbackOrder = [QemuConstants.ARCH_X64, QemuConstants.ARCH_ARM64, QemuConstants.ARCH_X86, QemuConstants.ARCH_ARM,
+                             QemuConstants.ARCH_RISCV64, QemuConstants.ARCH_RISCV32, QemuConstants.ARCH_PPC64, QemuConstants.ARCH_PPC,
+                             QemuConstants.ARCH_68K]
+        if let binary = fallbackOrder.first(where: { binaries[$0] == true }) {
+            return qemuPath + "/" + binary
+        }
+
+        return qemuPath + "/" + hostBinary
     }
 
     private static func verifyOpenGLSupport(forQemuPath qemuPath: String) async -> Bool {

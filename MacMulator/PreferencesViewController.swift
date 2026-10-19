@@ -85,31 +85,4 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             }
         }
     }
-
-    fileprivate func setGreenTick(_ view: NSImageView) {
-        if #available(macOS 11, *) {
-            view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil)
-            view.contentTintColor = NSColor.systemGreen
-        } else {
-            view.image = NSImage(named: "checkmark.circle.fill")
-        }
-    }
-
-    fileprivate func setYellowCross(_ view: NSImageView) {
-        if #available(macOS 11, *) {
-            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
-            view.contentTintColor = NSColor.systemYellow
-        } else {
-            view.image = NSImage(named: NSImage.Name("xmark.circle.fill.yellow"))
-        }
-    }
-
-    fileprivate func setRedCross(_ view: NSImageView) {
-        if #available(macOS 11, *) {
-            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
-            view.contentTintColor = NSColor.systemRed
-        } else {
-            view.image = NSImage(named: "xmark.circle.fill")
-        }
-    }
 }
