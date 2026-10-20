@@ -367,7 +367,7 @@ class QemuUtils {
 
     static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: QemuUtils.getQemuPath() + "/" + QemuConstants.QEMU_IMG) {
+        if !fileManager.fileExists(atPath: qemuPath + "/" + QemuConstants.QEMU_IMG) {
             callback(nil)
             return
         }
