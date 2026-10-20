@@ -115,7 +115,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="-101" width="600" height="2581"/>
+                                            <rect key="frame" x="0.0" y="-100" width="600" height="2580"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3803,7 +3803,6 @@ Rocky Linux</string>
                         <outlet property="qemuFolderLabel" destination="SXs-MC-95b" id="9W2-Pf-TBh"/>
                         <outlet property="qemuIntelIndicator" destination="Mno-7U-prL" id="dFc-fb-f9J"/>
                         <outlet property="qemuVersionLabel" destination="rM6-Gc-oyU" id="ARu-yV-7m5"/>
-                        <outlet property="qemu_ppc_tick" destination="5pp-fD-eqK" id="COv-b4-lqO"/>
                         <outlet property="spiceIndicator" destination="h3K-6a-f4h" id="pU4-Zc-fnK"/>
                         <outlet property="viewQemuCapabilitiesButton" destination="BOU-nj-ujh" id="M5K-JZ-Ocb"/>
                         <outlet property="virGLRendererIndicator" destination="sEJ-fi-wqq" id="aRd-R3-zZp"/>
