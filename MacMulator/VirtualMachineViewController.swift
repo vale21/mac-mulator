@@ -263,7 +263,7 @@ class VirtualMachineViewController: NSViewController {
                 if Utils.isVMAvailable(vm) {
                     startVMButton.isEnabled = true
                     qemuUnavailableLabel.isHidden = true
-                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11, QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.hasSwtpmBinary == false {
+                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11, QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.hasSwtpmBinary == false {
                     startVMButton.isEnabled = false
                     qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.swTpmNotAvailable", comment: ""), vmArchitecture.stringValue)
                     qemuUnavailableLabel.isHidden = false
