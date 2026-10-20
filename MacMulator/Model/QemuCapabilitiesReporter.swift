@@ -212,17 +212,17 @@ class QemuCapabilitiesReporter {
         let binaries = availableBinaries[qemuPath] ?? [:]
 
         if binaries[hostBinary] == true {
-            return qemuPath + "/" + hostBinary
+            return Utils.escape(qemuPath + "/" + hostBinary)
         }
 
         let fallbackOrder = [QemuConstants.ARCH_X64, QemuConstants.ARCH_ARM64, QemuConstants.ARCH_X86, QemuConstants.ARCH_ARM,
                              QemuConstants.ARCH_RISCV64, QemuConstants.ARCH_RISCV32, QemuConstants.ARCH_PPC64, QemuConstants.ARCH_PPC,
                              QemuConstants.ARCH_68K]
         if let binary = fallbackOrder.first(where: { binaries[$0] == true }) {
-            return qemuPath + "/" + binary
+            return Utils.escape(qemuPath + "/" + binary)
         }
 
-        return qemuPath + "/" + hostBinary
+        return Utils.escape(qemuPath + "/" + hostBinary)
     }
 
     private static func verifyOpenGLSupport(forQemuPath qemuPath: String) -> Bool {
