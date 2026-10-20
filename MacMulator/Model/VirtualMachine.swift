@@ -39,7 +39,7 @@ class VirtualMachine: Codable, Hashable {
         case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots
     }
 
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode _: String) {
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
