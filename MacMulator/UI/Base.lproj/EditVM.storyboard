@@ -1786,10 +1786,10 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
-                                <rect key="frame" x="451" y="404" width="244" height="22"/>
+                                <rect key="frame" x="355" y="404" width="340" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="Be0-7s-0eK"/>
-                                    <constraint firstAttribute="width" constant="244" id="LX6-Tw-6uM"/>
+                                    <constraint firstAttribute="width" constant="340" id="LX6-Tw-6uM"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="JoH-jk-AQB">
                                     <font key="font" metaFont="system"/>
@@ -1802,10 +1802,10 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </connections>
                             </comboBox>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ECR-CG-ZXO">
-                                <rect key="frame" x="451" y="374" width="244" height="22"/>
+                                <rect key="frame" x="355" y="374" width="340" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="VD4-bb-z8H"/>
-                                    <constraint firstAttribute="width" constant="244" id="f7I-zu-Snq"/>
+                                    <constraint firstAttribute="width" constant="340" id="f7I-zu-Snq"/>
                                 </constraints>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="VbZ-bE-0nH">
                                     <font key="font" metaFont="system"/>
@@ -1908,7 +1908,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                             <constraint firstItem="kMz-L0-DKD" firstAttribute="trailing" secondItem="m8g-Mx-rE1" secondAttribute="trailing" id="kkm-Cv-jnh"/>
                             <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="32" id="lbn-G1-cYw"/>
                             <constraint firstItem="bHD-eX-M1v" firstAttribute="leading" secondItem="5V6-3d-7RZ" secondAttribute="trailing" constant="-323" id="m2g-bm-PAb"/>
-                            <constraint firstItem="Kgv-EH-4Vd" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="trailing" constant="23" id="o3W-rH-SE3"/>
+                            <constraint firstItem="Kgv-EH-4Vd" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="trailing" constant="-73" id="o3W-rH-SE3"/>
                             <constraint firstAttribute="bottom" secondItem="m8g-Mx-rE1" secondAttribute="bottom" constant="20" symbolic="YES" id="sxd-NR-ija"/>
                             <constraint firstItem="qQO-GM-gW4" firstAttribute="leading" secondItem="7UL-Jt-MFG" secondAttribute="leading" id="v3Y-7E-bPW"/>
                         </constraints>
@@ -2013,17 +2013,17 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
             <objects>
                 <viewController title="Snapshots" id="OTc-Xm-wkq" customClass="EditVMViewControllerSnapshots" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" misplaced="YES" id="r6c-hw-4cm">
-                        <rect key="frame" x="0.0" y="0.0" width="750" height="472"/>
+                        <rect key="frame" x="0.0" y="0.0" width="750" height="444"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-nR-DCR">
-                                <rect key="frame" x="20" y="252" width="235" height="152"/>
+                                <rect key="frame" x="20" y="48" width="235" height="376"/>
                                 <clipView key="contentView" id="jSR-2h-Yxf">
-                                    <rect key="frame" x="1" y="1" width="233" height="150"/>
+                                    <rect key="frame" x="1" y="1" width="233" height="374"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="EPp-8I-aoE" viewBased="YES" id="Qqw-MA-7Qo">
-                                            <rect key="frame" x="0.0" y="0.0" width="233" height="122"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="233" height="346"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2074,11 +2074,11 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="g2m-56-VQ0">
-                                    <rect key="frame" x="1" y="190" width="233" height="17"/>
+                                    <rect key="frame" x="1" y="22" width="233" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="biV-Ng-0n4">
-                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="biV-Ng-0n4">
+                                    <rect key="frame" x="217" y="29" width="17" height="10"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="EPp-8I-aoE">
@@ -2087,7 +2087,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ivs-Ff-Qer">
-                                <rect key="frame" x="19" y="18" width="237" height="227"/>
+                                <rect key="frame" x="19" y="18" width="237" height="23"/>
                                 <buttonCell key="cell" type="roundTextured" title="Create new snapshot" bezelStyle="texturedRounded" image="plus.app.fill" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iLW-iZ-Xzx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -2100,9 +2100,9 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </connections>
                             </button>
                             <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="993-Vz-zsK">
-                                <rect key="frame" x="281" y="20" width="449" height="2"/>
+                                <rect key="frame" x="281" y="20" width="449" height="22"/>
                                 <clipView key="contentView" drawsBackground="NO" id="dyR-Po-oHv">
-                                    <rect key="frame" x="1" y="1" width="447" height="0.0"/>
+                                    <rect key="frame" x="1" y="1" width="447" height="20"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" baseWritingDirection="leftToRight" spellingCorrection="YES" smartInsertDelete="YES" id="cgj-zE-5Z6">
@@ -2110,7 +2110,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" red="0.12548999999999999" green="0.12941" blue="0.13333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="447" height="0.0"/>
+                                            <size key="minSize" width="447" height="20"/>
                                             <size key="maxSize" width="453" height="10000000"/>
                                             <attributedString key="textStorage">
                                                 <fragment>
@@ -2138,12 +2138,12 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="zbB-wV-LX6">
-                                    <rect key="frame" x="431" y="1" width="17" height="0.0"/>
+                                    <rect key="frame" x="431" y="1" width="17" height="20"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HKk-e8-Y2d">
-                                <rect key="frame" x="363" y="31" width="136" height="24"/>
+                                <rect key="frame" x="363" y="51" width="136" height="24"/>
                                 <buttonCell key="cell" type="push" title="Restore" bezelStyle="rounded" image="arrow.counterclockwise" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KsA-4W-Yka">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -2157,7 +2157,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9Eo-gn-1Vh">
-                                <rect key="frame" x="511" y="32" width="136" height="24"/>
+                                <rect key="frame" x="511" y="52" width="136" height="24"/>
                                 <buttonCell key="cell" type="push" title="Delete" bezelStyle="rounded" image="trash.fill" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HNd-JG-HkY">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -2171,7 +2171,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NhF-y0-7TR">
-                                <rect key="frame" x="279" y="388" width="350" height="16"/>
+                                <rect key="frame" x="279" y="408" width="350" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="346" id="0eS-c2-Yeu"/>
                                 </constraints>
@@ -2182,7 +2182,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4bA-V2-R6Q">
-                                <rect key="frame" x="278" y="120" width="455" height="311"/>
+                                <rect key="frame" x="278" y="92" width="455" height="311"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="304" id="jKE-KZ-3ZE"/>
                                 </constraints>

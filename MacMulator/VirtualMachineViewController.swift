@@ -204,15 +204,17 @@ class VirtualMachineViewController: NSViewController {
         if rootController?.currentVm != nil {
             showVMAvailableLayout()
 
-            if !QemuUtils.isBinaryAvailable(rootController!.currentVm!.architecture) {
-                startVMButton.isEnabled = false
-            }
-            if Utils.isPauseSupported(rootController!.currentVm!) {
-                pauseVMButton.isEnabled = true
-                pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseVM", comment: "")
-            } else {
-                pauseVMButton.isEnabled = false
-                pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseNotSupported", comment: "")
+            if let rootController, let currentVm = rootController.currentVm {
+                if !QemuUtils.isBinaryAvailable(currentVm.architecture, currentVm.qemuPath) {
+                    startVMButton.isEnabled = false
+                }
+                if Utils.isPauseSupported(currentVm) {
+                    pauseVMButton.isEnabled = true
+                    pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseVM", comment: "")
+                } else {
+                    pauseVMButton.isEnabled = false
+                    pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseNotSupported", comment: "")
+                }
             }
         } else {
             showNoVmsLayout()
@@ -261,13 +263,13 @@ class VirtualMachineViewController: NSViewController {
                 if Utils.isVMAvailable(vm) {
                     startVMButton.isEnabled = true
                     qemuUnavailableLabel.isHidden = true
-                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11, !QemuUtils.isBinaryAvailable(QemuConstants.SWTPM) {
+                } else if vm.subtype == QemuConstants.SUB_WINDOWS_11, QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.hasSwtpmBinary == false {
                     startVMButton.isEnabled = false
                     qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.swTpmNotAvailable", comment: ""), vmArchitecture.stringValue)
                     qemuUnavailableLabel.isHidden = false
                 } else {
                     startVMButton.isEnabled = false
-                    qemuUnavailableLabel.stringValue = NSLocalizedString("VirtualMachineViewController.binaryNotAvaiable", comment: "")
+                    qemuUnavailableLabel.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.binaryNotAvaiable", comment: ""), vm.architecture)
                     qemuUnavailableLabel.isHidden = false
                 }
             } else {
@@ -343,9 +345,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Creates the constraints used by resizeCentralBox when they are not connected in the storyboard.
-    /// Fixed width/height keep the box compact when showing VM features, while leading/trailing/bottom
-    /// spaces let it fill the window when showing the paused VM screenshot. Priorities are toggled at runtime.
     fileprivate func setupCentralBoxConstraints() {
         guard let container = centralBox.superview else { return }
 

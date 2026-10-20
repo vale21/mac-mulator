@@ -22,11 +22,20 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
-    var accelerationSuported: Bool = true
-    var spiceSuported: Bool = true
+    var accelerationSupported: Bool = true
+    var spiceSupported: Bool = true
+    var adaptersList: [String] = []
+    var displaysList: [String] = []
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
+
+        verifyOpenGLSupport()
+        verifySpiceSupport()
+
+        loadAdaptersList()
+        loadDisplaysList()
+
         updateView()
     }
 
@@ -39,22 +48,26 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         spiceDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionText", comment: "")
         spiceDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionLabel", comment: "")
         windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
+
         updateView()
     }
 
-    override func viewDidAppear() {
-        verifyOpenGLSupport()
-        verifySpiceSuport()
+    fileprivate func loadAdaptersList() {
+        guard let virtualMachine else { return }
+
+        let adapters = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
+        adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
+        updateView()
     }
 
-    fileprivate func buildAdaptersList() -> [String] {
-        var videoAdapters = QemuConstants.ALL_VIDEO_ADAPTERS
-        if let virtualMachine {
-            if virtualMachine.architecture == QemuConstants.ARCH_X64 {
-                videoAdapters.append(contentsOf: QemuConstants.INTEL_ONLY_VIDEO_ADAPTERS)
-            }
-        }
-        return videoAdapters
+    fileprivate func loadDisplaysList() {
+        guard let virtualMachine else { return }
+
+        var displays = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
+
+        displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
+        displaysList = displays
+        updateView()
     }
 
     func updateView() {
@@ -62,9 +75,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
             guard let self else { return }
             if let virtualMachine {
                 videoAdapterComboBox.reloadData()
-                videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+                videoAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
                 qemuDisplayComboBox.reloadData()
-                qemuDisplayComboBox.selectItem(at: QemuConstants.ALL_DISPLAYS.firstIndex(of: virtualMachine.qemuDisplay ?? QemuConstants.DISPLAY_DEFAULT) ?? 0)
+                qemuDisplayComboBox.selectItem(at: displaysList.firstIndex(of: virtualMachine.qemuDisplay ?? Utils.getDisplayForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
 
                 if virtualMachine.os == QemuConstants.OS_MAC {
                     videoAdapterComboBox.isEnabled = false
@@ -82,7 +95,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     windowsArmDescriptionText.isHidden = true
                 }
 
-                if spiceSuported {
+                if spiceSupported {
                     spiceDescriptionText.isEnabled = true
                     spiceDescriptionLabel.isEnabled = true
                     spiceDescriptionSwitch.isEnabled = true
@@ -112,7 +125,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                 #endif
 
                 let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
-                if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
+                if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSupported {
                     accelDescriptionText.isEnabled = false
                     accelDescriptionLabel.isEnabled = false
                     accelDescriptionSwitch.isEnabled = false
@@ -134,18 +147,18 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         if comboBox == videoAdapterComboBox {
-            return buildAdaptersList().count
+            return adaptersList.count
         } else if comboBox == qemuDisplayComboBox {
-            return QemuConstants.ALL_DISPLAYS.count
+            return displaysList.count
         }
         return 0
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == videoAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[buildAdaptersList()[index]] : ""
+            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[adaptersList[index]] : ""
         } else if comboBox == qemuDisplayComboBox {
-            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[QemuConstants.ALL_DISPLAYS[index]] : ""
+            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[displaysList[index]] : ""
         }
         return index + 1
     }
@@ -153,9 +166,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if let virtualMachine {
             if (notification.object as! NSComboBox) == videoAdapterComboBox {
-                virtualMachine.videoDevice = buildAdaptersList()[videoAdapterComboBox.indexOfSelectedItem]
+                virtualMachine.videoDevice = adaptersList[videoAdapterComboBox.indexOfSelectedItem]
             } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
-                virtualMachine.qemuDisplay = QemuConstants.ALL_DISPLAYS[qemuDisplayComboBox.indexOfSelectedItem]
+                virtualMachine.qemuDisplay = displaysList[qemuDisplayComboBox.indexOfSelectedItem]
             }
         }
     }
@@ -180,60 +193,40 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
     fileprivate func verifyOpenGLSupport() {
         if let virtualMachine {
-            let shell = Shell()
-            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))
+            let virGLSupported = capabilities?.virGLSupported ?? false
+            let appleParavirtualizedGraphicsSupported = capabilities?.appleParavirtualizedGraphicsSupported ?? false
 
-            if let qemuExecutable = runner.getQemuCommand().split(separator: " ").first {
-                let command = qemuExecutable + " -device help"
-                print(command)
-
-                shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
-                    let devices = shell.readFromStandardOutput()
-
-                    if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && (devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl")) || virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && devices.contains("apple-gfx-pci") {
-                        print("OpenGL SUPPORTED")
-                        DispatchQueue.main.async {
-                            self.accelerationSuported = true
-                            self.updateView()
-                        }
-                    } else {
-                        print("OpenGL NOT SUPPORTED")
-                        DispatchQueue.main.async {
-                            self.accelerationSuported = false
-                            self.updateView()
-                        }
-                    }
-                })
+            if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && virGLSupported ||
+                virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
+            {
+                print("3D Acceleration SUPPORTED")
+                DispatchQueue.main.async {
+                    self.accelerationSupported = true
+                }
+            } else {
+                print("3D Acceleration NOT SUPPORTED")
+                DispatchQueue.main.async {
+                    self.accelerationSupported = false
+                }
             }
         }
     }
 
-    fileprivate func verifySpiceSuport() {
+    fileprivate func verifySpiceSupport() {
         if let virtualMachine {
-            let shell = Shell()
-            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+            let spiceSupported = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.spiceSupported ?? false
 
-            if let qemuExecutable = runner.getQemuCommand().split(separator: " ").first {
-                let command = qemuExecutable + " -help"
-                print(command)
-
-                shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
-                    let options = shell.readFromStandardOutput()
-
-                    if options.contains("spice") {
-                        print("Spice SUPPORTED")
-                        DispatchQueue.main.async {
-                            self.spiceSuported = true
-                            self.updateView()
-                        }
-                    } else {
-                        print("Spice NOT SUPPORTED")
-                        DispatchQueue.main.async {
-                            self.spiceSuported = false
-                            self.updateView()
-                        }
-                    }
-                })
+            if spiceSupported {
+                print("Spice SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = true
+                }
+            } else {
+                print("Spice NOT SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = false
+                }
             }
         }
     }

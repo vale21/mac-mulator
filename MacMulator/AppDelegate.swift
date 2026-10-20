@@ -10,7 +10,7 @@ import Cocoa
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var savedVMs: [String]? = []
-    private var rootController: RootViewController?
+    private(set) var rootController: RootViewController?
     private var fileName: String?
     private var initialized = false
 
@@ -333,6 +333,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         if let fileName {
             rootController?.addVirtualMachineFromFile(fileName)
+        }
+
+        let qemuPath = QemuUtils.getQemuPath()
+
+        DispatchQueue.global().async {
+            // Update the QEMU capabilities cache for the current QEMU path and all the VMs, so that the UI can be responsive when the user tries to edit a VM.
+            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            if let rootController = self.rootController {
+                for vm in rootController.virtualMachines {
+                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+                }
+            }
         }
     }
 

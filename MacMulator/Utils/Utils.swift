@@ -569,7 +569,7 @@ class Utils {
     }
 
     static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
-        getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO
+        getStringValueForSubType(os, subtype, 19) ?? QemuConstants.VGA_VIRTIO_GPU
     }
 
     static func getSoundForSubType(_ os: String, _ subtype: String?) -> String {
@@ -592,7 +592,7 @@ class Utils {
         getStringValueForSubType(os, subtype, 20) ?? QemuConstants.BOOT_BIOS
     }
 
-    static func getDisplaySubType(_ os: String, _ subtype: String?) -> String {
+    static func getDisplayForSubType(_ os: String, _ subtype: String?) -> String {
         getStringValueForSubType(os, subtype, 21) ?? QemuConstants.DISPLAY_DEFAULT
     }
 
@@ -921,9 +921,9 @@ class Utils {
         #endif
         return if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+                QemuUtils.isBinaryAvailable(vm.architecture, vm.qemuPath) && QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.hasSwtpmBinary == true
             } else {
-                QemuUtils.isBinaryAvailable(vm.architecture)
+                QemuUtils.isBinaryAvailable(vm.architecture, vm.qemuPath)
             }
         } else {
             if isVirtualizationFrameworkPreferred(vm) {

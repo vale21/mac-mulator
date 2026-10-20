@@ -14,23 +14,14 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet var qemuFolderField: NSTextField!
     @IBOutlet var vmFolderButton: NSButton!
     @IBOutlet var qemuFolderButton: NSButton!
-
     @IBOutlet var qemuVersionLabel: NSTextField!
-    @IBOutlet var swtpm_tick: NSImageView!
-    @IBOutlet var qemu_img_tick: NSImageView!
-    @IBOutlet var qemu_img_label: NSTextField!
-    @IBOutlet var qemu_i386_tick: NSImageView!
-    @IBOutlet var qemu_x86_64_tick: NSImageView!
-    @IBOutlet var qemu_arm_tick: NSImageView!
-    @IBOutlet var qemu_arm64_tick: NSImageView!
-    @IBOutlet var qemu_ppc_tick: NSImageView!
-    @IBOutlet var qemu_68k_tick: NSImageView!
 
-    @IBOutlet var livePreviewEnabledButton: NSButton!
-    @IBOutlet var livePreviewLabel: NSTextField!
-    @IBOutlet var oneSecLabel: NSTextField!
-    @IBOutlet var sixtySecsLabel: NSTextField!
-    @IBOutlet var livePreviewSlider: NSSlider!
+    @IBOutlet var qemuIntelIndicator: NSImageView!
+    @IBOutlet var qemuArmIndicator: NSImageView!
+    @IBOutlet var virGLRendererIndicator: NSImageView!
+    @IBOutlet var spiceIndicator: NSImageView!
+
+    @IBOutlet var viewQemuCapabilitiesButton: NSButton!
 
     var userDefaults: UserDefaults = .standard
     var rootController: RootViewController?
@@ -50,36 +41,15 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             } else if sender as? NSObject == qemuFolderButton {
                 qemuFolderField.stringValue = panel.url!.path
                 userDefaults.set(Utils.escape(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-                checkForQemuBinaries()
             }
             dirty = true
         })
-    }
-
-    @IBAction func livePreviewTickChanged(_ sender: Any) {
-        let button = sender as! NSButton
-
-        if button.state == NSControl.StateValue.off {
-            livePreviewLabel.textColor = NSColor.tertiaryLabelColor
-            oneSecLabel.textColor = NSColor.tertiaryLabelColor
-            sixtySecsLabel.textColor = NSColor.tertiaryLabelColor
-            livePreviewSlider.isEnabled = false
-        } else {
-            livePreviewLabel.textColor = NSColor.labelColor
-            oneSecLabel.textColor = NSColor.labelColor
-            sixtySecsLabel.textColor = NSColor.labelColor
-            livePreviewSlider.isEnabled = true
-        }
-
-        userDefaults.set(button.state == NSControl.StateValue.on, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
-        dirty = true
     }
 
     @IBAction func sliderChanged(_ sender: Any) {
         let slider = sender as! NSSlider
 
         let value = slider.intValue
-        livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(value))
 
         userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
         dirty = true
@@ -89,20 +59,23 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
+        vmFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
+        qemuFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
+        viewQemuCapabilitiesButton.title = NSLocalizedString("PreferencesViewController.viewQemuCapabilities", comment: "")
 
-        let livePreviewEnabled = userDefaults.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
-        livePreviewEnabledButton.state = livePreviewEnabled ? NSButton.StateValue.on : NSButton.StateValue.off
-        livePreviewTickChanged(livePreviewEnabledButton as Any)
-        livePreviewEnabledButton.title = NSLocalizedString("PreferencesViewController.livePreviewLabel", comment: "")
+        let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
+        updateView(with: capabilities)
+    }
 
-        let livePreviewRate = userDefaults.integer(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
-        livePreviewLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.updateLivePreview", comment: ""), String(livePreviewRate))
-        livePreviewSlider.intValue = Int32(livePreviewRate)
+    private func updateView(with capabilities: QemuCapabilitiesReporter?) {
+        refreshQemuVersion(with: capabilities)
 
-        checkForQemuBinaries()
-        dirty = false
+        setIndicator(qemuIntelIndicator, capabilities?.hasx86_64Binary ?? false)
+        setIndicator(qemuArmIndicator, capabilities?.hasAarch64Binary ?? false)
+        setIndicator(virGLRendererIndicator, capabilities?.virGLSupported ?? false)
+        setIndicator(spiceIndicator, capabilities?.spiceSupported ?? false)
     }
 
     override func viewDidDisappear() {
@@ -122,64 +95,28 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     func controlTextDidEndEditing(_ obj: Notification) {
         if obj.object as? NSObject == qemuFolderField {
-            checkForQemuBinaries()
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
+            updateView(with: capabilities)
         }
     }
 
-    fileprivate func checkForQemuBinaries() {
-        let fileManager = FileManager.default
-        #if APPSTORE
-            let path = QemuUtils.getQemuPath()
-        #else
-            let path = qemuFolderField.stringValue
-        #endif
-        if fileManager.fileExists(atPath: path) {
-            checkFile(QemuConstants.SWTPM, swtpm_tick)
-            checkFileAndGetVersion(QemuConstants.QEMU_IMG, qemu_img_tick)
-            checkFile(QemuConstants.ARCH_X86, qemu_i386_tick)
-            checkFile(QemuConstants.ARCH_X64, qemu_x86_64_tick)
-            checkFile(QemuConstants.ARCH_ARM, qemu_arm_tick)
-            checkFile(QemuConstants.ARCH_ARM64, qemu_arm64_tick)
-            checkFile(QemuConstants.ARCH_PPC, qemu_ppc_tick)
-            checkFile(QemuConstants.ARCH_68K, qemu_68k_tick)
+    private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {
+        if let version = capabilities?.qemuVersion, !version.isEmpty {
+            qemuVersionLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.qemuVersion", comment: ""), version)
         } else {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), path), virtualMachine: nil)
-            qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "")
-            setYellowCross(qemu_img_tick)
-            setRedCross(swtpm_tick)
-            setRedCross(qemu_i386_tick)
-            setRedCross(qemu_x86_64_tick)
-            setRedCross(qemu_arm_tick)
-            setRedCross(qemu_arm64_tick)
-            setRedCross(qemu_ppc_tick)
-            setRedCross(qemu_68k_tick)
+            qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuNotFound", comment: "")
         }
     }
 
-    fileprivate func checkFile(_ path: String, _ image: NSImageView) {
-        if QemuUtils.isBinaryAvailable(path) {
-            setGreenTick(image)
-        } else if path == QemuConstants.QEMU_IMG {
-            setYellowCross(image)
+    private func setIndicator(_ view: NSImageView, _ value: Bool) {
+        if value {
+            setGreenTick(view)
         } else {
-            setRedCross(image)
+            setRedCross(view)
         }
     }
 
-    fileprivate func checkFileAndGetVersion(_ path: String, _ image: NSImageView) {
-        checkFile(path, image)
-        QemuUtils.getQemuVersion(qemuPath: QemuUtils.getQemuPath(), uponCompletion: { version in
-            DispatchQueue.main.async {
-                if version == nil {
-                    self.qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.noQemuFound", comment: "")
-                } else {
-                    self.qemuVersionLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.qemuFound", comment: ""), version!)
-                }
-            }
-        })
-    }
-
-    fileprivate func setGreenTick(_ view: NSImageView) {
+    private func setGreenTick(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "checkmark.circle.fill", accessibilityDescription: nil)
             view.contentTintColor = NSColor.systemGreen
@@ -188,16 +125,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         }
     }
 
-    fileprivate func setYellowCross(_ view: NSImageView) {
-        if #available(macOS 11, *) {
-            view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
-            view.contentTintColor = NSColor.systemYellow
-        } else {
-            view.image = NSImage(named: NSImage.Name("xmark.circle.fill.yellow"))
-        }
-    }
-
-    fileprivate func setRedCross(_ view: NSImageView) {
+    private func setRedCross(_ view: NSImageView) {
         if #available(macOS 11, *) {
             view.image = NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)
             view.contentTintColor = NSColor.systemRed

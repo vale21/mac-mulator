@@ -105,8 +105,7 @@ class QemuCommandBuilder {
                 FORMATTER + "-chardev spicevmc,id=spicechannel0,name=vdagent" +
                 FORMATTER + "-device virtserialport,chardev=spicechannel0,name=com.redhat.spice.0" +
                 FORMATTER + "-chardev spiceport,id=webdav0,name=org.spice-space.webdav.0" +
-                FORMATTER + "-device virtserialport,chardev=webdav0,name=org.spice-space.webdav.0" +
-                FORMATTER + "-nic user,model=virtio"
+                FORMATTER + "-device virtserialport,chardev=webdav0,name=org.spice-space.webdav.0"
         }
         return self
     }
