@@ -61,7 +61,7 @@ class VirtualMachine: Codable, Hashable {
         portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
         self.macAddress = macAddress
         self.type = type
-        // self.bootMode = bootMode
+        self.bootMode = bootMode
         snapshots = []
     }
 
