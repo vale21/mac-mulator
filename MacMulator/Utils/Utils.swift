@@ -921,9 +921,9 @@ class Utils {
         #endif
         return if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
-                QemuUtils.isBinaryAvailable(vm.architecture) && QemuUtils.isBinaryAvailable(QemuConstants.SWTPM)
+                QemuUtils.isBinaryAvailable(vm.architecture, vm.qemuPath) && QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.hasSwtpmBinary == true
             } else {
-                QemuUtils.isBinaryAvailable(vm.architecture)
+                QemuUtils.isBinaryAvailable(vm.architecture, vm.qemuPath)
             }
         } else {
             if isVirtualizationFrameworkPreferred(vm) {

@@ -135,9 +135,7 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         if (notification.object as! NSTextField) == qemuPathView, let virtualMachine, virtualMachine.qemuPath != nil {
             let fileManager = FileManager.default
             if fileManager.fileExists(atPath: qemuPathView.stringValue) {
-                Task {
-                    _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPathView.stringValue)
-                }
+                _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPathView.stringValue)
             } else {
                 Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), qemuPathView.stringValue), virtualMachine: nil)
             }

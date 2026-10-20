@@ -336,12 +336,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let qemuPath = QemuUtils.getQemuPath()
-        Task {
-            _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
-            if let rootController {
-                for vm in rootController.virtualMachines {
-                    _ = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
-                }
+        _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+        if let rootController {
+            for vm in rootController.virtualMachines {
+                _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
             }
         }
     }

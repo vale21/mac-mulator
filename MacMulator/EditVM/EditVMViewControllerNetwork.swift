@@ -148,10 +148,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     fileprivate func loadAdaptersList() {
         guard let virtualMachine else { return }
 
-        Task {
-            let adapters = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableNetworkDevices ?? QemuConstants.ALL_NETWORK_ADAPTERS
-            self.adaptersList = adapters
-            self.updateView()
-        }
+        adaptersList = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableNetworkDevices ?? QemuConstants.ALL_NETWORK_ADAPTERS
+        updateView()
     }
 }

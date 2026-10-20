@@ -59,13 +59,14 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
+        vmFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
+        qemuFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
+        viewQemuCapabilitiesButton.title = NSLocalizedString("PreferencesViewController.viewQemuCapabilities", comment: "")
 
-        Task {
-            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
-            updateView(with: capabilities)
-        }
+        let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
+        updateView(with: capabilities)
     }
 
     private func updateView(with capabilities: QemuCapabilitiesReporter?) {
@@ -94,21 +95,16 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     func controlTextDidEndEditing(_ obj: Notification) {
         if obj.object as? NSObject == qemuFolderField {
-            Task {
-                let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
-                updateView(with: capabilities)
-            }
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
+            updateView(with: capabilities)
         }
     }
 
     private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {
-        let qemuPath = QemuUtils.getQemuPath()
-        Task {
-            if let version = capabilities?.qemuVersion, !version.isEmpty {
-                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
-            } else {
-                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
-            }
+        if let version = capabilities?.qemuVersion, !version.isEmpty {
+            qemuVersionLabel.stringValue = String(format: NSLocalizedString("PreferencesViewController.qemuVersion", comment: ""), version)
+        } else {
+            qemuVersionLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuNotFound", comment: "")
         }
     }
 

@@ -84,13 +84,11 @@ class AboutBoxViewController: NSViewController {
 
     private func refreshQemuVersion() {
         let qemuPath = QemuUtils.getQemuPath()
-        Task {
-            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
-            if let version = capabilities?.qemuVersion, !version.isEmpty {
-                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
-            } else {
-                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
-            }
+        let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+        if let version = capabilities?.qemuVersion, !version.isEmpty {
+            qemuVersionLabel.stringValue = String(format: NSLocalizedString("AboutBoxViewController.qemuVersion", comment: ""), version)
+        } else {
+            qemuVersionLabel.stringValue = NSLocalizedString("AboutBoxViewController.qemuNotFound", comment: "")
         }
     }
 }

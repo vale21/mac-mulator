@@ -6,6 +6,8 @@
 "AboutBoxViewController.descriptionText" = "MacMulator is the computer emulator for your Mac! It engages the power of Qemu and Apple Virtualization Framework, together with a nice, easy to use UI, to let you create any kind of Virtual Machines in a few clicks. Whatever OS you need to run on your Mac, MacMulator is the tool for you!";
 "AboutBoxViewController.creditsLabel" = "Credits";
 "AboutBoxViewController.copyright" = "Copyright © %@ the MacMulator Project. macmulator@gmail.com";
+"AboutBoxViewController.qemuVersion" = "QEMU version %@";
+"AboutBoxViewController.qemuNotFound" = "QEMU not found";
 "AppDelegate.exportToParallelsComplete" = "Export to Parallels complete.";
 "AppDelegate.exportToParallelsFailed" = "Export failed with error: %@";
 "AppDelegate.importFromParallelsFailed" = "Import failed with error: %@";
@@ -152,7 +154,19 @@
 "PreferencesViewController.qemuFound" = "Detected Qemu version %@";
 "PreferencesViewController.vmFolderLabel" = "Virtual Machines folder";
 "PreferencesViewController.qemuFolderLabel" = "Qemu binaries folder";
+"PreferencesViewController.qemuVersion" = "QEMU version %@";
+"PreferencesViewController.qemuNotFound" = "QEMU not found";
+"PreferencesViewController.find" = "Find";
+"PreferencesViewController.viewQemuCapabilities" = "View all QEMU capabilities...";
 "PreferencesViewController.windowTitle" = "MacMulator Preferences";
+"QemuCapabilitiesViewController.qemuDisplays" = "QEMU Displays";
+"QemuCapabilitiesViewController.qemuVideoAdapters" = "QEMU Video Adapters";
+"QemuCapabilitiesViewController.qemuNetworkAdapters" = "QEMU Network Adapters";
+"QemuCapabilitiesViewController.qemuNotFound" = "QEMU not found";
+"QemuCapabilitiesViewController.qemuVersion" = "QEMU version %@";
+"QemuCapabilitiesViewController.qemuBinaries" = "QEMU Binaries";
+"QemuCapabilitiesViewController.otherBinaries" = "Other Binaries";
+"QemuCapabilitiesViewController.features" = "Features";
 "QemuConstants.hd" = "Hard Drive";
 "QemuConstants.usb" = "USB Drive";
 "QemuConstants.usb-cdrom" = "CD/DVD over USB";
@@ -258,7 +272,7 @@
 "VirtualMachineViewController.stopVM" = "Stop the execution of this VM";
 "VirtualMachineViewController.pausedVMName" = "%@ (Paused)";
 "VirtualMachineViewController.notSpecified" = "Not specified";
-"VirtualMachineViewController.binaryNotAvaiable" ="The VM cannot be started because Qemu binary for artchitecture %@ is not available.";
+"VirtualMachineViewController.binaryNotAvaiable" ="The VM cannot be started because Qemu binary %@ is not available.";
 "VirtualMachineViewController.swTpmNotAvailable" ="The VM cannot be started because it requires swtpm but the executable was not found.";
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmFeatures" = "Virtual Machine Features";

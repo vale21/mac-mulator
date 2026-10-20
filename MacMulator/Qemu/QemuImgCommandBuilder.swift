@@ -64,16 +64,7 @@ class QemuImgCommandBuilder {
     }
 
     func build() -> String {
-        var cmd = ""
-        #if APPSTORE
-            cmd = Utils.escape(qemuPath) + "/" + executable
-        #else
-            if QemuUtils.isBinaryAvailable(executable) {
-                cmd = Utils.escape(qemuPath) + "/" + executable
-            } else {
-                cmd = Utils.escape(Bundle.main.path(forResource: "qemu-img", ofType: nil)!)
-            }
-        #endif
+        var cmd = Utils.escape(qemuPath) + "/" + executable
 
         if let command {
             cmd += " " + command

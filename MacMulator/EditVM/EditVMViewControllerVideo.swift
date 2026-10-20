@@ -55,23 +55,19 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     fileprivate func loadAdaptersList() {
         guard let virtualMachine else { return }
 
-        Task {
-            let adapters = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
-            self.adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
-            self.updateView()
-        }
+        let adapters = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
+        adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
+        updateView()
     }
 
     fileprivate func loadDisplaysList() {
         guard let virtualMachine else { return }
 
-        Task {
-            var displays = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
+        var displays = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
 
-            displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
-            self.displaysList = displays
-            self.updateView()
-        }
+        displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
+        displaysList = displays
+        updateView()
     }
 
     func updateView() {
@@ -197,40 +193,37 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
     fileprivate func verifyOpenGLSupport() {
         if let virtualMachine {
-            Task {
-                let virGLSupported = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.virGLSupported ?? false
-                let appleParavirtualizedGraphicsSupported = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.appleParavirtualizedGraphicsSupported ?? false
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))
+            let virGLSupported = capabilities?.virGLSupported ?? false
+            let appleParavirtualizedGraphicsSupported = capabilities?.appleParavirtualizedGraphicsSupported ?? false
 
-                if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && virGLSupported ||
-                    virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
-                {
-                    print("3D Acceleration SUPPORTED")
-                    DispatchQueue.main.async {
-                        self.accelerationSupported = true
-                    }
-                } else {
-                    print("3D Acceleration NOT SUPPORTED")
-                    DispatchQueue.main.async {}
+            if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && virGLSupported ||
+                virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
+            {
+                print("3D Acceleration SUPPORTED")
+                DispatchQueue.main.async {
+                    self.accelerationSupported = true
                 }
+            } else {
+                print("3D Acceleration NOT SUPPORTED")
+                DispatchQueue.main.async {}
             }
         }
     }
 
     fileprivate func verifySpiceSupport() {
         if let virtualMachine {
-            Task {
-                let spiceSupported = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.spiceSupported ?? false
+            let spiceSupported = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.spiceSupported ?? false
 
-                if spiceSupported {
-                    print("Spice SUPPORTED")
-                    DispatchQueue.main.async {
-                        self.spiceSupported = true
-                    }
-                } else {
-                    print("Spice NOT SUPPORTED")
-                    DispatchQueue.main.async {
-                        self.spiceSupported = false
-                    }
+            if spiceSupported {
+                print("Spice SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = true
+                }
+            } else {
+                print("Spice NOT SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = false
                 }
             }
         }

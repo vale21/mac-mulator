@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -115,7 +115,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textView editable="NO" drawsBackground="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="2C4-Kt-n3z">
-                                            <rect key="frame" x="0.0" y="-100" width="600" height="2580"/>
+                                            <rect key="frame" x="0.0" y="-101" width="600" height="2581"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3413,9 +3413,9 @@ Rocky Linux</string>
                                 </connections>
                             </button>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GAk-eH-dhx">
-                                <rect key="frame" x="503" y="404" width="121" height="15"/>
+                                <rect key="frame" x="439" y="406" width="185" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="QEMU version 10.0.2" id="WVk-pa-JBn">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="QEMU version 10.0.2" id="WVk-pa-JBn">
                                     <font key="font" metaFont="cellTitle"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -3597,7 +3597,7 @@ Rocky Linux</string>
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="u1x-Fr-N6k">
-                                <rect key="frame" x="20" y="247" width="441" height="24"/>
+                                <rect key="frame" x="20" y="247" width="423" height="24"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Ag2-Lx-SfX">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3608,13 +3608,13 @@ Rocky Linux</string>
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZSk-8V-9fP">
-                                <rect key="frame" x="469" y="246" width="56" height="24"/>
+                                <rect key="frame" x="451" y="246" width="74" height="24"/>
                                 <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eGS-Xf-CRr">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="56" id="6rS-iU-LxG"/>
+                                    <constraint firstAttribute="width" constant="74" id="6rS-iU-LxG"/>
                                 </constraints>
                                 <connections>
                                     <action selector="searchFolder:" target="cF1-rS-o50" id="IkC-Fh-pIG"/>
@@ -3632,7 +3632,7 @@ Rocky Linux</string>
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FWM-lN-Jy4">
-                                <rect key="frame" x="21" y="31" width="441" height="24"/>
+                                <rect key="frame" x="21" y="31" width="422" height="24"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="7JJ-SA-RYa">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -3643,13 +3643,13 @@ Rocky Linux</string>
                                 </connections>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7Ih-Ef-1Mh">
-                                <rect key="frame" x="470" y="30" width="56" height="24"/>
+                                <rect key="frame" x="451" y="30" width="75" height="24"/>
                                 <buttonCell key="cell" type="smallSquare" title="Find" bezelStyle="smallSquare" image="NSAddTemplate" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="0Kf-o9-ZUv">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="56" id="ofK-VS-MwD"/>
+                                    <constraint firstAttribute="width" constant="75" id="ofK-VS-MwD"/>
                                 </constraints>
                                 <connections>
                                     <action selector="searchFolder:" target="cF1-rS-o50" id="0h1-Vc-dDu"/>
@@ -3758,7 +3758,7 @@ Rocky Linux</string>
                             <constraint firstItem="lNI-RH-lWM" firstAttribute="baseline" secondItem="Cad-QZ-tB8" secondAttribute="baseline" id="H11-AU-FZe"/>
                             <constraint firstItem="rM6-Gc-oyU" firstAttribute="leading" secondItem="Mno-7U-prL" secondAttribute="leading" constant="-70" id="IJE-5R-d7a"/>
                             <constraint firstItem="lNI-RH-lWM" firstAttribute="leading" secondItem="sEJ-fi-wqq" secondAttribute="trailing" constant="8" symbolic="YES" id="IV0-xS-hMe"/>
-                            <constraint firstItem="BOU-nj-ujh" firstAttribute="top" secondItem="sEJ-fi-wqq" secondAttribute="bottom" constant="10" id="KTI-xv-CXD"/>
+                            <constraint firstItem="BOU-nj-ujh" firstAttribute="top" secondItem="sEJ-fi-wqq" secondAttribute="bottom" constant="19" id="KTI-xv-CXD"/>
                             <constraint firstItem="wzh-YA-iXF" firstAttribute="top" secondItem="EZq-aB-jhj" secondAttribute="bottom" constant="14" id="KYL-uB-GXa"/>
                             <constraint firstItem="TbL-Ch-oZB" firstAttribute="baseline" secondItem="Q6s-7c-wCb" secondAttribute="baseline" id="Nsz-ax-UCc"/>
                             <constraint firstItem="SXs-MC-95b" firstAttribute="leading" secondItem="SYm-hx-Lfj" secondAttribute="leading" constant="20" symbolic="YES" id="RCL-2h-MaE"/>
@@ -4180,7 +4180,7 @@ Rocky Linux</string>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Ry6-PU-m2R">
-                                                            <rect key="frame" x="8" y="0.0" width="415" height="25"/>
+                                                            <rect key="frame" x="8" y="0.0" width="193" height="25"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qSA-O3-2Cv">

@@ -46,18 +46,20 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        qemuDisplaysTableView.tableColumns.first?.headerCell.stringValue = "QEMU Displays"
-        qemuVideopAdapterTableView.tableColumns.first?.headerCell.stringValue = "QEMU Video adapters"
-        qemuNetworkAdaptersTableView.tableColumns.first?.headerCell.stringValue = "QEMU Network adapters"
+        qemuBinariesLabel.stringValue = NSLocalizedString("QemuCapabilitiesViewController.qemuBinaries", comment: "")
+        otherBinariesLabel.stringValue = NSLocalizedString("QemuCapabilitiesViewController.otherBinaries", comment: "")
+        featuresLabel.stringValue = NSLocalizedString("QemuCapabilitiesViewController.features", comment: "")
+
+        qemuDisplaysTableView.tableColumns.first?.headerCell.stringValue = NSLocalizedString("QemuCapabilitiesViewController.qemuDisplays", comment: "")
+        qemuVideopAdapterTableView.tableColumns.first?.headerCell.stringValue = NSLocalizedString("QemuCapabilitiesViewController.qemuVideoAdapters", comment: "")
+        qemuNetworkAdaptersTableView.tableColumns.first?.headerCell.stringValue = NSLocalizedString("QemuCapabilitiesViewController.qemuNetworkAdapters", comment: "")
     }
 
     override func viewWillAppear() {
         super.viewWillAppear()
 
-        Task {
-            let capabilities = await QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
-            updateView(with: capabilities)
-        }
+        let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())
+        updateView(with: capabilities)
     }
 
     private func updateView(with capabilities: QemuCapabilitiesReporter?) {
@@ -122,13 +124,10 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
     }
 
     private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {
-        let qemuPath = QemuUtils.getQemuPath()
-        Task {
-            if let version = capabilities?.qemuVersion, !version.isEmpty {
-                qemuVersionLabel.stringValue = String(format: NSLocalizedString("RootViewController.qemuVersion", comment: ""), version)
-            } else {
-                qemuVersionLabel.stringValue = NSLocalizedString("RootViewController.qemuNotFound", comment: "")
-            }
+        if let version = capabilities?.qemuVersion, !version.isEmpty {
+            qemuVersionLabel.stringValue = String(format: NSLocalizedString("QemuCapabilitiesViewController.qemuVersion", comment: ""), version)
+        } else {
+            qemuVersionLabel.stringValue = NSLocalizedString("QemuCapabilitiesViewController.qemuNotFound", comment: "")
         }
     }
 

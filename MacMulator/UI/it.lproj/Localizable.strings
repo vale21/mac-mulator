@@ -6,6 +6,8 @@
 "AboutBoxViewController.descriptionText" = "MacMulator è l'emulatore di computer per il tuo Mac! Grazie alla sua interfaccia intuitva e alla potenza di Qemu e di Apple Virtualization Framework, ti offre la possibilità di creare qualsiasi Macchina Virtuale in pochi click. Qualunque sia il sistema che devi emulare sul tuo Mac, MacMulator è lo strumento per te!";
 "AboutBoxViewController.creditsLabel" = "Ringraziamenti";
 "AboutBoxViewController.copyright" = "Copyright © %@ the MacMulator Project. macmulator@gmail.com";
+"AboutBoxViewController.qemuVersion" = "QEMU versione %@";
+"AboutBoxViewController.qemuNotFound" = "QEMU non trovato";
 "AppDelegate.exportToParallelsComplete" = "Esportazione completata.";
 "AppDelegate.exportToParallelsFailed" = "Esportazione fallita con errore: %@";
 "AppDelegate.importFromParallelsFailed" = "Importazione fallita con errore: %@";
@@ -152,7 +154,19 @@
 "PreferencesViewController.qemuFound" ="Trovato Qemu versione %@";
 "PreferencesViewController.vmFolderLabel" = "Cartella delle macchine virtuali";
 "PreferencesViewController.qemuFolderLabel" = "Cartella degli eseguibii Qemu";
+"PreferencesViewController.qemuVersion" = "QEMU versione %@";
+"PreferencesViewController.qemuNotFound" = "QEMU non trovato";
+"PreferencesViewController.find" = "Trova";
+"PreferencesViewController.viewQemuCapabilities" = "Vedi tutte le caratteristiche di QEMU...";
 "PreferencesViewController.windowTitle" = "Preferenze di MacMulator";
+"QemuCapabilitiesViewController.qemuDisplays" = "Display QEMU";
+"QemuCapabilitiesViewController.qemuVideoAdapters" = "Adattatori video QEMU";
+"QemuCapabilitiesViewController.qemuNetworkAdapters" = "Adattatori di rete QEMU";
+"QemuCapabilitiesViewController.qemuNotFound" = "QEMU non trovato";
+"QemuCapabilitiesViewController.qemuVersion" = "QEMU versione %@";
+"QemuCapabilitiesViewController.qemuBinaries" = "Eseguibili QEMU";
+"QemuCapabilitiesViewController.otherBinaries" = "Altri eseguibili";
+"QemuCapabilitiesViewController.features" = "Caratteristiche";
 "QemuConstants.hd" = "Disco Rigido";
 "QemuConstants.usb" = "Drive USB";
 "QemuConstants.usb-cdrom" = "CD/DVD su USB";
@@ -189,8 +203,6 @@
 "RootViewController.vmConvertedToQemu" = "La VM è stata convertita con successo al formato QEMU.";
 "RootViewController.vmConvertedToApple" = "La VM è stata convertita con successo al formato Apple.";
 "RootViewController.cloneOf" = "Clone di %@";
-"RootViewController.qemuVersion" = "QEMU versione %@";
-"RootViewController.qemuNotFound" = "QEMU non trovato";
 "StartVMViewController.startVMLabel" = "Avvio la VM. Per favore attendi...";
 "Utils.sudoNotAllowed" = "Il comando Qemu fornito è errato: L'uso del comando sudo non è consentito.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";
@@ -258,7 +270,7 @@
 "VirtualMachineViewController.stopVM" = "Arresta l'esecuzione di questa VM";
 "VirtualMachineViewController.pausedVMName" = "%@ (In pausa)";
 "VirtualMachineViewController.notSpecified" ="Non specificato";
-"VirtualMachineViewController.binaryNotAvaiable" ="La VM non può essere avviata perché l'eseguibile QEMU per l'architettura %@ non è disponibile.";
+"VirtualMachineViewController.binaryNotAvaiable" ="La VM non può essere avviata perché l'eseguibile QEMU %@ non è disponibile.";
 "VirtualMachineViewController.swTpmNotAvailable" ="La VM non può essere avviata perché richiede swtpm ma l'eseguibile non è stato trovato.";
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmFeatures" = "Caratteristiche Macchina Virtuale";

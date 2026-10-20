@@ -246,16 +246,42 @@ class QemuUtils {
         })
     }
 
+    static func isBinaryAvailable(_ binary: String, _ qemuPath: String?) -> Bool {
+        guard let path = qemuPath == nil ? QemuUtils.getQemuPath() : qemuPath else { return false }
+
+        switch binary {
+        case QemuConstants.ARCH_X64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasx86_64Binary ?? false
+        case QemuConstants.ARCH_X86:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasX86Binary ?? false
+        case QemuConstants.ARCH_ARM64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasAarch64Binary ?? false
+        case QemuConstants.ARCH_ARM:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasArmBinary ?? false
+        case QemuConstants.ARCH_PPC64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasPowerPC64Binary ?? false
+        case QemuConstants.ARCH_PPC:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasPowerPCBinary ?? false
+        case QemuConstants.ARCH_RISCV64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasRiscv64Binary ?? false
+        case QemuConstants.ARCH_RISCV32:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasRiscvBinary ?? false
+        case QemuConstants.ARCH_68K:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasM68kBinary ?? false
+        case QemuConstants.QEMU_IMG:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasQemuImgBinary ?? false
+        case QemuConstants.SWTPM:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasSwtpmBinary ?? false
+        default:
+            return false
+        }
+    }
+
     #if APPSTORE
-        /// The bundled qemu-system-* and qemu-img executables live next to the main executable (Contents/MacOS).
         static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
-        /// Firmware and data files of the bundled Qemu (Contents/Resources/qemu), passed to Qemu with -L.
         static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
     #endif
 
-    /// Directory containing the qemu-system-* and qemu-img executables used by the application.
-    /// The App Store flavor only ever runs the Qemu bundled inside the application; the Enthusiast
-    /// flavor runs the Qemu installation configured in the Preferences.
     static func getQemuPath() -> String {
         #if APPSTORE
             return bundledQemuPath
@@ -264,8 +290,6 @@ class QemuUtils {
         #endif
     }
 
-    /// Directory containing the Qemu executables to use for a given VM: the per-VM override when
-    /// the user configured one (Enthusiast flavor only), the global directory otherwise.
     static func getQemuPath(for vm: VirtualMachine) -> String {
         #if APPSTORE
             return bundledQemuPath
@@ -274,8 +298,6 @@ class QemuUtils {
         #endif
     }
 
-    /// Whether a VM is shown through the Spice display. The bundled Qemu of the App Store flavor has
-    /// no native (Cocoa) display, so there the Spice display is the only option, whatever the VM says.
     static func isSpiceDisplayEnabled(_ vm: VirtualMachine) -> Bool {
         #if APPSTORE
             return true
@@ -284,10 +306,6 @@ class QemuUtils {
         #endif
     }
 
-    /// Path of the unix socket on which Qemu's Spice server listens for a VM.
-    /// The Enthusiast flavor keeps it next to the VM. A sandboxed app can only bind unix sockets
-    /// inside its own container, so the App Store flavor keeps it in the container's temporary
-    /// directory, with a short name derived from the VM path (sun_path is limited to 104 bytes).
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
             return containerSocketPath("spice", vmPath)
@@ -296,8 +314,6 @@ class QemuUtils {
         #endif
     }
 
-    /// Path of the control socket through which Qemu talks to the swtpm process emulating a VM's TPM.
-    /// Same considerations as for the Spice socket.
     static func tpmSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
             return containerSocketPath("tpm", vmPath)
@@ -318,13 +334,6 @@ class QemuUtils {
             return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
         }
     #endif
-
-    static func isBinaryAvailable(_ binary: String, qemuPath: String? = nil) -> Bool {
-        let rootPath = qemuPath != nil ? qemuPath! : getQemuPath()
-        let fileManager = FileManager.default
-
-        return fileManager.fileExists(atPath: rootPath + "/" + binary)
-    }
 
     static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
         let aliases = [
@@ -351,7 +360,8 @@ class QemuUtils {
     }
 
     static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
-        if !isBinaryAvailable(QemuConstants.QEMU_IMG) {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: QemuUtils.getQemuPath() + "/" + QemuConstants.QEMU_IMG) {
             callback(nil)
             return
         }

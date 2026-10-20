@@ -353,7 +353,7 @@ class QemuConstants {
 
     static let MAX_CPUS: [String: Int] = [
         ARCH_PPC: 1,
-        ARCH_PPC64: 1,
+        ARCH_PPC64: 4,
         ARCH_X86: 4,
         ARCH_X64: ProcessInfo.processInfo.processorCount,
         ARCH_ARM: 2,
