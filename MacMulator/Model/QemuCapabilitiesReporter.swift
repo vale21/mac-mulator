@@ -54,11 +54,18 @@ class QemuCapabilitiesReporter {
         self.availableNetworkDevices = availableNetworkDevices
     }
 
-    static var INSTANCES: [String: QemuCapabilitiesReporter] = [:]
+    private static let cacheQueue = DispatchQueue(label: "QemuCapabilitiesReporter.cache")
+    private static var INSTANCES: [String: QemuCapabilitiesReporter] = [:]
     private static var cachedCommands: [String: [String]] = [:]
     private static var availableBinaries: [String: [String: Bool]] = [:]
 
     static func getInstance(forQemuPath qemuPath: String) -> QemuCapabilitiesReporter? {
+        cacheQueue.sync {
+            loadInstance(forQemuPath: qemuPath)
+        }
+    }
+
+    private static func loadInstance(forQemuPath qemuPath: String) -> QemuCapabilitiesReporter? {
         if INSTANCES.contains(where: { $0.key == qemuPath }) {
             return INSTANCES[qemuPath]
         }
