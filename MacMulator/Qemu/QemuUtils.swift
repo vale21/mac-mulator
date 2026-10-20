@@ -302,7 +302,13 @@ class QemuUtils {
         #if APPSTORE
             return true
         #else
-            return vm.enableSpiceDisplay == true
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+            if capabilities?.spiceSupported == true {
+                return vm.enableSpiceDisplay == true
+            } else {
+                vm.enableSpiceDisplay = false
+                return false
+            }
         #endif
     }
 

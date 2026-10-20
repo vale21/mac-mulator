@@ -44,8 +44,8 @@ class ImportExportHerlper {
         let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
         let videoDevice = Utils.getVideoForSubType(os, subtype)
         let qemuDisplay = Utils.getDisplayForSubType(os, subtype)
-        let enable3DAcceleration = true
-        let enableSpiceDisplay = true
+        let enable3DAcceleration = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.virGLSupported ?? false
+        let enableSpiceDisplay = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.spiceSupported ?? false
         let hvf = Utils.getAccelForSubType(os, subtype)
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         let bootMode = Utils.getBootModeForSubType(os, subtype)
