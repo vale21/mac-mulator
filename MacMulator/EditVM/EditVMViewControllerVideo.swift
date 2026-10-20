@@ -206,7 +206,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                 }
             } else {
                 print("3D Acceleration NOT SUPPORTED")
-                DispatchQueue.main.async {}
+                DispatchQueue.main.async {
+                    self.accelerationSupported = false
+                }
             }
         }
     }
