@@ -336,10 +336,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         let qemuPath = QemuUtils.getQemuPath()
-        _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
-        if let rootController {
-            for vm in rootController.virtualMachines {
-                _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+
+        DispatchQueue.global().async {
+            // Update the QEMU capabilities cache for the current QEMU path and all the VMs, so that the UI can be responsive when the user tries to edit a VM.
+            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            if let rootController = self.rootController {
+                for vm in rootController.virtualMachines {
+                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+                }
             }
         }
     }
