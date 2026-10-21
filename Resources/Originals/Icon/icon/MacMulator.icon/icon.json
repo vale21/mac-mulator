@@ -7,6 +7,12 @@
       "blur-material" : null,
       "layers" : [
         {
+          "glass-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : true
+            }
+          ],
           "image-name" : "curl_dark.png",
           "name" : "curl_dark",
           "opacity-specializations" : [
@@ -20,6 +26,12 @@
           ]
         },
         {
+          "glass-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : false
+            }
+          ],
           "image-name" : "Curl.png",
           "name" : "curl_light",
           "opacity-specializations" : [
@@ -37,11 +49,18 @@
           }
         },
         {
-          "image-name" : "Border_cut_2.png",
+          "image-name" : "Border_cut.png",
           "name" : "border"
         },
         {
-          "image-name" : "Wallpaper-dark.png",
+          "glass-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : true
+            }
+          ],
+          "hidden" : false,
+          "image-name" : "Wallpaper-dark 2.png",
           "name" : "wallpaper_dark",
           "opacity-specializations" : [
             {
@@ -54,9 +73,18 @@
           ]
         },
         {
-          "image-name" : "Wallpaper-light.png",
+          "glass-specializations" : [
+            {
+              "appearance" : "dark",
+              "value" : false
+            }
+          ],
+          "image-name" : "Wallpaper-light 2.png",
           "name" : "wallpaper_light",
           "opacity-specializations" : [
+            {
+              "value" : 1
+            },
             {
               "appearance" : "dark",
               "value" : 0
@@ -64,6 +92,13 @@
           ]
         },
         {
+          "glass" : false,
+          "hidden-specializations" : [
+            {
+              "idiom" : "macOS",
+              "value" : false
+            }
+          ],
           "image-name" : "binary_dark.png",
           "name" : "binary_dark",
           "opacity-specializations" : [
@@ -84,6 +119,14 @@
           }
         },
         {
+          "fill" : "automatic",
+          "glass" : false,
+          "hidden-specializations" : [
+            {
+              "idiom" : "macOS",
+              "value" : false
+            }
+          ],
           "image-name" : "Binary.png",
           "name" : "binary_light",
           "opacity-specializations" : [
