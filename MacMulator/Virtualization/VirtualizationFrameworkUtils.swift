@@ -204,15 +204,14 @@ class VirtualizationFrameworkUtils {
     }
 
     /// Builds a diskutil-like description of a disk image, using only data that can be read from inside the App Sandbox.
+    /// RAW images are normally described by qemu-img; they only end up here when qemu-img is not available.
     fileprivate static func formatDiskImageInfo(_ drivePath: String, format: String, sectorCount: Int, blockSize: Int, layerInfo: [(String, String)] = []) -> String {
         let asifHeader = format == "ASIF" ? readASIFHeader(drivePath) : nil
         let sizes = fileSizes(drivePath)
 
         var info = "Image Format: " + format + "\n"
-        switch format {
-        case "ASIF": info += "Format Description: Apple sparse image\n"
-        case "RAW": info += "Format Description: RAW read-write image\n"
-        default: break
+        if asifHeader != nil {
+            info += "Format Description: Apple sparse image\n"
         }
 
         if let asifHeader {
@@ -246,23 +245,6 @@ class VirtualizationFrameworkUtils {
             }
         }
 
-        // ASIF data is stored in chunks, so the partition table can only be read directly from RAW images.
-        if format == "RAW", let partitions = readPartitionTable(drivePath, blockSize: blockSize) {
-            info += "\n\tPartitions (" + partitions.scheme + "):\n"
-            if partitions.entries.isEmpty {
-                info += "\t\tNone\n"
-            }
-            for (index, entry) in partitions.entries.enumerated() {
-                info += "\t\t\(index):\n"
-                info += "\t\t\ttype: " + entry.type + "\n"
-                if !entry.name.isEmpty {
-                    info += "\t\t\tname: " + entry.name + "\n"
-                }
-                info += "\t\t\tstart: \(entry.startSector)\n"
-                info += "\t\t\ttotal-space: " + formatBytes(entry.sectorCount * blockSize) + "\n"
-            }
-        }
-
         return info
     }
 
@@ -275,108 +257,6 @@ class VirtualizationFrameworkUtils {
         let values = try? URL(fileURLWithPath: path).resourceValues(forKeys: [.fileSizeKey, .totalFileAllocatedSizeKey])
         guard let logical = values?.fileSize else { return nil }
         return (logical, values?.totalFileAllocatedSize)
-    }
-
-    // MARK: - Partition table access (RAW images only)
-
-    fileprivate struct PartitionEntry {
-        let type: String
-        let name: String
-        let startSector: Int
-        let sectorCount: Int
-    }
-
-    // Well-known GPT partition type GUIDs.
-    fileprivate static let gptPartitionTypes: [String: String] = [
-        "C12A7328-F81F-11D2-BA4B-00A0C93EC93B": "EFI System",
-        "7C3457EF-0000-11AA-AA11-00306543ECAC": "Apple APFS",
-        "48465300-0000-11AA-AA11-00306543ECAC": "Apple HFS+",
-        "426F6F74-0000-11AA-AA11-00306543ECAC": "Apple Boot",
-        "0FC63DAF-8483-4772-8E79-3D69D8477DE4": "Linux filesystem",
-        "0657FD6D-A4AB-43C4-84E5-0933C84B4F4F": "Linux swap",
-        "E6D6D379-F507-44C2-A23C-238F2A3DF928": "Linux LVM",
-        "B921B045-1DF0-41C3-AF44-4C6F280D3FAE": "Linux root (ARM64)",
-        "4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709": "Linux root (x86-64)",
-        "BC13C2FF-59E6-4262-A352-B275FD6F7172": "Linux extended boot",
-        "EBD0A0A2-B9E5-4433-87C0-68B6B72699C7": "Microsoft basic data",
-        "E3C9E316-0B5C-4DB8-817D-F92DF00215AE": "Microsoft reserved",
-        "DE94BBA4-06D1-4D40-A16A-BFD50179D6AC": "Windows recovery",
-    ]
-
-    // Common MBR partition type IDs.
-    fileprivate static let mbrPartitionTypes: [UInt8: String] = [
-        0x05: "Extended", 0x0F: "Extended (LBA)",
-        0x06: "FAT16", 0x0B: "FAT32", 0x0C: "FAT32 (LBA)", 0x0E: "FAT16 (LBA)",
-        0x07: "NTFS / exFAT", 0x27: "Windows recovery",
-        0x82: "Linux swap", 0x83: "Linux", 0x8E: "Linux LVM",
-        0xAF: "Apple HFS+", 0xEF: "EFI System",
-    ]
-
-    /// Reads the GPT (or legacy MBR) partition table at the start of a RAW image.
-    fileprivate static func readPartitionTable(_ path: String, blockSize: Int) -> (scheme: String, entries: [PartitionEntry])? {
-        guard let handle = FileHandle(forReadingAtPath: path) else { return nil }
-        defer { try? handle.close() }
-
-        guard let mbrData = try? handle.read(upToCount: blockSize), mbrData.count == blockSize else { return nil }
-        let mbr = [UInt8](mbrData)
-        guard mbr[510] == 0x55, mbr[511] == 0xAA else { return nil }
-
-        let mbrEntries = (0 ..< 4).compactMap { index -> (type: UInt8, start: Int, count: Int)? in
-            let offset = 446 + index * 16
-            let type = mbr[offset + 4]
-            guard type != 0 else { return nil }
-            return (type, Int(readLittleEndian(mbr, offset + 8, 4)), Int(readLittleEndian(mbr, offset + 12, 4)))
-        }
-
-        // A protective MBR (type 0xEE) means the real partition table is a GPT starting at LBA 1.
-        if mbrEntries.contains(where: { $0.type == 0xEE }),
-           let gptHeaderData = try? handle.read(upToCount: blockSize), gptHeaderData.count == blockSize {
-            let gptHeader = [UInt8](gptHeaderData)
-            if Array(gptHeader[0 ..< 8]) == Array("EFI PART".utf8) {
-                let entriesLBA = readLittleEndian(gptHeader, 72, 8)
-                let entryCount = min(Int(readLittleEndian(gptHeader, 80, 4)), 256)
-                let entrySize = Int(readLittleEndian(gptHeader, 84, 4))
-                guard entrySize >= 128,
-                      (try? handle.seek(toOffset: entriesLBA * UInt64(blockSize))) != nil,
-                      let entriesData = try? handle.read(upToCount: entryCount * entrySize) else { return ("GPT", []) }
-
-                let table = [UInt8](entriesData)
-                var entries: [PartitionEntry] = []
-                for index in 0 ..< table.count / entrySize {
-                    let entry = Array(table[index * entrySize ..< (index + 1) * entrySize])
-                    let typeGUID = formatGUID(Array(entry[0 ..< 16]))
-                    guard typeGUID != "00000000-0000-0000-0000-000000000000" else { continue }
-
-                    let firstLBA = Int(readLittleEndian(entry, 32, 8))
-                    let lastLBA = Int(readLittleEndian(entry, 40, 8))
-                    let nameUnits = stride(from: 56, to: 128, by: 2).map { UInt16(entry[$0]) | (UInt16(entry[$0 + 1]) << 8) }
-                    let name = String(decoding: nameUnits.prefix { $0 != 0 }, as: UTF16.self)
-
-                    entries.append(PartitionEntry(
-                        type: gptPartitionTypes[typeGUID] ?? typeGUID,
-                        name: name,
-                        startSector: firstLBA,
-                        sectorCount: lastLBA - firstLBA + 1
-                    ))
-                }
-                return ("GPT", entries)
-            }
-        }
-
-        return ("MBR", mbrEntries.map {
-            PartitionEntry(type: mbrPartitionTypes[$0.type] ?? String(format: "0x%02X", $0.type), name: "", startSector: $0.start, sectorCount: $0.count)
-        })
-    }
-
-    /// Formats a GUID stored in the GPT mixed-endian layout (first three fields little-endian).
-    fileprivate static func formatGUID(_ bytes: [UInt8]) -> String {
-        let ordered = [3, 2, 1, 0, 5, 4, 7, 6] + Array(8 ..< 16)
-        let hex = ordered.map { String(format: "%02X", bytes[$0]) }
-        return hex[0 ..< 4].joined() + "-" + hex[4 ..< 6].joined() + "-" + hex[6 ..< 8].joined() + "-" + hex[8 ..< 10].joined() + "-" + hex[10 ..< 16].joined()
-    }
-
-    fileprivate static func readLittleEndian(_ bytes: [UInt8], _ offset: Int, _ length: Int) -> UInt64 {
-        bytes[offset ..< offset + length].reversed().reduce(0) { ($0 << 8) | UInt64($1) }
     }
 
     // MARK: - ASIF header access (used where DiskImageKit and diskutil are unavailable)
