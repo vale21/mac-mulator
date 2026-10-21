@@ -470,6 +470,8 @@ class Utils {
 
     static func getMacOSSubType(_ os: String?) -> String {
         switch os {
+        case QemuConstants.DESC_MAC_GOLDEN_GATE:
+            QemuConstants.SUB_MAC_GOLDEN_GATE
         case QemuConstants.DESC_MAC_TAHOE:
             QemuConstants.SUB_MAC_TAHOE
         case QemuConstants.DESC_MAC_SEQUOIA:
@@ -708,6 +710,10 @@ class Utils {
         return false
     }
 
+    static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
+        Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
+    }
+
     static func isTrackpadSupported(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
     }
@@ -759,6 +765,8 @@ class Utils {
     static func getHostMacOSVersion() -> String {
         let version = ProcessInfo.processInfo.operatingSystemVersion
         switch (version.majorVersion, version.minorVersion) {
+        case (27, _):
+            return QemuConstants.DESC_MAC_GOLDEN_GATE
         case (26, _):
             return QemuConstants.DESC_MAC_TAHOE
         case (15, _):
@@ -961,10 +969,6 @@ class Utils {
         }
     }
 
-    static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
-        Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
-    }
-
     static func removeUnexistingDrives(_ virtualMachine: VirtualMachine) {
         if let window = NSApp.mainWindow {
             for drive in virtualMachine.drives {
@@ -1159,6 +1163,7 @@ class Utils {
             QemuConstants.SUB_MAC_SONOMA,
             QemuConstants.SUB_MAC_SEQUOIA,
             QemuConstants.SUB_MAC_TAHOE,
+            QemuConstants.SUB_MAC_GOLDEN_GATE,
         ]
 
         let version = versions.firstIndex(of: subtype)
