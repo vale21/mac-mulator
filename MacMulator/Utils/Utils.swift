@@ -728,7 +728,7 @@ class Utils {
 
     static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 26.0, *) {
-            vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC
+            vm.type == MacMulatorConstants.APPLE_VM
         } else {
             false
         }
