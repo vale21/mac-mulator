@@ -118,6 +118,8 @@
 "NewDiskViewController.diskSizeTextField" = "Size (GB)";
 "NewDiskViewController.useCow" = "Use Copy On Write";
 "NewDiskViewController.cowDescriptionLabel" = "The Copy On Write (COW) feature greatly reduces the amount of disk space used by the drive, and it is highly recommended";
+"NewDiskViewController.diskCreationFailed" = "Disk creation failed with error: %@";
+"NewDiskViewController.diskUpdateFailed" = "Disk update failed with error: %@";
 "NewPortMappingViewController.createMapping" = "Create new port mapping";
 "NewPortMappingViewController.editMapping" = "Edit port mapping %@";
 "NewPortMappingViewController.nameLabel" = "Mapping name:";

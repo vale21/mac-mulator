@@ -46,7 +46,7 @@ class Shell {
         }
     }
 
-    func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         DispatchQueue.global().async {
             self.task.currentDirectoryPath = currentDirectoryPath
             print("Running " + command + " in " + self.task.currentDirectoryPath)
@@ -63,7 +63,7 @@ class Shell {
                         self.pipe_out.fileHandleForReading.readabilityHandler = nil
                         self.pipe_in.fileHandleForWriting.writeabilityHandler = nil
 
-                        callback(self.task.terminationStatus)
+                        callback(self.task.terminationStatus, self.task.terminationStatus != 0 ? self.readFromStandardError() : nil)
                     }
                     try self.task.run()
                 }

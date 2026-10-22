@@ -116,7 +116,7 @@ class QemuVMCreator: VMCreator {
             if let virtualHDD {
                 if !Utils.isVHDXImage(installMedia) {
                     QemuDiskImageManager().createDiskImage(virtualHDD, vm.path, uponCompletion: {
-                        _ in
+                        _, _ in
                         QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
                         vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
                         self.complete = true

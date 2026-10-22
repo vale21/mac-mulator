@@ -268,7 +268,7 @@ class QemuUtils {
             .withCommand(QemuConstants.IMAGE_CMD_VERSION)
             .build()
 
-        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
+        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode, errorMessage in
             guard terminationCode == 0 else {
                 callback(nil)
                 return
@@ -292,7 +292,7 @@ class QemuUtils {
         })
     }
 
-    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
             try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
@@ -305,10 +305,10 @@ class QemuUtils {
         try? fileManager.moveItem(atPath: virtualMachine.path + "/" + QemuConstants.OPENCORE + ".img", toPath: virtualMachine.path + "/opencore-0.img")
         try? fileManager.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/__MACOSX"))
         let shell = Shell()
-        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode, errorMessage  in
 
             let shell2 = Shell()
-            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode in
+            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                 let json = shell2.stdout
                 print(json)
                 let jsonData = json.data(using: .utf8)!
@@ -323,7 +323,7 @@ class QemuUtils {
                 let machineDetails = systemProfilerData?.SPHardwareDataType[0]
 
                 let shell3 = Shell()
-                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode in
+                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                     do {
                         var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template")
 
@@ -343,8 +343,8 @@ class QemuUtils {
                         try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8)
 
                         let shell4 = Shell()
-                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode in
-                            callback(terminationCode)
+                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
+                            callback(terminationCode, errorMessage)
                         })
                     } catch {
                         print("ERROR while reading/writing OpenCore config.plist: " + error.localizedDescription)

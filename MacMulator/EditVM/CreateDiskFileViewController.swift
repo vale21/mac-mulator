@@ -33,7 +33,7 @@ class CreateDiskFileViewController: NSViewController {
 
         if let newVirtualDrive {
             var complete = false
-            var error = false
+            var error: String? = nil
 
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
             DispatchQueue.main.async {
@@ -41,9 +41,9 @@ class CreateDiskFileViewController: NSViewController {
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
                     diskImageManager.createDiskImage(newVirtualDrive, newVirtualDrive.path, uponCompletion: {
-                        code in
+                        errorCode, errorMessage in
                         complete = true
-                        error = code != 0
+                        error = errorCode != 0 ? errorMessage : nil
                     })
                     newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
@@ -52,9 +52,9 @@ class CreateDiskFileViewController: NSViewController {
                         DispatchQueue.main.async {
                             self.updateProgress(percentage)
                         }
-                    }, uponCompletion: { code in
+                    }, uponCompletion: { errorCode, errorMessage in
                         complete = true
-                        error = code != 0
+                        error = errorCode != 0 ? errorMessage : nil
                     })
                 }
             }
@@ -66,10 +66,10 @@ class CreateDiskFileViewController: NSViewController {
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
 
-                    if !error {
+                    if (error == nil) {
                         self.parentController!.diskCreated()
                     } else {
-                        self.parentController!.diskFailedCreation()
+                        self.parentController!.diskFailedCreation(error: error ?? "")
                     }
                     return
                 }

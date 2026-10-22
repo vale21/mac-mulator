@@ -8,11 +8,11 @@
 import Foundation
 
 class QemuDiskImageManager: DiskImageManager {
-    func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
     }
 
-    private func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    private func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
@@ -27,7 +27,7 @@ class QemuDiskImageManager: DiskImageManager {
         shell.runCommand(command, path, uponCompletion: callback)
     }
 
-    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
+    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 
@@ -41,7 +41,7 @@ class QemuDiskImageManager: DiskImageManager {
         shell.runCommand(command, path, uponCompletion: callback)
     }
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32) -> Void) {
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
 
@@ -60,21 +60,21 @@ class QemuDiskImageManager: DiskImageManager {
             .withTargetName(Utils.escape(tempPath))
             .build()
 
-        shell.runCommand(command, path, uponCompletion: { terminationCode in
+        shell.runCommand(command, path, uponCompletion: { terminationCode, errorMessage in
             guard terminationCode == 0 else {
                 print("Failed to convert disk image to " + format + ": " + shell.readFromConsole())
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(terminationCode)
+                callback(terminationCode, errorMessage)
                 return
             }
 
             do {
                 _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
-                callback(0)
+                callback(0, nil)
             } catch {
                 print("Failed to replace disk image with converted " + format + " image: \(error)")
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(-1)
+                callback(-1, "Failed to replace disk image with converted " + format + " image: \(error)")
             }
         })
     }
@@ -90,7 +90,7 @@ class QemuDiskImageManager: DiskImageManager {
             .build()
 
         shell.runCommand(command, vmPath, uponCompletion: {
-            terminationCode in
+            terminationCode, errorMessage in
 
             if terminationCode == 0 {
                 self.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {
@@ -126,8 +126,8 @@ class QemuDiskImageManager: DiskImageManager {
             .withName(drivePath)
             .build()
 
-        shell.runCommand(command, path, uponCompletion: { terminationCcode in
-            callback(terminationCcode, shell.readFromStandardOutput())
+        shell.runCommand(command, path, uponCompletion: { terminationCode, errorMessage in
+            callback(terminationCode, (terminationCode == 0 ? shell.readFromStandardOutput() : errorMessage) ?? shell.readFromStandardError())
         })
     }
 }

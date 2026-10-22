@@ -33,7 +33,7 @@ class QemuRunner: VirtualMachineRunner {
             try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: QemuUtils.getQemuPath(for: managedVm)) {
                 validationResult, error in
                 if validationResult {
-                    self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result in
+                    self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result, errorMessage in
                         callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
                     })
                 } else {

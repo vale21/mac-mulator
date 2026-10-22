@@ -452,7 +452,7 @@ class VirtualMachineViewController: NSViewController {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
                 let swTpmPath = QemuUtils.getQemuPath(for: vm)
                 let shell = Shell()
-                shell.runCommand(Utils.escape(swTpmPath) + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: vm.path)) + "  --log level=20 --tpm2", vm.path, uponCompletion: { _ in
+                shell.runCommand(Utils.escape(swTpmPath) + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: vm.path)) + "  --log level=20 --tpm2", vm.path, uponCompletion: { _, _ in
                     print("swtpm done")
                 })
             }

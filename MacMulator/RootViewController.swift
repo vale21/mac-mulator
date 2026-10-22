@@ -222,7 +222,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         let vmToClone = virtualMachines[index]
         let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
         let shell = Shell()
-        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _ in
+        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _, _ in
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
             if let tempVm = temp {
                 tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)

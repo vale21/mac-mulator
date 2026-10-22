@@ -10,7 +10,7 @@ import DiskImageKit
 
 class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
-    func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         if #available(macOS 26.0, *), virtualDrive.format == QemuConstants.FORMAT_ASIF {
             createASIFDiskImage(virtualDrive, path, uponCompletion: callback)
         } else {
@@ -19,7 +19,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     }
 
     @available(macOS 26.0, *)
-    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
 
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
         
@@ -35,10 +35,10 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                         blockSize: .bytes512
                     )
                 )
-                callback(0)
+                callback(0, nil)
             } catch {
                 print("Failed to create ASIF disk image: \(error)")
-                callback(-1)
+                callback(-1, "Failed to create ASIF disk image: \(error)")
             }
         } else {
             let shell = Shell()
@@ -48,7 +48,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
         if #available(macOS 27.0, *) {
             let blockSize: Int = 512
@@ -61,10 +61,10 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                         blockCount: Int(blockCount)
                     )
                 )
-                callback(0)
+                callback(0, nil)
             } catch {
                 print("Failed to create RAW disk image: \(error)")
-                callback(-1)
+                callback(-1, "Failed to create RAW disk image: \(error)")
             }
         } else {
             // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
@@ -72,7 +72,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
+    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let newSizeInBytes = Int(virtualDrive.size) * 1000 * 1000 * 1000
 
         if #available(macOS 27.0, *) {
@@ -80,10 +80,10 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 do {
                     let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: virtualDrive.path), mode: .readWrite))
                     try diskImage.truncate(blockCount: newSizeInBytes / diskImage.blockSize.rawValue)
-                    callback(0)
+                    callback(0, nil)
                 } catch {
                     print("Failed to resize disk image: \(error)")
-                    callback(-1)
+                    callback(-1, "Failed to resize disk image: \(error)")
                 }
             }
         } else {
@@ -93,7 +93,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                     QemuDiskImageManager().resizeDiskImage(virtualDrive, path, shrink: shrink, uponCompletion: callback)
                 } else {
                     print("Cannot resize disk image of format \(virtualDrive.format) inside the App Store sandbox on macOS < 27.0")
-                    callback(-1)
+                    callback(-1, "Cannot resize disk image of format \(virtualDrive.format) inside the App Store sandbox on macOS < 27.0")
                 }
             #else
                 let shell = Shell()
@@ -105,7 +105,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32) -> Void) {
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
 
@@ -124,27 +124,25 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
         let command = "/usr/sbin/diskutil image create from --format " + format + " " + Utils.escape(drivePath) + " " + Utils.escape(tempPath)
 
-        shell.runCommand(command, path, uponCompletion: { terminationCode in
+        shell.runCommand(command, path, uponCompletion: { terminationCode, errorMessage in
             guard terminationCode == 0 else {
-                print("Failed to convert disk image to " + format + ": " + shell.readFromConsole())
+                print("Failed to convert disk image to " + format + ": " + (errorMessage ?? shell.readFromStandardError()))
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(terminationCode)
+                callback(terminationCode, errorMessage)
                 return
             }
 
             do {
                 _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
-                callback(0)
+                callback(0, nil)
             } catch {
                 print("Failed to replace disk image with converted " + format + " image: \(error)")
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(-1)
+                callback(-1, "Failed to replace disk image with converted " + format + " image: \(error)")
             }
         })
     }
 
-    /// Extracts the latest percentage from diskutil's progress output, which is a sequence of
-    /// carriage-return separated markers like "\r[42% completed] ".
     private func parseConversionProgress(_ output: String) -> Double? {
         let marker = "% completed]"
         guard let markerRange = output.range(of: marker, options: .backwards),

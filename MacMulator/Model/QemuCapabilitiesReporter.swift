@@ -375,7 +375,7 @@ class QemuCapabilitiesReporter {
         // Shell completes on a background queue, so blocking the calling thread here cannot deadlock.
         let shell = Shell()
         let semaphore = DispatchSemaphore(value: 0)
-        shell.runCommand(command, qemuPath, uponCompletion: { _ in
+        shell.runCommand(command, qemuPath, uponCompletion: { _, _ in
             semaphore.signal()
         })
         semaphore.wait()
