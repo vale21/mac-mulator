@@ -35,7 +35,7 @@ class CreateDiskFileViewController: NSViewController {
             var complete = false
             var error: String? = nil
 
-            let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
+            _ = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
             DispatchQueue.main.async {
                 let diskImageManager = DiskImageManagerFactory().create(isVirtualizationFrameworkInUse: self.isVirtualizaionFrameworkInUse)
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {

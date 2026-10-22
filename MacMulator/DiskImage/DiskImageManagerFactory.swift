@@ -14,4 +14,11 @@ class DiskImageManagerFactory {
         }
         return QemuDiskImageManager()
     }
+
+    func create(forVM: VirtualMachine) -> DiskImageManager {
+        if forVM.type == MacMulatorConstants.APPLE_VM {
+            return VirtualizationFrameworkDiskImageManager()
+        }
+        return QemuDiskImageManager()
+    }
 }

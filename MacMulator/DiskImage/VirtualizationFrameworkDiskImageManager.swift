@@ -126,7 +126,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             guard terminationCode == 0 else {
                 print("Failed to convert disk image to " + format + ": " + (errorMessage ?? shell.readFromStandardError()))
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(terminationCode, errorMessage)
+                callback(terminationCode, errorMessage.map { self.pruneConversionProgress($0) })
                 return
             }
 
@@ -139,6 +139,16 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 callback(-1, "Failed to replace disk image with converted " + format + " image: \(error)")
             }
         })
+    }
+
+    private func pruneConversionProgress(_ message: String) -> String {
+        message
+            .replacingOccurrences(of: "\\[\\s*\\d+(\\.\\d+)?% completed\\][ \\t]*", with: "", options: .regularExpression)
+            .split(whereSeparator: \.isNewline)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func parseConversionProgress(_ output: String) -> Double? {
