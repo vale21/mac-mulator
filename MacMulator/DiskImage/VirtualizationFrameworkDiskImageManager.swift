@@ -105,7 +105,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
 
@@ -114,6 +114,13 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         try? FileManager.default.removeItem(atPath: tempPath)
 
         let shell = Shell()
+        if let progress {
+            shell.outputHandler = { output in
+                if let percentage = self.parseConversionProgress(output) {
+                    progress(percentage)
+                }
+            }
+        }
 
         let command = "/usr/sbin/diskutil image create from --format " + format + " " + Utils.escape(drivePath) + " " + Utils.escape(tempPath)
 
@@ -134,6 +141,17 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 callback(-1)
             }
         })
+    }
+
+    /// Extracts the latest percentage from diskutil's progress output, which is a sequence of
+    /// carriage-return separated markers like "\r[42% completed] ".
+    private func parseConversionProgress(_ output: String) -> Double? {
+        let marker = "% completed]"
+        guard let markerRange = output.range(of: marker, options: .backwards),
+              let openBracket = output.range(of: "[", options: .backwards, range: output.startIndex..<markerRange.lowerBound) else {
+            return nil
+        }
+        return Double(output[openBracket.upperBound..<markerRange.lowerBound].trimmingCharacters(in: .whitespaces))
     }
 
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {

@@ -12,13 +12,14 @@ protocol DiskImageManager {
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void)
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void)
+    /// `progress`, when supported by the implementation, is called with the completion percentage (0-100) while converting.
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32) -> Void)
 
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void)
 }
 
 extension DiskImageManager {
-    func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, progress: ((Double) -> Void)? = nil, uponCompletion callback: @escaping (Int32) -> Void) {
         let resizeIfNeeded: (Int32) -> Void = { terminationCode in
             guard terminationCode == 0, newVirtualDrive.size != oldVirtualDrive.size else {
                 callback(terminationCode)
@@ -28,7 +29,7 @@ extension DiskImageManager {
         }
 
         if newVirtualDrive.format != oldVirtualDrive.format {
-            convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, uponCompletion: resizeIfNeeded)
+            convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, progress: progress, uponCompletion: resizeIfNeeded)
         } else {
             resizeIfNeeded(0)
         }

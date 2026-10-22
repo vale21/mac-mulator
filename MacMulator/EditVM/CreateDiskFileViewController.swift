@@ -33,6 +33,7 @@ class CreateDiskFileViewController: NSViewController {
 
         if let newVirtualDrive {
             var complete = false
+            var error = false
 
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
             DispatchQueue.main.async {
@@ -40,14 +41,20 @@ class CreateDiskFileViewController: NSViewController {
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
                     diskImageManager.createDiskImage(newVirtualDrive, newVirtualDrive.path, uponCompletion: {
-                        _ in
+                        code in
                         complete = true
+                        error = code != 0
                     })
                     newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)
-                    diskImageManager.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
+                    diskImageManager.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), progress: { percentage in
+                        DispatchQueue.main.async {
+                            self.updateProgress(percentage)
+                        }
+                    }, uponCompletion: { code in
                         complete = true
+                        error = code != 0
                     })
                 }
             }
@@ -59,10 +66,24 @@ class CreateDiskFileViewController: NSViewController {
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
 
-                    self.parentController!.diskCreated()
+                    if !error {
+                        self.parentController!.diskCreated()
+                    } else {
+                        self.parentController!.diskFailedCreation()
+                    }
                     return
                 }
             })
         }
+    }
+
+    private func updateProgress(_ percentage: Double) {
+        if progressBar.isIndeterminate {
+            progressBar.stopAnimation(self)
+            progressBar.isIndeterminate = false
+            progressBar.minValue = 0
+            progressBar.maxValue = 100
+        }
+        progressBar.doubleValue = percentage
     }
 }

@@ -17,6 +17,9 @@ class Shell {
     var stderr: String = ""
     var output: String = ""
 
+    /// Optional handler invoked with each new chunk of output (stdout or stderr) as soon as it is read.
+    var outputHandler: ((String) -> Void)?
+
     private func setupStandardOutput() {
         task.standardOutput = pipe_out
         pipe_out.fileHandleForReading.readabilityHandler = { fileHandle in
@@ -25,6 +28,7 @@ class Shell {
             if let out = newOutput, !out.isEmpty {
                 self.stdout.append(contentsOf: out)
                 self.output.append(contentsOf: out)
+                self.outputHandler?(out)
             }
         }
     }
@@ -37,6 +41,7 @@ class Shell {
             if let out = newOutput, !out.isEmpty {
                 self.stderr.append(contentsOf: out)
                 self.output.append(contentsOf: out)
+                self.outputHandler?(out)
             }
         }
     }

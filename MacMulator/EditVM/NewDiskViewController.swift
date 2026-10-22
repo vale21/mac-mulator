@@ -205,4 +205,9 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
         }
         dismiss(self)
     }
+    
+    func diskFailedCreation() {
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewDiskViewController.diskCreationFailed", comment: ""), virtualMachine: nil)
+        dismiss(self)
+    }
 }
