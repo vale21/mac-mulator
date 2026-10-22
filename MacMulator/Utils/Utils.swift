@@ -161,7 +161,7 @@ class Utils {
     }
 
     static func computeSizeOfPhysicalDrive(_ path: String, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        QemuUtils.getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
+        QemuDiskImageManager().getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
             infoCode, output in
             if infoCode == 0 {
                 let driveSize = Utils.extractDriveSize(output)

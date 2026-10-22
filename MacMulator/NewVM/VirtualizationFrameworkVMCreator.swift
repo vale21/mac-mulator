@@ -132,17 +132,10 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             vm.addVirtualDrive(installMedia)
         }
 
-        if #available(macOS 26.0, *), Utils.isAsifSupported(vm) {
-            VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                terminationCcode in
-                callback(terminationCcode)
-            })
-        } else {
-            VirtualizationFrameworkUtils.createRAWDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                terminationCcode in
-                callback(terminationCcode)
-            })
-        }
+        VirtualizationFrameworkDiskImageManager().createDiskImage(virtualHDD, vm.path, uponCompletion: {
+            terminationCcode in
+            callback(terminationCcode)
+        })
     }
 
     fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {

@@ -115,14 +115,14 @@ class QemuVMCreator: VMCreator {
             try Utils.createDocumentPackage(vm.path)
             if let virtualHDD {
                 if !Utils.isVHDXImage(installMedia) {
-                    QemuUtils.createDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                    QemuDiskImageManager().createDiskImage(virtualHDD, vm.path, uponCompletion: {
                         _ in
                         QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
                         vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
                         self.complete = true
                     })
                 } else {
-                    QemuUtils.convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
+                    QemuDiskImageManager().convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
                         _, driveSize in
                         virtualHDD.size = driveSize
                         QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)

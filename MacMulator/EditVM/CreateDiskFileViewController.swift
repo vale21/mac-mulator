@@ -36,38 +36,19 @@ class CreateDiskFileViewController: NSViewController {
 
             let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
             DispatchQueue.main.async {
+                let diskImageManager = DiskImageManagerFactory().create(isVirtualizationFrameworkInUse: self.isVirtualizaionFrameworkInUse)
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
-                    if self.isVirtualizaionFrameworkInUse {
-                        if #available(macOS 26.0, *), newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
-                            VirtualizationFrameworkUtils.createASIFDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                                _ in
-                                complete = true
-                            })
-                        } else {
-                            VirtualizationFrameworkUtils.createRAWDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                                _ in
-                                complete = true
-                            })
-                        }
-                    } else {
-                        QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                            _ in
-                            complete = true
-                        })
-                    }
+                    diskImageManager.createDiskImage(newVirtualDrive, newVirtualDrive.path, uponCompletion: {
+                        _ in
+                        complete = true
+                    })
                     newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)
-                    if self.isVirtualizaionFrameworkInUse, newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
-                        VirtualizationFrameworkUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
-                            complete = true
-                        })
-                    } else {
-                        QemuUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
-                            complete = true
-                        })
-                    }
+                    diskImageManager.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
+                        complete = true
+                    })
                 }
             }
 

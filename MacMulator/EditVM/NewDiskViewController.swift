@@ -61,10 +61,6 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                             } else {
                                 useCow.intValue = 0
                             }
-                            if mode == Mode.EDIT {
-                                useCow.isEnabled = false
-                                useCow.toolTip = "Updating this property on an existing drive is not supported at the moment"
-                            }
                         } else {
                             newVirtualDrive.format = QemuConstants.FORMAT_RAW
 
