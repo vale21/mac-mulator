@@ -5,11 +5,10 @@
 //  Created by Vale on 27/06/23.
 //
 
-import Foundation
 import DiskImageKit
+import Foundation
 
 class VirtualizationFrameworkDiskImageManager: DiskImageManager {
-
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         if #available(macOS 26.0, *), virtualDrive.format == QemuConstants.FORMAT_ASIF {
             createASIFDiskImage(virtualDrive, path, uponCompletion: callback)
@@ -20,13 +19,12 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
     @available(macOS 26.0, *)
     private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-        
+
         if #available(macOS 27.0, *) {
-            let blockSize: Int = 512
+            let blockSize = 512
             let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
-            
+
             do {
                 _ = try DiskImage(
                     creating: .asif(
@@ -43,7 +41,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         } else {
             let shell = Shell()
             let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
-            
+
             shell.runCommand(command, path, uponCompletion: callback)
         }
     }
@@ -51,9 +49,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
         if #available(macOS 27.0, *) {
-            let blockSize: Int = 512
+            let blockSize = 512
             let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
-            
+
             do {
                 _ = try DiskImage(
                     creating: .raw(
@@ -88,7 +86,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             }
         } else {
             #if APPSTORE
-            if virtualDrive.format == QemuConstants.FORMAT_RAW {
+                if virtualDrive.format == QemuConstants.FORMAT_RAW {
                     // Fallback to qemu-img for RAW images on macOS < 27.0 inside the App Store sandbox, since diskutil does not support resizing RAW images.
                     QemuDiskImageManager().resizeDiskImage(virtualDrive, path, shrink: shrink, uponCompletion: callback)
                 } else {
@@ -105,7 +103,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat _: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
 
@@ -146,10 +144,11 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     private func parseConversionProgress(_ output: String) -> Double? {
         let marker = "% completed]"
         guard let markerRange = output.range(of: marker, options: .backwards),
-              let openBracket = output.range(of: "[", options: .backwards, range: output.startIndex..<markerRange.lowerBound) else {
+              let openBracket = output.range(of: "[", options: .backwards, range: output.startIndex ..< markerRange.lowerBound)
+        else {
             return nil
         }
-        return Double(output[openBracket.upperBound..<markerRange.lowerBound].trimmingCharacters(in: .whitespaces))
+        return Double(output[openBracket.upperBound ..< markerRange.lowerBound].trimmingCharacters(in: .whitespaces))
     }
 
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
@@ -164,12 +163,12 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
                     // Layer details are only meaningful for images that are part of a stack.
                     var identityInfo: [(String, String)] = []
-                        if let layerUUID = diskImage.layerUUID {
-                            identityInfo.append(("UUID", layerUUID.uuidString))
-                        }
-                        if let parentUUID = diskImage.parentUUID {
-                            identityInfo.append(("Stable UUID", parentUUID.uuidString))
-                        }
+                    if let layerUUID = diskImage.layerUUID {
+                        identityInfo.append(("UUID", layerUUID.uuidString))
+                    }
+                    if let parentUUID = diskImage.parentUUID {
+                        identityInfo.append(("Stable UUID", parentUUID.uuidString))
+                    }
 
                     callback(0, self.formatDiskImageInfo(
                         drivePath,
@@ -206,12 +205,12 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
     private func formatDiskImageInfo(_ drivePath: String, format: String, sectorCount: Int, blockSize: Int, identityInfo: [(String, String)] = []) -> String {
         var info = formatHeader(format)
-        
+
         info += "\n\tIdentity Info:\n"
         for (key, value) in identityInfo {
             info += "\t\t" + key + ": " + value + "\n"
-            }
-        
+        }
+
         let totalBytes = sectorCount * blockSize
         let (logical, allocated) = fileSizes(drivePath) ?? (0, nil)
 
@@ -248,7 +247,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
     private func formatFileSizes(logical: Int, allocated: Int?) -> String {
         var info = "\t\tFile Size: " + String(logical) + "\n"
-        if let allocated = allocated {
+        if let allocated {
             info += "\t\tAllocated On Disk: " + String(allocated) + "\n"
         }
         return info

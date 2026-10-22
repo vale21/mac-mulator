@@ -41,7 +41,7 @@ class QemuDiskImageManager: DiskImageManager {
         shell.runCommand(command, path, uponCompletion: callback)
     }
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress _: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
 
@@ -90,7 +90,7 @@ class QemuDiskImageManager: DiskImageManager {
             .build()
 
         shell.runCommand(command, vmPath, uponCompletion: {
-            terminationCode, errorMessage in
+            terminationCode, _ in
 
             if terminationCode == 0 {
                 self.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {

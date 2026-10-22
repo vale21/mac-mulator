@@ -63,7 +63,7 @@ class StartVMViewController: NSViewController {
 
                 if QemuUtils.requiresOpenCore(virtualMachine) {
                     QemuUtils.populateOpenCoreConfig(virtualMachine: virtualMachine, uponCompletion: {
-                        terminationCode, errorMessage in
+                        terminationCode, _ in
                         if terminationCode == 0 {
                             openCoreComplete = true
                         }

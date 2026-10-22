@@ -268,7 +268,7 @@ class QemuUtils {
             .withCommand(QemuConstants.IMAGE_CMD_VERSION)
             .build()
 
-        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode, errorMessage in
+        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode, _ in
             guard terminationCode == 0 else {
                 callback(nil)
                 return
@@ -305,7 +305,7 @@ class QemuUtils {
         try? fileManager.moveItem(atPath: virtualMachine.path + "/" + QemuConstants.OPENCORE + ".img", toPath: virtualMachine.path + "/opencore-0.img")
         try? fileManager.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/__MACOSX"))
         let shell = Shell()
-        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode, errorMessage  in
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode, errorMessage in
 
             let shell2 = Shell()
             shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in

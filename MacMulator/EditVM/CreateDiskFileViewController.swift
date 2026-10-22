@@ -66,7 +66,7 @@ class CreateDiskFileViewController: NSViewController {
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
 
-                    if (error == nil) {
+                    if error == nil {
                         self.parentController!.diskCreated()
                     } else {
                         self.parentController!.diskFailedCreation(error: error ?? "")
