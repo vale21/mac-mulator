@@ -182,7 +182,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
                     callback(0, self.formatDiskImageInfo(
                         drivePath,
-                        format: String(describing: diskImage.format).uppercased(),
+                        format: String(describing: diskImage.format),
                         sectorCount: diskImage.blockCount,
                         blockSize: diskImage.blockSize.rawValue,
                         identityInfo: identityInfo
@@ -216,7 +216,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     private func formatDiskImageInfo(_ drivePath: String, format: String, sectorCount: Int, blockSize: Int, identityInfo: [(String, String)] = []) -> String {
         var info = formatHeader(format)
 
-        info += "\n\tIdentity Info:\n"
+        if !identityInfo.isEmpty {
+            info += "\n\tIdentity Info:\n"
+        }
         for (key, value) in identityInfo {
             info += "\t\t" + key + ": " + value + "\n"
         }
@@ -225,17 +227,17 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         let (logical, allocated) = fileSizes(drivePath) ?? (0, nil)
 
         info += "\n\tSize Info:\n"
-        info += "\t\tEmpty Bytes: " + String(totalBytes - (allocated ?? logical)) + "\n"
+        info += "\t\tEmpty Bytes: " + formatBytes(totalBytes - (allocated ?? logical)) + "\n"
         info += "\t\tBlock Size: \(blockSize)\n"
         info += "\t\tSector Count: \(sectorCount)\n"
-        info += "\t\tTotal Bytes: " + String(totalBytes) + "\n"
+        info += "\t\tTotal Bytes: " + formatBytes(totalBytes) + "\n"
         info += formatFileSizes(logical: logical, allocated: allocated)
 
         return info
     }
 
     private func formatBasicDiskImageInfo(_ drivePath: String, virtualDrive: VirtualDrive?) -> String {
-        var info = formatHeader(virtualDrive?.format.uppercased())
+        var info = formatHeader(virtualDrive?.format)
 
         info += "\n\tSize Info:\n"
         if let virtualDrive {
@@ -249,16 +251,18 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
     private func formatHeader(_ format: String?) -> String {
         var info = "Image Format: " + (format ?? "Unknown") + "\n"
-        if format == "ASIF" {
+        if format == QemuConstants.FORMAT_ASIF {
             info += "Format Description: Apple sparse image\n"
+        } else if format == QemuConstants.FORMAT_RAW {
+            info += "Format Description: RAW read-write image\n"
         }
         return info
     }
 
     private func formatFileSizes(logical: Int, allocated: Int?) -> String {
-        var info = "\t\tFile Size: " + String(logical) + "\n"
+        var info = "\t\tFile Size: " + formatBytes(logical) + "\n"
         if let allocated {
-            info += "\t\tAllocated On Disk: " + String(allocated) + "\n"
+            info += "\t\tAllocated On Disk: " + formatBytes(allocated) + "\n"
         }
         return info
     }
@@ -267,5 +271,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         let values = try? URL(fileURLWithPath: path).resourceValues(forKeys: [.fileSizeKey, .totalFileAllocatedSizeKey])
         guard let logical = values?.fileSize else { return nil }
         return (logical, values?.totalFileAllocatedSize)
+    }
+
+    fileprivate func formatBytes(_ bytes: Int) -> String {
+        "\(bytes) (" + ByteCountFormatter.string(fromByteCount: Int64(bytes), countStyle: .file) + ")"
     }
 }
