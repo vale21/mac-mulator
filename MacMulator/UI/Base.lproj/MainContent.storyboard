@@ -5135,17 +5135,26 @@ Rocky Linux</string>
             <objects>
                 <viewController id="RSg-f6-UZF" customClass="ConvertVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Cz6-3i-Wzp">
-                        <rect key="frame" x="0.0" y="0.0" width="379" height="82"/>
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="107"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="0JI-kX-8jR">
-                                <rect key="frame" x="20" y="19" width="339" height="20"/>
+                                <rect key="frame" x="20" y="44" width="339" height="20"/>
                             </progressIndicator>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abd-zG-JTc">
-                                <rect key="frame" x="18" y="46" width="343" height="16"/>
+                                <rect key="frame" x="18" y="71" width="343" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Converting VM. Please wait..." id="Z5l-NT-HNg">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fta-r4-wzk">
+                                <rect key="frame" x="18" y="20" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="9Tn-vb-979">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -5161,12 +5170,13 @@ Rocky Linux</string>
                     </view>
                     <connections>
                         <outlet property="convertingVMLabel" destination="Abd-zG-JTc" id="loA-on-znb"/>
-                        <outlet property="convertingVMProgressBar" destination="0JI-kX-8jR" id="etN-1u-oDe"/>
+                        <outlet property="estimateTimeRemainingLabel" destination="fta-r4-wzk" id="y1d-3k-FDc"/>
+                        <outlet property="progressBar" destination="0JI-kX-8jR" id="etN-1u-oDe"/>
                     </connections>
                 </viewController>
                 <customObject id="RFc-HB-pEs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="173" y="1708"/>
+            <point key="canvasLocation" x="172.5" y="1720.5"/>
         </scene>
     </scenes>
     <resources>
