@@ -118,6 +118,33 @@ class VirtualMachineViewController: NSViewController {
         }, virtualMachine: rootController?.currentVm)
     }
 
+    @available(macOS 13.0, *)
+    func convertToQemuMenuBarClicked(_: Any, _: Bool = true) {
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+    }
+
+    @available(macOS 13.0, *)
+    func convertToAppleMenuBarClicked(_: Any) {
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+    }
+
+    func vmConverted(_ vm: VirtualMachine) {
+        setVirtualMachine(vm)
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: vm)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: vm)
+        }
+    }
+
+    func vmFailedConversion(_ vm: VirtualMachine, _ error: String) {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Conversion to QEMU failed: " + error, virtualMachine: vm)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Conversion to Apple failed: " + error, virtualMachine: vm)
+        }
+    }
+
     func createVMSnapshot(sender _: Any) {
         if let vm = rootController?.currentVm, let rootController {
             do {
@@ -152,6 +179,17 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
+    override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
+        if identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
+            if #available(macOS 14.0, *) {
+                return true
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
@@ -184,6 +222,14 @@ class VirtualMachineViewController: NSViewController {
             dest.setVirtualMachine(vmToStart.vm)
             dest.setRecoveryMode(vmToStart.inRecovery)
             dest.setVmController(source)
+        } else if segue.identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
+            if #available(macOS 14.0, *), let rootController, let currentVM = rootController.currentVm {
+                let source = segue.sourceController as! VirtualMachineViewController
+                let dest = segue.destinationController as! ConvertVMViewController
+
+                dest.setVirtualMachine(currentVM)
+                dest.setParentController(source)
+            }
         }
     }
 

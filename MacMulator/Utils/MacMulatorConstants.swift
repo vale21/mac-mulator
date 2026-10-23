@@ -48,6 +48,7 @@ class MacMulatorConstants {
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     static let START_VM_SEGUE = "startVMSegue"
+    static let CONVERT_VM_SEGUE = "convertVMSegue"
     static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
 
