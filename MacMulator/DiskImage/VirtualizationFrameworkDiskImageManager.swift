@@ -100,18 +100,18 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 } else {
                     // Convert to RAW, resize, and convert back to ASIF, since diskutil does not support resizing ASIF images on macOS < 27.0 inside the App Store sandbox.
                     virtualDrive.format = QemuConstants.FORMAT_RAW
-                    convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_ASIF, progress: progress, uponCompletion: { errorCode, errorMessage in
+                    convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_ASIF, progress: progress.map { report in { report($0 / 2) } }, uponCompletion: { errorCode, errorMessage in
                         guard errorCode == 0 else {
                             callback(errorCode, errorMessage)
                             return
                         }
-                        self.resizeDiskImage(virtualDrive, path, shrink: shrink, progress: progress, uponCompletion: { errorCode, errorMessage in
+                        self.resizeDiskImage(virtualDrive, path, shrink: shrink, progress: nil, uponCompletion: { errorCode, errorMessage in
                             guard errorCode == 0 else {
                                 callback(errorCode, errorMessage)
                                 return
                             }
                             virtualDrive.format = QemuConstants.FORMAT_ASIF
-                            self.convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: nil, uponCompletion: callback)
+                            self.convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: progress.map { report in { report(50 + $0 / 2) } }, uponCompletion: callback)
                         })
                     })
                 }
