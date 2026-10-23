@@ -276,3 +276,4 @@
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "Instantané de VM créé avec succès !";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "Impossible de créer l’instantané de la VM : %@";
 "AppDelegate.deviceInUse" = "%@ — utilisé par %@";
+"AppDelegate.deviceNotConnected" = "%@ (non connecté)";

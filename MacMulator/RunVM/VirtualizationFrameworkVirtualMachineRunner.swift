@@ -417,12 +417,6 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         }
                     } else {
                         self.passthroughDevices[registryID] = device
-                        if !silent, let key = UsbPassthroughManager.shared.candidates().first(where: { $0.registryID == registryID })?.key {
-                            var saved = self.managedVm.usbPassthroughDevices ?? []
-                            saved.append(key)
-                            self.managedVm.usbPassthroughDevices = saved
-                            self.managedVm.writeToPlist()
-                        }
                         NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
                     }
                 }
@@ -435,15 +429,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     @available(macOS 27.0, *)
     func detachPassthroughDevice(registryID: UInt64) {
         guard let device = passthroughDevices[registryID] as? VZUSBPassthroughDevice, let usbController = vzVirtualMachine?.usbControllers.first else { return }
-        let key = UsbPassthroughManager.shared.candidates().first(where: { $0.registryID == registryID })?.key
         usbController.detach(device: device) { _ in
             DispatchQueue.main.async {
                 self.passthroughDevices.removeValue(forKey: registryID)
-                if let key, var saved = self.managedVm.usbPassthroughDevices, let index = saved.firstIndex(of: key) {
-                    saved.remove(at: index)
-                    self.managedVm.usbPassthroughDevices = saved
-                    self.managedVm.writeToPlist()
-                }
                 NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
             }
         }

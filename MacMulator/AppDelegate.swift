@@ -101,16 +101,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @available(macOS 27.0, *)
     @IBAction func toggleUSBPassthroughMenuBarClicked(_ sender: NSMenuItem) {
-        guard let registryID = (sender.representedObject as? NSNumber)?.uint64Value,
-              let virtualMachine = rootController?.currentVm,
-              rootController?.isVMRunning(virtualMachine) == true,
-              let runner = rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner else { return }
+        guard let info = sender.representedObject as? [String: Any],
+              let key = info["key"] as? String,
+              let virtualMachine = rootController?.currentVm else { return }
+        let registryID = (info["id"] as? NSNumber)?.uint64Value
 
-        if runner.isPassthroughAttached(registryID: registryID) {
-            runner.detachPassthroughDevice(registryID: registryID)
+        var saved = virtualMachine.usbPassthroughDevices ?? []
+        let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
+        if sender.state == .on {
+            if let index = saved.firstIndex(of: key) {
+                saved.remove(at: index)
+            }
+            if let registryID, runner?.isPassthroughAttached(registryID: registryID) == true {
+                runner?.detachPassthroughDevice(registryID: registryID)
+            }
         } else {
-            runner.attachPassthroughDevice(registryID: registryID)
+            saved.append(key)
+            if let registryID, let runner, otherVMUsingPassthroughDevice(registryID, excluding: virtualMachine) == nil {
+                runner.attachPassthroughDevice(registryID: registryID)
+            }
         }
+        virtualMachine.usbPassthroughDevices = saved
+        virtualMachine.writeToPlist()
+        refreshUSBPassthroughMenu()
     }
 
     @available(macOS 27.0, *)
@@ -139,7 +152,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
 
             let candidates = UsbPassthroughManager.shared.candidates()
-            if candidates.isEmpty {
+            var autoAttachCounts: [String: Int] = [:]
+            for key in virtualMachine.usbPassthroughDevices ?? [] {
+                autoAttachCounts[key, default: 0] += 1
+            }
+
+            if candidates.isEmpty, autoAttachCounts.isEmpty {
                 let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
                 let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
                 emptyItem.isEnabled = false
@@ -148,14 +166,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             for candidate in candidates {
                 let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
                 item.target = self
-                item.representedObject = NSNumber(value: candidate.registryID)
-                item.isEnabled = runner != nil
-                item.state = runner?.isPassthroughAttached(registryID: candidate.registryID) == true ? .on : .off
-                if item.state == .off, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
+                item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID)] as [String: Any]
+                item.isEnabled = true
+                if let count = autoAttachCounts[candidate.key], count > 0 {
+                    autoAttachCounts[candidate.key] = count - 1
+                    item.state = .on
+                }
+                if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
                     item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
-                    item.isEnabled = false
                 }
                 newItems.append(item)
+            }
+            for (key, count) in autoAttachCounts.sorted(by: { $0.key < $1.key }) where count > 0 {
+                for _ in 0 ..< count {
+                    let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), key), action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
+                    item.target = self
+                    item.representedObject = ["key": key] as [String: Any]
+                    item.state = .on
+                    newItems.append(item)
+                }
             }
         } else {
             return
