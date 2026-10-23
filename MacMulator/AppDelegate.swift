@@ -190,6 +190,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
                     item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
+                    item.isEnabled = false
+                    item.state = .off
                 }
                 newItems.append(item)
             }
