@@ -27,7 +27,7 @@ class QemuDiskImageManager: DiskImageManager {
         shell.runCommand(command, path, uponCompletion: callback)
     }
 
-    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress _: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
 

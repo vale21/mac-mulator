@@ -5,7 +5,9 @@
 //  Created by Vale on 27/06/23.
 //
 
-import DiskImageKit
+#if arch(arm64)
+    import DiskImageKit
+#endif
 import Foundation
 
 class VirtualizationFrameworkDiskImageManager: DiskImageManager {
@@ -22,22 +24,24 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
 
         if #available(macOS 27.0, *) {
-            let blockSize = 512
-            let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
 
-            do {
-                _ = try DiskImage(
-                    creating: .asif(
-                        url: URL(fileURLWithPath: drivePath),
-                        blockCount: Int(blockCount),
-                        blockSize: .bytes512
+                do {
+                    _ = try DiskImage(
+                        creating: .asif(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount),
+                            blockSize: .bytes512
+                        )
                     )
-                )
-                callback(0, nil)
-            } catch {
-                print("Failed to create ASIF disk image: \(error)")
-                callback(-1, "Failed to create ASIF disk image: \(error)")
-            }
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create ASIF disk image: \(error)")
+                    callback(-1, "Failed to create ASIF disk image: \(error)")
+                }
+            #endif
         } else {
             let shell = Shell()
             let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
@@ -49,49 +53,67 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
         if #available(macOS 27.0, *) {
-            let blockSize = 512
-            let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
 
-            do {
-                _ = try DiskImage(
-                    creating: .raw(
-                        url: URL(fileURLWithPath: drivePath),
-                        blockCount: Int(blockCount)
+                do {
+                    _ = try DiskImage(
+                        creating: .raw(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount)
+                        )
                     )
-                )
-                callback(0, nil)
-            } catch {
-                print("Failed to create RAW disk image: \(error)")
-                callback(-1, "Failed to create RAW disk image: \(error)")
-            }
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create RAW disk image: \(error)")
+                    callback(-1, "Failed to create RAW disk image: \(error)")
+                }
+            #endif
         } else {
             // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
             QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
         }
     }
 
-    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let newSizeInBytes = Int(virtualDrive.size) * 1000 * 1000 * 1000
 
         if #available(macOS 27.0, *) {
-            DispatchQueue.global().async {
-                do {
-                    let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: virtualDrive.path), mode: .readWrite))
-                    try diskImage.truncate(blockCount: newSizeInBytes / diskImage.blockSize.rawValue)
-                    callback(0, nil)
-                } catch {
-                    print("Failed to resize disk image: \(error)")
-                    callback(-1, "Failed to resize disk image: \(error)")
+            #if arch(arm64)
+                DispatchQueue.global().async {
+                    do {
+                        let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: virtualDrive.path), mode: .readWrite))
+                        try diskImage.truncate(blockCount: newSizeInBytes / diskImage.blockSize.rawValue)
+                        callback(0, nil)
+                    } catch {
+                        print("Failed to resize disk image: \(error)")
+                        callback(-1, "Failed to resize disk image: \(error)")
+                    }
                 }
-            }
+            #endif
         } else {
             #if APPSTORE
                 if virtualDrive.format == QemuConstants.FORMAT_RAW {
                     // Fallback to qemu-img for RAW images on macOS < 27.0 inside the App Store sandbox, since diskutil does not support resizing RAW images.
-                    QemuDiskImageManager().resizeDiskImage(virtualDrive, path, shrink: shrink, uponCompletion: callback)
+                    QemuDiskImageManager().resizeDiskImage(virtualDrive, path, shrink: shrink, progress: progress, uponCompletion: callback)
                 } else {
-                    print("Cannot resize disk image of format \(virtualDrive.format) inside the App Store sandbox on macOS < 27.0")
-                    callback(-1, "Cannot resize disk image of format \(virtualDrive.format) inside the App Store sandbox on macOS < 27.0")
+                    // Convert to RAW, resize, and convert back to ASIF, since diskutil does not support resizing ASIF images on macOS < 27.0 inside the App Store sandbox.
+                    virtualDrive.format = QemuConstants.FORMAT_RAW
+                    convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_ASIF, progress: progress, uponCompletion: { errorCode, errorMessage in
+                        guard errorCode == 0 else {
+                            callback(errorCode, errorMessage)
+                            return
+                        }
+                        self.resizeDiskImage(virtualDrive, path, shrink: shrink, progress: progress, uponCompletion: { errorCode, errorMessage in
+                            guard errorCode == 0 else {
+                                callback(errorCode, errorMessage)
+                                return
+                            }
+                            virtualDrive.format = QemuConstants.FORMAT_ASIF
+                            self.convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: nil, uponCompletion: callback)
+                        })
+                    })
                 }
             #else
                 let shell = Shell()
@@ -167,30 +189,32 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
     private func getDiskImageInfo(_ drivePath: String, _ path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, String) -> Void) {
         if #available(macOS 27.0, *) {
-            DispatchQueue.global().async {
-                do {
-                    let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: drivePath), mode: .readOnly))
+            #if arch(arm64)
+                DispatchQueue.global().async {
+                    do {
+                        let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: drivePath), mode: .readOnly))
 
-                    // Layer details are only meaningful for images that are part of a stack.
-                    var identityInfo: [(String, String)] = []
-                    if let layerUUID = diskImage.layerUUID {
-                        identityInfo.append(("UUID", layerUUID.uuidString))
-                    }
-                    if let parentUUID = diskImage.parentUUID {
-                        identityInfo.append(("Stable UUID", parentUUID.uuidString))
-                    }
+                        // Layer details are only meaningful for images that are part of a stack.
+                        var identityInfo: [(String, String)] = []
+                        if let layerUUID = diskImage.layerUUID {
+                            identityInfo.append(("UUID", layerUUID.uuidString))
+                        }
+                        if let parentUUID = diskImage.parentUUID {
+                            identityInfo.append(("Stable UUID", parentUUID.uuidString))
+                        }
 
-                    callback(0, self.formatDiskImageInfo(
-                        drivePath,
-                        format: String(describing: diskImage.format),
-                        sectorCount: diskImage.blockCount,
-                        blockSize: diskImage.blockSize.rawValue,
-                        identityInfo: identityInfo
-                    ))
-                } catch {
-                    callback(-1, "Failed to read disk image info: \(error)")
+                        callback(0, self.formatDiskImageInfo(
+                            drivePath,
+                            format: String(describing: diskImage.format),
+                            sectorCount: diskImage.blockCount,
+                            blockSize: diskImage.blockSize.rawValue,
+                            identityInfo: identityInfo
+                        ))
+                    } catch {
+                        callback(-1, "Failed to read disk image info: \(error)")
+                    }
                 }
-            }
+            #endif
         } else {
             #if APPSTORE
                 if virtualDrive.format == QemuConstants.FORMAT_RAW {
@@ -247,7 +271,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
         info += "\n\tSize Info:\n"
         if let virtualDrive {
-            info += "\t\tConfigured Size: " + String(Int(virtualDrive.size) * 1000 * 1000 * 1000) + "\n"
+            info += "\t\tConfigured Size: " + formatBytes(Int(virtualDrive.size) * 1000 * 1000 * 1000) + "\n"
         }
         let (logical, allocated) = fileSizes(drivePath) ?? (0, nil)
         info += formatFileSizes(logical: logical, allocated: allocated)
