@@ -278,4 +278,4 @@
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM Snapshot created successfully!";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "Could not create VM snapshot: %@";
 "AppDelegate.deviceInUse" = "%@ — in use by %@";
-"AppDelegate.deviceNotConnected" = "%@ (not connected)";
+"AppDelegate.deviceNotConnected" = "%@ (not assigned to MacMulator)";

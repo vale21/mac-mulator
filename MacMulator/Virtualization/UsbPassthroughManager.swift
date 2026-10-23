@@ -20,6 +20,8 @@ struct UsbPassthroughCandidate {
 final class UsbPassthroughManager: NSObject, AAUSBAccessoryListener, @unchecked Sendable {
     static let shared = UsbPassthroughManager()
     static let didChangeNotification = Notification.Name("UsbPassthroughManagerDidChange")
+    static let didConnectNotification = Notification.Name("UsbPassthroughManagerDidConnect")
+    static let didRemoveNotification = Notification.Name("UsbPassthroughManagerDidRemove")
 
     private let lock = NSLock()
     private var accessories: [UInt64: AAUSBAccessory] = [:]
@@ -95,6 +97,9 @@ final class UsbPassthroughManager: NSObject, AAUSBAccessoryListener, @unchecked 
         lock.lock()
         accessories[usbAccessory.registryID] = usbAccessory
         lock.unlock()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Self.didConnectNotification, object: nil)
+        }
         notifyChange()
     }
 
@@ -102,6 +107,9 @@ final class UsbPassthroughManager: NSObject, AAUSBAccessoryListener, @unchecked 
         lock.lock()
         accessories.removeValue(forKey: usbAccessory.registryID)
         lock.unlock()
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Self.didRemoveNotification, object: nil, userInfo: ["registryID": usbAccessory.registryID])
+        }
         notifyChange()
     }
 
@@ -126,7 +134,7 @@ final class UsbPassthroughManager: NSObject, AAUSBAccessoryListener, @unchecked 
         defer { IOObjectRelease(entry) }
 
         if let product = IORegistryEntryCreateCFProperty(entry, "USB Product Name" as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue() as? String, !product.isEmpty {
-            return "\(product) (\(ids))"
+            return product
         }
         return ids
     }
