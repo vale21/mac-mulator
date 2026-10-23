@@ -99,13 +99,17 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     @available(macOS 13.0, *)
     func convertToQemuMenuBarClicked(_: Any, _ showAlert: Bool = true) {
         if let currentVm {
-            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
-            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
-            currentVm.type = MacMulatorConstants.QEMU_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            if showAlert {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: currentVm)
+            let drives = currentVm.drives.filter { $0.mediaType == QemuConstants.MEDIATYPE_DISK && $0.format == QemuConstants.FORMAT_ASIF }
+            convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_QCOW2) { success in
+                guard success else { return }
+                QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
+                VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
+                currentVm.type = MacMulatorConstants.QEMU_VM
+                currentVm.writeToPlist()
+                self.vmController?.setVirtualMachine(currentVm)
+                if showAlert {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: currentVm)
+                }
             }
         }
     }
@@ -113,13 +117,66 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
         if let currentVm {
-            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
-            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
-            currentVm.type = MacMulatorConstants.APPLE_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: currentVm)
+            var drives: [VirtualDrive] = []
+            if #available(macOS 26.0, *), currentVm.os == QemuConstants.OS_MAC {
+                drives = currentVm.drives.filter { $0.mediaType == QemuConstants.MEDIATYPE_DISK && $0.format == QemuConstants.FORMAT_QCOW2 }
+            }
+            convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_ASIF) { success in
+                guard success else { return }
+                VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
+                QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
+                currentVm.type = MacMulatorConstants.APPLE_VM
+                currentVm.writeToPlist()
+                self.vmController?.setVirtualMachine(currentVm)
+                Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: currentVm)
+            }
         }
+    }
+
+    /// Converts the given drives one after the other; the completion runs on the main thread.
+    private func convertDrives(_ drives: [VirtualDrive], of vm: VirtualMachine, to format: String, uponCompletion completion: @escaping (Bool) -> Void) {
+        guard let drive = drives.first else {
+            completion(true)
+            return
+        }
+
+        convertDrive(drive, to: format, in: vm.path) { code, _ in
+            DispatchQueue.main.async {
+                vm.writeToPlist()
+                if code == 0 {
+                    self.convertDrives(Array(drives.dropFirst()), of: vm, to: format, uponCompletion: completion)
+                } else {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("RootViewController.diskConversionFailed", comment: ""), virtualMachine: vm)
+                    completion(false)
+                }
+            }
+        }
+    }
+
+    /// ASIF and QCOW2 cannot be converted directly: the drive goes through a RAW image first.
+    private func convertDrive(_ drive: VirtualDrive, to format: String, in path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let originalFormat = drive.format
+        let factory = DiskImageManagerFactory()
+        let sourceManager = factory.create(isVirtualizationFrameworkInUse: originalFormat == QemuConstants.FORMAT_ASIF)
+        let targetManager = factory.create(isVirtualizationFrameworkInUse: format == QemuConstants.FORMAT_ASIF)
+
+        drive.format = QemuConstants.FORMAT_RAW
+        sourceManager.convertDiskImage(drive, path, fromFormat: originalFormat, progress: nil, uponCompletion: { code, message in
+            guard code == 0 else {
+                drive.format = originalFormat
+                callback(code, message)
+                return
+            }
+
+            drive.format = format
+            targetManager.convertDiskImage(drive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: nil, uponCompletion: { code, message in
+                if code != 0 {
+                    // The image is left as RAW.
+                    drive.format = QemuConstants.FORMAT_RAW
+                }
+                callback(code, message)
+            })
+        })
     }
 
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {

@@ -193,6 +193,7 @@
 "RootViewController.forciblyClosing" = "Es sind VMs aktiv.\nWenn du MacMulator schließt, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "RootViewController.vmConvertedToQemu" = "Die VM wurde erfolgreich ins QEMU-Format konvertiert.";
 "RootViewController.vmConvertedToApple" = "Die VM wurde erfolgreich ins Apple-Format konvertiert.";
+"RootViewController.diskConversionFailed" = "Die Festplattenkonvertierung ist fehlgeschlagen. Die VM wurde nicht konvertiert.";
 "RootViewController.cloneOf" = "Klon von %@";
 "StartVMViewController.startVMLabel" = "VM wird gestartet. Bitte warten...";
 "Utils.sudoNotAllowed" = "Falscher Qemu-Befehl angegeben: Die Verwendung von sudo ist nicht erlaubt.";
