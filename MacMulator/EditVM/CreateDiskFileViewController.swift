@@ -10,6 +10,7 @@ import Cocoa
 class CreateDiskFileViewController: NSViewController {
     @IBOutlet var diskProgressLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!
+    @IBOutlet var estimateTimeRemainingLabel: NSTextField!
 
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
@@ -30,6 +31,7 @@ class CreateDiskFileViewController: NSViewController {
 
     override func viewDidAppear() {
         progressBar.startAnimation(self)
+        setEstimateTimeRemainingVisible(false)
 
         if let newVirtualDrive {
             var complete = false
@@ -59,9 +61,15 @@ class CreateDiskFileViewController: NSViewController {
                 }
             }
 
+            let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
 
-                guard !complete else {
+                if !complete, !self.progressBar.isIndeterminate {
+                    let progress = self.progressBar.doubleValue
+                    if progress > 10 {
+                        self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progressBar.doubleValue))
+                    }
+                } else {
                     timer.invalidate()
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
@@ -77,12 +85,30 @@ class CreateDiskFileViewController: NSViewController {
         }
     }
 
+    private func setEstimateTimeRemainingVisible(_ visible: Bool) {
+        estimateTimeRemainingLabel.isHidden = !visible
+        let size = NSSize(width: view.frame.width, height: visible ? 107 : 82)
+        if let window = view.window {
+            // Subviews are pinned to the top, so keep the top edge fixed while resizing.
+            var frame = window.frame
+            let newHeight = window.frameRect(forContentRect: NSRect(origin: .zero, size: size)).height
+            frame.origin.y += frame.height - newHeight
+            frame.size.height = newHeight
+            window.setFrame(frame, display: true, animate: true)
+        } else {
+            preferredContentSize = size
+        }
+    }
+
     private func updateProgress(_ percentage: Double) {
         if progressBar.isIndeterminate {
             progressBar.stopAnimation(self)
             progressBar.isIndeterminate = false
             progressBar.minValue = 0
             progressBar.maxValue = 100
+
+            setEstimateTimeRemainingVisible(true)
+            estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
         }
         progressBar.doubleValue = percentage
     }

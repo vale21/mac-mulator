@@ -864,14 +864,18 @@ class Utils {
     }
 
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
-        let currentTime = Int64(Date().timeIntervalSince1970)
+        if progress > 0 {
+            let currentTime = Int64(Date().timeIntervalSince1970)
 
-        let timeDelta = Double(currentTime - startTime)
-        let factor = timeDelta / progress
-        let totalTime = 100.0 * factor
-        let remainingTime = totalTime - timeDelta
+            let timeDelta = Double(currentTime - startTime)
+            let factor = timeDelta / progress
+            let totalTime = 100.0 * factor
+            let remainingTime = totalTime - timeDelta
 
-        return formatTime(remainingTime)
+            return formatTime(remainingTime)
+        } else {
+            return formatTime(0)
+        }
     }
 
     static func formatTime(_ secs: Double) -> String {
