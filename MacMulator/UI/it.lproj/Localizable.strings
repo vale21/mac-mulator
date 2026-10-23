@@ -17,6 +17,8 @@
 "AppDelegate.exportFailed" = "Esportazione fallita con il seguente errore: %@";
 "AppDelegate.importFailed" = "Importazione fallita con il seguente errore: %@";
 "AppDelegate.detachImage" = "Disconnetti Immagine";
+"AppDelegate.passthroughDevice" = "Passthrough Dispositivo";
+"AppDelegate.noUsbDevices" = "Nessun dispositivo USB disponibile";
 "ConsoleViewController.loading" = "Caricamento...";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "CreateDiskFileViewController.creatingDisk" = "Creo il nuovo disco...";
@@ -273,3 +275,4 @@
 "VirtualMachineViewController.editVMButton" = "Configura questa VM";
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "Istantanea VM creata con successo!";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "Non è stato possibile creare l'istantanea: %@";
+"AppDelegate.deviceInUse" = "%@ — in uso da %@";

@@ -17,6 +17,8 @@
 "AppDelegate.exportFailed" = "Export failed with error: %@";
 "AppDelegate.importFailed" = "Import failed with error: %@";
 "AppDelegate.detachImage" = "Detach Image";
+"AppDelegate.passthroughDevice" = "Pass Through Device";
+"AppDelegate.noUsbDevices" = "No USB devices available";
 "ConsoleViewController.loading" = "Loading...";
 "ConsoleViewController.vmNotRunning" = "Current VM is not running";
 "CreateDiskFileViewController.creatingDisk" = "Creating new disk...";
@@ -275,3 +277,4 @@
 "VirtualMachineViewController.editVMButton" = "Configure this VM";
 "VirtualMachineViewController.snapshotCreatedSuccessfully" = "VM Snapshot created successfully!";
 "VirtualMachineViewController.couldNotCreateSnapshot" = "Could not create VM snapshot: %@";
+"AppDelegate.deviceInUse" = "%@ — in use by %@";

@@ -14,6 +14,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     let saveFileURL: URL
     let screenshotFileURL: URL
     var vzVirtualMachine: VZVirtualMachine?
+    var passthroughDevices: [UInt64: AnyObject] = [:]
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
     var recoveryMode: Bool = false
@@ -185,6 +186,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     fileprivate func attachUSBDrives() {
+        if #available(macOS 27.0, *) {
+            reattachSavedPassthroughDevices()
+        }
         if #available(macOS 15.0, *) {
             for drive in self.managedVm.drives {
                 if drive.mediaType == QemuConstants.MEDIATYPE_USB {
@@ -346,6 +350,78 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         print("Image at path " + virtualDrive.path + " detached.")
                     })
                 }
+            }
+        }
+    }
+
+    @available(macOS 27.0, *)
+    func reattachSavedPassthroughDevices() {
+        guard let saved = managedVm.usbPassthroughDevices, !saved.isEmpty else { return }
+        UsbPassthroughManager.shared.start {
+            DispatchQueue.main.async {
+                var remaining = UsbPassthroughManager.shared.candidates().filter { !self.isPassthroughAttached(registryID: $0.registryID) }
+                for key in saved {
+                    guard let index = remaining.firstIndex(where: { $0.key == key }) else { continue }
+                    let candidate = remaining.remove(at: index)
+                    self.attachPassthroughDevice(registryID: candidate.registryID, silent: true)
+                }
+            }
+        }
+    }
+
+    @available(macOS 27.0, *)
+    func isPassthroughAttached(registryID: UInt64) -> Bool {
+        guard let device = passthroughDevices[registryID] as? VZUSBPassthroughDevice else { return false }
+        let stillAttached = vzVirtualMachine?.usbControllers.first?.usbDevices.contains { $0.uuid == device.uuid } ?? false
+        if !stillAttached {
+            passthroughDevices.removeValue(forKey: registryID)
+        }
+        return stillAttached
+    }
+
+    @available(macOS 27.0, *)
+    func attachPassthroughDevice(registryID: UInt64, silent: Bool = false) {
+        guard passthroughDevices[registryID] == nil,
+              let accessory = UsbPassthroughManager.shared.accessory(withRegistryID: registryID),
+              let usbController = vzVirtualMachine?.usbControllers.first else { return }
+        do {
+            let device = try VZUSBPassthroughDevice(configuration: VZUSBPassthroughDeviceConfiguration(device: accessory))
+            usbController.attach(device: device) { error in
+                DispatchQueue.main.async {
+                    if let error {
+                        if !silent {
+                            Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: nil)
+                        }
+                    } else {
+                        self.passthroughDevices[registryID] = device
+                        if !silent, let key = UsbPassthroughManager.shared.candidates().first(where: { $0.registryID == registryID })?.key {
+                            var saved = self.managedVm.usbPassthroughDevices ?? []
+                            saved.append(key)
+                            self.managedVm.usbPassthroughDevices = saved
+                            self.managedVm.writeToPlist()
+                        }
+                        NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                    }
+                }
+            }
+        } catch {
+            Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: nil)
+        }
+    }
+
+    @available(macOS 27.0, *)
+    func detachPassthroughDevice(registryID: UInt64) {
+        guard let device = passthroughDevices[registryID] as? VZUSBPassthroughDevice, let usbController = vzVirtualMachine?.usbControllers.first else { return }
+        let key = UsbPassthroughManager.shared.candidates().first(where: { $0.registryID == registryID })?.key
+        usbController.detach(device: device) { _ in
+            DispatchQueue.main.async {
+                self.passthroughDevices.removeValue(forKey: registryID)
+                if let key, var saved = self.managedVm.usbPassthroughDevices, let index = saved.firstIndex(of: key) {
+                    saved.remove(at: index)
+                    self.managedVm.usbPassthroughDevices = saved
+                    self.managedVm.writeToPlist()
+                }
+                NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
             }
         }
     }

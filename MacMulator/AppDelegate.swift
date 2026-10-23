@@ -97,6 +97,77 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private static let usbPassthroughMenuTag = 2701
+
+    @available(macOS 27.0, *)
+    @IBAction func toggleUSBPassthroughMenuBarClicked(_ sender: NSMenuItem) {
+        guard let registryID = (sender.representedObject as? NSNumber)?.uint64Value,
+              let virtualMachine = rootController?.currentVm,
+              rootController?.isVMRunning(virtualMachine) == true,
+              let runner = rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner else { return }
+
+        if runner.isPassthroughAttached(registryID: registryID) {
+            runner.detachPassthroughDevice(registryID: registryID)
+        } else {
+            runner.attachPassthroughDevice(registryID: registryID)
+        }
+    }
+
+    @available(macOS 27.0, *)
+    private func otherVMUsingPassthroughDevice(_ registryID: UInt64, excluding current: VirtualMachine) -> VirtualMachine? {
+        guard let running = rootController?.runningVMs else { return nil }
+        for (vm, runner) in running where vm != current {
+            if let vfRunner = runner as? VirtualizationFrameworkVirtualMachineRunner, vfRunner.isPassthroughAttached(registryID: registryID) {
+                return vm
+            }
+        }
+        return nil
+    }
+
+    func refreshUSBPassthroughMenu() {
+        guard let submenu = usbDevicesMenuItem?.submenu else { return }
+        submenu.autoenablesItems = false
+        for item in submenu.items where item.tag == AppDelegate.usbPassthroughMenuTag {
+            submenu.removeItem(item)
+        }
+
+        guard let virtualMachine = rootController?.currentVm, virtualMachine.type == MacMulatorConstants.APPLE_VM else { return }
+
+        var newItems: [NSMenuItem] = []
+        if #available(macOS 27.0, *) {
+            UsbPassthroughManager.shared.start()
+            let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
+
+            let candidates = UsbPassthroughManager.shared.candidates()
+            if candidates.isEmpty {
+                let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
+                let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
+                emptyItem.isEnabled = false
+                newItems.append(emptyItem)
+            }
+            for candidate in candidates {
+                let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
+                item.target = self
+                item.representedObject = NSNumber(value: candidate.registryID)
+                item.isEnabled = runner != nil
+                item.state = runner?.isPassthroughAttached(registryID: candidate.registryID) == true ? .on : .off
+                if item.state == .off, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
+                    item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
+                    item.isEnabled = false
+                }
+                newItems.append(item)
+            }
+        } else {
+            return
+        }
+
+        newItems.append(NSMenuItem.separator())
+        for (index, item) in newItems.enumerated() {
+            item.tag = AppDelegate.usbPassthroughMenuTag
+            submenu.insertItem(item, at: index)
+        }
+    }
+
     @IBAction func createNewSnapshotMenuBarClicked(_: Any) {
         rootController?.createVMSnapshot(sender: self)
     }
@@ -185,6 +256,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func refreshVMMenus() {
+        defer { refreshUSBPassthroughMenu() }
         vmMenu.autoenablesItems = false
         #if APPSTORE
             preferencesMenuItem.isHidden = true
@@ -270,7 +342,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                 if !usbDevicesMenuItem.submenu!.items.contains(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
                                     detachMenuItem = NSMenuItem(title: NSLocalizedString("AppDelegate.detachImage", comment: ""), action: nil, keyEquivalent: "")
                                     detachMenuItem.submenu = NSMenu(title: NSLocalizedString("AppDelegate.detachImage", comment: ""))
-                                    usbDevicesMenuItem.submenu?.insertItem(detachMenuItem, at: 1)
+                                    usbDevicesMenuItem.submenu?.insertItem(detachMenuItem, at: usbDevicesMenuItem.submenu!.index(of: usbAttachImageMenuItem) + 1)
                                 } else {
                                     detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") })!
                                 }
@@ -282,8 +354,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                     }
                                 }
                             } else {
-                                if usbDevicesMenuItem.submenu!.items.contains(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
-                                    usbDevicesMenuItem.submenu?.removeItem(at: 1)
+                                if let detachItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
+                                    usbDevicesMenuItem.submenu?.removeItem(detachItem)
                                 }
                             }
                         } else {
@@ -316,6 +388,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_: Notification) {
+        if #available(macOS 27.0, *) {
+            NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+                self?.refreshUSBPassthroughMenu()
+            }
+        }
         let userDefaults = UserDefaults.standard
 
         // Before touching any VM file: regain access to the folders and files the user picked (App Store flavor).

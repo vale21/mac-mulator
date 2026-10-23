@@ -22,6 +22,7 @@
 		3B200DA92802EF8500F7159E /* VMCreatorFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */; };
 		3B200DAC2802F2B400F7159E /* VirtualMachineRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */; };
 		3B200DAE2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */; };
+		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */; };
 		3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */; };
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
@@ -132,6 +133,7 @@
 		3BFB2B3D3078F067005A4B51 /* VirtualMachineContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */; };
 		3BFB2B3E3078F067005A4B51 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3BFB2B3F3078F067005A4B51 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
+		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */; };
 		3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD7454F25E7AC85005ECECB /* DriveInfoViewController.swift */; };
 		3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */; };
@@ -252,6 +254,7 @@
 		3B200DA82802EF8500F7159E /* VMCreatorFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VMCreatorFactory.swift; sourceTree = "<group>"; };
 		3B200DAB2802F2B400F7159E /* VirtualMachineRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineRunner.swift; sourceTree = "<group>"; };
 		3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineRunnerFactory.swift; sourceTree = "<group>"; };
+		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkLinuxSupport.swift; sourceTree = "<group>"; };
 		3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuSpiceViewerViewController.swift; sourceTree = "<group>"; };
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
@@ -483,6 +486,7 @@
 				3B9D7C5D280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift */,
 				3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */,
 				3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */,
+				3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */,
 				3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */,
 				3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */,
 				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
@@ -867,6 +871,7 @@
 				3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */,
 				3BBC26A7307A83E200603BA6 /* SandboxBookmarks.swift in Sources */,
 				3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
+				3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */,
 				3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */,
 				3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */,
@@ -954,6 +959,7 @@
 				3BFB2B3F3078F067005A4B51 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */,
 				3BBC26A6307A83E200603BA6 /* SandboxBookmarks.swift in Sources */,
 				3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
+				3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */,
 				3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */,
 				3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3BFB2B433078F067005A4B51 /* EditVMViewControllerNetworkVF.swift in Sources */,
