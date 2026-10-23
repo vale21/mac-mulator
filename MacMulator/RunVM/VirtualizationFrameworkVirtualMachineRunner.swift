@@ -215,6 +215,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if #available(macOS 27.0, *) {
+            releasePassthroughDevices()
+        }
         if let uponCompletion {
             vzVirtualMachine?.stop(completionHandler: uponCompletion)
         } else {
@@ -355,10 +358,29 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     @available(macOS 27.0, *)
+    func releasePassthroughDevices() {
+        let registryIDs = Array(passthroughDevices.keys)
+        passthroughDevices.removeAll()
+        for registryID in registryIDs {
+            guard let accessory = UsbPassthroughManager.shared.accessory(withRegistryID: registryID) else { continue }
+            accessory.close { error in
+                if let error {
+                    NSLog("USB passthrough release failed: %@", String(describing: error))
+                }
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                }
+            }
+        }
+    }
+
+    @available(macOS 27.0, *)
     func reattachSavedPassthroughDevices() {
         guard let saved = managedVm.usbPassthroughDevices, !saved.isEmpty else { return }
+        NSLog("USB passthrough: restoring saved devices %@", saved.joined(separator: ","))
         UsbPassthroughManager.shared.start {
             DispatchQueue.main.async {
+                NSLog("USB passthrough: available devices %@", UsbPassthroughManager.shared.candidates().map(\.key).joined(separator: ","))
                 var remaining = UsbPassthroughManager.shared.candidates().filter { !self.isPassthroughAttached(registryID: $0.registryID) }
                 for key in saved {
                     guard let index = remaining.firstIndex(where: { $0.key == key }) else { continue }
@@ -389,6 +411,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             usbController.attach(device: device) { error in
                 DispatchQueue.main.async {
                     if let error {
+                        NSLog("USB passthrough attach failed: %@", String(describing: error))
                         if !silent {
                             Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: nil)
                         }
