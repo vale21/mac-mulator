@@ -141,14 +141,8 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         })
     }
 
-    private func pruneConversionProgress(_ message: String) -> String {
-        message
-            .replacingOccurrences(of: "\\[\\s*\\d+(\\.\\d+)?% completed\\][ \\t]*", with: "", options: .regularExpression)
-            .split(whereSeparator: \.isNewline)
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
+    func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
+        getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
     }
 
     private func parseConversionProgress(_ output: String) -> Double? {
@@ -161,8 +155,14 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         return Double(output[openBracket.upperBound ..< markerRange.lowerBound].trimmingCharacters(in: .whitespaces))
     }
 
-    func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
+    private func pruneConversionProgress(_ message: String) -> String {
+        message
+            .replacingOccurrences(of: "\\[\\s*\\d+(\\.\\d+)?% completed\\][ \\t]*", with: "", options: .regularExpression)
+            .split(whereSeparator: \.isNewline)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+            .joined(separator: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func getDiskImageInfo(_ drivePath: String, _ path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, String) -> Void) {
@@ -206,11 +206,17 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
 
                 let command = "/usr/sbin/diskutil image info " + Utils.escape(drivePath)
 
-                shell.runCommand(command, path, uponCompletion: { terminationCcode in
-                    callback(terminationCcode, terminationCcode == 0 ? shell.readFromStandardOutput() : shell.readFromConsole())
+                shell.runCommand(command, path, uponCompletion: { terminationCcode, errorMessage in
+                    callback(terminationCcode, terminationCcode == 0 ? shell.readFromStandardOutput() : errorMessage ?? shell.readFromStandardError())
                 })
             #endif
         }
+    }
+
+    private func fileSizes(_ path: String) -> (logical: Int, allocated: Int?)? {
+        let values = try? URL(fileURLWithPath: path).resourceValues(forKeys: [.fileSizeKey, .totalFileAllocatedSizeKey])
+        guard let logical = values?.fileSize else { return nil }
+        return (logical, values?.totalFileAllocatedSize)
     }
 
     private func formatDiskImageInfo(_ drivePath: String, format: String, sectorCount: Int, blockSize: Int, identityInfo: [(String, String)] = []) -> String {
@@ -267,13 +273,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         return info
     }
 
-    private func fileSizes(_ path: String) -> (logical: Int, allocated: Int?)? {
-        let values = try? URL(fileURLWithPath: path).resourceValues(forKeys: [.fileSizeKey, .totalFileAllocatedSizeKey])
-        guard let logical = values?.fileSize else { return nil }
-        return (logical, values?.totalFileAllocatedSize)
-    }
-
-    fileprivate func formatBytes(_ bytes: Int) -> String {
+    private func formatBytes(_ bytes: Int) -> String {
         "\(bytes) (" + ByteCountFormatter.string(fromByteCount: Int64(bytes), countStyle: .file) + ")"
     }
 }
