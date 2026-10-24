@@ -14,7 +14,7 @@
             <objects>
                 <windowController showSeguePresentationStyle="single" id="sJi-6Q-Gmn" sceneMemberID="viewController">
                     <window key="window" title="Configure Virtual Machine" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="84f-BE-UCM">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="600" y="377" width="750" height="500"/>
@@ -2027,13 +2027,13 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-nR-DCR">
-                                <rect key="frame" x="20" y="252" width="235" height="152"/>
+                                <rect key="frame" x="20" y="308" width="235" height="96"/>
                                 <clipView key="contentView" ambiguous="YES" id="jSR-2h-Yxf">
-                                    <rect key="frame" x="1" y="1" width="233" height="150"/>
+                                    <rect key="frame" x="1" y="1" width="233" height="94"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="EPp-8I-aoE" viewBased="YES" id="Qqw-MA-7Qo">
-                                            <rect key="frame" x="0.0" y="0.0" width="233" height="122"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="233" height="66"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2084,7 +2084,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="g2m-56-VQ0">
-                                    <rect key="frame" x="1" y="190" width="233" height="17"/>
+                                    <rect key="frame" x="1" y="134" width="233" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="biV-Ng-0n4">
@@ -2097,7 +2097,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ivs-Ff-Qer">
-                                <rect key="frame" x="19" y="18" width="237" height="227"/>
+                                <rect key="frame" x="19" y="18" width="237" height="283"/>
                                 <buttonCell key="cell" type="roundTextured" title="Create new snapshot" bezelStyle="texturedRounded" image="plus.app.fill" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iLW-iZ-Xzx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
