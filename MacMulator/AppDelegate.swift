@@ -144,74 +144,76 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func refreshUSBPassthroughMenu() {
-        guard let submenu = usbDevicesMenuItem?.submenu else { return }
-        submenu.autoenablesItems = false
-        for item in submenu.items where item.tag == AppDelegate.usbPassthroughMenuTag {
-            submenu.removeItem(item)
-        }
-
-        guard let virtualMachine = rootController?.currentVm, virtualMachine.type == MacMulatorConstants.APPLE_VM else { return }
-
-        var newItems: [NSMenuItem] = []
-        if #available(macOS 27.0, *) {
-            UsbPassthroughManager.shared.start()
-            let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
-
-            let candidates = UsbPassthroughManager.shared.candidates()
-            var autoAttachCounts: [String: Int] = [:]
-            for key in virtualMachine.usbPassthroughDevices ?? [] {
-                autoAttachCounts[key, default: 0] += 1
+        #if arch(arm64)
+            guard let submenu = usbDevicesMenuItem?.submenu else { return }
+            submenu.autoenablesItems = false
+            for item in submenu.items where item.tag == AppDelegate.usbPassthroughMenuTag {
+                submenu.removeItem(item)
             }
 
-            if candidates.isEmpty, autoAttachCounts.isEmpty {
-                let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
-                let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
-                emptyItem.isEnabled = false
-                newItems.append(emptyItem)
-            }
-            var names = virtualMachine.usbPassthroughDeviceNames ?? [:]
-            var namesChanged = false
-            for candidate in candidates where autoAttachCounts[candidate.key] != nil && names[candidate.key] != candidate.name {
-                names[candidate.key] = candidate.name
-                namesChanged = true
-            }
-            if namesChanged {
-                virtualMachine.usbPassthroughDeviceNames = names
-                virtualMachine.writeToPlist()
-            }
-            for candidate in candidates {
-                let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
-                item.target = self
-                item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID), "name": candidate.name] as [String: Any]
-                item.isEnabled = true
-                if let count = autoAttachCounts[candidate.key], count > 0 {
-                    autoAttachCounts[candidate.key] = count - 1
-                    item.state = .on
+            guard let virtualMachine = rootController?.currentVm, virtualMachine.type == MacMulatorConstants.APPLE_VM else { return }
+
+            var newItems: [NSMenuItem] = []
+            if #available(macOS 27.0, *) {
+                UsbPassthroughManager.shared.start()
+                let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
+
+                let candidates = UsbPassthroughManager.shared.candidates()
+                var autoAttachCounts: [String: Int] = [:]
+                for key in virtualMachine.usbPassthroughDevices ?? [] {
+                    autoAttachCounts[key, default: 0] += 1
                 }
-                if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
-                    item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
-                    item.isEnabled = false
-                    item.state = .off
+
+                if candidates.isEmpty, autoAttachCounts.isEmpty {
+                    let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
+                    let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
+                    emptyItem.isEnabled = false
+                    newItems.append(emptyItem)
                 }
-                newItems.append(item)
-            }
-            for (key, count) in autoAttachCounts.sorted(by: { $0.key < $1.key }) where count > 0 {
-                for _ in 0 ..< count {
-                    let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), names[key] ?? key), action: nil, keyEquivalent: "")
-                    item.isEnabled = false
-                    item.state = .on
+                var names = virtualMachine.usbPassthroughDeviceNames ?? [:]
+                var namesChanged = false
+                for candidate in candidates where autoAttachCounts[candidate.key] != nil && names[candidate.key] != candidate.name {
+                    names[candidate.key] = candidate.name
+                    namesChanged = true
+                }
+                if namesChanged {
+                    virtualMachine.usbPassthroughDeviceNames = names
+                    virtualMachine.writeToPlist()
+                }
+                for candidate in candidates {
+                    let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
+                    item.target = self
+                    item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID), "name": candidate.name] as [String: Any]
+                    item.isEnabled = true
+                    if let count = autoAttachCounts[candidate.key], count > 0 {
+                        autoAttachCounts[candidate.key] = count - 1
+                        item.state = .on
+                    }
+                    if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
+                        item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
+                        item.isEnabled = false
+                        item.state = .off
+                    }
                     newItems.append(item)
                 }
+                for (key, count) in autoAttachCounts.sorted(by: { $0.key < $1.key }) where count > 0 {
+                    for _ in 0 ..< count {
+                        let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), names[key] ?? key), action: nil, keyEquivalent: "")
+                        item.isEnabled = false
+                        item.state = .on
+                        newItems.append(item)
+                    }
+                }
+            } else {
+                return
             }
-        } else {
-            return
-        }
 
-        newItems.append(NSMenuItem.separator())
-        for (index, item) in newItems.enumerated() {
-            item.tag = AppDelegate.usbPassthroughMenuTag
-            submenu.insertItem(item, at: index)
-        }
+            newItems.append(NSMenuItem.separator())
+            for (index, item) in newItems.enumerated() {
+                item.tag = AppDelegate.usbPassthroughMenuTag
+                submenu.insertItem(item, at: index)
+            }
+        #endif
     }
 
     @IBAction func createNewSnapshotMenuBarClicked(_: Any) {
@@ -435,21 +437,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_: Notification) {
         if #available(macOS 27.0, *) {
-            NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didConnectNotification, object: nil, queue: .main) { [weak self] _ in
-                for runner in self?.rootController?.runningVMs.values ?? [:].values {
-                    (runner as? VirtualizationFrameworkVirtualMachineRunner)?.restoreSavedPassthroughDevices()
-                }
-            }
-            NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didRemoveNotification, object: nil, queue: .main) { [weak self] notification in
-                if let registryID = (notification.userInfo?["registryID"] as? NSNumber)?.uint64Value {
+            #if arch(arm64)
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didConnectNotification, object: nil, queue: .main) { [weak self] _ in
                     for runner in self?.rootController?.runningVMs.values ?? [:].values {
-                        (runner as? VirtualizationFrameworkVirtualMachineRunner)?.passthroughAccessoryRemoved(registryID: registryID)
+                        (runner as? VirtualizationFrameworkVirtualMachineRunner)?.restoreSavedPassthroughDevices()
                     }
                 }
-            }
-            NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-                self?.refreshUSBPassthroughMenu()
-            }
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didRemoveNotification, object: nil, queue: .main) { [weak self] notification in
+                    if let registryID = (notification.userInfo?["registryID"] as? NSNumber)?.uint64Value {
+                        for runner in self?.rootController?.runningVMs.values ?? [:].values {
+                            (runner as? VirtualizationFrameworkVirtualMachineRunner)?.passthroughAccessoryRemoved(registryID: registryID)
+                        }
+                    }
+                }
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+                    self?.refreshUSBPassthroughMenu()
+                }
+            #endif
         }
         let userDefaults = UserDefaults.standard
 
