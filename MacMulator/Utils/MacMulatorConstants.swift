@@ -51,6 +51,7 @@ class MacMulatorConstants {
     static let CONVERT_VM_SEGUE = "convertVMSegue"
     static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
+    static let SHOW_PROVISIONING_OPTIONS_SEGUE = "showProvisioningOptionsSegue"
 
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")

@@ -738,6 +738,13 @@ class Utils {
         isPauseSupported(vm)
     }
 
+    static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 27.0, *) {
+            return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)
+        }
+        return false
+    }
+
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF, !isAsifSupported(vm) {
             return NSLocalizedString("Utils.asifNotSupported", comment: "")

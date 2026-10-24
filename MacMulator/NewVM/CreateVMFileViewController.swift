@@ -156,7 +156,7 @@ class CreateVMFileViewController: NSViewController {
         dismiss(self)
 
         if error == nil {
-            parentController!.vmCreated(vm)
+            parentController!.vmCreated(vm, performProvisioning: Utils.isVMProvisioningSupported(vm))
         } else {
             parentController!.vmCreationfFailed(vm, error!)
         }

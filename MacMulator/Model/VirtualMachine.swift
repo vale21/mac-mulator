@@ -36,9 +36,10 @@ class VirtualMachine: Codable, Hashable {
     var snapshots: [VirtualMachineSnapshot]?
     var usbPassthroughDevices: [String]?
     var usbPassthroughDeviceNames: [String: String]?
+    var provisioningInformation: ProvisioningInformation? = nil
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {

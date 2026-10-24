@@ -198,6 +198,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let delegate = NSApp.delegate as! AppDelegate
         delegate.removeSavedVM(virtualMachine.path)
+        virtualMachine.provisioningInformation?.deletePassword()
 
         return virtualMachine
     }
@@ -210,6 +211,12 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
             if let tempVm = temp {
                 tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)
+                if let provisioningInformation = tempVm.provisioningInformation {
+                    // The cloned plist points at the original's Keychain item; give the clone its own.
+                    let password = provisioningInformation.userPassword
+                    provisioningInformation.passwordKeychainId = UUID().uuidString
+                    provisioningInformation.userPassword = password
+                }
                 tempVm.writeToPlist()
                 DispatchQueue.main.async {
                     self.addVirtualMachineFromFile(newVMPath)
