@@ -172,4 +172,8 @@ class VirtualMachine: Codable, Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(displayName)
     }
+
+    func cleanup() {
+        provisioningInformation?.cleanup()
+    }
 }

@@ -72,7 +72,6 @@ class ProvisioningOptionsViewController: NSViewController, NSTextFieldDelegate {
         }
 
         if let virtualMachine {
-            virtualMachine.provisioningInformation?.deletePassword()
             virtualMachine.provisioningInformation = ProvisioningInformation(userFullName: fullNameField.stringValue.trimmingCharacters(in: .whitespaces), userName: userNameField.stringValue.trimmingCharacters(in: .whitespaces), userPassword: passwordField.stringValue, automaticLogin: loginAutomaticallySwitch.state == .on, enableSSh: enableSshSwitch.state == .on)
             virtualMachine.writeToPlist()
         }

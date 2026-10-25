@@ -198,7 +198,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let delegate = NSApp.delegate as! AppDelegate
         delegate.removeSavedVM(virtualMachine.path)
-        virtualMachine.provisioningInformation?.deletePassword()
+        virtualMachine.cleanup()
 
         return virtualMachine
     }

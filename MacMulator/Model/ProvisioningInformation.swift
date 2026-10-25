@@ -49,7 +49,7 @@ class ProvisioningInformation: Codable, Hashable {
         hasher.combine(enableSSh)
     }
 
-    func deletePassword() {
+    func cleanup() {
         ProvisioningPasswordStore.delete(account: passwordKeychainId)
     }
 }

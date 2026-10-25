@@ -98,6 +98,15 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 #if arch(arm64)
                     let options = VZMacOSVirtualMachineStartOptions()
                     options.startUpFromMacOSRecovery = self.recoveryMode
+                    if #available(macOS 27.0, *), let provisioningInfo = managedVm.provisioningInformation {
+                        let guestProvisioning = VZMacGuestProvisioningOptions()
+                        guestProvisioning.fullName = provisioningInfo.userFullName
+                        guestProvisioning.username = provisioningInfo.userName
+                        guestProvisioning.password = provisioningInfo.userPassword
+                        guestProvisioning.enablesRemoteLogin = provisioningInfo.enableSSh
+                        guestProvisioning.logsInAutomatically = provisioningInfo.automaticLogin
+                        try? options.setGuestProvisioning(guestProvisioning)
+                    }
                     vzVirtualMachine.start(options: options, completionHandler: { result in self.handleVMStartWithOptions(error: result) })
                 #endif
             } else {
