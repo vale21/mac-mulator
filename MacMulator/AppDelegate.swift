@@ -466,24 +466,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             savedVMs = []
         }
 
+        let qemuPath = QemuUtils.getQemuPath()
+        let vmPaths = savedVMs ?? []
+
+        // Probing QEMU spawns many processes and the cache is locked meanwhile: do it off the main thread,
+        // so that the window renders immediately, and load the VMs once the capabilities are cached.
+        DispatchQueue.global(qos: .userInitiated).async {
+            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            for path in vmPaths {
+                if FileManager.default.fileExists(atPath: path + "/" + MacMulatorConstants.INFO_PLIST), let vm = VirtualMachine.readFromPlist(path, MacMulatorConstants.INFO_PLIST) {
+                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+                }
+            }
+            DispatchQueue.main.async {
+                self.completeStartup()
+            }
+        }
+    }
+
+    private func completeStartup() {
         setupSavedVMs()
 
         initialized = true
 
         if let fileName {
             rootController?.addVirtualMachineFromFile(fileName)
-        }
-
-        let qemuPath = QemuUtils.getQemuPath()
-
-        DispatchQueue.global().async {
-            // Update the QEMU capabilities cache for the current QEMU path and all the VMs, so that the UI can be responsive when the user tries to edit a VM.
-            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
-            if let rootController = self.rootController {
-                for vm in rootController.virtualMachines {
-                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
-                }
-            }
         }
     }
 
