@@ -292,3 +292,5 @@
 "ProvisioningOptionsViewController.enableSshLabel" = "Remote-Login aktivieren (SSH)";
 "ProvisioningOptionsViewController.okButton" = "OK";
 "ProvisioningOptionsViewController.skipButton" = "Vorerst überspringen";
+
+"VirtualMachineViewController.loadingVMs" = "Virtuelle Maschinen werden geladen …";

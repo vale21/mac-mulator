@@ -12,7 +12,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var savedVMs: [String]? = []
     private(set) var rootController: RootViewController?
     private var fileName: String?
-    private var initialized = false
+    private(set) var initialized = false
 
     @IBOutlet var preferencesMenuItem: NSMenuItem!
     @IBOutlet var preferencesSeparator: NSMenuItem!
@@ -492,6 +492,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let fileName {
             rootController?.addVirtualMachineFromFile(fileName)
         }
+
+        rootController?.startupCompleted()
     }
 
     func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {

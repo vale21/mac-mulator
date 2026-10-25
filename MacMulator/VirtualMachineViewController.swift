@@ -238,6 +238,10 @@ class VirtualMachineViewController: NSViewController {
         if rootController?.currentVm == vm {
             setRunningStatus(vm, false)
         }
+        if vm.provisioningInformation != nil {
+            vm.provisioningInformation?.cleanup()
+            vm.provisioningInformation = nil
+        }
     }
 
     override func viewWillAppear() {
@@ -454,7 +458,44 @@ class VirtualMachineViewController: NSViewController {
         editVMButton.isHidden = hidden
     }
 
+    private lazy var loadingView: NSStackView = {
+        let spinner = NSProgressIndicator()
+        spinner.style = .spinning
+        spinner.isIndeterminate = true
+        spinner.controlSize = .regular
+        spinner.startAnimation(nil)
+        let label = NSTextField(labelWithString: NSLocalizedString("VirtualMachineViewController.loadingVMs", comment: ""))
+        label.textColor = .secondaryLabelColor
+        let stack = NSStackView(views: [spinner, label])
+        stack.orientation = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        return stack
+    }()
+
+    fileprivate func showLoadingLayout() {
+        noVMsBox.isHidden = true
+        vmName.isHidden = true
+        vmDescription.isHidden = true
+        centralBox.isHidden = true
+        startVMButton.isHidden = true
+        stopVMButton.isHidden = true
+        pauseVMButton.isHidden = true
+        qemuUnavailableLabel.isHidden = true
+        loadingView.isHidden = false
+    }
+
     fileprivate func showNoVmsLayout() {
+        if (NSApp.delegate as? AppDelegate)?.initialized == false {
+            showLoadingLayout()
+            return
+        }
+        loadingView.isHidden = true
         noVMsBox.isHidden = false
 
         vmName.isHidden = true
@@ -469,6 +510,7 @@ class VirtualMachineViewController: NSViewController {
     }
 
     fileprivate func showVMAvailableLayout() {
+        loadingView.isHidden = true
         noVMsBox.isHidden = true
 
         vmName.isHidden = false

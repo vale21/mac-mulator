@@ -292,3 +292,5 @@
 "ProvisioningOptionsViewController.enableSshLabel" = "Activer la connexion à distance (SSH)";
 "ProvisioningOptionsViewController.okButton" = "OK";
 "ProvisioningOptionsViewController.skipButton" = "Ignorer pour l’instant";
+
+"VirtualMachineViewController.loadingVMs" = "Chargement des machines virtuelles…";

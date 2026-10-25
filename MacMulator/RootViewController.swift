@@ -122,6 +122,12 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.refreshVMMenus()
     }
 
+    func startupCompleted() {
+        if virtualMachines.isEmpty {
+            vmController?.setVirtualMachine(nil)
+        }
+    }
+
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST)
         if let vm = virtualMachine {
