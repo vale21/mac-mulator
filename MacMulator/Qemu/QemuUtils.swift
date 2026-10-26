@@ -40,88 +40,6 @@ class QemuUtils {
         return QemuConstants.HD
     }
 
-    static func createDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
-        createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
-    }
-
-    static func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command: String =
-            QemuImgCommandBuilder(qemuPath: qemuPath)
-                .withCommand(QemuConstants.IMAGE_CMD_CREATE)
-                .withFormat(format)
-                .withSize(size)
-                .withName(name)
-                .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_RESIZE)
-            .withName(virtualDrive.path)
-            .withShrinkArg(shrink)
-            .withShortSize(String(virtualDrive.size) + "G")
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
-            .withFormat(oldFormat)
-            .withTargetFormat(virtualDrive.format)
-            .withName(virtualDrive.path)
-            .withTargetName(virtualDrive.path)
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func convertVHDXToDiskImage(vhdxPath: String, vmPath: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
-            .withName(vhdxPath)
-            .withTargetName(Utils.escape(virtualDrive.path))
-            .build()
-
-        shell.runCommand(command, vmPath, uponCompletion: {
-            terminationCode in
-
-            if terminationCode == 0 {
-                QemuUtils.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {
-                    infoCode, output in
-                    if infoCode == 0 {
-                        let driveSize = Utils.extractDriveSize(output)
-                        if let driveSize {
-                            callback(infoCode, driveSize)
-                        } else {
-                            callback(infoCode, -1)
-                        }
-                    } else {
-                        callback(infoCode, -1)
-                    }
-                })
-            } else {
-                callback(terminationCode, -1)
-            }
-
-        })
-    }
-
     static func createAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
         if Utils.getTPMForSubType(vm.os, vm.subtype) {
             try? FileManager.default.createDirectory(at: URL(fileURLWithPath: vm.path + "/tpm"), withIntermediateDirectories: false)
@@ -217,33 +135,6 @@ class QemuUtils {
             try? FileManager.default.removeItem(atPath: vm.path + "/bootrom-0")
             try? FileManager.default.removeItem(atPath: vm.path + "/nor-0.bin")
         }
-    }
-
-    static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        if newVirtualDrive.size != oldVirtualDrive.size {
-            resizeDiskImage(newVirtualDrive, path, shrink: newVirtualDrive.size < oldVirtualDrive.size, uponCompletion: callback)
-        }
-        if newVirtualDrive.format != oldVirtualDrive.format {
-            convertDiskImage(newVirtualDrive, path, oldFormat: oldVirtualDrive.format, uponCompletion: callback)
-        }
-    }
-
-    static func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        getDiskImageInfo(virtualDrive.path, path, uponCompletion: callback)
-    }
-
-    static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_INFO)
-            .withName(drivePath)
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: { terminationCcode in
-            callback(terminationCcode, shell.readFromStandardOutput())
-        })
     }
 
     static func isBinaryAvailable(_ binary: String, _ qemuPath: String?) -> Bool {
@@ -377,7 +268,7 @@ class QemuUtils {
             .withCommand(QemuConstants.IMAGE_CMD_VERSION)
             .build()
 
-        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
+        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode, _ in
             guard terminationCode == 0 else {
                 callback(nil)
                 return
@@ -401,7 +292,7 @@ class QemuUtils {
         })
     }
 
-    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
             try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
@@ -414,10 +305,10 @@ class QemuUtils {
         try? fileManager.moveItem(atPath: virtualMachine.path + "/" + QemuConstants.OPENCORE + ".img", toPath: virtualMachine.path + "/opencore-0.img")
         try? fileManager.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/__MACOSX"))
         let shell = Shell()
-        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode, errorMessage in
 
             let shell2 = Shell()
-            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode in
+            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                 let json = shell2.stdout
                 print(json)
                 let jsonData = json.data(using: .utf8)!
@@ -432,7 +323,7 @@ class QemuUtils {
                 let machineDetails = systemProfilerData?.SPHardwareDataType[0]
 
                 let shell3 = Shell()
-                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode in
+                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                     do {
                         var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template")
 
@@ -452,8 +343,8 @@ class QemuUtils {
                         try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8)
 
                         let shell4 = Shell()
-                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode in
-                            callback(terminationCode)
+                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
+                            callback(terminationCode, errorMessage)
                         })
                     } catch {
                         print("ERROR while reading/writing OpenCore config.plist: " + error.localizedDescription)

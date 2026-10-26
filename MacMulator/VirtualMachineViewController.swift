@@ -118,6 +118,35 @@ class VirtualMachineViewController: NSViewController {
         }, virtualMachine: rootController?.currentVm)
     }
 
+    @available(macOS 13.0, *)
+    func convertToQemuMenuBarClicked(_: Any, _: Bool = true) {
+        guard let rootController, !rootController.isCurrentVMRunning() else { return }
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+    }
+
+    @available(macOS 13.0, *)
+    func convertToAppleMenuBarClicked(_: Any) {
+        guard let rootController, !rootController.isCurrentVMRunning() else { return }
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+    }
+
+    func vmConverted(_ vm: VirtualMachine) {
+        setVirtualMachine(vm)
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: vm)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: vm)
+        }
+    }
+
+    func vmFailedConversion(_ vm: VirtualMachine, _ error: String) {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("VirtualMachineViewController.conversionToQemuFailed", comment: ""), error), virtualMachine: vm)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("VirtualMachineViewController.conversionToAppleFailed", comment: ""), error), virtualMachine: vm)
+        }
+    }
+
     func createVMSnapshot(sender _: Any) {
         if let vm = rootController?.currentVm, let rootController {
             do {
@@ -152,6 +181,17 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
+    override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
+        if identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
+            if #available(macOS 14.0, *) {
+                return true
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if segue.identifier == MacMulatorConstants.SHOW_VM_VIEW_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
@@ -184,6 +224,14 @@ class VirtualMachineViewController: NSViewController {
             dest.setVirtualMachine(vmToStart.vm)
             dest.setRecoveryMode(vmToStart.inRecovery)
             dest.setVmController(source)
+        } else if segue.identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
+            if #available(macOS 13.0, *), let rootController, let currentVM = rootController.currentVm {
+                let source = segue.sourceController as! VirtualMachineViewController
+                let dest = segue.destinationController as! ConvertVMViewController
+
+                dest.setVirtualMachine(currentVM)
+                dest.setParentController(source)
+            }
         }
     }
 
@@ -408,7 +456,45 @@ class VirtualMachineViewController: NSViewController {
         editVMButton.isHidden = hidden
     }
 
+    private lazy var loadingView: NSStackView = {
+        let spinner = NSProgressIndicator()
+        spinner.style = .spinning
+        spinner.isIndeterminate = true
+        spinner.controlSize = .regular
+        spinner.startAnimation(nil)
+        let label = NSTextField(labelWithString: NSLocalizedString("VirtualMachineViewController.loadingVMs", comment: ""))
+        label.textColor = .secondaryLabelColor
+        let stack = NSStackView(views: [spinner, label])
+        stack.orientation = .vertical
+        stack.spacing = 12
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stack)
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
+        return stack
+    }()
+
+    fileprivate func showLoadingLayout() {
+        noVMsBox.isHidden = true
+        vmName.isHidden = true
+        vmDescription.isHidden = true
+        centralBox.isHidden = true
+        startVMButton.isHidden = true
+        stopVMButton.isHidden = true
+        pauseVMButton.isHidden = true
+        qemuUnavailableLabel.isHidden = true
+        loadingView.isHidden = false
+        bottomConfigureVMButton.isHidden = true
+    }
+
     fileprivate func showNoVmsLayout() {
+        if (NSApp.delegate as? AppDelegate)?.initialized == false {
+            showLoadingLayout()
+            return
+        }
+        loadingView.isHidden = true
         noVMsBox.isHidden = false
 
         vmName.isHidden = true
@@ -420,9 +506,11 @@ class VirtualMachineViewController: NSViewController {
         noVMWelcomeMessage.stringValue = NSLocalizedString("VirtualMachineViewController.noVMWelcomeMessage", comment: "")
         newVMLabel.title = NSLocalizedString("VirtualMachineViewController.newVMLabel", comment: "")
         importVMLabel.title = NSLocalizedString("VirtualMachineViewController.importVMLabel", comment: "")
+        bottomConfigureVMButton.isHidden = true
     }
 
     fileprivate func showVMAvailableLayout() {
+        loadingView.isHidden = true
         noVMsBox.isHidden = true
 
         vmName.isHidden = false
@@ -452,7 +540,7 @@ class VirtualMachineViewController: NSViewController {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
                 let swTpmPath = QemuUtils.getQemuPath(for: vm)
                 let shell = Shell()
-                shell.runCommand(Utils.escape(swTpmPath) + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: vm.path)) + "  --log level=20 --tpm2", vm.path, uponCompletion: { _ in
+                shell.runCommand(Utils.escape(swTpmPath) + "/swtpm socket --tpmstate dir=" + Utils.escape(vm.path) + "/tpm  --ctrl type=unixio,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: vm.path)) + "  --log level=20 --tpm2", vm.path, uponCompletion: { _, _ in
                     print("swtpm done")
                 })
             }

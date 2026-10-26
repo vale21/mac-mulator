@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -15,7 +15,7 @@
             <objects>
                 <windowController storyboardIdentifier="NSWindowController-DJS-zH-ZBC" id="DJS-zH-ZBC" sceneMemberID="viewController">
                     <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="VIH-r7-T0P">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <rect key="contentRect" x="440" y="364" width="642" height="482"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
@@ -3457,6 +3457,7 @@ Rocky Linux</string>
                         <outlet property="descriptionText" destination="bNY-9B-VBP" id="6bV-72-d9I"/>
                         <outlet property="licenseButton" destination="E7N-rW-Fzz" id="phu-nW-VTF"/>
                         <outlet property="qemuVersionLabel" destination="GAk-eH-dhx" id="Th7-Be-ybX"/>
+                        <outlet property="titleLabel" destination="jcg-29-BcR" id="GVO-KC-0Vm"/>
                         <outlet property="versionLabel" destination="nbc-Cc-IYr" id="QWc-rl-OHS"/>
                     </connections>
                 </viewController>
@@ -3469,7 +3470,7 @@ Rocky Linux</string>
             <objects>
                 <windowController storyboardIdentifier="NSWindowController-yhg-XN-9MI" showSeguePresentationStyle="single" id="yhg-XN-9MI" sceneMemberID="viewController">
                     <window key="window" title="Console output" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="y7i-Bf-Ufc">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="227" y="299" width="640" height="480"/>
@@ -3556,7 +3557,7 @@ Rocky Linux</string>
             <objects>
                 <windowController storyboardIdentifier="NSWindowController-Fkf-Y0-JDu" showSeguePresentationStyle="single" id="Fkf-Y0-JDu" sceneMemberID="viewController">
                     <window key="window" title="MacMulator Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="8w2-j3-l5g">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES"/>
                         <rect key="contentRect" x="293" y="483" width="545" height="290"/>
@@ -4688,8 +4689,8 @@ Rocky Linux</string>
                                                 <constraint firstAttribute="width" constant="468" id="3wh-eh-AJz"/>
                                                 <constraint firstAttribute="height" constant="210" id="M23-sn-hvB"/>
                                             </constraints>
-                                            <color key="borderColor" name="tertiarySystemFillColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="fillColor" name="tertiarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="borderColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="fillColor" name="quaternarySystemFillColor" catalog="System" colorSpace="catalog"/>
                                         </box>
                                         <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="f2n-08-TYD">
                                             <rect key="frame" x="24" y="68" width="602" height="430"/>
@@ -4964,6 +4965,7 @@ Rocky Linux</string>
                         <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
                         <segue destination="cvb-zf-bpY" kind="sheet" identifier="startVMSegue" id="xJM-1W-fcJ"/>
                         <segue destination="XEm-KJ-Oor" kind="show" identifier="showSpiceViewSegue" id="e7k-B8-t4V"/>
+                        <segue destination="RSg-f6-UZF" kind="sheet" identifier="convertVMSegue" id="OkB-v1-ghb"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -5127,7 +5129,55 @@ Rocky Linux</string>
                 </viewController>
                 <customObject id="dsI-EX-obA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-19" y="1682"/>
+            <point key="canvasLocation" x="-228" y="1708"/>
+        </scene>
+        <!--ConvertVM View Controller-->
+        <scene sceneID="FFR-uc-7Rd">
+            <objects>
+                <viewController id="RSg-f6-UZF" customClass="ConvertVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Cz6-3i-Wzp">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="107"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <progressIndicator wantsLayer="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="0JI-kX-8jR">
+                                <rect key="frame" x="20" y="44" width="339" height="20"/>
+                            </progressIndicator>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Abd-zG-JTc">
+                                <rect key="frame" x="18" y="71" width="343" height="16"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Converting VM. Please wait..." id="Z5l-NT-HNg">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fta-r4-wzk">
+                                <rect key="frame" x="18" y="20" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="9Tn-vb-979">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Abd-zG-JTc" firstAttribute="leading" secondItem="Cz6-3i-Wzp" secondAttribute="leading" constant="20" symbolic="YES" id="2l7-a1-z2f"/>
+                            <constraint firstItem="0JI-kX-8jR" firstAttribute="top" secondItem="Abd-zG-JTc" secondAttribute="bottom" constant="7" id="NF2-nP-AVn"/>
+                            <constraint firstItem="Abd-zG-JTc" firstAttribute="trailing" secondItem="0JI-kX-8jR" secondAttribute="trailing" id="VsX-t6-2ZI"/>
+                            <constraint firstAttribute="trailing" secondItem="Abd-zG-JTc" secondAttribute="trailing" constant="20" symbolic="YES" id="ix2-Ss-YpZ"/>
+                            <constraint firstItem="Abd-zG-JTc" firstAttribute="top" secondItem="Cz6-3i-Wzp" secondAttribute="top" constant="20" symbolic="YES" id="jAt-xD-L3H"/>
+                            <constraint firstItem="Abd-zG-JTc" firstAttribute="leading" secondItem="0JI-kX-8jR" secondAttribute="leading" id="rO8-O8-gNq"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="convertingVMLabel" destination="Abd-zG-JTc" id="loA-on-znb"/>
+                        <outlet property="estimateTimeRemainingLabel" destination="fta-r4-wzk" id="y1d-3k-FDc"/>
+                        <outlet property="progressBar" destination="0JI-kX-8jR" id="etN-1u-oDe"/>
+                    </connections>
+                </viewController>
+                <customObject id="RFc-HB-pEs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="172.5" y="1720.5"/>
         </scene>
     </scenes>
     <resources>

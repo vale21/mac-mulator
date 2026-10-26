@@ -8,6 +8,7 @@
 import Cocoa
 
 class AboutBoxViewController: NSViewController {
+    @IBOutlet var titleLabel: NSTextField!
     @IBOutlet var versionLabel: NSTextField!
     @IBOutlet var licenseButton: NSButton!
     @IBOutlet var descriptionLabel: NSTextField!
@@ -25,6 +26,9 @@ class AboutBoxViewController: NSViewController {
     }
 
     override func viewWillAppear() {
+        var productName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
+        titleLabel.stringValue = productName ?? "MacMulator"
+
         var version: String = NSLocalizedString("AboutBoxViewController.version", comment: "")
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             version += " " + text

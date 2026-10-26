@@ -97,29 +97,13 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     @available(macOS 13.0, *)
-    func convertToQemuMenuBarClicked(_: Any, _ showAlert: Bool = true) {
-        if let currentVm {
-            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
-            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
-            currentVm.type = MacMulatorConstants.QEMU_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            if showAlert {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: currentVm)
-            }
-        }
+    func convertToQemuMenuBarClicked(_: Any) {
+        vmController?.convertToQemuMenuBarClicked(self)
     }
 
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
-        if let currentVm {
-            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
-            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
-            currentVm.type = MacMulatorConstants.APPLE_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: currentVm)
-        }
+        vmController?.convertToAppleMenuBarClicked(self)
     }
 
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
@@ -138,13 +122,19 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.refreshVMMenus()
     }
 
+    func startupCompleted() {
+        if virtualMachines.isEmpty {
+            vmController?.setVirtualMachine(nil)
+        }
+    }
+
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST)
         if let vm = virtualMachine {
             addVirtualMachine(vm)
             if #available(macOS 13.0, *) {
                 if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
-                    self.convertToQemuMenuBarClicked(self, false)
+                    vmController?.convertToQemuMenuBarClicked(self)
                 }
             }
         }
@@ -214,6 +204,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let delegate = NSApp.delegate as! AppDelegate
         delegate.removeSavedVM(virtualMachine.path)
+        virtualMachine.cleanup()
 
         return virtualMachine
     }
@@ -222,10 +213,16 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         let vmToClone = virtualMachines[index]
         let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
         let shell = Shell()
-        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _ in
+        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _, _ in
             let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
             if let tempVm = temp {
                 tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)
+                if let provisioningInformation = tempVm.provisioningInformation {
+                    // The cloned plist points at the original's Keychain item; give the clone its own.
+                    let password = provisioningInformation.userPassword
+                    provisioningInformation.passwordKeychainId = UUID().uuidString
+                    provisioningInformation.userPassword = password
+                }
                 tempVm.writeToPlist()
                 DispatchQueue.main.async {
                     self.addVirtualMachineFromFile(newVMPath)

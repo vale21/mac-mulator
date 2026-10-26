@@ -24,6 +24,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet var cowDescriptionLabel: NSTextField!
     @IBOutlet var okButton: NSButton!
 
+    var originalVirtualDrive: VirtualDrive?
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
 
@@ -32,7 +33,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     var mode: Mode = .ADD
 
     func setVirtualDrive(_ virtualDrive: VirtualDrive) {
-        newVirtualDrive = virtualDrive
+        originalVirtualDrive = virtualDrive
+        newVirtualDrive = virtualDrive.clone()
         oldVirtualDrive = virtualDrive.clone()
     }
 
@@ -60,10 +62,6 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                                 useCow.intValue = 1
                             } else {
                                 useCow.intValue = 0
-                            }
-                            if mode == Mode.EDIT {
-                                useCow.isEnabled = false
-                                useCow.toolTip = "Updating this property on an existing drive is not supported at the moment"
                             }
                         } else {
                             newVirtualDrive.format = QemuConstants.FORMAT_RAW
@@ -200,13 +198,26 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func diskCreated() {
-        if let newVirtualDrive {
+        if let newVirtualDrive, let originalVirtualDrive {
+            // Changes are applied to the model only after the disk was successfully created/updated
+            originalVirtualDrive.path = newVirtualDrive.path
+            originalVirtualDrive.name = newVirtualDrive.name
+            originalVirtualDrive.format = newVirtualDrive.format
+            originalVirtualDrive.size = newVirtualDrive.size
             if mode == Mode.ADD {
-                parentController?.addVirtualDrive(newVirtualDrive)
+                parentController?.addVirtualDrive(originalVirtualDrive)
             } else {
                 parentController?.reloadDrives()
             }
         }
         dismiss(self)
+    }
+
+    func diskFailedCreation(error: String) {
+        if mode == Mode.ADD {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewDiskViewController.diskCreationFailed", comment: ""), error), virtualMachine: nil)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewDiskViewController.diskUpdateFailed", comment: ""), error), virtualMachine: nil)
+        }
     }
 }

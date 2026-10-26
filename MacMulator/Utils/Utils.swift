@@ -161,7 +161,7 @@ class Utils {
     }
 
     static func computeSizeOfPhysicalDrive(_ path: String, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        QemuUtils.getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
+        QemuDiskImageManager().getDiskImageInfo(path, NSHomeDirectory(), uponCompletion: {
             infoCode, output in
             if infoCode == 0 {
                 let driveSize = Utils.extractDriveSize(output)
@@ -470,6 +470,8 @@ class Utils {
 
     static func getMacOSSubType(_ os: String?) -> String {
         switch os {
+        case QemuConstants.DESC_MAC_GOLDEN_GATE:
+            QemuConstants.SUB_MAC_GOLDEN_GATE
         case QemuConstants.DESC_MAC_TAHOE:
             QemuConstants.SUB_MAC_TAHOE
         case QemuConstants.DESC_MAC_SEQUOIA:
@@ -708,6 +710,10 @@ class Utils {
         return false
     }
 
+    static func isMacVMSupportingParavirtualizedGraphics(_ vm: VirtualMachine) -> Bool {
+        Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
+    }
+
     static func isTrackpadSupported(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_VENTURA)
     }
@@ -722,7 +728,7 @@ class Utils {
 
     static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 26.0, *) {
-            vm.type == MacMulatorConstants.APPLE_VM && vm.os == QemuConstants.OS_MAC
+            vm.type == MacMulatorConstants.APPLE_VM
         } else {
             false
         }
@@ -730,6 +736,13 @@ class Utils {
 
     static func areLiveSnapshotsSupported(_ vm: VirtualMachine) -> Bool {
         isPauseSupported(vm)
+    }
+
+    static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 27.0, *) {
+            return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)
+        }
+        return false
     }
 
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
@@ -759,6 +772,8 @@ class Utils {
     static func getHostMacOSVersion() -> String {
         let version = ProcessInfo.processInfo.operatingSystemVersion
         switch (version.majorVersion, version.minorVersion) {
+        case (27, _):
+            return QemuConstants.DESC_MAC_GOLDEN_GATE
         case (26, _):
             return QemuConstants.DESC_MAC_TAHOE
         case (15, _):
@@ -856,14 +871,18 @@ class Utils {
     }
 
     static func computeTimeRemaining(startTime: Int64, progress: Double) -> String {
-        let currentTime = Int64(Date().timeIntervalSince1970)
+        if progress > 0 {
+            let currentTime = Int64(Date().timeIntervalSince1970)
 
-        let timeDelta = Double(currentTime - startTime)
-        let factor = timeDelta / progress
-        let totalTime = 100.0 * factor
-        let remainingTime = totalTime - timeDelta
+            let timeDelta = Double(currentTime - startTime)
+            let factor = timeDelta / progress
+            let totalTime = 100.0 * factor
+            let remainingTime = totalTime - timeDelta
 
-        return formatTime(remainingTime)
+            return formatTime(remainingTime)
+        } else {
+            return formatTime(0)
+        }
     }
 
     static func formatTime(_ secs: Double) -> String {
@@ -959,10 +978,6 @@ class Utils {
         } else {
             false
         }
-    }
-
-    static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
-        Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
     }
 
     static func removeUnexistingDrives(_ virtualMachine: VirtualMachine) {
@@ -1159,6 +1174,7 @@ class Utils {
             QemuConstants.SUB_MAC_SONOMA,
             QemuConstants.SUB_MAC_SEQUOIA,
             QemuConstants.SUB_MAC_TAHOE,
+            QemuConstants.SUB_MAC_GOLDEN_GATE,
         ]
 
         let version = versions.firstIndex(of: subtype)

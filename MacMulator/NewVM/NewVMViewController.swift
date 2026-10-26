@@ -90,6 +90,13 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
         if segue.identifier == MacMulatorConstants.CREATE_VM_FILE_SEGUE {
             let destinationController = segue.destinationController as! CreateVMFileViewController
             destinationController.setParentController(self)
+        } else if segue.identifier == MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE {
+            let destinationController = segue.destinationController as! ProvisioningOptionsViewController
+            let vm = rootController?.getVirtualMachine(name: vmName.stringValue)
+            if let vm {
+                destinationController.setVirtualMachine(vm)
+                destinationController.setParentController(self)
+            }
         }
     }
 
@@ -130,12 +137,16 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
         }
     }
 
-    func vmCreated(_ vm: VirtualMachine) {
+    func vmCreated(_ vm: VirtualMachine, performProvisioning: Bool) {
         rootController?.addVirtualMachine(vm)
-        if fullConfiguration.state == NSControl.StateValue.on {
-            rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, vm])
+        if performProvisioning {
+            performSegue(withIdentifier: MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE, sender: self)
+        } else {
+            if fullConfiguration.state == NSControl.StateValue.on {
+                rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, vm])
+            }
+            view.window?.close()
         }
-        view.window?.close()
     }
 
     func vmCreationfFailed(_: VirtualMachine, _ error: Error) {

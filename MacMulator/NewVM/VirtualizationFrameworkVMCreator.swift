@@ -78,7 +78,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         #endif
     }
 
-    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32) -> Void) throws {
+    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) throws {
         var format = QemuConstants.FORMAT_RAW
         if Utils.isAsifSupported(vm) {
             format = QemuConstants.FORMAT_ASIF
@@ -132,22 +132,15 @@ class VirtualizationFrameworkVMCreator: VMCreator {
             vm.addVirtualDrive(installMedia)
         }
 
-        if #available(macOS 26.0, *), Utils.isAsifSupported(vm) {
-            VirtualizationFrameworkUtils.createASIFDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                terminationCcode in
-                callback(terminationCcode)
-            })
-        } else {
-            VirtualizationFrameworkUtils.createRAWDiskImage(path: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                terminationCcode in
-                callback(terminationCcode)
-            })
-        }
+        VirtualizationFrameworkDiskImageManager().createDiskImage(virtualHDD, vm.path, uponCompletion: {
+            terminationCode, errorMessage in
+            callback(terminationCode, errorMessage)
+        })
     }
 
     fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {
         try! createVMFilesOnDisk(vm, installMedia, uponCompletion: {
-            _ in
+            _, _ in
             vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
             self.setupVirtualMachine(vm: vm, ipswURL: URL(fileURLWithPath: installMedia))
         })

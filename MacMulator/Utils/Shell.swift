@@ -17,6 +17,9 @@ class Shell {
     var stderr: String = ""
     var output: String = ""
 
+    /// Optional handler invoked with each new chunk of output (stdout or stderr) as soon as it is read.
+    var outputHandler: ((String) -> Void)?
+
     private func setupStandardOutput() {
         task.standardOutput = pipe_out
         pipe_out.fileHandleForReading.readabilityHandler = { fileHandle in
@@ -25,6 +28,7 @@ class Shell {
             if let out = newOutput, !out.isEmpty {
                 self.stdout.append(contentsOf: out)
                 self.output.append(contentsOf: out)
+                self.outputHandler?(out)
             }
         }
     }
@@ -37,11 +41,12 @@ class Shell {
             if let out = newOutput, !out.isEmpty {
                 self.stderr.append(contentsOf: out)
                 self.output.append(contentsOf: out)
+                self.outputHandler?(out)
             }
         }
     }
 
-    func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32) -> Void) {
+    func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         DispatchQueue.global().async {
             self.task.currentDirectoryPath = currentDirectoryPath
             print("Running " + command + " in " + self.task.currentDirectoryPath)
@@ -58,7 +63,7 @@ class Shell {
                         self.pipe_out.fileHandleForReading.readabilityHandler = nil
                         self.pipe_in.fileHandleForWriting.writeabilityHandler = nil
 
-                        callback(self.task.terminationStatus)
+                        callback(self.task.terminationStatus, self.task.terminationStatus != 0 ? self.readFromStandardError() : nil)
                     }
                     try self.task.run()
                 }

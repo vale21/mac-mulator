@@ -10,6 +10,7 @@ import Cocoa
 class CreateDiskFileViewController: NSViewController {
     @IBOutlet var diskProgressLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!
+    @IBOutlet var estimateTimeRemainingLabel: NSTextField!
 
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
@@ -30,58 +31,90 @@ class CreateDiskFileViewController: NSViewController {
 
     override func viewDidAppear() {
         progressBar.startAnimation(self)
+        setEstimateTimeRemainingVisible(false)
 
         if let newVirtualDrive {
             var complete = false
+            var error: String? = nil
 
-            let dispatchQueue = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
+            _ = DispatchQueue(label: "New Disk Thread", qos: DispatchQoS.background)
             DispatchQueue.main.async {
+                let diskImageManager = DiskImageManagerFactory().create(isVirtualizationFrameworkInUse: self.isVirtualizaionFrameworkInUse)
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
-                    if self.isVirtualizaionFrameworkInUse {
-                        if #available(macOS 26.0, *), newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
-                            VirtualizationFrameworkUtils.createASIFDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                                _ in
-                                complete = true
-                            })
-                        } else {
-                            VirtualizationFrameworkUtils.createRAWDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                                _ in
-                                complete = true
-                            })
-                        }
-                    } else {
-                        QemuUtils.createDiskImage(path: newVirtualDrive.path, virtualDrive: newVirtualDrive, uponCompletion: {
-                            _ in
+                    let directoryPath = newVirtualDrive.path
+                    diskImageManager.createDiskImage(newVirtualDrive, directoryPath, uponCompletion: {
+                        errorCode, errorMessage in
+                        DispatchQueue.main.async {
+                            if errorCode == 0 {
+                                newVirtualDrive.path = directoryPath + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+                            }
+                            error = errorCode != 0 ? errorMessage : nil
                             complete = true
-                        })
-                    }
-                    newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+                        }
+                    })
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)
-                    if self.isVirtualizaionFrameworkInUse, newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
-                        VirtualizationFrameworkUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
-                            complete = true
-                        })
-                    } else {
-                        QemuUtils.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), uponCompletion: { _ in
-                            complete = true
-                        })
-                    }
+                    diskImageManager.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), progress: { percentage in
+                        DispatchQueue.main.async {
+                            self.updateProgress(percentage)
+                        }
+                    }, uponCompletion: { errorCode, errorMessage in
+                        complete = true
+                        error = errorCode != 0 ? errorMessage : nil
+                    })
                 }
             }
 
+            let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
 
-                guard !complete else {
+                if !complete {
+                    let progress = self.progressBar.doubleValue
+                    if !self.progressBar.isIndeterminate, progress > 10 {
+                        self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progressBar.doubleValue))
+                    }
+                } else {
                     timer.invalidate()
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
 
-                    self.parentController!.diskCreated()
+                    if error == nil {
+                        self.parentController!.diskCreated()
+                    } else {
+                        self.parentController!.diskFailedCreation(error: error ?? "")
+                    }
                     return
                 }
             })
         }
+    }
+
+    private func setEstimateTimeRemainingVisible(_ visible: Bool) {
+        estimateTimeRemainingLabel.isHidden = !visible
+        let size = NSSize(width: view.frame.width, height: visible ? 107 : 82)
+        if let window = view.window {
+            // Subviews are pinned to the top, so keep the top edge fixed while resizing.
+            var frame = window.frame
+            let newHeight = window.frameRect(forContentRect: NSRect(origin: .zero, size: size)).height
+            frame.origin.y += frame.height - newHeight
+            frame.size.height = newHeight
+            window.setFrame(frame, display: true, animate: true)
+        } else {
+            preferredContentSize = size
+        }
+    }
+
+    private func updateProgress(_ percentage: Double) {
+        if progressBar.isIndeterminate {
+            progressBar.stopAnimation(self)
+            progressBar.isIndeterminate = false
+            progressBar.minValue = 0
+            progressBar.maxValue = 100
+
+            setEstimateTimeRemainingVisible(true)
+            estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
+        }
+        progressBar.doubleValue = percentage
     }
 }
