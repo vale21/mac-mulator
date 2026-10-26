@@ -252,6 +252,7 @@
 "VirtualizationFrameworkInstallVMViewController.installSucceeded" = "Installation réussie.";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Démarrage de l’installation.";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Temps restant estimé : Calcul en cours...";
+"VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Échec du provisionnement de l’invité : %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Création de l’instantané de la VM...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Opération en cours...";
 "VirtualizationFrameworkPauseResumeVMViewController.pausing" = "Mise en pause de la VM et sauvegarde de l’état...";

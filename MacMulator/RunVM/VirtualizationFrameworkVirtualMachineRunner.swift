@@ -108,7 +108,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         do {
                             try options.setGuestProvisioning(guestProvisioning)
                         } catch {
-                            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Guest provisioning failed: " + error.localizedDescription, virtualMachine: managedVm)
+                            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.provisioningFailed", comment: ""), error.localizedDescription), virtualMachine: managedVm)
                             return
                         }
                     }
