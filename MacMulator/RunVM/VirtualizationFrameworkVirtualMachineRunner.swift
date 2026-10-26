@@ -105,7 +105,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         guestProvisioning.password = provisioningInfo.userPassword
                         guestProvisioning.enablesRemoteLogin = provisioningInfo.enableSSh
                         guestProvisioning.logsInAutomatically = provisioningInfo.automaticLogin
-                        try? options.setGuestProvisioning(guestProvisioning)
+                        do {
+                            try options.setGuestProvisioning(guestProvisioning)
+                        } catch {
+                            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Guest provisioning failed: " + error.localizedDescription, virtualMachine: managedVm)
+                            return
+                        }
                     }
                     vzVirtualMachine.start(options: options, completionHandler: { result in self.handleVMStartWithOptions(error: result) })
                 #endif
