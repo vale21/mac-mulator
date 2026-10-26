@@ -28,7 +28,13 @@ extension DiskImageManager {
         }
 
         if newVirtualDrive.format != oldVirtualDrive.format {
-            convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, progress: progress, uponCompletion: callback)
+            convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, progress: progress, uponCompletion: { terminationCode, errorMessage in
+                guard terminationCode == 0 else {
+                    callback(terminationCode, errorMessage)
+                    return
+                }
+                resizeIfNeeded(0)
+            })
         } else {
             resizeIfNeeded(0)
         }
