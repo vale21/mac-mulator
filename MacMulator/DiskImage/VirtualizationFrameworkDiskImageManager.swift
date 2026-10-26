@@ -116,6 +116,10 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                     })
                 }
             #else
+                if virtualDrive.format == QemuConstants.FORMAT_RAW {
+                    QemuDiskImageManager().resizeDiskImage(virtualDrive, path, shrink: shrink, progress: progress, uponCompletion: callback)
+                    return
+                }
                 let shell = Shell()
 
                 let command = "/usr/sbin/diskutil image resize --size " + String(virtualDrive.size) + "GiB " + Utils.escape(virtualDrive.path)
