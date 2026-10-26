@@ -180,7 +180,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     virtualMachine.usbPassthroughDeviceNames = names
                     virtualMachine.writeToPlist()
                 }
-                for candidate in candidates {
+                let attachedIDs = Set(candidates.filter {
+                    runner?.isPassthroughAttached(registryID: $0.registryID) == true
+                }.map { $0.registryID })
+                let orderedCandidates = candidates.filter { attachedIDs.contains($0.registryID) }
+                    + candidates.filter { !attachedIDs.contains($0.registryID) }
+                for candidate in orderedCandidates {
                     let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
                     item.target = self
                     item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID), "name": candidate.name] as [String: Any]
