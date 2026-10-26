@@ -486,6 +486,7 @@ class VirtualMachineViewController: NSViewController {
         pauseVMButton.isHidden = true
         qemuUnavailableLabel.isHidden = true
         loadingView.isHidden = false
+        bottomConfigureVMButton.isHidden = true
     }
 
     fileprivate func showNoVmsLayout() {
@@ -505,6 +506,7 @@ class VirtualMachineViewController: NSViewController {
         noVMWelcomeMessage.stringValue = NSLocalizedString("VirtualMachineViewController.noVMWelcomeMessage", comment: "")
         newVMLabel.title = NSLocalizedString("VirtualMachineViewController.newVMLabel", comment: "")
         importVMLabel.title = NSLocalizedString("VirtualMachineViewController.importVMLabel", comment: "")
+        bottomConfigureVMButton.isHidden = true
     }
 
     fileprivate func showVMAvailableLayout() {

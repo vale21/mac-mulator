@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -3457,6 +3457,7 @@ Rocky Linux</string>
                         <outlet property="descriptionText" destination="bNY-9B-VBP" id="6bV-72-d9I"/>
                         <outlet property="licenseButton" destination="E7N-rW-Fzz" id="phu-nW-VTF"/>
                         <outlet property="qemuVersionLabel" destination="GAk-eH-dhx" id="Th7-Be-ybX"/>
+                        <outlet property="titleLabel" destination="jcg-29-BcR" id="GVO-KC-0Vm"/>
                         <outlet property="versionLabel" destination="nbc-Cc-IYr" id="QWc-rl-OHS"/>
                     </connections>
                 </viewController>

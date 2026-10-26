@@ -182,7 +182,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 }
                 let attachedIDs = Set(candidates.filter {
                     runner?.isPassthroughAttached(registryID: $0.registryID) == true
-                }.map { $0.registryID })
+                }.map(\.registryID))
                 let orderedCandidates = candidates.filter { attachedIDs.contains($0.registryID) }
                     + candidates.filter { !attachedIDs.contains($0.registryID) }
                 for candidate in orderedCandidates {
@@ -441,7 +441,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    // The storyboard title is localized but hardcodes "MacMulator"; swap in the product name (e.g. "MacMulator EE").
+    private func updateAboutMenuItemTitle() {
+        guard let productName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
+              let aboutItem = NSApp.mainMenu?.items.first?.submenu?.items.first
+        else {
+            return
+        }
+        aboutItem.title = aboutItem.title.replacingOccurrences(of: "MacMulator", with: productName)
+    }
+
     func applicationDidFinishLaunching(_: Notification) {
+        updateAboutMenuItemTitle()
+
         if #available(macOS 27.0, *) {
             #if arch(arm64)
                 NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didConnectNotification, object: nil, queue: .main) { [weak self] _ in
