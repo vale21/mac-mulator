@@ -77,12 +77,11 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     }
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let newSizeInBytes = Int(virtualDrive.size) * 1000 * 1000 * 1000
-
         if #available(macOS 27.0, *) {
             #if arch(arm64)
                 DispatchQueue.global().async {
                     do {
+                        let newSizeInBytes = Int(virtualDrive.size) * 1000 * 1000 * 1000
                         let diskImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: virtualDrive.path), mode: .readWrite))
                         try diskImage.truncate(blockCount: newSizeInBytes / diskImage.blockSize.rawValue)
                         callback(0, nil)
