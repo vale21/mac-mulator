@@ -240,11 +240,6 @@ class VirtualMachineViewController: NSViewController {
         if rootController?.currentVm == vm {
             setRunningStatus(vm, false)
         }
-        if vm.provisioningInformation != nil {
-            vm.provisioningInformation?.cleanup()
-            vm.provisioningInformation = nil
-            vm.writeToPlist()
-        }
     }
 
     override func viewWillAppear() {

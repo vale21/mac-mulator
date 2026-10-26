@@ -182,6 +182,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if error != nil {
             Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         } else {
+            if managedVm.provisioningInformation != nil {
+                managedVm.provisioningInformation?.cleanup()
+                managedVm.provisioningInformation = nil
+                managedVm.writeToPlist()
+            }
             attachUSBDrives()
         }
     }
