@@ -18,6 +18,7 @@ class ConvertVMViewController: NSViewController {
     }
 
     override func viewDidAppear() {
+        convertingVMLabel.stringValue = NSLocalizedString("ConvertVMViewController.convertingVM", comment: "")
         progressBar.startAnimation(self)
         setEstimateTimeRemainingVisible(false)
 

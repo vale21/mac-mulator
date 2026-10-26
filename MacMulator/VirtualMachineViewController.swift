@@ -139,9 +139,9 @@ class VirtualMachineViewController: NSViewController {
 
     func vmFailedConversion(_ vm: VirtualMachine, _ error: String) {
         if vm.type == MacMulatorConstants.QEMU_VM {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Conversion to QEMU failed: " + error, virtualMachine: vm)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("VirtualMachineViewController.conversionToQemuFailed", comment: ""), error), virtualMachine: vm)
         } else {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: "VM Conversion to Apple failed: " + error, virtualMachine: vm)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("VirtualMachineViewController.conversionToAppleFailed", comment: ""), error), virtualMachine: vm)
         }
     }
 

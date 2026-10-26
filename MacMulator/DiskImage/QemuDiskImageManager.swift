@@ -72,9 +72,9 @@ class QemuDiskImageManager: DiskImageManager {
                 _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
                 callback(0, nil)
             } catch {
-                print("Failed to replace disk image with converted " + format + " image: \(error)")
+                print(String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(-1, "Failed to replace disk image with converted " + format + " image: \(error)")
+                callback(-1, String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
             }
         })
     }

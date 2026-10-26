@@ -39,7 +39,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                     callback(0, nil)
                 } catch {
                     print("Failed to create ASIF disk image: \(error)")
-                    callback(-1, "Failed to create ASIF disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createAsifFailed", comment: ""), "\(error)"))
                 }
             #endif
         } else {
@@ -67,7 +67,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                     callback(0, nil)
                 } catch {
                     print("Failed to create RAW disk image: \(error)")
-                    callback(-1, "Failed to create RAW disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createRawFailed", comment: ""), "\(error)"))
                 }
             #endif
         } else {
@@ -88,7 +88,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                         callback(0, nil)
                     } catch {
                         print("Failed to resize disk image: \(error)")
-                        callback(-1, "Failed to resize disk image: \(error)")
+                        callback(-1, String(format: NSLocalizedString("DiskImageManager.resizeFailed", comment: ""), "\(error)"))
                     }
                 }
             #endif
@@ -156,9 +156,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
                 callback(0, nil)
             } catch {
-                print("Failed to replace disk image with converted " + format + " image: \(error)")
+                print(String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
                 try? FileManager.default.removeItem(atPath: tempPath)
-                callback(-1, "Failed to replace disk image with converted " + format + " image: \(error)")
+                callback(-1, String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
             }
         })
     }
@@ -211,7 +211,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                             identityInfo: identityInfo
                         ))
                     } catch {
-                        callback(-1, "Failed to read disk image info: \(error)")
+                        callback(-1, String(format: NSLocalizedString("DiskImageManager.readInfoFailed", comment: ""), "\(error)"))
                     }
                 }
             #endif

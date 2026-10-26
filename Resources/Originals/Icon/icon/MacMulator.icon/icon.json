@@ -1,19 +1,11 @@
 {
-  "fill" : {
-    "solid" : "extended-gray:1.00000,1.00000"
-  },
+  "fill" : "system-light",
   "groups" : [
     {
       "blur-material" : null,
       "layers" : [
         {
-          "glass-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : true
-            }
-          ],
-          "image-name" : "curl_dark.png",
+          "image-name" : "curl_dark 2.png",
           "name" : "curl_dark",
           "opacity-specializations" : [
             {
@@ -22,45 +14,60 @@
             {
               "appearance" : "dark",
               "value" : 1
+            },
+            {
+              "appearance" : "tinted",
+              "value" : 1
+            }
+          ],
+          "position-specializations" : [
+            {
+              "idiom" : "macOS",
+              "value" : {
+                "scale" : 0.85,
+                "translation-in-points" : [
+                  -30,
+                  32
+                ]
+              }
             }
           ]
         },
         {
-          "glass-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : false
-            }
-          ],
-          "image-name" : "Curl.png",
+          "image-name" : "curl_light.png",
           "name" : "curl_light",
           "opacity-specializations" : [
             {
+              "value" : 1
+            },
+            {
               "appearance" : "dark",
+              "value" : 0
+            },
+            {
+              "appearance" : "tinted",
               "value" : 0
             }
           ],
-          "position" : {
-            "scale" : 0.9,
-            "translation-in-points" : [
-              -18.6796875,
-              21.0078125
-            ]
-          }
+          "position-specializations" : [
+            {
+              "idiom" : "macOS",
+              "value" : {
+                "scale" : 0.85,
+                "translation-in-points" : [
+                  -30,
+                  32
+                ]
+              }
+            }
+          ]
         },
         {
-          "image-name" : "Border_cut.png",
+          "image-name" : "Border_cut 3.png",
           "name" : "border"
         },
         {
-          "glass-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : true
-            }
-          ],
-          "hidden" : false,
-          "image-name" : "Wallpaper-dark 2.png",
+          "image-name" : "Wallpaper-dark.png",
           "name" : "wallpaper_dark",
           "opacity-specializations" : [
             {
@@ -73,13 +80,7 @@
           ]
         },
         {
-          "glass-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : false
-            }
-          ],
-          "image-name" : "Wallpaper-light 2.png",
+          "image-name" : "Wallpaper-light.png",
           "name" : "wallpaper_light",
           "opacity-specializations" : [
             {
@@ -92,14 +93,30 @@
           ]
         },
         {
-          "glass" : false,
-          "hidden-specializations" : [
+          "hidden" : false,
+          "image-name" : "binary_light 4.png",
+          "name" : "binary_light",
+          "opacity-specializations" : [
             {
-              "idiom" : "macOS",
-              "value" : false
+              "appearance" : "dark",
+              "value" : 0
             }
           ],
-          "image-name" : "binary_dark.png",
+          "position-specializations" : [
+            {
+              "idiom" : "macOS",
+              "value" : {
+                "scale" : 1,
+                "translation-in-points" : [
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "image-name" : "binary_dark 2.png",
           "name" : "binary_dark",
           "opacity-specializations" : [
             {
@@ -109,39 +126,7 @@
               "appearance" : "dark",
               "value" : 1
             }
-          ],
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              -132.0859375,
-              2.6796875
-            ]
-          }
-        },
-        {
-          "fill" : "automatic",
-          "glass" : false,
-          "hidden-specializations" : [
-            {
-              "idiom" : "macOS",
-              "value" : false
-            }
-          ],
-          "image-name" : "Binary.png",
-          "name" : "binary_light",
-          "opacity-specializations" : [
-            {
-              "appearance" : "dark",
-              "value" : 0
-            }
-          ],
-          "position" : {
-            "scale" : 1,
-            "translation-in-points" : [
-              -133.4609375,
-              4.09375
-            ]
-          }
+          ]
         }
       ],
       "lighting" : "combined",
