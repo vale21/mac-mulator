@@ -64,9 +64,9 @@ class CreateDiskFileViewController: NSViewController {
             let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
 
-                if !complete, !self.progressBar.isIndeterminate {
+                if !complete {
                     let progress = self.progressBar.doubleValue
-                    if progress > 10 {
+                    if !self.progressBar.isIndeterminate, progress > 10 {
                         self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progressBar.doubleValue))
                     }
                 } else {
