@@ -43,7 +43,13 @@ class ConvertVMViewController: NSViewController {
                     }
                 } else {
                     let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_QCOW2 }
-                    convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_ASIF) { code, message in
+                    let targetFormat: String
+                    if #available(macOS 26.0, *) {
+                        targetFormat = QemuConstants.FORMAT_ASIF
+                    } else {
+                        targetFormat = QemuConstants.FORMAT_RAW
+                    }
+                    convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
                         if code == 0 {
                             VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
                             QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
