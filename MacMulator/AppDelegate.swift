@@ -334,6 +334,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 showConsoleOutputmenuItem.isEnabled = false
             } else {
                 if let vm = rootController.currentVm {
+                    let canConvert = !rootController.isCurrentVMRunning()
                     cloneVMMemuItem.isEnabled = true
                     showVMInFinderMenuItem.isEnabled = true
                     settingsMenuItem.isEnabled = true
@@ -373,7 +374,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     #endif
 
                     if vm.type == MacMulatorConstants.APPLE_VM {
-                        convertToQemuMenuItem.isEnabled = !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+                        convertToQemuMenuItem.isEnabled = canConvert && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
                         convertToAppleMenuItem.isEnabled = false
 
                         var usbDrives: [String] = []
@@ -411,7 +412,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         }
                     } else {
                         convertToQemuMenuItem.isEnabled = false
-                        convertToAppleMenuItem.isEnabled = vm.os == QemuConstants.OS_LINUX
+                        convertToAppleMenuItem.isEnabled = canConvert && vm.os == QemuConstants.OS_LINUX
                         usbDevicesMenuItem.isEnabled = false
                     }
                 }
