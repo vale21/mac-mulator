@@ -710,7 +710,7 @@ class Utils {
         return false
     }
 
-    static func isMacVMSupportingParavirtualozedGraphics(_ vm: VirtualMachine) -> Bool {
+    static func isMacVMSupportingParavirtualizedGraphics(_ vm: VirtualMachine) -> Bool {
         Utils.isVMAvailable(vm) && Utils.isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_BIG_SUR)
     }
 

@@ -198,7 +198,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
             let appleParavirtualizedGraphicsSupported = capabilities?.appleParavirtualizedGraphicsSupported ?? false
 
             if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && virGLSupported ||
-                virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualozedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
+                virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualizedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
             {
                 print("3D Acceleration SUPPORTED")
                 DispatchQueue.main.async {
