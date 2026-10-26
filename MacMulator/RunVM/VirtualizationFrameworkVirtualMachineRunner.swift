@@ -418,7 +418,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         #if arch(arm64)
             guard let saved = managedVm.usbPassthroughDevices, !saved.isEmpty else { return }
             NSLog("USB passthrough: restoring saved devices %@", saved.joined(separator: ","))
-            UsbPassthroughManager.shared.start {
+            UsbPassthroughManager.shared.start(retryAfterFailure: true) {
                 DispatchQueue.main.async {
                     self.restoreSavedPassthroughDevices()
                 }

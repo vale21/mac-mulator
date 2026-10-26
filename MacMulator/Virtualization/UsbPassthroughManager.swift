@@ -27,11 +27,12 @@
         private let lock = NSLock()
         private var accessories: [UInt64: AAUSBAccessory] = [:]
         private var registered = false
+        private var registrationFailed = false
         private var ready = false
         private var pendingCompletions: [() -> Void] = []
         private(set) var lastError: String?
 
-        func start(completion: (() -> Void)? = nil) {
+        func start(retryAfterFailure: Bool = false, completion: (() -> Void)? = nil) {
             lock.lock()
             if ready {
                 lock.unlock()
@@ -45,6 +46,11 @@
                 lock.unlock()
                 return
             }
+            if registrationFailed && !retryAfterFailure {
+                lock.unlock()
+                return
+            }
+            registrationFailed = false
             registered = true
             lock.unlock()
 
@@ -53,6 +59,7 @@
                     NSLog("USB accessory listener registration failed: %@", String(describing: error))
                     self?.lock.lock()
                     self?.registered = false
+                    self?.registrationFailed = true
                     self?.lastError = "\(error.localizedDescription) [\((error as NSError).domain) \((error as NSError).code)]"
                     self?.lock.unlock()
                     self?.notifyChange()
