@@ -938,7 +938,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */,
-				3B3A5889308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
