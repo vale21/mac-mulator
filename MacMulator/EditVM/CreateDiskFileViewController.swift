@@ -42,12 +42,17 @@ class CreateDiskFileViewController: NSViewController {
                 let diskImageManager = DiskImageManagerFactory().create(isVirtualizationFrameworkInUse: self.isVirtualizaionFrameworkInUse)
                 if self.parentController?.mode == NewDiskViewController.Mode.ADD {
                     self.diskProgressLabel.stringValue = NSLocalizedString("CreateDiskFileViewController.creatingDisk", comment: "")
-                    diskImageManager.createDiskImage(newVirtualDrive, newVirtualDrive.path, uponCompletion: {
+                    let directoryPath = newVirtualDrive.path
+                    diskImageManager.createDiskImage(newVirtualDrive, directoryPath, uponCompletion: {
                         errorCode, errorMessage in
-                        complete = true
-                        error = errorCode != 0 ? errorMessage : nil
+                        DispatchQueue.main.async {
+                            if errorCode == 0 {
+                                newVirtualDrive.path = directoryPath + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+                            }
+                            error = errorCode != 0 ? errorMessage : nil
+                            complete = true
+                        }
                     })
-                    newVirtualDrive.path = newVirtualDrive.path + "/" + newVirtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
                 } else {
                     self.diskProgressLabel.stringValue = String(format: NSLocalizedString("CreateDiskFileViewController.updatingDisk", comment: ""), newVirtualDrive.name)
                     diskImageManager.updateDiskImage(oldVirtualDrive: self.oldVirtualDrive!, newVirtualDrive: newVirtualDrive, path: NSHomeDirectory(), progress: { percentage in
