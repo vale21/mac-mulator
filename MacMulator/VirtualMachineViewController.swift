@@ -241,6 +241,7 @@ class VirtualMachineViewController: NSViewController {
         if vm.provisioningInformation != nil {
             vm.provisioningInformation?.cleanup()
             vm.provisioningInformation = nil
+            vm.writeToPlist()
         }
     }
 
