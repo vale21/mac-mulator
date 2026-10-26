@@ -225,7 +225,7 @@ class VirtualMachineViewController: NSViewController {
             dest.setRecoveryMode(vmToStart.inRecovery)
             dest.setVmController(source)
         } else if segue.identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
-            if #available(macOS 14.0, *), let rootController, let currentVM = rootController.currentVm {
+            if #available(macOS 13.0, *), let rootController, let currentVM = rootController.currentVm {
                 let source = segue.sourceController as! VirtualMachineViewController
                 let dest = segue.destinationController as! ConvertVMViewController
 
