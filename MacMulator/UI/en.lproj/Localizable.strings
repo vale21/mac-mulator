@@ -11,7 +11,7 @@
 "AppDelegate.cannotOpenFile" = "Could not open file %@. It migh be corrupted.";
 "AppDelegate.couldNotFindExistingVMs" = "Could not find some Virtual Machines that were configured in MacMulator: %@";
 "AppDelegate.detachImage" = "Detach Image";
-"AppDelegate.deviceInUse" = "%@ — in use by %@";
+"AppDelegate.deviceInUse" = "%@ (in use by %@)";
 "AppDelegate.deviceNotConnected" = "%@ (not assigned to MacMulator)";
 "AppDelegate.errorDeleting" = "Error while deleting %@: %@";
 "AppDelegate.errorReading" = "Error while reading %@: %@";

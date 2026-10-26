@@ -205,7 +205,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     for _ in 0 ..< count {
                         let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), names[key] ?? key), action: nil, keyEquivalent: "")
                         item.isEnabled = false
-                        item.state = .on
+                        item.state = .off
                         newItems.append(item)
                     }
                 }

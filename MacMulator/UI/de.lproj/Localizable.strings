@@ -11,7 +11,7 @@
 "AppDelegate.cannotOpenFile" = "Datei %@ konnte nicht geöffnet werden. Sie könnte beschädigt sein.";
 "AppDelegate.couldNotFindExistingVMs" = "Einige in MacMulator konfigurierte virtuelle Maschinen konnten nicht gefunden werden: %@";
 "AppDelegate.detachImage" = "Abbild trennen";
-"AppDelegate.deviceInUse" = "%@ — verwendet von %@";
+"AppDelegate.deviceInUse" = "%@ (verwendet von %@)";
 "AppDelegate.deviceNotConnected" = "%@ (nicht MacMulator zugewiesen)";
 "AppDelegate.errorDeleting" = "Fehler beim Löschen von %@: %@";
 "AppDelegate.errorReading" = "Fehler beim Lesen von %@: %@";

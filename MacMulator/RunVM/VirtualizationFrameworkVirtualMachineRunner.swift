@@ -206,6 +206,17 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     fileprivate func attachUSBDrives() {
+        attachUSBPassthroughDevices()
+        if #available(macOS 15.0, *) {
+            for drive in self.managedVm.drives {
+                if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                    self.attachUSBImageToVM(virtualDrive: drive)
+                }
+            }
+        }
+    }
+
+    fileprivate func attachUSBPassthroughDevices() {
         if #available(macOS 27.0, *) {
             #if arch(arm64)
                 for controller in vzVirtualMachine?.usbControllers ?? [] {
@@ -213,13 +224,6 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 }
                 reattachSavedPassthroughDevices()
             #endif
-        }
-        if #available(macOS 15.0, *) {
-            for drive in self.managedVm.drives {
-                if drive.mediaType == QemuConstants.MEDIATYPE_USB {
-                    self.attachUSBImageToVM(virtualDrive: drive)
-                }
-            }
         }
     }
 
@@ -233,6 +237,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
                     Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                } else {
+                    // Passthrough devices are not part of the saved machine state: plug back the ones saved for this VM
+                    self.attachUSBPassthroughDevices()
                 }
                 NSLog(String(vzVirtualMachine.state.rawValue))
             })
@@ -267,9 +274,17 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                     vmViewController?.takeScreenshot()
                     vmViewController?.showPausingView()
                     #if arch(arm64)
-                        pauseAndSaveVirtualMachine(completionHandler: {
-                            self.stopVM(guestStopped: true)
-                        })
+                        if #available(macOS 27.0, *) {
+                            detachPassthroughDevicesBeforeSaving {
+                                self.pauseAndSaveVirtualMachine(completionHandler: {
+                                    self.stopVM(guestStopped: true)
+                                })
+                            }
+                        } else {
+                            self.pauseAndSaveVirtualMachine(completionHandler: {
+                                self.stopVM(guestStopped: true)
+                            })
+                        }
                     #endif
                 }
             }
@@ -410,6 +425,27 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                     }
                 }
             }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func detachPassthroughDevicesBeforeSaving(completionHandler: @escaping () -> Void) {
+        #if arch(arm64)
+            guard let usbController = vzVirtualMachine?.usbControllers.first else {
+                completionHandler()
+                return
+            }
+            let group = DispatchGroup()
+            for device in passthroughDevices.values.compactMap({ $0 as? VZUSBPassthroughDevice }) {
+                group.enter()
+                usbController.detach(device: device) { error in
+                    if let error {
+                        NSLog("USB passthrough detach before saving failed: %@", String(describing: error))
+                    }
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main, execute: completionHandler)
         #endif
     }
 

@@ -75,6 +75,17 @@ class RunningVMManagerViewController: NSViewController, NSWindowDelegate {
         virtualMachine?.writeToPlist()
     }
 
+    /// When the VM window comes to the foreground, make its VM the current one so that the menus act on it
+    func windowDidBecomeMain(_: Notification) {
+        guard let virtualMachine,
+              let rootController = (NSApp.delegate as? AppDelegate)?.rootController,
+              rootController.currentVm !== virtualMachine
+        else {
+            return
+        }
+        rootController.setCurrentVirtualMachine(virtualMachine)
+    }
+
     func windowDidEnterFullScreen(_: Notification) {
         isFullScreen = true
     }

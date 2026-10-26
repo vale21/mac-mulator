@@ -11,7 +11,7 @@
 "AppDelegate.cannotOpenFile" = "Impossible d’ouvrir le fichier %@. Il pourrait être corrompu.";
 "AppDelegate.couldNotFindExistingVMs" = "Impossible de trouver certaines machines virtuelles configurées dans MacMulator : %@";
 "AppDelegate.detachImage" = "Détacher l’image";
-"AppDelegate.deviceInUse" = "%@ — utilisé par %@";
+"AppDelegate.deviceInUse" = "%@ (utilisé par %@)";
 "AppDelegate.deviceNotConnected" = "%@ (non attribué à MacMulator)";
 "AppDelegate.errorDeleting" = "Erreur lors de la suppression de %@ : %@";
 "AppDelegate.errorReading" = "Erreur lors de la lecture de %@ : %@";

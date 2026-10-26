@@ -11,7 +11,7 @@
 "AppDelegate.cannotOpenFile" = "Non ho potuto aprire il file %@. Potrebbe essere corrotto.";
 "AppDelegate.couldNotFindExistingVMs" = "Le seguenti VM che erano configurate in MacMulator non sono state trovate: %@";
 "AppDelegate.detachImage" = "Disconnetti Immagine";
-"AppDelegate.deviceInUse" = "%@ — in uso da %@";
+"AppDelegate.deviceInUse" = "%@ (in uso su %@)";
 "AppDelegate.deviceNotConnected" = "%@ (non assegnato a MacMulator)";
 "AppDelegate.errorDeleting" = "Errore durante la cancellazione di %@: %@";
 "AppDelegate.errorReading" = "Errore durante la lettura di %@: %@";
