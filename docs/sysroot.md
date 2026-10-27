@@ -2,7 +2,11 @@
 
 MacMulator does not build SPICE, GLib, GStreamer or Qemu itself. It takes them prebuilt from the
 **UTM sysroot**, the universal (arm64 + x86_64) macOS sysroot that the
-[UTM project](https://github.com/utmapp/UTM) builds on GitHub Actions for its own app. This document
+[UTM project](https://github.com/utmapp/UTM) builds on GitHub Actions for its own app. UTM's
+artifacts expire after 90 days, so MacMulator keeps its own copies, attached as
+`MacMulator-UTM-SysRoot-<artifact-id>.zip` to the
+[GitHub releases](https://github.com/vale21/mac-mulator/releases) of this repository. Builds only
+ever download those copies; UTM's CI is only contacted to pick up a new sysroot. This document
 explains how that sysroot is obtained, pinned and updated.
 
 ## Current pin
@@ -10,6 +14,7 @@ explains how that sysroot is obtained, pinned and updated.
 | What | Value |
 |---|---|
 | Artifact | `Sysroot-macos-universal` id `10846077902` |
+| MacMulator copy | `MacMulator-UTM-SysRoot-10846077902.zip` in release `1_0_0_b28` |
 | UTM commit | `7eadb056ae0f91d979059544d0ddcd2d5a40be92` (`main`, built 2026-09-25) |
 | Qemu | 10.0.12 (UTM fork) |
 | CocoaSpice | revision `d8d29fc810047a3ddcebb351cdadc8fe4b4f308d` |
@@ -20,7 +25,8 @@ Update this table whenever the sysroot or CocoaSpice is changed.
 
 The sysroot lives in `Sysroot/sysroot-macOS-arm64_x86_64/` at the root of the repository. The whole
 `Sysroot/` directory is git-ignored: every machine that builds MacMulator has to download it.
-`Sysroot/VERSION` records which artifact was downloaded.
+`Sysroot/VERSION` records which UTM artifact and commit the sysroot comes from and which copy was
+downloaded.
 
 | Part of the sysroot | Used by | How |
 |---|---|---|
@@ -32,9 +38,13 @@ The sysroot lives in `Sysroot/sysroot-macOS-arm64_x86_64/` at the root of the re
 | `share/qemu/` | App Store flavor | firmware subset copied to `Contents/Resources/qemu`, passed to Qemu with `-L` |
 | `Frameworks/swtpm.0.framework` | App Store flavor | embedded; `scripts/swtpm_launcher.c` is compiled around it into `Contents/MacOS/swtpm`, since the sysroot has no swtpm executable |
 
-Two scripts do all the work:
+Three scripts do all the work:
 
-- `scripts/fetch_sysroot.sh` downloads an artifact and extracts the parts above into `Sysroot/`.
+- `scripts/fetch_sysroot.sh` downloads a MacMulator copy from the releases of this repository and
+  unpacks it into `Sysroot/`. This is what developers and Xcode Cloud run.
+- `scripts/fetch_utm_sysroot.sh` downloads an artifact from UTM's CI, extracts the parts above into
+  `Sysroot/` and packages them as `MacMulator-UTM-SysRoot-<artifact-id>.zip` for a new release. Only
+  needed when updating the sysroot.
 - `scripts/embed_sysroot_frameworks.sh` is the "Embed Sysroot" Run Script phase of both app targets.
   It follows the `@rpath` load commands of the frameworks the app links to compute what to embed,
   thins binaries to the architecture being built, signs everything, and adds the Qemu pieces when the
@@ -48,26 +58,20 @@ which is compiled against the headers and frameworks of the sysroot. See
 ## Setting up a new development machine
 
 1. Install Xcode and clone the repository. Open `MacMulator.xcworkspace`, not the project.
-2. Provide a GitHub token. GitHub only serves Actions artifacts to authenticated requests, even for
-   public repositories. The fetch script looks for a token in this order:
-   - the `GH_TOKEN` environment variable;
-   - the `GITHUB_TOKEN` environment variable;
-   - the GitHub CLI, if `gh auth login` was run;
-   - the git credential helper for `github.com` (the keychain entry that `git push` over HTTPS uses).
-
-   A fine-grained token only needs read access to *Actions* on public repositories; a classic token
-   needs the `repo` scope.
-3. Download the sysroot:
+2. Download the sysroot:
 
    ```sh
-   scripts/fetch_sysroot.sh
+   scripts/fetch_sysroot.sh 10846077902        # the copy of a specific artifact id
+   scripts/fetch_sysroot.sh                    # or: the newest copy in any release
    ```
 
-   This downloads about 650 MB and leaves about 530 MB in `Sysroot/`. Check `Sysroot/VERSION`
+   This downloads about 130 MB and leaves about 530 MB in `Sysroot/`. Check `Sysroot/VERSION`
    afterwards. To reproduce exactly what the rest of the team uses, pass the artifact id from the
-   [Current pin](#current-pin) table instead of taking the newest one (see
-   [Choosing the artifact](#downloading-the-sysroot-and-choosing-the-artifact-id)).
-4. Build the `MacMulator Enthusiast` scheme and the `MacMulator App Store` scheme once each. The
+   [Current pin](#current-pin) table. No GitHub token is needed; if one is available (`GH_TOKEN`,
+   `GITHUB_TOKEN` or `gh auth login`) it is used to avoid the rate limit of anonymous API requests.
+   A copy downloaded by other means can be unpacked with
+   `SYSROOT_ZIP=~/Downloads/MacMulator-UTM-SysRoot-10846077902.zip scripts/fetch_sysroot.sh`.
+3. Build the `MacMulator Enthusiast` scheme and the `MacMulator App Store` scheme once each. The
    first build of each flavor is slow because the Run Script phase copies and signs the frameworks.
    Code signing needs a development certificate of the team: the embedded frameworks and the Qemu
    executables are signed with the same identity as the app.
@@ -86,26 +90,34 @@ Troubleshooting:
 Xcode Cloud starts from a clean clone, so it downloads the sysroot on every build:
 
 - `ci_scripts/ci_post_clone.sh` runs `scripts/fetch_sysroot.sh` right after the clone.
-- The script needs a token: in App Store Connect open the workflow, go to *Environment*, and add an
-  environment variable named `GH_TOKEN` marked as **secret**, containing a GitHub token as described
-  above.
-- To build against a fixed artifact instead of the newest `main` one, add a second environment
-  variable `SYSROOT_ARTIFACT_ID` with the artifact id. Keep it equal to the
-  [Current pin](#current-pin). Remember that artifacts expire (see below): when the pinned one
-  expires, the build fails at the post-clone step until the variable is updated.
+- No token is required. Xcode Cloud machines share IP addresses, so GitHub's limit of 60 anonymous
+  API requests per hour can be hit; to avoid it, open the workflow in App Store Connect, go to
+  *Environment*, and add an environment variable named `GH_TOKEN` marked as **secret**, containing
+  any GitHub token (no scopes needed).
+- To build against a fixed sysroot instead of the newest copy, add an environment variable
+  `SYSROOT_ARTIFACT_ID` with the artifact id. Keep it equal to the [Current pin](#current-pin).
 - Workflows must use the `MacMulator Enthusiast` or `MacMulator App Store` scheme. Both are
   universal (arm64 + x86_64); the App Store scheme produces the sandboxed, Qemu-bundling app.
   Being universal costs the App Store flavor about 210 MB (the embedded binaries go from 206 MB
   to 414 MB); to make it Apple Silicon only again, set `ARCHS = arm64` on the App Store target
   and the embed script thins everything it embeds.
 
-The download adds roughly a minute and a half to each build.
-
-## Downloading the sysroot and choosing the artifact ID
+## Taking a new sysroot from UTM and choosing the artifact ID
 
 UTM's "Build" workflow uploads one `Sysroot-macos-universal` artifact per run, for every branch it
 builds. Artifacts are kept for **90 days** and then expire; an expired artifact cannot be downloaded
-any more.
+any more, which is why MacMulator keeps its own copies.
+
+`scripts/fetch_utm_sysroot.sh` talks to UTM's CI. GitHub only serves Actions artifacts to
+authenticated requests, even for public repositories, so it needs a token, looked up in this order:
+
+- the `GH_TOKEN` environment variable;
+- the `GITHUB_TOKEN` environment variable;
+- the GitHub CLI, if `gh auth login` was run;
+- the git credential helper for `github.com` (the keychain entry that `git push` over HTTPS uses).
+
+A fine-grained token only needs read access to *Actions* on public repositories; a classic token
+needs the `repo` scope.
 
 List the available artifacts with the GitHub CLI:
 
@@ -126,9 +138,21 @@ Choosing one:
 Then download it:
 
 ```sh
-scripts/fetch_sysroot.sh 10846077902        # a specific artifact id
-scripts/fetch_sysroot.sh                    # or: the newest non-expired artifact of main
+scripts/fetch_utm_sysroot.sh 10846077902    # a specific artifact id
+scripts/fetch_utm_sysroot.sh                # or: the newest non-expired artifact of main
 ```
+
+Besides filling `Sysroot/`, the script writes `MacMulator-UTM-SysRoot-<artifact-id>.zip` to the
+repository root (git-ignored; `SYSROOT_PACKAGE_DIR` changes the location). Once the sysroot has been
+validated (see below), attach the zip to a release so that everybody else and Xcode Cloud get it:
+
+```sh
+gh release upload <tag> MacMulator-UTM-SysRoot-<artifact-id>.zip
+```
+
+`scripts/fetch_sysroot.sh` without arguments takes the copy with the highest artifact id across all
+releases, so uploading it makes it the default immediately. Upload it only after it builds and passes
+the smoke test.
 
 The script extracts only what MacMulator uses. It skips the Qemu system emulators for architectures
 MacMulator does not support, the EDK2 firmware images (MacMulator ships its own EFI), and the GPU
@@ -139,10 +163,12 @@ If the artifact was downloaded by other means (for example from the browser, thr
 UTM's GitHub page, where the artifact zip contains a `sysroot.tgz`), the download step can be skipped:
 
 ```sh
-SYSROOT_TGZ=~/Downloads/sysroot.tgz scripts/fetch_sysroot.sh
+SYSROOT_TGZ=~/Downloads/sysroot.tgz scripts/fetch_utm_sysroot.sh
 ```
 
-In that case `Sysroot/VERSION` cannot record the UTM commit; add it by hand if it matters.
+In that case `Sysroot/VERSION` cannot record the artifact id and UTM commit, and no release zip is
+written; add them to `VERSION` by hand and zip `Sysroot/VERSION` and `Sysroot/sysroot-macOS-*`
+(`zip -ry`) if you want to publish it.
 
 ## Updating Qemu when UTM releases a new version
 
@@ -150,7 +176,8 @@ Qemu is not a separate download: a new UTM release means a new sysroot artifact 
 release tag, which brings the new Qemu **and** new SPICE, GLib and GStreamer frameworks. Updating
 Qemu therefore affects both flavors, not only the App Store one.
 
-1. Find the artifact of the release tag with the listing command above and fetch it with its id.
+1. Find the artifact of the release tag with the listing command above and fetch it with
+   `scripts/fetch_utm_sysroot.sh <id>`.
 2. Update CocoaSpice to the revision UTM pins at that tag (next section). SPICE client and server
    must agree.
 3. Build both schemes. Two kinds of failure are expected after a big update:
@@ -187,8 +214,8 @@ Qemu therefore affects both flavors, not only the App Store one.
 6. Smoke test: in the Enthusiast flavor open a VM with the Spice display; in the App Store flavor
    open Preferences (it runs the bundled `qemu-img`), then start an ARM64 VM with HVF and an x86_64
    VM with TCG. Check that an Enthusiast build contains no `qemu-*` in `Contents/MacOS`.
-7. Update the [Current pin](#current-pin) table, the `SYSROOT_ARTIFACT_ID` of the Xcode Cloud
-   workflow if one is set, and commit.
+7. Upload `MacMulator-UTM-SysRoot-<id>.zip` to a release, update the [Current pin](#current-pin)
+   table and the `SYSROOT_ARTIFACT_ID` of the Xcode Cloud workflow if one is set, and commit.
 
 ## License obligations
 

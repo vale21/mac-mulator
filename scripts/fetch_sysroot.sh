@@ -1,38 +1,30 @@
 #!/bin/sh
 #
-# Downloads the prebuilt universal (arm64 + x86_64) macOS sysroot that the UTM
-# project publishes from its CI, and unpacks the parts MacMulator needs into
-# Sysroot/ at the repository root:
+# Downloads the MacMulator copy of the prebuilt universal (arm64 + x86_64) UTM
+# macOS sysroot and unpacks it into Sysroot/ at the repository root.
 #
-# - the SPICE / GLib / GStreamer frameworks and static GStreamer plugins, linked
-#   by both flavors of the application and embedded into the bundle;
-# - the UTM build of Qemu (qemu-*-softmmu frameworks, qemu-system-* and
-#   qemu-img executables, firmware in share/qemu), bundled by the App Store
-#   flavor only. See scripts/embed_sysroot_frameworks.sh.
+# The copies are attached as MacMulator-UTM-SysRoot-<artifact-id>.zip to the
+# GitHub releases of vale21/mac-mulator, so the build does not depend on UTM's
+# CI artifacts, which expire after 90 days. Each zip contains the Sysroot/
+# directory exactly as scripts/fetch_utm_sysroot.sh produces it (only the parts
+# MacMulator needs, plus Sysroot/VERSION); <artifact-id> is the id of the UTM
+# CI artifact it was extracted from. See docs/sysroot.md.
 #
-# The full sysroot is 2.6 GB; only the Qemu emulators MacMulator supports are
-# extracted, and the EDK2 firmware images are skipped (MacMulator ships its own).
-#
-# GitHub Actions artifacts can only be downloaded with an authenticated request.
-# The token is taken from, in order: $GH_TOKEN, $GITHUB_TOKEN, `gh auth token`,
-# or the git credential helper for github.com (the keychain entry that `git
-# push` uses). On Xcode Cloud, define GH_TOKEN as a secret environment variable
-# of the workflow; ci_scripts/ci_post_clone.sh then runs this script.
+# The release assets are public. A GitHub token is optional and only used to
+# avoid the API rate limit of anonymous requests; it is taken from $GH_TOKEN,
+# $GITHUB_TOKEN or `gh auth token`. On Xcode Cloud, ci_scripts/ci_post_clone.sh
+# runs this script.
 #
 # Usage: scripts/fetch_sysroot.sh [artifact-id]
 #
-# Without an argument the newest "Sysroot-macos-universal" artifact built from
-# the `main` branch of utmapp/UTM is used. Set SYSROOT_TGZ to the path of an
-# already downloaded sysroot.tgz to skip the download.
+# Without an argument the copy with the highest artifact id (the most recent
+# UTM build) found in any release is used. Set SYSROOT_ZIP to the path of an
+# already downloaded MacMulator-UTM-SysRoot-*.zip to skip the download.
 set -e
 
-REPO="utmapp/UTM"
-ARTIFACT_NAME="Sysroot-macos-universal"
+REPO="vale21/mac-mulator"
+ASSET_PREFIX="MacMulator-UTM-SysRoot-"
 SYSROOT_NAME="sysroot-macOS-arm64_x86_64"
-
-# Qemu system emulators bundled in the App Store flavor. Keep in sync with
-# QemuConstants.ARCH_* and with scripts/embed_sysroot_frameworks.sh.
-QEMU_TARGETS="aarch64 x86_64 i386 arm ppc ppc64 m68k riscv32 riscv64"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/Sysroot"
@@ -44,9 +36,6 @@ github_token () {
         echo "$GITHUB_TOKEN"
     elif command -v gh >/dev/null 2>&1 && gh auth token >/dev/null 2>&1; then
         gh auth token
-    else
-        # GIT_TERMINAL_PROMPT=0 / GIT_ASKPASS keep git from asking interactively on a CI machine.
-        printf "protocol=https\nhost=github.com\n\n" | GIT_TERMINAL_PROMPT=0 GIT_ASKPASS=/usr/bin/false git credential fill 2>/dev/null | sed -n 's/^password=//p'
     fi
 }
 
@@ -54,85 +43,91 @@ WORK="$(mktemp -d "${TMPDIR:-/tmp}/macmulator-sysroot.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 
 ARTIFACT_ID="$1"
-HEAD_SHA=
-CREATED_AT=
+SOURCE=
 
-if [ -n "$SYSROOT_TGZ" ]; then
-    echo "Using local sysroot archive $SYSROOT_TGZ..."
-    TGZ="$SYSROOT_TGZ"
+if [ -n "$SYSROOT_ZIP" ]; then
+    echo "Using local sysroot archive $SYSROOT_ZIP..."
+    ZIP="$SYSROOT_ZIP"
+    SOURCE="$SYSROOT_ZIP"
 else
     TOKEN="$(github_token)"
-    if [ -z "$TOKEN" ]; then
-        echo "error: no GitHub token found. Set GH_TOKEN, run 'gh auth login', or store github.com credentials in git." >&2
-        exit 1
-    fi
 
     api () {
-        curl -sfL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "$@"
+        if [ -n "$TOKEN" ]; then
+            curl -sfL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "$@"
+        else
+            curl -sfL -H "Accept: application/vnd.github+json" "$@"
+        fi
     }
 
-    if [ -z "$ARTIFACT_ID" ]; then
-        echo "Looking up the latest $ARTIFACT_NAME artifact of $REPO (main)..."
-        ARTIFACT_ID="$(api "https://api.github.com/repos/$REPO/actions/artifacts?per_page=100&name=$ARTIFACT_NAME" | /usr/bin/python3 -c '
-import json, sys
-artifacts = json.load(sys.stdin)["artifacts"]
-for a in artifacts:
-    if not a["expired"] and a["workflow_run"]["head_branch"] == "main":
-        print(a["id"], a["workflow_run"]["head_sha"], a["created_at"])
-        break
-')"
-    fi
+    # Fetch every page of the release list; the tag a copy is attached to is not known in advance.
+    echo "Looking up ${ARTIFACT_ID:-the latest} sysroot in the releases of $REPO..."
+    PAGE=1
+    while :; do
+        api -o "$WORK/releases-$PAGE.json" "https://api.github.com/repos/$REPO/releases?per_page=100&page=$PAGE"
+        COUNT="$(/usr/bin/python3 -c 'import json, sys; print(len(json.load(open(sys.argv[1]))))' "$WORK/releases-$PAGE.json")"
+        [ "$COUNT" -lt 100 ] && break
+        PAGE=$((PAGE + 1))
+    done
 
-    set -- $ARTIFACT_ID
+    FOUND="$(/usr/bin/python3 - "$ASSET_PREFIX" "$ARTIFACT_ID" "$WORK"/releases-*.json <<'EOF'
+import json, re, sys
+prefix, wanted, pages = sys.argv[1], sys.argv[2], sys.argv[3:]
+pattern = re.compile(re.escape(prefix) + r"(\d+)\.zip")
+best = None
+for page in pages:
+    for release in json.load(open(page)):
+        if release.get("draft"):
+            continue
+        for asset in release["assets"]:
+            m = pattern.fullmatch(asset["name"])
+            if not m or (wanted and m.group(1) != wanted):
+                continue
+            if best is None or int(m.group(1)) > int(best[0]):
+                best = (m.group(1), release["tag_name"], asset["browser_download_url"])
+if best:
+    print(*best)
+EOF
+)"
+
+    REQUESTED_ID="$ARTIFACT_ID"
+    set -- $FOUND
     ARTIFACT_ID="$1"
-    HEAD_SHA="$2"
-    CREATED_AT="$3"
-    if [ -z "$ARTIFACT_ID" ]; then
-        echo "error: no non-expired $ARTIFACT_NAME artifact found." >&2
+    TAG="$2"
+    URL="$3"
+    if [ -z "$URL" ]; then
+        echo "error: no $ASSET_PREFIX${REQUESTED_ID:-*}.zip asset found in the releases of $REPO." >&2
         exit 1
     fi
 
-    echo "Downloading artifact $ARTIFACT_ID${HEAD_SHA:+ (UTM commit $HEAD_SHA, built $CREATED_AT)}..."
-    api -o "$WORK/$ARTIFACT_NAME.zip" "https://api.github.com/repos/$REPO/actions/artifacts/$ARTIFACT_ID/zip"
-    unzip -oq "$WORK/$ARTIFACT_NAME.zip" -d "$WORK"
-    rm -f "$WORK/$ARTIFACT_NAME.zip"
-    TGZ="$WORK/sysroot.tgz"
+    echo "Downloading sysroot $ARTIFACT_ID from release $TAG..."
+    ZIP="$WORK/$ASSET_PREFIX$ARTIFACT_ID.zip"
+    curl -fL --progress-bar -o "$ZIP" "$URL"
+    SOURCE="$URL"
 fi
 
-echo "Extracting the SPICE, GLib and GStreamer parts..."
+echo "Extracting..."
 mkdir -p "$WORK/out"
-tar -xzf "$TGZ" -C "$WORK/out" \
-    --exclude="$SYSROOT_NAME/Frameworks/qemu-*" \
-    --exclude="$SYSROOT_NAME/Frameworks/D3DMetal.framework" \
-    --exclude="$SYSROOT_NAME/Frameworks/d3dmetal-native.framework" \
-    --exclude="$SYSROOT_NAME/Frameworks/dxmt-native.framework" \
-    --exclude="$SYSROOT_NAME/Frameworks/LTO.framework" \
-    --exclude="$SYSROOT_NAME/Frameworks/Remarks.framework" \
-    --exclude="$SYSROOT_NAME/Frameworks/MoltenVK.framework" \
-    "$SYSROOT_NAME/Frameworks" \
-    "$SYSROOT_NAME/lib/gstreamer-1.0" \
-    "$SYSROOT_NAME/lib/glib-2.0" \
-    "$SYSROOT_NAME/include"
-
-echo "Extracting Qemu..."
-QEMU_PATHS="$SYSROOT_NAME/bin/qemu-img"
-for t in $QEMU_TARGETS; do
-    QEMU_PATHS="$QEMU_PATHS $SYSROOT_NAME/Frameworks/qemu-$t-softmmu.framework $SYSROOT_NAME/bin/qemu-system-$t"
-done
-tar -xzf "$TGZ" -C "$WORK/out" \
-    --exclude="$SYSROOT_NAME/share/qemu/edk2-*" \
-    $QEMU_PATHS \
-    "$SYSROOT_NAME/share/qemu"
+# ditto keeps the framework symlinks and folds any __MACOSX/AppleDouble entries back into the files.
+ditto -x -k "$ZIP" "$WORK/out"
+if [ ! -d "$WORK/out/Sysroot/$SYSROOT_NAME" ]; then
+    echo "error: $ZIP does not contain Sysroot/$SYSROOT_NAME." >&2
+    exit 1
+fi
+find "$WORK/out" -name .DS_Store -delete
 
 mkdir -p "$DEST"
 rm -rf "$DEST/$SYSROOT_NAME"
-mv "$WORK/out/$SYSROOT_NAME" "$DEST/$SYSROOT_NAME"
+mv "$WORK/out/Sysroot/$SYSROOT_NAME" "$DEST/$SYSROOT_NAME"
 
+# Keep the VERSION written by fetch_utm_sysroot.sh (UTM artifact and commit) and record where the copy came from.
 {
-    [ -n "$ARTIFACT_ID" ] && echo "artifact: $ARTIFACT_ID"
-    [ -n "$HEAD_SHA" ] && echo "utm-commit: $HEAD_SHA"
-    [ -n "$CREATED_AT" ] && echo "built: $CREATED_AT"
-    echo "source: https://github.com/$REPO/actions"
+    if [ -f "$WORK/out/Sysroot/VERSION" ]; then
+        grep -v '^mirror: ' "$WORK/out/Sysroot/VERSION"
+    elif [ -n "$ARTIFACT_ID" ]; then
+        echo "artifact: $ARTIFACT_ID"
+    fi
+    echo "mirror: $SOURCE"
 } > "$DEST/VERSION"
 
 echo "Done. Sysroot is at $DEST/$SYSROOT_NAME ($(du -sh "$DEST/$SYSROOT_NAME" | cut -f1))"
