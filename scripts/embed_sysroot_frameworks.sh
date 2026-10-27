@@ -33,7 +33,7 @@ QEMU_ENTITLEMENTS="${PROJECT_DIR}/MacMulator/Resources/QemuHelper.entitlements"
 SWTPM_SRC="${PROJECT_DIR}/scripts/swtpm_launcher.c"
 
 # Qemu system emulators bundled in the App Store flavor. Keep in sync with
-# QemuConstants.ARCH_* and with scripts/fetch_sysroot.sh.
+# QemuConstants.ARCH_* and with scripts/fetch_utm_sysroot.sh.
 QEMU_TARGETS="aarch64 x86_64 i386 arm ppc ppc64 m68k riscv32 riscv64"
 QEMU_EXECUTABLES="qemu-img"
 for t in ${QEMU_TARGETS}; do

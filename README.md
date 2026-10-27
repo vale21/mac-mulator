@@ -34,7 +34,7 @@ The SPICE display viewer links against the SPICE, GLib and GStreamer frameworks 
 scripts/fetch_sysroot.sh
 ```
 
-which downloads them into the git-ignored `Sysroot/` directory. The download needs a GitHub token (`GH_TOKEN`, `gh auth login`, or the git credential helper). Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh` and expects `GH_TOKEN` as a secret environment variable of the workflow. How to pick a sysroot version, pin it, and update Qemu and CocoaSpice when UTM releases a new version is described in [docs/sysroot.md](docs/sysroot.md).
+which downloads them into the git-ignored `Sysroot/` directory from a copy of the UTM sysroot attached to the [releases](https://github.com/vale21/mac-mulator/releases) of this repository (pass an artifact id to pick a specific copy; the newest is used otherwise). No GitHub token is needed. Xcode Cloud does the same in `ci_scripts/ci_post_clone.sh`. To pick up a newer sysroot from UTM's CI, `scripts/fetch_utm_sysroot.sh` downloads it and packages it for a new release. How to pin a sysroot version and update Qemu and CocoaSpice when UTM releases a new version is described in [docs/sysroot.md](docs/sysroot.md).
 
 ### Licenses and credits
 
