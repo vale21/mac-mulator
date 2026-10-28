@@ -138,7 +138,9 @@ class VirtualMachineViewController: NSViewController {
 
     func vmConverted(_ vm: VirtualMachine) {
         setVirtualMachine(vm)
-        if vm.type == MacMulatorConstants.QEMU_VM {
+        if Utils.isVMTemplate(vm) {
+            rootController?.setCurrentVirtualMachine(vm)
+        } else if vm.type == MacMulatorConstants.QEMU_VM {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: vm)
         } else {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: vm)

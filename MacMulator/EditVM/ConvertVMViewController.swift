@@ -38,7 +38,28 @@ class ConvertVMViewController: NSViewController {
             var error: String? = nil
 
             if let currentVm = self.virtualMachine {
-                if operation == .convertToQemu {
+                if operation == .convertToTemplate {
+                    // Templates must not reference removable media, and must use a format that supports linked clones.
+                    for drive in Utils.findExternalDrives(currentVm.drives) {
+                        currentVm.removeVirtualDrive(drive.path)
+                    }
+                    let drives = Utils.findRawDrives(currentVm.drives)
+                    let targetFormat = currentVm.type == MacMulatorConstants.QEMU_VM ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_ASIF
+                    convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
+                        if code == 0 {
+                            if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+                                currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
+                            } else if currentVm.type == MacMulatorConstants.QEMU_VM {
+                                currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+                            }
+                            currentVm.writeToPlist()
+                            complete = true
+                        } else {
+                            complete = true
+                            error = message
+                        }
+                    }
+                } else if operation == .convertToQemu {
                     let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_ASIF }
                     convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_QCOW2) { code, message in
                         if code == 0 {
@@ -71,15 +92,6 @@ class ConvertVMViewController: NSViewController {
                             error = message
                         }
                     }
-                } else if operation == .convertToTemplate {
-                    if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
-                        currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
-                    } else if currentVm.type == MacMulatorConstants.QEMU_VM {
-                        currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
-                    }
-
-                    currentVm.writeToPlist()
-                    complete = true
                 }
             }
 
@@ -138,6 +150,10 @@ class ConvertVMViewController: NSViewController {
         let targetManager = factory.create(isVirtualizationFrameworkInUse: format == QemuConstants.FORMAT_ASIF)
 
         drive.format = QemuConstants.FORMAT_RAW
+        if originalFormat == QemuConstants.FORMAT_RAW {
+            convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progress: progress, uponCompletion: callback)
+            return
+        }
         sourceManager.convertDiskImage(drive, path, fromFormat: originalFormat, progress: { progress($0 / 2) }, uponCompletion: { code, message in
             guard code == 0 else {
                 drive.format = originalFormat
@@ -145,13 +161,18 @@ class ConvertVMViewController: NSViewController {
                 return
             }
 
-            drive.format = format
-            targetManager.convertDiskImage(drive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: { progress(50 + $0 / 2) }, uponCompletion: { code, message in
-                if code != 0 {
-                    drive.format = QemuConstants.FORMAT_RAW
-                }
-                callback(code, message)
-            })
+            self.convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progressOffset: 50, progress: progress, uponCompletion: callback)
+        })
+    }
+
+    private func convertFromRaw(_ drive: VirtualDrive, to format: String, in path: String, targetManager: DiskImageManager, progressOffset: Double = 0, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let scale = (100 - progressOffset) / 100
+        drive.format = format
+        targetManager.convertDiskImage(drive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: { progress(progressOffset + $0 * scale) }, uponCompletion: { code, message in
+            if code != 0 {
+                drive.format = QemuConstants.FORMAT_RAW
+            }
+            callback(code, message)
         })
     }
 
