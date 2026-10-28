@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24765"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -261,11 +261,24 @@
                                                 <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Convertir en Modèle de VM" id="6HG-Au-I4F">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToTemplateMenuBarClicked:" target="Voe-Tx-rLC" id="hei-Jp-yUt"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
                                         <menuItem title="Afficher l'output de la console" id="7ko-iP-uk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="lNT-1D-u8j"/>
+                                        <menuItem title="Supprimer" id="iR1-XY-z7t">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="deleteVMMenuBarClicked:" target="Voe-Tx-rLC" id="hKL-Yj-dfr"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -338,6 +351,8 @@
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
+                        <outlet property="convertToTemplateMenuItem" destination="6HG-Au-I4F" id="t6b-xY-2w0"/>
+                        <outlet property="deleteVMMenuItem" destination="iR1-XY-z7t" id="DhZ-78-9sI"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="dCY-FF-mSN"/>

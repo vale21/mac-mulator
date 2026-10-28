@@ -77,7 +77,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             vmName.stringValue = virtualMachine.displayName
             vmDescription.string = virtualMachine.description
 
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM || virtualMachine.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
                 bootOrderLabel.isHidden = true
                 bootOrderTable.isHidden = true
                 bootOrderView.isHidden = true

@@ -217,6 +217,10 @@
 "QemuSpiceViewerViewController.noMetal" = "Metal n’est pas disponible sur ce Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossible de démarrer le client SPICE";
 "RootViewController.cloneOf" = "Clone de %@";
+"RootViewController.convertToTemplate" = "Vous êtes sur le point de convertir cette VM en modèle.\nUn modèle est une VM de base en lecture seule, que vous pouvez utiliser pour créer rapidement de nouvelles VM.\n\nCette opération est irréversible : le modèle ne pourra plus être démarré. Pour l’utiliser, créez-en un clone :\n- Clone complet : une copie complète et indépendante de la VM.\n- Clone lié : une VM légère qui enregistre uniquement ses modifications par-dessus le disque du modèle.";
+"RootViewController.convertToTemplateConfirm" = "Voulez-vous continuer ?";
+"RootViewController.convertToTemplateRawDrives" = "Les disques suivants sont au format RAW et seront convertis au format %@ :\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "Les disques suivants sont amovibles et seront détachés de la VM :\n%@";
 "RootViewController.forciblyClosing" = "Des machines virtuelles sont en cours d’exécution.\nFermer MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "RootViewController.vmConvertedToApple" = "La machine virtuelle a été convertie avec succès au format Apple.";
 "RootViewController.vmConvertedToQemu" = "La machine virtuelle a été convertie avec succès au format QEMU.";

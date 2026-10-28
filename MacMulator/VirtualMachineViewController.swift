@@ -253,10 +253,12 @@ class VirtualMachineViewController: NSViewController {
             showVMAvailableLayout()
 
             if let rootController, let currentVm = rootController.currentVm {
-                if !QemuUtils.isBinaryAvailable(currentVm.architecture, currentVm.qemuPath) {
+                if Utils.isVMTemplate(currentVm) {
                     startVMButton.isEnabled = false
-                }
-                if Utils.isPauseSupported(currentVm) {
+                    pauseVMButton.isEnabled = false
+                } else if !QemuUtils.isBinaryAvailable(currentVm.architecture, currentVm.qemuPath) {
+                    startVMButton.isEnabled = false
+                } else if Utils.isPauseSupported(currentVm) {
                     pauseVMButton.isEnabled = true
                     pauseVMButton.toolTip = NSLocalizedString("VirtualMachineViewController.pauseVM", comment: "")
                 } else {
@@ -281,11 +283,20 @@ class VirtualMachineViewController: NSViewController {
 
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
-            vmIcon.image = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".large"))
+            let backgroundImageName = Utils.getIconForSubType(vm.os, vm.subtype) + ".large"
+            if Utils.isVMTemplate(vm) {
+                if let newImage = Utils.getIconWithOverlay(backgroundImageName, "template.overlay.large") {
+                    vmIcon.image = newImage
+                }
+            } else {
+                vmIcon.image = NSImage(named: NSImage.Name(backgroundImageName))
+            }
 
             if let rootController {
                 if rootController.isVMPaused(vm) {
                     vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
+                } else if Utils.isVMTemplate(vm) {
+                    vmName.stringValue = "VM Template - " + vm.displayName
                 } else {
                     vmName.stringValue = vm.displayName
                 }
@@ -307,7 +318,11 @@ class VirtualMachineViewController: NSViewController {
                 setRunningStatus(vm, false)
             }
 
-            if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
+            if Utils.isVMTemplate(vm) {
+                startVMButton.isEnabled = false
+                qemuUnavailableLabel.stringValue = "VM template cannot be started"
+                qemuUnavailableLabel.isHidden = false
+            } else if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
                 if Utils.isVMAvailable(vm) {
                     startVMButton.isEnabled = true
                     qemuUnavailableLabel.isHidden = true
@@ -380,6 +395,15 @@ class VirtualMachineViewController: NSViewController {
                         centralBox.contentView = imageView
                     }
                     bottomConfigureVMButton.isHidden = false
+                } else if Utils.isVMTemplate(vm) {
+                    vmName.stringValue = vm.displayName + " (VM template)"
+
+                    // TODO: style UI
+                    resizeCentralBox(false)
+                    hideBoxControls(false)
+
+                    centralBox.contentView = boxContentView
+                    bottomConfigureVMButton.isHidden = true
                 } else {
                     vmName.stringValue = vm.displayName
 

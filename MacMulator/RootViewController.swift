@@ -1,7 +1,4 @@
 //
-//  RootViewController.swift
-//  QManage
-//
 //  Created by Vale on 26/01/21.
 //
 
@@ -82,7 +79,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.createVMSnapshot(sender: sender)
     }
 
-    @IBAction func cloneVMMenuBarClicked(_: Any) {
+    func cloneVMMenuBarClicked(_: Any) {
         if let currentVm {
             if let vmIndex = getIndex(of: currentVm) {
                 cloneVirtualMachineAt(vmIndex)
@@ -90,7 +87,21 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
-    @IBAction func showVMInFinderMenuBarClicked(_: Any) {
+    func deleteVMMenuBarClicked(_: Any) {
+        if let currentVm {
+            if let vmIndex = getIndex(of: currentVm) {
+                _ = removeVirtualMachineAt(vmIndex)
+            }
+            listController?.refreshList()
+            if virtualMachines.isEmpty {
+                setCurrentVirtualMachine(nil)
+            } else {
+                setCurrentVirtualMachine(virtualMachines.first)
+            }
+        }
+    }
+
+    func showVMInFinderMenuBarClicked(_: Any) {
         if let currentVm {
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: currentVm.path, isDirectory: false)])
         }
@@ -106,11 +117,21 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.convertToAppleMenuBarClicked(self)
     }
 
+    func convertToTemplateMenuBarClicked(_: Any) {
+        if let currentVm {
+            if let vmIndex = getIndex(of: currentVm) {
+                convertVirtualMachineToTemplateAt(vmIndex)
+            }
+        }
+    }
+
     func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
         if let vm = currentVm {
             Utils.removeUnexistingDrives(vm)
             vmController?.setVirtualMachine(vm)
-            listController?.selectElement(virtualMachines.firstIndex(of: vm) ?? -1)
+            let index = virtualMachines.firstIndex(of: vm) ?? -1
+            listController?.selectElement(index)
+            listController?.setState(index, vm)
         } else {
             vmController?.setVirtualMachine(nil)
             listController?.selectElement(-1)
@@ -209,8 +230,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return virtualMachine
     }
 
-    func cloneVirtualMachineAt(_ index: Int) {
-        let vmToClone = virtualMachines[index]
+    fileprivate func performFullClone(_ vmToClone: VirtualMachine) {
         let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
         let shell = Shell()
         shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _, _ in
@@ -231,10 +251,44 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         })
     }
 
+    func cloneVirtualMachineAt(_ index: Int) {
+        let vmToClone = virtualMachines[index]
+        if Utils.isVMTemplate(vmToClone) {
+            vmController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_CLONE_VIEW_SEGUE, sender: self)
+        } else {
+            performFullClone(vmToClone)
+        }
+    }
+
+    func convertVirtualMachineToTemplateAt(_ index: Int) {
+        let vmToConvert = virtualMachines[index]
+        let rawVMDrives = Utils.findRawDrives(vmToConvert.drives)
+        let removableVMDrives = Utils.findExternalDrives(vmToConvert.drives)
+        var promptText = NSLocalizedString("RootViewController.convertToTemplate", comment: "") + "\n\n"
+        if !rawVMDrives.isEmpty {
+            let targetFormat = vmToConvert.type == MacMulatorConstants.QEMU_VM ? "QCOW2" : "ASIF"
+            promptText += String(format: NSLocalizedString("RootViewController.convertToTemplateRawDrives", comment: ""), targetFormat, rawVMDrives.map { "- " + $0.name }.joined(separator: "\n")) + "\n\n"
+        }
+        if !removableVMDrives.isEmpty {
+            promptText += String(format: NSLocalizedString("RootViewController.convertToTemplateRemovableDrives", comment: ""), removableVMDrives.map { "- " + $0.name }.joined(separator: "\n")) + "\n\n"
+        }
+        promptText += NSLocalizedString("RootViewController.convertToTemplateConfirm", comment: "")
+        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: promptText, virtualMachine: vmToConvert)
+        if response.rawValue == Utils.ALERT_RESP_OK {
+            if vmToConvert.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+                vmToConvert.type = MacMulatorConstants.APPLE_TEMPLATE_VM
+            } else if vmToConvert.type == MacMulatorConstants.QEMU_VM {
+                vmToConvert.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+            }
+            setCurrentVirtualMachine(vmToConvert)
+            vmToConvert.writeToPlist()
+        }
+    }
+
     func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualMachineRunner) {
         runningVMs[vm] = runner
 
-        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true)
+        listController?.setState(virtualMachines.firstIndex(of: vm)!, .running)
 
         let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
@@ -244,7 +298,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         runningVMs.removeValue(forKey: vm)
         let index = virtualMachines.firstIndex(of: vm)
         if let idx = index {
-            listController?.setRunning(idx, false)
+            listController?.setState(idx, isVMPaused(vm) ? .paused : .stopped)
         }
 
         let appDelegate = NSApp.delegate as! AppDelegate

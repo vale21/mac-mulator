@@ -27,11 +27,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView
         if let rootController {
-            cell.rootController = rootController
+            cell.setRootController(rootController)
 
             let vm: VirtualMachine = rootController.getVirtualMachineAt(row)
             cell.setVirtualMachine(virtualMachine: vm)
-            cell.setRunning(rootController.isVMRunning(vm))
         }
         return cell
     }
@@ -73,6 +72,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Convert to VM template", action: #selector(tableViewConvertToTemplateItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
@@ -90,7 +90,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let row = table.clickedRow
         if let rootController {
             let vm = rootController.getVirtualMachineAt(row)
-            if rootController.isVMRunning(vm) {
+            if Utils.isVMTemplate(vm) {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""))?.isEnabled = false
+                menu.item(withTitle: "Convert to VM template")?.isEnabled = false
+            } else if rootController.isVMRunning(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 #if arch(arm64)
                     menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
@@ -169,6 +176,11 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     @objc func tableViewCloneItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         cloneVirtualMachine(table.clickedRow)
+    }
+
+    @objc func tableViewConvertToTemplateItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        convertVirtualMachineToTemplate(table.clickedRow)
     }
 
     @objc func tableViewTakeSnapshotItemClicked(_: AnyObject) {
@@ -261,6 +273,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         rootController?.cloneVirtualMachineAt(index)
     }
 
+    func convertVirtualMachineToTemplate(_ index: Int) {
+        rootController?.convertVirtualMachineToTemplateAt(index)
+    }
+
     func createVMSnapshot(_ index: Int) {
         if let rootController {
             _ = rootController.getVirtualMachineAt(index)
@@ -277,10 +293,17 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         table.reloadData()
     }
 
-    func setRunning(_ index: Int, _ running: Bool) {
+    func setState(_ index: Int, _ state: VirtualMachineTableCellView.CellState) {
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
-            cellView.setRunning(running)
+            cellView.setState(state)
+        }
+    }
+
+    func setState(_ index: Int, _ vm: VirtualMachine) {
+        let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
+        if let cellView = view, let rootController {
+            cellView.setState(VirtualMachineTableCellView.computeVMState(vm, rootController))
         }
     }
 

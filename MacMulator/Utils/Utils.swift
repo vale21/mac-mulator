@@ -337,6 +337,28 @@ class Utils {
         return nvrams[0]
     }
 
+    static func findRawDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        var hdds: [VirtualDrive] = []
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME, drive.format == QemuConstants.FORMAT_RAW {
+                hdds.append(drive)
+            }
+        }
+
+        return hdds
+    }
+
+    static func findExternalDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        var hdds: [VirtualDrive] = []
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
+                hdds.append(drive)
+            }
+        }
+
+        return hdds
+    }
+
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/" }) else { return path }
         return path.substring(to: lastSlash)
@@ -510,6 +532,24 @@ class Utils {
 
     static func getIconForSubType(_ os: String, _ subtype: String?) -> String {
         getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OTHER
+    }
+
+    static func getIconWithOverlay(_ backgroundName: String, _ overlayName: String) -> NSImage? {
+        guard let background = NSImage(named: NSImage.Name(backgroundName)),
+              let overlay = NSImage(named: NSImage.Name(overlayName))
+        else {
+            return nil
+        }
+
+        let newImage = NSImage(size: background.size)
+        newImage.lockFocus()
+        var newImageRect: CGRect = .zero
+        newImageRect.size = newImage.size
+        background.draw(in: newImageRect)
+        overlay.draw(in: newImageRect)
+        newImage.unlockFocus()
+
+        return newImage
     }
 
     static func getArchitectureForSubType(_ os: String, _ subtype: String?) -> String {
@@ -728,7 +768,7 @@ class Utils {
 
     static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 26.0, *) {
-            vm.type == MacMulatorConstants.APPLE_VM
+            vm.type == MacMulatorConstants.APPLE_VM || vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM
         } else {
             false
         }
@@ -736,6 +776,10 @@ class Utils {
 
     static func areLiveSnapshotsSupported(_ vm: VirtualMachine) -> Bool {
         isPauseSupported(vm)
+    }
+
+    static func isVMTemplate(_ vm: VirtualMachine) -> Bool {
+        vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM || vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM
     }
 
     static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {

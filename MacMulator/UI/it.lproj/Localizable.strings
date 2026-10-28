@@ -217,6 +217,10 @@
 "QemuSpiceViewerViewController.noMetal" = "Metal non è disponibile su questo Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossibile avviare il client SPICE";
 "RootViewController.cloneOf" = "Clone di %@";
+"RootViewController.convertToTemplate" = "Stai convertendo questa VM in un template.\nUn template è una VM di base in sola lettura, che puoi usare per creare rapidamente nuove VM.\n\nL'operazione è irreversibile: il template non potrà più essere avviato. Per usarlo, creane un clone:\n- Clone completo: una copia completa e indipendente della VM.\n- Clone collegato: una VM leggera che salva solo le proprie modifiche sopra il disco del template.";
+"RootViewController.convertToTemplateConfirm" = "Vuoi continuare?";
+"RootViewController.convertToTemplateRawDrives" = "I seguenti dischi sono in formato RAW e saranno convertiti in formato %@:\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "I seguenti dischi sono rimovibili e saranno scollegati dalla VM:\n%@";
 "RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "RootViewController.vmConvertedToApple" = "La VM è stata convertita con successo al formato Apple.";
 "RootViewController.vmConvertedToQemu" = "La VM è stata convertita con successo al formato QEMU.";
