@@ -117,6 +117,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.convertToAppleMenuBarClicked(self)
     }
 
+    @available(macOS 13.0, *)
     func convertToTemplateMenuBarClicked(_: Any) {
         if let currentVm {
             if let vmIndex = getIndex(of: currentVm) {
@@ -260,6 +261,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
+    @available(macOS 13.0, *)
     func convertVirtualMachineToTemplateAt(_ index: Int) {
         let vmToConvert = virtualMachines[index]
         let rawVMDrives = Utils.findRawDrives(vmToConvert.drives)
@@ -275,13 +277,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         promptText += NSLocalizedString("RootViewController.convertToTemplateConfirm", comment: "")
         let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: promptText, virtualMachine: vmToConvert)
         if response.rawValue == Utils.ALERT_RESP_OK {
-            if vmToConvert.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
-                vmToConvert.type = MacMulatorConstants.APPLE_TEMPLATE_VM
-            } else if vmToConvert.type == MacMulatorConstants.QEMU_VM {
-                vmToConvert.type = MacMulatorConstants.QEMU_TEMPLATE_VM
-            }
-            setCurrentVirtualMachine(vmToConvert)
-            vmToConvert.writeToPlist()
+            vmController?.convertToTemplateMenuBarClicked(self)
         }
     }
 

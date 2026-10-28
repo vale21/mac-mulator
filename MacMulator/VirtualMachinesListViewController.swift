@@ -72,7 +72,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: "Convert to VM template", action: #selector(tableViewConvertToTemplateItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""), action: #selector(tableViewConvertToTemplateItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
@@ -90,13 +90,17 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let row = table.clickedRow
         if let rootController {
             let vm = rootController.getVirtualMachineAt(row)
+            if #unavailable(macOS 13.0,) {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isHidden = true
+            }
+
             if Utils.isVMTemplate(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""))?.isEnabled = false
-                menu.item(withTitle: "Convert to VM template")?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = false
             } else if rootController.isVMRunning(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 #if arch(arm64)
@@ -180,7 +184,9 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     @objc func tableViewConvertToTemplateItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
-        convertVirtualMachineToTemplate(table.clickedRow)
+        if #available(macOS 13.0, *) {
+            convertVirtualMachineToTemplate(table.clickedRow)
+        }
     }
 
     @objc func tableViewTakeSnapshotItemClicked(_: AnyObject) {
@@ -273,6 +279,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         rootController?.cloneVirtualMachineAt(index)
     }
 
+    @available(macOS 13.0, *)
     func convertVirtualMachineToTemplate(_ index: Int) {
         rootController?.convertVirtualMachineToTemplateAt(index)
     }

@@ -270,6 +270,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM ripristinata dall'istantanea con successo.";
 "VirtualMachineContainerViewController.vmExecutionError" = "L'esecuzione della VM è fallita con errore: %@";
 "VirtualMachineListViewController.clone" = "Crea clone";
+"VirtualMachineListViewController.convertToTemplate" = "Converti in template di VM";
 "VirtualMachineListViewController.createSnapshot" = "Crea nuova istantanea";
 "VirtualMachineListViewController.delete" = "Elimina";
 "VirtualMachineListViewController.edit" = "Configura";

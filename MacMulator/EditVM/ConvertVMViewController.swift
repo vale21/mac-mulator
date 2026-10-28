@@ -1,13 +1,24 @@
 import Cocoa
 
+enum ConversionOperations {
+    case convertToApple
+    case convertToQemu
+    case convertToTemplate
+}
+
 @available(macOS 13.0, *)
 class ConvertVMViewController: NSViewController {
     @IBOutlet var convertingVMLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!
     @IBOutlet var estimateTimeRemainingLabel: NSTextField!
 
+    var operation: ConversionOperations?
     var parentController: VirtualMachineViewController?
     var virtualMachine: VirtualMachine?
+
+    func setOperation(_ operation: ConversionOperations) {
+        self.operation = operation
+    }
 
     func setParentController(_ parentController: VirtualMachineViewController) {
         self.parentController = parentController
@@ -27,7 +38,7 @@ class ConvertVMViewController: NSViewController {
             var error: String? = nil
 
             if let currentVm = self.virtualMachine {
-                if currentVm.type == MacMulatorConstants.APPLE_VM {
+                if operation == .convertToQemu {
                     let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_ASIF }
                     convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_QCOW2) { code, message in
                         if code == 0 {
@@ -41,13 +52,12 @@ class ConvertVMViewController: NSViewController {
                             error = message
                         }
                     }
-                } else {
+                } else if operation == .convertToApple {
                     let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_QCOW2 }
-                    let targetFormat: String
-                    if #available(macOS 26.0, *) {
-                        targetFormat = QemuConstants.FORMAT_ASIF
+                    let targetFormat: String = if #available(macOS 26.0, *) {
+                        QemuConstants.FORMAT_ASIF
                     } else {
-                        targetFormat = QemuConstants.FORMAT_RAW
+                        QemuConstants.FORMAT_RAW
                     }
                     convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
                         if code == 0 {
@@ -61,6 +71,15 @@ class ConvertVMViewController: NSViewController {
                             error = message
                         }
                     }
+                } else if operation == .convertToTemplate {
+                    if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+                        currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
+                    } else if currentVm.type == MacMulatorConstants.QEMU_VM {
+                        currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+                    }
+
+                    currentVm.writeToPlist()
+                    complete = true
                 }
             }
 

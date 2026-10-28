@@ -121,13 +121,19 @@ class VirtualMachineViewController: NSViewController {
     @available(macOS 13.0, *)
     func convertToQemuMenuBarClicked(_: Any, _: Bool = true) {
         guard let rootController, !rootController.isCurrentVMRunning() else { return }
-        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToQemu)
     }
 
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
         guard let rootController, !rootController.isCurrentVMRunning() else { return }
-        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: self)
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToApple)
+    }
+
+    @available(macOS 13.0, *)
+    func convertToTemplateMenuBarClicked(_: Any) {
+        guard let rootController, !rootController.isCurrentVMRunning() else { return }
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToTemplate)
     }
 
     func vmConverted(_ vm: VirtualMachine) {
@@ -229,6 +235,7 @@ class VirtualMachineViewController: NSViewController {
                 let source = segue.sourceController as! VirtualMachineViewController
                 let dest = segue.destinationController as! ConvertVMViewController
 
+                dest.setOperation(sender as! ConversionOperations)
                 dest.setVirtualMachine(currentVM)
                 dest.setParentController(source)
             }

@@ -270,6 +270,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM successfully restored from snasphot.";
 "VirtualMachineContainerViewController.vmExecutionError" = "VM execution failed with error: %@";
 "VirtualMachineListViewController.clone" = "Clone";
+"VirtualMachineListViewController.convertToTemplate" = "Convert to VM template";
 "VirtualMachineListViewController.createSnapshot" = "Create new snapshot";
 "VirtualMachineListViewController.delete" = "Delete";
 "VirtualMachineListViewController.edit" = "Configure";

@@ -272,8 +272,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func convertToTemplateMenuBarClicked(_: Any) {
-        rootController?.convertToTemplateMenuBarClicked(MacMulatorConstants.mainMenuSender)
-        refreshVMMenus()
+        if #available(macOS 13.0, *) {
+            rootController?.convertToTemplateMenuBarClicked(MacMulatorConstants.mainMenuSender)
+            refreshVMMenus()
+        }
     }
 
     @IBAction func startVMMenuBarClicked(_: Any) {
