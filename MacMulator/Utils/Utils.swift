@@ -359,6 +359,11 @@ class Utils {
         return hdds
     }
 
+    static func findFirmwareDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        let firmwareTypes = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_EFI_SECURE_VARS, QemuConstants.MEDIATYPE_OPENCORE]
+        return drives.filter { firmwareTypes.contains($0.mediaType) }
+    }
+
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/" }) else { return path }
         return path.substring(to: lastSlash)

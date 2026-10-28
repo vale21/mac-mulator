@@ -39,9 +39,13 @@ class ConvertVMViewController: NSViewController {
 
             if let currentVm = self.virtualMachine {
                 if operation == .convertToTemplate {
-                    // Templates must not reference removable media, and must use a format that supports linked clones.
                     for drive in Utils.findExternalDrives(currentVm.drives) {
                         currentVm.removeVirtualDrive(drive.path)
+                    }
+                    // EFI and OpenCore drives live inside the VM bundle, so delete their files as well.
+                    for drive in Utils.findFirmwareDrives(currentVm.drives) {
+                        currentVm.removeVirtualDrive(drive.path)
+                        try? FileManager.default.removeItem(atPath: drive.path)
                     }
                     let drives = Utils.findRawDrives(currentVm.drives)
                     let targetFormat = currentVm.type == MacMulatorConstants.QEMU_VM ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_ASIF
@@ -98,9 +102,9 @@ class ConvertVMViewController: NSViewController {
             let startTime = Int64(Date().timeIntervalSince1970)
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
 
-                if !complete, !self.progressBar.isIndeterminate {
+                if !complete {
                     let progress = self.progressBar.doubleValue
-                    if progress > 10 {
+                    if !self.progressBar.isIndeterminate, progress > 10 {
                         self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progressBar.doubleValue))
                     }
                 } else {
