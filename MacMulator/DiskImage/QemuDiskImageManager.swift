@@ -47,7 +47,6 @@ class QemuDiskImageManager: DiskImageManager {
     }
 
     func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        // qemu-img convert reads through the backing chain and writes a standalone image without backing file.
         convertDiskImage(virtualDrive, path, fromFormat: virtualDrive.format, progress: nil, uponCompletion: callback)
     }
 

@@ -100,8 +100,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         #endif
     }
 
-    /// Creates the storage attachment for a drive. Linked drives are overlay layers that have to be stacked
-    /// on top of their template drive before being handed to the Virtualization framework.
     static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
         #if arch(arm64)
             if #available(macOS 27.0, *), let backingPath = drive.backingPath {
@@ -114,11 +112,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         return try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: drive.path), readOnly: readOnly)
     }
 
-    /// Flattens an ASIF overlay into a standalone sparse ASIF.
-    ///
-    /// DiskImageKit has no API to merge layers, so the overlay is attached on top of its template as a shadow layer,
-    /// which exposes the whole stack as a single device, and its contents are copied into a new blank ASIF with
-    /// `dd conv=sparse`, as done for the RAW to ASIF conversion. Attaching images is not allowed by the App Store sandbox.
     func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         #if !APPSTORE && arch(arm64)
             guard #available(macOS 27.0, *), let backingPath = virtualDrive.backingPath else {
@@ -172,22 +165,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         #else
             callback(-1, NSLocalizedString("DiskImageManager.flattenNotSupported", comment: ""))
         #endif
-    }
-
-    /// Runs a `diskutil image attach` command and returns the /dev node of the attached image.
-    private func attachDevice(_ command: String, _ path: String, uponCompletion callback: @escaping (String?, String?) -> Void) {
-        let shell = Shell()
-        shell.runCommand(command, path, uponCompletion: { code, message in
-            // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
-            guard code == 0,
-                  let device = shell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
-                  device.hasPrefix("/dev/disk")
-            else {
-                callback(nil, message ?? shell.readFromStandardError())
-                return
-            }
-            callback(device, nil)
-        })
     }
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
@@ -293,6 +270,21 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         })
     }
 
+    private func attachDevice(_ command: String, _ path: String, uponCompletion callback: @escaping (String?, String?) -> Void) {
+        let shell = Shell()
+        shell.runCommand(command, path, uponCompletion: { code, message in
+            // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
+            guard code == 0,
+                  let device = shell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
+                  device.hasPrefix("/dev/disk")
+            else {
+                callback(nil, message ?? shell.readFromStandardError())
+                return
+            }
+            callback(device, nil)
+        })
+    }
+
     private func replaceDiskImage(_ drivePath: String, with tempPath: String, format: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         do {
             _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
@@ -304,12 +296,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    /// Converts a RAW image into a sparse ASIF image.
-    ///
-    /// `diskutil image create from` copies every block of the source, zero-filled ones included, so the resulting
-    /// ASIF ends up fully allocated (even slightly larger than the RAW file). Instead, create an empty unpartitioned
-    /// ASIF, attach it as a device and copy the RAW contents with `dd conv=sparse`, which seeks over all-zero blocks
-    /// rather than writing them, so they stay unallocated in the ASIF.
     private func convertToSparseASIF(_ sourcePath: String, _ destinationPath: String, _ path: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         guard let sourceSize = (try? FileManager.default.attributesOfItem(atPath: sourcePath))?[.size] as? Int else {
             callback(-1, "Unable to read the size of " + sourcePath)
@@ -363,7 +349,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         })
     }
 
-    /// Parses the number of bytes copied so far from `dd status=progress` output (e.g. "448069632 bytes (448 MB, 427 MiB) transferred 1.004s, 446 MB/s").
     private func parseCopyProgress(_ output: String) -> Int? {
         let lines = output.split(whereSeparator: { $0 == "\r" || $0 == "\n" })
         for line in lines.reversed() {

@@ -10,11 +10,8 @@ import Foundation
 protocol DiskImageManager {
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
-    /// Creates `virtualDrive` as an overlay layer on top of `backingDrive`, which is left untouched.
     func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
-    /// Merges a linked drive with the template layers beneath it into a standalone image, replacing the drive file in place.
-    /// The template drive is left untouched. The caller is responsible for clearing `backingPath` afterwards.
     func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void)

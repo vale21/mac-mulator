@@ -319,8 +319,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         })
     }
 
-    /// Creates a clone whose disks are overlay layers (QCOW2 backing files or stacked ASIF images) on top of the template ones,
-    /// so that it takes almost no space and is created instantly.
     func performLinkedClone(_ vmToClone: VirtualMachine) {
         let uniqueName = cloneName(of: vmToClone.displayName, linked: true)
         let newVMPath = Utils.computeVMPath(vmName: uniqueName)
