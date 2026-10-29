@@ -114,6 +114,82 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         return try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: drive.path), readOnly: readOnly)
     }
 
+    /// Flattens an ASIF overlay into a standalone sparse ASIF.
+    ///
+    /// DiskImageKit has no API to merge layers, so the overlay is attached on top of its template as a shadow layer,
+    /// which exposes the whole stack as a single device, and its contents are copied into a new blank ASIF with
+    /// `dd conv=sparse`, as done for the RAW to ASIF conversion. Attaching images is not allowed by the App Store sandbox.
+    func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        #if !APPSTORE && arch(arm64)
+            guard #available(macOS 27.0, *), let backingPath = virtualDrive.backingPath else {
+                callback(-1, NSLocalizedString("DiskImageManager.flattenNotSupported", comment: ""))
+                return
+            }
+            let drivePath = virtualDrive.path
+            let tempPath = (drivePath as NSString).deletingPathExtension + "-flatten." + MacMulatorConstants.DISK_EXTENSION
+            try? FileManager.default.removeItem(atPath: tempPath)
+
+            let stackSize: Int
+            do {
+                let overlay = try DiskImage(opening: .open(url: URL(fileURLWithPath: drivePath), mode: .readOnly))
+                stackSize = overlay.blockCount * overlay.blockSize.rawValue
+            } catch {
+                callback(-1, String(format: NSLocalizedString("DiskImageManager.flattenFailed", comment: ""), "\(error)"))
+                return
+            }
+
+            let fail: (Int32, String?) -> Void = { code, message in
+                try? FileManager.default.removeItem(atPath: tempPath)
+                callback(code, message)
+            }
+
+            Shell().runCommand("/usr/sbin/diskutil image create blank --fs None --format ASIF --size " + String(stackSize) + " " + Utils.escape(tempPath), path, uponCompletion: { code, message in
+                guard code == 0 else { return fail(code, message) }
+
+                let stackCommand = "/usr/sbin/diskutil image attach --noMount --readOnly " + Utils.escape(backingPath) + " --shadow " + Utils.escape(drivePath)
+                self.attachDevice(stackCommand, path, uponCompletion: { stackDevice, message in
+                    guard let stackDevice else { return fail(-1, message) }
+                    self.attachDevice("/usr/sbin/diskutil image attach --noMount " + Utils.escape(tempPath), path, uponCompletion: { targetDevice, message in
+                        guard let targetDevice else {
+                            Shell().runCommand("/usr/sbin/diskutil eject " + stackDevice, path, uponCompletion: { _, _ in fail(-1, message) })
+                            return
+                        }
+
+                        let sourceNode = stackDevice.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
+                        let targetNode = targetDevice.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
+                        Shell().runCommand("/bin/dd if=" + sourceNode + " of=" + targetNode + " bs=1m conv=sparse", path, uponCompletion: { copyCode, copyMessage in
+                            // Always detach both images, even if the copy failed.
+                            Shell().runCommand("/usr/sbin/diskutil eject " + targetDevice, path, uponCompletion: { _, _ in
+                                Shell().runCommand("/usr/sbin/diskutil eject " + stackDevice, path, uponCompletion: { _, _ in
+                                    guard copyCode == 0 else { return fail(copyCode, copyMessage) }
+                                    self.replaceDiskImage(drivePath, with: tempPath, format: QemuConstants.FORMAT_ASIF, uponCompletion: callback)
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        #else
+            callback(-1, NSLocalizedString("DiskImageManager.flattenNotSupported", comment: ""))
+        #endif
+    }
+
+    /// Runs a `diskutil image attach` command and returns the /dev node of the attached image.
+    private func attachDevice(_ command: String, _ path: String, uponCompletion callback: @escaping (String?, String?) -> Void) {
+        let shell = Shell()
+        shell.runCommand(command, path, uponCompletion: { code, message in
+            // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
+            guard code == 0,
+                  let device = shell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
+                  device.hasPrefix("/dev/disk")
+            else {
+                callback(nil, message ?? shell.readFromStandardError())
+                return
+            }
+            callback(device, nil)
+        })
+    }
+
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         if #available(macOS 27.0, *) {
             #if arch(arm64)

@@ -274,6 +274,12 @@
                                                 <action selector="convertToTemplateMenuBarClicked:" target="Voe-Tx-rLC" id="bU9-MZ-u00"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Convert to Full Clone" id="Fc1-Cl-n01">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToFullCloneMenuBarClicked:" target="Voe-Tx-rLC" id="Fc1-Cl-a02"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
                                         <menuItem title="Show Console Output" id="7ko-iP-uk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -358,6 +364,7 @@
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
+                        <outlet property="convertToFullCloneMenuItem" destination="Fc1-Cl-n01" id="Fc1-Cl-o03"/>
                         <outlet property="convertToTemplateMenuItem" destination="J23-gx-PyE" id="rh8-TC-nzi"/>
                         <outlet property="deleteVMMenuItem" destination="1tp-Kb-lAO" id="dnn-aU-MSt"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>

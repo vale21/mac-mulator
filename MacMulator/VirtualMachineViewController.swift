@@ -136,6 +136,25 @@ class VirtualMachineViewController: NSViewController {
         performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToTemplate)
     }
 
+    @available(macOS 13.0, *)
+    func convertToFullClone(_ vm: VirtualMachine) {
+        guard let rootController, !rootController.isVMRunning(vm) else { return }
+        // The conversion window works on the current VM.
+        if rootController.currentVm !== vm {
+            rootController.setCurrentVirtualMachine(vm)
+        }
+        performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToFullClone)
+    }
+
+    func vmConvertedToFullClone(_ vm: VirtualMachine, _ error: String?) {
+        vm.writeToPlist()
+        rootController?.refreshViewForVM(vm)
+        (NSApp.delegate as? AppDelegate)?.refreshVMMenus()
+        if let error {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.convertToFullCloneFailed", comment: ""), error), virtualMachine: vm)
+        }
+    }
+
     func vmConverted(_ vm: VirtualMachine) {
         setVirtualMachine(vm)
         if Utils.isVMTemplate(vm) {

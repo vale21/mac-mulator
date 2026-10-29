@@ -30,6 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet var convertToAppleMenuItem: NSMenuItem!
     @IBOutlet var convertToTemplateMenuItem: NSMenuItem!
+    @IBOutlet var convertToFullCloneMenuItem: NSMenuItem!
     @IBOutlet var usbDevicesMenuItem: NSMenuItem!
     @IBOutlet var usbAttachImageMenuItem: NSMenuItem!
     @IBOutlet var usbConfigureMenuItem: NSMenuItem!
@@ -278,6 +279,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @IBAction func convertToFullCloneMenuBarClicked(_: Any) {
+        rootController?.convertToFullCloneMenuBarClicked(MacMulatorConstants.mainMenuSender)
+        refreshVMMenus()
+    }
+
     @IBAction func startVMMenuBarClicked(_: Any) {
         rootController?.startVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
@@ -345,6 +351,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 exportMenuItem.isEnabled = false
                 convertToQemuMenuItem.isEnabled = false
                 convertToAppleMenuItem.isEnabled = false
+                convertToFullCloneMenuItem.isEnabled = false
                 snapshotsMenuItem.isEnabled = false
                 snapshotCreateMenuItem.isEnabled = false
                 snapshotsViewRestoreMenuItem.isEnabled = false
@@ -364,6 +371,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         convertToQemuMenuItem.isEnabled = false
                         convertToAppleMenuItem.isEnabled = false
                         convertToTemplateMenuItem.isEnabled = false
+                        convertToFullCloneMenuItem.isEnabled = false
                         snapshotsMenuItem.isEnabled = false
                         snapshotCreateMenuItem.isEnabled = false
                         snapshotsViewRestoreMenuItem.isEnabled = false
@@ -376,6 +384,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             appleTemplatesSupported = true
                         }
                         convertToTemplateMenuItem.isEnabled = canConvert && (vm.type == MacMulatorConstants.QEMU_VM || (vm.type == MacMulatorConstants.APPLE_VM && appleTemplatesSupported))
+                        convertToFullCloneMenuItem.isEnabled = canConvert && vm.hasLinkedDrives && Utils.isFullCloneConversionSupported(vm)
                         cloneVMMemuItem.isEnabled = true
                         showVMInFinderMenuItem.isEnabled = true
                         settingsMenuItem.isEnabled = true
@@ -603,6 +612,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let userDefaults = UserDefaults.standard
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    /// Replaces the path of a saved VM whose folder has been renamed.
+    func replaceSavedVM(_ oldPath: String, with newPath: String) {
+        let oldPath = Utils.unescape(oldPath)
+        if let index = savedVMs?.firstIndex(of: oldPath) {
+            savedVMs?[index] = Utils.unescape(newPath)
+        } else {
+            addSavedVM(newPath)
+        }
+        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
     }
 
     func removeSavedVM(_ savedVM: String) {

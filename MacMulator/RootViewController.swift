@@ -209,6 +209,52 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.setVirtualMachine(virtualMachine)
     }
 
+    /// Renames the folder of a VM after its (possibly changed) name, adding a " (2)", " (3)", ... suffix if it is already taken.
+    /// Drives, snapshots and the linked clones depending on the VM are updated accordingly.
+    func renameVMFolderToMatchName(_ vm: VirtualMachine) {
+        guard !isVMRunning(vm) else { return }
+        let invalidCharacters = CharacterSet(charactersIn: "/:")
+        let name = vm.displayName.components(separatedBy: invalidCharacters).joined(separator: "-").trimmingCharacters(in: .whitespaces)
+        let oldPath = vm.path
+        guard !name.isEmpty, URL(fileURLWithPath: oldPath).deletingPathExtension().lastPathComponent != name else { return }
+
+        let fileManager = FileManager.default
+        var newPath = Utils.computeVMPath(vmName: name)
+        var counter = 2
+        while fileManager.fileExists(atPath: newPath) {
+            newPath = Utils.computeVMPath(vmName: "\(name) (\(counter))")
+            counter += 1
+        }
+
+        do {
+            try fileManager.moveItem(atPath: oldPath, toPath: newPath)
+        } catch {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.renameFailed", comment: ""), "\(error.localizedDescription)"), virtualMachine: vm)
+            return
+        }
+
+        VirtualMachine.setupPaths(vm, newPath)
+        vm.writeToPlist()
+        SandboxBookmarks.remember(URL(fileURLWithPath: newPath))
+        (NSApp.delegate as? AppDelegate)?.replaceSavedVM(oldPath, with: newPath)
+
+        // Linked clones refer to the drives of their template by absolute path.
+        let oldPrefix = oldPath + "/"
+        for other in virtualMachines where other !== vm {
+            var changed = false
+            for drive in other.drives {
+                if let backingPath = drive.backingPath, backingPath.hasPrefix(oldPrefix) {
+                    drive.backingPath = newPath + "/" + backingPath.dropFirst(oldPrefix.count)
+                    changed = true
+                }
+            }
+            if changed {
+                other.writeToPlist()
+            }
+        }
+        refreshViewForVM(vm)
+    }
+
     /// VMs whose drives are linked to a drive of the given template.
     func linkedClones(of template: VirtualMachine) -> [VirtualMachine] {
         let templatePrefix = template.path + "/"
@@ -356,6 +402,24 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             DispatchQueue.main.async {
                 self.addVirtualMachineFromFile(newVMPath)
             }
+        }
+    }
+
+    func convertToFullCloneMenuBarClicked(_: Any) {
+        if let currentVm, let vmIndex = getIndex(of: currentVm) {
+            convertToFullCloneAt(vmIndex)
+        }
+    }
+
+    /// Merges the drives of a linked clone with the template ones, so that the VM no longer depends on the template.
+    func convertToFullCloneAt(_ index: Int) {
+        let vm = virtualMachines[index]
+        guard vm.hasLinkedDrives, Utils.isFullCloneConversionSupported(vm), !isVMRunning(vm) else { return }
+        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("RootViewController.convertToFullClone", comment: ""), virtualMachine: vm)
+        guard response.rawValue == Utils.ALERT_RESP_OK else { return }
+
+        if #available(macOS 13.0, *) {
+            vmController?.convertToFullClone(vm)
         }
     }
 

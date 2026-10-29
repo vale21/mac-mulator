@@ -73,6 +73,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""), action: #selector(tableViewConvertToTemplateItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.convertToFullClone", comment: ""), action: #selector(tableViewConvertToFullCloneItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
@@ -92,6 +93,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             let vm = rootController.getVirtualMachineAt(row)
             if #unavailable(macOS 13.0,) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isHidden = true
+            } else {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = true
+            }
+
+            if let fullCloneItem = menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToFullClone", comment: "")) {
+                fullCloneItem.isHidden = !vm.hasLinkedDrives
+                fullCloneItem.isEnabled = Utils.isFullCloneConversionSupported(vm) && !rootController.isVMRunning(vm)
             }
 
             if Utils.isVMTemplate(vm) {
@@ -180,6 +188,12 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     @objc func tableViewCloneItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         cloneVirtualMachine(table.clickedRow)
+    }
+
+    @objc func tableViewConvertToFullCloneItemClicked(_: AnyObject) {
+        if table.clickedRow >= 0 {
+            rootController?.convertToFullCloneAt(table.clickedRow)
+        }
     }
 
     @objc func tableViewConvertToTemplateItemClicked(_: AnyObject) {

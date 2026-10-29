@@ -78,6 +78,8 @@ class EditVMViewController: NSTabViewController {
     override func viewDidDisappear() {
         if let virtualMachine {
             virtualMachine.writeToPlist()
+            // The folder of the VM follows its name.
+            (NSApp.delegate as? AppDelegate)?.rootController?.renameVMFolderToMatchName(virtualMachine)
         }
     }
 

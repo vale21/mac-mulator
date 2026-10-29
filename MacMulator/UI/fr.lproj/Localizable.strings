@@ -323,4 +323,10 @@
 "RootViewController.linkedCloneFailed" = "Échec de la création du clone lié : %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "Les disques du modèle ne sont pas dans un format compatible avec les clones liés.";
 "NewDiskViewController.linkedCowDisabled" = "Le format d'un disque de clone lié ne peut pas être modifié, car il dépend du disque du modèle.";
-"RootViewController.templateHasLinkedClones" = "Le modèle \"%@\" ne peut pas être supprimé car des clones liés en dépendent :\n\n%@\n\nSupprimez d'abord les clones liés.";
+"RootViewController.templateHasLinkedClones" = "Le modèle \"%@\" ne peut pas être supprimé car des clones liés en dépendent :\n\n%@\n\nSupprimez d'abord les clones liés ou convertissez-les en clones complets.";
+"VirtualMachineListViewController.convertToFullClone" = "Convertir en clone complet";
+"RootViewController.convertToFullClone" = "Cette VM est un clone lié. Ses disques seront fusionnés avec ceux du modèle, rendant la VM indépendante du modèle.\n\nCela peut prendre du temps et nécessite autant d'espace disque que la taille complète des disques. Voulez-vous continuer ?";
+"RootViewController.convertToFullCloneFailed" = "Impossible de convertir la VM en clone complet : %@";
+"DiskImageManager.flattenNotSupported" = "La fusion des disques liés n'est pas prise en charge pour ce type de machine virtuelle.";
+"DiskImageManager.flattenFailed" = "Impossible de fusionner le disque lié : %@";
+"RootViewController.renameFailed" = "Impossible de renommer le dossier de la machine virtuelle : %@";

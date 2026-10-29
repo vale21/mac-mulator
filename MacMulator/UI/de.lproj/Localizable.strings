@@ -323,4 +323,10 @@
 "RootViewController.linkedCloneFailed" = "Erstellen des verknüpften Klons fehlgeschlagen: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "Die Laufwerke der Vorlage haben kein Format, das verknüpfte Klone unterstützt.";
 "NewDiskViewController.linkedCowDisabled" = "Das Format eines Laufwerks eines verknüpften Klons kann nicht geändert werden, da es vom Laufwerk der Vorlage abhängt.";
-"RootViewController.templateHasLinkedClones" = "Die Vorlage \"%@\" kann nicht gelöscht werden, da verknüpfte Klone von ihr abhängen:\n\n%@\n\nLösche zuerst die verknüpften Klone.";
+"RootViewController.templateHasLinkedClones" = "Die Vorlage \"%@\" kann nicht gelöscht werden, da verknüpfte Klone von ihr abhängen:\n\n%@\n\nLösche zuerst die verknüpften Klone oder wandle sie in vollständige Klone um.";
+"VirtualMachineListViewController.convertToFullClone" = "In vollständigen Klon umwandeln";
+"RootViewController.convertToFullClone" = "Diese VM ist ein verknüpfter Klon. Ihre Laufwerke werden mit denen der Vorlage zusammengeführt, wodurch die VM unabhängig von der Vorlage wird.\n\nDies kann einige Zeit dauern und benötigt so viel Speicherplatz wie die volle Größe der Laufwerke. Möchtest du fortfahren?";
+"RootViewController.convertToFullCloneFailed" = "Die VM konnte nicht in einen vollständigen Klon umgewandelt werden: %@";
+"DiskImageManager.flattenNotSupported" = "Das Zusammenführen verknüpfter Laufwerke wird für diese Art von virtueller Maschine nicht unterstützt.";
+"DiskImageManager.flattenFailed" = "Das verknüpfte Laufwerk konnte nicht zusammengeführt werden: %@";
+"RootViewController.renameFailed" = "Der Ordner der virtuellen Maschine konnte nicht umbenannt werden: %@";

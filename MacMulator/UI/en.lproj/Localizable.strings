@@ -323,4 +323,10 @@
 "RootViewController.linkedCloneFailed" = "Linked clone creation failed: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "The template drives are not in a format that supports linked clones.";
 "NewDiskViewController.linkedCowDisabled" = "The format of a linked clone drive cannot be changed, since it depends on the template drive.";
-"RootViewController.templateHasLinkedClones" = "Template \"%@\" cannot be deleted because it has linked clones depending on it:\n\n%@\n\nDelete the linked clones first.";
+"RootViewController.templateHasLinkedClones" = "Template \"%@\" cannot be deleted because it has linked clones depending on it:\n\n%@\n\nDelete the linked clones or convert them to full clones first.";
+"VirtualMachineListViewController.convertToFullClone" = "Convert to full clone";
+"RootViewController.convertToFullClone" = "This VM is a linked clone. Its drives will be merged with the template ones, making the VM independent from the template.\n\nThis may take a while and requires as much disk space as the full size of the drives. Do you want to continue?";
+"RootViewController.convertToFullCloneFailed" = "Unable to convert the VM to a full clone: %@";
+"DiskImageManager.flattenNotSupported" = "Flattening linked drives is not supported for this kind of virtual machine.";
+"DiskImageManager.flattenFailed" = "Unable to flatten the linked disk: %@";
+"RootViewController.renameFailed" = "Unable to rename the virtual machine folder: %@";

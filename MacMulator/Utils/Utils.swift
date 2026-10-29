@@ -787,6 +787,20 @@ class Utils {
         vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM || vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM
     }
 
+    /// Whether the linked drives of the VM can be merged with the template ones: QEMU relies on qemu-img,
+    /// while Apple VMs need to attach ASIF images, which is only possible outside of the App Store sandbox.
+    static func isFullCloneConversionSupported(_ vm: VirtualMachine) -> Bool {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            return true
+        }
+        #if !APPSTORE && arch(arm64)
+            if #available(macOS 27.0, *) {
+                return vm.type == MacMulatorConstants.APPLE_VM
+            }
+        #endif
+        return false
+    }
+
     static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 27.0, *) {
             return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)

@@ -323,4 +323,10 @@
 "RootViewController.linkedCloneFailed" = "Creazione del clone collegato fallita: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "I dischi del template non sono in un formato che supporti i cloni collegati.";
 "NewDiskViewController.linkedCowDisabled" = "Il formato di un disco di un clone collegato non può essere cambiato, perché dipende dal disco del template.";
-"RootViewController.templateHasLinkedClones" = "Il template \"%@\" non può essere eliminato perché ha dei cloni collegati che ne dipendono:\n\n%@\n\nElimina prima i cloni collegati.";
+"RootViewController.templateHasLinkedClones" = "Il template \"%@\" non può essere eliminato perché ha dei cloni collegati che ne dipendono:\n\n%@\n\nElimina prima i cloni collegati o convertili in cloni completi.";
+"VirtualMachineListViewController.convertToFullClone" = "Converti in clone completo";
+"RootViewController.convertToFullClone" = "Questa VM è un clone collegato. I suoi dischi verranno uniti a quelli del template, rendendo la VM indipendente dal template.\n\nL'operazione può richiedere del tempo e necessita di spazio su disco pari alla dimensione completa dei dischi. Vuoi continuare?";
+"RootViewController.convertToFullCloneFailed" = "Impossibile convertire la VM in un clone completo: %@";
+"DiskImageManager.flattenNotSupported" = "L'unione dei dischi collegati non è supportata per questo tipo di macchina virtuale.";
+"DiskImageManager.flattenFailed" = "Impossibile unire il disco collegato: %@";
+"RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";

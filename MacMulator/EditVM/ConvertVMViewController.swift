@@ -4,6 +4,7 @@ enum ConversionOperations {
     case convertToApple
     case convertToQemu
     case convertToTemplate
+    case convertToFullClone
 }
 
 @available(macOS 13.0, *)
@@ -63,6 +64,15 @@ class ConvertVMViewController: NSViewController {
                             error = message
                         }
                     }
+                } else if operation == .convertToFullClone {
+                    flattenDrives(currentVm.drives.filter(\.isLinked), of: currentVm) { code, message in
+                        if code == 0 {
+                            complete = true
+                        } else {
+                            complete = true
+                            error = message
+                        }
+                    }
                 } else if operation == .convertToQemu {
                     let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_ASIF }
                     convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_QCOW2) { code, message in
@@ -112,7 +122,9 @@ class ConvertVMViewController: NSViewController {
                     self.progressBar.stopAnimation(self)
                     self.dismiss(self)
 
-                    if error == nil {
+                    if self.operation == .convertToFullClone {
+                        self.parentController?.vmConvertedToFullClone(virtualMachine, error)
+                    } else if error == nil {
                         self.parentController?.vmConverted(virtualMachine)
                     } else {
                         self.parentController?.vmFailedConversion(virtualMachine, error ?? "")
@@ -145,6 +157,29 @@ class ConvertVMViewController: NSViewController {
                 }
             }
         }
+    }
+
+    /// Merges linked drives with the template ones, one at a time. Drives merged so far stay standalone if one fails.
+    private func flattenDrives(_ drives: [VirtualDrive], of vm: VirtualMachine, totalDrives: Int? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard let drive = drives.first else {
+            callback(0, nil)
+            return
+        }
+
+        let totalDrives = totalDrives ?? drives.count
+        let index = totalDrives - drives.count
+        DiskImageManagerFactory().create(forVM: vm).flattenLinkedDiskImage(drive, vm.path, uponCompletion: { code, message in
+            DispatchQueue.main.async {
+                if code == 0 {
+                    drive.backingPath = nil
+                    vm.writeToPlist()
+                    self.updateProgress(Double(index + 1) * 100 / Double(totalDrives))
+                    self.flattenDrives(Array(drives.dropFirst()), of: vm, totalDrives: totalDrives, uponCompletion: callback)
+                } else {
+                    callback(code, message)
+                }
+            }
+        })
     }
 
     private func convertDrive(_ drive: VirtualDrive, to format: String, in path: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
