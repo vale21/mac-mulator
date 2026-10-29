@@ -307,3 +307,18 @@
 "VirtualMachineViewController.vmPaused" = "VM pausiert";
 "VirtualMachineViewController.vmProcessors" = "Prozessoren:";
 "VirtualMachineViewController.vmType" = "Typ:";
+
+"CloneVMViewController.cloneType" = "Klontyp:";
+"CloneVMViewController.fullClone" = "Vollständiger Klon";
+"CloneVMViewController.linkedClone" = "Verknüpfter Klon";
+"CloneVMViewController.fullCloneDescription" = "Ein vollständiger Klon ist eine völlig unabhängige Kopie der Vorlage. Er benötigt mehr Speicherplatz, funktioniert aber auch dann weiter, wenn die ursprüngliche Vorlage verschoben oder gelöscht wird.";
+"CloneVMViewController.linkedCloneDescription" = "Ein verknüpfter Klon teilt sich die Festplatten der Vorlage und speichert nur die Unterschiede. Er wird nahezu sofort erstellt und braucht sehr wenig Speicherplatz, setzt aber voraus, dass die ursprüngliche Vorlage verfügbar bleibt.";
+"CloneVMViewController.clone" = "Klonen";
+"CloneVMViewController.cancel" = "Abbrechen";
+
+"DiskImageManager.convertLinkedFailed" = "Die Disk-Images eines verknüpften Klons können nicht konvertiert werden, da sie von der Vorlage abhängen. Erstellen Sie stattdessen einen vollständigen Klon.";
+"DiskImageManager.linkedNotSupported" = "Verknüpfte Klone werden für diese Art von virtueller Maschine nicht unterstützt.";
+"DiskImageManager.createLinkedFailed" = "Das verknüpfte Laufwerk konnte nicht erstellt werden: %@";
+"RootViewController.linkedCloneFailed" = "Erstellen des verknüpften Klons fehlgeschlagen: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "Die Laufwerke der Vorlage haben kein Format, das verknüpfte Klone unterstützt.";
+"NewDiskViewController.linkedCowDisabled" = "Das Format eines Laufwerks eines verknüpften Klons kann nicht geändert werden, da es vom Laufwerk der Vorlage abhängt.";

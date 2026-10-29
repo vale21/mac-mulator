@@ -5180,16 +5180,16 @@ Rocky Linux</string>
             </objects>
             <point key="canvasLocation" x="172.5" y="1720.5"/>
         </scene>
-        <!--View Controller-->
+        <!--CloneVM View Controller-->
         <scene sceneID="GYB-OX-Xbb">
             <objects>
-                <viewController id="1rf-Yg-KwF" sceneMemberID="viewController">
+                <viewController id="1rf-Yg-KwF" customClass="CloneVMViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="nWM-Ju-cSl">
-                        <rect key="frame" x="0.0" y="0.0" width="448" height="296"/>
+                        <rect key="frame" x="0.0" y="0.0" width="448" height="215"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VzO-Hl-UOZ">
-                                <rect key="frame" x="18" y="260" width="247" height="16"/>
+                                <rect key="frame" x="18" y="179" width="247" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Which type of clone you want to create?" id="5hL-WL-AF4">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -5197,30 +5197,8 @@ Rocky Linux</string>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NzD-61-IIJ">
-                                <rect key="frame" x="385" y="20" width="43" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ha5-Me-I4N">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MrH-kL-0XS">
-                                <rect key="frame" x="307" y="20" width="66" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mc-u0-4h8">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                </buttonCell>
-                            </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tfg-Zt-XjQ">
-                                <rect key="frame" x="18" y="73" width="412" height="104"/>
+                                <rect key="frame" x="18" y="24" width="412" height="104"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" id="7Ke-QW-7uu">
                                     <font key="font" metaFont="smallSystem"/>
@@ -5231,7 +5209,7 @@ With this approach, if you delete teh template, the VM will stop working.</strin
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tu0-OX-TzT">
-                                <rect key="frame" x="20" y="228" width="248" height="24"/>
+                                <rect key="frame" x="20" y="147" width="248" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="5" id="RxM-y7-Xcp">
                                     <font key="font" metaFont="system"/>
@@ -5239,12 +5217,47 @@ With this approach, if you delete teh template, the VM will stop working.</strin
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </comboBoxCell>
                             </comboBox>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NzD-61-IIJ">
+                                <rect key="frame" x="346" y="20" width="82" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Clone" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ha5-Me-I4N">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="okButtonPressed:" target="1rf-Yg-KwF" id="dwE-lC-jUc"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MrH-kL-0XS">
+                                <rect key="frame" x="252" y="20" width="82" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7Mc-u0-4h8">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="cancelButtonPressed:" target="1rf-Yg-KwF" id="1Kl-uo-Hup"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="cancelButton" destination="MrH-kL-0XS" id="uRs-Yu-eDd"/>
+                        <outlet property="cloneDescriptionLabel" destination="Tfg-Zt-XjQ" id="Ptb-IO-zNi"/>
+                        <outlet property="cloneTypeComboBox" destination="tu0-OX-TzT" id="y1a-lC-MLM"/>
+                        <outlet property="cloneTypeLabel" destination="VzO-Hl-UOZ" id="LBD-5v-Ed6"/>
+                        <outlet property="okButton" destination="NzD-61-IIJ" id="llf-oC-x6S"/>
+                    </connections>
                 </viewController>
                 <customObject id="WFM-9a-0Vs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="617" y="1822"/>
+            <point key="canvasLocation" x="617" y="1781.5"/>
         </scene>
     </scenes>
     <resources>

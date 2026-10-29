@@ -307,3 +307,18 @@
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmProcessors" = "Processori:";
 "VirtualMachineViewController.vmType" = "Tipo:";
+
+"CloneVMViewController.cloneType" = "Tipo di clone:";
+"CloneVMViewController.fullClone" = "Clone completo";
+"CloneVMViewController.linkedClone" = "Clone collegato";
+"CloneVMViewController.fullCloneDescription" = "Un clone completo è una copia totalmente indipendente del template. Occupa più spazio su disco, ma continua a funzionare anche se il template originale viene spostato o eliminato.";
+"CloneVMViewController.linkedCloneDescription" = "Un clone collegato condivide i dischi del template e salva solo le differenze. Viene creato quasi istantaneamente e occupa pochissimo spazio, ma richiede che il template originale rimanga disponibile.";
+"CloneVMViewController.clone" = "Clona";
+"CloneVMViewController.cancel" = "Annulla";
+
+"DiskImageManager.convertLinkedFailed" = "Le immagini disco di un clone collegato non possono essere convertite, perché dipendono dal template. Crea invece un clone completo.";
+"DiskImageManager.linkedNotSupported" = "I cloni collegati non sono supportati per questo tipo di macchina virtuale.";
+"DiskImageManager.createLinkedFailed" = "Impossibile creare il disco collegato: %@";
+"RootViewController.linkedCloneFailed" = "Creazione del clone collegato fallita: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "I dischi del template non sono in un formato che supporti i cloni collegati.";
+"NewDiskViewController.linkedCowDisabled" = "Il formato di un disco di un clone collegato non può essere cambiato, perché dipende dal disco del template.";

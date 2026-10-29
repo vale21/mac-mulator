@@ -18,6 +18,8 @@ class QemuImgCommandBuilder {
     var targetName: String?
     var shrinkArg: Bool?
     var shortSize: String?
+    var backingFile: String?
+    var backingFormat: String?
 
     init(qemuPath: String) {
         self.qemuPath = qemuPath
@@ -58,6 +60,16 @@ class QemuImgCommandBuilder {
         return self
     }
 
+    func withBackingFile(_ backingFile: String) -> QemuImgCommandBuilder {
+        self.backingFile = Utils.escape(backingFile)
+        return self
+    }
+
+    func withBackingFormat(_ backingFormat: String) -> QemuImgCommandBuilder {
+        self.backingFormat = backingFormat
+        return self
+    }
+
     func withShortSize(_ shortSize: String) -> QemuImgCommandBuilder {
         self.shortSize = shortSize
         return self
@@ -74,6 +86,12 @@ class QemuImgCommandBuilder {
         }
         if let targetFormat {
             cmd += " -O " + targetFormat
+        }
+        if let backingFile {
+            cmd += " -b " + backingFile
+        }
+        if let backingFormat {
+            cmd += " -F " + backingFormat
         }
         if let size {
             cmd += " -o size=" + size

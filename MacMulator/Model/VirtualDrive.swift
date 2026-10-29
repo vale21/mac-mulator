@@ -16,6 +16,7 @@ class VirtualDrive: Codable, Equatable {
     var isBootDrive: Bool = false
     var blank: Int? = 1 // TODO: Review why on earth Bool? does not work and we have to do this crap with Int?
     var vzDeviceUUID: String?
+    var backingPath: String? // path of the template drive this drive is layered on top of (linked clones only)
 
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
         self.path = path
@@ -33,10 +34,15 @@ class VirtualDrive: Codable, Equatable {
         self.blank = blank ? 1 : 0
     }
 
+    var isLinked: Bool {
+        backingPath != nil
+    }
+
     func clone() -> VirtualDrive {
         let drive = VirtualDrive(path: path, name: name, format: format, mediaType: mediaType, size: size)
         drive.isBootDrive = isBootDrive
         drive.blank = blank
+        drive.backingPath = backingPath
 
         return drive
     }
@@ -49,6 +55,7 @@ class VirtualDrive: Codable, Equatable {
             lhs.size == rhs.size &&
             lhs.isBootDrive == rhs.isBootDrive &&
             lhs.blank == rhs.blank &&
-            lhs.vzDeviceUUID == rhs.vzDeviceUUID
+            lhs.vzDeviceUUID == rhs.vzDeviceUUID &&
+            lhs.backingPath == rhs.backingPath
     }
 }

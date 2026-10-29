@@ -307,3 +307,18 @@
 "VirtualMachineViewController.vmPaused" = "VM en pause";
 "VirtualMachineViewController.vmProcessors" = "Processeurs :";
 "VirtualMachineViewController.vmType" = "Type :";
+
+"CloneVMViewController.cloneType" = "Type de clone :";
+"CloneVMViewController.fullClone" = "Clone complet";
+"CloneVMViewController.linkedClone" = "Clone lié";
+"CloneVMViewController.fullCloneDescription" = "Un clone complet est une copie totalement indépendante du modèle. Il occupe plus d'espace disque, mais continue de fonctionner même si le modèle d'origine est déplacé ou supprimé.";
+"CloneVMViewController.linkedCloneDescription" = "Un clone lié partage les disques du modèle et ne stocke que les différences. Il est créé presque instantanément et occupe très peu d'espace, mais nécessite que le modèle d'origine reste disponible.";
+"CloneVMViewController.clone" = "Cloner";
+"CloneVMViewController.cancel" = "Annuler";
+
+"DiskImageManager.convertLinkedFailed" = "Les images disque d'un clone lié ne peuvent pas être converties, car elles dépendent du modèle. Créez plutôt un clone complet.";
+"DiskImageManager.linkedNotSupported" = "Les clones liés ne sont pas pris en charge pour ce type de machine virtuelle.";
+"DiskImageManager.createLinkedFailed" = "Impossible de créer le disque lié : %@";
+"RootViewController.linkedCloneFailed" = "Échec de la création du clone lié : %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "Les disques du modèle ne sont pas dans un format compatible avec les clones liés.";
+"NewDiskViewController.linkedCowDisabled" = "Le format d'un disque de clone lié ne peut pas être modifié, car il dépend du disque du modèle.";

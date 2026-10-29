@@ -307,3 +307,18 @@
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmProcessors" = "Processors:";
 "VirtualMachineViewController.vmType" = "Type:";
+
+"CloneVMViewController.cloneType" = "Clone type:";
+"CloneVMViewController.fullClone" = "Full clone";
+"CloneVMViewController.linkedClone" = "Linked clone";
+"CloneVMViewController.fullCloneDescription" = "A full clone is a completely independent copy of the template. It uses more disk space, but keeps working even if the original template is moved or deleted.";
+"CloneVMViewController.linkedCloneDescription" = "A linked clone shares the template's disks and only stores the differences. It is created almost instantly and uses very little disk space, but requires the original template to remain available.";
+"CloneVMViewController.clone" = "Clone";
+"CloneVMViewController.cancel" = "Cancel";
+
+"DiskImageManager.convertLinkedFailed" = "Disk images cannot be converted for a linked clone, since they depend on the template. Create a full clone instead.";
+"DiskImageManager.linkedNotSupported" = "Linked clones are not supported for this kind of virtual machine.";
+"DiskImageManager.createLinkedFailed" = "Unable to create the linked disk: %@";
+"RootViewController.linkedCloneFailed" = "Linked clone creation failed: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "The template drives are not in a format that supports linked clones.";
+"NewDiskViewController.linkedCowDisabled" = "The format of a linked clone drive cannot be changed, since it depends on the template drive.";

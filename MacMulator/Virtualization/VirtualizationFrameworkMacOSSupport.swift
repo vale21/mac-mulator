@@ -61,7 +61,7 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
                     }
                 }
             }
-            disksArray.add(MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path))
+            disksArray.add(MacOSVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(drive: Utils.findMainDrive(vm.drives)!))
             guard let disks = disksArray as? [VZStorageDeviceConfiguration] else {
                 fatalError("Invalid disksArray.")
             }

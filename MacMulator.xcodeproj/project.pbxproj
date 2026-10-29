@@ -30,7 +30,6 @@
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
-		3B3A5889308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3A588A308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3A588B308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B3DF81B2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd */; };
@@ -103,6 +102,8 @@
 		3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */; };
 		3BDB19082CDE5F5100B8D3A6 /* OPENCORE.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */; };
 		3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */; };
+		3BDD3D4330921646007FE305 /* CloneVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D4230921646007FE305 /* CloneVMViewController.swift */; };
+		3BDD3D4430921646007FE305 /* CloneVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BDD3D4230921646007FE305 /* CloneVMViewController.swift */; };
 		3BE72EDC3074F0D600599EBB /* RunningVMManagerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */; };
 		3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BEF5D352804419000709576 /* VirtualizationFrameworkVMCreator.swift */; };
 		3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF128BA26C270CA009BFF7D /* ConsoleViewController.swift */; };
@@ -342,6 +343,7 @@
 		3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = SECURE_EFI_x64.fd; sourceTree = "<group>"; };
 		3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = OPENCORE.zip; sourceTree = "<group>"; };
 		3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "macos-guest-tools.img.zip"; sourceTree = "<group>"; };
+		3BDD3D4230921646007FE305 /* CloneVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloneVMViewController.swift; sourceTree = "<group>"; };
 		3BE706152DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = fr; path = fr.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3BE706162DFD6B7F00AC2203 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningVMManagerViewController.swift; sourceTree = "<group>"; };
@@ -612,6 +614,7 @@
 		3BF8F62125E401D4006E2C1C /* EditVM */ = {
 			isa = PBXGroup;
 			children = (
+				3BDD3D4230921646007FE305 /* CloneVMViewController.swift */,
 				3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */,
 				3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */,
 				3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */,
@@ -903,6 +906,7 @@
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
 				3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */,
+				3BDD3D4430921646007FE305 /* CloneVMViewController.swift in Sources */,
 				3B200DA72802EEDE00F7159E /* VMCreator.swift in Sources */,
 				3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
@@ -992,6 +996,7 @@
 				3BFB2B523078F067005A4B51 /* EditVMViewController.swift in Sources */,
 				3BFB2B533078F067005A4B51 /* QemuCommandBuilder.swift in Sources */,
 				3BFB2B543078F067005A4B51 /* VirtualizationFrameworkVMCreator.swift in Sources */,
+				3BDD3D4330921646007FE305 /* CloneVMViewController.swift in Sources */,
 				3BFB2B553078F067005A4B51 /* VMCreator.swift in Sources */,
 				3BFB2B563078F067005A4B51 /* ConsoleViewController.swift in Sources */,
 				3BFB2B573078F067005A4B51 /* QemuUtils.swift in Sources */,

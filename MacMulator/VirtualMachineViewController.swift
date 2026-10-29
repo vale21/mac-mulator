@@ -10,9 +10,9 @@ import Cocoa
 class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
-    var runner: VirtualMachineRunner
+    var runner: VirtualMachineRunner?
 
-    init(vm: VirtualMachine, inRecovery: Bool, runner: VirtualMachineRunner) {
+    init(vm: VirtualMachine, inRecovery: Bool, runner: VirtualMachineRunner?) {
         self.vm = vm
         self.inRecovery = inRecovery
         self.runner = runner
@@ -155,6 +155,10 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
+    func cloneVirtualMachine(_ vm: VirtualMachine) {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_CLONE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: false, runner: nil))
+    }
+
     func createVMSnapshot(sender _: Any) {
         if let vm = rootController?.currentVm, let rootController {
             do {
@@ -206,32 +210,38 @@ class VirtualMachineViewController: NSViewController {
             let dest = segue.destinationController as! VirtualMachineContainerViewController
             let vmToStart = sender as! VMToStart
 
-            dest.setVirtualMachine(vmToStart.vm)
-            dest.setRecoveryMode(vmToStart.inRecovery)
-            dest.setVmRunner(vmToStart.runner)
-            dest.setVmController(source)
-            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
+            if let runner = vmToStart.runner {
+                dest.setVirtualMachine(vmToStart.vm)
+                dest.setRecoveryMode(vmToStart.inRecovery)
+                dest.setVmRunner(runner)
+                dest.setVmController(source)
+                dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
+            }
         } else if segue.identifier == MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! QemuSpiceViewerViewController
             let vmToStart = sender as! VMToStart
 
-            dest.setVirtualMachine(vmToStart.vm)
-            dest.setRecoveryMode(vmToStart.inRecovery)
-            dest.setVmRunner(vmToStart.runner)
-            dest.setVmController(source)
-            dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
-            dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
-            spiceViewer = dest
+            if let runner = vmToStart.runner {
+                dest.setVirtualMachine(vmToStart.vm)
+                dest.setRecoveryMode(vmToStart.inRecovery)
+                dest.setVmRunner(runner)
+                dest.setVmController(source)
+                dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
+                dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
+                spiceViewer = dest
+            }
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! StartVMViewController
             let vmToStart = sender as! VMToStart
 
-            dest.setVmRunner(vmToStart.runner)
-            dest.setVirtualMachine(vmToStart.vm)
-            dest.setRecoveryMode(vmToStart.inRecovery)
-            dest.setVmController(source)
+            if let runner = vmToStart.runner {
+                dest.setVmRunner(runner)
+                dest.setVirtualMachine(vmToStart.vm)
+                dest.setRecoveryMode(vmToStart.inRecovery)
+                dest.setVmController(source)
+            }
         } else if segue.identifier == MacMulatorConstants.CONVERT_VM_SEGUE {
             if #available(macOS 13.0, *), let rootController, let currentVM = rootController.currentVm {
                 let source = segue.sourceController as! VirtualMachineViewController
@@ -241,6 +251,13 @@ class VirtualMachineViewController: NSViewController {
                 dest.setVirtualMachine(currentVM)
                 dest.setParentController(source)
             }
+        } else if segue.identifier == MacMulatorConstants.SHOW_CLONE_VIEW_SEGUE {
+            let source = segue.sourceController as! VirtualMachineViewController
+            let dest = segue.destinationController as! CloneVMViewController
+            let vmToClone = sender as! VMToStart
+
+            dest.setVirtualMachine(vmToClone.vm)
+            dest.setParentController(source)
         }
     }
 

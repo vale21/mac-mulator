@@ -9,6 +9,7 @@
     import DiskImageKit
 #endif
 import Foundation
+import Virtualization
 
 class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
@@ -74,6 +75,43 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
             QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
         }
+    }
+
+    func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard #available(macOS 27.0, *), virtualDrive.format == QemuConstants.FORMAT_ASIF, backingDrive.format == QemuConstants.FORMAT_ASIF else {
+            callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
+            return
+        }
+        #if arch(arm64)
+            let overlayURL = URL(fileURLWithPath: path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
+            DispatchQueue.global().async {
+                do {
+                    // The template is only read, so it's opened read-only and never modified.
+                    let baseImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: backingDrive.path), mode: .readOnly))
+                    _ = try baseImage.appending(.asifLayer(url: overlayURL, type: .overlay))
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create ASIF overlay image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createLinkedFailed", comment: ""), "\(error)"))
+                }
+            }
+        #else
+            callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
+        #endif
+    }
+
+    /// Creates the storage attachment for a drive. Linked drives are overlay layers that have to be stacked
+    /// on top of their template drive before being handed to the Virtualization framework.
+    static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
+        #if arch(arm64)
+            if #available(macOS 27.0, *), let backingPath = drive.backingPath {
+                let baseImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: backingPath), mode: .readOnly))
+                let overlayImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: drive.path), mode: readOnly ? .readOnly : .readWrite))
+                let stackedImage = try baseImage.appending(overlayImage)
+                return try VZDiskImageStorageDeviceAttachment(diskImage: stackedImage)
+            }
+        #endif
+        return try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: drive.path), readOnly: readOnly)
     }
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
@@ -298,7 +336,11 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                             identityInfo.append(("UUID", layerUUID.uuidString))
                         }
                         if let parentUUID = diskImage.parentUUID {
-                            identityInfo.append(("Stable UUID", parentUUID.uuidString))
+                            identityInfo.append(("Parent UUID", parentUUID.uuidString))
+                        }
+
+                        if let backingPath = virtualDrive.backingPath {
+                            identityInfo.append(("Template", backingPath))
                         }
 
                         callback(0, self.formatDiskImageInfo(
