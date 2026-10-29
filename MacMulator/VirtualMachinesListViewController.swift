@@ -223,6 +223,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     func deleteVirtualMachine(_ index: Int) {
         if let rootController {
+            guard rootController.canDelete(rootController.getVirtualMachineAt(index)) else { return }
             if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
                 let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineListViewController.runningVM", comment: ""), virtualMachine: rootController.getVirtualMachineAt(index))
                 if response.rawValue == Utils.ALERT_RESP_OK {

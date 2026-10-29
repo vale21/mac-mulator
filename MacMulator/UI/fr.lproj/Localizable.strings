@@ -216,7 +216,8 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (appuyez sur ⌃⌥ pour libérer la souris)";
 "QemuSpiceViewerViewController.noMetal" = "Metal n’est pas disponible sur ce Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossible de démarrer le client SPICE";
-"RootViewController.cloneOf" = "Clone de %@";
+"RootViewController.fullCloneOf" = "Clone complet de %@";
+"RootViewController.linkedCloneOf" = "Clone lié de %@";
 "RootViewController.convertToTemplate" = "Vous êtes sur le point de convertir cette VM en modèle.\nUn modèle est une VM de base en lecture seule, que vous pouvez utiliser pour créer rapidement de nouvelles VM.\n\nCette opération est irréversible : le modèle ne pourra plus être démarré. Pour l’utiliser, créez-en un clone :\n- Clone complet : une copie complète et indépendante de la VM.\n- Clone lié : une VM légère qui enregistre uniquement ses modifications par-dessus le disque du modèle.";
 "RootViewController.convertToTemplateConfirm" = "Voulez-vous continuer ?";
 "RootViewController.convertToTemplateRawDrives" = "Les disques suivants sont au format RAW et seront convertis au format %@ :\n%@";
@@ -322,3 +323,4 @@
 "RootViewController.linkedCloneFailed" = "Échec de la création du clone lié : %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "Les disques du modèle ne sont pas dans un format compatible avec les clones liés.";
 "NewDiskViewController.linkedCowDisabled" = "Le format d'un disque de clone lié ne peut pas être modifié, car il dépend du disque du modèle.";
+"RootViewController.templateHasLinkedClones" = "Le modèle \"%@\" ne peut pas être supprimé car des clones liés en dépendent :\n\n%@\n\nSupprimez d'abord les clones liés.";

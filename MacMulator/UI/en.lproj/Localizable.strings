@@ -216,7 +216,8 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (press ⌃⌥ to release the mouse)";
 "QemuSpiceViewerViewController.noMetal" = "Metal is not available on this Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Unable to start the SPICE client";
-"RootViewController.cloneOf" = "Clone of %@";
+"RootViewController.fullCloneOf" = "Full clone of %@";
+"RootViewController.linkedCloneOf" = "Linked clone of %@";
 "RootViewController.convertToTemplate" = "You are converting this VM to a template.\nA template is a read-only base VM you can use to quickly create new VMs.\n\nThis cannot be undone: the template can no longer be run. To use it, create a clone:\n- Full clone: an independent, complete copy of the VM.\n- Linked clone: a lightweight VM that stores only its changes on top of the template disk.";
 "RootViewController.convertToTemplateConfirm" = "Do you want to continue?";
 "RootViewController.convertToTemplateRawDrives" = "The following drives are in RAW format and will be converted to %@ format:\n%@";
@@ -322,3 +323,4 @@
 "RootViewController.linkedCloneFailed" = "Linked clone creation failed: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "The template drives are not in a format that supports linked clones.";
 "NewDiskViewController.linkedCowDisabled" = "The format of a linked clone drive cannot be changed, since it depends on the template drive.";
+"RootViewController.templateHasLinkedClones" = "Template \"%@\" cannot be deleted because it has linked clones depending on it:\n\n%@\n\nDelete the linked clones first.";

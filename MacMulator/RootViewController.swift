@@ -89,6 +89,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func deleteVMMenuBarClicked(_: Any) {
         if let currentVm {
+            guard canDelete(currentVm) else { return }
             if let vmIndex = getIndex(of: currentVm) {
                 _ = removeVirtualMachineAt(vmIndex)
             }
@@ -155,7 +156,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         if let vm = virtualMachine {
             addVirtualMachine(vm)
             if #available(macOS 13.0, *) {
-                if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
+                if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, !vm.hasLinkedDrives, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
                     vmController?.convertToQemuMenuBarClicked(self)
                 }
             }
@@ -208,6 +209,26 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.setVirtualMachine(virtualMachine)
     }
 
+    /// VMs whose drives are linked to a drive of the given template.
+    func linkedClones(of template: VirtualMachine) -> [VirtualMachine] {
+        let templatePrefix = template.path + "/"
+        return virtualMachines.filter { vm in
+            vm !== template && vm.drives.contains(where: { $0.backingPath?.hasPrefix(templatePrefix) == true })
+        }
+    }
+
+    /// A template that still has linked clones cannot be deleted: its disks are the backing files of the clones' ones.
+    /// Shows an alert and returns false in that case.
+    func canDelete(_ vm: VirtualMachine) -> Bool {
+        guard Utils.isVMTemplate(vm) else { return true }
+        let clones = linkedClones(of: vm)
+        if clones.isEmpty {
+            return true
+        }
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.templateHasLinkedClones", comment: ""), vm.displayName, clones.map { "- " + $0.displayName }.joined(separator: "\n")), virtualMachine: vm)
+        return false
+    }
+
     func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
         if index > 0 {
             setCurrentVirtualMachine(virtualMachines[index - 1])
@@ -231,18 +252,32 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return virtualMachine
     }
 
+    /// Name for a new clone, with a " (2)", " (3)", ... suffix if a VM or a folder with the same name already exists.
+    private func cloneName(of name: String, linked: Bool) -> String {
+        let baseName = String(format: NSLocalizedString(linked ? "RootViewController.linkedCloneOf" : "RootViewController.fullCloneOf", comment: ""), name)
+        var candidate = baseName
+        var counter = 2
+        while virtualMachines.contains(where: { $0.displayName == candidate }) || FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: candidate)) {
+            candidate = "\(baseName) (\(counter))"
+            counter += 1
+        }
+        return candidate
+    }
+
     func performFullClone(_ vmToClone: VirtualMachine) {
-        let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
+        let uniqueName = cloneName(of: vmToClone.displayName, linked: false)
+        let newVMPath = Utils.computeVMPath(vmName: uniqueName)
         let shell = Shell()
         shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _, _ in
-            self.registerClone(at: newVMPath)
+            self.registerClone(at: newVMPath, displayName: uniqueName)
         })
     }
 
     /// Creates a clone whose disks are overlay layers (QCOW2 backing files or stacked ASIF images) on top of the template ones,
     /// so that it takes almost no space and is created instantly.
     func performLinkedClone(_ vmToClone: VirtualMachine) {
-        let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
+        let uniqueName = cloneName(of: vmToClone.displayName, linked: true)
+        let newVMPath = Utils.computeVMPath(vmName: uniqueName)
         let templateDisks = vmToClone.drives.filter { $0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME }
 
         // Overlays can only be stacked on top of sparse images, which is guaranteed by the template conversion.
@@ -278,7 +313,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         func createOverlay(at index: Int) {
             guard index < overlays.count else {
-                registerClone(at: newVMPath, linkedDrives: overlays)
+                registerClone(at: newVMPath, displayName: uniqueName, linkedDrives: overlays)
                 return
             }
             diskImageManager.createLinkedDiskImage(overlays[index], backingDrive: templateDisks[index], newVMPath, uponCompletion: { errorCode, errorMessage in
@@ -295,10 +330,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         createOverlay(at: 0)
     }
 
-    private func registerClone(at newVMPath: String, linkedDrives: [VirtualDrive] = []) {
+    private func registerClone(at newVMPath: String, displayName: String, linkedDrives: [VirtualDrive] = []) {
         let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
         if let tempVm = temp {
-            tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)
+            tempVm.assignNewIdForClone()
+            tempVm.displayName = displayName
             if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
                 tempVm.type = MacMulatorConstants.APPLE_VM
             }

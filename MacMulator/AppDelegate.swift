@@ -415,7 +415,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         #endif
 
                         if vm.type == MacMulatorConstants.APPLE_VM {
-                            convertToQemuMenuItem.isEnabled = canConvert && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+                            convertToQemuMenuItem.isEnabled = canConvert && !vm.hasLinkedDrives && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
                             convertToAppleMenuItem.isEnabled = false
 
                             var usbDrives: [String] = []
@@ -453,7 +453,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                             }
                         } else if vm.type == MacMulatorConstants.QEMU_VM {
                             convertToQemuMenuItem.isEnabled = false
-                            convertToAppleMenuItem.isEnabled = canConvert && vm.os == QemuConstants.OS_LINUX
+                            convertToAppleMenuItem.isEnabled = canConvert && !vm.hasLinkedDrives && vm.os == QemuConstants.OS_LINUX
                             usbDevicesMenuItem.isEnabled = false
                         } else {
                             convertToQemuMenuItem.isEnabled = false

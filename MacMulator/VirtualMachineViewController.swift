@@ -120,13 +120,13 @@ class VirtualMachineViewController: NSViewController {
 
     @available(macOS 13.0, *)
     func convertToQemuMenuBarClicked(_: Any, _: Bool = true) {
-        guard let rootController, !rootController.isCurrentVMRunning() else { return }
+        guard let rootController, !rootController.isCurrentVMRunning(), rootController.currentVm?.hasLinkedDrives != true else { return }
         performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToQemu)
     }
 
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
-        guard let rootController, !rootController.isCurrentVMRunning() else { return }
+        guard let rootController, !rootController.isCurrentVMRunning(), rootController.currentVm?.hasLinkedDrives != true else { return }
         performSegue(withIdentifier: MacMulatorConstants.CONVERT_VM_SEGUE, sender: ConversionOperations.convertToApple)
     }
 

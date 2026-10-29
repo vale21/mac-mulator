@@ -216,7 +216,8 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (⌃⌥ drücken, um die Maus freizugeben)";
 "QemuSpiceViewerViewController.noMetal" = "Metal ist auf diesem Mac nicht verfügbar";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Der SPICE-Client konnte nicht gestartet werden";
-"RootViewController.cloneOf" = "Klon von %@";
+"RootViewController.fullCloneOf" = "Vollständiger Klon von %@";
+"RootViewController.linkedCloneOf" = "Verknüpfter Klon von %@";
 "RootViewController.convertToTemplate" = "Du wandelst diese VM in eine Vorlage um.\nEine Vorlage ist eine schreibgeschützte Basis-VM, mit der du schnell neue VMs erstellen kannst.\n\nDies kann nicht rückgängig gemacht werden: Die Vorlage kann nicht mehr gestartet werden. Um sie zu verwenden, erstelle einen Klon:\n- Vollständiger Klon: eine unabhängige, vollständige Kopie der VM.\n- Verknüpfter Klon: eine schlanke VM, die nur ihre Änderungen auf Basis der Vorlagen-Festplatte speichert.";
 "RootViewController.convertToTemplateConfirm" = "Möchtest du fortfahren?";
 "RootViewController.convertToTemplateRawDrives" = "Die folgenden Laufwerke liegen im RAW-Format vor und werden in das %@-Format konvertiert:\n%@";
@@ -322,3 +323,4 @@
 "RootViewController.linkedCloneFailed" = "Erstellen des verknüpften Klons fehlgeschlagen: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "Die Laufwerke der Vorlage haben kein Format, das verknüpfte Klone unterstützt.";
 "NewDiskViewController.linkedCowDisabled" = "Das Format eines Laufwerks eines verknüpften Klons kann nicht geändert werden, da es vom Laufwerk der Vorlage abhängt.";
+"RootViewController.templateHasLinkedClones" = "Die Vorlage \"%@\" kann nicht gelöscht werden, da verknüpfte Klone von ihr abhängen:\n\n%@\n\nLösche zuerst die verknüpften Klone.";

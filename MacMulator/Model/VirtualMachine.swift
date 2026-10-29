@@ -8,6 +8,8 @@
 import Foundation
 
 class VirtualMachine: Codable, Hashable {
+    /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
+    private var storedId: String?
     var os: String
     var subtype: String
     var architecture: String
@@ -38,11 +40,28 @@ class VirtualMachine: Codable, Hashable {
     var usbPassthroughDeviceNames: [String: String]?
     var provisioningInformation: ProvisioningInformation? = nil
 
+    /// Unique identifier, assigned at creation time and never modified afterwards.
+    /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
+    var id: String {
+        if let storedId {
+            return storedId
+        }
+        let newId = UUID().uuidString
+        storedId = newId
+        return newId
+    }
+
+    var hasLinkedDrives: Bool {
+        drives.contains(where: \.isLinked)
+    }
+
     private enum CodingKeys: String, CodingKey {
+        case storedId = "id"
         case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+        storedId = UUID().uuidString
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -114,6 +133,11 @@ class VirtualMachine: Codable, Hashable {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName)
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!)
             setupPaths(vm, plistFilePath)
+            if vm.storedId == nil {
+                // Legacy VM created before IDs were introduced: assign one and persist it.
+                _ = vm.id
+                vm.writeToPlist()
+            }
             if vm.portMappings == nil {
                 vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
             }
@@ -171,6 +195,12 @@ class VirtualMachine: Codable, Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(displayName)
+    }
+
+    /// Gives a freshly copied VM its own identity. Only to be used while cloning,
+    /// before the copy is registered.
+    func assignNewIdForClone() {
+        storedId = UUID().uuidString
     }
 
     func cleanup() {

@@ -216,7 +216,8 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (premi ⌃⌥ per rilasciare il mouse)";
 "QemuSpiceViewerViewController.noMetal" = "Metal non è disponibile su questo Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossibile avviare il client SPICE";
-"RootViewController.cloneOf" = "Clone di %@";
+"RootViewController.fullCloneOf" = "Clone completo di %@";
+"RootViewController.linkedCloneOf" = "Clone collegato di %@";
 "RootViewController.convertToTemplate" = "Stai convertendo questa VM in un template.\nUn template è una VM di base in sola lettura, che puoi usare per creare rapidamente nuove VM.\n\nL'operazione è irreversibile: il template non potrà più essere avviato. Per usarlo, creane un clone:\n- Clone completo: una copia completa e indipendente della VM.\n- Clone collegato: una VM leggera che salva solo le proprie modifiche sopra il disco del template.";
 "RootViewController.convertToTemplateConfirm" = "Vuoi continuare?";
 "RootViewController.convertToTemplateRawDrives" = "I seguenti dischi sono in formato RAW e saranno convertiti in formato %@:\n%@";
@@ -322,3 +323,4 @@
 "RootViewController.linkedCloneFailed" = "Creazione del clone collegato fallita: %@";
 "RootViewController.linkedCloneUnsupportedDrives" = "I dischi del template non sono in un formato che supporti i cloni collegati.";
 "NewDiskViewController.linkedCowDisabled" = "Il formato di un disco di un clone collegato non può essere cambiato, perché dipende dal disco del template.";
+"RootViewController.templateHasLinkedClones" = "Il template \"%@\" non può essere eliminato perché ha dei cloni collegati che ne dipendono:\n\n%@\n\nElimina prima i cloni collegati.";
