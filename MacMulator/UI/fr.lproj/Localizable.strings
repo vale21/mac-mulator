@@ -330,3 +330,4 @@
 "DiskImageManager.flattenNotSupported" = "La fusion des disques liés n'est pas prise en charge pour ce type de machine virtuelle.";
 "DiskImageManager.flattenFailed" = "Impossible de fusionner le disque lié : %@";
 "RootViewController.renameFailed" = "Impossible de renommer le dossier de la machine virtuelle : %@";
+"RootViewController.cloneRunningVM" = "Une VM en cours d'exécution ne peut pas être clonée. Arrêtez-la d'abord. Une VM en pause peut être clonée.";

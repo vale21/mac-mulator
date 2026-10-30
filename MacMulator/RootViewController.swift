@@ -276,15 +276,18 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
+        let virtualMachine = virtualMachines.remove(at: index)
+
+        // Select a neighbour of the removed VM. This has to happen after the removal: the VM that follows the removed one
+        // is now at the same index, and selecting the removed VM itself would apply its state (e.g. template) to that row.
         if index > 0 {
             setCurrentVirtualMachine(virtualMachines[index - 1])
-        } else if virtualMachines.count > 1 {
-            setCurrentVirtualMachine(virtualMachines[0])
+        } else if let first = virtualMachines.first {
+            setCurrentVirtualMachine(first)
         } else {
             setCurrentVirtualMachine(nil)
         }
 
-        let virtualMachine = virtualMachines.remove(at: index)
         if isVMRunning(virtualMachine) {
             let runner = runningVMs[virtualMachine]
             runner?.stopVM(guestStopped: false)
@@ -423,6 +426,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func cloneVirtualMachineAt(_ index: Int) {
         let vmToClone = virtualMachines[index]
+        guard !isVMRunning(vmToClone) else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("RootViewController.cloneRunningVM", comment: ""), virtualMachine: vmToClone)
+            return
+        }
         if Utils.isVMTemplate(vmToClone) {
             vmController?.cloneVirtualMachine(vmToClone)
         } else {
@@ -433,6 +440,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     @available(macOS 13.0, *)
     func convertVirtualMachineToTemplateAt(_ index: Int) {
         let vmToConvert = virtualMachines[index]
+        // A paused VM holds a saved state that would be invalid once its drives change: it has to be stopped first.
+        guard !isVMRunning(vmToConvert), !isVMPaused(vmToConvert) else { return }
         let rawVMDrives = Utils.findRawDrives(vmToConvert.drives)
         let removableVMDrives = Utils.findExternalDrives(vmToConvert.drives)
         var promptText = NSLocalizedString("RootViewController.convertToTemplate", comment: "") + "\n\n"

@@ -801,6 +801,21 @@ class Utils {
         return false
     }
 
+    /// Layers a drive depends on, base first, ending with the drive itself. A linked clone converted to a template can
+    /// be the backing drive of other linked clones, so the chain is followed through the VM bundles of the layers.
+    static func backingChain(endingAt drivePath: String) -> [String] {
+        let folder = (drivePath as NSString).deletingLastPathComponent
+        if let data = FileManager.default.contents(atPath: folder + "/" + MacMulatorConstants.INFO_PLIST),
+           let vm = try? PropertyListDecoder().decode(VirtualMachine.self, from: data)
+        {
+            VirtualMachine.setupPaths(vm, folder)
+            if let parentPath = vm.drives.first(where: { $0.path == drivePath })?.backingPath, parentPath != drivePath {
+                return backingChain(endingAt: parentPath) + [drivePath]
+            }
+        }
+        return [drivePath]
+    }
+
     static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 27.0, *) {
             return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)

@@ -97,9 +97,12 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = true
             }
 
+            // A paused VM can be cloned, a running one cannot.
+            menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""))?.isEnabled = !rootController.isVMRunning(vm)
+
             if let fullCloneItem = menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToFullClone", comment: "")) {
-                fullCloneItem.isHidden = !vm.hasLinkedDrives
-                fullCloneItem.isEnabled = Utils.isFullCloneConversionSupported(vm) && !rootController.isVMRunning(vm)
+                fullCloneItem.isHidden = !vm.hasLinkedDrives || !Utils.isFullCloneConversionSupported(vm)
+                fullCloneItem.isEnabled = !rootController.isVMRunning(vm)
             }
 
             if Utils.isVMTemplate(vm) {
@@ -116,6 +119,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = true
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = Utils.isPauseSupported(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = false
             } else {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)
@@ -123,6 +127,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
+                // A paused VM has to be stopped before becoming a template.
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = !rootController.isVMPaused(vm)
             }
         }
     }

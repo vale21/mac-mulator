@@ -87,8 +87,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             DispatchQueue.global().async {
                 do {
                     // The template is only read, so it's opened read-only and never modified.
-                    let baseImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: backingDrive.path), mode: .readOnly))
-                    _ = try baseImage.appending(.asifLayer(url: overlayURL, type: .overlay))
+                    // If it is a linked clone itself, the new overlay goes on top of the whole chain.
+                    let templateStack = try Self.openReadOnlyStack(Utils.backingChain(endingAt: backingDrive.path))
+                    _ = try templateStack.appending(.asifLayer(url: overlayURL, type: .overlay))
                     callback(0, nil)
                 } catch {
                     print("Failed to create ASIF overlay image: \(error)")
@@ -100,10 +101,20 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         #endif
     }
 
+    /// Opens the given layers, base first, as a single read-only image.
+    @available(macOS 27.0, *)
+    private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
+        var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
+        for layerPath in layerPaths.dropFirst() {
+            image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
+        }
+        return image
+    }
+
     static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
         #if arch(arm64)
             if #available(macOS 27.0, *), let backingPath = drive.backingPath {
-                let baseImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: backingPath), mode: .readOnly))
+                let baseImage = try openReadOnlyStack(Utils.backingChain(endingAt: backingPath))
                 let overlayImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: drive.path), mode: readOnly ? .readOnly : .readWrite))
                 let stackedImage = try baseImage.appending(overlayImage)
                 return try VZDiskImageStorageDeviceAttachment(diskImage: stackedImage)
@@ -139,7 +150,9 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             Shell().runCommand("/usr/sbin/diskutil image create blank --fs None --format ASIF --size " + String(stackSize) + " " + Utils.escape(tempPath), path, uponCompletion: { code, message in
                 guard code == 0 else { return fail(code, message) }
 
-                let stackCommand = "/usr/sbin/diskutil image attach --noMount --readOnly " + Utils.escape(backingPath) + " --shadow " + Utils.escape(drivePath)
+                // The base layer comes first, followed by every layer above it as a shadow, the drive being the topmost one.
+                let chain = Utils.backingChain(endingAt: backingPath)
+                let stackCommand = "/usr/sbin/diskutil image attach --noMount --readOnly " + Utils.escape(chain[0]) + (chain.dropFirst() + [drivePath]).map { " --shadow " + Utils.escape($0) }.joined()
                 self.attachDevice(stackCommand, path, uponCompletion: { stackDevice, message in
                     guard let stackDevice else { return fail(-1, message) }
                     self.attachDevice("/usr/sbin/diskutil image attach --noMount " + Utils.escape(tempPath), path, uponCompletion: { targetDevice, message in

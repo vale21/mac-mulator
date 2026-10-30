@@ -330,3 +330,4 @@
 "DiskImageManager.flattenNotSupported" = "L'unione dei dischi collegati non è supportata per questo tipo di macchina virtuale.";
 "DiskImageManager.flattenFailed" = "Impossibile unire il disco collegato: %@";
 "RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";
+"RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";

@@ -351,6 +351,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 exportMenuItem.isEnabled = false
                 convertToQemuMenuItem.isEnabled = false
                 convertToAppleMenuItem.isEnabled = false
+                convertToFullCloneMenuItem.isHidden = false
                 convertToFullCloneMenuItem.isEnabled = false
                 snapshotsMenuItem.isEnabled = false
                 snapshotCreateMenuItem.isEnabled = false
@@ -371,6 +372,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         convertToQemuMenuItem.isEnabled = false
                         convertToAppleMenuItem.isEnabled = false
                         convertToTemplateMenuItem.isEnabled = false
+                        convertToFullCloneMenuItem.isHidden = false
                         convertToFullCloneMenuItem.isEnabled = false
                         snapshotsMenuItem.isEnabled = false
                         snapshotCreateMenuItem.isEnabled = false
@@ -383,9 +385,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         if #available(macOS 27.0, *) {
                             appleTemplatesSupported = true
                         }
-                        convertToTemplateMenuItem.isEnabled = canConvert && (vm.type == MacMulatorConstants.QEMU_VM || (vm.type == MacMulatorConstants.APPLE_VM && appleTemplatesSupported))
-                        convertToFullCloneMenuItem.isEnabled = canConvert && vm.hasLinkedDrives && Utils.isFullCloneConversionSupported(vm)
-                        cloneVMMemuItem.isEnabled = true
+                        convertToTemplateMenuItem.isEnabled = canConvert && !rootController.isVMPaused(vm) && (vm.type == MacMulatorConstants.QEMU_VM || (vm.type == MacMulatorConstants.APPLE_VM && appleTemplatesSupported))
+                        // Hidden when merging drives can never work for this kind of VM (e.g. Apple VMs in the App Store version).
+                        convertToFullCloneMenuItem.isHidden = !Utils.isFullCloneConversionSupported(vm)
+                        convertToFullCloneMenuItem.isEnabled = canConvert && vm.hasLinkedDrives
+                        // A paused VM can be cloned, a running one cannot.
+                        cloneVMMemuItem.isEnabled = !rootController.isCurrentVMRunning()
                         showVMInFinderMenuItem.isEnabled = true
                         settingsMenuItem.isEnabled = true
                         snapshotsMenuItem.isEnabled = true

@@ -77,9 +77,15 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    func guestDidStop(_: VZVirtualMachine) {
+    func guestDidStop(_ virtualMachine: VZVirtualMachine) {
         print("Stopped")
         stopVM(guestStopped: true)
+        releaseVirtualMachine(virtualMachine)
+    }
+
+    func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: any Error) {
+        print("Stopped with error: \(error)")
+        releaseVirtualMachine(virtualMachine)
     }
 
     func isVMRunning() -> Bool {
@@ -251,11 +257,26 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             releasePassthroughDevices()
         }
         if let uponCompletion {
+            // The caller keeps using the stopped VM (e.g. to restore a snapshot), so it must not be released here.
             vzVirtualMachine?.stop(completionHandler: uponCompletion)
         } else {
-            vzVirtualMachine?.stop(completionHandler: { _ in })
+            let stoppingVirtualMachine = vzVirtualMachine
+            vzVirtualMachine?.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
         }
         vmViewController?.stopVM(guestStopped)
+    }
+
+    /// Drops every reference to the stopped VZVirtualMachine, so that its configuration is deallocated.
+    /// Linked clones attach disks through DiskImage objects opened in this process, whose file descriptors
+    /// are shared with the Virtualization service: the service's lock on the overlay stays held until these
+    /// objects are released, which would make the next start fail with "Cannot acquire exclusive lock".
+    private func releaseVirtualMachine(_ stoppedVirtualMachine: VZVirtualMachine?) {
+        guard let stoppedVirtualMachine, stoppedVirtualMachine === vzVirtualMachine else { return }
+        if vmView?.virtualMachine === stoppedVirtualMachine {
+            vmView?.virtualMachine = nil
+        }
+        stoppedVirtualMachine.delegate = nil
+        vzVirtualMachine = nil
     }
 
     func stopVMGracefully() {
