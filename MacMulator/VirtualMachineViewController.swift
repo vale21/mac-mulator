@@ -11,11 +11,14 @@ class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
     var runner: VirtualMachineRunner
+    /// True when the VM window (or the Spice viewer) is opened as a session on an already running headless VM
+    var session: Bool
 
-    init(vm: VirtualMachine, inRecovery: Bool, runner: VirtualMachineRunner) {
+    init(vm: VirtualMachine, inRecovery: Bool, runner: VirtualMachineRunner, session: Bool = false) {
         self.vm = vm
         self.inRecovery = inRecovery
         self.runner = runner
+        self.session = session
     }
 }
 
@@ -105,7 +108,8 @@ class VirtualMachineViewController: NSViewController {
         if let vm = rootController?.currentVm {
             if sender as? String == MacMulatorConstants.mainMenuSender, vm.type == MacMulatorConstants.APPLE_VM {
                 let runner = rootController?.getRunnerForRunningVM(vm) as! VirtualizationFrameworkVirtualMachineRunner
-                window = runner.vmView!.window!
+                // A headless VM has no window: ask on the main one
+                window = runner.vmView?.window ?? window
             }
         }
 
@@ -203,6 +207,7 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmRunner(vmToStart.runner)
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! VirtualizationFrameworkVirtualMachineRunner)
+            dest.setSession(vmToStart.session)
         } else if segue.identifier == MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
             let dest = segue.destinationController as! QemuSpiceViewerViewController
@@ -214,6 +219,7 @@ class VirtualMachineViewController: NSViewController {
             dest.setVmController(source)
             dest.setVmRunner(rootController?.getRunnerForCurrentVM() as! QemuRunner)
             dest.setMouseCaptureEnabled(Utils.getCaptureMouseForSubType(vmToStart.vm.type ?? "", vmToStart.vm.subtype))
+            dest.setSession(vmToStart.session)
             spiceViewer = dest
         } else if segue.identifier == MacMulatorConstants.START_VM_SEGUE {
             let source = segue.sourceController as! VirtualMachineViewController
@@ -530,7 +536,7 @@ class VirtualMachineViewController: NSViewController {
 
     func startVMPrerequisitesCompleted(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
         startVM_internal(runner, inRecovery, vm)
-        if QemuUtils.isSpiceDisplayEnabled(vm) {
+        if !Utils.isHeadless(vm), QemuUtils.isSpiceDisplayEnabled(vm) {
             performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
         }
     }
@@ -569,11 +575,13 @@ class VirtualMachineViewController: NSViewController {
                     vm.writeToPlist()
                 }
 
-                if vm.type == MacMulatorConstants.APPLE_VM {
+                if vm.type == MacMulatorConstants.APPLE_VM, canStartHeadless(vm) {
+                    startHeadlessAppleVM(runner as! VirtualizationFrameworkVirtualMachineRunner, inRecovery)
+                } else if vm.type == MacMulatorConstants.APPLE_VM {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
                     performSegue(withIdentifier: MacMulatorConstants.START_VM_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
-                } else if QemuUtils.isSpiceDisplayEnabled(vm) {
+                } else if !Utils.isHeadless(vm), QemuUtils.isSpiceDisplayEnabled(vm) {
                     startVM_internal(runner, inRecovery, vm)
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else {
@@ -581,6 +589,94 @@ class VirtualMachineViewController: NSViewController {
                 }
             }
         }
+    }
+
+    /// Apple VMs run headless only once their OS is installed: the installation progress is shown in the VM window
+    fileprivate func canStartHeadless(_ vm: VirtualMachine) -> Bool {
+        guard Utils.isHeadless(vm) else { return false }
+        if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
+            return Utils.findMainDrive(vm.drives)?.isBlank() == false
+        }
+        return true
+    }
+
+    /// Starts an Apple VM with no VM window. Its screen can be shown later with openScreenSession()
+    fileprivate func startHeadlessAppleVM(_ runner: VirtualizationFrameworkVirtualMachineRunner, _ inRecovery: Bool) {
+        runner.setVmController(self)
+        runner.runVM(recoveryMode: inRecovery, uponCompletion: { _, _ in })
+    }
+
+    /// Shows the screen of the current (running, headless) VM: in the VM window for Apple VMs, in a Spice viewer for
+    /// Qemu VMs. Closing the window leaves the VM running
+    func openScreenSession() {
+        guard let rootController, let vm = rootController.currentVm, let runner = rootController.getRunnerForRunningVM(vm) else { return }
+
+        let existingWindow = NSApp.windows.first { window in
+            (window.contentViewController as? RunningVMManagerViewController)?.virtualMachine == vm
+        }
+        if let existingWindow {
+            existingWindow.makeKeyAndOrderFront(self)
+            return
+        }
+        let segue = vm.type == MacMulatorConstants.APPLE_VM ? MacMulatorConstants.SHOW_VM_VIEW_SEGUE : MacMulatorConstants.SHOW_SPICE_VIEW_SEGUE
+        performSegue(withIdentifier: segue, sender: VMToStart(vm: vm, inRecovery: false, runner: runner, session: true))
+    }
+
+    /// Opens a MacMulator terminal window on an SSH connection to the current VM, through the port mapped onto the guest SSH port
+    func openSSHSession() {
+        guard let vm = rootController?.currentVm else { return }
+
+        if vm.type == MacMulatorConstants.APPLE_VM {
+            openSSHSessionOnAppleVM(vm)
+            return
+        }
+        guard let args = QemuUtils.sshArguments(for: vm) else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.noSshPortMapping", comment: ""), virtualMachine: vm)
+            return
+        }
+        TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
+    }
+
+    /// Apple VMs get their own IP address (from the macOS DHCP server, or the LAN when bridged): look it up from the MAC address
+    fileprivate func openSSHSessionOnAppleVM(_ vm: VirtualMachine) {
+        guard let macAddress = vm.macAddress else { return }
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            let ipAddress = GuestNetworkLookup.ipAddress(forMACAddress: macAddress)
+            DispatchQueue.main.async {
+                guard let ipAddress else {
+                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.guestIPAddressNotFound", comment: ""), virtualMachine: vm)
+                    return
+                }
+                var destination = ipAddress
+                if let userName = Utils.guestUserName(vm) {
+                    destination = userName + "@" + destination
+                }
+                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: [destination])
+            }
+        }
+    }
+
+    /// Opens a MacMulator terminal window on the serial console of the current VM
+    func openTerminalSession() {
+        guard let vm = rootController?.currentVm else { return }
+
+        if vm.type == MacMulatorConstants.APPLE_VM {
+            if let serialConsole = (rootController?.getRunnerForRunningVM(vm) as? VirtualizationFrameworkVirtualMachineRunner)?.serialConsole {
+                TerminalSessionWindowController.open(serialConsole, on: vm)
+            }
+            return
+        }
+
+        let socketPath = QemuUtils.serialSocketPath(forVMAt: vm.path)
+        guard FileManager.default.fileExists(atPath: socketPath) else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.serialConsoleNotAvailable", comment: ""), virtualMachine: vm)
+            return
+        }
+
+        // nc relays the socket; the pseudo-terminal goes raw so that every key reaches the guest as typed
+        let command = "stty raw -echo; exec /usr/bin/nc -U " + Utils.shellQuote(socketPath)
+        TerminalSessionWindowController.open(.serialConsole, on: vm, executable: "/bin/sh", args: ["-c", command])
     }
 
     fileprivate func completionhandler(result: VMExecutionResult, virtualMachine: VirtualMachine) {

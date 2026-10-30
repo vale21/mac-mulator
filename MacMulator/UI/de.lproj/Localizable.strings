@@ -19,6 +19,10 @@
 "AppDelegate.exportToParallelsComplete" = "Export nach Parallels abgeschlossen.";
 "AppDelegate.importFailed" = "Import fehlgeschlagen mit Fehler: %@";
 "AppDelegate.noUsbDevices" = "Keine USB-Geräte verfügbar";
+"AppDelegate.openSSHSession" = "SSH-Sitzung öffnen";
+"AppDelegate.openSpiceSession" = "SPICE-Sitzung öffnen";
+"AppDelegate.openTerminalSession" = "Terminal-Sitzung öffnen";
+"AppDelegate.showVMScreen" = "VM-Bildschirm anzeigen";
 "AppDelegate.youHaveRunningVMs" = "Es sind VMs aktiv.\nWenn du MacMulator schließt, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "ConsoleViewController.loading" = "Wird geladen...";
 "ConsoleViewController.vmNotRunning" = "Die aktuelle VM wird nicht ausgeführt";
@@ -112,6 +116,8 @@
 "EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipEnabled" = "Versuchen Sie, Apple Paravirtualized Graphics zu aktivieren, um 3D-Beschleunigung in der VM zu nutzen.";
 "EditVMViewControllerVideo.enableAppleParavirtualizedGraphics" = "Apple Paravirtualized Graphics aktivieren";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Zu verwendendes QEMU-Display:";
+"EditVMViewControllerVideo.showScreenLabel" = "VM-Bildschirm anzeigen";
+"EditVMViewControllerVideo.showScreenTooltip" = "Deaktivieren, um die VM headless auszuführen, ohne Fenster für ihren Bildschirm. Während sie läuft, kannst du dich über das VM-Menü mit einer SPICE-, SSH- oder Terminal-Sitzung verbinden.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled" = "Die Spice-Unterstützung ist nicht aktiviert, da Qemu sie nicht unterstützt.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled" = "Spice-Anzeige verwenden, um die VM darzustellen.";
 "EditVMViewControllerVideo.spiceDescriptionLabel" = "Spice-Anzeige verwenden";
@@ -221,6 +227,9 @@
 "RootViewController.vmConvertedToApple" = "Die VM wurde erfolgreich ins Apple-Format konvertiert.";
 "RootViewController.vmConvertedToQemu" = "Die VM wurde erfolgreich ins QEMU-Format konvertiert.";
 "StartVMViewController.startVMLabel" = "VM wird gestartet. Bitte warten...";
+"TerminalSessionWindowController.serialConsoleTitle" = "%@ - Serielle Konsole - MacMulator";
+"TerminalSessionWindowController.sessionEnded" = "[Sitzung beendet. Schließe das Fenster.]";
+"TerminalSessionWindowController.sshTitle" = "%@ - SSH - MacMulator";
 "Utils.appleSiliconOnly" = "Die VM kann nicht gestartet werden, da sie nur auf Apple-Silicon-Hardware läuft.";
 "Utils.asifNotSupported" = "Die VM kann nicht gestartet werden, da sie das ASIF-Format verwendet. ASIF erfordert macOS Tahoe oder neuer.";
 "Utils.calcel" = "Abbrechen";
@@ -243,6 +252,9 @@
 "Utils.unexistingDrive" = "Laufwerk %@ wurde nicht gefunden. Möchtest du es entfernen?";
 "Utils.virtualizationNotSupported" = "Die VM kann nicht gestartet werden, da das Apple Virtualization Framework für diese VM nicht unterstützt wird.";
 "Utils.workingPathError" = "Falscher Qemu-Befehl angegeben: Das angegebene Programm läuft nicht im richtigen Pfad. \n\nErwarteter Pfad: \"%@\".\n\nAngegebener Befehl: %@";
+"VirtualMachineViewController.guestIPAddressNotFound" = "Die IP-Adresse der VM wurde nicht gefunden. Sie startet möglicherweise noch, oder ihr Netzwerk ist noch nicht aktiv. Versuche es in einigen Sekunden erneut. Für SSH muss in der VM die entfernte Anmeldung (macOS) oder ein SSH-Server (Linux) aktiviert sein.";
+"VirtualMachineViewController.noSshPortMapping" = "Die VM hat keine Portweiterleitung für den SSH-Port (22). Füge eine in den Netzwerkeinstellungen der VM hinzu, um dich per SSH zu verbinden.";
+"VirtualMachineViewController.serialConsoleNotAvailable" = "Die serielle Konsole der VM ist nicht verfügbar. Starte die VM neu, um sie zu aktivieren.";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Geschätzte verbleibende Zeit: %@";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Installation wird abgebrochen. Bitte warten...";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installation fehlgeschlagen mit Fehler: %@";

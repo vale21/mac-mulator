@@ -145,6 +145,22 @@ class Utils {
         return replaced
     }
 
+    /// Whether the VM runs with no window showing its screen. iOS VMs cannot be headless.
+    static func isHeadless(_ vm: VirtualMachine) -> Bool {
+        vm.os != QemuConstants.OS_IOS && vm.headless == true
+    }
+
+    /// The user to log in as with SSH: the one provisioned when the VM was created, if any
+    static func guestUserName(_ vm: VirtualMachine) -> String? {
+        let userName = vm.provisioningInformation?.userName ?? vm.guestUserName
+        return userName?.isEmpty == false ? userName : nil
+    }
+
+    /// Quotes a string so that a POSIX shell takes it as a single literal word
+    static func shellQuote(_ string: String) -> String {
+        "'" + string.replacingOccurrences(of: "'", with: "'\\''") + "'"
+    }
+
     static func unescape(_ string: String) -> String {
         var replaced = string.replacingOccurrences(of: "\\ ", with: " ")
         replaced = replaced.replacingOccurrences(of: "\\(", with: "(")

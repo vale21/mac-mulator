@@ -30,7 +30,6 @@
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
-		3B3A5889308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3A588A308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3A588B308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B3A5888308B6C3700A2A782 /* ConvertVMViewController.swift */; };
 		3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3B3DF81B2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd */; };
@@ -92,6 +91,14 @@
 		3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */; };
 		3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */ = {isa = PBXBuildFile; fileRef = 3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */; };
 		3BC5262D25E4F0F700A70699 /* NewDiskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */; };
+		3BC81761309501F30025C20B /* TerminalSessionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */; };
+		3BC81762309501F30025C20B /* TerminalSessionWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */; };
+		3BC817653095054F0025C20B /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC817643095054F0025C20B /* SwiftTerm */; };
+		3BC8176D3095057D0025C20B /* SwiftTerm in Frameworks */ = {isa = PBXBuildFile; productRef = 3BC8176C3095057D0025C20B /* SwiftTerm */; };
+		3BC817753095087C0025C20B /* GuestNetworkLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC817743095087C0025C20B /* GuestNetworkLookup.swift */; };
+		3BC817763095087C0025C20B /* GuestNetworkLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC817743095087C0025C20B /* GuestNetworkLookup.swift */; };
+		3BC8177830950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */; };
+		3BC8177930950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */; };
 		3BC90A8425E536DF003E7DDE /* CreateDiskFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */; };
 		3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BCFF7332DA9C520008E01D3 /* MainContent.storyboard */; };
 		3BD212272FCC363C007CB895 /* VirtualMachineSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD212262FCC363C007CB895 /* VirtualMachineSnapshot.swift */; };
@@ -331,6 +338,9 @@
 		3BC4761C2CE4A71D00AEC13A /* EFI_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_ARM.fd; sourceTree = "<group>"; };
 		3BC4761E2CE4A77A00AEC13A /* EFI_VARS_ARM.fd */ = {isa = PBXFileReference; lastKnownFileType = file; path = EFI_VARS_ARM.fd; sourceTree = "<group>"; };
 		3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiskViewController.swift; sourceTree = "<group>"; };
+		3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalSessionWindowController.swift; sourceTree = "<group>"; };
+		3BC817743095087C0025C20B /* GuestNetworkLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestNetworkLookup.swift; sourceTree = "<group>"; };
+		3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkSerialConsole.swift; sourceTree = "<group>"; };
 		3BC90A8325E536DF003E7DDE /* CreateDiskFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateDiskFileViewController.swift; sourceTree = "<group>"; };
 		3BCFF7342DA9C520008E01D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainContent.storyboard; sourceTree = "<group>"; };
 		3BD212262FCC363C007CB895 /* VirtualMachineSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineSnapshot.swift; sourceTree = "<group>"; };
@@ -368,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B9E42A82806178500981297 /* Virtualization.framework in Frameworks */,
+				3BC8176D3095057D0025C20B /* SwiftTerm in Frameworks */,
 				3B6FF876266F791700368BAB /* SocketSwift in Frameworks */,
 				3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */,
 				3BC0C5A3307400000000A003 /* CocoaSpiceNoUsb in Frameworks */,
@@ -386,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3BFB2B6D3078F067005A4B51 /* Virtualization.framework in Frameworks */,
+				3BC817653095054F0025C20B /* SwiftTerm in Frameworks */,
 				3BFB2B6E3078F067005A4B51 /* SocketSwift in Frameworks */,
 				3BFB2B6F3078F067005A4B51 /* ZIPFoundation in Frameworks */,
 				3BFB2B703078F067005A4B51 /* CocoaSpiceNoUsb in Frameworks */,
@@ -403,6 +415,8 @@
 				3B200DAD2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift */,
 				3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */,
 				3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */,
+				3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */,
+				3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */,
 			);
 			path = RunVM;
 			sourceTree = "<group>";
@@ -541,6 +555,7 @@
 				3B18445C25E4F86A00CDAA20 /* MacMulatorConstants.swift */,
 				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
 				3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */,
+				3BC817743095087C0025C20B /* GuestNetworkLookup.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -655,6 +670,7 @@
 				3B6FF875266F791700368BAB /* SocketSwift */,
 				3B559E6526EB54730071E5B5 /* ZIPFoundation */,
 				3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */,
+				3BC8176C3095057D0025C20B /* SwiftTerm */,
 			);
 			productName = MacMulator;
 			productReference = 3B391EE925C075F50030E914 /* MacMulator EE.app */;
@@ -696,6 +712,7 @@
 				3BFB2B263078F067005A4B51 /* SocketSwift */,
 				3BFB2B283078F067005A4B51 /* ZIPFoundation */,
 				3BFB2B2A3078F067005A4B51 /* CocoaSpiceNoUsb */,
+				3BC817643095054F0025C20B /* SwiftTerm */,
 			);
 			productName = MacMulator;
 			productReference = 3BFB2B8F3078F067005A4B51 /* MacMulator.app */;
@@ -736,6 +753,7 @@
 				3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */,
 				3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
 				3B6BD7163073ACF0004DB26B /* XCRemoteSwiftPackageReference "CocoaSpice" */,
+				3BC817633095054F0025C20B /* XCRemoteSwiftPackageReference "SwiftTerm" */,
 			);
 			productRefGroup = 3B391EEA25C075F50030E914 /* Products */;
 			projectDirPath = "";
@@ -884,6 +902,7 @@
 				3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */,
 				3B3FC24C308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
+				3BC81761309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,
@@ -896,6 +915,7 @@
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
+				3BC8177830950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */,
 				3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */,
 				3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */,
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
@@ -930,6 +950,7 @@
 				3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26885308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3B66C6CA306D1B280031A733 /* ManageSnapshotViewController.swift in Sources */,
+				3BC817763095087C0025C20B /* GuestNetworkLookup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,6 +994,7 @@
 				3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3BFB2B433078F067005A4B51 /* EditVMViewControllerNetworkVF.swift in Sources */,
 				3B3FC24B308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
+				3BC81762309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
 				3BFB2B443078F067005A4B51 /* DrivesTableCells.swift in Sources */,
 				3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */,
@@ -985,6 +1007,7 @@
 				3BFB2B4B3078F067005A4B51 /* VirtualMachineViewController.swift in Sources */,
 				3BFB2B4C3078F067005A4B51 /* AppDelegate.swift in Sources */,
 				3BFB2B4D3078F067005A4B51 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
+				3BC8177930950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */,
 				3BFB2B4E3078F067005A4B51 /* EditVMViewControllerAdvanced.swift in Sources */,
 				3BFB2B4F3078F067005A4B51 /* QemuSpiceViewerViewController.swift in Sources */,
 				3BFB2B503078F067005A4B51 /* MacMulatorConstants.swift in Sources */,
@@ -1019,6 +1042,7 @@
 				3BFB2B6A3078F067005A4B51 /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26886308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3BFB2B6B3078F067005A4B51 /* ManageSnapshotViewController.swift in Sources */,
+				3BC817753095087C0025C20B /* GuestNetworkLookup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1779,6 +1803,14 @@
 				version = 2.4.0;
 			};
 		};
+		3BC817633095054F0025C20B /* XCRemoteSwiftPackageReference "SwiftTerm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/migueldeicaza/SwiftTerm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.99.2;
+			};
+		};
 		3BE7AD2926EA69E800E3F578 /* XCRemoteSwiftPackageReference "ZIPFoundation" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/weichsel/ZIPFoundation.git";
@@ -1819,6 +1851,16 @@
 		3BC0C5A2307400000000A002 /* CocoaSpiceNoUsb */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = CocoaSpiceNoUsb;
+		};
+		3BC817643095054F0025C20B /* SwiftTerm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BC817633095054F0025C20B /* XCRemoteSwiftPackageReference "SwiftTerm" */;
+			productName = SwiftTerm;
+		};
+		3BC8176C3095057D0025C20B /* SwiftTerm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3BC817633095054F0025C20B /* XCRemoteSwiftPackageReference "SwiftTerm" */;
+			productName = SwiftTerm;
 		};
 		3BFB2B263078F067005A4B51 /* SocketSwift */ = {
 			isa = XCSwiftPackageProductDependency;

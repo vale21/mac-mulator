@@ -24,6 +24,8 @@ class VirtualMachine: Codable, Hashable {
     var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
     var enable3DAcceleration: Bool? = true
     var enableSpiceDisplay: Bool? = true
+    /// When true, the VM runs with no window showing its screen (see QemuUtils.isHeadless)
+    var headless: Bool? = false
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
@@ -37,9 +39,11 @@ class VirtualMachine: Codable, Hashable {
     var usbPassthroughDevices: [String]?
     var usbPassthroughDeviceNames: [String: String]?
     var provisioningInformation: ProvisioningInformation? = nil
+    /// The user created by provisioning, kept once the provisioning information is consumed (used for SSH sessions)
+    var guestUserName: String?
 
     private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {

@@ -18,7 +18,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     var pendingPassthroughIDs: Set<UInt64> = []
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
+    /// The main view controller, which is told when a headless VM (one with no VM window) stops
+    weak var vmController: VirtualMachineViewController?
     var recoveryMode: Bool = false
+    /// The serial console of Linux VMs, which Terminal sessions connect to
+    private(set) var serialConsole: VirtualizationFrameworkSerialConsole?
 
     init(virtualMachine: VirtualMachine) {
         managedVm = virtualMachine
@@ -38,8 +42,51 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         self.vmViewController = vmViewController
     }
 
+    func setVmController(_ vmController: VirtualMachineViewController) {
+        self.vmController = vmController
+    }
+
+    /// The window alerts are shown on: the VM window, or the main window when the VM runs headless
+    private var alertWindow: NSWindow {
+        if let window = vmView?.window {
+            return window
+        }
+        // Headless: nothing else shows that something went wrong, so bring the main window to the front
+        let mainWindow = (NSApp.delegate as! AppDelegate).rootController!.view.window!
+        mainWindow.makeKeyAndOrderFront(nil)
+        return mainWindow
+    }
+
+    /// Shows the running VM in `view`, owned by the VM window `viewController` (opened as a session on a headless VM)
+    func attachView(_ view: VZVirtualMachineView, _ viewController: VirtualMachineContainerViewController) {
+        vmView = view
+        vmViewController = viewController
+        configureVmView()
+    }
+
+    /// Forgets the VM window, once it is closed: the VM keeps running headless
+    func detachView() {
+        vmView?.virtualMachine = nil
+        vmView = nil
+        vmViewController = nil
+    }
+
+    private func configureVmView() {
+        vmView?.virtualMachine = vzVirtualMachine
+        if #available(macOS 14.0, *) {
+            vmView?.automaticallyReconfiguresDisplay = true
+        }
+        vmView?.capturesSystemKeys = true
+    }
+
     func runVM(recoveryMode: Bool, uponCompletion _: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
+
+        if managedVm.macAddress == nil {
+            // Keep the same MAC address across runs: the IP address of the guest is looked up through it (see GuestNetworkLookup)
+            managedVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+            managedVm.writeToPlist()
+        }
 
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
             #if arch(arm64)
@@ -62,14 +109,16 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             } else {
                 installPath = ""
             }
-            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
+            let console = VirtualizationFrameworkSerialConsole()
+            serialConsole = console
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
             startOrResumeVM()
         }
     }
 
     func instllationComplete(_ result: Result<Void, Error>) {
         if case let .failure(error) = result {
-            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription, virtualMachine: managedVm)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription, virtualMachine: managedVm)
         } else {
             Utils.findMainDrive(managedVm.drives)!.setBlank(blank: false)
             managedVm.writeToPlist()
@@ -89,11 +138,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     func startVM() {
         if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
-            vmView?.virtualMachine = vzVirtualMachine
-            if #available(macOS 14.0, *) {
-                self.vmView?.automaticallyReconfiguresDisplay = true
-            }
-            vmView?.capturesSystemKeys = true
+            configureVmView()
             if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 #if arch(arm64)
                     let options = VZMacOSVirtualMachineStartOptions()
@@ -108,7 +153,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                         do {
                             try options.setGuestProvisioning(guestProvisioning)
                         } catch {
-                            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.provisioningFailed", comment: ""), error.localizedDescription), virtualMachine: managedVm)
+                            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.provisioningFailed", comment: ""), error.localizedDescription), virtualMachine: managedVm)
                             return
                         }
                     }
@@ -185,10 +230,12 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
     fileprivate func handleVMStartWithOptions(error: (any Error)?) {
         if error != nil {
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         } else {
-            if managedVm.provisioningInformation != nil {
-                managedVm.provisioningInformation?.cleanup()
+            if let provisioningInformation = managedVm.provisioningInformation {
+                // The user name is still needed to open SSH sessions on the VM
+                managedVm.guestUserName = provisioningInformation.userName
+                provisioningInformation.cleanup()
                 managedVm.provisioningInformation = nil
                 managedVm.writeToPlist()
             }
@@ -199,7 +246,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     fileprivate func handleVMStart(result: Result<Void, any Error>) {
         switch result {
         case let .failure(error):
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         default:
             attachUSBDrives()
         }
@@ -231,12 +278,10 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     func resumeVM() {
         if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
-            vmView?.virtualMachine = vzVirtualMachine
-            vmView?.automaticallyReconfiguresDisplay = true
-            vmView?.capturesSystemKeys = true
+            configureVmView()
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
-                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
                 } else {
                     // Passthrough devices are not part of the saved machine state: plug back the ones saved for this VM
                     self.attachUSBPassthroughDevices()
@@ -255,7 +300,14 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         } else {
             vzVirtualMachine?.stop(completionHandler: { _ in })
         }
-        vmViewController?.stopVM(guestStopped)
+        if let vmViewController {
+            vmViewController.stopVM(guestStopped)
+        } else {
+            // Headless: there is no VM window to clean up after the VM
+            DispatchQueue.main.async {
+                self.vmController?.cleanupStoppedVM(self.managedVm)
+            }
+        }
     }
 
     func stopVMGracefully() {
@@ -336,7 +388,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                     self.startVM()
                 }
 
-                self.vmViewController?.vmController?.setRunningStatus(self.managedVm, true)
+                (self.vmViewController?.vmController ?? self.vmController)?.setRunningStatus(self.managedVm, true)
             })
         }
 

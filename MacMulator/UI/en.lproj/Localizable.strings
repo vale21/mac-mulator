@@ -19,6 +19,10 @@
 "AppDelegate.exportToParallelsComplete" = "Export to Parallels complete.";
 "AppDelegate.importFailed" = "Import failed with error: %@";
 "AppDelegate.noUsbDevices" = "No USB devices available";
+"AppDelegate.openSSHSession" = "Open an SSH session";
+"AppDelegate.openSpiceSession" = "Open a SPICE session";
+"AppDelegate.openTerminalSession" = "Open a Terminal session";
+"AppDelegate.showVMScreen" = "Show VM screen";
 "AppDelegate.youHaveRunningVMs" = "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "ConsoleViewController.loading" = "Loading...";
 "ConsoleViewController.vmNotRunning" = "Current VM is not running";
@@ -112,6 +116,8 @@
 "EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipEnabled" = "Try to enable Apple Paravirtualized Graphics, to have 3D acceleration in the VM.";
 "EditVMViewControllerVideo.enableAppleParavirtualizedGraphics" = "Enable Apple Paravirtualized Graphics";
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Qemu display to use:";
+"EditVMViewControllerVideo.showScreenLabel" = "Show VM screen";
+"EditVMViewControllerVideo.showScreenTooltip" = "Turn off to run the VM headless, with no window showing its screen. While it is running, you can connect to it from the VM menu with a SPICE, SSH or Terminal session.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled" = "Spice support is not enabled, because Qemu does not support it.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled" = "Use Spice display to show the VM.";
 "EditVMViewControllerVideo.spiceDescriptionLabel" = "Use Spice display";
@@ -221,6 +227,9 @@
 "RootViewController.vmConvertedToApple" = "The VM was successfully converted to Apple format.";
 "RootViewController.vmConvertedToQemu" = "The VM was successfully converted to QEMU format.";
 "StartVMViewController.startVMLabel" = "Starting VM. Please wait...";
+"TerminalSessionWindowController.serialConsoleTitle" = "%@ - Serial console - MacMulator";
+"TerminalSessionWindowController.sessionEnded" = "[Session ended. Close the window.]";
+"TerminalSessionWindowController.sshTitle" = "%@ - SSH - MacMulator";
 "Utils.appleSiliconOnly" = "The VM cannot be started because it can run only on Apple Silicon hardware.";
 "Utils.asifNotSupported" = "The VM cannot be started because it uses ASIF image format. ASIF requires macOS Tahoe or higher.";
 "Utils.calcel" = "Cancel";
@@ -243,6 +252,9 @@
 "Utils.unexistingDrive" = "Drive %@ was not found. Do you want to remove it?";
 "Utils.virtualizationNotSupported" = "The VM cannot be started because Apple Virtualization Framework is not supported with this VM.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";
+"VirtualMachineViewController.guestIPAddressNotFound" = "Could not find the IP address of the VM. It might still be starting up, or its network might not be up yet. Try again in a few seconds. To connect with SSH, Remote Login (macOS) or an SSH server (Linux) must be enabled in the VM.";
+"VirtualMachineViewController.noSshPortMapping" = "The VM has no port mapping for the SSH port (22). Add one in the Network settings of the VM to connect with SSH.";
+"VirtualMachineViewController.serialConsoleNotAvailable" = "The serial console of the VM is not available. Restart the VM to enable it.";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Estimate time remaining: %@";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Aborting installation. Please wait...";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installation failed with error: %@";

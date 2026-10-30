@@ -15,9 +15,14 @@ class QemuRunner: VirtualMachineRunner {
     let livePreviewEnabled: Bool
     let managedVm: VirtualMachine
 
-    /// Whether the VM is shown through Spice rather than a native Qemu display (see QemuUtils).
-    private var spiceDisplayEnabled: Bool {
-        QemuUtils.isSpiceDisplayEnabled(managedVm)
+    /// Whether Qemu runs a Spice server, to show the VM or to open Spice sessions on a headless VM (see QemuUtils).
+    private var spiceServerEnabled: Bool {
+        QemuUtils.isSpiceServerEnabled(managedVm)
+    }
+
+    /// Whether Qemu must not open a native display window: the VM is shown through Spice, or it is headless.
+    private var nativeDisplayDisabled: Bool {
+        spiceServerEnabled || Utils.isHeadless(managedVm)
     }
 
     init(listenPort: Int32, virtualMachine: VirtualMachine) {
@@ -133,6 +138,10 @@ class QemuRunner: VirtualMachineRunner {
                     builder = builder.withManagementPort(listenPort)
                 }
             }
+            if QemuUtils.isSerialConsoleExposed(managedVm) {
+                // Expose the serial console on a socket, so that a Terminal session can be opened on it
+                builder = builder.withSerial("unix:" + Utils.escape(QemuUtils.serialSocketPath(forVMAt: managedVm.path)) + ",server=on,wait=off")
+            }
             return builder.build()
         }
     }
@@ -216,8 +225,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(sanitizeMachineTypeForPPC(), [])
             .withMemory(managedVm.memory)
             .withGraphics(managedVm.displayResolution)
@@ -234,8 +243,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_PSERIES, [])
             .withMemory(managedVm.memory)
             .withGraphics(managedVm.displayResolution)
@@ -252,8 +261,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_PC, [])
             .withMemory(managedVm.memory)
             .withVga(QemuConstants.VGA_VIRTIO)
@@ -282,9 +291,9 @@ class QemuRunner: VirtualMachineRunner {
             .withBios(QemuConstants.PC_BIOS)
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
             .withEnable3D(managedVm.enable3DAcceleration ?? true)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withShowCursor(false)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(managedVm.memory)
@@ -312,8 +321,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpu(Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative && hvfConfigured))
             .withCpus(managedVm.cpus)
             .withBootArg(QemuConstants.ARG_BOOTLOADER)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_Q35, [])
             .withMemory(managedVm.memory)
             .withVga((managedVm.enable3DAcceleration ?? true) ? Utils.buildParavirtualizedVgaString(displayResolution: managedVm.displayResolution) : videoDevice)
@@ -338,8 +347,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB, [])
             .withCpu(sanitizeCPUTypeForARM())
             .withMemory(managedVm.memory)
@@ -348,8 +357,8 @@ class QemuRunner: VirtualMachineRunner {
     fileprivate func createBuilderForIOSGuests() -> QemuCommandBuilder {
         QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withSerial(QemuConstants.SERIAL_MON_STDIO)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(managedVm.drives[1].path), "nand=" + Utils.escape(managedVm.drives[0].path), "nor=" + Utils.escape(managedVm.drives[2].path)])
             .withCpu(sanitizeCPUTypeForARM())
             .withMemory(managedVm.memory)
@@ -372,9 +381,9 @@ class QemuRunner: VirtualMachineRunner {
             .withCpu(sanitizeCPUTypeForARM64(isNative))
             .withMemory(managedVm.memory)
             .withAccel(isNative && hvfConfigured ? QemuConstants.ACCEL_HVF : nil)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : managedVm.qemuDisplay)
             .withEnable3D(managedVm.enable3DAcceleration ?? false)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
             .withSound(QemuConstants.SOUND_HDA)
             .withSound(QemuConstants.SOUND_HDA_DUPLEX)
@@ -392,8 +401,8 @@ class QemuRunner: VirtualMachineRunner {
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
             .withShowCursor(managedVm.os == QemuConstants.OS_LINUX ? true : false)
-            .withDisplay(spiceDisplayEnabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceDisplayEnabled, basePath: managedVm.path)
+            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
+            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
             .withMachine(QemuConstants.MACHINE_TYPE_Q800, [])
             .withMemory(managedVm.memory)
     }

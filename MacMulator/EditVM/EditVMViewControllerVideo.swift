@@ -8,6 +8,8 @@
 import Cocoa
 
 class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
+    @IBOutlet var showScreenLabel: NSTextField!
+    @IBOutlet var showScreenSwitch: NSSwitch!
     @IBOutlet var videoDescriptionText: NSTextField!
     @IBOutlet var videoAdapterLabel: NSTextField!
     @IBOutlet var videoAdapterComboBox: NSComboBox!
@@ -30,6 +32,12 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
 
+        // The other video settings are Qemu ones: Apple VMs only get the "Show VM screen" switch
+        if vm.type == MacMulatorConstants.APPLE_VM {
+            updateView()
+            return
+        }
+
         verifyOpenGLSupport()
         verifySpiceSupport()
 
@@ -40,6 +48,8 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     }
 
     override func viewWillAppear() {
+        showScreenLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.showScreenLabel", comment: "")
+        showScreenSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.showScreenTooltip", comment: "")
         videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
         videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
         qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
@@ -73,7 +83,12 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     func updateView() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
-            if let virtualMachine {
+            if let virtualMachine, virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                showScreenSwitch.state = virtualMachine.headless == true ? .off : .on
+                for view in qemuVideoViews {
+                    view.isHidden = true
+                }
+            } else if let virtualMachine {
                 videoAdapterComboBox.reloadData()
                 videoAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
                 qemuDisplayComboBox.reloadData()
@@ -102,6 +117,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                     spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
 
                     spiceDescriptionSwitch.state = (virtualMachine.enableSpiceDisplay ?? true) ? .on : .off
+                    qemuDisplayComboBox.isEnabled = spiceDescriptionSwitch.state == .off
                     if virtualMachine.enableSpiceDisplay == true {
                         enableSpiceSupport(self)
                     }
@@ -141,8 +157,29 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
 
                     accelDescriptionSwitch.state = (virtualMachine.enable3DAcceleration ?? true) ? .on : .off
                 }
+
+                // A headless VM shows no screen: the display settings do not apply to it
+                let headless = virtualMachine.headless == true
+                showScreenSwitch.state = headless ? .off : .on
+                if headless {
+                    for control in qemuVideoViews.compactMap({ $0 as? NSControl }) {
+                        control.isEnabled = false
+                    }
+                } else {
+                    // The other controls get their state above: these texts are always enabled otherwise
+                    for control in [videoDescriptionText, videoAdapterLabel, qemuDisplayLabel, windowsArmDescriptionText] as [NSControl] {
+                        control.isEnabled = true
+                    }
+                }
             }
         }
+    }
+
+    /// Every control of the tab but the "Show VM screen" switch and its label
+    private var qemuVideoViews: [NSView] {
+        [videoDescriptionText, videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
+         accelDescriptionText, accelDescriptionLabel, accelDescriptionSwitch,
+         spiceDescriptionText, spiceDescriptionLabel, spiceDescriptionSwitch, windowsArmDescriptionText]
     }
 
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -177,6 +214,13 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         if let virtualMachine {
             virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
         }
+    }
+
+    @IBAction func showScreenToggleChanged(_: Any) {
+        if let virtualMachine {
+            virtualMachine.headless = showScreenSwitch.state == .off
+        }
+        updateView()
     }
 
     @IBAction func enableSpiceSupport(_: Any) {

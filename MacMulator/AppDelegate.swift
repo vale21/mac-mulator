@@ -37,6 +37,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var snapshotsViewRestoreMenuItem: NSMenuItem!
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
 
+    // Session menu items for headless VMs, added to the VM menu in code (see setupSessionMenuItems)
+    private var openScreenSessionMenuItem: NSMenuItem?
+    private var openSSHSessionMenuItem: NSMenuItem?
+    private var openTerminalSessionMenuItem: NSMenuItem?
+
     @IBAction func preferencesMenuBarClicked(_: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
     }
@@ -296,6 +301,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender)
     }
 
+    @IBAction func openScreenSessionMenuBarClicked(_: Any) {
+        rootController?.openScreenSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    @IBAction func openSSHSessionMenuBarClicked(_: Any) {
+        rootController?.openSSHSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    @IBAction func openTerminalSessionMenuBarClicked(_: Any) {
+        rootController?.openTerminalSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    /// Adds the items to connect to a running headless VM right after "Pause" in the VM menu
+    private func setupSessionMenuItems() {
+        guard openScreenSessionMenuItem == nil, let index = vmMenu.items.firstIndex(of: pauseVMMenuItem) else { return }
+
+        let screenItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSpiceSession", comment: ""), action: #selector(openScreenSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let terminalItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openTerminalSession", comment: ""), action: #selector(openTerminalSessionMenuBarClicked(_:)), keyEquivalent: "")
+        for (offset, item) in [NSMenuItem.separator(), screenItem, sshItem, terminalItem].enumerated() {
+            item.target = self
+            vmMenu.insertItem(item, at: index + 1 + offset)
+        }
+
+        openScreenSessionMenuItem = screenItem
+        openSSHSessionMenuItem = sshItem
+        openTerminalSessionMenuItem = terminalItem
+    }
+
     @IBAction func pauseVMMenuBarClicked(_: Any) {
         rootController?.pauseVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
@@ -311,6 +345,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func refreshVMMenus() {
         defer { refreshUSBPassthroughMenu() }
         vmMenu.autoenablesItems = false
+        setupSessionMenuItems()
         #if APPSTORE
             preferencesMenuItem.isHidden = true
             preferencesSeparator.isHidden = true
@@ -337,6 +372,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 snapshotsViewRestoreMenuItem.isEnabled = false
                 usbDevicesMenuItem.isEnabled = false
                 showConsoleOutputmenuItem.isEnabled = false
+                openScreenSessionMenuItem?.isEnabled = false
+                openSSHSessionMenuItem?.isEnabled = false
+                openTerminalSessionMenuItem?.isEnabled = false
             } else {
                 if let vm = rootController.currentVm {
                     let canConvert = !rootController.isCurrentVMRunning()
@@ -346,6 +384,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     snapshotsMenuItem.isEnabled = true
                     snapshotCreateMenuItem.isEnabled = true
                     snapshotsViewRestoreMenuItem.isEnabled = true
+
+                    // Sessions connect to a running VM. Showing the screen is only needed when the VM is headless
+                    let running = rootController.isCurrentVMRunning()
+                    if vm.type == MacMulatorConstants.APPLE_VM {
+                        openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.showVMScreen", comment: "")
+                        openScreenSessionMenuItem?.isEnabled = running && Utils.isHeadless(vm)
+                        openSSHSessionMenuItem?.isEnabled = running && vm.macAddress != nil
+                        // Linux VMs have a serial console (hvc0); macOS guests have none
+                        openTerminalSessionMenuItem?.isEnabled = running && vm.os == QemuConstants.OS_LINUX
+                    } else {
+                        openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.openSpiceSession", comment: "")
+                        openScreenSessionMenuItem?.isEnabled = running && Utils.isHeadless(vm) && QemuUtils.isSpiceServerEnabled(vm)
+                        openSSHSessionMenuItem?.isEnabled = running && QemuUtils.sshPortMapping(for: vm) != nil
+                        openTerminalSessionMenuItem?.isEnabled = running && QemuUtils.isSerialConsoleExposed(vm)
+                    }
 
                     if rootController.isCurrentVMRunning() {
                         pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)

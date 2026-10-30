@@ -66,6 +66,18 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.pauseVM(sender: sender)
     }
 
+    func openScreenSessionMenuBarClicked(_: Any) {
+        vmController?.openScreenSession()
+    }
+
+    func openSSHSessionMenuBarClicked(_: Any) {
+        vmController?.openSSHSession()
+    }
+
+    func openTerminalSessionMenuBarClicked(_: Any) {
+        vmController?.openTerminalSession()
+    }
+
     func attachUSBImageToVM(_ sender: Any, _ virtualDrive: VirtualDrive) {
         vmController?.attachUSBImageToVM(sender: sender, virtualDrive: virtualDrive)
     }

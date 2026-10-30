@@ -22,12 +22,23 @@ class BusyViewInformation {
 
 @available(macOS 12.0, *)
 class VirtualMachineContainerViewController: RunningVMManagerViewController {
+    /// True when the window is a session showing an already running headless VM: closing it leaves the VM running
+    private var isSession = false
+
+    func setSession(_ session: Bool) {
+        isSession = session
+    }
+
     override func viewDidAppear() {
         super.viewDidAppear()
 
         if let virtualMachine {
             if let vmRunner {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
+                if isSession {
+                    runner.attachView(view as! VZVirtualMachineView, self)
+                    return
+                }
                 runner.setVmView(view as! VZVirtualMachineView)
                 runner.setVmViewController(self)
                 runner.runVM(recoveryMode: recoveryMode, uponCompletion: {
@@ -59,6 +70,9 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
     }
 
     override func windowShouldClose(_: NSWindow) -> Bool {
+        if isSession {
+            return true
+        }
         if Utils.isPauseSupported(vmRunner!.getManagedVM()) {
             pauseVM()
 
@@ -66,6 +80,13 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
             return false
         } else {
             return super.windowShouldClose(view.window!)
+        }
+    }
+
+    override func windowWillClose(_ notification: Notification) {
+        super.windowWillClose(notification)
+        if isSession {
+            (vmRunner as? VirtualizationFrameworkVirtualMachineRunner)?.detachView()
         }
     }
 
