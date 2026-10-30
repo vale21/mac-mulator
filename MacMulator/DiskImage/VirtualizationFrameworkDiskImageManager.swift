@@ -101,15 +101,16 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         #endif
     }
 
-    /// Opens the given layers, base first, as a single read-only image.
-    @available(macOS 27.0, *)
-    private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
-        var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
-        for layerPath in layerPaths.dropFirst() {
-            image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
+    #if arch(arm64)
+        @available(macOS 27.0, *)
+        private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
+            var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
+            for layerPath in layerPaths.dropFirst() {
+                image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
+            }
+            return image
         }
-        return image
-    }
+    #endif
 
     static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
         #if arch(arm64)
