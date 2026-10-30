@@ -46,7 +46,7 @@
                 lock.unlock()
                 return
             }
-            if registrationFailed && !retryAfterFailure {
+            if registrationFailed, !retryAfterFailure {
                 lock.unlock()
                 return
             }
