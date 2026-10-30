@@ -133,9 +133,18 @@ class VirtualMachine: Codable, Hashable {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName)
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!)
             setupPaths(vm, plistFilePath)
+            var migrated = false
             if vm.storedId == nil {
-                // Legacy VM created before IDs were introduced: assign one and persist it.
+                // Legacy VM created before IDs were introduced: assign one.
                 _ = vm.id
+                migrated = true
+            }
+            if vm.type == nil {
+                // Legacy VM created before VM types were introduced: it can only be a QEMU one.
+                vm.type = MacMulatorConstants.QEMU_VM
+                migrated = true
+            }
+            if migrated {
                 vm.writeToPlist()
             }
             if vm.portMappings == nil {

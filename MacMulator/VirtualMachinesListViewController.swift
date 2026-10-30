@@ -85,6 +85,57 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        if let returnKeyMonitor {
+            NSEvent.removeMonitor(returnKeyMonitor)
+        }
+    }
+
+    private var returnKeyMonitor: Any?
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        guard returnKeyMonitor == nil else { return }
+        // Pressing Return on the selected VM renames it, as in the Finder.
+        returnKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, let window = view.window, event.window === window, window.firstResponder === table,
+                  event.keyCode == 36 || event.keyCode == 76, event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty
+            else {
+                return event
+            }
+            beginRenamingSelectedVirtualMachine()
+            return nil
+        }
+    }
+
+    private func beginRenamingSelectedVirtualMachine() {
+        let row = table.selectedRow
+        guard row >= 0, let rootController, let cell = table.view(atColumn: 0, row: row, makeIfNecessary: false) as? VirtualMachineTableCellView else { return }
+        let vm = rootController.getVirtualMachineAt(row)
+        // The running VMs are tracked by name, so they can't be renamed.
+        guard !rootController.isVMRunning(vm) else {
+            NSSound.beep()
+            return
+        }
+        cell.beginRenaming { [weak self] newName in
+            self?.renameVirtualMachine(vm, to: newName)
+        }
+    }
+
+    private func renameVirtualMachine(_ vm: VirtualMachine, to newName: String) {
+        guard let rootController else { return }
+        if rootController.virtualMachines.contains(where: { $0 !== vm && $0.displayName == newName }) {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineListViewController.renameDuplicate", comment: ""), newName), virtualMachine: vm)
+            return
+        }
+        vm.displayName = newName
+        vm.writeToPlist()
+        // The folder of the VM follows its name.
+        rootController.renameVMFolderToMatchName(vm)
+        rootController.refreshViewForVM(vm)
+        if let index = rootController.virtualMachines.firstIndex(where: { $0 === vm }) {
+            selectElement(index)
+        }
+        view.window?.makeFirstResponder(table)
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -94,7 +145,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             if #unavailable(macOS 13.0,) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isHidden = true
             } else {
-                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = true
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = Utils.isTemplateConversionSupported(vm)
             }
 
             // A paused VM can be cloned, a running one cannot.
@@ -128,7 +179,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
                 // A paused VM has to be stopped before becoming a template.
-                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = !rootController.isVMPaused(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = !rootController.isVMPaused(vm) && Utils.isTemplateConversionSupported(vm)
             }
         }
     }

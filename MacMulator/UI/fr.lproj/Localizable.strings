@@ -331,3 +331,4 @@
 "DiskImageManager.flattenFailed" = "Impossible de fusionner le disque lié : %@";
 "RootViewController.renameFailed" = "Impossible de renommer le dossier de la machine virtuelle : %@";
 "RootViewController.cloneRunningVM" = "Une VM en cours d'exécution ne peut pas être clonée. Arrêtez-la d'abord. Une VM en pause peut être clonée.";
+"VirtualMachineListViewController.renameDuplicate" = "Une machine virtuelle nommée \"%@\" existe déjà.";

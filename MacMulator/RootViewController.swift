@@ -441,7 +441,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func convertVirtualMachineToTemplateAt(_ index: Int) {
         let vmToConvert = virtualMachines[index]
         // A paused VM holds a saved state that would be invalid once its drives change: it has to be stopped first.
-        guard !isVMRunning(vmToConvert), !isVMPaused(vmToConvert) else { return }
+        guard !isVMRunning(vmToConvert), !isVMPaused(vmToConvert), Utils.isTemplateConversionSupported(vmToConvert) else { return }
         let rawVMDrives = Utils.findRawDrives(vmToConvert.drives)
         let removableVMDrives = Utils.findExternalDrives(vmToConvert.drives)
         var promptText = NSLocalizedString("RootViewController.convertToTemplate", comment: "") + "\n\n"
@@ -455,6 +455,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         promptText += NSLocalizedString("RootViewController.convertToTemplateConfirm", comment: "")
         let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: promptText, virtualMachine: vmToConvert)
         if response.rawValue == Utils.ALERT_RESP_OK {
+            // The conversion window works on the current VM, which is not necessarily the one chosen from the list.
+            if currentVm !== vmToConvert {
+                setCurrentVirtualMachine(vmToConvert)
+            }
             vmController?.convertToTemplateMenuBarClicked(self)
         }
     }

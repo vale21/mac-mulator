@@ -331,3 +331,4 @@
 "DiskImageManager.flattenFailed" = "Unable to flatten the linked disk: %@";
 "RootViewController.renameFailed" = "Unable to rename the virtual machine folder: %@";
 "RootViewController.cloneRunningVM" = "A running VM cannot be cloned. Stop it first. A paused VM can be cloned.";
+"VirtualMachineListViewController.renameDuplicate" = "A virtual machine named \"%@\" already exists.";

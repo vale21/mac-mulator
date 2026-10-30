@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class VirtualMachineTableCellView: NSTableCellView {
+class VirtualMachineTableCellView: NSTableCellView, NSTextFieldDelegate {
     enum CellState {
         case running
         case paused
@@ -31,6 +31,62 @@ class VirtualMachineTableCellView: NSTableCellView {
         if let rootController {
             setState(VirtualMachineTableCellView.computeVMState(virtualMachine, rootController))
         }
+    }
+
+    private var renameCompletion: ((String) -> Void)?
+    private var renameCancelled = false
+
+    /// Turns the name into an editable field, like renaming a file in Finder.
+    /// The completion is called with the new name when the edit is confirmed.
+    func beginRenaming(completion: @escaping (String) -> Void) {
+        guard let virtualMachine, renameCompletion == nil else { return }
+        renameCompletion = completion
+        renameCancelled = false
+        vmName.stringValue = virtualMachine.displayName
+        vmName.delegate = self
+        vmName.isEditable = true
+        vmName.isSelectable = true
+        // Becoming first responder selects the whole name.
+        window?.makeFirstResponder(vmName)
+    }
+
+    func control(_: NSControl, textView _: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
+        if commandSelector == #selector(NSResponder.cancelOperation(_:)) {
+            renameCancelled = true
+            window?.makeFirstResponder(enclosingTableView)
+            return true
+        }
+        return false
+    }
+
+    func controlTextDidEndEditing(_: Notification) {
+        guard let completion = renameCompletion else { return }
+        renameCompletion = nil
+        vmName.isEditable = false
+        vmName.isSelectable = false
+        vmName.delegate = nil
+
+        let newName = vmName.stringValue.trimmingCharacters(in: .whitespaces)
+        // Restore the regular label (it also adds the template suffix).
+        if let virtualMachine, let rootController {
+            refresh(state: VirtualMachineTableCellView.computeVMState(virtualMachine, rootController))
+        }
+        window?.makeFirstResponder(enclosingTableView)
+
+        if !renameCancelled, !newName.isEmpty, newName != virtualMachine?.displayName {
+            completion(newName)
+        }
+    }
+
+    private var enclosingTableView: NSTableView? {
+        var current: NSView? = superview
+        while let view = current {
+            if let table = view as? NSTableView {
+                return table
+            }
+            current = view.superview
+        }
+        return nil
     }
 
     func setState(_ state: CellState) {

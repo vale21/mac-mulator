@@ -801,6 +801,17 @@ class Utils {
         return false
     }
 
+    /// Apple VMs can only be converted to templates starting from macOS 27.
+    static func isTemplateConversionSupported(_ vm: VirtualMachine) -> Bool {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            return true
+        }
+        if vm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+            return true
+        }
+        return false
+    }
+
     /// Layers a drive depends on, base first, ending with the drive itself. A linked clone converted to a template can
     /// be the backing drive of other linked clones, so the chain is followed through the VM bundles of the layers.
     static func backingChain(endingAt drivePath: String) -> [String] {

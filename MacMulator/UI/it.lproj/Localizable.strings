@@ -331,3 +331,4 @@
 "DiskImageManager.flattenFailed" = "Impossibile unire il disco collegato: %@";
 "RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";
 "RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";
+"VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";
