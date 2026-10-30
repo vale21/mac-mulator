@@ -739,6 +739,9 @@ class Utils {
     }
 
     static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {
+        if vm.os == QemuConstants.OS_LINUX {
+            return true
+        }
         if #available(macOS 27.0, *) {
             return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)
         }

@@ -140,7 +140,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     func vmCreated(_ vm: VirtualMachine, performProvisioning: Bool) {
         rootController?.addVirtualMachine(vm)
         if performProvisioning {
-            performSegue(withIdentifier: MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE, sender: self)
+            performSegue(withIdentifier: vm.os == QemuConstants.OS_MAC ? MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE : MacMulatorConstants.SHOW_CLOUD_INIT_OPTIONS_SEGUE, sender: self)
         } else {
             if fullConfiguration.state == NSControl.StateValue.on {
                 rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [nil, vm])
