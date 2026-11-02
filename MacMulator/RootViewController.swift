@@ -489,6 +489,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         if !removableVMDrives.isEmpty {
             promptText += String(format: NSLocalizedString("RootViewController.convertToTemplateRemovableDrives", comment: ""), removableVMDrives.map { "- " + $0.name }.joined(separator: "\n")) + "\n\n"
         }
+        if let snapshotCount = vmToConvert.snapshots?.count, snapshotCount > 0 {
+            let key = snapshotCount == 1 ? "RootViewController.convertToTemplateSnapshotsOne" : "RootViewController.convertToTemplateSnapshotsOther"
+            promptText += String(format: NSLocalizedString(key, comment: ""), snapshotCount) + "\n\n"
+        }
         promptText += NSLocalizedString("RootViewController.convertToTemplateConfirm", comment: "")
         let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: promptText, virtualMachine: vmToConvert)
         if response.rawValue == Utils.ALERT_RESP_OK {
