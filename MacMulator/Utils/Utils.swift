@@ -359,8 +359,9 @@ class Utils {
         return hdds
     }
 
+    /// Firmware drives that are re-created on VM start. EFI variable stores are excluded because they hold the guest's persisted boot entries.
     static func findFirmwareDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
-        let firmwareTypes = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_EFI_VARS, QemuConstants.MEDIATYPE_EFI_SECURE_VARS, QemuConstants.MEDIATYPE_OPENCORE]
+        let firmwareTypes = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_OPENCORE]
         return drives.filter { firmwareTypes.contains($0.mediaType) }
     }
 

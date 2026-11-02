@@ -43,7 +43,7 @@ class ConvertVMViewController: NSViewController {
                     for drive in Utils.findExternalDrives(currentVm.drives) {
                         currentVm.removeVirtualDrive(drive.path)
                     }
-                    // EFI and OpenCore drives live inside the VM bundle, so delete their files as well.
+                    // EFI code and OpenCore images are re-created on start, so drop them. EFI variable stores are kept to preserve boot entries.
                     for drive in Utils.findFirmwareDrives(currentVm.drives) {
                         currentVm.removeVirtualDrive(drive.path)
                         try? FileManager.default.removeItem(atPath: drive.path)
