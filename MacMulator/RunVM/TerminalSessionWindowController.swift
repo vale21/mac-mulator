@@ -36,7 +36,7 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         let session = TerminalSessionWindowController(kind, virtualMachine, terminalView)
         terminalView.processDelegate = session
         session.show()
-        terminalView.startProcess(executable: executable, args: args)
+        terminalView.startProcess(executable: executable, args: args, environment: environment)
     }
 
     /// Opens a session on the serial console of an Apple VM, or brings the existing one to the front
@@ -59,7 +59,14 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
 
     private static let defaultFrame = NSRect(x: 0, y: 0, width: 800, height: 500)
 
-    private static func bringExistingToFront(_ kind: Kind, _ virtualMachine: VirtualMachine) -> Bool {
+    /// The environment of the process: the usual terminal one, but with every prompt (host key, password) asked in the
+    /// terminal. With DISPLAY set (e.g. by XQuartz), ssh would run the X11 ssh-askpass instead, which usually is missing
+    private static var environment: [String] {
+        Terminal.getEnvironmentVariables(termName: "xterm-256color").filter { !$0.hasPrefix("DISPLAY=") } + ["SSH_ASKPASS_REQUIRE=never"]
+    }
+
+    /// Brings the session of this kind on the VM to the front. Returns false if there is none
+    static func bringExistingToFront(_ kind: Kind, _ virtualMachine: VirtualMachine) -> Bool {
         guard let existing = openSessions.first(where: { $0.kind == kind && $0.virtualMachine == virtualMachine }) else { return false }
         existing.window?.makeKeyAndOrderFront(nil)
         return true

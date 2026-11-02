@@ -255,6 +255,8 @@
 "VirtualMachineViewController.guestIPAddressNotFound" = "Impossibile trovare l'indirizzo IP della VM. Potrebbe essere ancora in avvio, o la sua rete potrebbe non essere ancora attiva. Riprova tra qualche secondo. Per collegarti con SSH, nella VM deve essere attivo Login remoto (macOS) o un server SSH (Linux).";
 "VirtualMachineViewController.noSshPortMapping" = "La VM non ha una mappatura per la porta SSH (22). Aggiungine una nelle impostazioni di rete della VM per collegarti con SSH.";
 "VirtualMachineViewController.serialConsoleNotAvailable" = "La console seriale della VM non è disponibile. Riavvia la VM per abilitarla.";
+"VirtualMachineViewController.sshConnect" = "Collegati";
+"VirtualMachineViewController.sshUserNamePrompt" = "Nome utente per accedere a %@ con SSH:";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Tempo stimato rimanente: %@";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Annullo l'installazione. Per favore attendi...";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installazione fallita con errore: %@";

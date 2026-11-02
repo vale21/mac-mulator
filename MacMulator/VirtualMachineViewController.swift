@@ -624,17 +624,45 @@ class VirtualMachineViewController: NSViewController {
 
     /// Opens a MacMulator terminal window on an SSH connection to the current VM, through the port mapped onto the guest SSH port
     func openSSHSession() {
-        guard let vm = rootController?.currentVm else { return }
+        guard let vm = rootController?.currentVm, !TerminalSessionWindowController.bringExistingToFront(.ssh, vm) else { return }
 
-        if vm.type == MacMulatorConstants.APPLE_VM {
-            openSSHSessionOnAppleVM(vm)
-            return
-        }
-        guard let args = QemuUtils.sshArguments(for: vm) else {
+        if vm.type != MacMulatorConstants.APPLE_VM, QemuUtils.sshPortMapping(for: vm) == nil {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.noSshPortMapping", comment: ""), virtualMachine: vm)
             return
         }
-        TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
+        askSSHUserName(for: vm) {
+            if vm.type == MacMulatorConstants.APPLE_VM {
+                self.openSSHSessionOnAppleVM(vm)
+            } else if let args = QemuUtils.sshArguments(for: vm) {
+                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
+            }
+        }
+    }
+
+    /// Asks the user to log in as, suggesting the last one used for the VM (or the provisioned one, or the Mac user),
+    /// and remembers it in the VM
+    fileprivate func askSSHUserName(for vm: VirtualMachine, then connect: @escaping () -> Void) {
+        let alert = NSAlert()
+        alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".small"))
+        alert.messageText = String(format: NSLocalizedString("VirtualMachineViewController.sshUserNamePrompt", comment: ""), vm.displayName)
+
+        let userNameField = NSTextField(frame: NSRect(x: 0, y: 0, width: 240, height: 24))
+        userNameField.stringValue = Utils.guestUserName(vm) ?? NSUserName()
+        alert.accessoryView = userNameField
+        alert.addButton(withTitle: NSLocalizedString("VirtualMachineViewController.sshConnect", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
+        alert.window.initialFirstResponder = userNameField
+
+        alert.beginSheetModal(for: view.window!) { response in
+            let userName = userNameField.stringValue.trimmingCharacters(in: .whitespaces)
+            guard response == .alertFirstButtonReturn, !userName.isEmpty else { return }
+
+            if vm.guestUserName != userName {
+                vm.guestUserName = userName
+                vm.writeToPlist()
+            }
+            connect()
+        }
     }
 
     /// Apple VMs get their own IP address (from the macOS DHCP server, or the LAN when bridged): look it up from the MAC address
@@ -652,7 +680,7 @@ class VirtualMachineViewController: NSViewController {
                 if let userName = Utils.guestUserName(vm) {
                     destination = userName + "@" + destination
                 }
-                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: [destination])
+                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: Utils.sshArguments(for: vm, destination: destination))
             }
         }
     }

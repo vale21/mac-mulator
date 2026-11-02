@@ -237,7 +237,7 @@ class QemuUtils {
         if let userName = Utils.guestUserName(vm) {
             destination = userName + "@" + destination
         }
-        return ["-p", String(mapping.hostPort), destination]
+        return Utils.sshArguments(for: vm, destination: destination, port: mapping.hostPort)
     }
 
     /// Whether Qemu exposes the serial console of the VM on a socket (see serialSocketPath). Only Qemu VMs whose
@@ -267,13 +267,7 @@ class QemuUtils {
     #if APPSTORE
         /// A unix socket path inside the sandbox container, unique per VM and short enough for sun_path.
         private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
-            // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
-            var hash: UInt64 = 0xCBF2_9CE4_8422_2325
-            for byte in vmPath.utf8 {
-                hash ^= UInt64(byte)
-                hash = hash &* 0x0000_0100_0000_01B3
-            }
-            return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
+            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
         }
     #endif
 

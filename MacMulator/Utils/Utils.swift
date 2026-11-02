@@ -150,10 +150,94 @@ class Utils {
         vm.os != QemuConstants.OS_IOS && vm.headless == true
     }
 
-    /// The user to log in as with SSH: the one provisioned when the VM was created, if any
+    /// The user to log in as with SSH: the last one used, or the one provisioned when the VM was created, if any
     static func guestUserName(_ vm: VirtualMachine) -> String? {
-        let userName = vm.provisioningInformation?.userName ?? vm.guestUserName
+        let userName = vm.guestUserName ?? vm.provisioningInformation?.userName
         return userName?.isEmpty == false ? userName : nil
+    }
+
+    /// The arguments of an ssh command connecting to `destination` ([user@]host) for the VM. Host keys are kept in a
+    /// file of the VM in the app's Application Support folder: ~/.ssh is out of reach of the App Store sandbox, and Qemu
+    /// VMs are all reached on localhost, so they must not share one. A new guest key is trusted without asking; a key
+    /// that changes afterwards is still rejected.
+    static func sshArguments(for vm: VirtualMachine, destination: String, port: Int32? = nil) -> [String] {
+        var args = legacySSHOptions
+        if let knownHostsFile = sshKnownHostsFile(for: vm) {
+            // ssh splits option values on spaces, and the path contains "Application Support": quote it
+            args += ["-o", "UserKnownHostsFile=\"" + knownHostsFile + "\"", "-o", "StrictHostKeyChecking=accept-new"]
+        }
+        #if APPSTORE
+            // The sandbox keeps ssh away from the keys in ~/.ssh: trying them only prints errors. Use passwords
+            args += ["-o", "PubkeyAuthentication=no"]
+        #endif
+        if let port {
+            args += ["-p", String(port)]
+        }
+        return args + [destination]
+    }
+
+    private static func sshKnownHostsFile(for vm: VirtualMachine) -> String? {
+        guard let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+        let directory = applicationSupport.appendingPathComponent("MacMulator/known_hosts", isDirectory: true)
+        do {
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        } catch {
+            return nil
+        }
+        return directory.appendingPathComponent(String(stableHash(vm.path), radix: 16)).path
+    }
+
+    /// FNV-1a hash of a string: stable across launches (unlike Hasher) and short, to name files after a VM path
+    static func stableHash(_ string: String) -> UInt64 {
+        var hash: UInt64 = 0xCBF2_9CE4_8422_2325
+        for byte in string.utf8 {
+            hash ^= UInt64(byte)
+            hash = hash &* 0x0000_0100_0000_01B3
+        }
+        return hash
+    }
+
+    /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
+    /// key exchanges) be reached. The legacy algorithms are appended ("+") to the defaults, so newer guests still
+    /// negotiate modern ones; only those the ssh of the host still supports are listed, as an unknown one makes it fail.
+    static let legacySSHOptions: [String] = {
+        let legacyAlgorithms: [(option: String, query: String, algorithms: [String])] = [
+            ("HostKeyAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
+            ("PubkeyAcceptedAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
+            ("KexAlgorithms", "kex", ["diffie-hellman-group14-sha1", "diffie-hellman-group-exchange-sha1", "diffie-hellman-group1-sha1"]),
+            ("Ciphers", "cipher", ["aes128-cbc", "aes192-cbc", "aes256-cbc", "3des-cbc"]),
+        ]
+
+        var supportedByQuery: [String: Set<String>] = [:]
+        var options: [String] = []
+        for (option, query, algorithms) in legacyAlgorithms {
+            if supportedByQuery[query] == nil {
+                supportedByQuery[query] = supportedSSHAlgorithms(query)
+            }
+            let supported = algorithms.filter { supportedByQuery[query]!.contains($0) }
+            if !supported.isEmpty {
+                options += ["-o", option + "=+" + supported.joined(separator: ",")]
+            }
+        }
+        return options
+    }()
+
+    /// The algorithms of a kind (key, kex, cipher, ...) the ssh of the host supports, as listed by `ssh -Q`
+    private static func supportedSSHAlgorithms(_ query: String) -> Set<String> {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/ssh")
+        process.arguments = ["-Q", query]
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = FileHandle.nullDevice
+        do {
+            try process.run()
+        } catch {
+            return []
+        }
+        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+        process.waitUntilExit()
+        return Set(output.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) })
     }
 
     /// Quotes a string so that a POSIX shell takes it as a single literal word
