@@ -77,12 +77,21 @@ class ConvertVMViewController: NSViewController {
                         }
                     }
                 } else if operation == .convertToFullClone {
-                    flattenDrives(currentVm.drives.filter(\.isLinked), of: currentVm) { code, message in
-                        if code == 0 {
-                            complete = true
-                        } else {
-                            complete = true
-                            error = message
+                    checkSnapshotDrives(currentVm) { code, message in
+                        DispatchQueue.main.async {
+                            if code == 0 {
+                                self.flattenDrives(currentVm.drives.filter(\.isLinked), of: currentVm) { code, message in
+                                    if code == 0 {
+                                        complete = true
+                                    } else {
+                                        complete = true
+                                        error = message
+                                    }
+                                }
+                            } else {
+                                complete = true
+                                error = message
+                            }
                         }
                     }
                 } else if operation == .convertToQemu {
@@ -167,6 +176,46 @@ class ConvertVMViewController: NSViewController {
                 } else {
                     callback(code, message)
                 }
+            }
+        }
+    }
+
+    private func checkSnapshotDrives(_ vm: VirtualMachine, index: Int = 0, drives: [VirtualDrive]? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let snapshotDrives: [VirtualDrive]
+        if let drives {
+            snapshotDrives = drives
+        } else {
+            var snapshotDrivesToCheck: [VirtualDrive] = []
+            for snapshotPath in (vm.snapshots ?? []).flatMap(\.driveSnapshotPaths) {
+                let filename = URL(fileURLWithPath: snapshotPath).lastPathComponent
+                guard let drive = vm.drives.first(where: { $0.name + "." + MacMulatorConstants.DISK_EXTENSION == filename }) else {
+                    callback(-1, NSLocalizedString("ConvertVMViewController.linkedSnapshotsPreventFullClone", comment: ""))
+                    return
+                }
+                let snapshotDrive = drive.clone()
+                snapshotDrive.path = snapshotPath
+                snapshotDrive.backingPath = nil
+                snapshotDrivesToCheck.append(snapshotDrive)
+            }
+            snapshotDrives = snapshotDrivesToCheck
+        }
+
+        guard index < snapshotDrives.count else {
+            callback(0, nil)
+            return
+        }
+
+        DiskImageManagerFactory().create(forVM: vm).getDiskImageInfo(snapshotDrives[index], vm.path) { code, info in
+            guard code == 0 else {
+                callback(code, info)
+                return
+            }
+
+            let linkedImagePattern = #"(?im)^\s*(backing file|parent uuid):"#
+            if info.range(of: linkedImagePattern, options: .regularExpression) != nil {
+                callback(-1, NSLocalizedString("ConvertVMViewController.linkedSnapshotsPreventFullClone", comment: ""))
+            } else {
+                self.checkSnapshotDrives(vm, index: index + 1, drives: snapshotDrives, uponCompletion: callback)
             }
         }
     }

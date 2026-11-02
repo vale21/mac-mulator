@@ -23,6 +23,7 @@
 "ConsoleViewController.loading" = "Caricamento...";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "ConvertVMViewController.convertingVM" = "Conversione della VM in corso. Attendere...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Impossibile convertire la macchina virtuale in un clone completo finché gli snapshot contengono dischi collegati o potrebbero dipenderne. Elimina prima gli snapshot.";
 "CreateDiskFileViewController.creatingDisk" = "Creo il nuovo disco...";
 "CreateDiskFileViewController.updatingDisk" = "Aggiorno il disco %@...";
 "CreateVMFileViewController.creatingVM" = "Creo la Macchina Virtuale...";

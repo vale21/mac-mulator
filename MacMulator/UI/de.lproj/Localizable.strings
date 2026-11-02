@@ -23,6 +23,7 @@
 "ConsoleViewController.loading" = "Wird geladen...";
 "ConsoleViewController.vmNotRunning" = "Die aktuelle VM wird nicht ausgeführt";
 "ConvertVMViewController.convertingVM" = "VM wird konvertiert. Bitte warten...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Die VM kann nicht in einen vollständigen Klon umgewandelt werden, solange Snapshots verknüpfte Laufwerke enthalten oder davon abhängen könnten. Lösche zuerst die Snapshots.";
 "CreateDiskFileViewController.creatingDisk" = "Neue Festplatte wird erstellt...";
 "CreateDiskFileViewController.updatingDisk" = "Festplatte %@ wird aktualisiert...";
 "CreateVMFileViewController.creatingVM" = "Virtuelle Maschine wird erstellt...";

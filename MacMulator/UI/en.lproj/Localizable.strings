@@ -23,6 +23,7 @@
 "ConsoleViewController.loading" = "Loading...";
 "ConsoleViewController.vmNotRunning" = "Current VM is not running";
 "ConvertVMViewController.convertingVM" = "Converting VM. Please wait...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Cannot convert to a full clone while snapshots contain or may depend on linked disks. Delete the snapshots first.";
 "CreateDiskFileViewController.creatingDisk" = "Creating new disk...";
 "CreateDiskFileViewController.updatingDisk" = "Updating disk %@...";
 "CreateVMFileViewController.creatingVM" = "Creating Virtual Machine...";
