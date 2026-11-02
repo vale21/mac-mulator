@@ -204,6 +204,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     /// Drives, snapshots and the linked clones depending on the VM are updated accordingly.
     func renameVMFolderToMatchName(_ vm: VirtualMachine) {
         guard !isVMRunning(vm) else { return }
+        let dependentClones = linkedClones(of: vm)
+        guard dependentClones.allSatisfy({ !isVMRunning($0) }) else { return }
         let invalidCharacters = CharacterSet(charactersIn: "/:")
         let name = vm.displayName.components(separatedBy: invalidCharacters).joined(separator: "-").trimmingCharacters(in: .whitespaces)
         let oldPath = vm.path
@@ -217,9 +219,45 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             counter += 1
         }
 
+        let oldPrefix = oldPath + "/"
+        let qemuDiskImageManager = QemuDiskImageManager()
+        var rebasedImages: [(vm: VirtualMachine, path: String, backingPath: String)] = []
+        func rollbackRebasedImages() {
+            for image in rebasedImages.reversed() {
+                do {
+                    try qemuDiskImageManager.rebaseLinkedDiskImage(at: image.path, to: image.backingPath, for: image.vm)
+                } catch {
+                    NSLog("Failed to restore backing file for \(image.path): \(error.localizedDescription)")
+                }
+            }
+        }
+
+        do {
+            for clone in dependentClones {
+                for drive in clone.drives {
+                    guard let backingPath = drive.backingPath, backingPath.hasPrefix(oldPrefix) else { continue }
+                    guard drive.format == QemuConstants.FORMAT_QCOW2 else { continue }
+                    let newBackingPath = newPath + "/" + backingPath.dropFirst(oldPrefix.count)
+                    let diskName = URL(fileURLWithPath: drive.path).lastPathComponent
+                    let snapshotImages = (clone.snapshots ?? []).flatMap(\.driveSnapshotPaths).filter {
+                        URL(fileURLWithPath: $0).lastPathComponent == diskName
+                    }
+                    for imagePath in [drive.path] + snapshotImages {
+                        try qemuDiskImageManager.rebaseLinkedDiskImage(at: imagePath, to: newBackingPath, for: clone)
+                        rebasedImages.append((clone, imagePath, backingPath))
+                    }
+                }
+            }
+        } catch {
+            rollbackRebasedImages()
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.renameFailed", comment: ""), "\(error.localizedDescription)"), virtualMachine: vm)
+            return
+        }
+
         do {
             try fileManager.moveItem(atPath: oldPath, toPath: newPath)
         } catch {
+            rollbackRebasedImages()
             Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.renameFailed", comment: ""), "\(error.localizedDescription)"), virtualMachine: vm)
             return
         }
@@ -230,8 +268,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         (NSApp.delegate as? AppDelegate)?.replaceSavedVM(oldPath, with: newPath)
 
         // Linked clones refer to the drives of their template by absolute path.
-        let oldPrefix = oldPath + "/"
-        for other in virtualMachines where other !== vm {
+        for other in dependentClones {
             var changed = false
             for drive in other.drives {
                 if let backingPath = drive.backingPath, backingPath.hasPrefix(oldPrefix) {

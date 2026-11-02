@@ -8,6 +8,17 @@
 import Foundation
 
 class QemuDiskImageManager: DiskImageManager {
+    func rebaseLinkedDiskImage(at imagePath: String, to backingPath: String, for virtualMachine: VirtualMachine) throws {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: QemuUtils.getQemuPath(for: virtualMachine) + "/" + QemuConstants.QEMU_IMG)
+        process.arguments = ["rebase", "-u", "-b", backingPath, imagePath]
+        try process.run()
+        process.waitUntilExit()
+        guard process.terminationStatus == 0 else {
+            throw NSError(domain: "QemuDiskImageManager", code: Int(process.terminationStatus), userInfo: [NSLocalizedDescriptionKey: "Failed to update the backing file for \(imagePath)."])
+        }
+    }
+
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
     }
