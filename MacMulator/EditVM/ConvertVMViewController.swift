@@ -52,13 +52,25 @@ class ConvertVMViewController: NSViewController {
                     let targetFormat = currentVm.type == MacMulatorConstants.QEMU_VM ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_ASIF
                     convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
                         if code == 0 {
-                            if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
-                                currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
-                            } else if currentVm.type == MacMulatorConstants.QEMU_VM {
-                                currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+                            do {
+                                let snapshotsPath = currentVm.path + "/Snapshots"
+                                if FileManager.default.fileExists(atPath: snapshotsPath) {
+                                    try FileManager.default.removeItem(atPath: snapshotsPath)
+                                }
+                                for snapshot in currentVm.snapshots ?? [] {
+                                    currentVm.removeSnapshot(snapshot.timestamp)
+                                }
+                                if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+                                    currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
+                                } else if currentVm.type == MacMulatorConstants.QEMU_VM {
+                                    currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+                                }
+                                currentVm.writeToPlist()
+                                complete = true
+                            } catch let snapshotError {
+                                complete = true
+                                error = snapshotError.localizedDescription
                             }
-                            currentVm.writeToPlist()
-                            complete = true
                         } else {
                             complete = true
                             error = message
