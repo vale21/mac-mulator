@@ -156,6 +156,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 fullCloneItem.isEnabled = !rootController.isVMRunning(vm)
             }
 
+            menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""))?.isEnabled = !Utils.isVMTemplate(vm)
             if Utils.isVMTemplate(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
