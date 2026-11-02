@@ -59,6 +59,8 @@
 		3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
+		3B7E34283098CF4000F67411 /* QemuSerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */; };
+		3B7E34293098CF4000F67411 /* QemuSerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */; };
 		3B7F3C2429326F9900F1396D /* parallels_template in Resources */ = {isa = PBXBuildFile; fileRef = 3B7F3C2329326F9900F1396D /* parallels_template */; };
 		3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */; };
 		3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */; };
@@ -308,6 +310,7 @@
 		3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootrom_240_4; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
+		3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuSerialConsole.swift; sourceTree = "<group>"; };
 		3B7F3C2329326F9900F1396D /* parallels_template */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = parallels_template; sourceTree = "<group>"; };
 		3B7F944D25CD51800063F84D /* QemuImgCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuImgCommandBuilder.swift; sourceTree = "<group>"; };
 		3B7F945225CD51CA0063F84D /* QemuCommandBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuCommandBuilder.swift; sourceTree = "<group>"; };
@@ -420,6 +423,7 @@
 				3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */,
 				3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */,
 				3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */,
+				3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */,
 			);
 			path = RunVM;
 			sourceTree = "<group>";
@@ -919,6 +923,7 @@
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
 				3B6D1A0829326B0500AF7834 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
+				3B7E34283098CF4000F67411 /* QemuSerialConsole.swift in Sources */,
 				3BC8177830950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */,
 				3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */,
 				3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */,
@@ -1012,6 +1017,7 @@
 				3BFB2B4B3078F067005A4B51 /* VirtualMachineViewController.swift in Sources */,
 				3BFB2B4C3078F067005A4B51 /* AppDelegate.swift in Sources */,
 				3BFB2B4D3078F067005A4B51 /* LinuxVirtualMachineConfigurationHelper.swift in Sources */,
+				3B7E34293098CF4000F67411 /* QemuSerialConsole.swift in Sources */,
 				3BC8177930950E050025C20B /* VirtualizationFrameworkSerialConsole.swift in Sources */,
 				3BFB2B4E3078F067005A4B51 /* EditVMViewControllerAdvanced.swift in Sources */,
 				3BFB2B4F3078F067005A4B51 /* QemuSpiceViewerViewController.swift in Sources */,

@@ -287,6 +287,7 @@ class VirtualMachineViewController: NSViewController {
     }
 
     func cleanupStoppedVM(_ vm: VirtualMachine) {
+        TerminalSessionWindowController.closeSessions(on: vm)
         rootController?.unsetRunningVM(vm)
         if rootController?.currentVm == vm {
             setRunningStatus(vm, false)
@@ -359,8 +360,7 @@ class VirtualMachineViewController: NSViewController {
             vmProcessors.intValue = Int32(vm.cpus)
             vmMemory.stringValue = Utils.formatMemory(vm.memory)
 
-            let mainDrive = Utils.findMainDrive(vm.drives)
-            vmHardDrive.stringValue = mainDrive != nil ? Utils.formatDisk(mainDrive!.size) : NSLocalizedString("VirtualMachineViewController.notSpecified", comment: "")
+            vmHardDrive.stringValue = vm.type == MacMulatorConstants.APPLE_VM ? "Apple" : "QEMU"
             showVMAvailableLayout()
 
             if rootController?.getRunnerForRunningVM(vm) != nil {
@@ -599,7 +599,7 @@ class VirtualMachineViewController: NSViewController {
         vmTypeDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmType", comment: "")
         vmMemoryDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmMemory", comment: "")
         vmProcessorsDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmProcessors", comment: "")
-        vmHardDriveDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmHardDrive", comment: "")
+        vmHardDriveDesc.stringValue = NSLocalizedString("VirtualMachineViewController.vmEngine", comment: "")
         editVMButton.title = NSLocalizedString("VirtualMachineViewController.editVMButton", comment: "")
     }
 
@@ -734,22 +734,28 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Apple VMs get their own IP address (from the macOS DHCP server, or the LAN when bridged): look it up from the MAC address
+    /// Apple VMs get their own IP address (from the macOS DHCP server, or the LAN when bridged): look it up from the MAC
+    /// address. The terminal window opens at once, with a spinner, and is usable when the address is known
     fileprivate func openSSHSessionOnAppleVM(_ vm: VirtualMachine) {
-        guard let macAddress = vm.macAddress else { return }
+        guard let macAddress = vm.macAddress, let window = view.window else { return }
 
+        let session = TerminalSessionWindowController.openPending(.ssh, on: vm)
         DispatchQueue.global(qos: .userInitiated).async {
             let ipAddress = GuestNetworkLookup.ipAddress(forMACAddress: macAddress)
             DispatchQueue.main.async {
                 guard let ipAddress else {
-                    Utils.showAlert(window: self.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.guestIPAddressNotFound", comment: ""), virtualMachine: vm)
+                    session.cancel()
+                    Utils.showAlert(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.guestIPAddressNotFound", comment: ""), virtualMachine: vm)
                     return
                 }
                 var destination = ipAddress
                 if let userName = Utils.guestUserName(vm) {
                     destination = userName + "@" + destination
                 }
-                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: Utils.sshArguments(for: vm, destination: destination))
+                // Keep the spinner a little longer: the guest may have only just started its SSH server
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    session.start(executable: "/usr/bin/ssh", args: Utils.sshArguments(for: vm, destination: destination), banner: "ssh " + destination)
+                }
             }
         }
     }
@@ -765,15 +771,13 @@ class VirtualMachineViewController: NSViewController {
             return
         }
 
-        let socketPath = QemuUtils.serialSocketPath(forVMAt: vm.path)
-        guard FileManager.default.fileExists(atPath: socketPath) else {
+        guard !TerminalSessionWindowController.bringExistingToFront(.serialConsole, vm) else { return }
+
+        guard let serialConsole = QemuSerialConsole(socketPath: QemuUtils.serialSocketPath(forVMAt: vm.path)) else {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.serialConsoleNotAvailable", comment: ""), virtualMachine: vm)
             return
         }
-
-        // nc relays the socket; the pseudo-terminal goes raw so that every key reaches the guest as typed
-        let command = "stty raw -echo; exec /usr/bin/nc -U " + Utils.shellQuote(socketPath)
-        TerminalSessionWindowController.open(.serialConsole, on: vm, executable: "/bin/sh", args: ["-c", command])
+        TerminalSessionWindowController.open(serialConsole, on: vm)
     }
 
     fileprivate func completionhandler(result: VMExecutionResult, virtualMachine: VirtualMachine) {

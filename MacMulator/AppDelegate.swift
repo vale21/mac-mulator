@@ -333,15 +333,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         guard openScreenSessionMenuItem == nil, let index = vmMenu.items.firstIndex(of: pauseVMMenuItem) else { return }
 
         let screenItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSpiceSession", comment: ""), action: #selector(openScreenSessionMenuBarClicked(_:)), keyEquivalent: "")
-        let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
         let terminalItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openTerminalSession", comment: ""), action: #selector(openTerminalSessionMenuBarClicked(_:)), keyEquivalent: "")
-        for (offset, item) in [NSMenuItem.separator(), screenItem, sshItem, terminalItem].enumerated() {
+        var items = [NSMenuItem.separator(), screenItem]
+        #if !APPSTORE
+            // The sandbox keeps ssh from prompting for a password and from reaching guests: no SSH sessions in the App Store version
+            let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
+            items.append(sshItem)
+            openSSHSessionMenuItem = sshItem
+        #endif
+        items.append(terminalItem)
+        for (offset, item) in items.enumerated() {
             item.target = self
             vmMenu.insertItem(item, at: index + 1 + offset)
         }
 
         openScreenSessionMenuItem = screenItem
-        openSSHSessionMenuItem = sshItem
         openTerminalSessionMenuItem = terminalItem
     }
 
@@ -453,19 +459,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updateSessionMenus(for: vm, isRunning: isRunning)
     }
 
-    // Sessions connect to a running VM. Showing the screen is only needed when the VM is headless
     private func updateSessionMenus(for vm: VirtualMachine, isRunning running: Bool) {
         if vm.type == MacMulatorConstants.APPLE_VM {
             openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.showVMScreen", comment: "")
             openScreenSessionMenuItem?.isEnabled = running && Utils.isHeadless(vm)
-            openSSHSessionMenuItem?.isEnabled = running && vm.macAddress != nil
-            // Linux VMs have a serial console (hvc0); macOS guests have none
+            openSSHSessionMenuItem?.isEnabled = running && (vm.os == QemuConstants.OS_LINUX || vm.os == QemuConstants.OS_MAC)
             openTerminalSessionMenuItem?.isEnabled = running && vm.os == QemuConstants.OS_LINUX
         } else {
             openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.openSpiceSession", comment: "")
-            openScreenSessionMenuItem?.isEnabled = running && Utils.isHeadless(vm) && QemuUtils.isSpiceServerEnabled(vm)
-            openSSHSessionMenuItem?.isEnabled = running && QemuUtils.sshPortMapping(for: vm) != nil
-            openTerminalSessionMenuItem?.isEnabled = running && QemuUtils.isSerialConsoleExposed(vm)
+            openScreenSessionMenuItem?.isEnabled = running && Utils.isHeadless(vm) && QemuUtils.isSpiceSupported(vm)
+            openSSHSessionMenuItem?.isEnabled = running && (vm.os == QemuConstants.OS_LINUX || vm.os == QemuConstants.OS_MAC) && QemuUtils.sshPortMapping(for: vm) != nil
+            openTerminalSessionMenuItem?.isEnabled = running && vm.os == QemuConstants.OS_LINUX
         }
     }
 

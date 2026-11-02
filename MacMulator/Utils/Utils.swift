@@ -161,7 +161,8 @@ class Utils {
     /// VMs are all reached on localhost, so they must not share one. A new guest key is trusted without asking; a key
     /// that changes afterwards is still rejected.
     static func sshArguments(for vm: VirtualMachine, destination: String, port: Int32? = nil) -> [String] {
-        var args = legacySSHOptions
+        // Fail instead of leaving the terminal blank when the guest cannot be reached
+        var args = legacySSHOptions + ["-o", "ConnectTimeout=10"]
         if let knownHostsFile = sshKnownHostsFile(for: vm) {
             // ssh splits option values on spaces, and the path contains "Application Support": quote it
             args += ["-o", "UserKnownHostsFile=\"" + knownHostsFile + "\"", "-o", "StrictHostKeyChecking=accept-new"]

@@ -17,7 +17,7 @@ class QemuRunner: VirtualMachineRunner {
 
     /// Whether Qemu runs a Spice server, to show the VM or to open Spice sessions on a headless VM (see QemuUtils).
     private var spiceServerEnabled: Bool {
-        QemuUtils.isSpiceServerEnabled(managedVm)
+        QemuUtils.isSpiceSupported(managedVm)
     }
 
     /// Whether Qemu must not open a native display window: the VM is shown through Spice, or it is headless.
@@ -138,7 +138,7 @@ class QemuRunner: VirtualMachineRunner {
                     builder = builder.withManagementPort(listenPort)
                 }
             }
-            if QemuUtils.isSerialConsoleExposed(managedVm) {
+            if managedVm.os == QemuConstants.OS_LINUX {
                 // Expose the serial console on a socket, so that a Terminal session can be opened on it
                 builder = builder.withSerial("unix:" + Utils.escape(QemuUtils.serialSocketPath(forVMAt: managedVm.path)) + ",server=on,wait=off")
             }
@@ -250,6 +250,7 @@ class QemuRunner: VirtualMachineRunner {
             .withGraphics(managedVm.displayResolution)
             .withAutoBoot(true)
             .withVgaEnabled(true)
+            .withPortMappings(managedVm.portMappings)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
@@ -392,6 +393,7 @@ class QemuRunner: VirtualMachineRunner {
             .withDevice(QemuConstants.USB_TABLET)
             .withVga(videoDevice)
             .withNic(QemuConstants.NIC_VIRTIO)
+            .withPortMappings(managedVm.portMappings)
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
             .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS_DEVICE)
     }

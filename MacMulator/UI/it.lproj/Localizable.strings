@@ -320,7 +320,7 @@
 "VirtualMachineViewController.vmArchitecture" = "Architettura:";
 "VirtualMachineViewController.vmExecutionFailed" = "L'esecuzione della VM è fallita con questo errore: %@";
 "VirtualMachineViewController.vmFeatures" = "Caratteristiche Macchina Virtuale";
-"VirtualMachineViewController.vmHardDrive" = "Disco:";
+"VirtualMachineViewController.vmEngine" = "Tipo di VM:";
 "VirtualMachineViewController.vmMemory" = "Memoria:";
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmProcessors" = "Processori:";

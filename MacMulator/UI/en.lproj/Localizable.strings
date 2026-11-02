@@ -320,7 +320,7 @@
 "VirtualMachineViewController.vmArchitecture" = "Architecture:";
 "VirtualMachineViewController.vmExecutionFailed" = "VM execution failed with error: %@";
 "VirtualMachineViewController.vmFeatures" = "Virtual Machine Features";
-"VirtualMachineViewController.vmHardDrive" = "Hard drive size:";
+"VirtualMachineViewController.vmEngine" = "VM type:";
 "VirtualMachineViewController.vmMemory" = "Memory:";
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmProcessors" = "Processors:";
