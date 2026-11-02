@@ -189,7 +189,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let virtualMachine = rootController?.getVirtualMachineAt(row)
         if let vm = virtualMachine {
             let pasteboardItem = NSPasteboardItem()
-            pasteboardItem.setString(vm.displayName, forType: accountPasteboardType)
+            pasteboardItem.setString(vm.id, forType: accountPasteboardType)
             return pasteboardItem
         }
         return nil
@@ -206,8 +206,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation _: NSTableView.DropOperation) -> Bool {
         guard
             let item = info.draggingPasteboard.pasteboardItems?.first,
-            let theString = item.string(forType: accountPasteboardType),
-            let vm = rootController?.getVirtualMachine(name: theString),
+            let vmId = item.string(forType: accountPasteboardType),
+            let vm = rootController?.getVirtualMachine(id: vmId),
             let originalRow = rootController?.getIndex(of: vm)
         else { return false }
 

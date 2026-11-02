@@ -145,6 +145,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST)
         if let vm = virtualMachine {
+            if let existing = getVirtualMachine(id: vm.id), existing.path != vm.path {
+                // A copy of an already registered bundle carries the same ID as the original.
+                vm.assignNewIdForClone()
+                vm.writeToPlist()
+            }
             addVirtualMachine(vm)
             if #available(macOS 13.0, *) {
                 if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, !vm.hasLinkedDrives, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
@@ -181,6 +186,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             }
         }
         return nil
+    }
+
+    func getVirtualMachine(id: String) -> VirtualMachine? {
+        virtualMachines.first(where: { $0.id == id })
     }
 
     func getIndex(of virtualMachine: VirtualMachine) -> Int? {

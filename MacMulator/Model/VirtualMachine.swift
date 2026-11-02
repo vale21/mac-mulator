@@ -198,12 +198,13 @@ class VirtualMachine: Codable, Hashable {
         }
     }
 
+    // Identity is the immutable ID: the display name and the path change when a VM is renamed.
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
-        lhs.displayName == rhs.displayName
+        lhs.id == rhs.id
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(displayName)
+        hasher.combine(id)
     }
 
     /// Gives a freshly copied VM its own identity. Only to be used while cloning,
