@@ -85,6 +85,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
     func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: any Error) {
         print("Stopped with error: \(error)")
+        stopVM(guestStopped: true)
         releaseVirtualMachine(virtualMachine)
     }
 
