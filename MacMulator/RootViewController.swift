@@ -88,17 +88,8 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     }
 
     func deleteVMMenuBarClicked(_: Any) {
-        if let currentVm {
-            guard canDelete(currentVm) else { return }
-            if let vmIndex = getIndex(of: currentVm) {
-                _ = removeVirtualMachineAt(vmIndex)
-            }
-            listController?.refreshList()
-            if virtualMachines.isEmpty {
-                setCurrentVirtualMachine(nil)
-            } else {
-                setCurrentVirtualMachine(virtualMachines.first)
-            }
+        if let currentVm, let vmIndex = getIndex(of: currentVm) {
+            listController?.deleteVirtualMachine(vmIndex)
         }
     }
 
