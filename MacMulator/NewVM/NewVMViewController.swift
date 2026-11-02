@@ -8,6 +8,8 @@
 import Cocoa
 
 class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextViewDelegate {
+    /// The VM just created, handed over to the provisioning options by reference rather than looked up by name.
+    private var createdVM: VirtualMachine?
     @IBOutlet var essentialInformationBox: NSBox!
     @IBOutlet var vmNameLabel: NSTextField!
     @IBOutlet var vmName: NSTextField!
@@ -92,8 +94,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
             destinationController.setParentController(self)
         } else if segue.identifier == MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE {
             let destinationController = segue.destinationController as! ProvisioningOptionsViewController
-            let vm = rootController?.getVirtualMachine(name: vmName.stringValue)
-            if let vm {
+            if let vm = createdVM {
                 destinationController.setVirtualMachine(vm)
                 destinationController.setParentController(self)
             }
@@ -138,6 +139,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     func vmCreated(_ vm: VirtualMachine, performProvisioning: Bool) {
+        createdVM = vm
         rootController?.addVirtualMachine(vm)
         if performProvisioning {
             performSegue(withIdentifier: MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE, sender: self)

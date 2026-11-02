@@ -45,7 +45,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
             height: resolution[1]
         )]
 
-        virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(path: Utils.findMainDrive(vm.drives)!.path)]
+        virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(drive: Utils.findMainDrive(vm.drives)!)]
 
         // Resolve bridged network interface identifier to pass as String?
         let selectedBridgedInterfaceIdentifier: String? = {

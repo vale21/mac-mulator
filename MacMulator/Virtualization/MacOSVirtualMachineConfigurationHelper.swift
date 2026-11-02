@@ -25,9 +25,9 @@ import Virtualization
             return graphicsConfiguration
         }
 
-        static func createBlockDeviceConfiguration(path: String) -> VZVirtioBlockDeviceConfiguration {
+        static func createBlockDeviceConfiguration(drive: VirtualDrive) -> VZVirtioBlockDeviceConfiguration {
             do {
-                let diskImageAttachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: false)
+                let diskImageAttachment = try VirtualizationFrameworkDiskImageManager.createDiskAttachment(for: drive)
                 let disk = VZVirtioBlockDeviceConfiguration(attachment: diskImageAttachment)
                 return disk
             } catch {

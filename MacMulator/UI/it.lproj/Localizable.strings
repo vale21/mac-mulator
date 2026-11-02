@@ -27,6 +27,7 @@
 "ConsoleViewController.loading" = "Caricamento...";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "ConvertVMViewController.convertingVM" = "Conversione della VM in corso. Attendere...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Impossibile convertire la macchina virtuale in un clone completo finché gli snapshot contengono dischi collegati o potrebbero dipenderne. Elimina prima gli snapshot.";
 "CreateDiskFileViewController.creatingDisk" = "Creo il nuovo disco...";
 "CreateDiskFileViewController.updatingDisk" = "Aggiorno il disco %@...";
 "CreateVMFileViewController.creatingVM" = "Creo la Macchina Virtuale...";
@@ -222,7 +223,14 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (premi ⌃⌥ per rilasciare il mouse)";
 "QemuSpiceViewerViewController.noMetal" = "Metal non è disponibile su questo Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossibile avviare il client SPICE";
-"RootViewController.cloneOf" = "Clone di %@";
+"RootViewController.fullCloneOf" = "Clone completo di %@";
+"RootViewController.linkedCloneOf" = "Clone collegato di %@";
+"RootViewController.convertToTemplate" = "Stai convertendo questa VM in un template.\nUn template è una VM di base in sola lettura, che puoi usare per creare rapidamente nuove VM.\n\nL'operazione è irreversibile: il template non potrà più essere avviato. Per usarlo, creane un clone:\n- Clone completo: una copia completa e indipendente della VM.\n- Clone collegato: una VM leggera che salva solo le proprie modifiche sopra il disco del template.";
+"RootViewController.convertToTemplateConfirm" = "Vuoi continuare?";
+"RootViewController.convertToTemplateRawDrives" = "I seguenti dischi sono in formato RAW e saranno convertiti in formato %@:\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "I seguenti dischi sono rimovibili e saranno scollegati dalla VM:\n%@";
+"RootViewController.convertToTemplateSnapshotsOne" = "%d istantanea verrà eliminata.";
+"RootViewController.convertToTemplateSnapshotsOther" = "%d istantanee verranno eliminate.";
 "RootViewController.forciblyClosing" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "RootViewController.vmConvertedToApple" = "La VM è stata convertita con successo al formato Apple.";
 "RootViewController.vmConvertedToQemu" = "La VM è stata convertita con successo al formato QEMU.";
@@ -280,6 +288,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM ripristinata dall'istantanea con successo.";
 "VirtualMachineContainerViewController.vmExecutionError" = "L'esecuzione della VM è fallita con errore: %@";
 "VirtualMachineListViewController.clone" = "Crea clone";
+"VirtualMachineListViewController.convertToTemplate" = "Converti in template di VM";
 "VirtualMachineListViewController.createSnapshot" = "Crea nuova istantanea";
 "VirtualMachineListViewController.delete" = "Elimina";
 "VirtualMachineListViewController.edit" = "Configura";
@@ -316,3 +325,27 @@
 "VirtualMachineViewController.vmPaused" = "VM in pausa";
 "VirtualMachineViewController.vmProcessors" = "Processori:";
 "VirtualMachineViewController.vmType" = "Tipo:";
+
+"CloneVMViewController.cloneType" = "Tipo di clone:";
+"CloneVMViewController.fullClone" = "Clone completo";
+"CloneVMViewController.linkedClone" = "Clone collegato";
+"CloneVMViewController.fullCloneDescription" = "Un clone completo è una copia totalmente indipendente del template. Occupa più spazio su disco, ma continua a funzionare anche se il template originale viene spostato o eliminato.";
+"CloneVMViewController.linkedCloneDescription" = "Un clone collegato condivide i dischi del template e salva solo le differenze. Viene creato quasi istantaneamente e occupa pochissimo spazio, ma richiede che il template originale rimanga disponibile.";
+"CloneVMViewController.clone" = "Clona";
+"CloneVMViewController.cancel" = "Annulla";
+
+"DiskImageManager.convertLinkedFailed" = "Le immagini disco di un clone collegato non possono essere convertite, perché dipendono dal template. Crea invece un clone completo.";
+"DiskImageManager.linkedNotSupported" = "I cloni collegati non sono supportati per questo tipo di macchina virtuale.";
+"DiskImageManager.createLinkedFailed" = "Impossibile creare il disco collegato: %@";
+"RootViewController.linkedCloneFailed" = "Creazione del clone collegato fallita: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "I dischi del template non sono in un formato che supporti i cloni collegati.";
+"NewDiskViewController.linkedCowDisabled" = "Il formato di un disco di un clone collegato non può essere cambiato, perché dipende dal disco del template.";
+"RootViewController.templateHasLinkedClones" = "Il template \"%@\" non può essere eliminato perché ha dei cloni collegati che ne dipendono:\n\n%@\n\nElimina prima i cloni collegati o convertili in cloni completi.";
+"VirtualMachineListViewController.convertToFullClone" = "Converti in clone completo";
+"RootViewController.convertToFullClone" = "Questa VM è un clone collegato. I suoi dischi verranno uniti a quelli del template, rendendo la VM indipendente dal template.\n\nL'operazione può richiedere del tempo e necessita di spazio su disco pari alla dimensione completa dei dischi. Vuoi continuare?";
+"RootViewController.convertToFullCloneFailed" = "Impossibile convertire la VM in un clone completo: %@";
+"DiskImageManager.flattenNotSupported" = "L'unione dei dischi collegati non è supportata per questo tipo di macchina virtuale.";
+"DiskImageManager.flattenFailed" = "Impossibile unire il disco collegato: %@";
+"RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";
+"RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";
+"VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";

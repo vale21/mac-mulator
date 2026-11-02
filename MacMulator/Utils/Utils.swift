@@ -437,6 +437,34 @@ class Utils {
         return nvrams[0]
     }
 
+    static func findRawDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        var hdds: [VirtualDrive] = []
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME, drive.format == QemuConstants.FORMAT_RAW {
+                hdds.append(drive)
+            }
+        }
+
+        return hdds
+    }
+
+    static func findExternalDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        var hdds: [VirtualDrive] = []
+        for drive: VirtualDrive in drives {
+            if drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
+                hdds.append(drive)
+            }
+        }
+
+        return hdds
+    }
+
+    /// Firmware drives that are re-created on VM start. EFI variable stores are excluded because they hold the guest's persisted boot entries.
+    static func findFirmwareDrives(_ drives: [VirtualDrive]) -> [VirtualDrive] {
+        let firmwareTypes = [QemuConstants.MEDIATYPE_EFI, QemuConstants.MEDIATYPE_EFI_SECURE, QemuConstants.MEDIATYPE_OPENCORE]
+        return drives.filter { firmwareTypes.contains($0.mediaType) }
+    }
+
     static func getParentDir(_ path: String) -> String {
         guard let lastSlash = path.lastIndex(where: { char in char == "/" }) else { return path }
         return path.substring(to: lastSlash)
@@ -610,6 +638,24 @@ class Utils {
 
     static func getIconForSubType(_ os: String, _ subtype: String?) -> String {
         getStringValueForSubType(os, subtype, 10) ?? QemuConstants.OTHER
+    }
+
+    static func getIconWithOverlay(_ backgroundName: String, _ overlayName: String) -> NSImage? {
+        guard let background = NSImage(named: NSImage.Name(backgroundName)),
+              let overlay = NSImage(named: NSImage.Name(overlayName))
+        else {
+            return nil
+        }
+
+        let newImage = NSImage(size: background.size)
+        newImage.lockFocus()
+        var newImageRect: CGRect = .zero
+        newImageRect.size = newImage.size
+        background.draw(in: newImageRect)
+        overlay.draw(in: newImageRect)
+        newImage.unlockFocus()
+
+        return newImage
     }
 
     static func getArchitectureForSubType(_ os: String, _ subtype: String?) -> String {
@@ -828,7 +874,7 @@ class Utils {
 
     static func isAsifSupported(_ vm: VirtualMachine) -> Bool {
         if #available(macOS 26.0, *) {
-            vm.type == MacMulatorConstants.APPLE_VM
+            vm.type == MacMulatorConstants.APPLE_VM || vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM
         } else {
             false
         }
@@ -836,6 +882,50 @@ class Utils {
 
     static func areLiveSnapshotsSupported(_ vm: VirtualMachine) -> Bool {
         isPauseSupported(vm)
+    }
+
+    static func isVMTemplate(_ vm: VirtualMachine) -> Bool {
+        vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM || vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM
+    }
+
+    /// Whether the linked drives of the VM can be merged with the template ones: QEMU relies on qemu-img,
+    /// while Apple VMs need to attach ASIF images, which is only possible outside of the App Store sandbox.
+    static func isFullCloneConversionSupported(_ vm: VirtualMachine) -> Bool {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            return true
+        }
+        #if !APPSTORE && arch(arm64)
+            if #available(macOS 27.0, *) {
+                return vm.type == MacMulatorConstants.APPLE_VM
+            }
+        #endif
+        return false
+    }
+
+    /// Apple VMs can only be converted to templates starting from macOS 27.
+    static func isTemplateConversionSupported(_ vm: VirtualMachine) -> Bool {
+        if vm.type == MacMulatorConstants.QEMU_VM {
+            return true
+        }
+        if vm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+            return true
+        }
+        return false
+    }
+
+    /// Layers a drive depends on, base first, ending with the drive itself. A linked clone converted to a template can
+    /// be the backing drive of other linked clones, so the chain is followed through the VM bundles of the layers.
+    static func backingChain(endingAt drivePath: String) -> [String] {
+        let folder = (drivePath as NSString).deletingLastPathComponent
+        if let data = FileManager.default.contents(atPath: folder + "/" + MacMulatorConstants.INFO_PLIST),
+           let vm = try? PropertyListDecoder().decode(VirtualMachine.self, from: data)
+        {
+            VirtualMachine.setupPaths(vm, folder)
+            if let parentPath = vm.drives.first(where: { $0.path == drivePath })?.backingPath, parentPath != drivePath {
+                return backingChain(endingAt: parentPath) + [drivePath]
+            }
+        }
+        return [drivePath]
     }
 
     static func isVMProvisioningSupported(_ vm: VirtualMachine) -> Bool {

@@ -81,6 +81,13 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
                         }
                     }
 
+                    if newVirtualDrive.isLinked {
+                        // Overlay layers depend on the format of their template drive, so they cannot be converted.
+                        useCow.isEnabled = false
+                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.linkedCowDisabled", comment: "")
+                        useCow.toolTip = NSLocalizedString("NewDiskViewController.linkedCowDisabled", comment: "")
+                    }
+
                     if mode == Mode.ADD {
                         titleField.stringValue = NSLocalizedString("NewDiskViewController.createDisk", comment: "")
                     } else {

@@ -27,6 +27,7 @@
 "ConsoleViewController.loading" = "Wird geladen...";
 "ConsoleViewController.vmNotRunning" = "Die aktuelle VM wird nicht ausgeführt";
 "ConvertVMViewController.convertingVM" = "VM wird konvertiert. Bitte warten...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Die VM kann nicht in einen vollständigen Klon umgewandelt werden, solange Snapshots verknüpfte Laufwerke enthalten oder davon abhängen könnten. Lösche zuerst die Snapshots.";
 "CreateDiskFileViewController.creatingDisk" = "Neue Festplatte wird erstellt...";
 "CreateDiskFileViewController.updatingDisk" = "Festplatte %@ wird aktualisiert...";
 "CreateVMFileViewController.creatingVM" = "Virtuelle Maschine wird erstellt...";
@@ -222,7 +223,14 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (⌃⌥ drücken, um die Maus freizugeben)";
 "QemuSpiceViewerViewController.noMetal" = "Metal ist auf diesem Mac nicht verfügbar";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Der SPICE-Client konnte nicht gestartet werden";
-"RootViewController.cloneOf" = "Klon von %@";
+"RootViewController.fullCloneOf" = "Vollständiger Klon von %@";
+"RootViewController.linkedCloneOf" = "Verknüpfter Klon von %@";
+"RootViewController.convertToTemplate" = "Du wandelst diese VM in eine Vorlage um.\nEine Vorlage ist eine schreibgeschützte Basis-VM, mit der du schnell neue VMs erstellen kannst.\n\nDies kann nicht rückgängig gemacht werden: Die Vorlage kann nicht mehr gestartet werden. Um sie zu verwenden, erstelle einen Klon:\n- Vollständiger Klon: eine unabhängige, vollständige Kopie der VM.\n- Verknüpfter Klon: eine schlanke VM, die nur ihre Änderungen auf Basis der Vorlagen-Festplatte speichert.";
+"RootViewController.convertToTemplateConfirm" = "Möchtest du fortfahren?";
+"RootViewController.convertToTemplateRawDrives" = "Die folgenden Laufwerke liegen im RAW-Format vor und werden in das %@-Format konvertiert:\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "Die folgenden Laufwerke sind Wechseldatenträger und werden von der VM getrennt:\n%@";
+"RootViewController.convertToTemplateSnapshotsOne" = "%d Snapshot wird gelöscht.";
+"RootViewController.convertToTemplateSnapshotsOther" = "%d Snapshots werden gelöscht.";
 "RootViewController.forciblyClosing" = "Es sind VMs aktiv.\nWenn du MacMulator schließt, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "RootViewController.vmConvertedToApple" = "Die VM wurde erfolgreich ins Apple-Format konvertiert.";
 "RootViewController.vmConvertedToQemu" = "Die VM wurde erfolgreich ins QEMU-Format konvertiert.";
@@ -280,6 +288,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM erfolgreich aus dem Snapshot wiederhergestellt.";
 "VirtualMachineContainerViewController.vmExecutionError" = "VM-Ausführung fehlgeschlagen mit Fehler: %@";
 "VirtualMachineListViewController.clone" = "Klonen";
+"VirtualMachineListViewController.convertToTemplate" = "In VM-Vorlage umwandeln";
 "VirtualMachineListViewController.createSnapshot" = "Snapshot erstellen";
 "VirtualMachineListViewController.delete" = "Löschen";
 "VirtualMachineListViewController.edit" = "Konfigurieren";
@@ -316,3 +325,27 @@
 "VirtualMachineViewController.vmPaused" = "VM pausiert";
 "VirtualMachineViewController.vmProcessors" = "Prozessoren:";
 "VirtualMachineViewController.vmType" = "Typ:";
+
+"CloneVMViewController.cloneType" = "Klontyp:";
+"CloneVMViewController.fullClone" = "Vollständiger Klon";
+"CloneVMViewController.linkedClone" = "Verknüpfter Klon";
+"CloneVMViewController.fullCloneDescription" = "Ein vollständiger Klon ist eine völlig unabhängige Kopie der Vorlage. Er benötigt mehr Speicherplatz, funktioniert aber auch dann weiter, wenn die ursprüngliche Vorlage verschoben oder gelöscht wird.";
+"CloneVMViewController.linkedCloneDescription" = "Ein verknüpfter Klon teilt sich die Festplatten der Vorlage und speichert nur die Unterschiede. Er wird nahezu sofort erstellt und braucht sehr wenig Speicherplatz, setzt aber voraus, dass die ursprüngliche Vorlage verfügbar bleibt.";
+"CloneVMViewController.clone" = "Klonen";
+"CloneVMViewController.cancel" = "Abbrechen";
+
+"DiskImageManager.convertLinkedFailed" = "Die Disk-Images eines verknüpften Klons können nicht konvertiert werden, da sie von der Vorlage abhängen. Erstellen Sie stattdessen einen vollständigen Klon.";
+"DiskImageManager.linkedNotSupported" = "Verknüpfte Klone werden für diese Art von virtueller Maschine nicht unterstützt.";
+"DiskImageManager.createLinkedFailed" = "Das verknüpfte Laufwerk konnte nicht erstellt werden: %@";
+"RootViewController.linkedCloneFailed" = "Erstellen des verknüpften Klons fehlgeschlagen: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "Die Laufwerke der Vorlage haben kein Format, das verknüpfte Klone unterstützt.";
+"NewDiskViewController.linkedCowDisabled" = "Das Format eines Laufwerks eines verknüpften Klons kann nicht geändert werden, da es vom Laufwerk der Vorlage abhängt.";
+"RootViewController.templateHasLinkedClones" = "Die Vorlage \"%@\" kann nicht gelöscht werden, da verknüpfte Klone von ihr abhängen:\n\n%@\n\nLösche zuerst die verknüpften Klone oder wandle sie in vollständige Klone um.";
+"VirtualMachineListViewController.convertToFullClone" = "In vollständigen Klon umwandeln";
+"RootViewController.convertToFullClone" = "Diese VM ist ein verknüpfter Klon. Ihre Laufwerke werden mit denen der Vorlage zusammengeführt, wodurch die VM unabhängig von der Vorlage wird.\n\nDies kann einige Zeit dauern und benötigt so viel Speicherplatz wie die volle Größe der Laufwerke. Möchtest du fortfahren?";
+"RootViewController.convertToFullCloneFailed" = "Die VM konnte nicht in einen vollständigen Klon umgewandelt werden: %@";
+"DiskImageManager.flattenNotSupported" = "Das Zusammenführen verknüpfter Laufwerke wird für diese Art von virtueller Maschine nicht unterstützt.";
+"DiskImageManager.flattenFailed" = "Das verknüpfte Laufwerk konnte nicht zusammengeführt werden: %@";
+"RootViewController.renameFailed" = "Der Ordner der virtuellen Maschine konnte nicht umbenannt werden: %@";
+"RootViewController.cloneRunningVM" = "Eine laufende VM kann nicht geklont werden. Stoppe sie zuerst. Eine pausierte VM kann geklont werden.";
+"VirtualMachineListViewController.renameDuplicate" = "Eine virtuelle Maschine mit dem Namen \"%@\" existiert bereits.";
