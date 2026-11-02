@@ -49,7 +49,12 @@ class EditVMViewController: NSTabViewController {
             snapshots.setVmRunner(vmRunner)
         }
 
-        if vm.type == MacMulatorConstants.APPLE_VM {
+        if vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[6])
+            removeTabViewItem(tabViewItems[5])
+            removeTabViewItem(tabViewItems[4])
+            removeTabViewItem(tabViewItems[2])
+        } else if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[2])
@@ -57,6 +62,10 @@ class EditVMViewController: NSTabViewController {
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
+        } else if vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[6])
+            removeTabViewItem(tabViewItems[5])
+            removeTabViewItem(tabViewItems[3])
         } else {
             removeTabViewItem(tabViewItems[3])
         }
@@ -69,6 +78,8 @@ class EditVMViewController: NSTabViewController {
     override func viewDidDisappear() {
         if let virtualMachine {
             virtualMachine.writeToPlist()
+            // The folder of the VM follows its name.
+            (NSApp.delegate as? AppDelegate)?.rootController?.renameVMFolderToMatchName(virtualMachine)
         }
     }
 

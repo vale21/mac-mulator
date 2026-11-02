@@ -52,6 +52,7 @@ class MacMulatorConstants {
     static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
     static let SHOW_PROVISIONING_OPTIONS_SEGUE = "showProvisioningOptionsSegue"
+    static let SHOW_CLONE_VIEW_SEGUE = "showCloneViewSegue"
 
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
@@ -64,6 +65,8 @@ class MacMulatorConstants {
 
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
+    static let QEMU_TEMPLATE_VM = "qemu-tpl"
+    static let APPLE_TEMPLATE_VM = "apple-tpl"
 
     static let mainMenuSender = "MainMenu"
 }

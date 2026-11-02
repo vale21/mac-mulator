@@ -29,6 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var exportToParallelsMenuItem: NSMenuItem!
     @IBOutlet var convertToQemuMenuItem: NSMenuItem!
     @IBOutlet var convertToAppleMenuItem: NSMenuItem!
+    @IBOutlet var convertToTemplateMenuItem: NSMenuItem!
+    @IBOutlet var convertToFullCloneMenuItem: NSMenuItem!
     @IBOutlet var usbDevicesMenuItem: NSMenuItem!
     @IBOutlet var usbAttachImageMenuItem: NSMenuItem!
     @IBOutlet var usbConfigureMenuItem: NSMenuItem!
@@ -36,6 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var snapshotCreateMenuItem: NSMenuItem!
     @IBOutlet var snapshotsViewRestoreMenuItem: NSMenuItem!
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
+    @IBOutlet var deleteVMMenuItem: NSMenuItem!
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
@@ -269,6 +272,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @IBAction func convertToTemplateMenuBarClicked(_: Any) {
+        if #available(macOS 13.0, *) {
+            rootController?.convertToTemplateMenuBarClicked(MacMulatorConstants.mainMenuSender)
+            refreshVMMenus()
+        }
+    }
+
+    @IBAction func convertToFullCloneMenuBarClicked(_: Any) {
+        rootController?.convertToFullCloneMenuBarClicked(MacMulatorConstants.mainMenuSender)
+        refreshVMMenus()
+    }
+
     @IBAction func startVMMenuBarClicked(_: Any) {
         rootController?.startVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
@@ -294,6 +309,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func showConsolemenuBarClicked(_: Any) {
         rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    @IBAction func deleteVMMenuBarClicked(_: Any) {
+        rootController?.deleteVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
 
     @IBAction func pauseVMMenuBarClicked(_: Any) {
@@ -332,6 +351,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 exportMenuItem.isEnabled = false
                 convertToQemuMenuItem.isEnabled = false
                 convertToAppleMenuItem.isEnabled = false
+                convertToFullCloneMenuItem.isHidden = false
+                convertToFullCloneMenuItem.isEnabled = false
                 snapshotsMenuItem.isEnabled = false
                 snapshotCreateMenuItem.isEnabled = false
                 snapshotsViewRestoreMenuItem.isEnabled = false
@@ -339,86 +360,120 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 showConsoleOutputmenuItem.isEnabled = false
             } else {
                 if let vm = rootController.currentVm {
-                    let canConvert = !rootController.isCurrentVMRunning()
-                    cloneVMMemuItem.isEnabled = true
-                    showVMInFinderMenuItem.isEnabled = true
-                    settingsMenuItem.isEnabled = true
-                    snapshotsMenuItem.isEnabled = true
-                    snapshotCreateMenuItem.isEnabled = true
-                    snapshotsViewRestoreMenuItem.isEnabled = true
-
-                    if rootController.isCurrentVMRunning() {
-                        pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
-                        startVMMenuItem.isEnabled = false
-                        #if arch(arm64)
-                            startVMInRecoveryMenuItem.isEnabled = false
-                        #endif
-                        stopVMMenuItem.isEnabled = true
-                    } else {
+                    if Utils.isVMTemplate(vm) {
                         pauseVMMenuItem.isEnabled = false
-                        startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
-                        #if arch(arm64)
-                            startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
-                        #endif
+                        startVMMenuItem.isEnabled = false
+                        startVMInRecoveryMenuItem.isEnabled = false
                         stopVMMenuItem.isEnabled = false
-                    }
+                        settingsMenuItem.isEnabled = true
+                        cloneVMMemuItem.isEnabled = true
+                        showVMInFinderMenuItem.isEnabled = true
+                        exportMenuItem.isEnabled = false
+                        convertToQemuMenuItem.isEnabled = false
+                        convertToAppleMenuItem.isEnabled = false
+                        convertToTemplateMenuItem.isEnabled = false
+                        convertToFullCloneMenuItem.isHidden = false
+                        convertToFullCloneMenuItem.isEnabled = false
+                        snapshotsMenuItem.isEnabled = false
+                        snapshotCreateMenuItem.isEnabled = false
+                        snapshotsViewRestoreMenuItem.isEnabled = false
+                        usbDevicesMenuItem.isEnabled = false
+                        showConsoleOutputmenuItem.isEnabled = false
+                    } else {
+                        let canConvert = !rootController.isCurrentVMRunning()
+                        var appleTemplatesSupported = false
+                        if #available(macOS 27.0, *) {
+                            appleTemplatesSupported = true
+                        }
+                        convertToTemplateMenuItem.isEnabled = canConvert && !rootController.isVMPaused(vm) && (vm.type == MacMulatorConstants.QEMU_VM || (vm.type == MacMulatorConstants.APPLE_VM && appleTemplatesSupported))
+                        // Hidden when merging drives can never work for this kind of VM (e.g. Apple VMs in the App Store version).
+                        convertToFullCloneMenuItem.isHidden = !Utils.isFullCloneConversionSupported(vm)
+                        convertToFullCloneMenuItem.isEnabled = canConvert && vm.hasLinkedDrives
+                        // A paused VM can be cloned, a running one cannot.
+                        cloneVMMemuItem.isEnabled = !rootController.isCurrentVMRunning()
+                        showVMInFinderMenuItem.isEnabled = true
+                        settingsMenuItem.isEnabled = true
+                        snapshotsMenuItem.isEnabled = true
+                        snapshotCreateMenuItem.isEnabled = true
+                        snapshotsViewRestoreMenuItem.isEnabled = true
 
-                    #if arch(arm64)
-                        importFromParallelsMenuItem.isEnabled = true
-                        if Utils.isFullFeaturedMacOSVM(vm) {
-                            exportMenuItem.isEnabled = true
-                            exportToParallelsMenuItem.isEnabled = true
+                        if rootController.isCurrentVMRunning() {
+                            pauseVMMenuItem.isEnabled = Utils.isPauseSupported(vm)
+                            startVMMenuItem.isEnabled = false
+                            #if arch(arm64)
+                                startVMInRecoveryMenuItem.isEnabled = false
+                            #endif
+                            stopVMMenuItem.isEnabled = true
                         } else {
+                            pauseVMMenuItem.isEnabled = false
+                            startVMMenuItem.isEnabled = Utils.isVMAvailable(vm)
+                            #if arch(arm64)
+                                startVMInRecoveryMenuItem.isEnabled = Utils.isFullFeaturedMacOSVM(vm)
+                            #endif
+                            stopVMMenuItem.isEnabled = false
+                        }
+
+                        #if arch(arm64)
+                            importFromParallelsMenuItem.isEnabled = true
+                            if Utils.isFullFeaturedMacOSVM(vm) {
+                                exportMenuItem.isEnabled = true
+                                exportToParallelsMenuItem.isEnabled = true
+                            } else {
+                                exportMenuItem.isEnabled = false
+                                exportToParallelsMenuItem.isEnabled = false
+                            }
+                        #else
                             exportMenuItem.isEnabled = false
                             exportToParallelsMenuItem.isEnabled = false
-                        }
-                    #else
-                        exportMenuItem.isEnabled = false
-                        exportToParallelsMenuItem.isEnabled = false
-                        importFromParallelsMenuItem.isEnabled = true
-                    #endif
+                            importFromParallelsMenuItem.isEnabled = true
+                        #endif
 
-                    if vm.type == MacMulatorConstants.APPLE_VM {
-                        convertToQemuMenuItem.isEnabled = canConvert && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
-                        convertToAppleMenuItem.isEnabled = false
+                        if vm.type == MacMulatorConstants.APPLE_VM {
+                            convertToQemuMenuItem.isEnabled = canConvert && !vm.hasLinkedDrives && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)
+                            convertToAppleMenuItem.isEnabled = false
 
-                        var usbDrives: [String] = []
-                        for drive in vm.drives {
-                            if drive.mediaType == QemuConstants.MEDIATYPE_USB {
-                                usbDrives.append(drive.path)
-                            }
-                        }
-
-                        if #available(macOS 15.0, *) {
-                            usbDevicesMenuItem.isEnabled = true
-                            if usbDrives.count > 0 {
-                                var detachMenuItem: NSMenuItem
-                                if !usbDevicesMenuItem.submenu!.items.contains(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
-                                    detachMenuItem = NSMenuItem(title: NSLocalizedString("AppDelegate.detachImage", comment: ""), action: nil, keyEquivalent: "")
-                                    detachMenuItem.submenu = NSMenu(title: NSLocalizedString("AppDelegate.detachImage", comment: ""))
-                                    usbDevicesMenuItem.submenu?.insertItem(detachMenuItem, at: usbDevicesMenuItem.submenu!.index(of: usbAttachImageMenuItem) + 1)
-                                } else {
-                                    detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") })!
+                            var usbDrives: [String] = []
+                            for drive in vm.drives {
+                                if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                                    usbDrives.append(drive.path)
                                 }
+                            }
 
-                                detachMenuItem.submenu?.removeAllItems()
-                                for title in usbDrives {
-                                    if !detachMenuItem.submenu!.items.contains(where: { item in item.title == title }) {
-                                        detachMenuItem.submenu?.addItem(NSMenuItem(title: title, action: #selector(detachUSBImageMenuBarClicked(_:)), keyEquivalent: ""))
+                            if #available(macOS 15.0, *) {
+                                usbDevicesMenuItem.isEnabled = true
+                                if usbDrives.count > 0 {
+                                    var detachMenuItem: NSMenuItem
+                                    if !usbDevicesMenuItem.submenu!.items.contains(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
+                                        detachMenuItem = NSMenuItem(title: NSLocalizedString("AppDelegate.detachImage", comment: ""), action: nil, keyEquivalent: "")
+                                        detachMenuItem.submenu = NSMenu(title: NSLocalizedString("AppDelegate.detachImage", comment: ""))
+                                        usbDevicesMenuItem.submenu?.insertItem(detachMenuItem, at: usbDevicesMenuItem.submenu!.index(of: usbAttachImageMenuItem) + 1)
+                                    } else {
+                                        detachMenuItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") })!
+                                    }
+
+                                    detachMenuItem.submenu?.removeAllItems()
+                                    for title in usbDrives {
+                                        if !detachMenuItem.submenu!.items.contains(where: { item in item.title == title }) {
+                                            detachMenuItem.submenu?.addItem(NSMenuItem(title: title, action: #selector(detachUSBImageMenuBarClicked(_:)), keyEquivalent: ""))
+                                        }
+                                    }
+                                } else {
+                                    if let detachItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
+                                        usbDevicesMenuItem.submenu?.removeItem(detachItem)
                                     }
                                 }
                             } else {
-                                if let detachItem = usbDevicesMenuItem.submenu!.items.first(where: { item in item.title == NSLocalizedString("AppDelegate.detachImage", comment: "") }) {
-                                    usbDevicesMenuItem.submenu?.removeItem(detachItem)
-                                }
+                                usbDevicesMenuItem.isEnabled = false
                             }
+                        } else if vm.type == MacMulatorConstants.QEMU_VM {
+                            convertToQemuMenuItem.isEnabled = false
+                            convertToAppleMenuItem.isEnabled = canConvert && !vm.hasLinkedDrives && vm.os == QemuConstants.OS_LINUX
+                            usbDevicesMenuItem.isEnabled = false
                         } else {
+                            convertToQemuMenuItem.isEnabled = false
+                            convertToAppleMenuItem.isEnabled = false
                             usbDevicesMenuItem.isEnabled = false
                         }
-                    } else {
-                        convertToQemuMenuItem.isEnabled = false
-                        convertToAppleMenuItem.isEnabled = canConvert && vm.os == QemuConstants.OS_LINUX
-                        usbDevicesMenuItem.isEnabled = false
                     }
                 }
             }
@@ -562,6 +617,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         let userDefaults = UserDefaults.standard
         userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    /// Replaces the path of a saved VM whose folder has been renamed.
+    func replaceSavedVM(_ oldPath: String, with newPath: String) {
+        let oldPath = Utils.unescape(oldPath)
+        if let index = savedVMs?.firstIndex(of: oldPath) {
+            savedVMs?[index] = Utils.unescape(newPath)
+        } else {
+            addSavedVM(newPath)
+        }
+        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
     }
 
     func removeSavedVM(_ savedVM: String) {

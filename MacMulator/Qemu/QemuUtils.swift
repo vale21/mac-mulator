@@ -294,6 +294,18 @@ class QemuUtils {
 
     static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let fileManager = FileManager.default
+        // Templates drop the OpenCore drive record along with its image, so register it again for QemuRunner.
+        if !virtualMachine.containsVirtualDrive(virtualMachine.path + "/opencore-0.img") {
+            let openCore = VirtualDrive(
+                path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
+                size: 0
+            )
+            virtualMachine.addVirtualDrive(openCore)
+            virtualMachine.writeToPlist()
+        }
         if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
             try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
         }

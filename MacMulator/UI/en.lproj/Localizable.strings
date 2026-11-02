@@ -23,6 +23,7 @@
 "ConsoleViewController.loading" = "Loading...";
 "ConsoleViewController.vmNotRunning" = "Current VM is not running";
 "ConvertVMViewController.convertingVM" = "Converting VM. Please wait...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Cannot convert to a full clone while snapshots contain or may depend on linked disks. Delete the snapshots first.";
 "CreateDiskFileViewController.creatingDisk" = "Creating new disk...";
 "CreateDiskFileViewController.updatingDisk" = "Updating disk %@...";
 "CreateVMFileViewController.creatingVM" = "Creating Virtual Machine...";
@@ -216,7 +217,12 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (press ⌃⌥ to release the mouse)";
 "QemuSpiceViewerViewController.noMetal" = "Metal is not available on this Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Unable to start the SPICE client";
-"RootViewController.cloneOf" = "Clone of %@";
+"RootViewController.fullCloneOf" = "Full clone of %@";
+"RootViewController.linkedCloneOf" = "Linked clone of %@";
+"RootViewController.convertToTemplate" = "You are converting this VM to a template.\nA template is a read-only base VM you can use to quickly create new VMs.\n\nThis cannot be undone: the template can no longer be run, and all snapshots will be deleted. To use it, create a clone:\n- Full clone: an independent, complete copy of the VM.\n- Linked clone: a lightweight VM that stores only its changes on top of the template disk.";
+"RootViewController.convertToTemplateConfirm" = "Do you want to continue?";
+"RootViewController.convertToTemplateRawDrives" = "The following drives are in RAW format and will be converted to %@ format:\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "The following drives are removable and will be detached from the VM:\n%@";
 "RootViewController.forciblyClosing" = "You have running VMs.\nClosing MacMulator will forcibly kill any running VM.\nIt is strogly suggested to shut them down gracefully using the guest OS shut down procedure, or you might loose your unsaved work.\n\nDo you want to continue?";
 "RootViewController.vmConvertedToApple" = "The VM was successfully converted to Apple format.";
 "RootViewController.vmConvertedToQemu" = "The VM was successfully converted to QEMU format.";
@@ -266,6 +272,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM successfully restored from snasphot.";
 "VirtualMachineContainerViewController.vmExecutionError" = "VM execution failed with error: %@";
 "VirtualMachineListViewController.clone" = "Clone";
+"VirtualMachineListViewController.convertToTemplate" = "Convert to VM template";
 "VirtualMachineListViewController.createSnapshot" = "Create new snapshot";
 "VirtualMachineListViewController.delete" = "Delete";
 "VirtualMachineListViewController.edit" = "Configure";
@@ -302,3 +309,27 @@
 "VirtualMachineViewController.vmPaused" = "VM paused";
 "VirtualMachineViewController.vmProcessors" = "Processors:";
 "VirtualMachineViewController.vmType" = "Type:";
+
+"CloneVMViewController.cloneType" = "Clone type:";
+"CloneVMViewController.fullClone" = "Full clone";
+"CloneVMViewController.linkedClone" = "Linked clone";
+"CloneVMViewController.fullCloneDescription" = "A full clone is a completely independent copy of the template. It uses more disk space, but keeps working even if the original template is moved or deleted.";
+"CloneVMViewController.linkedCloneDescription" = "A linked clone shares the template's disks and only stores the differences. It is created almost instantly and uses very little disk space, but requires the original template to remain available.";
+"CloneVMViewController.clone" = "Clone";
+"CloneVMViewController.cancel" = "Cancel";
+
+"DiskImageManager.convertLinkedFailed" = "Disk images cannot be converted for a linked clone, since they depend on the template. Create a full clone instead.";
+"DiskImageManager.linkedNotSupported" = "Linked clones are not supported for this kind of virtual machine.";
+"DiskImageManager.createLinkedFailed" = "Unable to create the linked disk: %@";
+"RootViewController.linkedCloneFailed" = "Linked clone creation failed: %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "The template drives are not in a format that supports linked clones.";
+"NewDiskViewController.linkedCowDisabled" = "The format of a linked clone drive cannot be changed, since it depends on the template drive.";
+"RootViewController.templateHasLinkedClones" = "Template \"%@\" cannot be deleted because it has linked clones depending on it:\n\n%@\n\nDelete the linked clones or convert them to full clones first.";
+"VirtualMachineListViewController.convertToFullClone" = "Convert to full clone";
+"RootViewController.convertToFullClone" = "This VM is a linked clone. Its drives will be merged with the template ones, making the VM independent from the template.\n\nThis may take a while and requires as much disk space as the full size of the drives. Do you want to continue?";
+"RootViewController.convertToFullCloneFailed" = "Unable to convert the VM to a full clone: %@";
+"DiskImageManager.flattenNotSupported" = "Flattening linked drives is not supported for this kind of virtual machine.";
+"DiskImageManager.flattenFailed" = "Unable to flatten the linked disk: %@";
+"RootViewController.renameFailed" = "Unable to rename the virtual machine folder: %@";
+"RootViewController.cloneRunningVM" = "A running VM cannot be cloned. Stop it first. A paused VM can be cloned.";
+"VirtualMachineListViewController.renameDuplicate" = "A virtual machine named \"%@\" already exists.";

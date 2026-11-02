@@ -23,6 +23,7 @@
 "ConsoleViewController.loading" = "Chargement...";
 "ConsoleViewController.vmNotRunning" = "La machine virtuelle actuelle n’est pas en cours d’exécution";
 "ConvertVMViewController.convertingVM" = "Conversion de la machine virtuelle en cours. Veuillez patienter...";
+"ConvertVMViewController.linkedSnapshotsPreventFullClone" = "Impossible de convertir la machine virtuelle en clone complet tant que des instantanés contiennent des disques liés ou peuvent en dépendre. Supprimez d’abord les instantanés.";
 "CreateDiskFileViewController.creatingDisk" = "Création d’un nouveau disque...";
 "CreateDiskFileViewController.updatingDisk" = "Mise à jour du disque %@...";
 "CreateVMFileViewController.creatingVM" = "Création de la machine virtuelle...";
@@ -216,7 +217,12 @@
 "QemuSpiceViewerViewController.mouseCaptured" = "%@ (appuyez sur ⌃⌥ pour libérer la souris)";
 "QemuSpiceViewerViewController.noMetal" = "Metal n’est pas disponible sur ce Mac";
 "QemuSpiceViewerViewController.spiceStartFailed" = "Impossible de démarrer le client SPICE";
-"RootViewController.cloneOf" = "Clone de %@";
+"RootViewController.fullCloneOf" = "Clone complet de %@";
+"RootViewController.linkedCloneOf" = "Clone lié de %@";
+"RootViewController.convertToTemplate" = "Vous êtes sur le point de convertir cette VM en modèle.\nUn modèle est une VM de base en lecture seule, que vous pouvez utiliser pour créer rapidement de nouvelles VM.\n\nCette opération est irréversible : le modèle ne pourra plus être démarré et tous les instantanés seront supprimés. Pour l’utiliser, créez-en un clone :\n- Clone complet : une copie complète et indépendante de la VM.\n- Clone lié : une VM légère qui enregistre uniquement ses modifications par-dessus le disque du modèle.";
+"RootViewController.convertToTemplateConfirm" = "Voulez-vous continuer ?";
+"RootViewController.convertToTemplateRawDrives" = "Les disques suivants sont au format RAW et seront convertis au format %@ :\n%@";
+"RootViewController.convertToTemplateRemovableDrives" = "Les disques suivants sont amovibles et seront détachés de la VM :\n%@";
 "RootViewController.forciblyClosing" = "Des machines virtuelles sont en cours d’exécution.\nFermer MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "RootViewController.vmConvertedToApple" = "La machine virtuelle a été convertie avec succès au format Apple.";
 "RootViewController.vmConvertedToQemu" = "La machine virtuelle a été convertie avec succès au format QEMU.";
@@ -266,6 +272,7 @@
 "VirtualMachineContainerViewController.snapshotRestored" = "VM restaurée avec succès depuis l’instantané.";
 "VirtualMachineContainerViewController.vmExecutionError" = "Échec de l’exécution de la VM avec l’erreur : %@";
 "VirtualMachineListViewController.clone" = "Cloner";
+"VirtualMachineListViewController.convertToTemplate" = "Convertir en modèle de VM";
 "VirtualMachineListViewController.createSnapshot" = "Créer un instantané";
 "VirtualMachineListViewController.delete" = "Supprimer";
 "VirtualMachineListViewController.edit" = "Configurer";
@@ -302,3 +309,27 @@
 "VirtualMachineViewController.vmPaused" = "VM en pause";
 "VirtualMachineViewController.vmProcessors" = "Processeurs :";
 "VirtualMachineViewController.vmType" = "Type :";
+
+"CloneVMViewController.cloneType" = "Type de clone :";
+"CloneVMViewController.fullClone" = "Clone complet";
+"CloneVMViewController.linkedClone" = "Clone lié";
+"CloneVMViewController.fullCloneDescription" = "Un clone complet est une copie totalement indépendante du modèle. Il occupe plus d'espace disque, mais continue de fonctionner même si le modèle d'origine est déplacé ou supprimé.";
+"CloneVMViewController.linkedCloneDescription" = "Un clone lié partage les disques du modèle et ne stocke que les différences. Il est créé presque instantanément et occupe très peu d'espace, mais nécessite que le modèle d'origine reste disponible.";
+"CloneVMViewController.clone" = "Cloner";
+"CloneVMViewController.cancel" = "Annuler";
+
+"DiskImageManager.convertLinkedFailed" = "Les images disque d'un clone lié ne peuvent pas être converties, car elles dépendent du modèle. Créez plutôt un clone complet.";
+"DiskImageManager.linkedNotSupported" = "Les clones liés ne sont pas pris en charge pour ce type de machine virtuelle.";
+"DiskImageManager.createLinkedFailed" = "Impossible de créer le disque lié : %@";
+"RootViewController.linkedCloneFailed" = "Échec de la création du clone lié : %@";
+"RootViewController.linkedCloneUnsupportedDrives" = "Les disques du modèle ne sont pas dans un format compatible avec les clones liés.";
+"NewDiskViewController.linkedCowDisabled" = "Le format d'un disque de clone lié ne peut pas être modifié, car il dépend du disque du modèle.";
+"RootViewController.templateHasLinkedClones" = "Le modèle \"%@\" ne peut pas être supprimé car des clones liés en dépendent :\n\n%@\n\nSupprimez d'abord les clones liés ou convertissez-les en clones complets.";
+"VirtualMachineListViewController.convertToFullClone" = "Convertir en clone complet";
+"RootViewController.convertToFullClone" = "Cette VM est un clone lié. Ses disques seront fusionnés avec ceux du modèle, rendant la VM indépendante du modèle.\n\nCela peut prendre du temps et nécessite autant d'espace disque que la taille complète des disques. Voulez-vous continuer ?";
+"RootViewController.convertToFullCloneFailed" = "Impossible de convertir la VM en clone complet : %@";
+"DiskImageManager.flattenNotSupported" = "La fusion des disques liés n'est pas prise en charge pour ce type de machine virtuelle.";
+"DiskImageManager.flattenFailed" = "Impossible de fusionner le disque lié : %@";
+"RootViewController.renameFailed" = "Impossible de renommer le dossier de la machine virtuelle : %@";
+"RootViewController.cloneRunningVM" = "Une VM en cours d'exécution ne peut pas être clonée. Arrêtez-la d'abord. Une VM en pause peut être clonée.";
+"VirtualMachineListViewController.renameDuplicate" = "Une machine virtuelle nommée \"%@\" existe déjà.";

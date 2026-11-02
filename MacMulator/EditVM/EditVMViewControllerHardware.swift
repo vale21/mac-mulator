@@ -256,6 +256,11 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 createNewDiskButton.isEnabled = true
             }
 
+            if Utils.isVMTemplate(virtualMachine) {
+                createNewDiskButton.isEnabled = false
+                openImageButton.isEnabled = false
+            }
+
             let appDelegate = NSApp.delegate as! AppDelegate
             appDelegate.refreshVMMenus()
         }
@@ -306,7 +311,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 let destinationController = segue.destinationController as! NSWindowController
                 let contentController = destinationController.contentViewController as! DriveInfoViewController
                 let driveTableRow: Int = drivesTableView.row(for: sender as! NSView)
-                contentController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM)
+                contentController.isVirtualizaionFrameworkInUse = (virtualMachine.type == MacMulatorConstants.APPLE_VM || virtualMachine.type == MacMulatorConstants.APPLE_TEMPLATE_VM)
                 contentController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)])
             }
         }
@@ -422,7 +427,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         if tableColumn?.identifier.rawValue == "Buttons" {
             let cellView = cell as! DrivesTableButtonsCell
-            if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND {
+            if let virtualMachine, Utils.isVMTemplate(virtualMachine) {
+                cellView.editButton.isEnabled = false
+                cellView.deleteButton.isEnabled = false
+            } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND {
                 cellView.editButton.isEnabled = false
             } else {
                 cellView.editButton.isEnabled = true
