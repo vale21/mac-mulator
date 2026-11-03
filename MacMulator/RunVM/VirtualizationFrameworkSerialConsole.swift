@@ -8,17 +8,6 @@
 import Foundation
 import Virtualization
 
-/// The serial console of a VM, shown in a terminal window
-protocol SerialConsole: AnyObject {
-    /// Calls `handler` on the main thread with the guest output, until detach()
-    func attach(_ handler: @escaping (Data) -> Void)
-    func detach()
-    /// Sends what is typed in the terminal to the guest
-    func send(_ data: Data)
-}
-
-/// The serial console of a Linux Apple VM: a virtio console port (hvc0 in the guest) connected to two pipes.
-/// The guest output is kept, up to a limit, so that a terminal opened later shows what was printed before it.
 class VirtualizationFrameworkSerialConsole: SerialConsole {
     private static let maxBufferedBytes = 256 * 1024
 
@@ -45,14 +34,12 @@ class VirtualizationFrameworkSerialConsole: SerialConsole {
         fromGuest.fileHandleForReading.readabilityHandler = nil
     }
 
-    /// The port to add to the configuration of the VM
     func makePortConfiguration() -> VZVirtioConsoleDeviceSerialPortConfiguration {
         let port = VZVirtioConsoleDeviceSerialPortConfiguration()
         port.attachment = VZFileHandleSerialPortAttachment(fileHandleForReading: toGuest.fileHandleForReading, fileHandleForWriting: fromGuest.fileHandleForWriting)
         return port
     }
 
-    /// Calls `handler` on the main thread with everything the guest printed so far, then with each new output, until detach()
     func attach(_ handler: @escaping (Data) -> Void) {
         if !buffered.isEmpty {
             handler(buffered)
@@ -64,7 +51,6 @@ class VirtualizationFrameworkSerialConsole: SerialConsole {
         outputHandler = nil
     }
 
-    /// Sends what is typed in the terminal to the guest
     func send(_ data: Data) {
         try? toGuest.fileHandleForWriting.write(contentsOf: data)
     }

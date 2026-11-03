@@ -5,14 +5,10 @@
 
 import Foundation
 
-/// The serial console of a Qemu VM: a unix socket Qemu listens on (see QemuUtils.serialSocketPath), connected to directly
-/// instead of through a pseudo-terminal running nc, whose line discipline cannot be set up in the App Store sandbox.
-/// Qemu serves one client at a time: the connection is closed on detach().
 class QemuSerialConsole: SerialConsole {
     private var socketDescriptor: Int32
     private var readSource: DispatchSourceRead?
 
-    /// Connects to the socket, or returns nil if Qemu does not accept the connection
     init?(socketPath: String) {
         socketDescriptor = socket(AF_UNIX, SOCK_STREAM, 0)
         guard socketDescriptor >= 0 else { return nil }
@@ -47,8 +43,6 @@ class QemuSerialConsole: SerialConsole {
         detach()
     }
 
-    /// Calls `handler` on the main thread with each output of the guest, until detach(). Qemu keeps no history, so the
-    /// guest is sent a return to make it print its prompt
     func attach(_ handler: @escaping (Data) -> Void) {
         guard socketDescriptor >= 0 else { return }
 

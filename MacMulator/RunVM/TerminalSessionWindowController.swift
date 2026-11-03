@@ -8,27 +8,22 @@
 import Cocoa
 import SwiftTerm
 
-/// A MacMulator window hosting a shell session on a running VM: an SSH connection, or its serial console.
-/// The session is rendered by SwiftTerm; closing the window ends it, leaving the VM running.
 class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, LocalProcessTerminalViewDelegate {
     enum Kind {
         case ssh
         case serialConsole
     }
 
-    /// Open sessions, kept alive until their window closes
     private static var openSessions: [TerminalSessionWindowController] = []
 
     private let kind: Kind
     private let virtualMachine: VirtualMachine
     private let terminalView: TerminalView
-    /// Set when the terminal is connected to the serial console of an Apple VM rather than to a local process
     private var serialConsole: SerialConsole?
     private var serialConsoleDelegate: SerialConsoleTerminalDelegate?
     private var spinner: NSProgressIndicator?
     private var isClosed = false
 
-    /// Opens a session running `executable` with `args` in a pseudo-terminal, or brings the existing one of the same kind to the front
     static func open(_ kind: Kind, on virtualMachine: VirtualMachine, executable: String, args: [String]) {
         if bringExistingToFront(kind, virtualMachine) {
             return
@@ -41,8 +36,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         terminalView.startProcess(executable: executable, args: args, environment: environment)
     }
 
-    /// Opens the window of a session whose process is not known yet, e.g. because it needs the IP address of the guest.
-    /// A spinner is shown in it until `start` (or `cancel`) is called
     static func openPending(_ kind: Kind, on virtualMachine: VirtualMachine) -> TerminalSessionWindowController {
         let terminalView = LocalProcessTerminalView(frame: defaultFrame)
         let session = TerminalSessionWindowController(kind, virtualMachine, terminalView)
@@ -52,7 +45,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         return session
     }
 
-    /// Opens a session on the serial console of an Apple VM, or brings the existing one to the front
     static func open(_ serialConsole: SerialConsole, on virtualMachine: VirtualMachine) {
         if bringExistingToFront(.serialConsole, virtualMachine) {
             return
@@ -77,20 +69,16 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
 
     private static let defaultFrame = NSRect(x: 0, y: 0, width: 800, height: 500)
 
-    /// The environment of the process: the usual terminal one, but with every prompt (host key, password) asked in the
-    /// terminal. With DISPLAY set (e.g. by XQuartz), ssh would run the X11 ssh-askpass instead, which usually is missing
     private static var environment: [String] {
         Terminal.getEnvironmentVariables(termName: "xterm-256color").filter { !$0.hasPrefix("DISPLAY=") } + ["SSH_ASKPASS_REQUIRE=never"]
     }
 
-    /// Brings the session of this kind on the VM to the front. Returns false if there is none
     static func bringExistingToFront(_ kind: Kind, _ virtualMachine: VirtualMachine) -> Bool {
         guard let existing = openSessions.first(where: { $0.kind == kind && $0.virtualMachine == virtualMachine }) else { return false }
         existing.window?.makeKeyAndOrderFront(nil)
         return true
     }
 
-    /// Closes every session on the VM, e.g. because it has stopped
     static func closeSessions(on virtualMachine: VirtualMachine) {
         for session in openSessions.filter({ $0.virtualMachine == virtualMachine }) {
             session.window?.close()
@@ -161,7 +149,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         spinner = nil
     }
 
-    /// Starts the process of a session opened with `openPending`, and lets the user type in it
     func start(executable: String, args: [String], banner: String? = nil) {
         guard !isClosed, let terminalView = terminalView as? LocalProcessTerminalView else { return }
 
@@ -173,7 +160,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         window?.makeFirstResponder(terminalView)
     }
 
-    /// Closes a session opened with `openPending` whose process could not be determined
     func cancel() {
         window?.close()
     }
@@ -202,7 +188,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
     }
 }
 
-/// Sends what is typed in a terminal to the serial console of an Apple VM
 private class SerialConsoleTerminalDelegate: TerminalViewDelegate {
     private let serialConsole: SerialConsole
     init(_ serialConsole: SerialConsole) {
@@ -213,7 +198,6 @@ private class SerialConsoleTerminalDelegate: TerminalViewDelegate {
         serialConsole.send(Data(data))
     }
 
-    // A serial line has no notion of window size, title or current directory
     func sizeChanged(source _: TerminalView, newCols _: Int, newRows _: Int) {}
 
     func setTerminalTitle(source _: TerminalView, title _: String) {}

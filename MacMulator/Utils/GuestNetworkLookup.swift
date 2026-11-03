@@ -7,18 +7,11 @@
 
 import Foundation
 
-/// Finds the IP address of an Apple Virtualization VM from its MAC address, so that an SSH session can be opened on it.
-/// NAT guests get their address from the macOS DHCP server, which records it in /var/db/dhcpd_leases; every guest also
-/// shows up in the ARP table of the host once they have exchanged traffic (when the app is allowed to read it).
 enum GuestNetworkLookup {
     private static let leasesPath = "/var/db/dhcpd_leases"
-    /// How many leases (the most relevant ones) are tested for an open SSH port
     private static let maxCheckedLeases = 16
-    /// Subnets larger than this are not probed (see probeLocalSubnets)
     private static let maxProbedHosts: UInt32 = 1024
 
-    /// The IP address of the guest using `macAddress`, if it can be found. Blocks for a few seconds at most when the
-    /// guest has to be probed: call it off the main thread.
     static func ipAddress(forMACAddress macAddress: String) -> String? {
         guard let mac = normalize(macAddress) else { return nil }
         // The ARP table reflects the guests that are up now. It is empty for a process that has no access to the local
@@ -47,7 +40,6 @@ enum GuestNetworkLookup {
         return ipAddressFromARPTable(mac)
     }
 
-    /// The first of the addresses that accepts connections on the SSH port. They are all tried at once
     private static func firstReachable(_ ipAddresses: [String]) -> String? {
         var reachable = [Bool](repeating: false, count: ipAddresses.count)
         let lock = NSLock()
@@ -60,7 +52,6 @@ enum GuestNetworkLookup {
         return reachable.firstIndex(of: true).map { ipAddresses[$0] }
     }
 
-    /// The MAC address as six numbers: macOS writes the bytes without leading zeros (e.g. "a:1b:..."), the VM config with them
     private static func normalize(_ macAddress: String) -> [UInt8]? {
         let bytes = macAddress.split(separator: ":").compactMap { UInt8($0, radix: 16) }
         return bytes.count == 6 ? bytes : nil
@@ -103,9 +94,6 @@ enum GuestNetworkLookup {
         return leases.sorted { ($0.matchesMAC ? 1 : 0, $0.leaseExpiry) > ($1.matchesMAC ? 1 : 0, $1.leaseExpiry) }
     }
 
-    /// Whether something accepts connections on the SSH port of the address, waiting 2 seconds at most. The check is made
-    /// by nc, in a process of its own like the ssh that follows, rather than with a socket of the app. The process is
-    /// spawned and waited for directly: Process needs the main run loop, which is busy waiting for this
     private static func isReachable(_ ipAddress: String) -> Bool {
         var fileActions: posix_spawn_file_actions_t?
         posix_spawn_file_actions_init(&fileActions)
@@ -124,9 +112,6 @@ enum GuestNetworkLookup {
         return status == 0
     }
 
-    /// Looks for the guest in the ARP table of the host, as listed by `arp -an`, whose lines look like:
-    ///   ? (192.168.64.77) at 76:5e:73:a5:a1:bf on bridge100 ifscope [bridge]
-    /// Entries that are not resolved show "(incomplete)" instead of the MAC address
     private static func ipAddressFromARPTable(_ mac: [UInt8]) -> String? {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/sbin/arp")
@@ -151,8 +136,6 @@ enum GuestNetworkLookup {
         return nil
     }
 
-    /// Sends an empty UDP datagram to every address of the IPv4 subnets the host is on (the NAT bridge of the VMs and
-    /// the LAN, for bridged VMs): resolving them puts every running guest in the ARP table
     private static func probeLocalSubnets() {
         var interfaces: UnsafeMutablePointer<ifaddrs>?
         guard getifaddrs(&interfaces) == 0, let first = interfaces else { return }
