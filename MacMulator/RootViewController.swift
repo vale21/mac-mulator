@@ -3,6 +3,7 @@
 //
 
 import Cocoa
+import Virtualization
 
 class RootViewController: NSSplitViewController, NSWindowDelegate {
     private var listController: VirtualMachinesListViewController?
@@ -437,6 +438,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
         if let tempVm = temp {
             tempVm.assignNewIdForClone()
+            tempVm.macAddress = VZMACAddress.randomLocallyAdministered().string
             tempVm.displayName = displayName
             if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
                 tempVm.type = MacMulatorConstants.APPLE_VM
