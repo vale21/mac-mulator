@@ -346,6 +346,22 @@ class VirtualMachineViewController: NSViewController {
 
             dest.setVirtualMachine(vmToClone.vm)
             dest.setParentController(source)
+        } else if segue.identifier == MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE {
+            if #available(macOS 12.0, *), let (information, runner) = sender as? (BusyViewInformation, VirtualizationFrameworkVirtualMachineRunner) {
+                let dest = segue.destinationController as! VirtualizationFrameworkPauseResumeVMViewController
+                dest.setParentRunner(runner)
+                dest.setOperation(information.operation)
+                dest.setDismissalCriteria(information.dismissalCriteria)
+                dest.setAlertMessage(information.alertMessage)
+            }
+        }
+    }
+
+    /// Shows the pausing / resuming sheet of a headless VM, which has no window of its own to show it on
+    @available(macOS 12.0, *)
+    func showBusyView(_ information: BusyViewInformation, for runner: VirtualizationFrameworkVirtualMachineRunner) {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: (information, runner))
         }
     }
 
@@ -398,14 +414,7 @@ class VirtualMachineViewController: NSViewController {
 
     func setVirtualMachine(_ virtualMachine: VirtualMachine?) {
         if let vm = virtualMachine {
-            let backgroundImageName = Utils.getIconForSubType(vm.os, vm.subtype) + ".large"
-            if Utils.isVMTemplate(vm) {
-                if let newImage = Utils.getIconWithOverlay(backgroundImageName, "template.overlay.large") {
-                    vmIcon.image = newImage
-                }
-            } else {
-                vmIcon.image = NSImage(named: NSImage.Name(backgroundImageName))
-            }
+            updateVMIcon(vm)
 
             if let rootController {
                 if rootController.isVMPaused(vm) {
@@ -464,6 +473,22 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
+    fileprivate func updateVMIcon(_ vm: VirtualMachine) {
+        let backgroundImageName = Utils.getIconForSubType(vm.os, vm.subtype) + ".large"
+        if Utils.isVMTemplate(vm) {
+            if let newImage = Utils.getIconWithOverlay(backgroundImageName, "template.overlay.large") {
+                vmIcon.image = newImage
+            }
+        } else if Utils.isHeadless(vm), rootController?.isVMPaused(vm) == true,
+                  let newImage = Utils.getIconWithOverlay(backgroundImageName, "pause.overlay.large")
+        {
+            // A paused headless VM has no screenshot to show: mark the icon instead
+            vmIcon.image = newImage
+        } else {
+            vmIcon.image = NSImage(named: NSImage.Name(backgroundImageName))
+        }
+    }
+
     @objc private func vmPauseStateChanged(_ notification: Notification) {
         let changedVM = notification.object as? VirtualMachine
         if changedVM != rootController?.currentVm || rootController?.isCurrentVMRunning() == true {
@@ -481,6 +506,8 @@ class VirtualMachineViewController: NSViewController {
         pauseVMButton.isHidden = !running
 
         if let vm {
+            updateVMIcon(vm)
+
             if Utils.isPauseSupported(vm) {
                 pauseVMButton.isEnabled = true
             } else {
@@ -491,28 +518,29 @@ class VirtualMachineViewController: NSViewController {
                 let filemanager = FileManager.default
                 let screenshotExists = filemanager.fileExists(atPath: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
 
-                if rootController.isVMPaused(vm), screenshotExists {
+                if rootController.isVMPaused(vm) {
                     vmName.stringValue = String(format: NSLocalizedString("VirtualMachineViewController.pausedVMName", comment: ""), vm.displayName)
+                    if screenshotExists {
+                        resizeCentralBox(true)
+                        hideBoxControls(true)
 
-                    resizeCentralBox(true)
-                    hideBoxControls(true)
+                        centralBox.title = NSLocalizedString("VirtualMachineViewController.vmPaused", comment: "")
 
-                    centralBox.title = NSLocalizedString("VirtualMachineViewController.vmPaused", comment: "")
-                    let imagefile = NSImage(contentsOfFile: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
-                    if let image = imagefile {
-                        let imageView = NSImageView(image: image)
-                        // Let the box size drive the image, not the screenshot's intrinsic size
-                        imageView.imageScaling = .scaleProportionallyUpOrDown
-                        imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-                        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-                        screenshotView = imageView
-                        centralBox.contentView = imageView
+                        let imagefile = NSImage(contentsOfFile: vm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME)
+                        if let image = imagefile {
+                            let imageView = NSImageView(image: image)
+                            // Let the box size drive the image, not the screenshot's intrinsic size
+                            imageView.imageScaling = .scaleProportionallyUpOrDown
+                            imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                            imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+                            screenshotView = imageView
+                            centralBox.contentView = imageView
+                        }
+                        bottomConfigureVMButton.isHidden = false
                     }
-                    bottomConfigureVMButton.isHidden = false
                 } else if Utils.isVMTemplate(vm) {
                     vmName.stringValue = vm.displayName + " (VM template)"
 
-                    // TODO: style UI
                     resizeCentralBox(false)
                     hideBoxControls(false)
 

@@ -4856,6 +4856,7 @@ Rocky Linux</string>
                         <segue destination="XEm-KJ-Oor" kind="show" identifier="showSpiceViewSegue" id="e7k-B8-t4V"/>
                         <segue destination="RSg-f6-UZF" kind="sheet" identifier="convertVMSegue" id="OkB-v1-ghb"/>
                         <segue destination="1rf-Yg-KwF" kind="sheet" identifier="showCloneViewSegue" id="Z2M-4L-y1f"/>
+                        <segue destination="q1t-Ya-d4e" kind="sheet" identifier="showPauseResumeVMSegue" id="hPv-Sg-0aA"/>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

@@ -37,6 +37,8 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
                 let runner = vmRunner as! VirtualizationFrameworkVirtualMachineRunner
                 if isSession {
                     runner.attachView(view as! VZVirtualMachineView, self)
+                    // Route input to the VM view right away, so the guest gets pointer events and draws its cursor
+                    view.window?.makeFirstResponder(view)
                     return
                 }
                 runner.setVmView(view as! VZVirtualMachineView)

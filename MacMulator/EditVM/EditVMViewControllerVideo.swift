@@ -10,7 +10,8 @@ import Cocoa
 class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
     @IBOutlet var showScreenLabel: NSTextField!
     @IBOutlet var showScreenSwitch: NSSwitch!
-    @IBOutlet var videoDescriptionText: NSTextField!
+    @IBOutlet var showScreenDescriptionText: NSTextField!
+    @IBOutlet var qemuVideoBox: NSBox!
     @IBOutlet var videoAdapterLabel: NSTextField!
     @IBOutlet var videoAdapterComboBox: NSComboBox!
     @IBOutlet var qemuDisplayLabel: NSTextField!
@@ -50,7 +51,6 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     override func viewWillAppear() {
         showScreenLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.showScreenLabel", comment: "")
         showScreenSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.showScreenTooltip", comment: "")
-        videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
         videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
         qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
         accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
@@ -84,11 +84,12 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             if let virtualMachine, virtualMachine.type == MacMulatorConstants.APPLE_VM {
-                showScreenSwitch.state = virtualMachine.headless == true ? .off : .on
-                for view in qemuVideoViews {
-                    view.isHidden = true
-                }
+                let headless = virtualMachine.headless == true
+                showScreenSwitch.state = headless ? .off : .on
+                showScreenDescriptionText.stringValue = NSLocalizedString(headless ? "EditVMViewControllerVideo.showScreenOffAppleDescription" : "EditVMViewControllerVideo.showScreenOnDescription", comment: "")
+                qemuVideoBox.isHidden = true
             } else if let virtualMachine {
+                qemuVideoBox.isHidden = false
                 videoAdapterComboBox.reloadData()
                 videoAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
                 qemuDisplayComboBox.reloadData()
@@ -161,13 +162,14 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                 // A headless VM shows no screen: the display settings do not apply to it
                 let headless = virtualMachine.headless == true
                 showScreenSwitch.state = headless ? .off : .on
+                showScreenDescriptionText.stringValue = NSLocalizedString(headless ? "EditVMViewControllerVideo.showScreenOffDescription" : "EditVMViewControllerVideo.showScreenOnDescription", comment: "")
                 if headless {
                     for control in qemuVideoViews.compactMap({ $0 as? NSControl }) {
                         control.isEnabled = false
                     }
                 } else {
                     // The other controls get their state above: these texts are always enabled otherwise
-                    for control in [videoDescriptionText, videoAdapterLabel, qemuDisplayLabel, windowsArmDescriptionText] as [NSControl] {
+                    for control in [videoAdapterLabel, qemuDisplayLabel, windowsArmDescriptionText] as [NSControl] {
                         control.isEnabled = true
                     }
                 }
@@ -175,9 +177,8 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
-    /// Every control of the tab but the "Show VM screen" switch and its label
     private var qemuVideoViews: [NSView] {
-        [videoDescriptionText, videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
+        [videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
          accelDescriptionText, accelDescriptionLabel, accelDescriptionSwitch,
          spiceDescriptionText, spiceDescriptionLabel, spiceDescriptionSwitch, windowsArmDescriptionText]
     }
