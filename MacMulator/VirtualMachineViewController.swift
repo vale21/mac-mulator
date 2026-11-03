@@ -761,7 +761,7 @@ class VirtualMachineViewController: NSViewController {
                 }
 
                 if vm.type == MacMulatorConstants.APPLE_VM, canStartHeadless(vm) {
-                    startHeadlessAppleVM(runner as! VirtualizationFrameworkVirtualMachineRunner, inRecovery)
+                    startHeadlessVM(runner, inRecovery, vm)
                 } else if vm.type == MacMulatorConstants.APPLE_VM {
                     performSegue(withIdentifier: MacMulatorConstants.SHOW_VM_VIEW_SEGUE, sender: VMToStart(vm: vm, inRecovery: inRecovery, runner: runner))
                 } else if vm.bootMode == QemuConstants.BOOT_UEFI || vm.bootMode == QemuConstants.BOOT_UEFI_SECURE || (vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64) {
@@ -784,9 +784,15 @@ class VirtualMachineViewController: NSViewController {
         return true
     }
 
-    fileprivate func startHeadlessAppleVM(_ runner: VirtualizationFrameworkVirtualMachineRunner, _ inRecovery: Bool) {
-        runner.setVmController(self)
-        runner.runVM(recoveryMode: inRecovery, uponCompletion: { _, _ in })
+    fileprivate func startHeadlessVM(_ runner: any VirtualMachineRunner, _ inRecovery: Bool, _ vm: VirtualMachine) {
+        if vm.type == MacMulatorConstants.APPLE_VM, let appleRunner = runner as? VirtualizationFrameworkVirtualMachineRunner {
+            appleRunner.setVmController(self)
+        }
+        do {
+            try runner.runVM(recoveryMode: inRecovery, uponCompletion: { _, _ in })
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     func openScreenSession() {
@@ -811,11 +817,7 @@ class VirtualMachineViewController: NSViewController {
             return
         }
         askSSHUserName(for: vm) {
-            if vm.type == MacMulatorConstants.APPLE_VM {
-                self.openSSHSessionOnAppleVM(vm)
-            } else if let args = QemuUtils.sshArguments(for: vm) {
-                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
-            }
+            self.connectSSH(to: vm)
         }
     }
 
@@ -843,7 +845,13 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    fileprivate func openSSHSessionOnAppleVM(_ vm: VirtualMachine) {
+    fileprivate func connectSSH(to vm: VirtualMachine) {
+        guard vm.type == MacMulatorConstants.APPLE_VM else {
+            if let args = QemuUtils.sshArguments(for: vm) {
+                TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
+            }
+            return
+        }
         guard let macAddress = vm.macAddress, let window = view.window else { return }
 
         let session = TerminalSessionWindowController.openPending(.ssh, on: vm)
