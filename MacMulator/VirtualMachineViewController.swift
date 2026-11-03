@@ -665,7 +665,7 @@ class VirtualMachineViewController: NSViewController {
     }()
 
     fileprivate func showLoadingLayout() {
-        noVMsBox.isHidden = true
+        noVMsBox.removeFromSuperview()
         vmName.isHidden = true
         vmDescription.isHidden = true
         centralBox.isHidden = true
@@ -683,7 +683,7 @@ class VirtualMachineViewController: NSViewController {
             return
         }
         loadingView.isHidden = true
-        noVMsBox.isHidden = false
+        attachNoVMsBox()
 
         vmName.isHidden = true
         vmDescription.isHidden = true
@@ -697,9 +697,22 @@ class VirtualMachineViewController: NSViewController {
         bottomConfigureVMButton.isHidden = true
     }
 
+    /// The no VMs box is a top level view of the scene, attached to the main view only while there are no VMs
+    fileprivate func attachNoVMsBox() {
+        guard let container = centralBox.superview, noVMsBox.superview !== container else { return }
+
+        noVMsBox.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(noVMsBox)
+        NSLayoutConstraint.activate([
+            noVMsBox.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            noVMsBox.topAnchor.constraint(equalTo: container.topAnchor, constant: 52),
+            startVMButton.topAnchor.constraint(equalTo: noVMsBox.bottomAnchor, constant: 3),
+        ])
+    }
+
     fileprivate func showVMAvailableLayout() {
         loadingView.isHidden = true
-        noVMsBox.isHidden = true
+        noVMsBox.removeFromSuperview()
 
         vmName.isHidden = false
         vmDescription.isHidden = false

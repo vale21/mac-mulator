@@ -4692,119 +4692,6 @@ Rocky Linux</string>
                                             <color key="borderColor" name="secondarySystemFillColor" catalog="System" colorSpace="catalog"/>
                                             <color key="fillColor" name="quaternarySystemFillColor" catalog="System" colorSpace="catalog"/>
                                         </box>
-                                        <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="f2n-08-TYD">
-                                            <rect key="frame" x="24" y="68" width="602" height="430"/>
-                                            <view key="contentView" id="IAb-Ix-cM5">
-                                                <rect key="frame" x="0.0" y="0.0" width="602" height="430"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                <subviews>
-                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xtU-oZ-JtS">
-                                                        <rect key="frame" x="240" y="383" width="122" height="26"/>
-                                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="MacMulator" id="6TX-h8-Wug">
-                                                            <font key="font" textStyle="title1" name=".SFNS-Regular"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XIi-hH-iuO">
-                                                        <rect key="frame" x="71" y="271" width="460" height="79"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="79" id="NRz-n8-6Vh"/>
-                                                        </constraints>
-                                                        <textFieldCell key="cell" selectable="YES" alignment="center" title="Welcome to MacMulator. There is no Virtual Machine configured as of now." id="j2S-h9-OTc">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                    </textField>
-                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="eX2-gm-MSx">
-                                                        <rect key="frame" x="177" y="187" width="90" height="90"/>
-                                                        <buttonCell key="cell" type="square" title="createVMButton" bezelStyle="shadowlessSquare" image="new.vm" imagePosition="only" alignment="center" inset="2" id="CgY-NN-kRT">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="5fH-2A-Lpn"/>
-                                                            <constraint firstAttribute="height" constant="90" id="CaE-Sm-QtD"/>
-                                                            <constraint firstAttribute="width" constant="90" id="Jt9-WL-tOD"/>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="e5s-de-2bW"/>
-                                                        </constraints>
-                                                        <connections>
-                                                            <action selector="createVM:" target="Urh-Tu-1Cq" id="10P-86-TOq"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="uLv-zr-jEy">
-                                                        <rect key="frame" x="324" y="187" width="90" height="90"/>
-                                                        <buttonCell key="cell" type="square" title="importVMButton" bezelStyle="shadowlessSquare" image="folder.circle" imagePosition="only" alignment="center" inset="2" id="lya-n1-ifB">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="On1-dS-xT5"/>
-                                                            <constraint firstAttribute="height" constant="90" id="dbF-na-Guz"/>
-                                                            <constraint firstAttribute="width" constant="90" id="xAa-gY-0pI"/>
-                                                        </constraints>
-                                                        <connections>
-                                                            <action selector="importVM:" target="Urh-Tu-1Cq" id="f8Q-V1-bxs"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iAy-Zf-QEv">
-                                                        <rect key="frame" x="165" y="163" width="114" height="20"/>
-                                                        <buttonCell key="cell" type="bevel" title="Create new VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="7zO-81-atn">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="systemLight" size="16"/>
-                                                        </buttonCell>
-                                                        <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="114" id="1fd-bB-3Nx"/>
-                                                            <constraint firstAttribute="height" constant="20" id="EFG-jG-qAP"/>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="114" id="S5Z-Ko-pcE"/>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="h5J-lx-2aB"/>
-                                                        </constraints>
-                                                        <connections>
-                                                            <action selector="createVM:" target="Urh-Tu-1Cq" id="Qmg-Qo-oLZ"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hob-nc-3jQ">
-                                                        <rect key="frame" x="300" y="163" width="138" height="20"/>
-                                                        <buttonCell key="cell" type="bevel" title="Open existing VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="aSL-cT-buY">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="systemLight" size="16"/>
-                                                        </buttonCell>
-                                                        <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="138" id="cyK-ps-gHA"/>
-                                                            <constraint firstAttribute="height" constant="20" id="oKC-Jk-dcm"/>
-                                                        </constraints>
-                                                        <connections>
-                                                            <action selector="importVM:" target="Urh-Tu-1Cq" id="rV3-7I-zT4"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="eX2-gm-MSx" firstAttribute="centerX" secondItem="iAy-Zf-QEv" secondAttribute="centerX" id="3Uy-kn-vwJ"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="165" id="8W6-MQ-O0s"/>
-                                                    <constraint firstItem="eX2-gm-MSx" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="177" id="Apb-on-kOJ"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="top" secondItem="XIi-hH-iuO" secondAttribute="bottom" constant="88" id="Bu9-yz-JIy"/>
-                                                    <constraint firstItem="uLv-zr-jEy" firstAttribute="centerX" secondItem="hob-nc-3jQ" secondAttribute="centerX" id="HRO-IL-f8N"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="baseline" secondItem="hob-nc-3jQ" secondAttribute="baseline" id="Im0-C1-22L"/>
-                                                    <constraint firstItem="uLv-zr-jEy" firstAttribute="leading" secondItem="eX2-gm-MSx" secondAttribute="trailing" constant="57" id="NvN-mY-sJE"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="firstBaseline" secondItem="hob-nc-3jQ" secondAttribute="firstBaseline" id="OS4-iw-Gb4"/>
-                                                    <constraint firstItem="XIi-hH-iuO" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="73" id="Phz-EK-dyd"/>
-                                                    <constraint firstItem="xtU-oZ-JtS" firstAttribute="centerX" secondItem="IAb-Ix-cM5" secondAttribute="centerX" id="VGQ-x6-76j"/>
-                                                    <constraint firstItem="eX2-gm-MSx" firstAttribute="bottom" secondItem="uLv-zr-jEy" secondAttribute="bottom" id="Zsh-5I-Z2N"/>
-                                                    <constraint firstItem="eX2-gm-MSx" firstAttribute="top" secondItem="uLv-zr-jEy" secondAttribute="top" id="efu-kT-P6q"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="top" secondItem="eX2-gm-MSx" secondAttribute="bottom" constant="4" id="f7M-ku-igb"/>
-                                                    <constraint firstItem="iAy-Zf-QEv" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="165" id="gNn-hc-kw4"/>
-                                                    <constraint firstItem="xtU-oZ-JtS" firstAttribute="centerX" secondItem="XIi-hH-iuO" secondAttribute="centerX" id="pJe-6a-fm6"/>
-                                                    <constraint firstItem="xtU-oZ-JtS" firstAttribute="top" secondItem="IAb-Ix-cM5" secondAttribute="top" constant="21" id="rDA-2w-bt9"/>
-                                                    <constraint firstItem="hob-nc-3jQ" firstAttribute="leading" secondItem="iAy-Zf-QEv" secondAttribute="trailing" constant="21" id="rlb-ei-oKY"/>
-                                                    <constraint firstItem="XIi-hH-iuO" firstAttribute="top" secondItem="xtU-oZ-JtS" secondAttribute="bottom" constant="33" id="t8X-lY-qRk"/>
-                                                    <constraint firstItem="hob-nc-3jQ" firstAttribute="leading" secondItem="iAy-Zf-QEv" secondAttribute="trailing" constant="21" id="yWz-QK-vFP"/>
-                                                    <constraint firstItem="uLv-zr-jEy" firstAttribute="leading" secondItem="eX2-gm-MSx" secondAttribute="trailing" constant="57" id="yug-iK-bij"/>
-                                                </constraints>
-                                            </view>
-                                        </box>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2TJ-y4-d9V">
                                             <rect key="frame" x="18" y="451" width="614" height="26"/>
                                             <constraints>
@@ -4901,8 +4788,6 @@ Rocky Linux</string>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="trailing" secondItem="23l-NY-BDE" secondAttribute="trailing" id="4TS-O3-FS9"/>
                                         <constraint firstItem="drX-xb-Fr1" firstAttribute="leading" secondItem="WwV-tF-8bO" secondAttribute="trailing" constant="-23" id="8sO-om-j7z"/>
                                         <constraint firstItem="TgC-ff-dnC" firstAttribute="centerX" secondItem="WwV-tF-8bO" secondAttribute="centerX" id="Bfi-bA-bwc"/>
-                                        <constraint firstItem="f2n-08-TYD" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="HOZ-ix-pnt"/>
-                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="f2n-08-TYD" secondAttribute="bottom" constant="3" id="Isr-Uz-h4O"/>
                                         <constraint firstAttribute="bottom" secondItem="WwV-tF-8bO" secondAttribute="bottom" constant="20" symbolic="YES" id="Mjl-HA-QWz"/>
                                         <constraint firstAttribute="bottom" secondItem="drX-xb-Fr1" secondAttribute="bottom" constant="24" id="Nhq-ju-lzw"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="P2V-RM-ImW"/>
@@ -4914,11 +4799,10 @@ Rocky Linux</string>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="eYd-b1-YE3"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="centerX" secondItem="23l-NY-BDE" secondAttribute="centerX" id="hPi-g2-mQ9"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="top" secondItem="2TJ-y4-d9V" secondAttribute="bottom" constant="8" symbolic="YES" id="hTZ-hD-vSs"/>
-                                        <constraint firstItem="f2n-08-TYD" firstAttribute="top" secondItem="Qga-Ob-GTN" secondAttribute="top" constant="52" id="iCo-xk-UBi"/>
+                                        <constraint firstAttribute="bottom" secondItem="TgC-ff-dnC" secondAttribute="bottom" constant="80" id="nVm-Cf-0aA"/>
                                         <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="24" id="nqw-eF-VrR"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="19" id="tci-Rk-0aL"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="top" secondItem="gzW-c5-Oke" secondAttribute="bottom" constant="19" id="uEf-L3-9pJ"/>
-                                        <constraint firstItem="f2n-08-TYD" firstAttribute="bottom" secondItem="TgC-ff-dnC" secondAttribute="bottom" constant="12" id="vhx-en-ddS"/>
                                         <constraint firstItem="Fft-jP-dG6" firstAttribute="top" secondItem="drX-xb-Fr1" secondAttribute="top" id="yhQ-k4-iX1"/>
                                     </constraints>
                                 </view>
@@ -4975,7 +4859,120 @@ Rocky Linux</string>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Pn-0aA" userLabel="Headless VM View">
+                <box boxType="custom" borderType="none" cornerRadius="4" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="f2n-08-TYD" userLabel="No VMs View">
+                    <rect key="frame" x="0.0" y="0.0" width="602" height="430"/>
+                    <view key="contentView" id="IAb-Ix-cM5">
+                        <rect key="frame" x="0.0" y="0.0" width="602" height="430"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xtU-oZ-JtS">
+                                <rect key="frame" x="240" y="383" width="122" height="26"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="MacMulator" id="6TX-h8-Wug">
+                                    <font key="font" textStyle="title1" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="XIi-hH-iuO">
+                                <rect key="frame" x="71" y="271" width="460" height="79"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="79" id="NRz-n8-6Vh"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" alignment="center" title="Welcome to MacMulator. There is no Virtual Machine configured as of now." id="j2S-h9-OTc">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="eX2-gm-MSx">
+                                <rect key="frame" x="177" y="187" width="90" height="90"/>
+                                <buttonCell key="cell" type="square" title="createVMButton" bezelStyle="shadowlessSquare" image="new.vm" imagePosition="only" alignment="center" inset="2" id="CgY-NN-kRT">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="5fH-2A-Lpn"/>
+                                    <constraint firstAttribute="height" constant="90" id="CaE-Sm-QtD"/>
+                                    <constraint firstAttribute="width" constant="90" id="Jt9-WL-tOD"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="e5s-de-2bW"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="createVM:" target="Urh-Tu-1Cq" id="10P-86-TOq"/>
+                                </connections>
+                            </button>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="uLv-zr-jEy">
+                                <rect key="frame" x="324" y="187" width="90" height="90"/>
+                                <buttonCell key="cell" type="square" title="importVMButton" bezelStyle="shadowlessSquare" image="folder.circle" imagePosition="only" alignment="center" inset="2" id="lya-n1-ifB">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="90" id="On1-dS-xT5"/>
+                                    <constraint firstAttribute="height" constant="90" id="dbF-na-Guz"/>
+                                    <constraint firstAttribute="width" constant="90" id="xAa-gY-0pI"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="importVM:" target="Urh-Tu-1Cq" id="f8Q-V1-bxs"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iAy-Zf-QEv">
+                                <rect key="frame" x="165" y="163" width="114" height="20"/>
+                                <buttonCell key="cell" type="bevel" title="Create new VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="7zO-81-atn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="systemLight" size="16"/>
+                                </buttonCell>
+                                <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="114" id="1fd-bB-3Nx"/>
+                                    <constraint firstAttribute="height" constant="20" id="EFG-jG-qAP"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="114" id="S5Z-Ko-pcE"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="20" id="h5J-lx-2aB"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="createVM:" target="Urh-Tu-1Cq" id="Qmg-Qo-oLZ"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hob-nc-3jQ">
+                                <rect key="frame" x="300" y="163" width="138" height="20"/>
+                                <buttonCell key="cell" type="bevel" title="Open existing VM" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="aSL-cT-buY">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="systemLight" size="16"/>
+                                </buttonCell>
+                                <color key="contentTintColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="138" id="cyK-ps-gHA"/>
+                                    <constraint firstAttribute="height" constant="20" id="oKC-Jk-dcm"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="importVM:" target="Urh-Tu-1Cq" id="rV3-7I-zT4"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="eX2-gm-MSx" firstAttribute="centerX" secondItem="iAy-Zf-QEv" secondAttribute="centerX" id="3Uy-kn-vwJ"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="165" id="8W6-MQ-O0s"/>
+                            <constraint firstItem="eX2-gm-MSx" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="177" id="Apb-on-kOJ"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="top" secondItem="XIi-hH-iuO" secondAttribute="bottom" constant="88" id="Bu9-yz-JIy"/>
+                            <constraint firstItem="uLv-zr-jEy" firstAttribute="centerX" secondItem="hob-nc-3jQ" secondAttribute="centerX" id="HRO-IL-f8N"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="baseline" secondItem="hob-nc-3jQ" secondAttribute="baseline" id="Im0-C1-22L"/>
+                            <constraint firstItem="uLv-zr-jEy" firstAttribute="leading" secondItem="eX2-gm-MSx" secondAttribute="trailing" constant="57" id="NvN-mY-sJE"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="firstBaseline" secondItem="hob-nc-3jQ" secondAttribute="firstBaseline" id="OS4-iw-Gb4"/>
+                            <constraint firstItem="XIi-hH-iuO" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="73" id="Phz-EK-dyd"/>
+                            <constraint firstItem="xtU-oZ-JtS" firstAttribute="centerX" secondItem="IAb-Ix-cM5" secondAttribute="centerX" id="VGQ-x6-76j"/>
+                            <constraint firstItem="eX2-gm-MSx" firstAttribute="bottom" secondItem="uLv-zr-jEy" secondAttribute="bottom" id="Zsh-5I-Z2N"/>
+                            <constraint firstItem="eX2-gm-MSx" firstAttribute="top" secondItem="uLv-zr-jEy" secondAttribute="top" id="efu-kT-P6q"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="top" secondItem="eX2-gm-MSx" secondAttribute="bottom" constant="4" id="f7M-ku-igb"/>
+                            <constraint firstItem="iAy-Zf-QEv" firstAttribute="leading" secondItem="IAb-Ix-cM5" secondAttribute="leading" constant="165" id="gNn-hc-kw4"/>
+                            <constraint firstItem="xtU-oZ-JtS" firstAttribute="centerX" secondItem="XIi-hH-iuO" secondAttribute="centerX" id="pJe-6a-fm6"/>
+                            <constraint firstItem="xtU-oZ-JtS" firstAttribute="top" secondItem="IAb-Ix-cM5" secondAttribute="top" constant="21" id="rDA-2w-bt9"/>
+                            <constraint firstItem="hob-nc-3jQ" firstAttribute="leading" secondItem="iAy-Zf-QEv" secondAttribute="trailing" constant="21" id="rlb-ei-oKY"/>
+                            <constraint firstItem="XIi-hH-iuO" firstAttribute="top" secondItem="xtU-oZ-JtS" secondAttribute="bottom" constant="33" id="t8X-lY-qRk"/>
+                            <constraint firstItem="hob-nc-3jQ" firstAttribute="leading" secondItem="iAy-Zf-QEv" secondAttribute="trailing" constant="21" id="yWz-QK-vFP"/>
+                            <constraint firstItem="uLv-zr-jEy" firstAttribute="leading" secondItem="eX2-gm-MSx" secondAttribute="trailing" constant="57" id="yug-iK-bij"/>
+                        </constraints>
+                    </view>
+                </box>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Pn-0aA" userLabel="Headless VM View">
                     <rect key="frame" x="0.0" y="0.0" width="315" height="128"/>
                     <subviews>
                         <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-St-0aB">
