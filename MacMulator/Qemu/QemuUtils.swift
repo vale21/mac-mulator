@@ -203,15 +203,10 @@ class QemuUtils {
         #endif
     }
 
+    /// Whether Qemu is launched with a Spice server: to show the VM, or to open Spice sessions on it when headless.
+    /// It follows the Spice display setting of the VM, which is always on in the App Store version.
     static func isSpiceSupported(_ vm: VirtualMachine) -> Bool {
-        if Utils.isHeadless(vm) {
-            #if APPSTORE
-                return true
-            #else
-                return QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.spiceSupported == true
-            #endif
-        }
-        return isSpiceDisplayEnabled(vm)
+        isSpiceDisplayEnabled(vm)
     }
 
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
