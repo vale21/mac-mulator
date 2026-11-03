@@ -12,6 +12,35 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     var virtualMachines: [VirtualMachine] = []
     var runningVMs: [VirtualMachine: VirtualMachineRunner] = [:]
 
+    func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
+        if let vm = currentVm {
+            Utils.removeUnexistingDrives(vm)
+            vmController?.setVirtualMachine(vm)
+            let index = virtualMachines.firstIndex(of: vm) ?? -1
+            listController?.selectElement(index)
+            listController?.setState(index, vm)
+        } else {
+            vmController?.setVirtualMachine(nil)
+            listController?.selectElement(-1)
+        }
+
+        self.currentVm = currentVm
+
+        let appDelegate = NSApp.delegate as! AppDelegate
+        appDelegate.refreshVMMenus()
+    }
+
+    func getVirtualMachinesCount() -> Int {
+        virtualMachines.count
+    }
+
+    func getRunnerForCurrentVM() -> VirtualMachineRunner? {
+        if let currentVm {
+            return runningVMs[currentVm]
+        }
+        return nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -130,24 +159,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
-    func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
-        if let vm = currentVm {
-            Utils.removeUnexistingDrives(vm)
-            vmController?.setVirtualMachine(vm)
-            let index = virtualMachines.firstIndex(of: vm) ?? -1
-            listController?.selectElement(index)
-            listController?.setState(index, vm)
-        } else {
-            vmController?.setVirtualMachine(nil)
-            listController?.selectElement(-1)
-        }
-
-        self.currentVm = currentVm
-
-        let appDelegate = NSApp.delegate as! AppDelegate
-        appDelegate.refreshVMMenus()
-    }
-
     func startupCompleted() {
         if virtualMachines.isEmpty {
             vmController?.setVirtualMachine(nil)
@@ -181,10 +192,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let delegate = NSApp.delegate as! AppDelegate
         delegate.addSavedVM(virtualMachine.path)
-    }
-
-    func getVirtualMachinesCount() -> Int {
-        virtualMachines.count
     }
 
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
@@ -357,18 +364,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return virtualMachine
     }
 
-    /// Name for a new clone, with a " (2)", " (3)", ... suffix if a VM or a folder with the same name already exists.
-    private func cloneName(of name: String, linked: Bool) -> String {
-        let baseName = String(format: NSLocalizedString(linked ? "RootViewController.linkedCloneOf" : "RootViewController.fullCloneOf", comment: ""), name)
-        var candidate = baseName
-        var counter = 2
-        while virtualMachines.contains(where: { $0.displayName == candidate }) || FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: candidate)) {
-            candidate = "\(baseName) (\(counter))"
-            counter += 1
-        }
-        return candidate
-    }
-
     func performFullClone(_ vmToClone: VirtualMachine) {
         let uniqueName = cloneName(of: vmToClone.displayName, linked: false)
         let newVMPath = Utils.computeVMPath(vmName: uniqueName)
@@ -431,35 +426,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             })
         }
         createOverlay(at: 0)
-    }
-
-    private func registerClone(at newVMPath: String, displayName: String, linkedDrives: [VirtualDrive] = []) {
-        let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
-        if let tempVm = temp {
-            tempVm.assignNewIdForClone()
-            tempVm.displayName = displayName
-            if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
-                tempVm.type = MacMulatorConstants.APPLE_VM
-            }
-            if tempVm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
-                tempVm.type = MacMulatorConstants.QEMU_VM
-            }
-
-            for linkedDrive in linkedDrives {
-                tempVm.drives.first(where: { $0.path == linkedDrive.path })?.backingPath = linkedDrive.backingPath
-            }
-
-            if let provisioningInformation = tempVm.provisioningInformation {
-                // The cloned plist points at the original's Keychain item; give the clone its own.
-                let password = provisioningInformation.userPassword
-                provisioningInformation.passwordKeychainId = UUID().uuidString
-                provisioningInformation.userPassword = password
-            }
-            tempVm.writeToPlist()
-            DispatchQueue.main.async {
-                self.addVirtualMachineFromFile(newVMPath)
-            }
-        }
     }
 
     func convertToFullCloneMenuBarClicked(_: Any) {
@@ -569,13 +535,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         runningVMs[vm]
     }
 
-    func getRunnerForCurrentVM() -> VirtualMachineRunner? {
-        if let currentVm {
-            return runningVMs[currentVm]
-        }
-        return nil
-    }
-
     func areThereRunningVMs() -> Bool {
         runningVMs.count > 0
     }
@@ -583,6 +542,47 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func killAllRunningVMs() {
         for runner in runningVMs.values {
             runner.stopVM(guestStopped: false)
+        }
+    }
+
+    /// Name for a new clone, with a " (2)", " (3)", ... suffix if a VM or a folder with the same name already exists.
+    private func cloneName(of name: String, linked: Bool) -> String {
+        let baseName = String(format: NSLocalizedString(linked ? "RootViewController.linkedCloneOf" : "RootViewController.fullCloneOf", comment: ""), name)
+        var candidate = baseName
+        var counter = 2
+        while virtualMachines.contains(where: { $0.displayName == candidate }) || FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: candidate)) {
+            candidate = "\(baseName) (\(counter))"
+            counter += 1
+        }
+        return candidate
+    }
+
+    private func registerClone(at newVMPath: String, displayName: String, linkedDrives: [VirtualDrive] = []) {
+        let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
+        if let tempVm = temp {
+            tempVm.assignNewIdForClone()
+            tempVm.displayName = displayName
+            if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+                tempVm.type = MacMulatorConstants.APPLE_VM
+            }
+            if tempVm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
+                tempVm.type = MacMulatorConstants.QEMU_VM
+            }
+
+            for linkedDrive in linkedDrives {
+                tempVm.drives.first(where: { $0.path == linkedDrive.path })?.backingPath = linkedDrive.backingPath
+            }
+
+            if let provisioningInformation = tempVm.provisioningInformation {
+                // The cloned plist points at the original's Keychain item; give the clone its own.
+                let password = provisioningInformation.userPassword
+                provisioningInformation.passwordKeychainId = UUID().uuidString
+                provisioningInformation.userPassword = password
+            }
+            tempVm.writeToPlist()
+            DispatchQueue.main.async {
+                self.addVirtualMachineFromFile(newVMPath)
+            }
         }
     }
 }

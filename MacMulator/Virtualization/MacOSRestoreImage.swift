@@ -21,7 +21,6 @@ class MacOSRestoreImage: NSObject {
     }
 
     #if arch(arm64)
-
         public func download(completionHandler: @escaping (Error?) -> Void) {
             NSLog("Attempting to download latest available restore image.")
             VZMacOSRestoreImage.fetchLatestSupported { [self] (result: Result<VZMacOSRestoreImage, Error>) in
@@ -38,7 +37,9 @@ class MacOSRestoreImage: NSObject {
         public func cancelDownload() {
             canceled = true
         }
+    #endif
 
+    #if arch(arm64)
         private func downloadRestoreImage(restoreImage: VZMacOSRestoreImage, completionHandler: @escaping (Error?) -> Void) {
             let downloadTask = URLSession.shared.downloadTask(with: restoreImage.url) { localURL, _, error in
                 if let error {
@@ -68,6 +69,5 @@ class MacOSRestoreImage: NSObject {
             }
             downloadTask.resume()
         }
-
     #endif
 }

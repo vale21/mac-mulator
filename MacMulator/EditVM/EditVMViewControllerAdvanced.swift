@@ -62,55 +62,6 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         #endif
     }
 
-    #if APPSTORE
-        /// Hidden views still take part in Auto Layout, so the controls anchored below the Qemu path field
-        /// are re-anchored to fill the space left by the hidden Qemu path controls.
-        fileprivate func collapseQemuPathSpace() {
-            let anchoredToPathField = view.constraints.filter {
-                ($0.firstItem === accelerateVM || $0.firstItem === qemuCommandLabel) &&
-                    $0.firstAttribute == .top &&
-                    $0.secondItem === qemuPathView
-            }
-            NSLayoutConstraint.deactivate(anchoredToPathField)
-
-            NSLayoutConstraint.activate([
-                accelerateVM.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-                qemuCommandLabel.topAnchor.constraint(equalTo: accelerateVM.bottomAnchor, constant: 24),
-            ])
-        }
-    #endif
-
-    fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
-        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
-        fullCommandView.string = runner.getQemuCommand()
-        qemuPathView.stringValue = QemuUtils.getQemuPath(for: virtualMachine)
-    }
-
-    fileprivate func updateView() {
-        if let virtualMachine {
-            updateQemuCommand(virtualMachine)
-
-            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
-
-            if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() {
-                accelerateVM.state = NSButton.StateValue.off
-                accelerateVM.isEnabled = false
-                if Utils.isRunningInEmulation() {
-                    accelerateVM.toolTip = NSLocalizedString("EditVMViewControllerAdvanced.rosettaNotAvailable", comment: "")
-                } else {
-                    accelerateVM.toolTip = String(format: NSLocalizedString("EditVMViewControllerAdvanced.featureNotAvailable", comment: ""), vmArchitecture, Utils.hostArchitecture() ?? "")
-                }
-            } else {
-                accelerateVM.isEnabled = true
-                if let hvf = virtualMachine.hvf {
-                    accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off
-                } else {
-                    accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off
-                }
-            }
-        }
-    }
-
     func controlTextDidChange(_ notification: Notification) {
         if (notification.object as! NSTextField) == qemuPathView {
             if let virtualMachine {
@@ -156,6 +107,55 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
                     }
                 } else {
                     virtualMachine.qemuCommand = nil
+                }
+            }
+        }
+    }
+
+    #if APPSTORE
+        /// Hidden views still take part in Auto Layout, so the controls anchored below the Qemu path field
+        /// are re-anchored to fill the space left by the hidden Qemu path controls.
+        private func collapseQemuPathSpace() {
+            let anchoredToPathField = view.constraints.filter {
+                ($0.firstItem === accelerateVM || $0.firstItem === qemuCommandLabel) &&
+                    $0.firstAttribute == .top &&
+                    $0.secondItem === qemuPathView
+            }
+            NSLayoutConstraint.deactivate(anchoredToPathField)
+
+            NSLayoutConstraint.activate([
+                accelerateVM.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                qemuCommandLabel.topAnchor.constraint(equalTo: accelerateVM.bottomAnchor, constant: 24),
+            ])
+        }
+    #endif
+
+    private func updateQemuCommand(_ virtualMachine: VirtualMachine) {
+        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+        fullCommandView.string = runner.getQemuCommand()
+        qemuPathView.stringValue = QemuUtils.getQemuPath(for: virtualMachine)
+    }
+
+    private func updateView() {
+        if let virtualMachine {
+            updateQemuCommand(virtualMachine)
+
+            let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
+
+            if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() {
+                accelerateVM.state = NSButton.StateValue.off
+                accelerateVM.isEnabled = false
+                if Utils.isRunningInEmulation() {
+                    accelerateVM.toolTip = NSLocalizedString("EditVMViewControllerAdvanced.rosettaNotAvailable", comment: "")
+                } else {
+                    accelerateVM.toolTip = String(format: NSLocalizedString("EditVMViewControllerAdvanced.featureNotAvailable", comment: ""), vmArchitecture, Utils.hostArchitecture() ?? "")
+                }
+            } else {
+                accelerateVM.isEnabled = true
+                if let hvf = virtualMachine.hvf {
+                    accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off
+                } else {
+                    accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off
                 }
             }
         }

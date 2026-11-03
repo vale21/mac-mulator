@@ -8,8 +8,6 @@
 import Cocoa
 
 class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextViewDelegate {
-    /// The VM just created, handed over to the provisioning options by reference rather than looked up by name.
-    private var createdVM: VirtualMachine?
     @IBOutlet var essentialInformationBox: NSBox!
     @IBOutlet var vmNameLabel: NSTextField!
     @IBOutlet var vmName: NSTextField!
@@ -25,11 +23,18 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     @IBOutlet var fullConfiguration: NSButton!
     @IBOutlet var createButton: NSButton!
 
+    /// The VM just created, handed over to the provisioning options by reference rather than looked up by name.
+    private var createdVM: VirtualMachine?
+
     var rootController: RootViewController?
 
     static let DESCRIPTION_DEFAULT_MESSAGE = NSLocalizedString("NewVMViewController.defaultMessage", comment: "")
 
     var starting: Bool = true
+
+    func setRootController(_ rootController: RootViewController) {
+        self.rootController = rootController
+    }
 
     @IBAction func findInstallMedia(_: Any) {
         if vmType.stringValue == QemuConstants.OS_IOS {
@@ -101,10 +106,6 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
         }
     }
 
-    func setRootController(_ rootController: RootViewController) {
-        self.rootController = rootController
-    }
-
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         if comboBox == vmType {
             return QemuConstants.supportedVMTypes.count
@@ -155,7 +156,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
         Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.vmCreationFailed", comment: "") + error.localizedDescription, completionHandler: { _ in self.view.window?.close() }, virtualMachine: nil)
     }
 
-    fileprivate func validateInput() -> Bool {
+    private func validateInput() -> Bool {
         if vmType.stringValue == "" || vmName.stringValue == "" {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.errorFeldsMissing", comment: ""), virtualMachine: nil)
             return false

@@ -16,6 +16,18 @@ class VirtualizationFrameworkVMCreator: VMCreator {
     private var progress: Double = 0.0
     private var restoreImage: MacOSRestoreImage?
 
+    func setProgress(_ progress: Double) {
+        self.progress = progress
+    }
+
+    func getProgress() -> Double {
+        progress
+    }
+
+    func getError() -> Error? {
+        error
+    }
+
     func createVM(vm: VirtualMachine, installMedia: String) throws {
         try! Utils.createDocumentPackage(vm.path)
         if !shouldDownloadIpsw(vm, installMedia) {
@@ -50,18 +62,6 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         complete
     }
 
-    func setProgress(_ progress: Double) {
-        self.progress = progress
-    }
-
-    func getProgress() -> Double {
-        progress
-    }
-
-    func getError() -> Error? {
-        error
-    }
-
     func cancelVMCreation(vm: VirtualMachine) {
         #if arch(arm64)
 
@@ -78,7 +78,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         #endif
     }
 
-    fileprivate func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) throws {
+    private func createVMFilesOnDisk(_ vm: VirtualMachine, _ installMediaPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) throws {
         var format = QemuConstants.FORMAT_RAW
         if Utils.isAsifSupported(vm) {
             format = QemuConstants.FORMAT_ASIF
@@ -138,7 +138,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         })
     }
 
-    fileprivate func createVM_int(vm: VirtualMachine, installMedia: String) {
+    private func createVM_int(vm: VirtualMachine, installMedia: String) {
         try! createVMFilesOnDisk(vm, installMedia, uponCompletion: {
             _, _ in
             vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
@@ -146,7 +146,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         })
     }
 
-    fileprivate func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
+    private func setupVirtualMachine(vm: VirtualMachine, ipswURL: URL) {
         if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
             #if arch(arm64)
 
@@ -177,7 +177,7 @@ class VirtualizationFrameworkVMCreator: VMCreator {
         }
     }
 
-    fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
+    private func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
         Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

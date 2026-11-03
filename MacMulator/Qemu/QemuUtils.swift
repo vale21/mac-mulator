@@ -8,6 +8,11 @@
 import Cocoa
 
 class QemuUtils {
+    #if APPSTORE
+        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
+        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
+    #endif
+
     static func getDriveFormatDescription(_ format: String) -> String {
         if format == QemuConstants.FORMAT_RAW {
             return "(Plain data)"
@@ -168,11 +173,6 @@ class QemuUtils {
         }
     }
 
-    #if APPSTORE
-        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
-        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
-    #endif
-
     static func getQemuPath() -> String {
         #if APPSTORE
             return bundledQemuPath
@@ -244,12 +244,6 @@ class QemuUtils {
             return vmPath + "/tpm/socket"
         #endif
     }
-
-    #if APPSTORE
-        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
-            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
-        }
-    #endif
 
     static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
         let aliases = [
@@ -482,4 +476,10 @@ class QemuUtils {
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
+
+    #if APPSTORE
+        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
+            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+        }
+    #endif
 }

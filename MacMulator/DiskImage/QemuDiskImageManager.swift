@@ -23,21 +23,6 @@ class QemuDiskImageManager: DiskImageManager {
         createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
     }
 
-    private func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let qemuPath = QemuUtils.getQemuPath()
-        let shell = Shell()
-
-        let command: String =
-            QemuImgCommandBuilder(qemuPath: qemuPath)
-                .withCommand(QemuConstants.IMAGE_CMD_CREATE)
-                .withFormat(format)
-                .withSize(size)
-                .withName(name)
-                .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
     func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let qemuPath = QemuUtils.getQemuPath()
         let shell = Shell()
@@ -163,5 +148,20 @@ class QemuDiskImageManager: DiskImageManager {
         shell.runCommand(command, path, uponCompletion: { terminationCode, errorMessage in
             callback(terminationCode, (terminationCode == 0 ? shell.readFromStandardOutput() : errorMessage) ?? shell.readFromStandardError())
         })
+    }
+
+    private func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let qemuPath = QemuUtils.getQemuPath()
+        let shell = Shell()
+
+        let command: String =
+            QemuImgCommandBuilder(qemuPath: qemuPath)
+                .withCommand(QemuConstants.IMAGE_CMD_CREATE)
+                .withFormat(format)
+                .withSize(size)
+                .withName(name)
+                .build()
+
+        shell.runCommand(command, path, uponCompletion: callback)
     }
 }

@@ -31,7 +31,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia _: String, serialPort: VZSerialPortConfiguration?) -> VZVirtualMachineConfiguration {
+    private static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia _: String, serialPort: VZSerialPortConfiguration?) -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = createLinuxPlatformConfiguration(vm: vm, isInstalling: false)
         virtualMachineConfiguration.cpuCount = vm.cpus
@@ -99,7 +99,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func createLinuxPlatformConfiguration(vm: VirtualMachine, isInstalling: Bool) -> VZGenericPlatformConfiguration {
+    private static func createLinuxPlatformConfiguration(vm: VirtualMachine, isInstalling: Bool) -> VZGenericPlatformConfiguration {
         let linuxPlatformConfiguration = VZGenericPlatformConfiguration()
 
         let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkLinuxSupport.MACHINE_IDENTIFIER_NAME + "-0")
@@ -125,7 +125,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func createLinuxBootloader(vm: VirtualMachine, isInstalling: Bool) -> VZEFIBootLoader {
+    private static func createLinuxBootloader(vm: VirtualMachine, isInstalling: Bool) -> VZEFIBootLoader {
         let bootloader = VZEFIBootLoader()
 
         let efiVariableStorePath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.EFI_VARIABLE_STORE_NAME + "-0"
@@ -144,13 +144,13 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func deleteLinuxPlatformConfiguration(vm: VirtualMachine) {
+    private static func deleteLinuxPlatformConfiguration(vm: VirtualMachine) {
         let machineIdentifierPath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.MACHINE_IDENTIFIER_NAME + "-0"
         try? FileManager.default.removeItem(atPath: machineIdentifierPath)
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func deleteLinuxBootloader(vm: VirtualMachine) {
+    private static func deleteLinuxBootloader(vm: VirtualMachine) {
         let efiVariableStorePath = vm.path + "/" + VirtualizationFrameworkLinuxSupport.EFI_VARIABLE_STORE_NAME + "-0"
         try? FileManager.default.removeItem(atPath: efiVariableStorePath)
     }

@@ -11,7 +11,6 @@ import Virtualization
 @available(macOS 12.0, *)
 class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
     #if arch(arm64)
-
         static func createMacOSVirtualMachineData(vm: VirtualMachine, restoreImage: VZMacOSRestoreImage) {
             guard let macOSConfiguration = restoreImage.mostFeaturefulSupportedConfiguration else {
                 fatalError("No supported configuration available.")
@@ -30,8 +29,10 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
             let virtualMachine = VZVirtualMachine(configuration: configuration, queue: .main)
             return virtualMachine
         }
+    #endif
 
-        fileprivate static func setupMacOSVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
+    #if arch(arm64)
+        private static func setupMacOSVirtualMachine(vm: VirtualMachine) -> VZVirtualMachineConfiguration {
             let virtualMachineConfiguration = VZVirtualMachineConfiguration()
             virtualMachineConfiguration.platform = createMacPlatformConfiguration(vm: vm, macOSConfiguration: nil)
             virtualMachineConfiguration.cpuCount = vm.cpus
@@ -121,7 +122,7 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
             return virtualMachineConfiguration
         }
 
-        fileprivate static func createMacPlatformConfiguration(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements?) -> VZMacPlatformConfiguration {
+        private static func createMacPlatformConfiguration(vm: VirtualMachine, macOSConfiguration: VZMacOSConfigurationRequirements?) -> VZMacPlatformConfiguration {
             let macPlatformConfiguration = VZMacPlatformConfiguration()
             let auxiliaryStorageURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkMacOSSupport.AUXILIARY_STORAGE_NAME + "-0")
             let machineIdentifierURL = URL(fileURLWithPath: vm.path + "/" + VirtualizationFrameworkMacOSSupport.MACHINE_IDENTIFIER_NAME + "-0")
@@ -166,6 +167,5 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
 
             return macPlatformConfiguration
         }
-
     #endif
 }

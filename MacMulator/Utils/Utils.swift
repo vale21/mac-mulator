@@ -36,6 +36,31 @@ class Utils {
     static let IMAGE_TYPES = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
     static let IMAGE_TYPES_USB = ["img", "iso", "cdr"]
 
+    /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
+    /// key exchanges) be reached. The legacy algorithms are appended ("+") to the defaults, so newer guests still
+    /// negotiate modern ones; only those the ssh of the host still supports are listed, as an unknown one makes it fail.
+    static let legacySSHOptions: [String] = {
+        let legacyAlgorithms: [(option: String, query: String, algorithms: [String])] = [
+            ("HostKeyAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
+            ("PubkeyAcceptedAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
+            ("KexAlgorithms", "kex", ["diffie-hellman-group14-sha1", "diffie-hellman-group-exchange-sha1", "diffie-hellman-group1-sha1"]),
+            ("Ciphers", "cipher", ["aes128-cbc", "aes192-cbc", "aes256-cbc", "3des-cbc"]),
+        ]
+
+        var supportedByQuery: [String: Set<String>] = [:]
+        var options: [String] = []
+        for (option, query, algorithms) in legacyAlgorithms {
+            if supportedByQuery[query] == nil {
+                supportedByQuery[query] = supportedSSHAlgorithms(query)
+            }
+            let supported = algorithms.filter { supportedByQuery[query]!.contains($0) }
+            if !supported.isEmpty {
+                options += ["-o", option + "=+" + supported.joined(separator: ",")]
+            }
+        }
+        return options
+    }()
+
     static func createDocumentPackage(_ path: String) throws {
         let fileManager = FileManager.default
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
@@ -175,17 +200,6 @@ class Utils {
         return args + [destination]
     }
 
-    private static func sshKnownHostsFile(for vm: VirtualMachine) -> String? {
-        guard let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
-        let directory = applicationSupport.appendingPathComponent("MacMulator/known_hosts", isDirectory: true)
-        do {
-            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        } catch {
-            return nil
-        }
-        return directory.appendingPathComponent(String(stableHash(vm.path), radix: 16)).path
-    }
-
     /// FNV-1a hash of a string: stable across launches (unlike Hasher) and short, to name files after a VM path
     static func stableHash(_ string: String) -> UInt64 {
         var hash: UInt64 = 0xCBF2_9CE4_8422_2325
@@ -194,48 +208,6 @@ class Utils {
             hash = hash &* 0x0000_0100_0000_01B3
         }
         return hash
-    }
-
-    /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
-    /// key exchanges) be reached. The legacy algorithms are appended ("+") to the defaults, so newer guests still
-    /// negotiate modern ones; only those the ssh of the host still supports are listed, as an unknown one makes it fail.
-    static let legacySSHOptions: [String] = {
-        let legacyAlgorithms: [(option: String, query: String, algorithms: [String])] = [
-            ("HostKeyAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
-            ("PubkeyAcceptedAlgorithms", "key", ["ssh-rsa", "ssh-dss"]),
-            ("KexAlgorithms", "kex", ["diffie-hellman-group14-sha1", "diffie-hellman-group-exchange-sha1", "diffie-hellman-group1-sha1"]),
-            ("Ciphers", "cipher", ["aes128-cbc", "aes192-cbc", "aes256-cbc", "3des-cbc"]),
-        ]
-
-        var supportedByQuery: [String: Set<String>] = [:]
-        var options: [String] = []
-        for (option, query, algorithms) in legacyAlgorithms {
-            if supportedByQuery[query] == nil {
-                supportedByQuery[query] = supportedSSHAlgorithms(query)
-            }
-            let supported = algorithms.filter { supportedByQuery[query]!.contains($0) }
-            if !supported.isEmpty {
-                options += ["-o", option + "=+" + supported.joined(separator: ",")]
-            }
-        }
-        return options
-    }()
-
-    private static func supportedSSHAlgorithms(_ query: String) -> Set<String> {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/ssh")
-        process.arguments = ["-Q", query]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = FileHandle.nullDevice
-        do {
-            try process.run()
-        } catch {
-            return []
-        }
-        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-        process.waitUntilExit()
-        return Set(output.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) })
     }
 
     static func shellQuote(_ string: String) -> String {
@@ -284,18 +256,6 @@ class Utils {
 
                 return Int32(driveInfo.substring(with: String.Index(encodedOffset: index) ..< String.Index(encodedOffset: index2)))
             }
-        }
-
-        return nil
-    }
-
-    fileprivate static func toDecimalWithAutoLocale(_ string: String) -> Decimal? {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale.current
-
-        if let number = formatter.number(from: string) {
-            return number.decimalValue
         }
 
         return nil
@@ -1228,15 +1188,6 @@ class Utils {
         }
     }
 
-    private static func parseDimensions(_ res: String) -> (width: Int, height: Int)? {
-        let parts = res
-            .split(whereSeparator: { !$0.isNumber })
-            .compactMap { Int($0) }
-
-        guard parts.count >= 2 else { return nil }
-        return (parts[0], parts[1])
-    }
-
     static func getAvailableResolutions() -> [String] {
         let mainScreen = getMainScreenSize()
 
@@ -1295,7 +1246,56 @@ class Utils {
         VirtualMachineRunnerFactory().create(listenPort: 0, vm: vm)
     }
 
-    fileprivate static func driveExists(_ drive: VirtualDrive) -> Bool {
+    private static func sshKnownHostsFile(for vm: VirtualMachine) -> String? {
+        guard let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+        let directory = applicationSupport.appendingPathComponent("MacMulator/known_hosts", isDirectory: true)
+        do {
+            try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        } catch {
+            return nil
+        }
+        return directory.appendingPathComponent(String(stableHash(vm.path), radix: 16)).path
+    }
+
+    private static func supportedSSHAlgorithms(_ query: String) -> Set<String> {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/ssh")
+        process.arguments = ["-Q", query]
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = FileHandle.nullDevice
+        do {
+            try process.run()
+        } catch {
+            return []
+        }
+        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+        process.waitUntilExit()
+        return Set(output.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) })
+    }
+
+    private static func toDecimalWithAutoLocale(_ string: String) -> Decimal? {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale.current
+
+        if let number = formatter.number(from: string) {
+            return number.decimalValue
+        }
+
+        return nil
+    }
+
+    private static func parseDimensions(_ res: String) -> (width: Int, height: Int)? {
+        let parts = res
+            .split(whereSeparator: { !$0.isNumber })
+            .compactMap { Int($0) }
+
+        guard parts.count >= 2 else { return nil }
+        return (parts[0], parts[1])
+    }
+
+    private static func driveExists(_ drive: VirtualDrive) -> Bool {
         if drive.mediaType == QemuConstants.MEDIATYPE_CDROM || drive.mediaType == QemuConstants.MEDIATYPE_USB || drive.mediaType == QemuConstants.MEDIATYPE_IPSW {
             let filemanager = FileManager.default
             return filemanager.fileExists(atPath: drive.path)
@@ -1303,7 +1303,7 @@ class Utils {
         return true
     }
 
-    fileprivate static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
+    private static func getStringValueForSubType(_ os: String, _ subtype: String?, _ index: Int) -> String? {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os, vmDefault[1] as? String == subtype {
                 return vmDefault[index] as? String
@@ -1312,7 +1312,7 @@ class Utils {
         return nil
     }
 
-    fileprivate static func getIntValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Int) -> Int {
+    private static func getIntValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Int) -> Int {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os, vmDefault[1] as? String == subtype {
                 return vmDefault[index] as! Int
@@ -1321,7 +1321,7 @@ class Utils {
         return defaultValue
     }
 
-    fileprivate static func getBoolValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Bool) -> Bool {
+    private static func getBoolValueForSubType(_ os: String, _ subtype: String?, _ index: Int, _ defaultValue: Bool) -> Bool {
         for vmDefault in QemuConstants.vmDefaults {
             if vmDefault[0] as? String == os, vmDefault[1] as? String == subtype {
                 return vmDefault[index] as! Bool
@@ -1330,11 +1330,11 @@ class Utils {
         return defaultValue
     }
 
-    fileprivate static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
+    private static func isMacVersionWithVirtualizationFramework(os: String, subtype: String) -> Bool {
         os == QemuConstants.OS_MAC && isMacVersionGreaterOrEqualThan(subtype: subtype, target: QemuConstants.SUB_MAC_MONTEREY)
     }
 
-    fileprivate static func isMacVersionGreaterOrEqualThan(subtype: String, target: String) -> Bool {
+    private static func isMacVersionGreaterOrEqualThan(subtype: String, target: String) -> Bool {
         let versions = [
             QemuConstants.SUB_MAC_OS_8,
             QemuConstants.SUB_MAC_OS_9,

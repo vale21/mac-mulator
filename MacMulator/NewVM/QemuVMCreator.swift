@@ -12,15 +12,6 @@ class QemuVMCreator: VMCreator {
     var complete = false
     var progress: Double = 0.0
 
-    func createVM(vm: VirtualMachine, installMedia: String) throws {
-        let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)
-        try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia)
-    }
-
-    func isComplete() -> Bool {
-        complete
-    }
-
     func setProgress(_ progress: Double) {
         self.progress = progress
     }
@@ -33,9 +24,18 @@ class QemuVMCreator: VMCreator {
         nil
     }
 
+    func createVM(vm: VirtualMachine, installMedia: String) throws {
+        let virtualHDD = setupVirtualDriveObjects(vm: vm, installMedia: installMedia)
+        try createDriveFilesOnDisk(vm: vm, virtualHDD: virtualHDD, installMedia: installMedia)
+    }
+
+    func isComplete() -> Bool {
+        complete
+    }
+
     func cancelVMCreation(vm _: VirtualMachine) {}
 
-    fileprivate func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {
+    private func setupVirtualDriveObjects(vm: VirtualMachine, installMedia: String) -> VirtualDrive? {
         var virtualHDD: VirtualDrive? = nil
         if installMedia != "" {
             if Utils.isVHDXImage(installMedia) {
@@ -110,7 +110,7 @@ class QemuVMCreator: VMCreator {
         return virtualHDD
     }
 
-    fileprivate func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive?, installMedia: String) throws {
+    private func createDriveFilesOnDisk(vm: VirtualMachine, virtualHDD: VirtualDrive?, installMedia: String) throws {
         do {
             try Utils.createDocumentPackage(vm.path)
             if let virtualHDD {

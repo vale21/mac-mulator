@@ -23,64 +23,12 @@ class QemuRunner: VirtualMachineRunner {
         spiceServerEnabled || Utils.isHeadless(managedVm)
     }
 
-    init(listenPort: Int32, virtualMachine: VirtualMachine) {
-        qemuPath = QemuUtils.getQemuPath()
-        livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
-        self.listenPort = listenPort
-        managedVm = virtualMachine
-    }
-
-    func runVM(recoveryMode _: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
-        let command = getQemuCommand()
-        do {
-            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: QemuUtils.getQemuPath(for: managedVm)) {
-                validationResult, error in
-                if validationResult {
-                    self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result, _ in
-                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
-                    })
-                } else {
-                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.managedVm)
-                }
-            }
-        } catch {
-            throw error
-        }
-    }
-
     func getManagedVM() -> VirtualMachine {
         managedVm
     }
 
     func getListenPort() -> Int32 {
         listenPort
-    }
-
-    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if isVMRunning() {
-            throw ValidationError.snapshotError(vmType: "QEMU")
-        }
-
-        let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
-        if let underlyingHandler {
-            underlyingHandler(snapshot)
-        }
-    }
-
-    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
-        managedVm.removeSnapshot(snapshot.timestamp)
-        try deleteVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
-    }
-
-    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
-        if isVMRunning() {
-            throw ValidationError.snapshotError(vmType: "QEMU")
-        }
-
-        try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
-        if let underlyingHandler {
-            underlyingHandler(snapshot)
-        }
     }
 
     func getQemuCommand() -> String {
@@ -144,6 +92,70 @@ class QemuRunner: VirtualMachineRunner {
         }
     }
 
+    func getStandardError() -> String {
+        shell.readFromStandardError()
+    }
+
+    func getStandardOutput() -> String {
+        shell.readFromStandardOutput()
+    }
+
+    func getConsoleOutput() -> String {
+        shell.readFromConsole()
+    }
+
+    init(listenPort: Int32, virtualMachine: VirtualMachine) {
+        qemuPath = QemuUtils.getQemuPath()
+        livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
+        self.listenPort = listenPort
+        managedVm = virtualMachine
+    }
+
+    func runVM(recoveryMode _: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
+        let command = getQemuCommand()
+        do {
+            try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: QemuUtils.getQemuPath(for: managedVm)) {
+                validationResult, error in
+                if validationResult {
+                    self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result, _ in
+                        callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
+                    })
+                } else {
+                    callback(VMExecutionResult(exitCode: -1, error: error!.description), self.managedVm)
+                }
+            }
+        } catch {
+            throw error
+        }
+    }
+
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if isVMRunning() {
+            throw ValidationError.snapshotError(vmType: "QEMU")
+        }
+
+        let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
+        if let underlyingHandler {
+            underlyingHandler(snapshot)
+        }
+    }
+
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        managedVm.removeSnapshot(snapshot.timestamp)
+        try deleteVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+    }
+
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if isVMRunning() {
+            throw ValidationError.snapshotError(vmType: "QEMU")
+        }
+
+        try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+        if let underlyingHandler {
+            underlyingHandler(snapshot)
+        }
+    }
+
     static func validateQemuCommand(command: String, globalQemuPath: String, configuredQemuPath: String?, uponCompletion callback: @escaping (Bool, ValidationError?) -> Void) throws {
         if command.starts(with: "sudo") {
             throw ValidationError.sudoNotAllowed
@@ -198,7 +210,27 @@ class QemuRunner: VirtualMachineRunner {
         })
     }
 
-    fileprivate func setupMediaType(_ subtype: String, _ drive: VirtualDrive) -> String {
+    func waitForCompletion() {
+        shell.waitForCommand()
+    }
+
+    func isVMRunning() -> Bool {
+        shell.isRunning()
+    }
+
+    func stopVM(guestStopped _: Bool, uponCompletion _: (((any Error)?) -> Void)?) {
+        shell.kill()
+    }
+
+    func stopVMGracefully() {
+        stopVM(guestStopped: false)
+    }
+
+    func pauseVM() {}
+
+    func abort() {}
+
+    private func setupMediaType(_ subtype: String, _ drive: VirtualDrive) -> String {
         var mediaType = drive.mediaType
         if mediaType == QemuConstants.MEDIATYPE_OPENCORE {
             mediaType = subtype == QemuConstants.SUB_WINDOWS_11 ? QemuConstants.MEDIATYPE_NVME : QemuConstants.MEDIATYPE_DISK
@@ -206,7 +238,7 @@ class QemuRunner: VirtualMachineRunner {
         return mediaType
     }
 
-    fileprivate func setupPath(_ drive: VirtualDrive, _ vm: VirtualMachine) -> String {
+    private func setupPath(_ drive: VirtualDrive, _ vm: VirtualMachine) -> String {
         var path = drive.path
         // if User selected Install xxx.app, we add the sffix to reach BasSystem.dmg
         if path.hasSuffix(".app"), vm.os == QemuConstants.OS_MAC {
@@ -215,7 +247,7 @@ class QemuRunner: VirtualMachineRunner {
         return path
     }
 
-    fileprivate func createBuilderForPPC() -> QemuCommandBuilder {
+    private func createBuilderForPPC() -> QemuCommandBuilder {
         let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
@@ -234,7 +266,7 @@ class QemuRunner: VirtualMachineRunner {
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
-    fileprivate func createBuilderForPPC64() -> QemuCommandBuilder {
+    private func createBuilderForPPC64() -> QemuCommandBuilder {
         let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
@@ -252,7 +284,7 @@ class QemuRunner: VirtualMachineRunner {
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
-    fileprivate func createBuilderForI386() -> QemuCommandBuilder {
+    private func createBuilderForI386() -> QemuCommandBuilder {
         let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
@@ -273,7 +305,7 @@ class QemuRunner: VirtualMachineRunner {
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
-    fileprivate func createBuilderForX86_64() -> QemuCommandBuilder {
+    private func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation()
         let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
         let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
@@ -314,7 +346,7 @@ class QemuRunner: VirtualMachineRunner {
         return builder
     }
 
-    fileprivate func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String, _ videoDevice: String) -> QemuCommandBuilder {
+    private func createBuilderForMacGuestX86_64(_ isNative: Bool, _ hvfConfigured: Bool, _ networkDevice: String, _ videoDevice: String) -> QemuCommandBuilder {
         QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
             .withCpu(Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative && hvfConfigured))
@@ -336,7 +368,7 @@ class QemuRunner: VirtualMachineRunner {
             .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
     }
 
-    fileprivate func createBuilderForARM() -> QemuCommandBuilder {
+    private func createBuilderForARM() -> QemuCommandBuilder {
         if managedVm.os == QemuConstants.OS_IOS {
             return createBuilderForIOSGuests()
         }
@@ -353,7 +385,7 @@ class QemuRunner: VirtualMachineRunner {
             .withMemory(managedVm.memory)
     }
 
-    fileprivate func createBuilderForIOSGuests() -> QemuCommandBuilder {
+    private func createBuilderForIOSGuests() -> QemuCommandBuilder {
         QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withSerial(QemuConstants.SERIAL_MON_STDIO)
             .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
@@ -365,7 +397,7 @@ class QemuRunner: VirtualMachineRunner {
             .withLogging(QemuConstants.LOG_UNIMPLEMENTED)
     }
 
-    fileprivate func createBuilderForARM64() -> QemuCommandBuilder {
+    private func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation()
         let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
         let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
@@ -396,7 +428,7 @@ class QemuRunner: VirtualMachineRunner {
             .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS_DEVICE)
     }
 
-    fileprivate func createBuilderForM68k() -> QemuCommandBuilder {
+    private func createBuilderForM68k() -> QemuCommandBuilder {
         QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
@@ -407,7 +439,7 @@ class QemuRunner: VirtualMachineRunner {
             .withMemory(managedVm.memory)
     }
 
-    fileprivate func computeBootArg(_ vm: VirtualMachine) -> String {
+    private func computeBootArg(_ vm: VirtualMachine) -> String {
         for drive in vm.drives {
             if drive.isBootDrive {
                 if drive.mediaType == QemuConstants.MEDIATYPE_DISK {
@@ -422,7 +454,7 @@ class QemuRunner: VirtualMachineRunner {
         return QemuConstants.ARG_NET
     }
 
-    fileprivate func searchForDrive(_ vm: VirtualMachine, _ mediaType: String) -> Bool {
+    private func searchForDrive(_ vm: VirtualMachine, _ mediaType: String) -> Bool {
         for virtualDrive in vm.drives {
             if virtualDrive.mediaType == mediaType {
                 return true
@@ -431,7 +463,7 @@ class QemuRunner: VirtualMachineRunner {
         return false
     }
 
-    fileprivate func sanitizeMachineTypeForPPC() -> String {
+    private func sanitizeMachineTypeForPPC() -> String {
         var machineType = Utils.getMachineTypeForSubType(managedVm.os, managedVm.subtype)
         if machineType != QemuConstants.MACHINE_TYPE_MAC99, machineType != QemuConstants.MACHINE_TYPE_MAC99_PMU {
             machineType = QemuConstants.MACHINE_TYPE_MAC99_PMU
@@ -439,7 +471,7 @@ class QemuRunner: VirtualMachineRunner {
         return machineType
     }
 
-    fileprivate func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
+    private func sanitizeCPUTypeForIntel(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative)
         if cpuType != QemuConstants.CPU_HOST_PDPE_1GB,
            cpuType != QemuConstants.CPU_PENRYN,
@@ -456,7 +488,7 @@ class QemuRunner: VirtualMachineRunner {
         return cpuType
     }
 
-    fileprivate func sanitizeCPUTypeForARM() -> String {
+    private func sanitizeCPUTypeForARM() -> String {
         var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, false)
         if cpuType != QemuConstants.CPU_ARM1176,
            cpuType != QemuConstants.CPU_MAX
@@ -466,7 +498,7 @@ class QemuRunner: VirtualMachineRunner {
         return cpuType
     }
 
-    fileprivate func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
+    private func sanitizeCPUTypeForARM64(_ isNative: Bool) -> String {
         var cpuType = Utils.getCpuTypeForSubType(managedVm.os, managedVm.subtype, isNative)
         if cpuType != QemuConstants.CPU_HOST,
            cpuType != QemuConstants.CPU_CORTEX_A72,
@@ -477,7 +509,7 @@ class QemuRunner: VirtualMachineRunner {
         return cpuType
     }
 
-    fileprivate func extendPathForMacOSInstaller(_ path: String, _ subtype: String?) -> String {
+    private func extendPathForMacOSInstaller(_ path: String, _ subtype: String?) -> String {
         var installDMGFile = ""
         if subtype == QemuConstants.SUB_MAC_LION ||
             subtype == QemuConstants.SUB_MAC_MOUNTAIN_LION ||
@@ -496,37 +528,5 @@ class QemuRunner: VirtualMachineRunner {
             installDMGFile = "/Contents/SharedSupport/SharedSupport.dmg"
         }
         return path + installDMGFile
-    }
-
-    func waitForCompletion() {
-        shell.waitForCommand()
-    }
-
-    func isVMRunning() -> Bool {
-        shell.isRunning()
-    }
-
-    func stopVM(guestStopped _: Bool, uponCompletion _: (((any Error)?) -> Void)?) {
-        shell.kill()
-    }
-
-    func stopVMGracefully() {
-        stopVM(guestStopped: false)
-    }
-
-    func pauseVM() {}
-
-    func abort() {}
-
-    func getStandardError() -> String {
-        shell.readFromStandardError()
-    }
-
-    func getStandardOutput() -> String {
-        shell.readFromStandardOutput()
-    }
-
-    func getConsoleOutput() -> String {
-        shell.readFromConsole()
     }
 }

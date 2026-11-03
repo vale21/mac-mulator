@@ -44,34 +44,6 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         self.mode = mode
     }
 
-    override func viewWillAppear() {
-        nameLabel.stringValue = NSLocalizedString("NewPortMappingViewController.nameLabel", comment: "")
-        virtualMachinePortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.virtualMachinePortLabel", comment: "")
-        hostMacPortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.hostMacPortLabel", comment: "")
-
-        let portNumberFormatter = NumberFormatter()
-        portNumberFormatter.hasThousandSeparators = false
-
-        hostMacPortField.formatter = portNumberFormatter
-        virtualMachinePortField.formatter = portNumberFormatter
-
-        updateView()
-    }
-
-    fileprivate func updateView() {
-        nameField.stringValue = portMapping.name
-        virtualMachinePortStepper.intValue = portMapping.vmPort
-        virtualMachinePortField.intValue = portMapping.vmPort
-        hostMacPortStepper.intValue = portMapping.hostPort
-        hostMacPortField.intValue = portMapping.hostPort
-
-        if mode == Mode.ADD {
-            titleField.stringValue = NSLocalizedString("NewPortMappingViewController.createMapping", comment: "")
-        } else {
-            titleField.stringValue = String(format: NSLocalizedString("NewPortMappingViewController.editMapping", comment: ""), portMapping.name)
-        }
-    }
-
     @IBAction func stepperChanged(_ sender: Any) {
         if sender as? NSObject == virtualMachinePortStepper {
             portMapping.vmPort = virtualMachinePortStepper.intValue
@@ -100,6 +72,20 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         dismiss(self)
     }
 
+    override func viewWillAppear() {
+        nameLabel.stringValue = NSLocalizedString("NewPortMappingViewController.nameLabel", comment: "")
+        virtualMachinePortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.virtualMachinePortLabel", comment: "")
+        hostMacPortLabel.stringValue = NSLocalizedString("NewPortMappingViewController.hostMacPortLabel", comment: "")
+
+        let portNumberFormatter = NumberFormatter()
+        portNumberFormatter.hasThousandSeparators = false
+
+        hostMacPortField.formatter = portNumberFormatter
+        virtualMachinePortField.formatter = portNumberFormatter
+
+        updateView()
+    }
+
     func controlTextDidEndEditing(_ notification: Notification) {
         if (notification.object as! NSTextField) === nameField {
             portMapping.name = nameField.stringValue
@@ -109,6 +95,20 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         } else if (notification.object as! NSTextField) === hostMacPortField {
             portMapping.hostPort = hostMacPortField.intValue
             hostMacPortStepper.intValue = hostMacPortField.intValue
+        }
+    }
+
+    private func updateView() {
+        nameField.stringValue = portMapping.name
+        virtualMachinePortStepper.intValue = portMapping.vmPort
+        virtualMachinePortField.intValue = portMapping.vmPort
+        hostMacPortStepper.intValue = portMapping.hostPort
+        hostMacPortField.intValue = portMapping.hostPort
+
+        if mode == Mode.ADD {
+            titleField.stringValue = NSLocalizedString("NewPortMappingViewController.createMapping", comment: "")
+        } else {
+            titleField.stringValue = String(format: NSLocalizedString("NewPortMappingViewController.editMapping", comment: ""), portMapping.name)
         }
     }
 }

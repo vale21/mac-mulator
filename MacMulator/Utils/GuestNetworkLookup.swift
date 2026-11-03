@@ -11,6 +11,13 @@ import Foundation
 /// NAT guests get their address from the macOS DHCP server, which records it in /var/db/dhcpd_leases; every guest also
 /// shows up in the ARP table of the host once they have exchanged traffic (when the app is allowed to read it).
 enum GuestNetworkLookup {
+    private struct Lease {
+        let ipAddress: String
+        let leaseExpiry: UInt64
+        /// Whether the lease is recorded under the MAC address of the guest
+        let matchesMAC: Bool
+    }
+
     private static let leasesPath = "/var/db/dhcpd_leases"
     /// How many leases (the most relevant ones) are tested for an open SSH port
     private static let maxCheckedLeases = 16
@@ -64,13 +71,6 @@ enum GuestNetworkLookup {
     private static func normalize(_ macAddress: String) -> [UInt8]? {
         let bytes = macAddress.split(separator: ":").compactMap { UInt8($0, radix: 16) }
         return bytes.count == 6 ? bytes : nil
-    }
-
-    private struct Lease {
-        let ipAddress: String
-        let leaseExpiry: UInt64
-        /// Whether the lease is recorded under the MAC address of the guest
-        let matchesMAC: Bool
     }
 
     /// Parses the leases file, made of blocks such as:

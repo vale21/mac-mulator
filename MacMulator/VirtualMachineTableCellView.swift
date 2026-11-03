@@ -22,6 +22,9 @@ class VirtualMachineTableCellView: NSTableCellView, NSTextFieldDelegate {
     private var virtualMachine: VirtualMachine?
     private var rootController: RootViewController?
 
+    private var renameCompletion: ((String) -> Void)?
+    private var renameCancelled = false
+
     func setRootController(_ rootController: RootViewController) {
         self.rootController = rootController
     }
@@ -33,21 +36,28 @@ class VirtualMachineTableCellView: NSTableCellView, NSTextFieldDelegate {
         }
     }
 
-    private var renameCompletion: ((String) -> Void)?
-    private var renameCancelled = false
+    private var enclosingTableView: NSTableView? {
+        var current: NSView? = superview
+        while let view = current {
+            if let table = view as? NSTableView {
+                return table
+            }
+            current = view.superview
+        }
+        return nil
+    }
 
-    /// Turns the name into an editable field, like renaming a file in Finder.
-    /// The completion is called with the new name when the edit is confirmed.
-    func beginRenaming(completion: @escaping (String) -> Void) {
-        guard let virtualMachine, renameCompletion == nil else { return }
-        renameCompletion = completion
-        renameCancelled = false
-        vmName.stringValue = virtualMachine.displayName
-        vmName.delegate = self
-        vmName.isEditable = true
-        vmName.isSelectable = true
-        // Becoming first responder selects the whole name.
-        window?.makeFirstResponder(vmName)
+    func setState(_ state: CellState) {
+        if state == .running {
+            runningSpinner.isHidden = false
+            runningSpinner.startAnimation(self)
+            vmIcon.isHidden = true
+        } else if state == .paused || state == .stopped || state == .template {
+            runningSpinner.isHidden = true
+            runningSpinner.stopAnimation(self)
+            vmIcon.isHidden = false
+        }
+        refresh(state: state)
     }
 
     func control(_: NSControl, textView _: NSTextView, doCommandBy commandSelector: Selector) -> Bool {
@@ -78,28 +88,18 @@ class VirtualMachineTableCellView: NSTableCellView, NSTextFieldDelegate {
         }
     }
 
-    private var enclosingTableView: NSTableView? {
-        var current: NSView? = superview
-        while let view = current {
-            if let table = view as? NSTableView {
-                return table
-            }
-            current = view.superview
-        }
-        return nil
-    }
-
-    func setState(_ state: CellState) {
-        if state == .running {
-            runningSpinner.isHidden = false
-            runningSpinner.startAnimation(self)
-            vmIcon.isHidden = true
-        } else if state == .paused || state == .stopped || state == .template {
-            runningSpinner.isHidden = true
-            runningSpinner.stopAnimation(self)
-            vmIcon.isHidden = false
-        }
-        refresh(state: state)
+    /// Turns the name into an editable field, like renaming a file in Finder.
+    /// The completion is called with the new name when the edit is confirmed.
+    func beginRenaming(completion: @escaping (String) -> Void) {
+        guard let virtualMachine, renameCompletion == nil else { return }
+        renameCompletion = completion
+        renameCancelled = false
+        vmName.stringValue = virtualMachine.displayName
+        vmName.delegate = self
+        vmName.isEditable = true
+        vmName.isSelectable = true
+        // Becoming first responder selects the whole name.
+        window?.makeFirstResponder(vmName)
     }
 
     func refresh(state: CellState) {

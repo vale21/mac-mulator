@@ -9,11 +9,6 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    private var savedVMs: [String]? = []
-    private(set) var rootController: RootViewController?
-    private var fileName: String?
-    private(set) var initialized = false
-
     @IBOutlet var preferencesMenuItem: NSMenuItem!
     @IBOutlet var preferencesSeparator: NSMenuItem!
     @IBOutlet var vmMenu: NSMenu!
@@ -40,9 +35,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
     @IBOutlet var deleteVMMenuItem: NSMenuItem!
 
+    private var savedVMs: [String]? = []
+    private(set) var rootController: RootViewController?
+    private var fileName: String?
+    private(set) var initialized = false
+
     private var openScreenSessionMenuItem: NSMenuItem?
     private var openSSHSessionMenuItem: NSMenuItem?
     private var openTerminalSessionMenuItem: NSMenuItem?
+
+    private static let usbPassthroughMenuTag = 2701
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
@@ -104,8 +106,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private static let usbPassthroughMenuTag = 2701
-
     @available(macOS 27.0, *)
     @IBAction func toggleUSBPassthroughMenuBarClicked(_ sender: NSMenuItem) {
         guard let info = sender.representedObject as? [String: Any],
@@ -137,95 +137,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         virtualMachine.usbPassthroughDeviceNames = names
         virtualMachine.writeToPlist()
         refreshUSBPassthroughMenu()
-    }
-
-    @available(macOS 27.0, *)
-    private func otherVMUsingPassthroughDevice(_ registryID: UInt64, excluding current: VirtualMachine) -> VirtualMachine? {
-        guard let running = rootController?.runningVMs else { return nil }
-        for (vm, runner) in running where vm != current {
-            if let vfRunner = runner as? VirtualizationFrameworkVirtualMachineRunner, vfRunner.isPassthroughAttached(registryID: registryID) {
-                return vm
-            }
-        }
-        return nil
-    }
-
-    func refreshUSBPassthroughMenu() {
-        #if arch(arm64)
-            guard let submenu = usbDevicesMenuItem?.submenu else { return }
-            submenu.autoenablesItems = false
-            for item in submenu.items where item.tag == AppDelegate.usbPassthroughMenuTag {
-                submenu.removeItem(item)
-            }
-
-            guard let virtualMachine = rootController?.currentVm, virtualMachine.type == MacMulatorConstants.APPLE_VM else { return }
-
-            var newItems: [NSMenuItem] = []
-            if #available(macOS 27.0, *) {
-                UsbPassthroughManager.shared.start()
-                let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
-
-                let candidates = UsbPassthroughManager.shared.candidates()
-                var autoAttachCounts: [String: Int] = [:]
-                for key in virtualMachine.usbPassthroughDevices ?? [] {
-                    autoAttachCounts[key, default: 0] += 1
-                }
-
-                if candidates.isEmpty, autoAttachCounts.isEmpty {
-                    let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
-                    let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
-                    emptyItem.isEnabled = false
-                    newItems.append(emptyItem)
-                }
-                var names = virtualMachine.usbPassthroughDeviceNames ?? [:]
-                var namesChanged = false
-                for candidate in candidates where autoAttachCounts[candidate.key] != nil && names[candidate.key] != candidate.name {
-                    names[candidate.key] = candidate.name
-                    namesChanged = true
-                }
-                if namesChanged {
-                    virtualMachine.usbPassthroughDeviceNames = names
-                    virtualMachine.writeToPlist()
-                }
-                let attachedIDs = Set(candidates.filter {
-                    runner?.isPassthroughAttached(registryID: $0.registryID) == true
-                }.map(\.registryID))
-                let orderedCandidates = candidates.filter { attachedIDs.contains($0.registryID) }
-                    + candidates.filter { !attachedIDs.contains($0.registryID) }
-                for candidate in orderedCandidates {
-                    let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
-                    item.target = self
-                    item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID), "name": candidate.name] as [String: Any]
-                    item.isEnabled = true
-                    if let count = autoAttachCounts[candidate.key], count > 0 {
-                        autoAttachCounts[candidate.key] = count - 1
-                        item.state = .on
-                    }
-                    if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
-                        item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
-                        item.isEnabled = false
-                        item.state = .off
-                    }
-                    newItems.append(item)
-                }
-                for (key, count) in autoAttachCounts.sorted(by: { $0.key < $1.key }) where count > 0 {
-                    for _ in 0 ..< count {
-                        let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), names[key] ?? key), action: nil, keyEquivalent: "")
-                        item.isEnabled = false
-                        item.state = .off
-                        newItems.append(item)
-                    }
-                }
-            } else {
-                return
-            }
-
-            newItems.append(NSMenuItem.separator())
-            for (index, item) in newItems.enumerated() {
-                item.tag = AppDelegate.usbPassthroughMenuTag
-                submenu.insertItem(item, at: index)
-            }
-        #endif
     }
 
     @IBAction func createNewSnapshotMenuBarClicked(_: Any) {
@@ -327,23 +238,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.openTerminalSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
 
-    private func setupSessionMenuItems() {
-        guard openScreenSessionMenuItem == nil, let index = vmMenu.items.firstIndex(of: pauseVMMenuItem) else { return }
-
-        let screenItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSpiceSession", comment: ""), action: #selector(openScreenSessionMenuBarClicked(_:)), keyEquivalent: "")
-        let terminalItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openTerminalSession", comment: ""), action: #selector(openTerminalSessionMenuBarClicked(_:)), keyEquivalent: "")
-        let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
-        var items = [NSMenuItem.separator(), screenItem, sshItem, terminalItem]
-        for (offset, item) in items.enumerated() {
-            item.target = self
-            vmMenu.insertItem(item, at: index + 1 + offset)
-        }
-
-        openSSHSessionMenuItem = sshItem
-        openScreenSessionMenuItem = screenItem
-        openTerminalSessionMenuItem = terminalItem
-    }
-
     @IBAction func deleteVMMenuBarClicked(_: Any) {
         rootController?.deleteVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
@@ -358,6 +252,178 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBAction func showVMInFinderMenuBarClicked(_: Any) {
         rootController?.showVMInFinderMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
+        // Opened from the Finder or an open panel: keep the access to it across launches.
+        SandboxBookmarks.remember(URL(fileURLWithPath: filename))
+        if performSanityCheck(filename) {
+            if initialized {
+                rootController?.addVirtualMachineFromFile(filename)
+            } else {
+                fileName = filename
+            }
+            return true
+        } else {
+            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename), virtualMachine: nil)
+            return false
+        }
+    }
+
+    func applicationDidFinishLaunching(_: Notification) {
+        updateAboutMenuItemTitle()
+
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didConnectNotification, object: nil, queue: .main) { [weak self] _ in
+                    for runner in self?.rootController?.runningVMs.values ?? [:].values {
+                        (runner as? VirtualizationFrameworkVirtualMachineRunner)?.restoreSavedPassthroughDevices()
+                    }
+                }
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didRemoveNotification, object: nil, queue: .main) { [weak self] notification in
+                    if let registryID = (notification.userInfo?["registryID"] as? NSNumber)?.uint64Value {
+                        for runner in self?.rootController?.runningVMs.values ?? [:].values {
+                            (runner as? VirtualizationFrameworkVirtualMachineRunner)?.passthroughAccessoryRemoved(registryID: registryID)
+                        }
+                    }
+                }
+                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+                    self?.refreshUSBPassthroughMenu()
+                }
+            #endif
+        }
+        let userDefaults = UserDefaults.standard
+
+        // Before touching any VM file: regain access to the folders and files the user picked (App Store flavor).
+        SandboxBookmarks.restoreAll()
+        setupDefaultsPreferences(userDefaults)
+
+        savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        if savedVMs == nil {
+            savedVMs = []
+        }
+
+        let qemuPath = QemuUtils.getQemuPath()
+        let vmPaths = savedVMs ?? []
+
+        // Probing QEMU spawns many processes and the cache is locked meanwhile: do it off the main thread,
+        // so that the window renders immediately, and load the VMs once the capabilities are cached.
+        DispatchQueue.global(qos: .userInitiated).async {
+            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
+            for path in vmPaths {
+                if FileManager.default.fileExists(atPath: path + "/" + MacMulatorConstants.INFO_PLIST), let vm = VirtualMachine.readFromPlist(path, MacMulatorConstants.INFO_PLIST) {
+                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+                }
+            }
+            DispatchQueue.main.async {
+                self.completeStartup()
+            }
+        }
+    }
+
+    func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
+        if let rootController {
+            if rootController.areThereRunningVMs() {
+                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""), virtualMachine: nil)
+                if response.rawValue != Utils.ALERT_RESP_OK {
+                    return NSApplication.TerminateReply.terminateCancel
+                } else {
+                    rootController.killAllRunningVMs()
+                }
+            }
+        }
+
+        return .terminateNow
+    }
+
+    func applicationWillTerminate(_: Notification) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+
+        // Useful in Development to replicate the startup of a clean installation of MacMulator
+        // resetDefaults();
+    }
+
+    func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
+        true
+    }
+
+    func refreshUSBPassthroughMenu() {
+        #if arch(arm64)
+            guard let submenu = usbDevicesMenuItem?.submenu else { return }
+            submenu.autoenablesItems = false
+            for item in submenu.items where item.tag == AppDelegate.usbPassthroughMenuTag {
+                submenu.removeItem(item)
+            }
+
+            guard let virtualMachine = rootController?.currentVm, virtualMachine.type == MacMulatorConstants.APPLE_VM else { return }
+
+            var newItems: [NSMenuItem] = []
+            if #available(macOS 27.0, *) {
+                UsbPassthroughManager.shared.start()
+                let runner = rootController?.isVMRunning(virtualMachine) == true ? rootController?.getRunnerForRunningVM(virtualMachine) as? VirtualizationFrameworkVirtualMachineRunner : nil
+
+                let candidates = UsbPassthroughManager.shared.candidates()
+                var autoAttachCounts: [String: Int] = [:]
+                for key in virtualMachine.usbPassthroughDevices ?? [] {
+                    autoAttachCounts[key, default: 0] += 1
+                }
+
+                if candidates.isEmpty, autoAttachCounts.isEmpty {
+                    let emptyTitle = UsbPassthroughManager.shared.lastError ?? NSLocalizedString("AppDelegate.noUsbDevices", comment: "")
+                    let emptyItem = NSMenuItem(title: emptyTitle, action: nil, keyEquivalent: "")
+                    emptyItem.isEnabled = false
+                    newItems.append(emptyItem)
+                }
+                var names = virtualMachine.usbPassthroughDeviceNames ?? [:]
+                var namesChanged = false
+                for candidate in candidates where autoAttachCounts[candidate.key] != nil && names[candidate.key] != candidate.name {
+                    names[candidate.key] = candidate.name
+                    namesChanged = true
+                }
+                if namesChanged {
+                    virtualMachine.usbPassthroughDeviceNames = names
+                    virtualMachine.writeToPlist()
+                }
+                let attachedIDs = Set(candidates.filter {
+                    runner?.isPassthroughAttached(registryID: $0.registryID) == true
+                }.map(\.registryID))
+                let orderedCandidates = candidates.filter { attachedIDs.contains($0.registryID) }
+                    + candidates.filter { !attachedIDs.contains($0.registryID) }
+                for candidate in orderedCandidates {
+                    let item = NSMenuItem(title: candidate.name, action: #selector(toggleUSBPassthroughMenuBarClicked(_:)), keyEquivalent: "")
+                    item.target = self
+                    item.representedObject = ["key": candidate.key, "id": NSNumber(value: candidate.registryID), "name": candidate.name] as [String: Any]
+                    item.isEnabled = true
+                    if let count = autoAttachCounts[candidate.key], count > 0 {
+                        autoAttachCounts[candidate.key] = count - 1
+                        item.state = .on
+                    }
+                    if runner?.isPassthroughAttached(registryID: candidate.registryID) != true, let holder = otherVMUsingPassthroughDevice(candidate.registryID, excluding: virtualMachine) {
+                        item.title = String(format: NSLocalizedString("AppDelegate.deviceInUse", comment: ""), candidate.name, holder.displayName)
+                        item.isEnabled = false
+                        item.state = .off
+                    }
+                    newItems.append(item)
+                }
+                for (key, count) in autoAttachCounts.sorted(by: { $0.key < $1.key }) where count > 0 {
+                    for _ in 0 ..< count {
+                        let item = NSMenuItem(title: String(format: NSLocalizedString("AppDelegate.deviceNotConnected", comment: ""), names[key] ?? key), action: nil, keyEquivalent: "")
+                        item.isEnabled = false
+                        item.state = .off
+                        newItems.append(item)
+                    }
+                }
+            } else {
+                return
+            }
+
+            newItems.append(NSMenuItem.separator())
+            for (index, item) in newItems.enumerated() {
+                item.tag = AppDelegate.usbPassthroughMenuTag
+                submenu.insertItem(item, at: index)
+            }
+        #endif
     }
 
     func refreshVMMenus() {
@@ -385,6 +451,84 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             updateMenusForVM(vm, rootController: rootController)
         }
+    }
+
+    func rootControllerDidFinishLoading(_ rootController: RootViewController) {
+        self.rootController = rootController
+        refreshVMMenus()
+    }
+
+    func addSavedVM(_ savedVM: String) {
+        let vmToSave = Utils.unescape(savedVM)
+        if !(savedVMs!.contains(vmToSave)) {
+            savedVMs!.append(vmToSave)
+        }
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    /// Replaces the path of a saved VM whose folder has been renamed.
+    func replaceSavedVM(_ oldPath: String, with newPath: String) {
+        let oldPath = Utils.unescape(oldPath)
+        if let index = savedVMs?.firstIndex(of: oldPath) {
+            savedVMs?[index] = Utils.unescape(newPath)
+        } else {
+            addSavedVM(newPath)
+        }
+        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    func removeSavedVM(_ savedVM: String) {
+        let vmToRemove = Utils.unescape(savedVM)
+        let index = (savedVMs?.firstIndex(of: vmToRemove))!
+        savedVMs?.remove(at: index)
+
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(at: URL(fileURLWithPath: savedVM))
+        } catch {
+            print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
+        }
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    func moveSavedVm(at originalRow: Int, to newRow: Int) {
+        let vm = savedVMs?.remove(at: originalRow)
+        savedVMs?.insert(vm!, at: newRow)
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+    }
+
+    @available(macOS 27.0, *)
+    private func otherVMUsingPassthroughDevice(_ registryID: UInt64, excluding current: VirtualMachine) -> VirtualMachine? {
+        guard let running = rootController?.runningVMs else { return nil }
+        for (vm, runner) in running where vm != current {
+            if let vfRunner = runner as? VirtualizationFrameworkVirtualMachineRunner, vfRunner.isPassthroughAttached(registryID: registryID) {
+                return vm
+            }
+        }
+        return nil
+    }
+
+    private func setupSessionMenuItems() {
+        guard openScreenSessionMenuItem == nil, let index = vmMenu.items.firstIndex(of: pauseVMMenuItem) else { return }
+
+        let screenItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSpiceSession", comment: ""), action: #selector(openScreenSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let terminalItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openTerminalSession", comment: ""), action: #selector(openTerminalSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
+        var items = [NSMenuItem.separator(), screenItem, sshItem, terminalItem]
+        for (offset, item) in items.enumerated() {
+            item.target = self
+            vmMenu.insertItem(item, at: index + 1 + offset)
+        }
+
+        openSSHSessionMenuItem = sshItem
+        openScreenSessionMenuItem = screenItem
+        openTerminalSessionMenuItem = terminalItem
     }
 
     private func updateMenusForNoVM() {
@@ -551,22 +695,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func application(_ sender: NSApplication, openFile filename: String) -> Bool {
-        // Opened from the Finder or an open panel: keep the access to it across launches.
-        SandboxBookmarks.remember(URL(fileURLWithPath: filename))
-        if performSanityCheck(filename) {
-            if initialized {
-                rootController?.addVirtualMachineFromFile(filename)
-            } else {
-                fileName = filename
-            }
-            return true
-        } else {
-            Utils.showAlert(window: sender.mainWindow!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.cannotOpenFile", comment: ""), filename), virtualMachine: nil)
-            return false
-        }
-    }
-
     // The storyboard title is localized but hardcodes "MacMulator"; swap in the product name (e.g. "MacMulator EE").
     private func updateAboutMenuItemTitle() {
         guard let productName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
@@ -575,57 +703,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
         aboutItem.title = aboutItem.title.replacingOccurrences(of: "MacMulator", with: productName)
-    }
-
-    func applicationDidFinishLaunching(_: Notification) {
-        updateAboutMenuItemTitle()
-
-        if #available(macOS 27.0, *) {
-            #if arch(arm64)
-                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didConnectNotification, object: nil, queue: .main) { [weak self] _ in
-                    for runner in self?.rootController?.runningVMs.values ?? [:].values {
-                        (runner as? VirtualizationFrameworkVirtualMachineRunner)?.restoreSavedPassthroughDevices()
-                    }
-                }
-                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didRemoveNotification, object: nil, queue: .main) { [weak self] notification in
-                    if let registryID = (notification.userInfo?["registryID"] as? NSNumber)?.uint64Value {
-                        for runner in self?.rootController?.runningVMs.values ?? [:].values {
-                            (runner as? VirtualizationFrameworkVirtualMachineRunner)?.passthroughAccessoryRemoved(registryID: registryID)
-                        }
-                    }
-                }
-                NotificationCenter.default.addObserver(forName: UsbPassthroughManager.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
-                    self?.refreshUSBPassthroughMenu()
-                }
-            #endif
-        }
-        let userDefaults = UserDefaults.standard
-
-        // Before touching any VM file: regain access to the folders and files the user picked (App Store flavor).
-        SandboxBookmarks.restoreAll()
-        setupDefaultsPreferences(userDefaults)
-
-        savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-        if savedVMs == nil {
-            savedVMs = []
-        }
-
-        let qemuPath = QemuUtils.getQemuPath()
-        let vmPaths = savedVMs ?? []
-
-        // Probing QEMU spawns many processes and the cache is locked meanwhile: do it off the main thread,
-        // so that the window renders immediately, and load the VMs once the capabilities are cached.
-        DispatchQueue.global(qos: .userInitiated).async {
-            _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPath)
-            for path in vmPaths {
-                if FileManager.default.fileExists(atPath: path + "/" + MacMulatorConstants.INFO_PLIST), let vm = VirtualMachine.readFromPlist(path, MacMulatorConstants.INFO_PLIST) {
-                    _ = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
-                }
-            }
-            DispatchQueue.main.async {
-                self.completeStartup()
-            }
-        }
     }
 
     private func completeStartup() {
@@ -640,30 +717,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.startupCompleted()
     }
 
-    func applicationShouldTerminate(_: NSApplication) -> NSApplication.TerminateReply {
-        if let rootController {
-            if rootController.areThereRunningVMs() {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("AppDelegate.youHaveRunningVMs", comment: ""), virtualMachine: nil)
-                if response.rawValue != Utils.ALERT_RESP_OK {
-                    return NSApplication.TerminateReply.terminateCancel
-                } else {
-                    rootController.killAllRunningVMs()
-                }
-            }
-        }
-
-        return .terminateNow
-    }
-
-    func applicationWillTerminate(_: Notification) {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-
-        // Useful in Development to replicate the startup of a clean installation of MacMulator
-        // resetDefaults();
-    }
-
-    fileprivate func resetDefaults() {
+    private func resetDefaults() {
         let defaults = UserDefaults.standard
         let dictionary = defaults.dictionaryRepresentation()
         for key in dictionary.keys {
@@ -671,61 +725,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {
-        true
-    }
-
-    func rootControllerDidFinishLoading(_ rootController: RootViewController) {
-        self.rootController = rootController
-        refreshVMMenus()
-    }
-
-    func addSavedVM(_ savedVM: String) {
-        let vmToSave = Utils.unescape(savedVM)
-        if !(savedVMs!.contains(vmToSave)) {
-            savedVMs!.append(vmToSave)
-        }
-
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-    }
-
-    /// Replaces the path of a saved VM whose folder has been renamed.
-    func replaceSavedVM(_ oldPath: String, with newPath: String) {
-        let oldPath = Utils.unescape(oldPath)
-        if let index = savedVMs?.firstIndex(of: oldPath) {
-            savedVMs?[index] = Utils.unescape(newPath)
-        } else {
-            addSavedVM(newPath)
-        }
-        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-    }
-
-    func removeSavedVM(_ savedVM: String) {
-        let vmToRemove = Utils.unescape(savedVM)
-        let index = (savedVMs?.firstIndex(of: vmToRemove))!
-        savedVMs?.remove(at: index)
-
-        let fileManager = FileManager.default
-        do {
-            try fileManager.removeItem(at: URL(fileURLWithPath: savedVM))
-        } catch {
-            print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
-        }
-
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-    }
-
-    func moveSavedVm(at originalRow: Int, to newRow: Int) {
-        let vm = savedVMs?.remove(at: originalRow)
-        savedVMs?.insert(vm!, at: newRow)
-
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-    }
-
-    fileprivate func setupSavedVMs() {
+    private func setupSavedVMs() {
         let filemanager = FileManager.default
         var toRemove: [Int] = []
         for savedVM in savedVMs! {
@@ -754,7 +754,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    fileprivate func performSanityCheck(_ filename: String) -> Bool {
+    private func performSanityCheck(_ filename: String) -> Bool {
         if filename.hasSuffix("." + MacMulatorConstants.VM_EXTENSION) {
             let fileManager = FileManager.default
             do {
@@ -772,7 +772,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
-    fileprivate func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
+    private func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
             userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         }

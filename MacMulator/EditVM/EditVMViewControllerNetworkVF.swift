@@ -29,35 +29,6 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         updateView()
     }
 
-    fileprivate func updateSecondaryBoxAndDescription(attachment: String) {
-        if let virtualMachine {
-            if attachment == QemuConstants.ATTACHMENT_BRIDGED {
-                phisicalDeviceComboBox.isEnabled = true
-                if let device = virtualMachine.physicalBridgeNetworkDevice, let idx = VZBridgedNetworkInterface.networkInterfaces.firstIndex(where: { $0.identifier == device }) {
-                    phisicalDeviceComboBox.selectItem(at: idx)
-                } else {
-                    phisicalDeviceComboBox.selectItem(at: 0)
-                }
-                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionBridged", comment: "")
-            } else {
-                phisicalDeviceComboBox.isEnabled = false
-                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionNat", comment: "")
-            }
-        }
-    }
-
-    func updateView() {
-        if let virtualMachine {
-            networkAdapterComboBox.reloadData()
-            networkAdapterComboBox.selectItem(at: QemuConstants.APPLE_NETWORK_ATTACHMENTS.firstIndex(of: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT) ?? 0)
-
-            updateSecondaryBoxAndDescription(attachment: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT)
-
-            networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.networkMode", comment: "")
-            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
-        }
-    }
-
     func numberOfItems(in comboBox: NSComboBox) -> Int {
         if comboBox == networkAdapterComboBox {
             QemuConstants.APPLE_NETWORK_ATTACHMENTS.count
@@ -81,6 +52,35 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
                 updateSecondaryBoxAndDescription(attachment: QemuConstants.APPLE_NETWORK_ATTACHMENTS[networkAdapterComboBox.indexOfSelectedItem])
             } else if (notification.object as! NSComboBox) == phisicalDeviceComboBox {
                 virtualMachine.physicalBridgeNetworkDevice = VZBridgedNetworkInterface.networkInterfaces[phisicalDeviceComboBox.indexOfSelectedItem].identifier
+            }
+        }
+    }
+
+    func updateView() {
+        if let virtualMachine {
+            networkAdapterComboBox.reloadData()
+            networkAdapterComboBox.selectItem(at: QemuConstants.APPLE_NETWORK_ATTACHMENTS.firstIndex(of: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT) ?? 0)
+
+            updateSecondaryBoxAndDescription(attachment: virtualMachine.networkDevice ?? QemuConstants.ATTACHMENT_NAT)
+
+            networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.networkMode", comment: "")
+            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
+        }
+    }
+
+    private func updateSecondaryBoxAndDescription(attachment: String) {
+        if let virtualMachine {
+            if attachment == QemuConstants.ATTACHMENT_BRIDGED {
+                phisicalDeviceComboBox.isEnabled = true
+                if let device = virtualMachine.physicalBridgeNetworkDevice, let idx = VZBridgedNetworkInterface.networkInterfaces.firstIndex(where: { $0.identifier == device }) {
+                    phisicalDeviceComboBox.selectItem(at: idx)
+                } else {
+                    phisicalDeviceComboBox.selectItem(at: 0)
+                }
+                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionBridged", comment: "")
+            } else {
+                phisicalDeviceComboBox.isEnabled = false
+                descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionNat", comment: "")
             }
         }
     }
