@@ -145,12 +145,10 @@ class Utils {
         return replaced
     }
 
-    /// Whether the VM runs with no window showing its screen. iOS VMs cannot be headless.
     static func isHeadless(_ vm: VirtualMachine) -> Bool {
         vm.os != QemuConstants.OS_IOS && vm.headless == true
     }
 
-    /// The user to log in as with SSH: the last one used, or the one provisioned when the VM was created, if any
     static func guestUserName(_ vm: VirtualMachine) -> String? {
         let userName = vm.guestUserName ?? vm.provisioningInformation?.userName
         return userName?.isEmpty == false ? userName : nil
@@ -223,7 +221,6 @@ class Utils {
         return options
     }()
 
-    /// The algorithms of a kind (key, kex, cipher, ...) the ssh of the host supports, as listed by `ssh -Q`
     private static func supportedSSHAlgorithms(_ query: String) -> Set<String> {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/ssh")
@@ -241,7 +238,6 @@ class Utils {
         return Set(output.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespaces) })
     }
 
-    /// Quotes a string so that a POSIX shell takes it as a single literal word
     static func shellQuote(_ string: String) -> String {
         "'" + string.replacingOccurrences(of: "'", with: "'\\''") + "'"
     }

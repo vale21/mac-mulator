@@ -203,8 +203,6 @@ class QemuUtils {
         #endif
     }
 
-    /// Whether Qemu is launched with a Spice server: to show the VM, or to open Spice sessions on it when headless.
-    /// It follows the Spice display setting of the VM, which is always on in the App Store version.
     static func isSpiceSupported(_ vm: VirtualMachine) -> Bool {
         isSpiceDisplayEnabled(vm)
     }

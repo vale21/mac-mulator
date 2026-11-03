@@ -26,7 +26,6 @@ class VirtualMachine: Codable, Hashable {
     var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
     var enable3DAcceleration: Bool? = true
     var enableSpiceDisplay: Bool? = true
-    /// When true, the VM runs with no window showing its screen (see QemuUtils.isHeadless)
     var headless: Bool? = false
     var drives: [VirtualDrive]
     var qemuPath: String?
@@ -41,7 +40,6 @@ class VirtualMachine: Codable, Hashable {
     var usbPassthroughDevices: [String]?
     var usbPassthroughDeviceNames: [String: String]?
     var provisioningInformation: ProvisioningInformation? = nil
-    /// The user created by provisioning, kept once the provisioning information is consumed (used for SSH sessions)
     var guestUserName: String?
 
     /// Unique identifier, assigned at creation time and never modified afterwards.
@@ -202,7 +200,6 @@ class VirtualMachine: Codable, Hashable {
         }
     }
 
-    // Identity is the immutable ID: the display name and the path change when a VM is renamed.
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
         lhs.id == rhs.id
     }
@@ -211,8 +208,6 @@ class VirtualMachine: Codable, Hashable {
         hasher.combine(id)
     }
 
-    /// Gives a freshly copied VM its own identity. Only to be used while cloning,
-    /// before the copy is registered.
     func assignNewIdForClone() {
         storedId = UUID().uuidString
     }

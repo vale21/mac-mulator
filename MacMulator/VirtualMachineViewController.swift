@@ -11,7 +11,6 @@ class VMToStart {
     var vm: VirtualMachine
     var inRecovery: Bool
     var runner: VirtualMachineRunner?
-    /// True when the VM window (or the Spice viewer) is opened as a session on an already running headless VM
     var session: Bool
 
     init(vm: VirtualMachine, inRecovery: Bool, runner: VirtualMachineRunner?, session: Bool = false) {
@@ -22,12 +21,9 @@ class VMToStart {
     }
 }
 
-/// The actions opening a session on a VM (screen, SSH, terminal): whether they are shown and enabled, and why not.
-/// Shared by the VM menu and the headless panel of the VM view, so that they always agree
 struct VMSessionActions {
     struct Action {
         var isHidden: Bool
-        /// Nil when the action is enabled
         var disabledReason: String?
 
         var isEnabled: Bool { disabledReason == nil }
@@ -102,8 +98,6 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet var vmHardDrive: NSTextField!
     @IBOutlet var editVMButton: NSButton!
 
-    /// Shown in the central box, in place of the VM details, when the VM is headless. It is a top level view of the
-    /// scene, attached to and detached from the box as needed
     @IBOutlet var headlessView: NSView!
     @IBOutlet var headlessLabel: NSTextField!
     @IBOutlet var screenSessionButton: NSButton!
@@ -539,8 +533,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// For headless VMs, replaces the VM details in the central box (all but the icon and the configure button) with the headless view, whose
-    /// session buttons follow the session items of the VM menu
     fileprivate func updateHeadlessView(_ vm: VirtualMachine, _ running: Bool) {
         guard Utils.isHeadless(vm), let boxContentView else {
             headlessView.removeFromSuperview()
@@ -630,7 +622,6 @@ class VirtualMachineViewController: NSViewController {
         hideVMDetails(hidden)
     }
 
-    /// Hides the VM details shown next to the icon in the central box
     fileprivate func hideVMDetails(_ hidden: Bool) {
         vmArchitectureDesc.isHidden = hidden
         vmArchitecture.isHidden = hidden
@@ -697,7 +688,6 @@ class VirtualMachineViewController: NSViewController {
         bottomConfigureVMButton.isHidden = true
     }
 
-    /// The no VMs box is a top level view of the scene, attached to the main view only while there are no VMs
     fileprivate func attachNoVMsBox() {
         guard let container = centralBox.superview, noVMsBox.superview !== container else { return }
 
@@ -786,7 +776,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Apple VMs run headless only once their OS is installed: the installation progress is shown in the VM window
     fileprivate func canStartHeadless(_ vm: VirtualMachine) -> Bool {
         guard Utils.isHeadless(vm) else { return false }
         if Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) {
@@ -795,14 +784,11 @@ class VirtualMachineViewController: NSViewController {
         return true
     }
 
-    /// Starts an Apple VM with no VM window. Its screen can be shown later with openScreenSession()
     fileprivate func startHeadlessAppleVM(_ runner: VirtualizationFrameworkVirtualMachineRunner, _ inRecovery: Bool) {
         runner.setVmController(self)
         runner.runVM(recoveryMode: inRecovery, uponCompletion: { _, _ in })
     }
 
-    /// Shows the screen of the current (running, headless) VM: in the VM window for Apple VMs, in a Spice viewer for
-    /// Qemu VMs. Closing the window leaves the VM running
     func openScreenSession() {
         guard let rootController, let vm = rootController.currentVm, let runner = rootController.getRunnerForRunningVM(vm) else { return }
 
@@ -817,7 +803,6 @@ class VirtualMachineViewController: NSViewController {
         performSegue(withIdentifier: segue, sender: VMToStart(vm: vm, inRecovery: false, runner: runner, session: true))
     }
 
-    /// Opens a MacMulator terminal window on an SSH connection to the current VM, through the port mapped onto the guest SSH port
     func openSSHSession() {
         guard let vm = rootController?.currentVm, !TerminalSessionWindowController.bringExistingToFront(.ssh, vm) else { return }
 
@@ -834,8 +819,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Asks the user to log in as, suggesting the last one used for the VM (or the provisioned one, or the Mac user),
-    /// and remembers it in the VM
     fileprivate func askSSHUserName(for vm: VirtualMachine, then connect: @escaping () -> Void) {
         let alert = NSAlert()
         alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".small"))
@@ -860,8 +843,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Apple VMs get their own IP address (from the macOS DHCP server, or the LAN when bridged): look it up from the MAC
-    /// address. The terminal window opens at once, with a spinner, and is usable when the address is known
     fileprivate func openSSHSessionOnAppleVM(_ vm: VirtualMachine) {
         guard let macAddress = vm.macAddress, let window = view.window else { return }
 
@@ -886,7 +867,6 @@ class VirtualMachineViewController: NSViewController {
         }
     }
 
-    /// Opens a MacMulator terminal window on the serial console of the current VM
     func openTerminalSession() {
         guard let vm = rootController?.currentVm else { return }
 

@@ -15,12 +15,10 @@ class QemuRunner: VirtualMachineRunner {
     let livePreviewEnabled: Bool
     let managedVm: VirtualMachine
 
-    /// Whether Qemu runs a Spice server, to show the VM or to open Spice sessions on a headless VM (see QemuUtils).
     private var spiceServerEnabled: Bool {
         QemuUtils.isSpiceSupported(managedVm)
     }
 
-    /// Whether Qemu must not open a native display window: the VM is shown through Spice, or it is headless.
     private var nativeDisplayDisabled: Bool {
         spiceServerEnabled || Utils.isHeadless(managedVm)
     }

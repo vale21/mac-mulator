@@ -18,10 +18,8 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     var pendingPassthroughIDs: Set<UInt64> = []
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
-    /// The main view controller, which is told when a headless VM (one with no VM window) stops
     weak var vmController: VirtualMachineViewController?
     var recoveryMode: Bool = false
-    /// The serial console of Linux VMs, which Terminal sessions connect to
     private(set) var serialConsole: VirtualizationFrameworkSerialConsole?
 
     init(virtualMachine: VirtualMachine) {
@@ -46,25 +44,21 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         self.vmController = vmController
     }
 
-    /// The window alerts are shown on: the VM window, or the main window when the VM runs headless
     private var alertWindow: NSWindow {
         if let window = vmView?.window {
             return window
         }
-        // Headless: nothing else shows that something went wrong, so bring the main window to the front
         let mainWindow = (NSApp.delegate as! AppDelegate).rootController!.view.window!
         mainWindow.makeKeyAndOrderFront(nil)
         return mainWindow
     }
 
-    /// Shows the running VM in `view`, owned by the VM window `viewController` (opened as a session on a headless VM)
     func attachView(_ view: VZVirtualMachineView, _ viewController: VirtualMachineContainerViewController) {
         vmView = view
         vmViewController = viewController
         configureVmView()
     }
 
-    /// Forgets the VM window, once it is closed: the VM keeps running headless
     func detachView() {
         vmView?.virtualMachine = nil
         vmView = nil
@@ -240,7 +234,6 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
         } else {
             if let provisioningInformation = managedVm.provisioningInformation {
-                // The user name is still needed to open SSH sessions on the VM
                 managedVm.guestUserName = provisioningInformation.userName
                 provisioningInformation.cleanup()
                 managedVm.provisioningInformation = nil

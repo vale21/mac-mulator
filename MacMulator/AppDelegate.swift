@@ -40,7 +40,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
     @IBOutlet var deleteVMMenuItem: NSMenuItem!
 
-    // Session menu items for headless VMs, added to the VM menu in code (see setupSessionMenuItems)
     private var openScreenSessionMenuItem: NSMenuItem?
     private var openSSHSessionMenuItem: NSMenuItem?
     private var openTerminalSessionMenuItem: NSMenuItem?
