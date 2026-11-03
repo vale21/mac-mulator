@@ -233,7 +233,7 @@ class QemuUtils {
         #if APPSTORE
             return containerSocketPath("serial", vmPath)
         #else
-            return vmPath + "/socket.serial"
+            return NSTemporaryDirectory() + "serial-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
         #endif
     }
 
