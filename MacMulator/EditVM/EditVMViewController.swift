@@ -56,7 +56,6 @@ class EditVMViewController: NSTabViewController {
             removeTabViewItem(tabViewItems[2])
         } else if vm.type == MacMulatorConstants.APPLE_VM {
             removeTabViewItem(tabViewItems[6])
-            removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[2])
         } else if vm.os == QemuConstants.OS_IOS {
             removeTabViewItem(tabViewItems[4])

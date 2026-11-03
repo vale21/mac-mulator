@@ -23,15 +23,15 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
     }
 
     @available(macOS 13.0, *)
-    static func decodeLinuxVirtualMachine(vm: VirtualMachine, installMedia: String) -> VZVirtualMachine {
-        let configuration = setupLinuxVirtualMachine(vm: vm, installMedia: installMedia)
+    static func decodeLinuxVirtualMachine(vm: VirtualMachine, installMedia: String, serialPort: VZSerialPortConfiguration? = nil) -> VZVirtualMachine {
+        let configuration = setupLinuxVirtualMachine(vm: vm, installMedia: installMedia, serialPort: serialPort)
 
         let virtualMachine = VZVirtualMachine(configuration: configuration, queue: .main)
         return virtualMachine
     }
 
     @available(macOS 13.0, *)
-    fileprivate static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia _: String) -> VZVirtualMachineConfiguration {
+    fileprivate static func setupLinuxVirtualMachine(vm: VirtualMachine, installMedia _: String, serialPort: VZSerialPortConfiguration?) -> VZVirtualMachineConfiguration {
         let virtualMachineConfiguration = VZVirtualMachineConfiguration()
         virtualMachineConfiguration.platform = createLinuxPlatformConfiguration(vm: vm, isInstalling: false)
         virtualMachineConfiguration.cpuCount = vm.cpus
@@ -61,6 +61,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
 
         virtualMachineConfiguration.networkDevices = [
             LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                macAddress: vm.macAddress,
                 device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
                 phisicalDevice: selectedBridgedInterfaceIdentifier
             ),
@@ -70,6 +71,9 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]
         virtualMachineConfiguration.audioDevices = [LinuxVirtualMachineConfigurationHelper.createInputAudioDeviceConfiguration(), LinuxVirtualMachineConfigurationHelper.createOutputAudioDeviceConfiguration()]
         virtualMachineConfiguration.consoleDevices = [LinuxVirtualMachineConfigurationHelper.createSpiceAgentConsoleDeviceConfiguration()]
+        if let serialPort {
+            virtualMachineConfiguration.serialPorts = [serialPort]
+        }
 
         if #available(macOS 15.0, *) {
             let usbController = LinuxVirtualMachineConfigurationHelper.createUSBControllerConfiguration()

@@ -203,11 +203,37 @@ class QemuUtils {
         #endif
     }
 
+    static func isSpiceSupported(_ vm: VirtualMachine) -> Bool {
+        isSpiceDisplayEnabled(vm)
+    }
+
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
             return containerSocketPath("spice", vmPath)
         #else
             return vmPath + "/socket.spice"
+        #endif
+    }
+
+    static func sshPortMapping(for vm: VirtualMachine) -> PortMapping? {
+        vm.portMappings?.first { $0.vmPort == 22 }
+    }
+
+    static func sshArguments(for vm: VirtualMachine) -> [String]? {
+        guard let mapping = sshPortMapping(for: vm) else { return nil }
+
+        var destination = "localhost"
+        if let userName = Utils.guestUserName(vm) {
+            destination = userName + "@" + destination
+        }
+        return Utils.sshArguments(for: vm, destination: destination, port: mapping.hostPort)
+    }
+
+    static func serialSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("serial", vmPath)
+        #else
+            return NSTemporaryDirectory() + "serial-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
         #endif
     }
 
@@ -220,15 +246,8 @@ class QemuUtils {
     }
 
     #if APPSTORE
-        /// A unix socket path inside the sandbox container, unique per VM and short enough for sun_path.
         private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
-            // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
-            var hash: UInt64 = 0xCBF2_9CE4_8422_2325
-            for byte in vmPath.utf8 {
-                hash ^= UInt64(byte)
-                hash = hash &* 0x0000_0100_0000_01B3
-            }
-            return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
+            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
         }
     #endif
 

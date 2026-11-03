@@ -3,6 +3,7 @@
 //
 
 import Cocoa
+import Virtualization
 
 class RootViewController: NSSplitViewController, NSWindowDelegate {
     private var listController: VirtualMachinesListViewController?
@@ -61,6 +62,18 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func pauseVMMenuBarClicked(_ sender: Any) {
         vmController?.pauseVM(sender: sender)
+    }
+
+    func openScreenSessionMenuBarClicked(_: Any) {
+        vmController?.openScreenSession()
+    }
+
+    func openSSHSessionMenuBarClicked(_: Any) {
+        vmController?.openSSHSession()
+    }
+
+    func openTerminalSessionMenuBarClicked(_: Any) {
+        vmController?.openTerminalSession()
     }
 
     func attachUSBImageToVM(_ sender: Any, _ virtualDrive: VirtualDrive) {
@@ -202,6 +215,13 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.moveSavedVm(at: originalRow, to: newRow)
+    }
+
+    /// Refreshes the VM view and the VM menu after a setting of the VM changed, if it is the VM shown
+    func vmSettingsChanged(_ vm: VirtualMachine) {
+        guard currentVm === vm else { return }
+        vmController?.setVirtualMachine(vm)
+        (NSApp.delegate as? AppDelegate)?.refreshVMMenus()
     }
 
     func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
@@ -418,6 +438,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
         if let tempVm = temp {
             tempVm.assignNewIdForClone()
+            tempVm.macAddress = VZMACAddress.randomLocallyAdministered().string
             tempVm.displayName = displayName
             if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
                 tempVm.type = MacMulatorConstants.APPLE_VM

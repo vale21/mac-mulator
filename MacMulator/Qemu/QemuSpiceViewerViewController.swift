@@ -32,6 +32,9 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
 
     /// When true the guest is asked for relative (server) mouse mode and clicking the display grabs the host pointer
     private var mouseCaptureEnabled = false
+    /// True when the viewer is a session opened on a running headless VM: closing it, or losing the
+    /// connection, only disconnects from the VM instead of stopping it
+    private var isSession = false
     private var isMouseCaptured = false
     /// Where the pointer was (in Core Graphics coordinates) when it was grabbed, to put it back on release
     private var locationBeforeCapture: CGPoint?
@@ -56,6 +59,10 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         socketPath = QemuUtils.spiceSocketPath(forVMAt: vm.path)
     }
 
+    func setSession(_ session: Bool) {
+        isSession = session
+    }
+
     /// Turns mouse capture on or off. When enabled, the guest is asked for relative mouse positioning and
     /// clicking the display grabs the host pointer until ⌃⌥ is pressed or the window loses focus.
     /// When disabled (the default), the host pointer is mapped onto the guest display in absolute mode.
@@ -68,7 +75,7 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     }
 
     override func windowShouldClose(_: NSWindow) -> Bool {
-        if isConnecting {
+        if isConnecting || isSession {
             true
         } else {
             super.windowShouldClose(view.window!)
@@ -784,6 +791,9 @@ extension QemuSpiceViewerViewController: CSConnectionDelegate {
             if self.isConnecting {
                 // A failed attempt has been torn down (see spiceError): try again rather than closing the viewer
                 self.retryConnection()
+            } else if self.isSession {
+                // The VM keeps running headless: just close the session
+                self.view.window?.close()
             } else {
                 stopVM(true)
             }

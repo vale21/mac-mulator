@@ -40,6 +40,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet var showConsoleOutputmenuItem: NSMenuItem!
     @IBOutlet var deleteVMMenuItem: NSMenuItem!
 
+    private var openScreenSessionMenuItem: NSMenuItem?
+    private var openSSHSessionMenuItem: NSMenuItem?
+    private var openTerminalSessionMenuItem: NSMenuItem?
+
     @IBAction func preferencesMenuBarClicked(_: Any) {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
     }
@@ -311,6 +315,35 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.showConsoleMenubarClicked(MacMulatorConstants.mainMenuSender)
     }
 
+    @IBAction func openScreenSessionMenuBarClicked(_: Any) {
+        rootController?.openScreenSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    @IBAction func openSSHSessionMenuBarClicked(_: Any) {
+        rootController?.openSSHSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    @IBAction func openTerminalSessionMenuBarClicked(_: Any) {
+        rootController?.openTerminalSessionMenuBarClicked(MacMulatorConstants.mainMenuSender)
+    }
+
+    private func setupSessionMenuItems() {
+        guard openScreenSessionMenuItem == nil, let index = vmMenu.items.firstIndex(of: pauseVMMenuItem) else { return }
+
+        let screenItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSpiceSession", comment: ""), action: #selector(openScreenSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let terminalItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openTerminalSession", comment: ""), action: #selector(openTerminalSessionMenuBarClicked(_:)), keyEquivalent: "")
+        let sshItem = NSMenuItem(title: NSLocalizedString("AppDelegate.openSSHSession", comment: ""), action: #selector(openSSHSessionMenuBarClicked(_:)), keyEquivalent: "")
+        var items = [NSMenuItem.separator(), screenItem, sshItem, terminalItem]
+        for (offset, item) in items.enumerated() {
+            item.target = self
+            vmMenu.insertItem(item, at: index + 1 + offset)
+        }
+
+        openSSHSessionMenuItem = sshItem
+        openScreenSessionMenuItem = screenItem
+        openTerminalSessionMenuItem = terminalItem
+    }
+
     @IBAction func deleteVMMenuBarClicked(_: Any) {
         rootController?.deleteVMMenuBarClicked(MacMulatorConstants.mainMenuSender)
     }
@@ -330,6 +363,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func refreshVMMenus() {
         defer { refreshUSBPassthroughMenu() }
         vmMenu.autoenablesItems = false
+        setupSessionMenuItems()
         #if APPSTORE
             preferencesMenuItem.isHidden = true
             preferencesSeparator.isHidden = true
@@ -371,6 +405,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         snapshotsViewRestoreMenuItem.isEnabled = false
         usbDevicesMenuItem.isEnabled = false
         showConsoleOutputmenuItem.isEnabled = false
+        openScreenSessionMenuItem?.isEnabled = false
+        openSSHSessionMenuItem?.isEnabled = false
+        openTerminalSessionMenuItem?.isEnabled = false
     }
 
     private func updateMenusForTemplate() {
@@ -392,6 +429,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         snapshotsViewRestoreMenuItem.isEnabled = false
         usbDevicesMenuItem.isEnabled = false
         showConsoleOutputmenuItem.isEnabled = false
+        openScreenSessionMenuItem?.isEnabled = false
+        openSSHSessionMenuItem?.isEnabled = false
+        openTerminalSessionMenuItem?.isEnabled = false
     }
 
     private func updateMenusForVM(_ vm: VirtualMachine, rootController: RootViewController) {
@@ -409,6 +449,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         updateExportImportMenus(for: vm)
         updateConversionMenus(for: vm, canConvert: canConvert, rootController: rootController)
         updateUSBMenus(for: vm)
+        updateSessionMenus(for: vm, isRunning: isRunning)
+    }
+
+    private func updateSessionMenus(for vm: VirtualMachine, isRunning running: Bool) {
+        let actions = VMSessionActions(vm: vm, isRunning: running)
+        openScreenSessionMenuItem?.title = actions.screenTitle
+        for (item, action) in [(openScreenSessionMenuItem, actions.screen), (openSSHSessionMenuItem, actions.ssh), (openTerminalSessionMenuItem, actions.terminal)] {
+            item?.isHidden = action.isHidden
+            item?.isEnabled = action.isEnabled
+        }
     }
 
     private func updatePowerMenus(for vm: VirtualMachine, isRunning: Bool) {

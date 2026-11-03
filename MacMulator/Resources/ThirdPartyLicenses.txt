@@ -126,10 +126,14 @@ virtio-win drivers
                                          Clause (see the ISO)
 spice-vdagent for macOS
   (macos-guest-tools.img.zip)  0.22.1    GPL-3.0-or-later      both        https://gitlab.freedesktop.org/spice/linux/vd_agent (macOS port by UTM)
+SwiftTerm (Swift package,
+  linked into the app)         1.99.2    MIT                   both        https://github.com/migueldeicaza/SwiftTerm
 
 EDK2 is Copyright (c) TianoCore contributors and Intel Corporation; OpenCore is
 Copyright (c) the Acidanthera team; the virtio-win drivers are Copyright (c)
-Red Hat, Inc.; spice-vdagent is Copyright (C) Red Hat, Inc.
+Red Hat, Inc.; spice-vdagent is Copyright (C) Red Hat, Inc.; SwiftTerm is
+Copyright (c) 2019-2026 Miguel de Icaza and includes code Copyright (c) the
+xterm.js authors, SourceLair Private Company and Christopher Jeffrey.
 
 
 4. SOURCE CODE
@@ -171,7 +175,7 @@ The following license texts apply to the components above:
   * BSD 3-Clause License (spice-protocol, Opus, libslirp, zstd, swtpm, libtpms, ANGLE, SLOF, OpenCore, libpcre, parts of libjpeg-turbo and virtio-win)
   * BSD 2-Clause License (OpenSBI)
   * BSD 2-Clause Plus Patent License (EDK2)
-  * MIT License (libffi, pixman, virglrenderer, libepoxy)
+  * MIT License (libffi, pixman, virglrenderer, libepoxy, SwiftTerm)
   * OpenSSL License and SSLeay License (OpenSSL)
   * Independent JPEG Group License (libjpeg-turbo)
   * libpng License (libpng)

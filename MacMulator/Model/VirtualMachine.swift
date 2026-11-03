@@ -26,6 +26,7 @@ class VirtualMachine: Codable, Hashable {
     var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
     var enable3DAcceleration: Bool? = true
     var enableSpiceDisplay: Bool? = true
+    var headless: Bool? = false
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
@@ -39,6 +40,7 @@ class VirtualMachine: Codable, Hashable {
     var usbPassthroughDevices: [String]?
     var usbPassthroughDeviceNames: [String: String]?
     var provisioningInformation: ProvisioningInformation? = nil
+    var guestUserName: String?
 
     /// Unique identifier, assigned at creation time and never modified afterwards.
     /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
@@ -57,7 +59,7 @@ class VirtualMachine: Codable, Hashable {
 
     private enum CodingKeys: String, CodingKey {
         case storedId = "id"
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
@@ -198,7 +200,6 @@ class VirtualMachine: Codable, Hashable {
         }
     }
 
-    // Identity is the immutable ID: the display name and the path change when a VM is renamed.
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
         lhs.id == rhs.id
     }
@@ -207,8 +208,6 @@ class VirtualMachine: Codable, Hashable {
         hasher.combine(id)
     }
 
-    /// Gives a freshly copied VM its own identity. Only to be used while cloning,
-    /// before the copy is registered.
     func assignNewIdForClone() {
         storedId = UUID().uuidString
     }

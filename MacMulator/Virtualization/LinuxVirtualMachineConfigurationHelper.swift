@@ -29,7 +29,7 @@ class LinuxVirtualMachineConfigurationHelper {
         }
     }
 
-    static func createNetworkDeviceConfiguration(device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
+    static func createNetworkDeviceConfiguration(macAddress: String?, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
         var networkAttachment: VZNetworkDeviceAttachment = VZNATNetworkDeviceAttachment()
@@ -43,7 +43,7 @@ class LinuxVirtualMachineConfigurationHelper {
         }
 
         networkDevice.attachment = networkAttachment
-        networkDevice.macAddress = VZMACAddress.randomLocallyAdministered()
+        networkDevice.macAddress = macAddress.flatMap { VZMACAddress(string: $0) } ?? VZMACAddress.randomLocallyAdministered()
         return networkDevice
     }
 
