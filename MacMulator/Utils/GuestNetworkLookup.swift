@@ -20,14 +20,12 @@ enum GuestNetworkLookup {
             return ipAddress
         }
 
-        // The leases file keeps the old addresses of a guest too, and a guest that identifies itself with a DHCP client
-        // id (e.g. Linux with systemd-networkd) is recorded under that, not under its MAC: take the most recent lease
-        // that answers on the SSH port, preferring those recorded under the MAC
+        // Probe lease addresses to populate ARP, but never treat SSH reachability as guest identity.
         let leases = dhcpLeases(for: mac)
-        // The first connection to a host has to wait for its ARP resolution, which can take longer than the timeout:
-        // try twice
+        // Retry because the first connection may time out while resolving ARP.
         for _ in 0 ..< 2 {
-            if let ipAddress = firstReachable(leases.prefix(maxCheckedLeases).map(\.ipAddress)) {
+            _ = firstReachable(leases.prefix(maxCheckedLeases).map(\.ipAddress))
+            if let ipAddress = ipAddressFromARPTable(mac) {
                 return ipAddress
             }
         }
