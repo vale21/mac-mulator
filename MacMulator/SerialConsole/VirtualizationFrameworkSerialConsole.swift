@@ -13,48 +13,22 @@ class VirtualizationFrameworkSerialConsole: SerialConsole {
 
     private let toGuest = Pipe()
     private let fromGuest = Pipe()
-    private let writerQueue = DispatchQueue(label: "VirtualizationFrameworkSerialConsole.writer")
-    private let writerLock = NSLock()
-    private var writerSource: DispatchSourceWrite?
-    private var pendingWrites = Data()
-    private var writerCancelled = false
-    /// Guest output received so far (accessed on the main thread)
+    private var reader: SerialPortReader?
+    private let writer: SerialPortWriter?
     private var buffered = Data()
     private var outputHandler: ((Data) -> Void)?
 
     init() {
-        fromGuest.fileHandleForReading.readabilityHandler = { [weak self] handle in
-            let data = handle.availableData
-            guard !data.isEmpty else {
-                handle.readabilityHandler = nil
-                return
-            }
-            DispatchQueue.main.async {
-                self?.received(data)
-            }
-        }
-
-        let writerDescriptor = toGuest.fileHandleForWriting.fileDescriptor
-        let flags = fcntl(writerDescriptor, F_GETFL)
-        if flags >= 0, fcntl(writerDescriptor, F_SETFL, flags | O_NONBLOCK) == 0 {
-            let source = DispatchSource.makeWriteSource(fileDescriptor: writerDescriptor, queue: writerQueue)
-            source.setEventHandler { [weak self] in
-                self?.writePending()
-            }
-            source.resume()
-            writerSource = source
-        } else {
-            writerCancelled = true
-        }
+        writer = SerialPortWriter(fileHandle: toGuest.fileHandleForWriting, label: "VirtualizationFrameworkSerialConsole.write")
+        // Guest output is read for the whole VM lifetime, so it can be replayed when a console is attached
+        reader = SerialPortReader(fileHandle: fromGuest.fileHandleForReading, onData: { [weak self] data in
+            self?.received(data)
+        }, onClose: {})
     }
 
     deinit {
-        fromGuest.fileHandleForReading.readabilityHandler = nil
-        writerLock.lock()
-        writerCancelled = true
-        pendingWrites.removeAll()
-        writerLock.unlock()
-        writerSource?.cancel()
+        reader?.cancel()
+        writer?.cancel()
     }
 
     func makePortConfiguration() -> VZVirtioConsoleDeviceSerialPortConfiguration {
@@ -72,25 +46,10 @@ class VirtualizationFrameworkSerialConsole: SerialConsole {
 
     func detach() {
         outputHandler = nil
-        writerLock.lock()
-        pendingWrites.removeAll()
-        writerLock.unlock()
     }
 
     func send(_ data: Data) {
-        guard !data.isEmpty else { return }
-
-        writerLock.lock()
-        guard !writerCancelled, data.count <= Self.maxBufferedBytes - pendingWrites.count else {
-            writerLock.unlock()
-            return
-        }
-        pendingWrites.append(data)
-        writerLock.unlock()
-
-        writerQueue.async { [weak self] in
-            self?.writePending()
-        }
+        writer?.send(data)
     }
 
     private func received(_ data: Data) {
@@ -99,30 +58,5 @@ class VirtualizationFrameworkSerialConsole: SerialConsole {
             buffered.removeFirst(buffered.count - Self.maxBufferedBytes)
         }
         outputHandler?(data)
-    }
-
-    private func writePending() {
-        writerLock.lock()
-        defer { writerLock.unlock() }
-        guard !writerCancelled, !pendingWrites.isEmpty else { return }
-
-        while !pendingWrites.isEmpty {
-            let count = min(pendingWrites.count, 4096)
-            let written = pendingWrites.withUnsafeBytes { buffer in
-                write(toGuest.fileHandleForWriting.fileDescriptor, buffer.baseAddress!, count)
-            }
-            if written > 0 {
-                pendingWrites.removeFirst(written)
-            } else if written < 0, errno == EINTR {
-                continue
-            } else if written < 0, errno == EAGAIN || errno == EWOULDBLOCK {
-                return
-            } else {
-                pendingWrites.removeAll()
-                writerCancelled = true
-                writerSource?.cancel()
-                return
-            }
-        }
     }
 }
