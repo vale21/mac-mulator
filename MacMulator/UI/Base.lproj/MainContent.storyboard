@@ -4854,7 +4854,7 @@ Rocky Linux</string>
                         <segue destination="xWp-Ke-TzW" kind="show" identifier="showVMViewSegue" id="sX9-6h-L5a"/>
                         <segue destination="cvb-zf-bpY" kind="sheet" identifier="startVMSegue" id="xJM-1W-fcJ"/>
                         <segue destination="XEm-KJ-Oor" kind="show" identifier="showSpiceViewSegue" id="e7k-B8-t4V"/>
-                        <segue destination="RSg-f6-UZF" kind="show" identifier="convertVMSegue" id="OkB-v1-ghb"/>
+                        <segue destination="RSg-f6-UZF" kind="sheet" identifier="convertVMSegue" id="OkB-v1-ghb"/>
                         <segue destination="1rf-Yg-KwF" kind="sheet" identifier="showCloneViewSegue" id="Z2M-4L-y1f"/>
                     </connections>
                 </viewController>
