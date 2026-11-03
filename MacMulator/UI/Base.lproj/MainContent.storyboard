@@ -4825,20 +4825,6 @@ Rocky Linux</string>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="drX-xb-Fr1">
-                                            <rect key="frame" x="349" y="22" width="36" height="42"/>
-                                            <buttonCell key="cell" type="bevel" title="Stop" bezelStyle="rounded" image="stop.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="njb-KR-u3l">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="4qp-qn-DQN"/>
-                                                <constraint firstAttribute="width" constant="36" id="75n-UQ-aWH"/>
-                                            </constraints>
-                                            <connections>
-                                                <action selector="stopVM:" target="Urh-Tu-1Cq" id="Tot-ew-i8q"/>
-                                            </connections>
-                                        </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23l-NY-BDE">
                                             <rect key="frame" x="18" y="132" width="614" height="16"/>
                                             <constraints>
@@ -4865,20 +4851,6 @@ Rocky Linux</string>
                                                 <action selector="startVMWithSender:" target="Urh-Tu-1Cq" id="rzz-jA-YD0"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fft-jP-dG6">
-                                            <rect key="frame" x="266" y="22" width="36" height="42"/>
-                                            <buttonCell key="cell" type="bevel" title="Pause" bezelStyle="rounded" image="pause.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="4AF-ze-2Iu">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="36" id="C6w-y6-PXY"/>
-                                                <constraint firstAttribute="width" constant="36" id="giL-bF-ks8"/>
-                                            </constraints>
-                                            <connections>
-                                                <action selector="pauseVMWithSender:" target="Urh-Tu-1Cq" id="4kt-6K-52d"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TgC-ff-dnC">
                                             <rect key="frame" x="221" y="80" width="208" height="24"/>
                                             <buttonCell key="cell" type="push" title="Configure this VM" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="o7c-gE-LqP">
@@ -4894,17 +4866,45 @@ Rocky Linux</string>
                                                 <action selector="editVM:" target="Urh-Tu-1Cq" id="fxk-Ey-QyQ"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="drX-xb-Fr1">
+                                            <rect key="frame" x="325" y="21" width="45" height="42"/>
+                                            <buttonCell key="cell" type="bevel" title="Stop" bezelStyle="rounded" image="stop.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="njb-KR-u3l">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="4qp-qn-DQN"/>
+                                                <constraint firstAttribute="width" constant="45" id="75n-UQ-aWH"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="stopVM:" target="Urh-Tu-1Cq" id="Tot-ew-i8q"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fft-jP-dG6">
+                                            <rect key="frame" x="280" y="21" width="45" height="42"/>
+                                            <buttonCell key="cell" type="bevel" title="Pause" bezelStyle="rounded" image="pause.circle.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="4AF-ze-2Iu">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="36" id="C6w-y6-PXY"/>
+                                                <constraint firstAttribute="width" constant="45" id="giL-bF-ks8"/>
+                                            </constraints>
+                                            <connections>
+                                                <action selector="pauseVMWithSender:" target="Urh-Tu-1Cq" id="4kt-6K-52d"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="20" symbolic="YES" id="0t7-sq-taJ"/>
-                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="1" id="1uW-ZB-ijN"/>
+                                        <constraint firstItem="WwV-tF-8bO" firstAttribute="leading" secondItem="Fft-jP-dG6" secondAttribute="trailing" constant="-22" id="1uW-ZB-ijN"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="trailing" secondItem="23l-NY-BDE" secondAttribute="trailing" id="4TS-O3-FS9"/>
-                                        <constraint firstItem="drX-xb-Fr1" firstAttribute="leading" secondItem="WwV-tF-8bO" secondAttribute="trailing" constant="1" id="8sO-om-j7z"/>
+                                        <constraint firstItem="drX-xb-Fr1" firstAttribute="leading" secondItem="WwV-tF-8bO" secondAttribute="trailing" constant="-23" id="8sO-om-j7z"/>
                                         <constraint firstItem="TgC-ff-dnC" firstAttribute="centerX" secondItem="WwV-tF-8bO" secondAttribute="centerX" id="Bfi-bA-bwc"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="HOZ-ix-pnt"/>
                                         <constraint firstItem="WwV-tF-8bO" firstAttribute="top" secondItem="f2n-08-TYD" secondAttribute="bottom" constant="3" id="Isr-Uz-h4O"/>
                                         <constraint firstAttribute="bottom" secondItem="WwV-tF-8bO" secondAttribute="bottom" constant="20" symbolic="YES" id="Mjl-HA-QWz"/>
-                                        <constraint firstAttribute="bottom" secondItem="drX-xb-Fr1" secondAttribute="bottom" constant="25" id="Nhq-ju-lzw"/>
+                                        <constraint firstAttribute="bottom" secondItem="drX-xb-Fr1" secondAttribute="bottom" constant="24" id="Nhq-ju-lzw"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="P2V-RM-ImW"/>
                                         <constraint firstItem="2TJ-y4-d9V" firstAttribute="top" secondItem="Qga-Ob-GTN" secondAttribute="top" constant="73" id="RrE-cz-jmk"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="centerX" secondItem="Qga-Ob-GTN" secondAttribute="centerX" id="T4T-Di-q6V"/>
@@ -4915,7 +4915,7 @@ Rocky Linux</string>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="centerX" secondItem="23l-NY-BDE" secondAttribute="centerX" id="hPi-g2-mQ9"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="top" secondItem="2TJ-y4-d9V" secondAttribute="bottom" constant="8" symbolic="YES" id="hTZ-hD-vSs"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="top" secondItem="Qga-Ob-GTN" secondAttribute="top" constant="52" id="iCo-xk-UBi"/>
-                                        <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="25" id="nqw-eF-VrR"/>
+                                        <constraint firstAttribute="bottom" secondItem="Fft-jP-dG6" secondAttribute="bottom" constant="24" id="nqw-eF-VrR"/>
                                         <constraint firstItem="gzW-c5-Oke" firstAttribute="leading" secondItem="Qga-Ob-GTN" secondAttribute="leading" constant="19" id="tci-Rk-0aL"/>
                                         <constraint firstItem="cI4-jO-AFz" firstAttribute="top" secondItem="gzW-c5-Oke" secondAttribute="bottom" constant="19" id="uEf-L3-9pJ"/>
                                         <constraint firstItem="f2n-08-TYD" firstAttribute="bottom" secondItem="TgC-ff-dnC" secondAttribute="bottom" constant="12" id="vhx-en-ddS"/>
