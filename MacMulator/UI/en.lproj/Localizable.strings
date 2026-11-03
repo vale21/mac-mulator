@@ -265,6 +265,11 @@
 "VirtualMachineViewController.serialConsoleNotAvailable" = "The serial console of the VM is not available. Restart the VM to enable it.";
 "VirtualMachineViewController.sshConnect" = "Connect";
 "VirtualMachineViewController.sshUserNamePrompt" = "User name to log in to %@ with SSH:";
+"VirtualMachineViewController.headlessVM" = "This VM runs headless: it has no window. Open a session to use it.";
+"VirtualMachineViewController.sessionVMNotRunning" = "Start the VM to open a session.";
+"VirtualMachineViewController.sessionTemplate" = "VM templates cannot be started.";
+"VirtualMachineViewController.sessionSpiceNotEnabled" = "SPICE display is not enabled for this VM, or its QEMU does not support it. Check the Video settings of the VM.";
+"VirtualMachineViewController.sessionNoSshPortMapping" = "The VM has no port mapping for the SSH port (22). Add one in the Network settings of the VM.";
 "VirtualizationFrameworkInstallVMViewController.estimateTimeRemaining" = "Estimate time remaining: %@";
 "VirtualizationFrameworkInstallVMViewController.installAbort" = "Aborting installation. Please wait...";
 "VirtualizationFrameworkInstallVMViewController.installFailed" = "Installation failed with error: %@";

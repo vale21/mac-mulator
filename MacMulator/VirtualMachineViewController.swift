@@ -22,6 +22,55 @@ class VMToStart {
     }
 }
 
+/// The actions opening a session on a VM (screen, SSH, terminal): whether they are shown and enabled, and why not.
+/// Shared by the VM menu and the headless panel of the VM view, so that they always agree
+struct VMSessionActions {
+    struct Action {
+        var isHidden: Bool
+        /// Nil when the action is enabled
+        var disabledReason: String?
+
+        var isEnabled: Bool { disabledReason == nil }
+    }
+
+    let screenTitle: String
+    let screen: Action
+    let ssh: Action
+    let terminal: Action
+
+    init(vm: VirtualMachine, isRunning running: Bool) {
+        let isAppleVM = vm.type == MacMulatorConstants.APPLE_VM
+        screenTitle = NSLocalizedString(isAppleVM ? "AppDelegate.showVMScreen" : "AppDelegate.openSpiceSession", comment: "")
+
+        #if APPSTORE
+            let sshHidden = true
+        #else
+            let sshHidden = vm.os != QemuConstants.OS_LINUX && vm.os != QemuConstants.OS_MAC
+        #endif
+
+        let notRunningReason: String? = if Utils.isVMTemplate(vm) {
+            NSLocalizedString("VirtualMachineViewController.sessionTemplate", comment: "")
+        } else if !running {
+            NSLocalizedString("VirtualMachineViewController.sessionVMNotRunning", comment: "")
+        } else {
+            nil
+        }
+
+        var screenReason = notRunningReason
+        var sshReason = notRunningReason
+        if !isAppleVM, screenReason == nil, !QemuUtils.isSpiceSupported(vm) {
+            screenReason = NSLocalizedString("VirtualMachineViewController.sessionSpiceNotEnabled", comment: "")
+        }
+        if !isAppleVM, sshReason == nil, QemuUtils.sshPortMapping(for: vm) == nil {
+            sshReason = NSLocalizedString("VirtualMachineViewController.sessionNoSshPortMapping", comment: "")
+        }
+
+        screen = Action(isHidden: !Utils.isHeadless(vm), disabledReason: screenReason)
+        ssh = Action(isHidden: sshHidden, disabledReason: sshReason)
+        terminal = Action(isHidden: vm.os != QemuConstants.OS_LINUX, disabledReason: notRunningReason)
+    }
+}
+
 class VirtualMachineViewController: NSViewController {
     var listenPort: Int32 = 4444
     var rootController: RootViewController?
@@ -52,6 +101,14 @@ class VirtualMachineViewController: NSViewController {
     @IBOutlet var vmHardDriveDesc: NSTextField!
     @IBOutlet var vmHardDrive: NSTextField!
     @IBOutlet var editVMButton: NSButton!
+
+    /// Shown in the central box, in place of the VM details, when the VM is headless. It is a top level view of the
+    /// scene, attached to and detached from the box as needed
+    @IBOutlet var headlessView: NSView!
+    @IBOutlet var headlessLabel: NSTextField!
+    @IBOutlet var screenSessionButton: NSButton!
+    @IBOutlet var sshSessionButton: NSButton!
+    @IBOutlet var terminalSessionButton: NSButton!
 
     @IBOutlet var centralBox: NSBox!
     @IBOutlet var centralBoxTrailingSpace: NSLayoutConstraint?
@@ -100,6 +157,18 @@ class VirtualMachineViewController: NSViewController {
                 }
             }
         }
+    }
+
+    @IBAction func openScreenSessionClicked(_: Any) {
+        openScreenSession()
+    }
+
+    @IBAction func openSSHSessionClicked(_: Any) {
+        openSSHSession()
+    }
+
+    @IBAction func openTerminalSessionClicked(_: Any) {
+        openTerminalSession()
     }
 
     @IBAction func stopVM(_ sender: Any) {
@@ -455,6 +524,7 @@ class VirtualMachineViewController: NSViewController {
 
                     centralBox.contentView = boxContentView
                     bottomConfigureVMButton.isHidden = true
+                    updateHeadlessView(vm, running)
                 } else {
                     vmName.stringValue = vm.displayName
 
@@ -463,8 +533,46 @@ class VirtualMachineViewController: NSViewController {
 
                     centralBox.contentView = boxContentView
                     bottomConfigureVMButton.isHidden = true
+                    updateHeadlessView(vm, running)
                 }
             }
+        }
+    }
+
+    /// For headless VMs, replaces the VM details in the central box (all but the icon and the configure button) with the headless view, whose
+    /// session buttons follow the session items of the VM menu
+    fileprivate func updateHeadlessView(_ vm: VirtualMachine, _ running: Bool) {
+        guard Utils.isHeadless(vm), let boxContentView else {
+            headlessView.removeFromSuperview()
+            hideVMDetails(false)
+            return
+        }
+
+        hideVMDetails(true)
+        if headlessView.superview !== boxContentView {
+            headlessView.removeFromSuperview()
+            headlessView.translatesAutoresizingMaskIntoConstraints = false
+            boxContentView.addSubview(headlessView)
+            NSLayoutConstraint.activate([
+                headlessView.leadingAnchor.constraint(equalTo: vmIcon.trailingAnchor, constant: 21),
+                boxContentView.trailingAnchor.constraint(equalTo: headlessView.trailingAnchor, constant: 20),
+                headlessView.topAnchor.constraint(equalTo: vmIcon.topAnchor),
+                // Keep clear of the configure button, which stays at the bottom of the box
+                editVMButton.topAnchor.constraint(greaterThanOrEqualTo: headlessView.bottomAnchor, constant: 12),
+            ])
+        }
+
+        headlessLabel.stringValue = NSLocalizedString("VirtualMachineViewController.headlessVM", comment: "")
+        sshSessionButton.title = NSLocalizedString("AppDelegate.openSSHSession", comment: "")
+        terminalSessionButton.title = NSLocalizedString("AppDelegate.openTerminalSession", comment: "")
+
+        let actions = VMSessionActions(vm: vm, isRunning: running)
+        screenSessionButton.title = actions.screenTitle
+        for (button, action) in [(screenSessionButton, actions.screen), (sshSessionButton, actions.ssh), (terminalSessionButton, actions.terminal)] {
+            button?.isHidden = action.isHidden
+            button?.isEnabled = action.isEnabled
+            // Tooltips are shown on disabled buttons too: tell why the session cannot be opened
+            button?.toolTip = action.disabledReason
         }
     }
 
@@ -518,6 +626,12 @@ class VirtualMachineViewController: NSViewController {
 
     fileprivate func hideBoxControls(_ hidden: Bool) {
         vmIcon.isHidden = hidden
+        editVMButton.isHidden = hidden
+        hideVMDetails(hidden)
+    }
+
+    /// Hides the VM details shown next to the icon in the central box
+    fileprivate func hideVMDetails(_ hidden: Bool) {
         vmArchitectureDesc.isHidden = hidden
         vmArchitecture.isHidden = hidden
         vmTypeDesc.isHidden = hidden
@@ -528,7 +642,6 @@ class VirtualMachineViewController: NSViewController {
         vmMemory.isHidden = hidden
         vmHardDriveDesc.isHidden = hidden
         vmHardDrive.isHidden = hidden
-        editVMButton.isHidden = hidden
     }
 
     private lazy var loadingView: NSStackView = {

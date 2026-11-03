@@ -216,6 +216,13 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.moveSavedVm(at: originalRow, to: newRow)
     }
 
+    /// Refreshes the VM view and the VM menu after a setting of the VM changed, if it is the VM shown
+    func vmSettingsChanged(_ vm: VirtualMachine) {
+        guard currentVm === vm else { return }
+        vmController?.setVirtualMachine(vm)
+        (NSApp.delegate as? AppDelegate)?.refreshVMMenus()
+    }
+
     func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
         listController?.refreshList()
         vmController?.setVirtualMachine(virtualMachine)

@@ -454,24 +454,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func updateSessionMenus(for vm: VirtualMachine, isRunning running: Bool) {
-        openScreenSessionMenuItem?.isHidden = !Utils.isHeadless(vm)
-        openTerminalSessionMenuItem?.isHidden = vm.os != QemuConstants.OS_LINUX
-        #if APPSTORE
-            openSSHSessionMenuItem?.isHidden = true
-        #else
-            openSSHSessionMenuItem?.isHidden = vm.os != QemuConstants.OS_LINUX && vm.os != QemuConstants.OS_MAC
-        #endif
-
-        if vm.type == MacMulatorConstants.APPLE_VM {
-            openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.showVMScreen", comment: "")
-            openScreenSessionMenuItem?.isEnabled = running
-            openSSHSessionMenuItem?.isEnabled = running
-            openTerminalSessionMenuItem?.isEnabled = running
-        } else {
-            openScreenSessionMenuItem?.title = NSLocalizedString("AppDelegate.openSpiceSession", comment: "")
-            openScreenSessionMenuItem?.isEnabled = running && QemuUtils.isSpiceSupported(vm)
-            openSSHSessionMenuItem?.isEnabled = running && QemuUtils.sshPortMapping(for: vm) != nil
-            openTerminalSessionMenuItem?.isEnabled = running
+        let actions = VMSessionActions(vm: vm, isRunning: running)
+        openScreenSessionMenuItem?.title = actions.screenTitle
+        for (item, action) in [(openScreenSessionMenuItem, actions.screen), (openSSHSessionMenuItem, actions.ssh), (openTerminalSessionMenuItem, actions.terminal)] {
+            item?.isHidden = action.isHidden
+            item?.isEnabled = action.isEnabled
         }
     }
 

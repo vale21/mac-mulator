@@ -219,6 +219,8 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBAction func showScreenToggleChanged(_: Any) {
         if let virtualMachine {
             virtualMachine.headless = showScreenSwitch.state == .off
+            // The VM view behind the sheet shows the session buttons of headless VMs
+            (NSApp.delegate as? AppDelegate)?.rootController?.vmSettingsChanged(virtualMachine)
         }
         updateView()
     }

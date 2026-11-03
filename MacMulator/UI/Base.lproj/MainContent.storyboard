@@ -4939,6 +4939,8 @@ Rocky Linux</string>
                         <outlet property="bottomConfigureVMButton" destination="TgC-ff-dnC" id="wdq-Nz-an4"/>
                         <outlet property="centralBox" destination="cI4-jO-AFz" id="tcB-mw-SvE"/>
                         <outlet property="editVMButton" destination="oHu-X9-tE7" id="DPc-7e-AK7"/>
+                        <outlet property="headlessLabel" destination="hLv-Lb-0aC" id="hLv-o1-0aU"/>
+                        <outlet property="headlessView" destination="hLv-Pn-0aA" id="hLv-o2-0aV"/>
                         <outlet property="importVMButton" destination="uLv-zr-jEy" id="b9C-aG-D5c"/>
                         <outlet property="importVMLabel" destination="hob-nc-3jQ" id="QmU-kj-EYE"/>
                         <outlet property="newVMButton" destination="eX2-gm-MSx" id="uNK-3i-IAw"/>
@@ -4947,8 +4949,11 @@ Rocky Linux</string>
                         <outlet property="noVMsBox" destination="f2n-08-TYD" id="obv-00-IdA"/>
                         <outlet property="pauseVMButton" destination="Fft-jP-dG6" id="TAM-Y8-0hz"/>
                         <outlet property="qemuUnavailableLabel" destination="23l-NY-BDE" id="IEQ-po-m1f"/>
+                        <outlet property="screenSessionButton" destination="hLv-Sc-0aE" id="hLv-o3-0aW"/>
+                        <outlet property="sshSessionButton" destination="hLv-Ss-0aG" id="hLv-o4-0aX"/>
                         <outlet property="startVMButton" destination="WwV-tF-8bO" id="7aN-9a-6QH"/>
                         <outlet property="stopVMButton" destination="drX-xb-Fr1" id="Rvr-gU-z4q"/>
+                        <outlet property="terminalSessionButton" destination="hLv-Tm-0aI" id="hLv-o5-0aY"/>
                         <outlet property="vmArchitecture" destination="hm8-Zq-L4L" id="SsA-Eq-JGx"/>
                         <outlet property="vmArchitectureDesc" destination="crb-Lz-Aot" id="59h-t3-2Ol"/>
                         <outlet property="vmDescription" destination="gzW-c5-Oke" id="Mqz-DY-PHX"/>
@@ -4970,6 +4975,78 @@ Rocky Linux</string>
                     </connections>
                 </viewController>
                 <customObject id="Vcj-zu-TXn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Pn-0aA" userLabel="Headless VM View">
+                    <rect key="frame" x="0.0" y="0.0" width="315" height="128"/>
+                    <subviews>
+                        <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-St-0aB">
+                            <rect key="frame" x="0.0" y="0.0" width="315" height="128"/>
+                            <subviews>
+                                <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Lb-0aC">
+                                    <rect key="frame" x="-2" y="96" width="319" height="32"/>
+                                    <textFieldCell key="cell" title="This VM runs headless: it has no window. Open a session to use it." id="hLv-Lc-0aD">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Sc-0aE">
+                                    <rect key="frame" x="0.0" y="64" width="315" height="24"/>
+                                    <buttonCell key="cell" type="push" title="Open a SPICE session" bezelStyle="rounded" image="display" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hLv-Sd-0aF">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="openScreenSessionClicked:" target="Urh-Tu-1Cq" id="hLv-a1-0aR"/>
+                                    </connections>
+                                </button>
+                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Ss-0aG">
+                                    <rect key="frame" x="0.0" y="32" width="315" height="24"/>
+                                    <buttonCell key="cell" type="push" title="Open an SSH session" bezelStyle="rounded" image="network" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hLv-Sh-0aH">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="openSSHSessionClicked:" target="Urh-Tu-1Cq" id="hLv-a2-0aS"/>
+                                    </connections>
+                                </button>
+                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hLv-Tm-0aI">
+                                    <rect key="frame" x="0.0" y="0.0" width="315" height="24"/>
+                                    <buttonCell key="cell" type="push" title="Open a Terminal session" bezelStyle="rounded" image="apple.terminal" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hLv-Tc-0aJ">
+                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <action selector="openTerminalSessionClicked:" target="Urh-Tu-1Cq" id="hLv-a3-0aT"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="hLv-Lb-0aC" secondAttribute="trailing" id="hLv-c1-0aK"/>
+                                <constraint firstAttribute="trailing" secondItem="hLv-Sc-0aE" secondAttribute="trailing" id="hLv-c2-0aL"/>
+                                <constraint firstAttribute="trailing" secondItem="hLv-Ss-0aG" secondAttribute="trailing" id="hLv-c3-0aM"/>
+                                <constraint firstAttribute="trailing" secondItem="hLv-Tm-0aI" secondAttribute="trailing" id="hLv-c4-0aN"/>
+                            </constraints>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                        </stackView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="hLv-St-0aB" firstAttribute="leading" secondItem="hLv-Pn-0aA" secondAttribute="leading" id="hLv-c5-0aO"/>
+                        <constraint firstAttribute="trailing" secondItem="hLv-St-0aB" secondAttribute="trailing" id="hLv-c6-0aP"/>
+                        <constraint firstItem="hLv-St-0aB" firstAttribute="top" secondItem="hLv-Pn-0aA" secondAttribute="top" id="hLv-c7-0aQ"/>
+                        <constraint firstAttribute="bottom" secondItem="hLv-St-0aB" secondAttribute="bottom" id="hLv-c8-0aR"/>
+                    </constraints>
+                </customView>
             </objects>
             <point key="canvasLocation" x="-19" y="1116"/>
         </scene>
@@ -5264,9 +5341,12 @@ Gw
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="NSApplicationIcon" width="32" height="32"/>
         <image name="NSStopProgressFreestandingTemplate" width="20" height="20"/>
+        <image name="apple.terminal" catalog="system" width="18" height="14"/>
         <image name="checkmark.circle.fill" catalog="system" width="15" height="15"/>
+        <image name="display" catalog="system" width="19" height="15"/>
         <image name="folder.circle" width="78" height="78"/>
         <image name="monterey.large" width="90" height="90"/>
+        <image name="network" catalog="system" width="15" height="15"/>
         <image name="new.vm" width="78" height="78"/>
         <image name="pause.circle.fill" catalog="system" width="15" height="15"/>
         <image name="play.circle.fill" catalog="system" width="15" height="15"/>
