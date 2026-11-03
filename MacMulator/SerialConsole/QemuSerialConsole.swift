@@ -6,8 +6,14 @@
 import Foundation
 
 class QemuSerialConsole: SerialConsole {
+    private static let maxPendingWriteBytes = 256 * 1024
+
     private var socketDescriptor: Int32
     private var readSource: DispatchSourceRead?
+    private let writeStateLock = NSLock()
+    private let writeQueue = DispatchQueue(label: "QemuSerialConsole.write", qos: .utility)
+    private var pendingWriteData = Data()
+    private var writerScheduled = false
 
     init?(socketPath: String) {
         socketDescriptor = socket(AF_UNIX, SOCK_STREAM, 0)
@@ -66,24 +72,76 @@ class QemuSerialConsole: SerialConsole {
     func detach() {
         readSource?.cancel()
         readSource = nil
-        if socketDescriptor >= 0 {
-            close(socketDescriptor)
-            socketDescriptor = -1
+
+        writeStateLock.lock()
+        let descriptor = socketDescriptor
+        socketDescriptor = -1
+        pendingWriteData.removeAll()
+        writeStateLock.unlock()
+
+        guard descriptor >= 0 else { return }
+        shutdown(descriptor, SHUT_RDWR)
+        writeQueue.async {
+            close(descriptor)
         }
     }
 
     func send(_ data: Data) {
-        guard socketDescriptor >= 0 else { return }
+        guard !data.isEmpty else { return }
 
-        data.withUnsafeBytes { buffer in
-            var offset = 0
-            while offset < buffer.count {
-                let written = write(socketDescriptor, buffer.baseAddress! + offset, buffer.count - offset)
-                if written <= 0 {
-                    break
-                }
-                offset += written
+        writeStateLock.lock()
+        guard socketDescriptor >= 0 else {
+            writeStateLock.unlock()
+            return
+        }
+
+        let availableBytes = Self.maxPendingWriteBytes - pendingWriteData.count
+        let bytesToAppend = min(data.count, availableBytes)
+        guard bytesToAppend > 0 else {
+            writeStateLock.unlock()
+            return
+        }
+
+        pendingWriteData.append(contentsOf: data.prefix(bytesToAppend))
+        let shouldScheduleWriter = !writerScheduled
+        writerScheduled = true
+        writeStateLock.unlock()
+
+        if shouldScheduleWriter {
+            writeQueue.async { [weak self] in
+                self?.writePendingData()
             }
+        }
+    }
+
+    private func writePendingData() {
+        while true {
+            writeStateLock.lock()
+            guard socketDescriptor >= 0, !pendingWriteData.isEmpty else {
+                writerScheduled = false
+                writeStateLock.unlock()
+                return
+            }
+            let descriptor = socketDescriptor
+            let data = Data(pendingWriteData.prefix(4096))
+            writeStateLock.unlock()
+
+            let written = data.withUnsafeBytes { buffer in
+                write(descriptor, buffer.baseAddress!, buffer.count)
+            }
+            if written < 0 && errno == EINTR {
+                continue
+            }
+            guard written > 0 else {
+                detach()
+                return
+            }
+
+            writeStateLock.lock()
+            if socketDescriptor == descriptor {
+                pendingWriteData.removeFirst(min(written, pendingWriteData.count))
+            }
+            writeStateLock.unlock()
         }
     }
 }
