@@ -276,8 +276,13 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
-                    vmViewController?.takeScreenshot()
-                    vmViewController?.showPausingView()
+                    if let vmViewController {
+                        vmViewController.takeScreenshot()
+                        vmViewController.showPausingView()
+                    } else {
+                        // Headless: show the progress on the main window, until the paused VM is released
+                        vmController?.showBusyView(BusyViewInformation(operation: "Pausing", dismissalCriteria: { [weak self] in self?.vzVirtualMachine == nil }, alertMessage: nil), for: self)
+                    }
                     #if arch(arm64)
                         if #available(macOS 27.0, *) {
                             detachPassthroughDevicesBeforeSaving {
@@ -588,7 +593,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     #if arch(arm64)
         @available(macOS 14.0, *)
         private func restoreVirtualMachine() {
-            vmViewController?.showResumingView()
+            if let vmViewController {
+                vmViewController.showResumingView()
+            } else {
+                vmController?.showBusyView(BusyViewInformation(operation: "Resuming", dismissalCriteria: { [weak self] in self?.isVMRunning() ?? true }, alertMessage: nil), for: self)
+            }
             vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { error in
                 let fileManager = FileManager.default
                 try? fileManager.removeItem(at: self.saveFileURL)

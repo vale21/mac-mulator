@@ -119,6 +119,9 @@
 "EditVMViewControllerVideo.qemuDisplayLabel" = "Display Qemu da usare:";
 "EditVMViewControllerVideo.showScreenLabel" = "Mostra lo schermo della VM";
 "EditVMViewControllerVideo.showScreenTooltip" = "Disattiva per eseguire la VM in modalità headless, senza una finestra che ne mostri lo schermo. Mentre è in esecuzione, puoi collegarti dal menu VM con una sessione SPICE, SSH o Terminale.";
+"EditVMViewControllerVideo.showScreenOnDescription" = "La VM viene eseguita con una finestra che ne mostra lo schermo. Puoi interagire con essa come con un normale computer.";
+"EditVMViewControllerVideo.showScreenOffDescription" = "La VM viene eseguita in background, senza finestra. Puoi collegarti dal menu VM con una sessione SPICE, SSH o Terminale e continua a funzionare quando chiudi tali sessioni.";
+"EditVMViewControllerVideo.showScreenOffAppleDescription" = "La VM viene eseguita in background, senza finestra. Puoi collegarti dal menu VM con una sessione SSH o Terminale e continua a funzionare quando chiudi tali sessioni.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled" = "Il supporto Spice non è abilitato, perché Qemu non lo supporta.";
 "EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled" = "Usa il display Spice per mostrare la VM.";
 "EditVMViewControllerVideo.spiceDescriptionLabel" = "Usa il display Spice";

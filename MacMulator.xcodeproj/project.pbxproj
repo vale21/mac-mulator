@@ -27,6 +27,8 @@
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
+		3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
+		3B2E6666309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
 		3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEC25C075F50030E914 /* AppDelegate.swift */; };
 		3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B391EEE25C075F50030E914 /* RootViewController.swift */; };
 		3B39B8CF25C86A31004B9CBC /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */; };
@@ -274,6 +276,7 @@
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
+		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
 		3B39124E2DA9C64500BF8794 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B39124F2DA9C65000BF8794 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B391EE925C075F50030E914 /* MacMulator EE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MacMulator EE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -422,10 +425,18 @@
 				3BBFB8A32808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift */,
 				3BA0D1922C1C76CC0079AF20 /* StartVMViewController.swift */,
 				3BC81760309501F30025C20B /* TerminalSessionWindowController.swift */,
+			);
+			path = RunVM;
+			sourceTree = "<group>";
+		};
+		3B2E6667309A07FD0033552E /* SerialConsole */ = {
+			isa = PBXGroup;
+			children = (
+				3B2E6664309A076A0033552E /* SerialConsole.swift */,
 				3BC8177730950E050025C20B /* VirtualizationFrameworkSerialConsole.swift */,
 				3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */,
 			);
-			path = RunVM;
+			path = SerialConsole;
 			sourceTree = "<group>";
 		};
 		3B3624FD266F6253007857FB /* Frameworks */ = {
@@ -473,6 +484,7 @@
 				3BBB473625CABDCB00A4DBA7 /* Resources */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
 				3BE72EDB3074F0D600599EBB /* RunningVMManagerViewController.swift */,
+				3B2E6667309A07FD0033552E /* SerialConsole */,
 				3B200DAA2802F28D00F7159E /* RunVM */,
 				3BBB472F25CABDC600A4DBA7 /* UI */,
 				3BBB471C25CABDAE00A4DBA7 /* Utils */,
@@ -915,6 +927,7 @@
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,
 				3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */,
+				3B2E6666309A076A0033552E /* SerialConsole.swift in Sources */,
 				3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */,
 				3BF26889308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
@@ -1009,6 +1022,7 @@
 				3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */,
 				3BFB2B473078F067005A4B51 /* EditVMViewControllerNetwork.swift in Sources */,
+				3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */,
 				3BFB2B483078F067005A4B51 /* NetworkMappingsTableCells.swift in Sources */,
 				3BF26888308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3BFB2B493078F067005A4B51 /* RootViewController.swift in Sources */,

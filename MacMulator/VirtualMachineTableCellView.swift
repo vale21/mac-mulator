@@ -112,7 +112,7 @@ class VirtualMachineTableCellView: NSTableCellView, NSTextFieldDelegate {
 
             let backgroundImageName = Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"
             if state == .paused {
-                if let newImage = Utils.getIconWithOverlay(backgroundImageName, "pause.overlay") {
+                if let newImage = Utils.getIconWithOverlay(backgroundImageName, "pause.overlay.small") {
                     vmIcon.image = newImage
                 }
             } else if state == .template {
