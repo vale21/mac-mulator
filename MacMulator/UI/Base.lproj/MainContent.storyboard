@@ -5063,7 +5063,7 @@ Rocky Linux</string>
                 </viewController>
                 <customObject id="gDK-sg-7Zg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="680" y="912"/>
+            <point key="canvasLocation" x="680" y="1006"/>
         </scene>
         <!--Qemu Spice Viewer View Controller-->
         <scene sceneID="ySi-2d-UZm">
@@ -5076,7 +5076,7 @@ Rocky Linux</string>
                 </viewController>
                 <customObject id="WhY-Ty-5CU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="680" y="1299"/>
+            <point key="canvasLocation" x="680" y="1370"/>
         </scene>
         <!--Virtualization Framework Pause ResumeVM View Controller-->
         <scene sceneID="R36-g7-VFt">
@@ -5114,7 +5114,7 @@ Rocky Linux</string>
                 </viewController>
                 <customObject id="fha-py-gAQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1198" y="698"/>
+            <point key="canvasLocation" x="699" y="533"/>
         </scene>
         <!--Virtualization Framework InstallVM View Controller-->
         <scene sceneID="dcz-GQ-DoE">
@@ -5173,7 +5173,7 @@ Rocky Linux</string>
                     </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1287.5" y="990"/>
+            <point key="canvasLocation" x="1325" y="554"/>
         </scene>
         <!--StartVM View Controller-->
         <scene sceneID="37R-H4-ud8">
@@ -5335,6 +5335,9 @@ Gw
             <point key="canvasLocation" x="617" y="1781.5"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="6aE-PG-93S"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="NSApplicationIcon" width="32" height="32"/>

@@ -55,22 +55,6 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
         }
     }
 
-    func showPausingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Pausing", dismissalCriteria: { false }, alertMessage: nil))
-    }
-
-    func showResumingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Resuming", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: nil))
-    }
-
-    func showSnapshottingView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotCreated", comment: "")))
-    }
-
-    func showRestoringView() {
-        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotRestored", comment: "")))
-    }
-
     override func windowShouldClose(_: NSWindow) -> Bool {
         if isSession {
             return true
@@ -89,21 +73,6 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
         super.windowWillClose(notification)
         if isSession {
             (vmRunner as? VirtualizationFrameworkVirtualMachineRunner)?.detachView()
-        }
-    }
-
-    func takeScreenshot() {
-        let win = view.window
-        if let window = win {
-            do {
-                let inf = CGFloat(FP_INFINITE)
-                let null = CGRect(x: inf, y: inf, width: 0, height: 0)
-                let cgImage = CGWindowListCreateImage(null, .optionIncludingWindow, CGWindowID(window.windowNumber), .bestResolution)
-                let image = NSImage(cgImage: cgImage!, size: view.bounds.size)
-                let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)
-                let pngData = imageRep?.representation(using: .png, properties: [:])
-                try pngData?.write(to: URL(fileURLWithPath: virtualMachine!.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
-            } catch {}
         }
     }
 
@@ -128,6 +97,37 @@ class VirtualMachineContainerViewController: RunningVMManagerViewController {
                 destinationController.setDismissalCriteria((sender as! BusyViewInformation).dismissalCriteria)
                 destinationController.setAlertMessage((sender as! BusyViewInformation).alertMessage)
             }
+        }
+    }
+
+    func showPausingView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Pausing", dismissalCriteria: { false }, alertMessage: nil))
+    }
+
+    func showResumingView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Resuming", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: nil))
+    }
+
+    func showSnapshottingView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Snapshotting", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotCreated", comment: "")))
+    }
+
+    func showRestoringView() {
+        performSegue(withIdentifier: MacMulatorConstants.SHOW_PAUSE_RESUME_VM_SEGUE, sender: BusyViewInformation(operation: "Restoring snapshot", dismissalCriteria: vmRunner?.isVMRunning ?? { true }, alertMessage: NSLocalizedString("VirtualMachineContainerViewController.snapshotRestored", comment: "")))
+    }
+
+    func takeScreenshot() {
+        let win = view.window
+        if let window = win {
+            do {
+                let inf = CGFloat(FP_INFINITE)
+                let null = CGRect(x: inf, y: inf, width: 0, height: 0)
+                let cgImage = CGWindowListCreateImage(null, .optionIncludingWindow, CGWindowID(window.windowNumber), .bestResolution)
+                let image = NSImage(cgImage: cgImage!, size: view.bounds.size)
+                let imageRep = NSBitmapImageRep(data: image.tiffRepresentation!)
+                let pngData = imageRep?.representation(using: .png, properties: [:])
+                try pngData?.write(to: URL(fileURLWithPath: virtualMachine!.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
+            } catch {}
         }
     }
 }

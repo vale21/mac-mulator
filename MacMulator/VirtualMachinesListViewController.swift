@@ -12,8 +12,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     var rootController: RootViewController?
 
+    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
+
+    private var returnKeyMonitor: Any?
+
     func setRootController(_ rootController: RootViewController) {
         self.rootController = rootController
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        if let returnKeyMonitor {
+            NSEvent.removeMonitor(returnKeyMonitor)
+        }
     }
 
     func numberOfRows(in _: NSTableView) -> Int {
@@ -54,8 +65,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
-
     override func viewDidLoad() {
         let menu = NSMenu()
         menu.autoenablesItems = false
@@ -83,15 +92,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-        if let returnKeyMonitor {
-            NSEvent.removeMonitor(returnKeyMonitor)
-        }
-    }
-
-    private var returnKeyMonitor: Any?
-
     override func viewDidAppear() {
         super.viewDidAppear()
         guard returnKeyMonitor == nil else { return }
@@ -105,37 +105,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             beginRenamingSelectedVirtualMachine()
             return nil
         }
-    }
-
-    private func beginRenamingSelectedVirtualMachine() {
-        let row = table.selectedRow
-        guard row >= 0, let rootController, let cell = table.view(atColumn: 0, row: row, makeIfNecessary: false) as? VirtualMachineTableCellView else { return }
-        let vm = rootController.getVirtualMachineAt(row)
-        // The running VMs are tracked by name, so they can't be renamed.
-        guard !rootController.isVMRunning(vm) else {
-            NSSound.beep()
-            return
-        }
-        cell.beginRenaming { [weak self] newName in
-            self?.renameVirtualMachine(vm, to: newName)
-        }
-    }
-
-    private func renameVirtualMachine(_ vm: VirtualMachine, to newName: String) {
-        guard let rootController else { return }
-        if rootController.virtualMachines.contains(where: { $0 !== vm && $0.displayName == newName }) {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineListViewController.renameDuplicate", comment: ""), newName), virtualMachine: vm)
-            return
-        }
-        vm.displayName = newName
-        vm.writeToPlist()
-        // The folder of the VM follows its name.
-        rootController.renameVMFolderToMatchName(vm)
-        rootController.refreshViewForVM(vm)
-        if let index = rootController.virtualMachines.firstIndex(where: { $0 === vm }) {
-            selectElement(index)
-        }
-        view.window?.makeFirstResponder(table)
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -385,6 +354,37 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         if let cellView = view, let rootController {
             cellView.setState(VirtualMachineTableCellView.computeVMState(vm, rootController))
         }
+    }
+
+    private func beginRenamingSelectedVirtualMachine() {
+        let row = table.selectedRow
+        guard row >= 0, let rootController, let cell = table.view(atColumn: 0, row: row, makeIfNecessary: false) as? VirtualMachineTableCellView else { return }
+        let vm = rootController.getVirtualMachineAt(row)
+        // The running VMs are tracked by name, so they can't be renamed.
+        guard !rootController.isVMRunning(vm) else {
+            NSSound.beep()
+            return
+        }
+        cell.beginRenaming { [weak self] newName in
+            self?.renameVirtualMachine(vm, to: newName)
+        }
+    }
+
+    private func renameVirtualMachine(_ vm: VirtualMachine, to newName: String) {
+        guard let rootController else { return }
+        if rootController.virtualMachines.contains(where: { $0 !== vm && $0.displayName == newName }) {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineListViewController.renameDuplicate", comment: ""), newName), virtualMachine: vm)
+            return
+        }
+        vm.displayName = newName
+        vm.writeToPlist()
+        // The folder of the VM follows its name.
+        rootController.renameVMFolderToMatchName(vm)
+        rootController.refreshViewForVM(vm)
+        if let index = rootController.virtualMachines.firstIndex(where: { $0 === vm }) {
+            selectElement(index)
+        }
+        view.window?.makeFirstResponder(table)
     }
 
     @objc private func vmPauseStateChanged(_ notification: Notification) {

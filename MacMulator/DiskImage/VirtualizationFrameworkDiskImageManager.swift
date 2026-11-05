@@ -20,63 +20,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    @available(macOS 26.0, *)
-    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-
-        if #available(macOS 27.0, *) {
-            #if arch(arm64)
-                let blockSize = 512
-                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
-
-                do {
-                    _ = try DiskImage(
-                        creating: .asif(
-                            url: URL(fileURLWithPath: drivePath),
-                            blockCount: Int(blockCount),
-                            blockSize: .bytes512
-                        )
-                    )
-                    callback(0, nil)
-                } catch {
-                    print("Failed to create ASIF disk image: \(error)")
-                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createAsifFailed", comment: ""), "\(error)"))
-                }
-            #endif
-        } else {
-            let shell = Shell()
-            let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
-
-            shell.runCommand(command, path, uponCompletion: callback)
-        }
-    }
-
-    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-        if #available(macOS 27.0, *) {
-            #if arch(arm64)
-                let blockSize = 512
-                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
-
-                do {
-                    _ = try DiskImage(
-                        creating: .raw(
-                            url: URL(fileURLWithPath: drivePath),
-                            blockCount: Int(blockCount)
-                        )
-                    )
-                    callback(0, nil)
-                } catch {
-                    print("Failed to create RAW disk image: \(error)")
-                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createRawFailed", comment: ""), "\(error)"))
-                }
-            #endif
-        } else {
-            // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
-            QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
-        }
-    }
-
     func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         guard #available(macOS 27.0, *), virtualDrive.format == QemuConstants.FORMAT_ASIF, backingDrive.format == QemuConstants.FORMAT_ASIF else {
             callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
@@ -100,17 +43,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
         #endif
     }
-
-    #if arch(arm64)
-        @available(macOS 27.0, *)
-        private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
-            var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
-            for layerPath in layerPaths.dropFirst() {
-                image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
-            }
-            return image
-        }
-    #endif
 
     static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
         #if arch(arm64)
@@ -284,6 +216,78 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         })
     }
 
+    func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
+        getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
+    }
+
+    @available(macOS 26.0, *)
+    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+
+                do {
+                    _ = try DiskImage(
+                        creating: .asif(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount),
+                            blockSize: .bytes512
+                        )
+                    )
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create ASIF disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createAsifFailed", comment: ""), "\(error)"))
+                }
+            #endif
+        } else {
+            let shell = Shell()
+            let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
+
+            shell.runCommand(command, path, uponCompletion: callback)
+        }
+    }
+
+    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+
+                do {
+                    _ = try DiskImage(
+                        creating: .raw(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount)
+                        )
+                    )
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create RAW disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createRawFailed", comment: ""), "\(error)"))
+                }
+            #endif
+        } else {
+            // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
+            QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
+        }
+    }
+
+    #if arch(arm64)
+        @available(macOS 27.0, *)
+        private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
+            var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
+            for layerPath in layerPaths.dropFirst() {
+                image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
+            }
+            return image
+        }
+    #endif
+
     private func attachDevice(_ command: String, _ path: String, uponCompletion callback: @escaping (String?, String?) -> Void) {
         let shell = Shell()
         shell.runCommand(command, path, uponCompletion: { code, message in
@@ -372,10 +376,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             }
         }
         return nil
-    }
-
-    func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
     }
 
     private func parseConversionProgress(_ output: String) -> Double? {

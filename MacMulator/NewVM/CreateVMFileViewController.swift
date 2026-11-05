@@ -24,6 +24,21 @@ class CreateVMFileViewController: NSViewController {
         self.parentController = parentController
     }
 
+    @IBAction func cancelButtonPressed(_: Any) {
+        if let vmCreator {
+            if let vm {
+                vmCreator.cancelVMCreation(vm: vm)
+            }
+
+            if let timer {
+                timer.invalidate()
+            }
+
+            progressBar.stopAnimation(self)
+            dismiss(self)
+        }
+    }
+
     override func viewDidAppear() {
         progressBar.startAnimation(self)
 
@@ -121,28 +136,13 @@ class CreateVMFileViewController: NSViewController {
         }
     }
 
-    @IBAction func cancelButtonPressed(_: Any) {
-        if let vmCreator {
-            if let vm {
-                vmCreator.cancelVMCreation(vm: vm)
-            }
-
-            if let timer {
-                timer.invalidate()
-            }
-
-            progressBar.stopAnimation(self)
-            dismiss(self)
-        }
-    }
-
-    fileprivate func computePath() -> String {
+    private func computePath() -> String {
         let userDefaults = UserDefaults.standard
         let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
         return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
     }
 
-    fileprivate func computeDescription() -> String {
+    private func computeDescription() -> String {
         let description = parentController?.vmDescription.string
         if description != NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
             return description!
@@ -150,7 +150,7 @@ class CreateVMFileViewController: NSViewController {
         return ""
     }
 
-    fileprivate func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
+    private func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
         timer.invalidate()
         progressBar.stopAnimation(self)
         dismiss(self)
@@ -162,7 +162,7 @@ class CreateVMFileViewController: NSViewController {
         }
     }
 
-    fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
+    private func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
         Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

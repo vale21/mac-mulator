@@ -54,10 +54,149 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     /// Pause between two consecutive socket checks or connection attempts
     private static let connectionRetryInterval: UInt64 = 500_000_000
 
-    override func setVirtualMachine(_ vm: VirtualMachine) {
-        super.setVirtualMachine(vm)
-        socketPath = QemuUtils.spiceSocketPath(forVMAt: vm.path)
-    }
+    /// Environment variables that CocoaSpice's `gst_ios_init()` overwrites.
+    private static let environmentKeysChangedBySpice = [
+        "HOME", "TMP", "TEMP", "TMPDIR",
+        "XDG_RUNTIME_DIR", "XDG_CACHE_HOME", "XDG_DATA_DIRS", "XDG_CONFIG_DIRS", "XDG_CONFIG_HOME", "XDG_DATA_HOME",
+        "FONTCONFIG_PATH", "CA_CERTIFICATES",
+    ]
+
+    /// Device dependent `NSEvent.modifierFlags` bits (NX_DEVICE*KEYMASK) by macOS virtual key code of the modifier
+    private static let deviceModifierBits: [UInt16: UInt] = [
+        0x3B: 0x0001, // Left Control
+        0x3E: 0x2000, // Right Control
+        0x38: 0x0002, // Left Shift
+        0x3C: 0x0004, // Right Shift
+        0x3A: 0x0020, // Left Option
+        0x3D: 0x0040, // Right Option
+        0x37: 0x0008, // Left Command
+        0x36: 0x0010, // Right Command
+    ]
+
+    /// macOS virtual key code of F15, which is sent to the guest as the Pause key
+    private static let pauseKeyCode: UInt16 = 0x71
+
+    /// Maps macOS virtual key codes to PC XT (set 1) scancodes
+    private static let scancodes: [UInt16: Int] = [
+        0x00: 0x1E, // A
+        0x01: 0x1F, // S
+        0x02: 0x20, // D
+        0x03: 0x21, // F
+        0x04: 0x23, // H
+        0x05: 0x22, // G
+        0x06: 0x2C, // Z
+        0x07: 0x2D, // X
+        0x08: 0x2E, // C
+        0x09: 0x2F, // V
+        0x0A: 0x56, // ISO section
+        0x0B: 0x30, // B
+        0x0C: 0x10, // Q
+        0x0D: 0x11, // W
+        0x0E: 0x12, // E
+        0x0F: 0x13, // R
+        0x10: 0x15, // Y
+        0x11: 0x14, // T
+        0x12: 0x02, // 1
+        0x13: 0x03, // 2
+        0x14: 0x04, // 3
+        0x15: 0x05, // 4
+        0x16: 0x07, // 6
+        0x17: 0x06, // 5
+        0x18: 0x0D, // =
+        0x19: 0x0A, // 9
+        0x1A: 0x08, // 7
+        0x1B: 0x0C, // -
+        0x1C: 0x09, // 8
+        0x1D: 0x0B, // 0
+        0x1E: 0x1B, // ]
+        0x1F: 0x18, // O
+        0x20: 0x16, // U
+        0x21: 0x1A, // [
+        0x22: 0x17, // I
+        0x23: 0x19, // P
+        0x24: 0x1C, // Return
+        0x25: 0x26, // L
+        0x26: 0x24, // J
+        0x27: 0x28, // '
+        0x28: 0x25, // K
+        0x29: 0x27, // ;
+        0x2A: 0x2B, // \
+        0x2B: 0x33, // ,
+        0x2C: 0x35, // /
+        0x2D: 0x31, // N
+        0x2E: 0x32, // M
+        0x2F: 0x34, // .
+        0x30: 0x0F, // Tab
+        0x31: 0x39, // Space
+        0x32: 0x29, // `
+        0x33: 0x0E, // Backspace
+        0x35: 0x01, // Escape
+        0x36: 0xE05C, // Right Command
+        0x37: 0xE05B, // Left Command
+        0x38: 0x2A, // Left Shift
+        0x39: 0x3A, // Caps Lock
+        0x3A: 0x38, // Left Option
+        0x3B: 0x1D, // Left Control
+        0x3C: 0x36, // Right Shift
+        0x3D: 0xE038, // Right Option
+        0x3E: 0xE01D, // Right Control
+        0x40: 0x68, // F17
+        0x41: 0x53, // Keypad .
+        0x43: 0x37, // Keypad *
+        0x45: 0x4E, // Keypad +
+        0x47: 0x45, // Keypad Clear (Num Lock)
+        0x48: 0xE030, // Volume Up
+        0x49: 0xE02E, // Volume Down
+        0x4A: 0xE020, // Mute
+        0x4B: 0xE035, // Keypad /
+        0x4C: 0xE01C, // Keypad Enter
+        0x4E: 0x4A, // Keypad -
+        0x4F: 0x69, // F18
+        0x50: 0x6A, // F19
+        0x51: 0x59, // Keypad =
+        0x52: 0x52, // Keypad 0
+        0x53: 0x4F, // Keypad 1
+        0x54: 0x50, // Keypad 2
+        0x55: 0x51, // Keypad 3
+        0x56: 0x4B, // Keypad 4
+        0x57: 0x4C, // Keypad 5
+        0x58: 0x4D, // Keypad 6
+        0x59: 0x47, // Keypad 7
+        0x5A: 0x6B, // F20
+        0x5B: 0x48, // Keypad 8
+        0x5C: 0x49, // Keypad 9
+        0x5D: 0x7D, // JIS Yen
+        0x5E: 0x73, // JIS Underscore
+        0x5F: 0x7E, // JIS Keypad ,
+        0x60: 0x3F, // F5
+        0x61: 0x40, // F6
+        0x62: 0x41, // F7
+        0x63: 0x3D, // F3
+        0x64: 0x42, // F8
+        0x65: 0x43, // F9
+        0x66: 0x7B, // JIS Eisu
+        0x67: 0x57, // F11
+        0x68: 0x70, // JIS Kana
+        0x69: 0xE037, // F13 (Print Screen)
+        0x6A: 0x67, // F16
+        0x6B: 0x46, // F14 (Scroll Lock)
+        0x6D: 0x44, // F10
+        0x6E: 0xE05D, // Contextual Menu
+        0x6F: 0x58, // F12
+        0x72: 0xE052, // Help (Insert)
+        0x73: 0xE047, // Home
+        0x74: 0xE049, // Page Up
+        0x75: 0xE053, // Forward Delete
+        0x76: 0x3E, // F4
+        0x77: 0xE04F, // End
+        0x78: 0x3C, // F2
+        0x79: 0xE051, // Page Down
+        0x7A: 0x3B, // F1
+        0x7B: 0xE04B, // Left Arrow
+        0x7C: 0xE04D, // Right Arrow
+        0x7D: 0xE050, // Down Arrow
+        0x7E: 0xE048, // Up Arrow
+    ]
 
     func setSession(_ session: Bool) {
         isSession = session
@@ -72,6 +211,37 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
             releaseMouseCapture()
         }
         input?.requestMouseMode(enabled)
+    }
+
+    /// True while a connection is being established and no attempt has succeeded yet
+    private var isConnecting: Bool {
+        connectionDeadline != nil && !hasConnected
+    }
+
+    private var connectionTimedOut: Bool {
+        guard let connectionDeadline else {
+            return true
+        }
+        return Date() >= connectionDeadline
+    }
+
+    /// True when a click on the display should grab the pointer rather than being forwarded
+    private var shouldCaptureMouseOnClick: Bool {
+        mouseCaptureEnabled && !isMouseCaptured && (input?.serverModeCursor ?? false)
+    }
+
+    /// Cursor channel of the current display, if the guest exposes one.
+    ///
+    /// Accessed through key-value coding on purpose: Swift imports both `CSDisplay.cursor` and the
+    /// `cursorSource` requirement of `CSRenderSource` under the name `cursor`, and the resulting
+    /// ambiguity crashes the Swift 6.4 type checker.
+    private var guestCursor: CSCursor? {
+        display?.value(forKey: "cursor") as? CSCursor
+    }
+
+    override func setVirtualMachine(_ vm: VirtualMachine) {
+        super.setVirtualMachine(vm)
+        socketPath = QemuUtils.spiceSocketPath(forVMAt: vm.path)
     }
 
     override func windowShouldClose(_: NSWindow) -> Bool {
@@ -153,11 +323,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         connect()
     }
 
-    /// Closes the viewer without asking for confirmation. Used when QEMU has already exited
-    func closeWindow() {
-        view.window?.close()
-    }
-
     override func viewWillDisappear() {
         super.viewWillDisappear()
 
@@ -175,6 +340,11 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     override func viewDidLayout() {
         super.viewDidLayout()
         updateViewport()
+    }
+
+    /// Closes the viewer without asking for confirmation. Used when QEMU has already exited
+    func closeWindow() {
+        view.window?.close()
     }
 
     private func connect() {
@@ -238,18 +408,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         }
     }
 
-    /// True while a connection is being established and no attempt has succeeded yet
-    private var isConnecting: Bool {
-        connectionDeadline != nil && !hasConnected
-    }
-
-    private var connectionTimedOut: Bool {
-        guard let connectionDeadline else {
-            return true
-        }
-        return Date() >= connectionDeadline
-    }
-
     /// Schedules another attempt, or reports the failure if the deadline has passed
     private func retryConnection() {
         if connectionTimedOut {
@@ -283,13 +441,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         statusLabel.stringValue = text ?? ""
         statusLabel.isHidden = text == nil
     }
-
-    /// Environment variables that CocoaSpice's `gst_ios_init()` overwrites.
-    private static let environmentKeysChangedBySpice = [
-        "HOME", "TMP", "TEMP", "TMPDIR",
-        "XDG_RUNTIME_DIR", "XDG_CACHE_HOME", "XDG_DATA_DIRS", "XDG_CONFIG_DIRS", "XDG_CONFIG_HOME", "XDG_DATA_HOME",
-        "FONTCONFIG_PATH", "CA_CERTIFICATES",
-    ]
 
     /// Puts the variables listed in `environmentKeysChangedBySpice` back to the values they had in `environment`.
     private static func restoreEnvironment(_ environment: [String: String]) {
@@ -456,11 +607,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
 
     // MARK: - Mouse capture
 
-    /// True when a click on the display should grab the pointer rather than being forwarded
-    private var shouldCaptureMouseOnClick: Bool {
-        mouseCaptureEnabled && !isMouseCaptured && (input?.serverModeCursor ?? false)
-    }
-
     /// Pins the host pointer in the middle of the display and hides it. The system keeps reporting motion
     /// deltas while the pointer stays put, which is exactly what relative mode needs
     private func captureMouse() {
@@ -503,15 +649,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
     private static func coreGraphicsPoint(_ point: NSPoint) -> CGPoint {
         let primaryHeight = NSScreen.screens.first?.frame.height ?? 0
         return CGPoint(x: point.x, y: primaryHeight - point.y)
-    }
-
-    /// Cursor channel of the current display, if the guest exposes one.
-    ///
-    /// Accessed through key-value coding on purpose: Swift imports both `CSDisplay.cursor` and the
-    /// `cursorSource` requirement of `CSRenderSource` under the name `cursor`, and the resulting
-    /// ambiguity crashes the Swift 6.4 type checker.
-    private var guestCursor: CSCursor? {
-        display?.value(forKey: "cursor") as? CSCursor
     }
 
     private func handleMouseButton(_ button: CSInputButton, pressed: Bool) {
@@ -567,18 +704,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         }
     }
 
-    /// Device dependent `NSEvent.modifierFlags` bits (NX_DEVICE*KEYMASK) by macOS virtual key code of the modifier
-    private static let deviceModifierBits: [UInt16: UInt] = [
-        0x3B: 0x0001, // Left Control
-        0x3E: 0x2000, // Right Control
-        0x38: 0x0002, // Left Shift
-        0x3C: 0x0004, // Right Shift
-        0x3A: 0x0020, // Left Option
-        0x3D: 0x0040, // Right Option
-        0x37: 0x0008, // Left Command
-        0x36: 0x0010, // Right Command
-    ]
-
     private func sendKey(_ keyCode: UInt16, pressed: Bool) {
         guard let input else {
             return
@@ -602,131 +727,6 @@ class QemuSpiceViewerViewController: RunningVMManagerViewController {
         pressedModifierKeyCodes.removeAll()
         pressedMouseButtons = []
     }
-
-    /// macOS virtual key code of F15, which is sent to the guest as the Pause key
-    private static let pauseKeyCode: UInt16 = 0x71
-
-    /// Maps macOS virtual key codes to PC XT (set 1) scancodes
-    private static let scancodes: [UInt16: Int] = [
-        0x00: 0x1E, // A
-        0x01: 0x1F, // S
-        0x02: 0x20, // D
-        0x03: 0x21, // F
-        0x04: 0x23, // H
-        0x05: 0x22, // G
-        0x06: 0x2C, // Z
-        0x07: 0x2D, // X
-        0x08: 0x2E, // C
-        0x09: 0x2F, // V
-        0x0A: 0x56, // ISO section
-        0x0B: 0x30, // B
-        0x0C: 0x10, // Q
-        0x0D: 0x11, // W
-        0x0E: 0x12, // E
-        0x0F: 0x13, // R
-        0x10: 0x15, // Y
-        0x11: 0x14, // T
-        0x12: 0x02, // 1
-        0x13: 0x03, // 2
-        0x14: 0x04, // 3
-        0x15: 0x05, // 4
-        0x16: 0x07, // 6
-        0x17: 0x06, // 5
-        0x18: 0x0D, // =
-        0x19: 0x0A, // 9
-        0x1A: 0x08, // 7
-        0x1B: 0x0C, // -
-        0x1C: 0x09, // 8
-        0x1D: 0x0B, // 0
-        0x1E: 0x1B, // ]
-        0x1F: 0x18, // O
-        0x20: 0x16, // U
-        0x21: 0x1A, // [
-        0x22: 0x17, // I
-        0x23: 0x19, // P
-        0x24: 0x1C, // Return
-        0x25: 0x26, // L
-        0x26: 0x24, // J
-        0x27: 0x28, // '
-        0x28: 0x25, // K
-        0x29: 0x27, // ;
-        0x2A: 0x2B, // \
-        0x2B: 0x33, // ,
-        0x2C: 0x35, // /
-        0x2D: 0x31, // N
-        0x2E: 0x32, // M
-        0x2F: 0x34, // .
-        0x30: 0x0F, // Tab
-        0x31: 0x39, // Space
-        0x32: 0x29, // `
-        0x33: 0x0E, // Backspace
-        0x35: 0x01, // Escape
-        0x36: 0xE05C, // Right Command
-        0x37: 0xE05B, // Left Command
-        0x38: 0x2A, // Left Shift
-        0x39: 0x3A, // Caps Lock
-        0x3A: 0x38, // Left Option
-        0x3B: 0x1D, // Left Control
-        0x3C: 0x36, // Right Shift
-        0x3D: 0xE038, // Right Option
-        0x3E: 0xE01D, // Right Control
-        0x40: 0x68, // F17
-        0x41: 0x53, // Keypad .
-        0x43: 0x37, // Keypad *
-        0x45: 0x4E, // Keypad +
-        0x47: 0x45, // Keypad Clear (Num Lock)
-        0x48: 0xE030, // Volume Up
-        0x49: 0xE02E, // Volume Down
-        0x4A: 0xE020, // Mute
-        0x4B: 0xE035, // Keypad /
-        0x4C: 0xE01C, // Keypad Enter
-        0x4E: 0x4A, // Keypad -
-        0x4F: 0x69, // F18
-        0x50: 0x6A, // F19
-        0x51: 0x59, // Keypad =
-        0x52: 0x52, // Keypad 0
-        0x53: 0x4F, // Keypad 1
-        0x54: 0x50, // Keypad 2
-        0x55: 0x51, // Keypad 3
-        0x56: 0x4B, // Keypad 4
-        0x57: 0x4C, // Keypad 5
-        0x58: 0x4D, // Keypad 6
-        0x59: 0x47, // Keypad 7
-        0x5A: 0x6B, // F20
-        0x5B: 0x48, // Keypad 8
-        0x5C: 0x49, // Keypad 9
-        0x5D: 0x7D, // JIS Yen
-        0x5E: 0x73, // JIS Underscore
-        0x5F: 0x7E, // JIS Keypad ,
-        0x60: 0x3F, // F5
-        0x61: 0x40, // F6
-        0x62: 0x41, // F7
-        0x63: 0x3D, // F3
-        0x64: 0x42, // F8
-        0x65: 0x43, // F9
-        0x66: 0x7B, // JIS Eisu
-        0x67: 0x57, // F11
-        0x68: 0x70, // JIS Kana
-        0x69: 0xE037, // F13 (Print Screen)
-        0x6A: 0x67, // F16
-        0x6B: 0x46, // F14 (Scroll Lock)
-        0x6D: 0x44, // F10
-        0x6E: 0xE05D, // Contextual Menu
-        0x6F: 0x58, // F12
-        0x72: 0xE052, // Help (Insert)
-        0x73: 0xE047, // Home
-        0x74: 0xE049, // Page Up
-        0x75: 0xE053, // Forward Delete
-        0x76: 0x3E, // F4
-        0x77: 0xE04F, // End
-        0x78: 0x3C, // F2
-        0x79: 0xE051, // Page Down
-        0x7A: 0x3B, // F1
-        0x7B: 0xE04B, // Left Arrow
-        0x7C: 0xE04D, // Right Arrow
-        0x7D: 0xE050, // Down Arrow
-        0x7E: 0xE048, // Up Arrow
-    ]
 }
 
 // MARK: - SpiceDisplayViewInputDelegate

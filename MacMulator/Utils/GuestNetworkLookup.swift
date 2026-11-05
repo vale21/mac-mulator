@@ -8,6 +8,13 @@
 import Foundation
 
 enum GuestNetworkLookup {
+    private struct Lease {
+        let ipAddress: String
+        let leaseExpiry: UInt64
+        /// Whether the lease is recorded under the MAC address of the guest
+        let matchesMAC: Bool
+    }
+
     private static let leasesPath = "/var/db/dhcpd_leases"
     private static let maxCheckedLeases = 16
     private static let maxProbedHosts: UInt32 = 1024
@@ -53,13 +60,6 @@ enum GuestNetworkLookup {
     private static func normalize(_ macAddress: String) -> [UInt8]? {
         let bytes = macAddress.split(separator: ":").compactMap { UInt8($0, radix: 16) }
         return bytes.count == 6 ? bytes : nil
-    }
-
-    private struct Lease {
-        let ipAddress: String
-        let leaseExpiry: UInt64
-        /// Whether the lease is recorded under the MAC address of the guest
-        let matchesMAC: Bool
     }
 
     /// Parses the leases file, made of blocks such as:

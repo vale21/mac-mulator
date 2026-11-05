@@ -32,6 +32,26 @@
         private var pendingCompletions: [() -> Void] = []
         private(set) var lastError: String?
 
+        func usbAccessoryDidConnect(_ usbAccessory: AAUSBAccessory) {
+            lock.lock()
+            accessories[usbAccessory.registryID] = usbAccessory
+            lock.unlock()
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Self.didConnectNotification, object: nil)
+            }
+            notifyChange()
+        }
+
+        func usbAccessoryDidDisconnect(_ usbAccessory: AAUSBAccessory) {
+            lock.lock()
+            accessories.removeValue(forKey: usbAccessory.registryID)
+            lock.unlock()
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: Self.didRemoveNotification, object: nil, userInfo: ["registryID": usbAccessory.registryID])
+            }
+            notifyChange()
+        }
+
         func start(retryAfterFailure: Bool = false, completion: (() -> Void)? = nil) {
             lock.lock()
             if ready {
@@ -99,26 +119,6 @@
                     name: Self.displayName(of: accessory, vendorID: vendorID, productID: productID)
                 )
             }.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
-        }
-
-        func usbAccessoryDidConnect(_ usbAccessory: AAUSBAccessory) {
-            lock.lock()
-            accessories[usbAccessory.registryID] = usbAccessory
-            lock.unlock()
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: Self.didConnectNotification, object: nil)
-            }
-            notifyChange()
-        }
-
-        func usbAccessoryDidDisconnect(_ usbAccessory: AAUSBAccessory) {
-            lock.lock()
-            accessories.removeValue(forKey: usbAccessory.registryID)
-            lock.unlock()
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: Self.didRemoveNotification, object: nil, userInfo: ["registryID": usbAccessory.registryID])
-            }
-            notifyChange()
         }
 
         private func notifyChange() {

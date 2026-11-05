@@ -18,6 +18,14 @@ class VirtualDrive: Codable, Equatable {
     var vzDeviceUUID: String?
     var backingPath: String? // path of the template drive this drive is layered on top of (linked clones only)
 
+    func setBlank(blank: Bool) {
+        self.blank = blank ? 1 : 0
+    }
+
+    var isLinked: Bool {
+        backingPath != nil
+    }
+
     init(path: String, name: String, format: String, mediaType: String, size: Int32) {
         self.path = path
         self.name = name
@@ -28,14 +36,6 @@ class VirtualDrive: Codable, Equatable {
 
     func isBlank() -> Bool {
         blank != nil && blank == 1
-    }
-
-    func setBlank(blank: Bool) {
-        self.blank = blank ? 1 : 0
-    }
-
-    var isLinked: Bool {
-        backingPath != nil
     }
 
     func clone() -> VirtualDrive {

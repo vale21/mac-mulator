@@ -69,15 +69,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         updateView(with: capabilities)
     }
 
-    private func updateView(with capabilities: QemuCapabilitiesReporter?) {
-        refreshQemuVersion(with: capabilities)
-
-        setIndicator(qemuIntelIndicator, capabilities?.hasx86_64Binary ?? false)
-        setIndicator(qemuArmIndicator, capabilities?.hasAarch64Binary ?? false)
-        setIndicator(virGLRendererIndicator, capabilities?.virGLSupported ?? false)
-        setIndicator(spiceIndicator, capabilities?.spiceSupported ?? false)
-    }
-
     override func viewDidDisappear() {
         if dirty {
             rootController?.refreshViewForVM(rootController?.currentVm)
@@ -98,6 +89,15 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
             let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
             updateView(with: capabilities)
         }
+    }
+
+    private func updateView(with capabilities: QemuCapabilitiesReporter?) {
+        refreshQemuVersion(with: capabilities)
+
+        setIndicator(qemuIntelIndicator, capabilities?.hasx86_64Binary ?? false)
+        setIndicator(qemuArmIndicator, capabilities?.hasAarch64Binary ?? false)
+        setIndicator(virGLRendererIndicator, capabilities?.virGLSupported ?? false)
+        setIndicator(spiceIndicator, capabilities?.spiceSupported ?? false)
     }
 
     private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {

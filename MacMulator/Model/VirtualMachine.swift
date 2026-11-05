@@ -8,6 +8,11 @@
 import Foundation
 
 class VirtualMachine: Codable, Hashable {
+    private enum CodingKeys: String, CodingKey {
+        case storedId = "id"
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
+    }
+
     /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
     private var storedId: String?
     var os: String
@@ -55,11 +60,6 @@ class VirtualMachine: Codable, Hashable {
 
     var hasLinkedDrives: Bool {
         drives.contains(where: \.isLinked)
-    }
-
-    private enum CodingKeys: String, CodingKey {
-        case storedId = "id"
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
     }
 
     init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
@@ -119,10 +119,6 @@ class VirtualMachine: Codable, Hashable {
             snapshots?.remove(at: index)
             notifySnapshotsChanged()
         }
-    }
-
-    private func notifySnapshotsChanged() {
-        NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 
     func addPortMapping(_ portMapping: PortMapping) {
@@ -214,5 +210,9 @@ class VirtualMachine: Codable, Hashable {
 
     func cleanup() {
         provisioningInformation?.cleanup()
+    }
+
+    private func notifySnapshotsChanged() {
+        NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 }

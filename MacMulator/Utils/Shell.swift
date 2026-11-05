@@ -20,32 +20,6 @@ class Shell {
     /// Optional handler invoked with each new chunk of output (stdout or stderr) as soon as it is read.
     var outputHandler: ((String) -> Void)?
 
-    private func setupStandardOutput() {
-        task.standardOutput = pipe_out
-        pipe_out.fileHandleForReading.readabilityHandler = { fileHandle in
-            let availableData = fileHandle.availableData
-            let newOutput = String(data: availableData, encoding: .utf8)
-            if let out = newOutput, !out.isEmpty {
-                self.stdout.append(contentsOf: out)
-                self.output.append(contentsOf: out)
-                self.outputHandler?(out)
-            }
-        }
-    }
-
-    private func setupStandardError() {
-        task.standardError = pipe_err
-        pipe_err.fileHandleForReading.readabilityHandler = { fileHandle in
-            let availableData = fileHandle.availableData
-            let newOutput = String(data: availableData, encoding: .utf8)
-            if let out = newOutput, !out.isEmpty {
-                self.stderr.append(contentsOf: out)
-                self.output.append(contentsOf: out)
-                self.outputHandler?(out)
-            }
-        }
-    }
-
     func runCommand(_ command: String, _ currentDirectoryPath: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         DispatchQueue.global().async {
             self.task.currentDirectoryPath = currentDirectoryPath
@@ -101,5 +75,31 @@ class Shell {
 
     func readFromConsole() -> String {
         output
+    }
+
+    private func setupStandardOutput() {
+        task.standardOutput = pipe_out
+        pipe_out.fileHandleForReading.readabilityHandler = { fileHandle in
+            let availableData = fileHandle.availableData
+            let newOutput = String(data: availableData, encoding: .utf8)
+            if let out = newOutput, !out.isEmpty {
+                self.stdout.append(contentsOf: out)
+                self.output.append(contentsOf: out)
+                self.outputHandler?(out)
+            }
+        }
+    }
+
+    private func setupStandardError() {
+        task.standardError = pipe_err
+        pipe_err.fileHandleForReading.readabilityHandler = { fileHandle in
+            let availableData = fileHandle.availableData
+            let newOutput = String(data: availableData, encoding: .utf8)
+            if let out = newOutput, !out.isEmpty {
+                self.stderr.append(contentsOf: out)
+                self.output.append(contentsOf: out)
+                self.outputHandler?(out)
+            }
+        }
     }
 }

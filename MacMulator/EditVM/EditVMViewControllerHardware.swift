@@ -162,24 +162,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         }
     }
 
-    fileprivate func removeVirtualDrive(_ row: Int, _ index: Int) {
-        if let virtualMachine {
-            drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp)
-            let removedDrive = virtualMachine.drives.remove(at: index)
-            virtualMachine.writeToPlist()
-            updateView()
-
-            if #available(macOS 15.0, *), virtualMachine.type == MacMulatorConstants.APPLE_VM, vmRunner?.isVMRunning() == true,
-               let vfRunner = vmRunner as? VirtualizationFrameworkVirtualMachineRunner
-            {
-                vfRunner.detachUSBImageFromVM(virtualDrive: removedDrive)
-
-                let appDelegate = NSApp.delegate as! AppDelegate
-                appDelegate.refreshVMMenus()
-            }
-        }
-    }
-
     override func viewWillAppear() {
         architectureLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.architectureLabel", comment: "")
         cpusLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.cpusLabel", comment: "")
@@ -204,66 +186,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         }
 
         updateView()
-    }
-
-    func updateView() {
-        if let virtualMachine {
-            architectureComboBox.reloadData()
-            architectureComboBox.selectItem(at: QemuConstants.ALL_ARCHITECTURES.firstIndex(of: virtualMachine.architecture) ?? -1)
-
-            cpusComboBox.reloadData()
-            cpusComboBox.selectItem(at: virtualMachine.cpus - 1)
-
-            memoryStepper.intValue = virtualMachine.memory
-            memorySlider.intValue = virtualMachine.memory
-            memoryTextView.stringValue = String(virtualMachine.memory)
-
-            let minMemory = Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype)
-            let maxMemory = Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype)
-
-            minMemoryLabel.stringValue = Utils.formatMemory(Int32(minMemory))
-            maxMemoryLabel.stringValue = Utils.formatMemory(Int32(maxMemory))
-            memoryStepper.minValue = Double(minMemory)
-            memoryStepper.maxValue = Double(maxMemory)
-            memorySlider.minValue = Double(minMemory)
-            memorySlider.maxValue = Double(maxMemory)
-
-            if virtualMachine.memory < Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype) || virtualMachine.memory > Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype) {
-                memoryStepper.isEnabled = false
-                memorySlider.isEnabled = false
-            } else {
-                memoryStepper.isEnabled = true
-                memorySlider.isEnabled = true
-            }
-
-            drivesTableView.reloadData()
-
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
-                openImageButton.isEnabled = false
-                openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                openImageButton.isEnabled = false
-            } else {
-                openImageButton.isEnabled = true
-            }
-
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findMainDrive(virtualMachine.drives) != nil {
-                createNewDiskButton.isEnabled = false
-                createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                createNewDiskButton.title = "Select NAND..."
-            } else {
-                createNewDiskButton.isEnabled = true
-            }
-
-            if Utils.isVMTemplate(virtualMachine) {
-                createNewDiskButton.isEnabled = false
-                openImageButton.isEnabled = false
-            }
-
-            let appDelegate = NSApp.delegate as! AppDelegate
-            appDelegate.refreshVMMenus()
-        }
     }
 
     override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
@@ -315,15 +237,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 contentController.setVirtualDrive(virtualMachine.drives[Utils.computeDrivesTableIndex(virtualMachine, driveTableRow)])
             }
         }
-    }
-
-    func addVirtualDrive(_ virtualDrive: VirtualDrive) {
-        virtualMachine?.drives.append(virtualDrive)
-        updateView()
-    }
-
-    func reloadDrives() {
-        drivesTableView.reloadData()
     }
 
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -446,5 +359,92 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     func tableView(_: NSTableView, heightOfRow _: Int) -> CGFloat {
         30.0
+    }
+
+    func updateView() {
+        if let virtualMachine {
+            architectureComboBox.reloadData()
+            architectureComboBox.selectItem(at: QemuConstants.ALL_ARCHITECTURES.firstIndex(of: virtualMachine.architecture) ?? -1)
+
+            cpusComboBox.reloadData()
+            cpusComboBox.selectItem(at: virtualMachine.cpus - 1)
+
+            memoryStepper.intValue = virtualMachine.memory
+            memorySlider.intValue = virtualMachine.memory
+            memoryTextView.stringValue = String(virtualMachine.memory)
+
+            let minMemory = Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype)
+            let maxMemory = Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype)
+
+            minMemoryLabel.stringValue = Utils.formatMemory(Int32(minMemory))
+            maxMemoryLabel.stringValue = Utils.formatMemory(Int32(maxMemory))
+            memoryStepper.minValue = Double(minMemory)
+            memoryStepper.maxValue = Double(maxMemory)
+            memorySlider.minValue = Double(minMemory)
+            memorySlider.maxValue = Double(maxMemory)
+
+            if virtualMachine.memory < Utils.getMinMemoryForSubType(virtualMachine.os, virtualMachine.subtype) || virtualMachine.memory > Utils.getMaxMemoryForSubType(virtualMachine.os, virtualMachine.subtype) {
+                memoryStepper.isEnabled = false
+                memorySlider.isEnabled = false
+            } else {
+                memoryStepper.isEnabled = true
+                memorySlider.isEnabled = true
+            }
+
+            drivesTableView.reloadData()
+
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
+                openImageButton.isEnabled = false
+                openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
+            } else if virtualMachine.os == QemuConstants.OS_IOS {
+                openImageButton.isEnabled = false
+            } else {
+                openImageButton.isEnabled = true
+            }
+
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findMainDrive(virtualMachine.drives) != nil {
+                createNewDiskButton.isEnabled = false
+                createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
+            } else if virtualMachine.os == QemuConstants.OS_IOS {
+                createNewDiskButton.title = "Select NAND..."
+            } else {
+                createNewDiskButton.isEnabled = true
+            }
+
+            if Utils.isVMTemplate(virtualMachine) {
+                createNewDiskButton.isEnabled = false
+                openImageButton.isEnabled = false
+            }
+
+            let appDelegate = NSApp.delegate as! AppDelegate
+            appDelegate.refreshVMMenus()
+        }
+    }
+
+    func addVirtualDrive(_ virtualDrive: VirtualDrive) {
+        virtualMachine?.drives.append(virtualDrive)
+        updateView()
+    }
+
+    func reloadDrives() {
+        drivesTableView.reloadData()
+    }
+
+    private func removeVirtualDrive(_ row: Int, _ index: Int) {
+        if let virtualMachine {
+            drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp)
+            let removedDrive = virtualMachine.drives.remove(at: index)
+            virtualMachine.writeToPlist()
+            updateView()
+
+            if #available(macOS 15.0, *), virtualMachine.type == MacMulatorConstants.APPLE_VM, vmRunner?.isVMRunning() == true,
+               let vfRunner = vmRunner as? VirtualizationFrameworkVirtualMachineRunner
+            {
+                vfRunner.detachUSBImageFromVM(virtualDrive: removedDrive)
+
+                let appDelegate = NSApp.delegate as! AppDelegate
+                appDelegate.refreshVMMenus()
+            }
+        }
     }
 }

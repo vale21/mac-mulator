@@ -33,6 +33,21 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
         self.parentRunner = parentRunner
     }
 
+    @IBAction func cancelButtonPressed(_: Any) {
+        progress = 100.0
+        canceled = true
+
+        descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installAbort", comment: "")
+        estimateTimeRemainingLabel.stringValue = ""
+        progressBar.isIndeterminate = true
+        progressBar.minValue = 0
+        progressBar.maxValue = 0
+        progressBar.doubleValue = 0
+        progressBar.startAnimation(self)
+
+        parentRunner?.stopVM(guestStopped: false)
+    }
+
     override func viewDidLoad() {
         let vm = parentRunner?.managedVm
         if let vm {
@@ -49,11 +64,6 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
     }
 
     #if arch(arm64)
-
-        fileprivate func isComplete() -> Bool {
-            progress >= 100.0
-        }
-
         override func viewDidAppear() {
             if let virtualMachine {
                 if let restoreImageURL {
@@ -117,21 +127,11 @@ class VirtualizationFrameworkInstallVMViewController: NSViewController {
                 }
             }
         }
-
     #endif
 
-    @IBAction func cancelButtonPressed(_: Any) {
-        progress = 100.0
-        canceled = true
-
-        descriptionLabel.stringValue = NSLocalizedString("VirtualizationFrameworkInstallVMViewController.installAbort", comment: "")
-        estimateTimeRemainingLabel.stringValue = ""
-        progressBar.isIndeterminate = true
-        progressBar.minValue = 0
-        progressBar.maxValue = 0
-        progressBar.doubleValue = 0
-        progressBar.startAnimation(self)
-
-        parentRunner?.stopVM(guestStopped: false)
-    }
+    #if arch(arm64)
+        private func isComplete() -> Bool {
+            progress >= 100.0
+        }
+    #endif
 }

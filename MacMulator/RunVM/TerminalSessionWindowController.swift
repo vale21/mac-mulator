@@ -24,6 +24,70 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
     private var spinner: NSProgressIndicator?
     private var isClosed = false
 
+    private static let defaultFrame = NSRect(x: 0, y: 0, width: 800, height: 500)
+
+    private static var environment: [String] {
+        Terminal.getEnvironmentVariables(termName: "xterm-256color").filter { !$0.hasPrefix("DISPLAY=") } + ["SSH_ASKPASS_REQUIRE=never"]
+    }
+
+    private init(_ kind: Kind, _ virtualMachine: VirtualMachine, _ terminalView: TerminalView) {
+        self.kind = kind
+        self.virtualMachine = virtualMachine
+        self.terminalView = terminalView
+
+        let window = NSWindow(contentRect: terminalView.frame, styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
+        let titleFormat = kind == .ssh ? NSLocalizedString("TerminalSessionWindowController.sshTitle", comment: "") : NSLocalizedString("TerminalSessionWindowController.serialConsoleTitle", comment: "")
+        window.title = String(format: titleFormat, virtualMachine.displayName)
+        // The terminal sits in a container of its own: SwiftTerm stacks its subviews as it pleases, so the spinner
+        // must not be one of them
+        let container = NSView(frame: terminalView.frame)
+        terminalView.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(terminalView)
+        NSLayoutConstraint.activate([
+            terminalView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            terminalView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            terminalView.topAnchor.constraint(equalTo: container.topAnchor),
+            terminalView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+        ])
+        window.contentView = container
+        window.minSize = NSSize(width: 400, height: 200)
+        window.isReleasedWhenClosed = false
+        window.center()
+
+        super.init(window: window)
+
+        window.delegate = self
+        terminalView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func windowWillClose(_: Notification) {
+        isClosed = true
+        hideSpinner()
+        (terminalView as? LocalProcessTerminalView)?.terminate()
+        serialConsole?.detach()
+        TerminalSessionWindowController.openSessions.removeAll { $0 === self }
+    }
+
+    // MARK: - LocalProcessTerminalViewDelegate
+
+    func sizeChanged(source _: LocalProcessTerminalView, newCols _: Int, newRows _: Int) {}
+
+    func setTerminalTitle(source _: LocalProcessTerminalView, title _: String) {}
+
+    func hostCurrentDirectoryUpdate(source _: TerminalView, directory _: String?) {}
+
+    func processTerminated(source _: TerminalView, exitCode _: Int32?) {
+        DispatchQueue.main.async {
+            // Keep the window open, so that the last output (e.g. an SSH error) can still be read
+            self.terminalView.feed(text: "\r\n" + NSLocalizedString("TerminalSessionWindowController.sessionEnded", comment: "") + "\r\n")
+        }
+    }
+
     static func open(_ kind: Kind, on virtualMachine: VirtualMachine, executable: String, args: [String]) {
         if bringExistingToFront(kind, virtualMachine) {
             return
@@ -67,12 +131,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         isReplay = false
     }
 
-    private static let defaultFrame = NSRect(x: 0, y: 0, width: 800, height: 500)
-
-    private static var environment: [String] {
-        Terminal.getEnvironmentVariables(termName: "xterm-256color").filter { !$0.hasPrefix("DISPLAY=") } + ["SSH_ASKPASS_REQUIRE=never"]
-    }
-
     static func bringExistingToFront(_ kind: Kind, _ virtualMachine: VirtualMachine) -> Bool {
         guard let existing = openSessions.first(where: { $0.kind == kind && $0.virtualMachine == virtualMachine }) else { return false }
         existing.window?.makeKeyAndOrderFront(nil)
@@ -85,39 +143,19 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         }
     }
 
-    private init(_ kind: Kind, _ virtualMachine: VirtualMachine, _ terminalView: TerminalView) {
-        self.kind = kind
-        self.virtualMachine = virtualMachine
-        self.terminalView = terminalView
+    func start(executable: String, args: [String], banner: String? = nil) {
+        guard !isClosed, let terminalView = terminalView as? LocalProcessTerminalView else { return }
 
-        let window = NSWindow(contentRect: terminalView.frame, styleMask: [.titled, .closable, .miniaturizable, .resizable], backing: .buffered, defer: false)
-        let titleFormat = kind == .ssh ? NSLocalizedString("TerminalSessionWindowController.sshTitle", comment: "") : NSLocalizedString("TerminalSessionWindowController.serialConsoleTitle", comment: "")
-        window.title = String(format: titleFormat, virtualMachine.displayName)
-        // The terminal sits in a container of its own: SwiftTerm stacks its subviews as it pleases, so the spinner
-        // must not be one of them
-        let container = NSView(frame: terminalView.frame)
-        terminalView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(terminalView)
-        NSLayoutConstraint.activate([
-            terminalView.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            terminalView.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            terminalView.topAnchor.constraint(equalTo: container.topAnchor),
-            terminalView.bottomAnchor.constraint(equalTo: container.bottomAnchor),
-        ])
-        window.contentView = container
-        window.minSize = NSSize(width: 400, height: 200)
-        window.isReleasedWhenClosed = false
-        window.center()
-
-        super.init(window: window)
-
-        window.delegate = self
-        terminalView.font = NSFont.monospacedSystemFont(ofSize: NSFont.systemFontSize, weight: .regular)
+        hideSpinner()
+        if let banner {
+            terminalView.feed(text: banner + "\r\n")
+        }
+        terminalView.startProcess(executable: executable, args: args, environment: TerminalSessionWindowController.environment)
+        window?.makeFirstResponder(terminalView)
     }
 
-    @available(*, unavailable)
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func cancel() {
+        window?.close()
     }
 
     private func show() {
@@ -147,44 +185,6 @@ class TerminalSessionWindowController: NSWindowController, NSWindowDelegate, Loc
         spinner?.stopAnimation(nil)
         spinner?.removeFromSuperview()
         spinner = nil
-    }
-
-    func start(executable: String, args: [String], banner: String? = nil) {
-        guard !isClosed, let terminalView = terminalView as? LocalProcessTerminalView else { return }
-
-        hideSpinner()
-        if let banner {
-            terminalView.feed(text: banner + "\r\n")
-        }
-        terminalView.startProcess(executable: executable, args: args, environment: TerminalSessionWindowController.environment)
-        window?.makeFirstResponder(terminalView)
-    }
-
-    func cancel() {
-        window?.close()
-    }
-
-    func windowWillClose(_: Notification) {
-        isClosed = true
-        hideSpinner()
-        (terminalView as? LocalProcessTerminalView)?.terminate()
-        serialConsole?.detach()
-        TerminalSessionWindowController.openSessions.removeAll { $0 === self }
-    }
-
-    // MARK: - LocalProcessTerminalViewDelegate
-
-    func sizeChanged(source _: LocalProcessTerminalView, newCols _: Int, newRows _: Int) {}
-
-    func setTerminalTitle(source _: LocalProcessTerminalView, title _: String) {}
-
-    func hostCurrentDirectoryUpdate(source _: TerminalView, directory _: String?) {}
-
-    func processTerminated(source _: TerminalView, exitCode _: Int32?) {
-        DispatchQueue.main.async {
-            // Keep the window open, so that the last output (e.g. an SSH error) can still be read
-            self.terminalView.feed(text: "\r\n" + NSLocalizedString("TerminalSessionWindowController.sessionEnded", comment: "") + "\r\n")
-        }
     }
 }
 

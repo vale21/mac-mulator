@@ -48,6 +48,39 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         updateView()
     }
 
+    private var qemuVideoViews: [NSView] {
+        [videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
+         accelDescriptionText, accelDescriptionLabel, accelDescriptionSwitch,
+         spiceDescriptionText, spiceDescriptionLabel, spiceDescriptionSwitch, windowsArmDescriptionText]
+    }
+
+    @IBAction func enable3DAccelerationToggleChanged(_: Any) {
+        if let virtualMachine {
+            virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
+        }
+    }
+
+    @IBAction func showScreenToggleChanged(_: Any) {
+        if let virtualMachine {
+            virtualMachine.headless = showScreenSwitch.state == .off
+            // The VM view behind the sheet shows the session buttons of headless VMs
+            (NSApp.delegate as? AppDelegate)?.rootController?.vmSettingsChanged(virtualMachine)
+        }
+        updateView()
+    }
+
+    @IBAction func enableSpiceSupport(_: Any) {
+        if let virtualMachine {
+            virtualMachine.enableSpiceDisplay = spiceDescriptionSwitch.state == .on
+        }
+
+        if spiceDescriptionSwitch.state == .on {
+            qemuDisplayComboBox.isEnabled = false
+        } else {
+            qemuDisplayComboBox.isEnabled = true
+        }
+    }
+
     override func viewWillAppear() {
         showScreenLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.showScreenLabel", comment: "")
         showScreenSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.showScreenTooltip", comment: "")
@@ -62,22 +95,32 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         updateView()
     }
 
-    fileprivate func loadAdaptersList() {
-        guard let virtualMachine else { return }
-
-        let adapters = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
-        adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
-        updateView()
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        if comboBox == videoAdapterComboBox {
+            return adaptersList.count
+        } else if comboBox == qemuDisplayComboBox {
+            return displaysList.count
+        }
+        return 0
     }
 
-    fileprivate func loadDisplaysList() {
-        guard let virtualMachine else { return }
+    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        if comboBox == videoAdapterComboBox {
+            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[adaptersList[index]] : ""
+        } else if comboBox == qemuDisplayComboBox {
+            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[displaysList[index]] : ""
+        }
+        return index + 1
+    }
 
-        var displays = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
-
-        displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
-        displaysList = displays
-        updateView()
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        if let virtualMachine {
+            if (notification.object as! NSComboBox) == videoAdapterComboBox {
+                virtualMachine.videoDevice = adaptersList[videoAdapterComboBox.indexOfSelectedItem]
+            } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
+                virtualMachine.qemuDisplay = displaysList[qemuDisplayComboBox.indexOfSelectedItem]
+            }
+        }
     }
 
     func updateView() {
@@ -177,68 +220,25 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
-    private var qemuVideoViews: [NSView] {
-        [videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
-         accelDescriptionText, accelDescriptionLabel, accelDescriptionSwitch,
-         spiceDescriptionText, spiceDescriptionLabel, spiceDescriptionSwitch, windowsArmDescriptionText]
-    }
+    private func loadAdaptersList() {
+        guard let virtualMachine else { return }
 
-    func numberOfItems(in comboBox: NSComboBox) -> Int {
-        if comboBox == videoAdapterComboBox {
-            return adaptersList.count
-        } else if comboBox == qemuDisplayComboBox {
-            return displaysList.count
-        }
-        return 0
-    }
-
-    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        if comboBox == videoAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[adaptersList[index]] : ""
-        } else if comboBox == qemuDisplayComboBox {
-            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[displaysList[index]] : ""
-        }
-        return index + 1
-    }
-
-    func comboBoxSelectionDidChange(_ notification: Notification) {
-        if let virtualMachine {
-            if (notification.object as! NSComboBox) == videoAdapterComboBox {
-                virtualMachine.videoDevice = adaptersList[videoAdapterComboBox.indexOfSelectedItem]
-            } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
-                virtualMachine.qemuDisplay = displaysList[qemuDisplayComboBox.indexOfSelectedItem]
-            }
-        }
-    }
-
-    @IBAction func enable3DAccelerationToggleChanged(_: Any) {
-        if let virtualMachine {
-            virtualMachine.enable3DAcceleration = accelDescriptionSwitch.state == .on
-        }
-    }
-
-    @IBAction func showScreenToggleChanged(_: Any) {
-        if let virtualMachine {
-            virtualMachine.headless = showScreenSwitch.state == .off
-            // The VM view behind the sheet shows the session buttons of headless VMs
-            (NSApp.delegate as? AppDelegate)?.rootController?.vmSettingsChanged(virtualMachine)
-        }
+        let adapters = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
+        adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
         updateView()
     }
 
-    @IBAction func enableSpiceSupport(_: Any) {
-        if let virtualMachine {
-            virtualMachine.enableSpiceDisplay = spiceDescriptionSwitch.state == .on
-        }
+    private func loadDisplaysList() {
+        guard let virtualMachine else { return }
 
-        if spiceDescriptionSwitch.state == .on {
-            qemuDisplayComboBox.isEnabled = false
-        } else {
-            qemuDisplayComboBox.isEnabled = true
-        }
+        var displays = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
+
+        displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
+        displaysList = displays
+        updateView()
     }
 
-    fileprivate func verifyOpenGLSupport() {
+    private func verifyOpenGLSupport() {
         if let virtualMachine {
             let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))
             let virGLSupported = capabilities?.virGLSupported ?? false
@@ -260,7 +260,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
-    fileprivate func verifySpiceSupport() {
+    private func verifySpiceSupport() {
         if let virtualMachine {
             let spiceSupported = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.spiceSupported ?? false
 
