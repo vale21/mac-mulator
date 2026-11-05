@@ -27,6 +27,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     var rootController: RootViewController?
     var qemuVersion: String?
     var dirty = false
+    private var initialStateFilePath: String?
+    private var initialVmFolderPreference: String?
 
     func setRootController(_ rootController: RootViewController) {
         self.rootController = rootController
@@ -59,6 +61,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!)
+        initialStateFilePath = Utils.getAppStateFilePath()
+        initialVmFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         vmFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
         qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
@@ -70,9 +74,29 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewDidDisappear() {
+        // The VM list is stored in the VMs folder: when the folder changes, show the VMs saved in the new one.
+        if Utils.getAppStateFilePath() != initialStateFilePath {
+            vmFolderChanged()
+        }
         if dirty {
             rootController?.refreshViewForVM(rootController?.currentVm)
         }
+    }
+
+    /// Switching the VMs folder replaces the VM list, so the running VMs of the current list are forcibly stopped.
+    /// The user is warned first: if they cancel, the previous VMs folder is restored.
+    private func vmFolderChanged() {
+        guard let appDelegate = NSApp.delegate as? AppDelegate else { return }
+        if let rootController = appDelegate.rootController, rootController.areThereRunningVMs() {
+            guard let window = rootController.view.window else { return }
+            let response = Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("PreferencesViewController.vmFolderChangedWithRunningVMs", comment: ""), virtualMachine: nil)
+            if response.rawValue != Utils.ALERT_RESP_OK {
+                userDefaults.set(initialVmFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+                return
+            }
+            rootController.killAllRunningVMs()
+        }
+        appDelegate.reloadSavedVMs()
     }
 
     func controlTextDidChange(_ obj: Notification) {

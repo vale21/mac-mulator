@@ -170,7 +170,8 @@
 "PreferencesViewController.qemuNotFound" = "QEMU not found";
 "PreferencesViewController.qemuVersion" = "QEMU version %@";
 "PreferencesViewController.viewQemuCapabilities" = "View all QEMU capabilities...";
-"PreferencesViewController.vmFolderLabel" = "Virtual Machines folder";
+"PreferencesViewController.vmFolderLabel" = "MacMulator system folder";
+"PreferencesViewController.vmFolderChangedWithRunningVMs" = "You have running VMs.\nChanging the MacMulator system folder will forcibly kill any running VM.\nIt is strongly suggested to shut them down gracefully using the guest OS shut down procedure, or you might lose your unsaved work.\n\nDo you want to continue?";
 "PreferencesViewController.windowTitle" = "MacMulator Preferences";
 "ProvisioningOptionsViewController.description" = "If you want, you can pre-configure the VM users and some VM settings before the VM creation. You will always be able to change these settings from within the VM itself.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Enable remote login (SSH)";

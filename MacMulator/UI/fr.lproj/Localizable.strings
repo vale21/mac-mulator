@@ -170,7 +170,8 @@
 "PreferencesViewController.qemuNotFound" = "QEMU introuvable";
 "PreferencesViewController.qemuVersion" = "QEMU version %@";
 "PreferencesViewController.viewQemuCapabilities" = "Voir les capacités de Qemu...";
-"PreferencesViewController.vmFolderLabel" = "Dossier des machines virtuelles";
+"PreferencesViewController.vmFolderLabel" = "Dossier système de MacMulator";
+"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Des machines virtuelles sont en cours d’exécution.\nChanger le dossier système de MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "PreferencesViewController.windowTitle" = "Préférences de MacMulator";
 "ProvisioningOptionsViewController.description" = "Si vous le souhaitez, vous pouvez préconfigurer les utilisateurs de la VM et certains réglages avant sa création. Vous pourrez toujours modifier ces réglages depuis la VM elle-même.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Activer la connexion à distance (SSH)";

@@ -298,10 +298,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         SandboxBookmarks.restoreAll()
         setupDefaultsPreferences(userDefaults)
 
-        savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-        if savedVMs == nil {
-            savedVMs = []
-        }
+        savedVMs = loadSavedVMs(userDefaults)
 
         let qemuPath = QemuUtils.getQemuPath()
         let vmPaths = savedVMs ?? []
@@ -337,8 +334,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_: Notification) {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
 
         // Useful in Development to replicate the startup of a clean installation of MacMulator
         // resetDefaults();
@@ -464,8 +460,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             savedVMs!.append(vmToSave)
         }
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
     /// Replaces the path of a saved VM whose folder has been renamed.
@@ -476,7 +471,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             addSavedVM(newPath)
         }
-        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
     func removeSavedVM(_ savedVM: String) {
@@ -491,16 +486,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
         }
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
     func moveSavedVm(at originalRow: Int, to newRow: Int) {
         let vm = savedVMs?.remove(at: originalRow)
         savedVMs?.insert(vm!, at: newRow)
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
     @available(macOS 27.0, *)
@@ -749,8 +742,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")), virtualMachine: nil)
 
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+            persistSavedVMs()
         }
     }
 
@@ -770,6 +762,58 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
 
         return false
+    }
+
+    /// Reads the list of saved VMs from the hidden state file in the VMs folder.
+    /// The list used to live in UserDefaults: if the state file does not exist yet, it is migrated from there.
+    private func loadSavedVMs(_ userDefaults: UserDefaults) -> [String] {
+        if FileManager.default.fileExists(atPath: Utils.getAppStateFilePath()) {
+            return readStateFile()
+        }
+
+        let legacyVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS) ?? []
+        if persistSavedVMs(legacyVMs) {
+            userDefaults.removeObject(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        }
+        return legacyVMs
+    }
+
+    /// Reads the list of saved VMs from the state file in the current VMs folder. Returns an empty list if the file is missing.
+    private func readStateFile() -> [String] {
+        let stateFile = Utils.getAppStateFilePath()
+        guard FileManager.default.fileExists(atPath: stateFile) else { return [] }
+        if let data = FileManager.default.contents(atPath: stateFile),
+           let state = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
+           let vms = state[MacMulatorConstants.STATE_KEY_SAVED_VMS] as? [String]
+        {
+            return vms
+        }
+        print("Could not read state file " + stateFile)
+        return []
+    }
+
+    /// Called when the VMs folder changes in Preferences: replaces the VMs in the list with the ones saved in the state
+    /// file of the new folder, or with an empty list if the new folder has no state file.
+    func reloadSavedVMs() {
+        savedVMs = readStateFile()
+        rootController?.removeAllVirtualMachines()
+        setupSavedVMs()
+        rootController?.startupCompleted()
+    }
+
+    @discardableResult
+    private func persistSavedVMs(_ vms: [String]? = nil) -> Bool {
+        let stateFile = Utils.getAppStateFilePath()
+        let state: [String: Any] = [MacMulatorConstants.STATE_KEY_SAVED_VMS: vms ?? savedVMs ?? []]
+        do {
+            try FileManager.default.createDirectory(atPath: Utils.getParentDir(stateFile), withIntermediateDirectories: true)
+            let data = try PropertyListSerialization.data(fromPropertyList: state, format: .xml, options: 0)
+            try data.write(to: URL(fileURLWithPath: stateFile), options: .atomic)
+            return true
+        } catch {
+            print("Could not write state file " + stateFile + ": " + error.localizedDescription)
+            return false
+        }
     }
 
     private func setupDefaultsPreferences(_ userDefaults: UserDefaults) {

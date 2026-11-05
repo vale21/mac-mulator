@@ -195,6 +195,14 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         delegate.addSavedVM(virtualMachine.path)
     }
 
+    /// Empties the VM list, without touching the VM files. Used when switching to another VMs folder.
+    func removeAllVirtualMachines() {
+        runningVMs.removeAll()
+        virtualMachines.removeAll()
+        listController?.refreshList()
+        setCurrentVirtualMachine(nil)
+    }
+
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
         virtualMachines[index]
     }

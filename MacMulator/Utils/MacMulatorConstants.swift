@@ -57,11 +57,16 @@ class MacMulatorConstants {
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
 
+    /// Legacy UserDefaults key of the saved VMs list, now only read to migrate it to the state file.
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath"
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate"
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled"
+
+    /// Hidden file in the VMs folder holding the app state (e.g. the list of saved VMs).
+    static let APP_STATE_FILE = ".macmulator.plist"
+    static let STATE_KEY_SAVED_VMS = "savedVMs"
 
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
