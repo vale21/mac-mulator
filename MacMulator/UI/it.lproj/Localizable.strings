@@ -24,6 +24,11 @@
 "AppDelegate.openTerminalSession" = "Apri una sessione Terminale";
 "AppDelegate.showVMScreen" = "Mostra lo schermo della VM";
 "AppDelegate.youHaveRunningVMs" = "Ci sono VM in esecuzione.\nChiudendo MacMulator forzerai la terminazione di ciascuna.\nÉ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
+"AppDelegate.workspaceInUse" = "Un'altra istanza di MacMulator sta già usando la cartella di lavoro %@.";
+"AppDelegate.chooseAnotherWorkspace" = "Puoi scegliere un'altra cartella di lavoro, oppure chiudere MacMulator.";
+"AppDelegate.changeWorkspace" = "Cambia cartella di lavoro";
+"AppDelegate.quit" = "Esci";
+"AppDelegate.workspaceNotAccessible" = "Impossibile aprire la cartella di lavoro %@: %@";
 "ConsoleViewController.loading" = "Caricamento...";
 "ConsoleViewController.vmNotRunning" = "la VM corrente non è in esecuzione";
 "ConvertVMViewController.convertingVM" = "Conversione della VM in corso. Attendere...";
@@ -170,9 +175,10 @@
 "PreferencesViewController.qemuNotFound" = "QEMU non trovato";
 "PreferencesViewController.qemuVersion" = "QEMU versione %@";
 "PreferencesViewController.viewQemuCapabilities" = "Vedi tutte le caratteristiche di QEMU...";
-"PreferencesViewController.vmFolderLabel" = "Cartella di sistema di MacMulator";
-"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Ci sono VM in esecuzione.\nCambiando la cartella di sistema di MacMulator forzerai la terminazione di ciascuna.\nÈ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
+"PreferencesViewController.vmFolderLabel" = "Cartella di lavoro di MacMulator";
+"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Ci sono VM in esecuzione.\nCambiando la cartella di lavoro di MacMulator forzerai la terminazione di ciascuna.\nÈ fortemente raccomandato che siano spente correttamente, utilizzando la procedura di spegnimento nel sistema operativo guest, altrimenti potresti perdere il lavoro non salvato.\n\nVuoi continuare?";
 "PreferencesViewController.windowTitle" = "Preferenze di MacMulator";
+"PreferencesViewController.workspaceInUse" = "Un'altra istanza di MacMulator sta già usando la cartella di lavoro %@.\nÈ stata ripristinata la cartella di lavoro precedente.";
 "ProvisioningOptionsViewController.description" = "Se vuoi, puoi preconfigurare gli utenti e alcune impostazioni della VM prima della sua creazione. Potrai sempre modificare queste impostazioni dall’interno della VM stessa.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Abilita login remoto (SSH)";
 "ProvisioningOptionsViewController.fullNameLabel" = "Nome completo";

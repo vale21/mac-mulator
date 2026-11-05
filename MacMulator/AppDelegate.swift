@@ -298,7 +298,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         SandboxBookmarks.restoreAll()
         setupDefaultsPreferences(userDefaults)
 
-        savedVMs = loadSavedVMs(userDefaults)
+        // Only one instance at a time can work on a workspace.
+        guard openWorkspace() else {
+            NSApp.terminate(self)
+            return
+        }
+
+        savedVMs = WorkspaceState.shared.savedVMs
 
         let qemuPath = QemuUtils.getQemuPath()
         let vmPaths = savedVMs ?? []
@@ -764,70 +770,106 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
-    /// Reads the list of saved VMs from the hidden state file in the VMs folder.
-    /// The list used to live in UserDefaults: if the state file does not exist yet, it is migrated from there.
-    private func loadSavedVMs(_ userDefaults: UserDefaults) -> [String] {
-        if FileManager.default.fileExists(atPath: Utils.getAppStateFilePath()) {
-            return readStateFile()
-        }
-
-        let legacyVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS) ?? []
-        if persistSavedVMs(legacyVMs) {
-            userDefaults.removeObject(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-        }
-        return legacyVMs
-    }
-
-    /// Reads the list of saved VMs from the state file in the current VMs folder. Returns an empty list if the file is missing.
-    private func readStateFile() -> [String] {
-        let stateFile = Utils.getAppStateFilePath()
-        guard FileManager.default.fileExists(atPath: stateFile) else { return [] }
-        if let data = FileManager.default.contents(atPath: stateFile),
-           let state = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any],
-           let vms = state[MacMulatorConstants.STATE_KEY_SAVED_VMS] as? [String]
-        {
-            return vms
-        }
-        print("Could not read state file " + stateFile)
-        return []
-    }
-
-    /// Called when the VMs folder changes in Preferences: replaces the VMs in the list with the ones saved in the state
-    /// file of the new folder, or with an empty list if the new folder has no state file.
+    /// Called when the workspace folder changes in Preferences, once the state file of the new folder has been opened:
+    /// shows the VMs saved in it.
     func reloadSavedVMs() {
-        savedVMs = readStateFile()
+        savedVMs = WorkspaceState.shared.savedVMs
         rootController?.removeAllVirtualMachines()
         setupSavedVMs()
         rootController?.startupCompleted()
     }
 
-    @discardableResult
-    private func persistSavedVMs(_ vms: [String]? = nil) -> Bool {
-        let stateFile = Utils.getAppStateFilePath()
-        let state: [String: Any] = [MacMulatorConstants.STATE_KEY_SAVED_VMS: vms ?? savedVMs ?? []]
-        do {
-            try FileManager.default.createDirectory(atPath: Utils.getParentDir(stateFile), withIntermediateDirectories: true)
-            let data = try PropertyListSerialization.data(fromPropertyList: state, format: .xml, options: 0)
-            try data.write(to: URL(fileURLWithPath: stateFile), options: .atomic)
-            return true
-        } catch {
-            print("Could not write state file " + stateFile + ": " + error.localizedDescription)
-            return false
+    /// Opens and locks the state file of the workspace folder. If another instance of MacMulator holds the lock, or the
+    /// file can not be opened, the user can choose another workspace folder or quit. Returns false if the user quits.
+    private func openWorkspace() -> Bool {
+        let userDefaults = UserDefaults.standard
+        let originalFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+
+        while true {
+            let stateFilePath = Utils.getAppStateFilePath()
+            let workspaceFolder = Utils.getParentDir(stateFilePath)
+            let message: String
+            switch WorkspaceState.lockStateFile(atPath: stateFilePath) {
+            case let .locked(handle):
+                WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                return true
+            case .inUse:
+                message = String(format: NSLocalizedString("AppDelegate.workspaceInUse", comment: ""), workspaceFolder)
+            case let .failed(reason):
+                message = String(format: NSLocalizedString("AppDelegate.workspaceNotAccessible", comment: ""), workspaceFolder, reason)
+            }
+
+            guard let newFolder = askForAnotherWorkspaceFolder(message, proposedFolder: workspaceFolder) else {
+                // Quitting: keep the workspace folder the user had chosen in Preferences.
+                userDefaults.set(originalFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+                return false
+            }
+            userDefaults.set(Utils.escape(newFolder), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         }
+    }
+
+    /// Shows the given problem with the workspace folder, with a field (and a Find button) to choose another one.
+    /// Returns the chosen folder, or nil if the user chose to quit.
+    private func askForAnotherWorkspaceFolder(_ message: String, proposedFolder: String) -> String? {
+        let picker = WorkspaceFolderPicker(folder: proposedFolder)
+
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.messageText = message
+        alert.informativeText = NSLocalizedString("AppDelegate.chooseAnotherWorkspace", comment: "")
+        alert.accessoryView = picker.view
+        alert.addButton(withTitle: NSLocalizedString("AppDelegate.changeWorkspace", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("AppDelegate.quit", comment: ""))
+        alert.window.initialFirstResponder = picker.folderField
+
+        while alert.runModal() == .alertFirstButtonReturn {
+            let folder = Utils.cleanFolderPath((picker.folderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) as NSString).expandingTildeInPath)
+            if !folder.isEmpty {
+                return folder
+            }
+        }
+        return nil
+    }
+
+    private func persistSavedVMs() {
+        WorkspaceState.shared.savedVMs = savedVMs ?? []
+        WorkspaceState.shared.save()
     }
 
     private func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
             userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
-            userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE) == nil {
-            userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED) == nil {
-            userDefaults.set(false, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
-        }
+    }
+}
+
+/// Accessory view of the alert shown when the workspace folder is not available: a folder field and a Find button.
+private final class WorkspaceFolderPicker: NSObject {
+    let folderField = NSTextField()
+    let view: NSView
+
+    init(folder: String) {
+        let findButton = NSButton(title: NSLocalizedString("PreferencesViewController.find", comment: ""), target: nil, action: nil)
+        let stack = NSStackView(views: [folderField, findButton])
+        stack.orientation = .horizontal
+        stack.spacing = 8
+        stack.frame = NSRect(x: 0, y: 0, width: 360, height: 24)
+        view = stack
+        super.init()
+
+        folderField.stringValue = folder
+        folderField.lineBreakMode = .byTruncatingHead
+        folderField.widthAnchor.constraint(greaterThanOrEqualToConstant: 260).isActive = true
+        findButton.bezelStyle = .rounded
+        findButton.target = self
+        findButton.action = #selector(findFolder(_:))
+    }
+
+    @objc func findFolder(_: Any) {
+        Utils.showDirectorySelector(uponSelection: { panel in
+            if let url = panel.url {
+                folderField.stringValue = url.path
+            }
+        })
     }
 }

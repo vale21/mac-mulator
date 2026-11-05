@@ -24,6 +24,11 @@
 "AppDelegate.openTerminalSession" = "Terminal-Sitzung öffnen";
 "AppDelegate.showVMScreen" = "VM-Bildschirm anzeigen";
 "AppDelegate.youHaveRunningVMs" = "Es sind VMs aktiv.\nWenn du MacMulator schließt, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
+"AppDelegate.workspaceInUse" = "Eine andere Instanz von MacMulator verwendet bereits den Arbeitsordner %@.";
+"AppDelegate.chooseAnotherWorkspace" = "Du kannst einen anderen Arbeitsordner wählen oder MacMulator beenden.";
+"AppDelegate.changeWorkspace" = "Arbeitsordner wechseln";
+"AppDelegate.quit" = "Beenden";
+"AppDelegate.workspaceNotAccessible" = "Der Arbeitsordner %@ konnte nicht geöffnet werden: %@";
 "ConsoleViewController.loading" = "Wird geladen...";
 "ConsoleViewController.vmNotRunning" = "Die aktuelle VM wird nicht ausgeführt";
 "ConvertVMViewController.convertingVM" = "VM wird konvertiert. Bitte warten...";
@@ -170,9 +175,10 @@
 "PreferencesViewController.qemuNotFound" = "QEMU nicht gefunden";
 "PreferencesViewController.qemuVersion" = "QEMU Version %@";
 "PreferencesViewController.viewQemuCapabilities" = "QEMU-Funktionen anzeigen...";
-"PreferencesViewController.vmFolderLabel" = "MacMulator-Systemordner";
-"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Es sind VMs aktiv.\nWenn du den MacMulator-Systemordner änderst, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
+"PreferencesViewController.vmFolderLabel" = "MacMulator-Arbeitsordner";
+"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Es sind VMs aktiv.\nWenn du den MacMulator-Arbeitsordner änderst, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "PreferencesViewController.windowTitle" = "MacMulator-Einstellungen";
+"PreferencesViewController.workspaceInUse" = "Eine andere Instanz von MacMulator verwendet bereits den Arbeitsordner %@.\nDer vorherige Arbeitsordner wurde wiederhergestellt.";
 "ProvisioningOptionsViewController.description" = "Wenn du möchtest, kannst du die Benutzer und einige Einstellungen der VM vor ihrer Erstellung vorkonfigurieren. Du kannst diese Einstellungen jederzeit in der VM selbst ändern.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Remote-Login aktivieren (SSH)";
 "ProvisioningOptionsViewController.fullNameLabel" = "Vollständiger Name";

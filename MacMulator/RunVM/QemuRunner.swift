@@ -106,7 +106,7 @@ class QemuRunner: VirtualMachineRunner {
 
     init(listenPort: Int32, virtualMachine: VirtualMachine) {
         qemuPath = QemuUtils.getQemuPath()
-        livePreviewEnabled = UserDefaults.standard.bool(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
+        livePreviewEnabled = WorkspaceState.shared.livePreviewEnabled
         self.listenPort = listenPort
         managedVm = virtualMachine
     }

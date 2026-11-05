@@ -24,6 +24,11 @@
 "AppDelegate.openTerminalSession" = "Ouvrir une session Terminal";
 "AppDelegate.showVMScreen" = "Afficher l’écran de la VM";
 "AppDelegate.youHaveRunningVMs" = "Vous avez des machines virtuelles en cours d'exécution.\nFermer MacMulator forcera l'arrêt de toute VM active.\nIl est fortement recommandé de les éteindre proprement via le système d’exploitation invité, sinon vous risquez de perdre votre travail non sauvegardé.\n\nVoulez-vous continuer ?";
+"AppDelegate.workspaceInUse" = "Une autre instance de MacMulator utilise déjà le dossier de travail %@.";
+"AppDelegate.chooseAnotherWorkspace" = "Vous pouvez choisir un autre dossier de travail, ou quitter MacMulator.";
+"AppDelegate.changeWorkspace" = "Changer de dossier de travail";
+"AppDelegate.quit" = "Quitter";
+"AppDelegate.workspaceNotAccessible" = "Impossible d’ouvrir le dossier de travail %@ : %@";
 "ConsoleViewController.loading" = "Chargement...";
 "ConsoleViewController.vmNotRunning" = "La machine virtuelle actuelle n’est pas en cours d’exécution";
 "ConvertVMViewController.convertingVM" = "Conversion de la machine virtuelle en cours. Veuillez patienter...";
@@ -170,9 +175,10 @@
 "PreferencesViewController.qemuNotFound" = "QEMU introuvable";
 "PreferencesViewController.qemuVersion" = "QEMU version %@";
 "PreferencesViewController.viewQemuCapabilities" = "Voir les capacités de Qemu...";
-"PreferencesViewController.vmFolderLabel" = "Dossier système de MacMulator";
-"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Des machines virtuelles sont en cours d’exécution.\nChanger le dossier système de MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
+"PreferencesViewController.vmFolderLabel" = "Dossier de travail de MacMulator";
+"PreferencesViewController.vmFolderChangedWithRunningVMs" = "Des machines virtuelles sont en cours d’exécution.\nChanger le dossier de travail de MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "PreferencesViewController.windowTitle" = "Préférences de MacMulator";
+"PreferencesViewController.workspaceInUse" = "Une autre instance de MacMulator utilise déjà le dossier de travail %@.\nLe dossier de travail précédent a été rétabli.";
 "ProvisioningOptionsViewController.description" = "Si vous le souhaitez, vous pouvez préconfigurer les utilisateurs de la VM et certains réglages avant sa création. Vous pourrez toujours modifier ces réglages depuis la VM elle-même.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Activer la connexion à distance (SSH)";
 "ProvisioningOptionsViewController.fullNameLabel" = "Nom complet";

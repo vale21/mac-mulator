@@ -10,6 +10,8 @@
 		3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */; };
 		3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */; };
 		3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B03B07C284A4FCE002D465F /* PortMapping.swift */; };
+		3B07D4DA309C971F005E9C5D /* WorkspaceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B07D4D9309C971F005E9C5D /* WorkspaceState.swift */; };
+		3B07D4DB309C971F005E9C5D /* WorkspaceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B07D4D9309C971F005E9C5D /* WorkspaceState.swift */; };
 		3B095906295C8B2E006166AB /* VirtualizationFrameworkSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */; };
 		3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */; };
 		3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */; };
@@ -259,6 +261,7 @@
 		3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetworkVF.swift; sourceTree = "<group>"; };
 		3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetwork.swift; sourceTree = "<group>"; };
 		3B03B07C284A4FCE002D465F /* PortMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortMapping.swift; sourceTree = "<group>"; };
+		3B07D4D9309C971F005E9C5D /* WorkspaceState.swift */ = {isa = PBXFileReference; path = WorkspaceState.swift; sourceTree = "<group>"; };
 		3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkSupport.swift; sourceTree = "<group>"; };
 		3B0B9333289289FC0077B188 /* MacOSVirtualMachineDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacOSVirtualMachineDelegate.swift; sourceTree = "<group>"; };
 		3B0D023725D6975800E015EF /* EditVMViewControllerGeneral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerGeneral.swift; sourceTree = "<group>"; };
@@ -575,6 +578,7 @@
 				3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */,
 				3BBC26A5307A83E200603BA6 /* SandboxBookmarks.swift */,
 				3BC817743095087C0025C20B /* GuestNetworkLookup.swift */,
+				3B07D4D9309C971F005E9C5D /* WorkspaceState.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -932,6 +936,7 @@
 				3BF26889308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
 				3BF2688B308A01D900A7DBC1 /* DiskImageManagerFactory.swift in Sources */,
+				3B07D4DA309C971F005E9C5D /* WorkspaceState.swift in Sources */,
 				3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */,
 				3BFDBF0625C15FD800A1442F /* VirtualMachineViewController.swift in Sources */,
 				3B391EED25C075F50030E914 /* AppDelegate.swift in Sources */,
@@ -1027,6 +1032,7 @@
 				3BF26888308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3BFB2B493078F067005A4B51 /* RootViewController.swift in Sources */,
 				3BF2688C308A01D900A7DBC1 /* DiskImageManagerFactory.swift in Sources */,
+				3B07D4DB309C971F005E9C5D /* WorkspaceState.swift in Sources */,
 				3BFB2B4A3078F067005A4B51 /* EditVMViewControllerVideo.swift in Sources */,
 				3BFB2B4B3078F067005A4B51 /* VirtualMachineViewController.swift in Sources */,
 				3BFB2B4C3078F067005A4B51 /* AppDelegate.swift in Sources */,

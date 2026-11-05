@@ -42,7 +42,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
                 userDefaults.set(Utils.escape(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
             } else if sender as? NSObject == qemuFolderButton {
                 qemuFolderField.stringValue = panel.url!.path
-                userDefaults.set(Utils.escape(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
+                WorkspaceState.shared.qemuPath = Utils.escape(qemuFolderField.stringValue)
             }
             dirty = true
         })
@@ -53,7 +53,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
         let value = slider.intValue
 
-        userDefaults.set(value, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
+        WorkspaceState.shared.livePreviewRate = Int(value)
         dirty = true
     }
 
@@ -65,7 +65,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         initialVmFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         vmFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
         qemuFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.qemuFolderLabel", comment: "")
-        qemuFolderField.stringValue = Utils.unescape(userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!)
+        qemuFolderField.stringValue = Utils.unescape(WorkspaceState.shared.qemuPath)
         qemuFolderButton.title = NSLocalizedString("PreferencesViewController.find", comment: "")
         viewQemuCapabilitiesButton.title = NSLocalizedString("PreferencesViewController.viewQemuCapabilities", comment: "")
 
@@ -74,9 +74,15 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewDidDisappear() {
+        // Save the preferences in the workspace they were edited in, before possibly switching to another workspace.
+        WorkspaceState.shared.save()
+
         // The VM list is stored in the VMs folder: when the folder changes, show the VMs saved in the new one.
         if Utils.getAppStateFilePath() != initialStateFilePath {
-            vmFolderChanged()
+            // Switch once the Preferences window is gone: prompting while it is still closing does not work.
+            DispatchQueue.main.async {
+                self.vmFolderChanged()
+            }
         }
         if dirty {
             rootController?.refreshViewForVM(rootController?.currentVm)
@@ -84,26 +90,56 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     /// Switching the VMs folder replaces the VM list, so the running VMs of the current list are forcibly stopped.
-    /// The user is warned first: if they cancel, the previous VMs folder is restored.
+    /// The user is warned first: if they cancel, or if the new workspace is in use by another instance of MacMulator,
+    /// the previous VMs folder is restored.
     private func vmFolderChanged() {
-        guard let appDelegate = NSApp.delegate as? AppDelegate else { return }
-        if let rootController = appDelegate.rootController, rootController.areThereRunningVMs() {
-            guard let window = rootController.view.window else { return }
-            let response = Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("PreferencesViewController.vmFolderChangedWithRunningVMs", comment: ""), virtualMachine: nil)
-            if response.rawValue != Utils.ALERT_RESP_OK {
-                userDefaults.set(initialVmFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
-                return
-            }
-            rootController.killAllRunningVMs()
+        guard let appDelegate = NSApp.delegate as? AppDelegate,
+              let rootController = appDelegate.rootController,
+              let window = rootController.view.window
+        else { return }
+
+        let stateFilePath = Utils.getAppStateFilePath()
+        let handle: FileHandle
+        switch WorkspaceState.lockStateFile(atPath: stateFilePath) {
+        case let .locked(lockedHandle):
+            handle = lockedHandle
+        case .inUse:
+            restoreVmFolder()
+            Utils.showAlert(window: window, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("PreferencesViewController.workspaceInUse", comment: ""), Utils.getParentDir(stateFilePath)), virtualMachine: nil)
+            return
+        case let .failed(reason):
+            restoreVmFolder()
+            Utils.showAlert(window: window, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("AppDelegate.workspaceNotAccessible", comment: ""), Utils.getParentDir(stateFilePath), reason), virtualMachine: nil)
+            return
         }
-        appDelegate.reloadSavedVMs()
+
+        guard rootController.areThereRunningVMs() else {
+            WorkspaceState.shared.open(handle, atPath: stateFilePath)
+            appDelegate.reloadSavedVMs()
+            return
+        }
+
+        Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("PreferencesViewController.vmFolderChangedWithRunningVMs", comment: ""), completionHandler: { response in
+            if response == .alertFirstButtonReturn {
+                rootController.killAllRunningVMs()
+                WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                appDelegate.reloadSavedVMs()
+            } else {
+                // The handle is dropped with this closure, releasing the lock on the new workspace.
+                self.restoreVmFolder()
+            }
+        }, virtualMachine: nil)
+    }
+
+    private func restoreVmFolder() {
+        userDefaults.set(initialVmFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
     }
 
     func controlTextDidChange(_ obj: Notification) {
         if obj.object as? NSObject == vmFolderField {
             userDefaults.set(Utils.cleanFolderPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         } else if obj.object as? NSObject == qemuFolderField {
-            userDefaults.set(Utils.cleanFolderPath(qemuFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
+            WorkspaceState.shared.qemuPath = Utils.cleanFolderPath(qemuFolderField.stringValue)
         }
         dirty = true
     }
