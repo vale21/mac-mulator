@@ -311,6 +311,8 @@
 "VirtualMachineListViewController.pause" = "Pause";
 "VirtualMachineListViewController.deleteOrRemove" = "Du löschst die VM „%@“. Was möchtest du mit ihren Daten tun?";
 "VirtualMachineListViewController.deleteOrRemoveInfo" = "Du kannst die Daten der VM löschen oder auf der Festplatte behalten: In diesem Fall wird die VM nur aus dem MacMulator-Arbeitsordner entfernt, und du kannst sie später wieder hinzufügen.";
+"VirtualMachineListViewController.deleteLinkedClone" = "Du löschst den verknüpften Klon „%@“. Seine Daten werden gelöscht.";
+"VirtualMachineListViewController.deleteLinkedCloneInfo" = "Die Daten eines verknüpften Klons können nicht auf der Festplatte behalten werden, da seine Festplatten von denen seiner Vorlage abhängen. Wenn du sie behalten möchtest, wandle diesen verknüpften Klon vor dem Löschen in einen vollständigen Klon um.";
 "VirtualMachineListViewController.linkedCloneMustBeFull" = "Wandle diesen verknüpften Klon in einen vollständigen Klon um, bevor du ihn entfernst und seine Daten behältst.";
 "VirtualMachineListViewController.runningVMWillBeStopped" = "Die VM wird gerade ausgeführt: Sie wird zwangsweise beendet, und du könntest ungespeicherte Daten verlieren.";
 "VirtualMachineListViewController.deleteData" = "VM-Daten löschen";

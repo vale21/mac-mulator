@@ -270,13 +270,13 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".small"))
-        alert.messageText = String(format: NSLocalizedString("VirtualMachineListViewController.deleteOrRemove", comment: ""), vm.displayName)
-        var informativeText = NSLocalizedString("VirtualMachineListViewController.deleteOrRemoveInfo", comment: "")
+        // The data of a linked clone can't be kept: its disks depend on the template, which could then be deleted.
+        let messageKey = vm.hasLinkedDrives ? "VirtualMachineListViewController.deleteLinkedClone" : "VirtualMachineListViewController.deleteOrRemove"
+        let infoKey = vm.hasLinkedDrives ? "VirtualMachineListViewController.deleteLinkedCloneInfo" : "VirtualMachineListViewController.deleteOrRemoveInfo"
+        alert.messageText = String(format: NSLocalizedString(messageKey, comment: ""), vm.displayName)
+        var informativeText = NSLocalizedString(infoKey, comment: "")
         if rootController.isVMRunning(vm) {
             informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.runningVMWillBeStopped", comment: "")
-        }
-        if vm.hasLinkedDrives {
-            informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.linkedCloneMustBeFull", comment: "")
         }
         alert.informativeText = informativeText
         let deleteButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.deleteData", comment: ""))
