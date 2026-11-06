@@ -87,6 +87,22 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         }
     }
 
+    func controlTextDidChange(_ obj: Notification) {
+        if obj.object as? NSObject == vmFolderField {
+            userDefaults.set(Utils.cleanFolderPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+        } else if obj.object as? NSObject == qemuFolderField {
+            WorkspaceState.shared.qemuPath = Utils.cleanFolderPath(qemuFolderField.stringValue)
+        }
+        dirty = true
+    }
+
+    func controlTextDidEndEditing(_ obj: Notification) {
+        if obj.object as? NSObject == qemuFolderField {
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
+            updateView(with: capabilities)
+        }
+    }
+
     private func vmFolderChanged() {
         guard let appDelegate = NSApp.delegate as? AppDelegate,
               let rootController = appDelegate.rootController,
@@ -128,22 +144,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
     private func restoreVmFolder() {
         userDefaults.set(initialVmFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
-    }
-
-    func controlTextDidChange(_ obj: Notification) {
-        if obj.object as? NSObject == vmFolderField {
-            userDefaults.set(Utils.cleanFolderPath(vmFolderField.stringValue), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
-        } else if obj.object as? NSObject == qemuFolderField {
-            WorkspaceState.shared.qemuPath = Utils.cleanFolderPath(qemuFolderField.stringValue)
-        }
-        dirty = true
-    }
-
-    func controlTextDidEndEditing(_ obj: Notification) {
-        if obj.object as? NSObject == qemuFolderField {
-            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuFolderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines))
-            updateView(with: capabilities)
-        }
     }
 
     private func updateView(with capabilities: QemuCapabilitiesReporter?) {

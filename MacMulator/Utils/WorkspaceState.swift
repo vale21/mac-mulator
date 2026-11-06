@@ -56,6 +56,27 @@ final class WorkspaceState {
         load()
     }
 
+    @discardableResult
+    func save() -> Bool {
+        guard let fileHandle else { return false }
+        let state: [String: Any] = [
+            MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS: savedVMs,
+            MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH: qemuPath,
+            MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE: livePreviewRate,
+            MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED: livePreviewEnabled,
+        ]
+        do {
+            let data = try PropertyListSerialization.data(fromPropertyList: state, format: .xml, options: 0)
+            try fileHandle.truncate(atOffset: 0)
+            try fileHandle.write(contentsOf: data)
+            try fileHandle.synchronize()
+            return true
+        } catch {
+            print("Could not write state file " + filePath + ": " + error.localizedDescription)
+            return false
+        }
+    }
+
     private func load() {
         var state: [String: Any] = [:]
         do {
@@ -87,27 +108,6 @@ final class WorkspaceState {
             for key in WorkspaceState.legacyKeys {
                 userDefaults.removeObject(forKey: key)
             }
-        }
-    }
-
-    @discardableResult
-    func save() -> Bool {
-        guard let fileHandle else { return false }
-        let state: [String: Any] = [
-            MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS: savedVMs,
-            MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH: qemuPath,
-            MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE: livePreviewRate,
-            MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED: livePreviewEnabled,
-        ]
-        do {
-            let data = try PropertyListSerialization.data(fromPropertyList: state, format: .xml, options: 0)
-            try fileHandle.truncate(atOffset: 0)
-            try fileHandle.write(contentsOf: data)
-            try fileHandle.synchronize()
-            return true
-        } catch {
-            print("Could not write state file " + filePath + ": " + error.localizedDescription)
-            return false
         }
     }
 }

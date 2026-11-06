@@ -502,6 +502,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         persistSavedVMs()
     }
 
+    func reloadSavedVMs() {
+        savedVMs = WorkspaceState.shared.savedVMs
+        rootController?.removeAllVirtualMachines()
+        setupSavedVMs()
+        rootController?.startupCompleted()
+    }
+
     @available(macOS 27.0, *)
     private func otherVMUsingPassthroughDevice(_ registryID: UInt64, excluding current: VirtualMachine) -> VirtualMachine? {
         guard let running = rootController?.runningVMs else { return nil }
@@ -768,13 +775,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
-    func reloadSavedVMs() {
-        savedVMs = WorkspaceState.shared.savedVMs
-        rootController?.removeAllVirtualMachines()
-        setupSavedVMs()
-        rootController?.startupCompleted()
-    }
-
     private func openWorkspace() -> Bool {
         let userDefaults = UserDefaults.standard
         let originalFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
@@ -856,7 +856,7 @@ private final class WorkspaceFolderPicker: NSObject {
         findButton.action = #selector(findFolder(_:))
     }
 
-    @objc func findFolder(_: Any) {
+    @objc private func findFolder(_: Any) {
         Utils.showDirectorySelector(uponSelection: { panel in
             if let url = panel.url {
                 folderField.stringValue = url.path
