@@ -275,10 +275,14 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         if rootController.isVMRunning(vm) {
             informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.runningVMWillBeStopped", comment: "")
         }
+        if vm.hasLinkedDrives {
+            informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.linkedCloneMustBeFull", comment: "")
+        }
         alert.informativeText = informativeText
         let deleteButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.deleteData", comment: ""))
         deleteButton.hasDestructiveAction = true
-        alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.keepData", comment: ""))
+        let keepButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.keepData", comment: ""))
+        keepButton.isEnabled = !vm.hasLinkedDrives
         alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
 
         alert.beginSheetModal(for: window) { response in
@@ -287,6 +291,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
             case .alertFirstButtonReturn:
                 deleteFiles = true
             case .alertSecondButtonReturn:
+                guard !vm.hasLinkedDrives else {
+                    Utils.showAlert(window: window, style: .critical, message: NSLocalizedString("VirtualMachineListViewController.linkedCloneMustBeFull", comment: ""), virtualMachine: vm)
+                    return
+                }
                 deleteFiles = false
             default:
                 return

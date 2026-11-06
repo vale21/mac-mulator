@@ -310,6 +310,7 @@
 "VirtualMachineListViewController.pause" = "Pausa";
 "VirtualMachineListViewController.deleteOrRemove" = "Stai eliminando la VM \"%@\". Cosa vuoi fare con i suoi dati?";
 "VirtualMachineListViewController.deleteOrRemoveInfo" = "Puoi eliminare i dati della VM, oppure mantenerli sul disco: in questo caso la VM viene solo rimossa dalla cartella di lavoro di MacMulator, e potrai aggiungerla di nuovo in seguito.";
+"VirtualMachineListViewController.linkedCloneMustBeFull" = "Converti questo clone collegato in un clone completo prima di rimuoverlo mantenendone i dati.";
 "VirtualMachineListViewController.runningVMWillBeStopped" = "La VM è in esecuzione: verrà terminata forzatamente, e potresti perdere il lavoro non salvato.";
 "VirtualMachineListViewController.deleteData" = "Elimina i dati della VM";
 "VirtualMachineListViewController.keepData" = "Mantieni i dati della VM sul disco";
