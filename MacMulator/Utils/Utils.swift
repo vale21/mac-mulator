@@ -1107,9 +1107,8 @@ class Utils {
     }
 
     static func computeVMPath(vmName: String) -> String {
-        let userDefaults = UserDefaults.standard
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
-        return Utils.unescape(path) + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION
+        let path = getParentDir(WorkspaceState.shared.filePath)
+        return path + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION
     }
 
     static func truncateString(_ string: String, _ length: Int) -> String {
