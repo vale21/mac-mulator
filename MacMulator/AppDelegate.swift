@@ -480,16 +480,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         persistSavedVMs()
     }
 
-    func removeSavedVM(_ savedVM: String) {
+    func removeSavedVM(_ savedVM: String, deleteFiles: Bool) {
         let vmToRemove = Utils.unescape(savedVM)
         let index = (savedVMs?.firstIndex(of: vmToRemove))!
         savedVMs?.remove(at: index)
 
-        let fileManager = FileManager.default
-        do {
-            try fileManager.removeItem(at: URL(fileURLWithPath: savedVM))
-        } catch {
-            print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
+        if deleteFiles {
+            do {
+                try FileManager.default.removeItem(at: URL(fileURLWithPath: savedVM))
+            } catch {
+                print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
+            }
         }
 
         persistSavedVMs()

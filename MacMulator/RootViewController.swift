@@ -347,8 +347,16 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return false
     }
 
-    func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
+    /// Removes the VM from the workspace. With `deleteFiles`, its bundle on disk is deleted too.
+    func removeVirtualMachineAt(_ index: Int, deleteFiles: Bool) -> VirtualMachine {
+        // Stop a running VM as the Stop button does, so that its window is closed too. This has to happen while the VM
+        // is still in the list, so that its running state is cleaned up.
+        if let runner = runningVMs[virtualMachines[index]] {
+            runner.stopVM(guestStopped: true)
+        }
+
         let virtualMachine = virtualMachines.remove(at: index)
+        listController?.removeRow(index)
 
         // Select a neighbour of the removed VM. This has to happen after the removal: the VM that follows the removed one
         // is now at the same index, and selecting the removed VM itself would apply its state (e.g. template) to that row.
@@ -360,15 +368,14 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             setCurrentVirtualMachine(nil)
         }
 
-        if isVMRunning(virtualMachine) {
-            let runner = runningVMs[virtualMachine]
-            runner?.stopVM(guestStopped: false)
-            runningVMs.removeValue(forKey: virtualMachine)
-        }
+        runningVMs.removeValue(forKey: virtualMachine)
 
         let delegate = NSApp.delegate as! AppDelegate
-        delegate.removeSavedVM(virtualMachine.path)
-        virtualMachine.cleanup()
+        delegate.removeSavedVM(virtualMachine.path, deleteFiles: deleteFiles)
+        if deleteFiles {
+            // The provisioning password is kept for a VM left on disk, which may be added back later.
+            virtualMachine.cleanup()
+        }
 
         return virtualMachine
     }

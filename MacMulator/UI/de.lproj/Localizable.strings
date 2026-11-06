@@ -308,7 +308,11 @@
 "VirtualMachineListViewController.delete" = "Löschen";
 "VirtualMachineListViewController.edit" = "Konfigurieren";
 "VirtualMachineListViewController.pause" = "Pause";
-"VirtualMachineListViewController.runningVM" = "Die VM, die du entfernen möchtest, wird gerade ausgeführt. Möchtest du fortfahren?";
+"VirtualMachineListViewController.deleteOrRemove" = "Du löschst die VM „%@“. Was möchtest du mit ihren Daten tun?";
+"VirtualMachineListViewController.deleteOrRemoveInfo" = "Du kannst die Daten der VM löschen oder auf der Festplatte behalten: In diesem Fall wird die VM nur aus dem MacMulator-Arbeitsordner entfernt, und du kannst sie später wieder hinzufügen.";
+"VirtualMachineListViewController.runningVMWillBeStopped" = "Die VM wird gerade ausgeführt: Sie wird zwangsweise beendet, und du könntest ungespeicherte Daten verlieren.";
+"VirtualMachineListViewController.deleteData" = "VM-Daten löschen";
+"VirtualMachineListViewController.keepData" = "VM-Daten auf der Festplatte behalten";
 "VirtualMachineListViewController.showInFinder" = "Im Finder anzeigen";
 "VirtualMachineListViewController.start" = "Starten";
 "VirtualMachineListViewController.startInRecovery" = "Im Wiederherstellungsmodus starten";

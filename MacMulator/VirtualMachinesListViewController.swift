@@ -262,19 +262,39 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
+    /// Asks whether to delete the VM data, or keep it on disk and only remove the VM from the workspace.
     func deleteVirtualMachine(_ index: Int) {
-        if let rootController {
-            guard rootController.canDelete(rootController.getVirtualMachineAt(index)) else { return }
-            if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineListViewController.runningVM", comment: ""), virtualMachine: rootController.getVirtualMachineAt(index))
-                if response.rawValue == Utils.ALERT_RESP_OK {
-                    table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
-                    _ = rootController.removeVirtualMachineAt(index)
-                }
-            } else {
-                table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
-                _ = rootController.removeVirtualMachineAt(index)
+        guard let rootController, let window = rootController.view.window else { return }
+        let vm = rootController.getVirtualMachineAt(index)
+        guard rootController.canDelete(vm) else { return }
+
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".small"))
+        alert.messageText = String(format: NSLocalizedString("VirtualMachineListViewController.deleteOrRemove", comment: ""), vm.displayName)
+        var informativeText = NSLocalizedString("VirtualMachineListViewController.deleteOrRemoveInfo", comment: "")
+        if rootController.isVMRunning(vm) {
+            informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.runningVMWillBeStopped", comment: "")
+        }
+        alert.informativeText = informativeText
+        let deleteButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.deleteData", comment: ""))
+        deleteButton.hasDestructiveAction = true
+        alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.keepData", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
+
+        alert.beginSheetModal(for: window) { response in
+            let deleteFiles: Bool
+            switch response {
+            case .alertFirstButtonReturn:
+                deleteFiles = true
+            case .alertSecondButtonReturn:
+                deleteFiles = false
+            default:
+                return
             }
+            // The list may have changed while the sheet was open: look the VM up again.
+            guard let currentIndex = rootController.getIndex(of: vm) else { return }
+            _ = rootController.removeVirtualMachineAt(currentIndex, deleteFiles: deleteFiles)
         }
     }
 
@@ -342,7 +362,12 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         table.reloadData()
     }
 
+    func removeRow(_ index: Int) {
+        table.removeRows(at: IndexSet(integer: index), withAnimation: NSTableView.AnimationOptions.slideUp)
+    }
+
     func setState(_ index: Int, _ state: VirtualMachineTableCellView.CellState) {
+        guard index >= 0, index < table.numberOfRows else { return }
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
             cellView.setState(state)
@@ -350,6 +375,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func setState(_ index: Int, _ vm: VirtualMachine) {
+        guard index >= 0, index < table.numberOfRows else { return }
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view, let rootController {
             cellView.setState(VirtualMachineTableCellView.computeVMState(vm, rootController))

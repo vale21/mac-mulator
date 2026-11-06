@@ -308,7 +308,11 @@
 "VirtualMachineListViewController.delete" = "Supprimer";
 "VirtualMachineListViewController.edit" = "Configurer";
 "VirtualMachineListViewController.pause" = "Mettre en pause";
-"VirtualMachineListViewController.runningVM" = "La VM que vous essayez de supprimer est en cours d’exécution. Voulez-vous continuer ?";
+"VirtualMachineListViewController.deleteOrRemove" = "Vous supprimez la VM « %@ ». Que voulez-vous faire de ses données ?";
+"VirtualMachineListViewController.deleteOrRemoveInfo" = "Vous pouvez supprimer les données de la VM, ou les conserver sur le disque : dans ce cas, la VM est seulement retirée du dossier de travail de MacMulator, et vous pourrez l’ajouter de nouveau plus tard.";
+"VirtualMachineListViewController.runningVMWillBeStopped" = "La VM est en cours d’exécution : elle sera arrêtée brutalement, et vous risquez de perdre des données non enregistrées.";
+"VirtualMachineListViewController.deleteData" = "Supprimer les données de la VM";
+"VirtualMachineListViewController.keepData" = "Conserver les données de la VM sur le disque";
 "VirtualMachineListViewController.showInFinder" = "Afficher dans le Finder";
 "VirtualMachineListViewController.start" = "Démarrer";
 "VirtualMachineListViewController.startInRecovery" = "Démarrer en mode récupération";

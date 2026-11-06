@@ -79,7 +79,9 @@ class RunningVMManagerViewController: NSViewController, NSWindowDelegate {
     func windowDidBecomeMain(_: Notification) {
         guard let virtualMachine,
               let rootController = (NSApp.delegate as? AppDelegate)?.rootController,
-              rootController.currentVm !== virtualMachine
+              rootController.currentVm !== virtualMachine,
+              // The VM may have just been removed from the workspace while its window was still open
+              rootController.virtualMachines.contains(virtualMachine)
         else {
             return
         }
