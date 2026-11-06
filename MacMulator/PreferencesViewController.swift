@@ -74,10 +74,8 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewDidDisappear() {
-        // Save the preferences in the workspace they were edited in, before possibly switching to another workspace.
         WorkspaceState.shared.save()
 
-        // The VM list is stored in the VMs folder: when the folder changes, show the VMs saved in the new one.
         if Utils.getAppStateFilePath() != initialStateFilePath {
             // Switch once the Preferences window is gone: prompting while it is still closing does not work.
             DispatchQueue.main.async {
@@ -89,9 +87,6 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         }
     }
 
-    /// Switching the VMs folder replaces the VM list, so the running VMs of the current list are forcibly stopped.
-    /// The user is warned first: if they cancel, or if the new workspace is in use by another instance of MacMulator,
-    /// the previous VMs folder is restored.
     private func vmFolderChanged() {
         guard let appDelegate = NSApp.delegate as? AppDelegate,
               let rootController = appDelegate.rootController,

@@ -195,7 +195,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         delegate.addSavedVM(virtualMachine.path)
     }
 
-    /// Empties the VM list, without touching the VM files. Used when switching to another VMs folder.
     func removeAllVirtualMachines() {
         runningVMs.removeAll()
         virtualMachines.removeAll()
@@ -232,7 +231,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.moveSavedVm(at: originalRow, to: newRow)
     }
 
-    /// Refreshes the VM view and the VM menu after a setting of the VM changed, if it is the VM shown
     func vmSettingsChanged(_ vm: VirtualMachine) {
         guard currentVm === vm else { return }
         vmController?.setVirtualMachine(vm)
@@ -244,8 +242,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.setVirtualMachine(virtualMachine)
     }
 
-    /// Renames the folder of a VM after its (possibly changed) name, adding a " (2)", " (3)", ... suffix if it is already taken.
-    /// Drives, snapshots and the linked clones depending on the VM are updated accordingly.
     func renameVMFolderToMatchName(_ vm: VirtualMachine) {
         guard !isVMRunning(vm) else { return }
         let dependentClones = linkedClones(of: vm)
@@ -327,7 +323,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         refreshViewForVM(vm)
     }
 
-    /// VMs whose drives are linked to a drive of the given template.
     func linkedClones(of template: VirtualMachine) -> [VirtualMachine] {
         let templatePrefix = template.path + "/"
         return virtualMachines.filter { vm in
@@ -335,8 +330,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
-    /// A template that still has linked clones cannot be deleted: its disks are the backing files of the clones' ones.
-    /// Shows an alert and returns false in that case.
     func canDelete(_ vm: VirtualMachine) -> Bool {
         guard Utils.isVMTemplate(vm) else { return true }
         let clones = linkedClones(of: vm)
@@ -347,7 +340,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return false
     }
 
-    /// Removes the VM from the workspace. With `deleteFiles`, its bundle on disk is deleted too.
     func removeVirtualMachineAt(_ index: Int, deleteFiles: Bool) -> VirtualMachine {
         // Stop a running VM as the Stop button does, so that its window is closed too. This has to happen while the VM
         // is still in the list, so that its running state is cleaned up.

@@ -262,7 +262,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    /// Asks whether to delete the VM data, or keep it on disk and only remove the VM from the workspace.
     func deleteVirtualMachine(_ index: Int) {
         guard let rootController, let window = rootController.view.window else { return }
         let vm = rootController.getVirtualMachineAt(index)

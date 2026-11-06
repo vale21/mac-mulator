@@ -469,7 +469,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         persistSavedVMs()
     }
 
-    /// Replaces the path of a saved VM whose folder has been renamed.
     func replaceSavedVM(_ oldPath: String, with newPath: String) {
         let oldPath = Utils.unescape(oldPath)
         if let index = savedVMs?.firstIndex(of: oldPath) {
@@ -655,7 +654,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    // USB passthrough menus are only available for Apple VMs on macOS 15+.
     private func updateUSBMenus(for vm: VirtualMachine) {
         guard vm.type == MacMulatorConstants.APPLE_VM, #available(macOS 15.0, *) else {
             usbDevicesMenuItem.isEnabled = false
@@ -695,7 +693,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    // The storyboard title is localized but hardcodes "MacMulator"; swap in the product name (e.g. "MacMulator EE").
     private func updateAboutMenuItemTitle() {
         guard let productName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
               let aboutItem = NSApp.mainMenu?.items.first?.submenu?.items.first
@@ -771,8 +768,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
-    /// Called when the workspace folder changes in Preferences, once the state file of the new folder has been opened:
-    /// shows the VMs saved in it.
     func reloadSavedVMs() {
         savedVMs = WorkspaceState.shared.savedVMs
         rootController?.removeAllVirtualMachines()
@@ -780,8 +775,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         rootController?.startupCompleted()
     }
 
-    /// Opens and locks the state file of the workspace folder. If another instance of MacMulator holds the lock, or the
-    /// file can not be opened, the user can choose another workspace folder or quit. Returns false if the user quits.
     private func openWorkspace() -> Bool {
         let userDefaults = UserDefaults.standard
         let originalFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
@@ -809,8 +802,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    /// Shows the given problem with the workspace folder, with a field (and a Find button) to choose another one.
-    /// Returns the chosen folder, or nil if the user chose to quit.
     private func askForAnotherWorkspaceFolder(_ message: String, proposedFolder: String) -> String? {
         let picker = WorkspaceFolderPicker(folder: proposedFolder)
 
@@ -844,7 +835,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 }
 
-/// Accessory view of the alert shown when the workspace folder is not available: a folder field and a Find button.
 private final class WorkspaceFolderPicker: NSObject {
     let folderField = NSTextField()
     let view: NSView
