@@ -21,7 +21,7 @@ final class WorkspaceState {
         MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED,
     ]
 
-    private var fileHandle: FileHandle?
+    private var lockHandle: FileHandle?
     private(set) var filePath: String = ""
 
     var savedVMs: [String] = []
@@ -38,7 +38,8 @@ final class WorkspaceState {
             return .failed(error.localizedDescription)
         }
 
-        let fd = Darwin.open(path, O_RDWR | O_CREAT | O_CLOEXEC, 0o644)
+        let lockPath = path + ".lock"
+        let fd = Darwin.open(lockPath, O_RDWR | O_CREAT | O_CLOEXEC, 0o644)
         if fd < 0 {
             return .failed(String(cString: strerror(errno)))
         }
@@ -51,14 +52,14 @@ final class WorkspaceState {
     }
 
     func open(_ handle: FileHandle, atPath path: String) {
-        fileHandle = handle
+        lockHandle = handle
         filePath = path
         load()
     }
 
     @discardableResult
     func save() -> Bool {
-        guard let fileHandle else { return false }
+        guard lockHandle != nil else { return false }
         let state: [String: Any] = [
             MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS: savedVMs,
             MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH: qemuPath,
@@ -67,9 +68,7 @@ final class WorkspaceState {
         ]
         do {
             let data = try PropertyListSerialization.data(fromPropertyList: state, format: .xml, options: 0)
-            try fileHandle.truncate(atOffset: 0)
-            try fileHandle.write(contentsOf: data)
-            try fileHandle.synchronize()
+            try data.write(to: URL(fileURLWithPath: filePath), options: .atomic)
             return true
         } catch {
             print("Could not write state file " + filePath + ": " + error.localizedDescription)
@@ -80,10 +79,12 @@ final class WorkspaceState {
     private func load() {
         var state: [String: Any] = [:]
         do {
-            try fileHandle?.seek(toOffset: 0)
-            if let data = try fileHandle?.readToEnd(), !data.isEmpty {
-                if let fileState = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] {
-                    state = fileState
+            if FileManager.default.fileExists(atPath: filePath) {
+                let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+                if !data.isEmpty {
+                    if let fileState = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] {
+                        state = fileState
+                    }
                 }
             }
         } catch {
