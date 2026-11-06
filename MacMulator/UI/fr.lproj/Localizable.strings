@@ -179,6 +179,7 @@
 "PreferencesViewController.vmFolderChangedWithRunningVMs" = "Des machines virtuelles sont en cours d’exécution.\nChanger le dossier de travail de MacMulator forcera leur arrêt immédiat.\nIl est fortement recommandé d’éteindre les VM proprement via le système d’exploitation invité, sinon vous risquez de perdre des données non enregistrées.\n\nVoulez-vous continuer ?";
 "PreferencesViewController.windowTitle" = "Préférences de MacMulator";
 "PreferencesViewController.workspaceInUse" = "Une autre instance de MacMulator utilise déjà le dossier de travail %@.\nLe dossier de travail précédent a été rétabli.";
+"PreferencesViewController.workspaceSwitchFailed" = "Une machine virtuelle en cours d’exécution n’a pas pu être arrêtée : %@\nLe dossier de travail n’a pas été modifié.";
 "ProvisioningOptionsViewController.description" = "Si vous le souhaitez, vous pouvez préconfigurer les utilisateurs de la VM et certains réglages avant sa création. Vous pourrez toujours modifier ces réglages depuis la VM elle-même.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Activer la connexion à distance (SSH)";
 "ProvisioningOptionsViewController.fullNameLabel" = "Nom complet";

@@ -179,6 +179,7 @@
 "PreferencesViewController.vmFolderChangedWithRunningVMs" = "Es sind VMs aktiv.\nWenn du den MacMulator-Arbeitsordner änderst, werden alle laufenden VMs zwangsweise beendet.\nEs wird dringend empfohlen, sie ordnungsgemäß über das Gastbetriebssystem herunterzufahren, da du sonst ungespeicherte Daten verlieren könntest.\n\nMöchtest du fortfahren?";
 "PreferencesViewController.windowTitle" = "MacMulator-Einstellungen";
 "PreferencesViewController.workspaceInUse" = "Eine andere Instanz von MacMulator verwendet bereits den Arbeitsordner %@.\nDer vorherige Arbeitsordner wurde wiederhergestellt.";
+"PreferencesViewController.workspaceSwitchFailed" = "Eine laufende VM konnte nicht beendet werden: %@\nDer Arbeitsordner wurde nicht geändert.";
 "ProvisioningOptionsViewController.description" = "Wenn du möchtest, kannst du die Benutzer und einige Einstellungen der VM vor ihrer Erstellung vorkonfigurieren. Du kannst diese Einstellungen jederzeit in der VM selbst ändern.";
 "ProvisioningOptionsViewController.enableSshLabel" = "Remote-Login aktivieren (SSH)";
 "ProvisioningOptionsViewController.fullNameLabel" = "Vollständiger Name";

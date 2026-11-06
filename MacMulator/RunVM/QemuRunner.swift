@@ -218,8 +218,14 @@ class QemuRunner: VirtualMachineRunner {
         shell.isRunning()
     }
 
-    func stopVM(guestStopped _: Bool, uponCompletion _: (((any Error)?) -> Void)?) {
+    func stopVM(guestStopped _: Bool, uponCompletion: (((any Error)?) -> Void)?) {
         shell.kill()
+        if let uponCompletion {
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.shell.waitForCommand()
+                uponCompletion(nil)
+            }
+        }
     }
 
     func stopVMGracefully() {

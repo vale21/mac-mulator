@@ -128,12 +128,36 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
         Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("PreferencesViewController.vmFolderChangedWithRunningVMs", comment: ""), completionHandler: { response in
             if response == .alertFirstButtonReturn {
-                for runner in Array(rootController.runningVMs.values) {
-                    runner.stopVM(guestStopped: true)
+                let runners = Array(rootController.runningVMs.values)
+                guard !runners.isEmpty else {
+                    WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                    appDelegate.reloadSavedVMs()
+                    return
                 }
-                WorkspaceState.shared.open(handle, atPath: stateFilePath)
-                self.rememberWorkspaceSelection(atPath: stateFilePath)
-                appDelegate.reloadSavedVMs()
+
+                var remainingRunners = runners.count
+                var stopError: Error?
+                for runner in runners {
+                    runner.stopVM(guestStopped: true) { error in
+                        DispatchQueue.main.async {
+                            if stopError == nil {
+                                stopError = error
+                            }
+                            remainingRunners -= 1
+                            guard remainingRunners == 0 else { return }
+
+                            if let stopError {
+                                self.restoreVmFolder()
+                                let message = String(format: NSLocalizedString("PreferencesViewController.workspaceSwitchFailed", comment: ""), stopError.localizedDescription)
+                                Utils.showAlert(window: window, style: .warning, message: message, virtualMachine: nil)
+                            } else {
+                                WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                                self.rememberWorkspaceSelection(atPath: stateFilePath)
+                                appDelegate.reloadSavedVMs()
+                            }
+                        }
+                    }
+                }
             } else {
                 // The handle is dropped with this closure, releasing the lock on the new workspace.
                 self.restoreVmFolder()
