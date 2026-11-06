@@ -131,6 +131,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
                 let runners = Array(rootController.runningVMs.values)
                 guard !runners.isEmpty else {
                     WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                    self.rememberWorkspaceSelection(atPath: stateFilePath)
                     appDelegate.reloadSavedVMs()
                     return
                 }
