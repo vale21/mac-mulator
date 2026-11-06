@@ -248,7 +248,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
         if let uponCompletion {
             // The caller keeps using the stopped VM (e.g. to restore a snapshot), so it must not be released here.
-            vzVirtualMachine?.stop(completionHandler: uponCompletion)
+            if let vzVirtualMachine {
+                vzVirtualMachine.stop(completionHandler: uponCompletion)
+            } else {
+                uponCompletion(nil)
+            }
         } else {
             let stoppingVirtualMachine = vzVirtualMachine
             vzVirtualMachine?.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })

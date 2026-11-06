@@ -431,6 +431,12 @@ class Utils {
         NSHomeDirectory() + "/MacMulator"
     }
 
+    /// The app state file lives in the VMs folder chosen in Preferences.
+    static func getAppStateFilePath() -> String {
+        let path = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) ?? getDefaultVmFolderPath()
+        return Utils.unescape(path) + "/" + MacMulatorConstants.APP_STATE_FILE
+    }
+
     static func getDefaultQemuFolderPath() -> String {
         var qemuPath = "/opt/local/bin"
         if !FileManager.default.fileExists(atPath: qemuPath + "/qemu-img") {
@@ -1101,9 +1107,8 @@ class Utils {
     }
 
     static func computeVMPath(vmName: String) -> String {
-        let userDefaults = UserDefaults.standard
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
-        return Utils.unescape(path) + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION
+        let path = getParentDir(WorkspaceState.shared.filePath)
+        return path + "/" + vmName + "." + MacMulatorConstants.VM_EXTENSION
     }
 
     static func truncateString(_ string: String, _ length: Int) -> String {

@@ -177,7 +177,7 @@ class QemuUtils {
         #if APPSTORE
             return bundledQemuPath
         #else
-            return UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+            return WorkspaceState.shared.qemuPath
         #endif
     }
 

@@ -137,9 +137,8 @@ class CreateVMFileViewController: NSViewController {
     }
 
     private func computePath() -> String {
-        let userDefaults = UserDefaults.standard
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
-        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
+        let path = Utils.getParentDir(WorkspaceState.shared.filePath)
+        return path + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
     }
 
     private func computeDescription() -> String {

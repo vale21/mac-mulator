@@ -195,6 +195,13 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         delegate.addSavedVM(virtualMachine.path)
     }
 
+    func removeAllVirtualMachines() {
+        runningVMs.removeAll()
+        virtualMachines.removeAll()
+        listController?.refreshList()
+        setCurrentVirtualMachine(nil)
+    }
+
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
         virtualMachines[index]
     }
@@ -224,7 +231,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.moveSavedVm(at: originalRow, to: newRow)
     }
 
-    /// Refreshes the VM view and the VM menu after a setting of the VM changed, if it is the VM shown
     func vmSettingsChanged(_ vm: VirtualMachine) {
         guard currentVm === vm else { return }
         vmController?.setVirtualMachine(vm)
@@ -236,8 +242,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.setVirtualMachine(virtualMachine)
     }
 
-    /// Renames the folder of a VM after its (possibly changed) name, adding a " (2)", " (3)", ... suffix if it is already taken.
-    /// Drives, snapshots and the linked clones depending on the VM are updated accordingly.
     func renameVMFolderToMatchName(_ vm: VirtualMachine) {
         guard !isVMRunning(vm) else { return }
         let dependentClones = linkedClones(of: vm)
@@ -319,7 +323,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         refreshViewForVM(vm)
     }
 
-    /// VMs whose drives are linked to a drive of the given template.
     func linkedClones(of template: VirtualMachine) -> [VirtualMachine] {
         let templatePrefix = template.path + "/"
         return virtualMachines.filter { vm in
@@ -327,8 +330,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
-    /// A template that still has linked clones cannot be deleted: its disks are the backing files of the clones' ones.
-    /// Shows an alert and returns false in that case.
     func canDelete(_ vm: VirtualMachine) -> Bool {
         guard Utils.isVMTemplate(vm) else { return true }
         let clones = linkedClones(of: vm)
@@ -339,8 +340,15 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return false
     }
 
-    func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
+    func removeVirtualMachineAt(_ index: Int, deleteFiles: Bool) -> VirtualMachine {
+        // Stop a running VM as the Stop button does, so that its window is closed too. This has to happen while the VM
+        // is still in the list, so that its running state is cleaned up.
+        if let runner = runningVMs[virtualMachines[index]] {
+            runner.stopVM(guestStopped: true)
+        }
+
         let virtualMachine = virtualMachines.remove(at: index)
+        listController?.removeRow(index)
 
         // Select a neighbour of the removed VM. This has to happen after the removal: the VM that follows the removed one
         // is now at the same index, and selecting the removed VM itself would apply its state (e.g. template) to that row.
@@ -352,15 +360,14 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             setCurrentVirtualMachine(nil)
         }
 
-        if isVMRunning(virtualMachine) {
-            let runner = runningVMs[virtualMachine]
-            runner?.stopVM(guestStopped: false)
-            runningVMs.removeValue(forKey: virtualMachine)
-        }
+        runningVMs.removeValue(forKey: virtualMachine)
 
         let delegate = NSApp.delegate as! AppDelegate
-        delegate.removeSavedVM(virtualMachine.path)
-        virtualMachine.cleanup()
+        delegate.removeSavedVM(virtualMachine.path, deleteFiles: deleteFiles)
+        if deleteFiles {
+            // The provisioning password is kept for a VM left on disk, which may be added back later.
+            virtualMachine.cleanup()
+        }
 
         return virtualMachine
     }

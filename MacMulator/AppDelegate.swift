@@ -298,10 +298,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         SandboxBookmarks.restoreAll()
         setupDefaultsPreferences(userDefaults)
 
-        savedVMs = userDefaults.stringArray(forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
-        if savedVMs == nil {
-            savedVMs = []
+        // Only one instance at a time can work on a workspace.
+        guard openWorkspace() else {
+            NSApp.terminate(self)
+            return
         }
+
+        savedVMs = WorkspaceState.shared.savedVMs
 
         let qemuPath = QemuUtils.getQemuPath()
         let vmPaths = savedVMs ?? []
@@ -337,8 +340,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_: Notification) {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
 
         // Useful in Development to replicate the startup of a clean installation of MacMulator
         // resetDefaults();
@@ -464,11 +466,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             savedVMs!.append(vmToSave)
         }
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
-    /// Replaces the path of a saved VM whose folder has been renamed.
     func replaceSavedVM(_ oldPath: String, with newPath: String) {
         let oldPath = Utils.unescape(oldPath)
         if let index = savedVMs?.firstIndex(of: oldPath) {
@@ -476,31 +476,37 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else {
             addSavedVM(newPath)
         }
-        UserDefaults.standard.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
-    func removeSavedVM(_ savedVM: String) {
+    func removeSavedVM(_ savedVM: String, deleteFiles: Bool) {
         let vmToRemove = Utils.unescape(savedVM)
         let index = (savedVMs?.firstIndex(of: vmToRemove))!
         savedVMs?.remove(at: index)
 
-        let fileManager = FileManager.default
-        do {
-            try fileManager.removeItem(at: URL(fileURLWithPath: savedVM))
-        } catch {
-            print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
+        if deleteFiles {
+            do {
+                try FileManager.default.removeItem(at: URL(fileURLWithPath: savedVM))
+            } catch {
+                print(String(format: NSLocalizedString("AppDelegate.errorDeleting", comment: ""), savedVM, error.localizedDescription))
+            }
         }
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
     }
 
     func moveSavedVm(at originalRow: Int, to newRow: Int) {
         let vm = savedVMs?.remove(at: originalRow)
         savedVMs?.insert(vm!, at: newRow)
 
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+        persistSavedVMs()
+    }
+
+    func reloadSavedVMs() {
+        savedVMs = WorkspaceState.shared.savedVMs
+        rootController?.removeAllVirtualMachines()
+        setupSavedVMs()
+        rootController?.startupCompleted()
     }
 
     @available(macOS 27.0, *)
@@ -655,7 +661,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    // USB passthrough menus are only available for Apple VMs on macOS 15+.
     private func updateUSBMenus(for vm: VirtualMachine) {
         guard vm.type == MacMulatorConstants.APPLE_VM, #available(macOS 15.0, *) else {
             usbDevicesMenuItem.isEnabled = false
@@ -695,7 +700,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    // The storyboard title is localized but hardcodes "MacMulator"; swap in the product name (e.g. "MacMulator EE").
     private func updateAboutMenuItemTitle() {
         guard let productName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String,
               let aboutItem = NSApp.mainMenu?.items.first?.submenu?.items.first
@@ -749,8 +753,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             Utils.showAlert(window: (rootController?.view.window)!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("AppDelegate.couldNotFindExistingVMs", comment: ""), removed.joined(separator: ", ")), virtualMachine: nil)
 
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(savedVMs, forKey: MacMulatorConstants.PREFERENCE_KEY_SAVED_VMS)
+            persistSavedVMs()
         }
     }
 
@@ -772,18 +775,92 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return false
     }
 
+    private func openWorkspace() -> Bool {
+        let userDefaults = UserDefaults.standard
+        let originalFolderPreference = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+
+        while true {
+            let stateFilePath = Utils.getAppStateFilePath()
+            let workspaceFolder = Utils.getParentDir(stateFilePath)
+            let message: String
+            switch WorkspaceState.lockStateFile(atPath: stateFilePath) {
+            case let .locked(handle):
+                WorkspaceState.shared.open(handle, atPath: stateFilePath)
+                return true
+            case .inUse:
+                message = String(format: NSLocalizedString("AppDelegate.workspaceInUse", comment: ""), workspaceFolder)
+            case let .failed(reason):
+                message = String(format: NSLocalizedString("AppDelegate.workspaceNotAccessible", comment: ""), workspaceFolder, reason)
+            }
+
+            guard let newFolder = askForAnotherWorkspaceFolder(message, proposedFolder: workspaceFolder) else {
+                // Quitting: keep the workspace folder the user had chosen in Preferences.
+                userDefaults.set(originalFolderPreference, forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+                return false
+            }
+            userDefaults.set(Utils.escape(newFolder), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
+        }
+    }
+
+    private func askForAnotherWorkspaceFolder(_ message: String, proposedFolder: String) -> String? {
+        let picker = WorkspaceFolderPicker(folder: proposedFolder)
+
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.messageText = message
+        alert.informativeText = NSLocalizedString("AppDelegate.chooseAnotherWorkspace", comment: "")
+        alert.accessoryView = picker.view
+        alert.addButton(withTitle: NSLocalizedString("AppDelegate.changeWorkspace", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("AppDelegate.quit", comment: ""))
+        alert.window.initialFirstResponder = picker.folderField
+
+        while alert.runModal() == .alertFirstButtonReturn {
+            let folder = Utils.cleanFolderPath((picker.folderField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines) as NSString).expandingTildeInPath)
+            if !folder.isEmpty {
+                return folder
+            }
+        }
+        return nil
+    }
+
+    private func persistSavedVMs() {
+        WorkspaceState.shared.savedVMs = savedVMs ?? []
+        WorkspaceState.shared.save()
+    }
+
     private func setupDefaultsPreferences(_ userDefaults: UserDefaults) {
         if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH) == nil {
             userDefaults.set(Utils.getDefaultVmFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)
         }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH) == nil {
-            userDefaults.set(Utils.getDefaultQemuFolderPath(), forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE) == nil {
-            userDefaults.set(10, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_RATE)
-        }
-        if userDefaults.value(forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED) == nil {
-            userDefaults.set(false, forKey: MacMulatorConstants.PREFERENCE_KEY_LIVE_PREVIEW_ENABLED)
-        }
+    }
+}
+
+private final class WorkspaceFolderPicker: NSObject {
+    let folderField = NSTextField()
+    let view: NSView
+
+    init(folder: String) {
+        let findButton = NSButton(title: NSLocalizedString("PreferencesViewController.find", comment: ""), target: nil, action: nil)
+        let stack = NSStackView(views: [folderField, findButton])
+        stack.orientation = .horizontal
+        stack.spacing = 8
+        stack.frame = NSRect(x: 0, y: 0, width: 360, height: 24)
+        view = stack
+        super.init()
+
+        folderField.stringValue = folder
+        folderField.lineBreakMode = .byTruncatingHead
+        folderField.widthAnchor.constraint(greaterThanOrEqualToConstant: 260).isActive = true
+        findButton.bezelStyle = .rounded
+        findButton.target = self
+        findButton.action = #selector(findFolder(_:))
+    }
+
+    @objc private func findFolder(_: Any) {
+        Utils.showDirectorySelector(uponSelection: { panel in
+            if let url = panel.url {
+                folderField.stringValue = url.path
+            }
+        })
     }
 }
