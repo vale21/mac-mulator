@@ -132,7 +132,9 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
 
         Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: NSLocalizedString("PreferencesViewController.vmFolderChangedWithRunningVMs", comment: ""), completionHandler: { response in
             if response == .alertFirstButtonReturn {
-                rootController.killAllRunningVMs()
+                for runner in Array(rootController.runningVMs.values) {
+                    runner.stopVM(guestStopped: true)
+                }
                 WorkspaceState.shared.open(handle, atPath: stateFilePath)
                 appDelegate.reloadSavedVMs()
             } else {
