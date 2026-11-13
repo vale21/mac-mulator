@@ -1,11 +1,9 @@
 //
-//  RootViewController.swift
-//  QManage
-//
 //  Created by Vale on 26/01/21.
 //
 
 import Cocoa
+import Virtualization
 
 class RootViewController: NSSplitViewController, NSWindowDelegate {
     private var listController: VirtualMachinesListViewController?
@@ -14,6 +12,35 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     var currentVm: VirtualMachine?
     var virtualMachines: [VirtualMachine] = []
     var runningVMs: [VirtualMachine: VirtualMachineRunner] = [:]
+
+    func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
+        if let vm = currentVm {
+            Utils.removeUnexistingDrives(vm)
+            vmController?.setVirtualMachine(vm)
+            let index = virtualMachines.firstIndex(of: vm) ?? -1
+            listController?.selectElement(index)
+            listController?.setState(index, vm)
+        } else {
+            vmController?.setVirtualMachine(nil)
+            listController?.selectElement(-1)
+        }
+
+        self.currentVm = currentVm
+
+        let appDelegate = NSApp.delegate as! AppDelegate
+        appDelegate.refreshVMMenus()
+    }
+
+    func getVirtualMachinesCount() -> Int {
+        virtualMachines.count
+    }
+
+    func getRunnerForCurrentVM() -> VirtualMachineRunner? {
+        if let currentVm {
+            return runningVMs[currentVm]
+        }
+        return nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +93,18 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         vmController?.pauseVM(sender: sender)
     }
 
+    func openScreenSessionMenuBarClicked(_: Any) {
+        vmController?.openScreenSession()
+    }
+
+    func openSSHSessionMenuBarClicked(_: Any) {
+        vmController?.openSSHSession()
+    }
+
+    func openTerminalSessionMenuBarClicked(_: Any) {
+        vmController?.openTerminalSession()
+    }
+
     func attachUSBImageToVM(_ sender: Any, _ virtualDrive: VirtualDrive) {
         vmController?.attachUSBImageToVM(sender: sender, virtualDrive: virtualDrive)
     }
@@ -78,7 +117,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.EDIT_VM_SEGUE, sender: [sender, currentVm]) // The sender here determines which tab to show
     }
 
-    @IBAction func cloneVMMenuBarClicked(_: Any) {
+    func createVMSnapshot(sender: Any) {
+        vmController?.createVMSnapshot(sender: sender)
+    }
+
+    func cloneVMMenuBarClicked(_: Any) {
         if let currentVm {
             if let vmIndex = getIndex(of: currentVm) {
                 cloneVirtualMachineAt(vmIndex)
@@ -86,61 +129,55 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         }
     }
 
-    @IBAction func showVMInFinderMenuBarClicked(_: Any) {
+    func deleteVMMenuBarClicked(_: Any) {
+        if let currentVm, let vmIndex = getIndex(of: currentVm) {
+            listController?.deleteVirtualMachine(vmIndex)
+        }
+    }
+
+    func showVMInFinderMenuBarClicked(_: Any) {
         if let currentVm {
             NSWorkspace.shared.activateFileViewerSelecting([URL(fileURLWithPath: currentVm.path, isDirectory: false)])
         }
     }
 
     @available(macOS 13.0, *)
-    func convertToQemuMenuBarClicked(_: Any, _ showAlert: Bool = true) {
-        if let currentVm {
-            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
-            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
-            currentVm.type = MacMulatorConstants.QEMU_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            if showAlert {
-                Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToQemu", comment: ""), virtualMachine: currentVm)
-            }
-        }
+    func convertToQemuMenuBarClicked(_: Any) {
+        vmController?.convertToQemuMenuBarClicked(self)
     }
 
     @available(macOS 13.0, *)
     func convertToAppleMenuBarClicked(_: Any) {
+        vmController?.convertToAppleMenuBarClicked(self)
+    }
+
+    @available(macOS 13.0, *)
+    func convertToTemplateMenuBarClicked(_: Any) {
         if let currentVm {
-            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
-            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
-            currentVm.type = MacMulatorConstants.APPLE_VM
-            currentVm.writeToPlist()
-            vmController?.setVirtualMachine(currentVm)
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("RootViewController.vmConvertedToApple", comment: ""), virtualMachine: currentVm)
+            if let vmIndex = getIndex(of: currentVm) {
+                convertVirtualMachineToTemplateAt(vmIndex)
+            }
         }
     }
 
-    func setCurrentVirtualMachine(_ currentVm: VirtualMachine?) {
-        if let vm = currentVm {
-            Utils.removeUnexistingDrives(vm)
-            vmController?.setVirtualMachine(vm)
-            listController?.selectElement(virtualMachines.firstIndex(of: vm) ?? -1)
-        } else {
+    func startupCompleted() {
+        if virtualMachines.isEmpty {
             vmController?.setVirtualMachine(nil)
-            listController?.selectElement(-1)
         }
-
-        self.currentVm = currentVm
-
-        let appDelegate = NSApp.delegate as! AppDelegate
-        appDelegate.refreshVMMenus()
     }
 
     func addVirtualMachineFromFile(_ fileName: String) {
         let virtualMachine = VirtualMachine.readFromPlist(fileName, MacMulatorConstants.INFO_PLIST)
         if let vm = virtualMachine {
+            if let existing = getVirtualMachine(id: vm.id), existing.path != vm.path {
+                // A copy of an already registered bundle carries the same ID as the original.
+                vm.assignNewIdForClone()
+                vm.writeToPlist()
+            }
             addVirtualMachine(vm)
             if #available(macOS 13.0, *) {
-                if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
-                    self.convertToQemuMenuBarClicked(self, false)
+                if vm.type == MacMulatorConstants.APPLE_VM, vm.os == QemuConstants.OS_LINUX, !vm.hasLinkedDrives, Utils.hostArchitecture() != Utils.getMachineArchitecture(vm.architecture) {
+                    vmController?.convertToQemuMenuBarClicked(self)
                 }
             }
         }
@@ -158,8 +195,11 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         delegate.addSavedVM(virtualMachine.path)
     }
 
-    func getVirtualMachinesCount() -> Int {
-        virtualMachines.count
+    func removeAllVirtualMachines() {
+        runningVMs.removeAll()
+        virtualMachines.removeAll()
+        listController?.refreshList()
+        setCurrentVirtualMachine(nil)
     }
 
     func getVirtualMachineAt(_ index: Int) -> VirtualMachine {
@@ -175,6 +215,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         return nil
     }
 
+    func getVirtualMachine(id: String) -> VirtualMachine? {
+        virtualMachines.first(where: { $0.id == id })
+    }
+
     func getIndex(of virtualMachine: VirtualMachine) -> Int? {
         virtualMachines.firstIndex(of: virtualMachine)
     }
@@ -187,53 +231,276 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         appDelegate.moveSavedVm(at: originalRow, to: newRow)
     }
 
+    func vmSettingsChanged(_ vm: VirtualMachine) {
+        guard currentVm === vm else { return }
+        vmController?.setVirtualMachine(vm)
+        (NSApp.delegate as? AppDelegate)?.refreshVMMenus()
+    }
+
     func refreshViewForVM(_ virtualMachine: VirtualMachine?) {
         listController?.refreshList()
         vmController?.setVirtualMachine(virtualMachine)
     }
 
-    func removeVirtualMachineAt(_ index: Int) -> VirtualMachine {
+    func renameVMFolderToMatchName(_ vm: VirtualMachine) {
+        guard !isVMRunning(vm) else { return }
+        let dependentClones = linkedClones(of: vm)
+        guard dependentClones.allSatisfy({ !isVMRunning($0) }) else { return }
+        let invalidCharacters = CharacterSet(charactersIn: "/:")
+        let name = vm.displayName.components(separatedBy: invalidCharacters).joined(separator: "-").trimmingCharacters(in: .whitespaces)
+        let oldPath = vm.path
+        guard !name.isEmpty, URL(fileURLWithPath: oldPath).deletingPathExtension().lastPathComponent != name else { return }
+
+        let fileManager = FileManager.default
+        var newPath = Utils.computeVMPath(vmName: name)
+        var counter = 2
+        while fileManager.fileExists(atPath: newPath) {
+            newPath = Utils.computeVMPath(vmName: "\(name) (\(counter))")
+            counter += 1
+        }
+
+        let oldPrefix = oldPath + "/"
+        let qemuDiskImageManager = QemuDiskImageManager()
+        var rebasedImages: [(vm: VirtualMachine, path: String, backingPath: String)] = []
+        func rollbackRebasedImages() {
+            for image in rebasedImages.reversed() {
+                do {
+                    try qemuDiskImageManager.rebaseLinkedDiskImage(at: image.path, to: image.backingPath, for: image.vm)
+                } catch {
+                    NSLog("Failed to restore backing file for \(image.path): \(error.localizedDescription)")
+                }
+            }
+        }
+
+        do {
+            for clone in dependentClones {
+                for drive in clone.drives {
+                    guard let backingPath = drive.backingPath, backingPath.hasPrefix(oldPrefix) else { continue }
+                    guard drive.format == QemuConstants.FORMAT_QCOW2 else { continue }
+                    let newBackingPath = newPath + "/" + backingPath.dropFirst(oldPrefix.count)
+                    let diskName = URL(fileURLWithPath: drive.path).lastPathComponent
+                    let snapshotImages = (clone.snapshots ?? []).flatMap(\.driveSnapshotPaths).filter {
+                        URL(fileURLWithPath: $0).lastPathComponent == diskName
+                    }
+                    for imagePath in [drive.path] + snapshotImages {
+                        try qemuDiskImageManager.rebaseLinkedDiskImage(at: imagePath, to: newBackingPath, for: clone)
+                        rebasedImages.append((clone, imagePath, backingPath))
+                    }
+                }
+            }
+        } catch {
+            rollbackRebasedImages()
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.renameFailed", comment: ""), "\(error.localizedDescription)"), virtualMachine: vm)
+            return
+        }
+
+        do {
+            try fileManager.moveItem(atPath: oldPath, toPath: newPath)
+        } catch {
+            rollbackRebasedImages()
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.renameFailed", comment: ""), "\(error.localizedDescription)"), virtualMachine: vm)
+            return
+        }
+
+        VirtualMachine.setupPaths(vm, newPath)
+        vm.writeToPlist()
+        SandboxBookmarks.remember(URL(fileURLWithPath: newPath))
+        (NSApp.delegate as? AppDelegate)?.replaceSavedVM(oldPath, with: newPath)
+
+        // Linked clones refer to the drives of their template by absolute path.
+        for other in dependentClones {
+            var changed = false
+            for drive in other.drives {
+                if let backingPath = drive.backingPath, backingPath.hasPrefix(oldPrefix) {
+                    drive.backingPath = newPath + "/" + backingPath.dropFirst(oldPrefix.count)
+                    changed = true
+                }
+            }
+            if changed {
+                other.writeToPlist()
+            }
+        }
+        refreshViewForVM(vm)
+    }
+
+    func linkedClones(of template: VirtualMachine) -> [VirtualMachine] {
+        let templatePrefix = template.path + "/"
+        return virtualMachines.filter { vm in
+            vm !== template && vm.drives.contains(where: { $0.backingPath?.hasPrefix(templatePrefix) == true })
+        }
+    }
+
+    func canDelete(_ vm: VirtualMachine) -> Bool {
+        guard Utils.isVMTemplate(vm) else { return true }
+        let clones = linkedClones(of: vm)
+        if clones.isEmpty {
+            return true
+        }
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.templateHasLinkedClones", comment: ""), vm.displayName, clones.map { "- " + $0.displayName }.joined(separator: "\n")), virtualMachine: vm)
+        return false
+    }
+
+    func removeVirtualMachineAt(_ index: Int, deleteFiles: Bool) -> VirtualMachine {
+        // Stop a running VM as the Stop button does, so that its window is closed too. This has to happen while the VM
+        // is still in the list, so that its running state is cleaned up.
+        if let runner = runningVMs[virtualMachines[index]] {
+            runner.stopVM(guestStopped: true)
+        }
+
+        let virtualMachine = virtualMachines.remove(at: index)
+        listController?.removeRow(index)
+
+        // Select a neighbour of the removed VM. This has to happen after the removal: the VM that follows the removed one
+        // is now at the same index, and selecting the removed VM itself would apply its state (e.g. template) to that row.
         if index > 0 {
             setCurrentVirtualMachine(virtualMachines[index - 1])
-        } else if virtualMachines.count > 1 {
-            setCurrentVirtualMachine(virtualMachines[0])
+        } else if let first = virtualMachines.first {
+            setCurrentVirtualMachine(first)
         } else {
             setCurrentVirtualMachine(nil)
         }
 
-        let virtualMachine = virtualMachines.remove(at: index)
-        if isVMRunning(virtualMachine) {
-            let runner = runningVMs[virtualMachine]
-            runner?.stopVM(guestStopped: false)
-            runningVMs.removeValue(forKey: virtualMachine)
-        }
+        runningVMs.removeValue(forKey: virtualMachine)
 
         let delegate = NSApp.delegate as! AppDelegate
-        delegate.removeSavedVM(virtualMachine.path)
+        delegate.removeSavedVM(virtualMachine.path, deleteFiles: deleteFiles)
+        if deleteFiles {
+            // The provisioning password is kept for a VM left on disk, which may be added back later.
+            virtualMachine.cleanup()
+        }
 
         return virtualMachine
     }
 
-    func cloneVirtualMachineAt(_ index: Int) {
-        let vmToClone = virtualMachines[index]
-        let newVMPath = Utils.computeVMPath(vmName: String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), vmToClone.displayName))
+    func performFullClone(_ vmToClone: VirtualMachine) {
+        let uniqueName = cloneName(of: vmToClone.displayName, linked: false)
+        let newVMPath = Utils.computeVMPath(vmName: uniqueName)
         let shell = Shell()
-        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _ in
-            let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
-            if let tempVm = temp {
-                tempVm.displayName = String(format: NSLocalizedString("RootViewController.cloneOf", comment: ""), tempVm.displayName)
-                tempVm.writeToPlist()
-                DispatchQueue.main.async {
-                    self.addVirtualMachineFromFile(newVMPath)
+        shell.runCommand("cp -c -R " + Utils.escape(vmToClone.path) + " " + Utils.escape(newVMPath), NSHomeDirectory(), uponCompletion: { _, _ in
+            self.registerClone(at: newVMPath, displayName: uniqueName)
+        })
+    }
+
+    func performLinkedClone(_ vmToClone: VirtualMachine) {
+        let uniqueName = cloneName(of: vmToClone.displayName, linked: true)
+        let newVMPath = Utils.computeVMPath(vmName: uniqueName)
+        let templateDisks = vmToClone.drives.filter { $0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME }
+
+        // Overlays can only be stacked on top of sparse images, which is guaranteed by the template conversion.
+        guard !templateDisks.isEmpty, templateDisks.allSatisfy({ $0.format == QemuConstants.FORMAT_QCOW2 || $0.format == QemuConstants.FORMAT_ASIF }) else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.linkedCloneFailed", comment: ""), NSLocalizedString("RootViewController.linkedCloneUnsupportedDrives", comment: "")), virtualMachine: vmToClone)
+            return
+        }
+
+        let fileManager = FileManager.default
+        let templateDiskPaths = Set(templateDisks.map(\.path))
+        do {
+            // Copy everything but the disks, which are replaced by the overlays.
+            try fileManager.createDirectory(atPath: newVMPath, withIntermediateDirectories: true)
+            for item in try fileManager.contentsOfDirectory(atPath: vmToClone.path) {
+                let sourcePath = vmToClone.path + "/" + item
+                if !templateDiskPaths.contains(sourcePath) {
+                    try fileManager.copyItem(atPath: sourcePath, toPath: newVMPath + "/" + item)
                 }
             }
-        })
+        } catch {
+            try? fileManager.removeItem(atPath: newVMPath)
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.linkedCloneFailed", comment: ""), "\(error)"), virtualMachine: vmToClone)
+            return
+        }
+
+        let diskImageManager = DiskImageManagerFactory().create(isVirtualizationFrameworkInUse: vmToClone.type == MacMulatorConstants.APPLE_TEMPLATE_VM)
+        let overlays = templateDisks.map { templateDisk -> VirtualDrive in
+            let overlay = templateDisk.clone()
+            overlay.path = newVMPath + "/" + templateDisk.name + "." + MacMulatorConstants.DISK_EXTENSION
+            overlay.backingPath = templateDisk.path
+            return overlay
+        }
+
+        func createOverlay(at index: Int) {
+            guard index < overlays.count else {
+                registerClone(at: newVMPath, displayName: uniqueName, linkedDrives: overlays)
+                return
+            }
+            diskImageManager.createLinkedDiskImage(overlays[index], backingDrive: templateDisks[index], newVMPath, uponCompletion: { errorCode, errorMessage in
+                guard errorCode == 0 else {
+                    try? fileManager.removeItem(atPath: newVMPath)
+                    DispatchQueue.main.async {
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("RootViewController.linkedCloneFailed", comment: ""), errorMessage ?? ""), virtualMachine: vmToClone)
+                    }
+                    return
+                }
+                createOverlay(at: index + 1)
+            })
+        }
+        createOverlay(at: 0)
+    }
+
+    func convertToFullCloneMenuBarClicked(_: Any) {
+        if let currentVm, let vmIndex = getIndex(of: currentVm) {
+            convertToFullCloneAt(vmIndex)
+        }
+    }
+
+    /// Merges the drives of a linked clone with the template ones, so that the VM no longer depends on the template.
+    func convertToFullCloneAt(_ index: Int) {
+        let vm = virtualMachines[index]
+        guard vm.hasLinkedDrives, Utils.isFullCloneConversionSupported(vm), !isVMRunning(vm) else { return }
+        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("RootViewController.convertToFullClone", comment: ""), virtualMachine: vm)
+        guard response.rawValue == Utils.ALERT_RESP_OK else { return }
+
+        if #available(macOS 13.0, *) {
+            vmController?.convertToFullClone(vm)
+        }
+    }
+
+    func cloneVirtualMachineAt(_ index: Int) {
+        let vmToClone = virtualMachines[index]
+        guard !isVMRunning(vmToClone) else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("RootViewController.cloneRunningVM", comment: ""), virtualMachine: vmToClone)
+            return
+        }
+        if Utils.isVMTemplate(vmToClone) {
+            vmController?.cloneVirtualMachine(vmToClone)
+        } else {
+            performFullClone(vmToClone)
+        }
+    }
+
+    @available(macOS 13.0, *)
+    func convertVirtualMachineToTemplateAt(_ index: Int) {
+        let vmToConvert = virtualMachines[index]
+        // A paused VM holds a saved state that would be invalid once its drives change: it has to be stopped first.
+        guard !isVMRunning(vmToConvert), !isVMPaused(vmToConvert), Utils.isTemplateConversionSupported(vmToConvert) else { return }
+        let rawVMDrives = Utils.findRawDrives(vmToConvert.drives)
+        let removableVMDrives = Utils.findExternalDrives(vmToConvert.drives)
+        var promptText = NSLocalizedString("RootViewController.convertToTemplate", comment: "") + "\n\n"
+        if !rawVMDrives.isEmpty {
+            let targetFormat = vmToConvert.type == MacMulatorConstants.QEMU_VM ? "QCOW2" : "ASIF"
+            promptText += String(format: NSLocalizedString("RootViewController.convertToTemplateRawDrives", comment: ""), targetFormat, rawVMDrives.map { "- " + $0.name }.joined(separator: "\n")) + "\n\n"
+        }
+        if !removableVMDrives.isEmpty {
+            promptText += String(format: NSLocalizedString("RootViewController.convertToTemplateRemovableDrives", comment: ""), removableVMDrives.map { "- " + $0.name }.joined(separator: "\n")) + "\n\n"
+        }
+        if let snapshotCount = vmToConvert.snapshots?.count, snapshotCount > 0 {
+            let key = snapshotCount == 1 ? "RootViewController.convertToTemplateSnapshotsOne" : "RootViewController.convertToTemplateSnapshotsOther"
+            promptText += String(format: NSLocalizedString(key, comment: ""), snapshotCount) + "\n\n"
+        }
+        promptText += NSLocalizedString("RootViewController.convertToTemplateConfirm", comment: "")
+        let response = Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: promptText, virtualMachine: vmToConvert)
+        if response.rawValue == Utils.ALERT_RESP_OK {
+            // The conversion window works on the current VM, which is not necessarily the one chosen from the list.
+            if currentVm !== vmToConvert {
+                setCurrentVirtualMachine(vmToConvert)
+            }
+            vmController?.convertToTemplateMenuBarClicked(self)
+        }
     }
 
     func setRunningVM(_ vm: VirtualMachine, _ runner: VirtualMachineRunner) {
         runningVMs[vm] = runner
 
-        listController?.setRunning(virtualMachines.firstIndex(of: vm)!, true)
+        listController?.setState(virtualMachines.firstIndex(of: vm)!, .running)
 
         let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
@@ -243,7 +510,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         runningVMs.removeValue(forKey: vm)
         let index = virtualMachines.firstIndex(of: vm)
         if let idx = index {
-            listController?.setRunning(idx, false)
+            listController?.setState(idx, isVMPaused(vm) ? .paused : .stopped)
         }
 
         let appDelegate = NSApp.delegate as! AppDelegate
@@ -276,13 +543,6 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         runningVMs[vm]
     }
 
-    func getRunnerForCurrentVM() -> VirtualMachineRunner? {
-        if let currentVm {
-            return runningVMs[currentVm]
-        }
-        return nil
-    }
-
     func areThereRunningVMs() -> Bool {
         runningVMs.count > 0
     }
@@ -290,6 +550,48 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
     func killAllRunningVMs() {
         for runner in runningVMs.values {
             runner.stopVM(guestStopped: false)
+        }
+    }
+
+    /// Name for a new clone, with a " (2)", " (3)", ... suffix if a VM or a folder with the same name already exists.
+    private func cloneName(of name: String, linked: Bool) -> String {
+        let baseName = String(format: NSLocalizedString(linked ? "RootViewController.linkedCloneOf" : "RootViewController.fullCloneOf", comment: ""), name)
+        var candidate = baseName
+        var counter = 2
+        while virtualMachines.contains(where: { $0.displayName == candidate }) || FileManager.default.fileExists(atPath: Utils.computeVMPath(vmName: candidate)) {
+            candidate = "\(baseName) (\(counter))"
+            counter += 1
+        }
+        return candidate
+    }
+
+    private func registerClone(at newVMPath: String, displayName: String, linkedDrives: [VirtualDrive] = []) {
+        let temp = VirtualMachine.readFromPlist(newVMPath, "Info.plist")
+        if let tempVm = temp {
+            tempVm.assignNewIdForClone()
+            tempVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+            tempVm.displayName = displayName
+            if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+                tempVm.type = MacMulatorConstants.APPLE_VM
+            }
+            if tempVm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
+                tempVm.type = MacMulatorConstants.QEMU_VM
+            }
+
+            for linkedDrive in linkedDrives {
+                tempVm.drives.first(where: { $0.path == linkedDrive.path })?.backingPath = linkedDrive.backingPath
+            }
+
+            if let provisioningInformation = tempVm.provisioningInformation {
+                // The cloned plist points at the original's Keychain item; give the clone its own.
+                let password = provisioningInformation.userPassword
+                provisioningInformation.passwordKeychainId = UUID().uuidString
+                provisioningInformation.userPassword = password
+            }
+            tempVm.writeToPlist()
+            DispatchQueue.main.async {
+                self.addVirtualMachineFromFile(newVMPath)
+            }
         }
     }
 }

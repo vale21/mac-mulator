@@ -24,6 +24,21 @@ class CreateVMFileViewController: NSViewController {
         self.parentController = parentController
     }
 
+    @IBAction func cancelButtonPressed(_: Any) {
+        if let vmCreator {
+            if let vm {
+                vmCreator.cancelVMCreation(vm: vm)
+            }
+
+            if let timer {
+                timer.invalidate()
+            }
+
+            progressBar.stopAnimation(self)
+            dismiss(self)
+        }
+    }
+
     override func viewDidAppear() {
         progressBar.startAnimation(self)
 
@@ -40,8 +55,9 @@ class CreateVMFileViewController: NSViewController {
             let displayOrigin = QemuConstants.ORIGIN
             let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
-            let qemuDisplay = QemuConstants.DISPLAY_DEFAULT
-            let enable3DAcceleration = false
+            let qemuDisplay = Utils.getDisplayForSubType(os, subtype)
+            let enable3DAcceleration = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.virGLSupported ?? false
+            let enableSpiceDisplay = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.spiceSupported ?? false
             let hvf = Utils.getAccelForSubType(os, subtype)
             let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             let bootMode = Utils.getBootModeForSubType(os, subtype)
@@ -50,7 +66,7 @@ class CreateVMFileViewController: NSViewController {
             if #available(macOS 11.0, *) {
                 macAddress = VZMACAddress.randomLocallyAdministered().string
             }
-            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
+            vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, enableSpiceDisplay: enableSpiceDisplay, hvf: hvf, macAddress: macAddress, type: vmType, bootMode: bootMode)
 
             if let vm {
                 let installMedia = parentController.installMedia.stringValue
@@ -120,28 +136,12 @@ class CreateVMFileViewController: NSViewController {
         }
     }
 
-    @IBAction func cancelButtonPressed(_: Any) {
-        if let vmCreator {
-            if let vm {
-                vmCreator.cancelVMCreation(vm: vm)
-            }
-
-            if let timer {
-                timer.invalidate()
-            }
-
-            progressBar.stopAnimation(self)
-            dismiss(self)
-        }
+    private func computePath() -> String {
+        let path = Utils.getParentDir(WorkspaceState.shared.filePath)
+        return path + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
     }
 
-    fileprivate func computePath() -> String {
-        let userDefaults = UserDefaults.standard
-        let path = userDefaults.string(forKey: MacMulatorConstants.PREFERENCE_KEY_VMS_FOLDER_PATH)!
-        return Utils.unescape(path) + "/" + parentController!.vmName.stringValue + "." + MacMulatorConstants.VM_EXTENSION
-    }
-
-    fileprivate func computeDescription() -> String {
+    private func computeDescription() -> String {
         let description = parentController?.vmDescription.string
         if description != NewVMViewController.DESCRIPTION_DEFAULT_MESSAGE {
             return description!
@@ -149,19 +149,19 @@ class CreateVMFileViewController: NSViewController {
         return ""
     }
 
-    fileprivate func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
+    private func creationComplete(_ timer: Timer, _ error: Error?, _ vm: VirtualMachine) {
         timer.invalidate()
         progressBar.stopAnimation(self)
         dismiss(self)
 
         if error == nil {
-            parentController!.vmCreated(vm)
+            parentController!.vmCreated(vm, performProvisioning: Utils.isVMProvisioningSupported(vm))
         } else {
             parentController!.vmCreationfFailed(vm, error!)
         }
     }
 
-    fileprivate func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
+    private func shouldDownloadIpsw(_ vm: VirtualMachine, _ installMedia: String) -> Bool {
         Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype) && !Utils.isIpswInstallMediaProvided(installMedia)
     }
 }

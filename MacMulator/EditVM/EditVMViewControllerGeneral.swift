@@ -29,6 +29,9 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     var updating = false
     var currentResolution: [Int] = []
 
+    let availableResolutions = Utils.getAvailableResolutions()
+    let availableResolutionsDesc = Utils.getAvailableResolutionsDesc()
+
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
         updateView()
@@ -47,73 +50,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         updateView()
     }
 
-    fileprivate func selectBootDrive(_ virtualMachine: VirtualMachine) {
-        if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
-            let defaultBootMode = Utils.getBootModeForSubType(virtualMachine.os, virtualMachine.subtype)
-            let index = QemuConstants.ALL_BOOT_MODES.firstIndex(of: virtualMachine.bootMode ?? defaultBootMode) ?? 0
-            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
-        } else {
-            var i = 0
-            for drive in virtualMachine.drives {
-                if drive.isBootDrive {
-                    bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
-                    return
-                }
-                i += 1
-            }
-            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
-        }
-    }
-
-    func updateView() {
-        if let virtualMachine {
-            updating = true
-            vmType.stringValue = virtualMachine.os
-            vmSubType.stringValue = virtualMachine.subtype
-
-            vmName.stringValue = virtualMachine.displayName
-            vmDescription.string = virtualMachine.description
-
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM {
-                bootOrderLabel.isHidden = true
-                bootOrderTable.isHidden = true
-                bootOrderView.isHidden = true
-
-                resolutionView.setFrameSize(NSSize(width: 464, height: 165))
-                resolutionTable.setFrameSize(NSSize(width: 464, height: 165))
-                resolutionLabelTop.isHidden = true
-                resolutionlabelSide.isHidden = false
-
-            } else {
-                bootOrderLabel.isHidden = false
-                bootOrderTable.isHidden = false
-                bootOrderView.isHidden = false
-
-                resolutionView.setFrameSize(NSSize(width: 218, height: 141))
-                resolutionTable.setFrameSize(NSSize(width: 218, height: 141))
-                resolutionLabelTop.isHidden = false
-                resolutionlabelSide.isHidden = true
-            }
-
-            if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
-                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootMode", comment: "")
-            } else {
-                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootDrive", comment: "")
-            }
-
-            bootOrderTable.reloadData()
-            resolutionTable.reloadData()
-
-            selectBootDrive(virtualMachine)
-            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
-            updating = false
-
-            if virtualMachine.os == QemuConstants.OS_IOS {
-                resolutionTable.isHidden = true
-            }
-        }
-    }
-
     func numberOfRows(in tableView: NSTableView) -> Int {
         if let virtualMachine {
             if tableView == bootOrderTable {
@@ -124,7 +60,7 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 }
             }
             if tableView == resolutionTable {
-                return QemuConstants.ALL_RESOLUTIONS_DESC.count + 1
+                return availableResolutionsDesc.count + 1
             }
         }
         return 0
@@ -146,23 +82,12 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
                 if row == 0 {
                     cell.addSubview(NSTextField(labelWithString: Utils.getCustomScreenSizeDesc(width: currentResolution[0], heigh: currentResolution[1])))
                 } else {
-                    cell.addSubview(NSTextField(labelWithString: QemuConstants.ALL_RESOLUTIONS_DESC[QemuConstants.ALL_RESOLUTIONS[row - 1]]!))
+                    cell.addSubview(NSTextField(labelWithString: availableResolutionsDesc[availableResolutions[row - 1]]!))
                 }
             }
         }
 
         return cell
-    }
-
-    fileprivate func getDriveDescription(_ vm: VirtualMachine, _ row: Int) -> String {
-        if row == vm.drives.count {
-            return "Network"
-        } else {
-            let drive = vm.drives[row]
-            let type = QemuUtils.getDriveTypeDescription(drive.mediaType)
-            let descr = " (" + type + (drive.size > 0 ? (" " + String(drive.size) + " GB)") : ")")
-            return drive.name + descr
-        }
     }
 
     func tableView(_: NSTableView, shouldSelectRow _: Int) -> Bool {
@@ -232,10 +157,88 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             }
             if (notification.object as! NSTableView) == resolutionTable {
                 if resolutionTable.selectedRow > 0 {
-                    virtualMachine?.displayResolution = QemuConstants.ALL_RESOLUTIONS[resolutionTable.selectedRow - 1]
+                    virtualMachine?.displayResolution = availableResolutions[resolutionTable.selectedRow - 1]
                     virtualMachine?.displayOrigin = QemuConstants.ORIGIN
                 }
             }
+        }
+    }
+
+    func updateView() {
+        if let virtualMachine {
+            updating = true
+            vmType.stringValue = virtualMachine.os
+            vmSubType.stringValue = virtualMachine.subtype
+
+            vmName.stringValue = virtualMachine.displayName
+            vmDescription.string = virtualMachine.description
+
+            if virtualMachine.type == MacMulatorConstants.APPLE_VM || virtualMachine.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+                bootOrderLabel.isHidden = true
+                bootOrderTable.isHidden = true
+                bootOrderView.isHidden = true
+
+                resolutionView.setFrameSize(NSSize(width: 617, height: 250))
+                resolutionTable.setFrameSize(NSSize(width: 617, height: 250))
+                resolutionLabelTop.isHidden = true
+                resolutionlabelSide.isHidden = false
+
+            } else {
+                bootOrderLabel.isHidden = false
+                bootOrderTable.isHidden = false
+                bootOrderView.isHidden = false
+
+                resolutionView.setFrameSize(NSSize(width: 290, height: 250))
+                resolutionTable.setFrameSize(NSSize(width: 290, height: 250))
+                resolutionLabelTop.isHidden = false
+                resolutionlabelSide.isHidden = true
+            }
+
+            if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootMode", comment: "")
+            } else {
+                bootOrderLabel.stringValue = NSLocalizedString("QemuConstants.bootDrive", comment: "")
+            }
+
+            bootOrderTable.reloadData()
+            resolutionTable.reloadData()
+
+            selectBootDrive(virtualMachine)
+            resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
+            updating = false
+
+            if virtualMachine.os == QemuConstants.OS_IOS {
+                resolutionTable.isHidden = true
+            }
+        }
+    }
+
+    private func selectBootDrive(_ virtualMachine: VirtualMachine) {
+        if virtualMachine.architecture == QemuConstants.ARCH_X64 || virtualMachine.architecture == QemuConstants.ARCH_ARM64 {
+            let defaultBootMode = Utils.getBootModeForSubType(virtualMachine.os, virtualMachine.subtype)
+            let index = QemuConstants.ALL_BOOT_MODES.firstIndex(of: virtualMachine.bootMode ?? defaultBootMode) ?? 0
+            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+        } else {
+            var i = 0
+            for drive in virtualMachine.drives {
+                if drive.isBootDrive {
+                    bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
+                    return
+                }
+                i += 1
+            }
+            bootOrderTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(i)), byExtendingSelection: false)
+        }
+    }
+
+    private func getDriveDescription(_ vm: VirtualMachine, _ row: Int) -> String {
+        if row == vm.drives.count {
+            return "Network"
+        } else {
+            let drive = vm.drives[row]
+            let type = QemuUtils.getDriveTypeDescription(drive.mediaType)
+            let descr = " (" + type + (drive.size > 0 ? (" " + String(drive.size) + " GB)") : ")")
+            return drive.name + descr
         }
     }
 }

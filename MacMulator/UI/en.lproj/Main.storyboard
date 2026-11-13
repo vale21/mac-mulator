@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24506" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25408" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25408"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -90,6 +90,13 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="yNP-ow-gwT"/>
+                                        <menuItem title="Connect to running VM" id="lOz-n7-MXp">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <segue destination="5pa-o4-OMC" kind="show" id="pl9-Cp-3RB"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="g26-lY-0gZ"/>
                                         <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                             <connections>
                                                 <action selector="performClose:" target="Ady-hI-5gd" id="HmO-Ls-i7Q"/>
@@ -207,7 +214,7 @@
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="BWP-T9-TOD"/>
-                                                    <menuItem title="Configure..." keyEquivalent="" id="vyi-Nn-ga9">
+                                                    <menuItem title="Configure disk images..." id="vyi-Nn-ga9">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="Jzh-OX-vA0"/>
@@ -217,6 +224,25 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Snapshots" id="m05-p9-CBE">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Snapshots" id="rrP-s6-baf">
+                                                <items>
+                                                    <menuItem title="Create new" keyEquivalent="S" id="S13-EC-pqC">
+                                                        <connections>
+                                                            <action selector="createNewSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="TSe-Fb-Bk1"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="View or restore..." id="3Up-Wp-qQq">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="zwI-4O-wyI"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="s0i-0u-o7V"/>
                                         <menuItem title="Export as" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Export as" id="3Ko-t4-AGP">
@@ -230,6 +256,7 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="lFX-8K-LIP"/>
                                         <menuItem title="Convert to QEMU VM" id="R2R-CL-gW6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -242,11 +269,30 @@
                                                 <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Convert to VM Template" id="J23-gx-PyE">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToTemplateMenuBarClicked:" target="Voe-Tx-rLC" id="bU9-MZ-u00"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Convert to Full Clone" id="Fc1-Cl-n01">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToFullCloneMenuBarClicked:" target="Voe-Tx-rLC" id="Fc1-Cl-a02"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
                                         <menuItem title="Show Console Output" id="7ko-iP-uk6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="hqT-1W-wOp"/>
+                                        <menuItem title="Delete" id="1tp-Kb-lAO">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="deleteVMMenuBarClicked:" target="Voe-Tx-rLC" id="3XD-mn-NJU"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -316,21 +362,29 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
-                        <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
-                        <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
+                        <outlet property="convertToFullCloneMenuItem" destination="Fc1-Cl-n01" id="Fc1-Cl-o03"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
+                        <outlet property="convertToTemplateMenuItem" destination="J23-gx-PyE" id="rh8-TC-nzi"/>
+                        <outlet property="deleteVMMenuItem" destination="1tp-Kb-lAO" id="dnn-aU-MSt"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="dCY-FF-mSN"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="preferencesMenuItem" destination="BOF-NM-1cW" id="tqM-aI-G6L"/>
+                        <outlet property="preferencesSeparator" destination="wFC-TO-SCJ" id="wzs-Vq-Cfv"/>
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
+                        <outlet property="snapshotCreateMenuItem" destination="S13-EC-pqC" id="bA6-TI-yZJ"/>
+                        <outlet property="snapshotsMenuItem" destination="m05-p9-CBE" id="dxg-Iz-kdj"/>
+                        <outlet property="snapshotsViewRestoreMenuItem" destination="3Up-Wp-qQq" id="R9K-Gx-gEV"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="Wwm-kT-UN6"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="CMy-19-2tg"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
+                        <outlet property="usbAttachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
+                        <outlet property="usbConfigureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="usbDevicesMenuItem" destination="S7C-pL-vez" id="Cyf-X7-X0C"/>
                         <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
                     </connections>
@@ -338,14 +392,52 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2830" y="-1037"/>
+            <point key="canvasLocation" x="-2828" y="-1114"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="PoJ-HA-dA6">
+            <objects>
+                <windowController id="5pa-o4-OMC" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="rUd-k1-ve3">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="211" y="270" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1512" height="949"/>
+                        <view key="contentView" id="TZH-dq-IQm">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="5pa-o4-OMC" id="Kb4-J6-M1V"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="gBZ-gf-hfc" kind="relationship" relationship="window.shadowedContentViewController" id="Vfs-8t-hiu"/>
+                    </connections>
+                </windowController>
+                <customObject id="ep7-AN-Ldt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2181" y="-990"/>
+        </scene>
+        <!--Qemu Spice Viewer View Controller-->
+        <scene sceneID="hkI-4Y-Hea">
+            <objects>
+                <viewController id="gBZ-gf-hfc" customClass="QemuSpiceViewerViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="YpP-kh-Zmp">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="I4Y-tY-Kqh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1474" y="-1025"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
             <objects>
                 <windowController id="xsA-Pr-uKN" customClass="MainWindowController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="zD6-kL-rGm">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" fullSizeContentView="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="240" y="336" width="900" height="550"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>
@@ -421,7 +513,7 @@
                 </windowController>
                 <customObject id="hud-c8-Y7E" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2473" y="-608"/>
+            <point key="canvasLocation" x="-2346" y="-254"/>
         </scene>
         <!--EditVM-->
         <scene sceneID="Bwp-hB-HEO">

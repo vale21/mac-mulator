@@ -8,7 +8,10 @@
 import Cocoa
 
 class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
-    @IBOutlet var videoDescriptionText: NSTextField!
+    @IBOutlet var showScreenLabel: NSTextField!
+    @IBOutlet var showScreenSwitch: NSSwitch!
+    @IBOutlet var showScreenDescriptionText: NSTextField!
+    @IBOutlet var qemuVideoBox: NSBox!
     @IBOutlet var videoAdapterLabel: NSTextField!
     @IBOutlet var videoAdapterComboBox: NSComboBox!
     @IBOutlet var qemuDisplayLabel: NSTextField!
@@ -16,101 +19,39 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     @IBOutlet var accelDescriptionText: NSTextField!
     @IBOutlet var accelDescriptionLabel: NSTextField!
     @IBOutlet var accelDescriptionSwitch: NSSwitch!
+    @IBOutlet var spiceDescriptionText: NSTextField!
+    @IBOutlet var spiceDescriptionLabel: NSTextField!
+    @IBOutlet var spiceDescriptionSwitch: NSSwitch!
     @IBOutlet var windowsArmDescriptionText: NSTextField!
 
     var virtualMachine: VirtualMachine?
-    var accelerationSuported: Bool = true
+    var accelerationSupported: Bool = true
+    var spiceSupported: Bool = true
+    var adaptersList: [String] = []
+    var displaysList: [String] = []
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
-        updateView()
-    }
 
-    override func viewWillAppear() {
-        videoDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoDescriptionText", comment: "")
-        videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
-        qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
-        accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
-        accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
-        windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
-        updateView()
-    }
+        // The other video settings are Qemu ones: Apple VMs only get the "Show VM screen" switch
+        if vm.type == MacMulatorConstants.APPLE_VM {
+            updateView()
+            return
+        }
 
-    override func viewDidAppear() {
         verifyOpenGLSupport()
+        verifySpiceSupport()
+
+        loadAdaptersList()
+        loadDisplaysList()
+
+        updateView()
     }
 
-    fileprivate func buildAdaptersList() -> [String] {
-        var videoAdapters = QemuConstants.ALL_VIDEO_ADAPTERS
-        if let virtualMachine {
-            if virtualMachine.architecture == QemuConstants.ARCH_X64 {
-                videoAdapters.append(contentsOf: QemuConstants.INTEL_ONLY_VIDEO_ADAPTERS)
-            }
-        }
-        return videoAdapters
-    }
-
-    func updateView() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            if let virtualMachine {
-                videoAdapterComboBox.reloadData()
-                videoAdapterComboBox.selectItem(at: buildAdaptersList().firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
-                qemuDisplayComboBox.reloadData()
-                qemuDisplayComboBox.selectItem(at: QemuConstants.ALL_DISPLAYS.firstIndex(of: virtualMachine.qemuDisplay ?? QemuConstants.DISPLAY_DEFAULT) ?? 0)
-
-                if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
-                    windowsArmDescriptionText.isHidden = false
-                } else {
-                    windowsArmDescriptionText.isHidden = true
-                }
-                let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
-                if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSuported {
-                    accelDescriptionText.isEnabled = false
-                    accelDescriptionLabel.isEnabled = false
-                    accelDescriptionSwitch.isEnabled = false
-                    accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipDisabled", comment: "")
-
-                    accelDescriptionSwitch.state = .off
-                    virtualMachine.enable3DAcceleration = false
-                } else {
-                    accelDescriptionText.isEnabled = true
-                    accelDescriptionLabel.isEnabled = true
-                    accelDescriptionSwitch.isEnabled = true
-                    accelDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipEnabled", comment: "")
-
-                    accelDescriptionSwitch.state = (virtualMachine.enable3DAcceleration ?? false) ? .on : .off
-                }
-            }
-        }
-    }
-
-    func numberOfItems(in comboBox: NSComboBox) -> Int {
-        if comboBox == videoAdapterComboBox {
-            return buildAdaptersList().count
-        } else if comboBox == qemuDisplayComboBox {
-            return QemuConstants.ALL_DISPLAYS.count
-        }
-        return 0
-    }
-
-    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
-        if comboBox == videoAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[buildAdaptersList()[index]] : ""
-        } else if comboBox == qemuDisplayComboBox {
-            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[QemuConstants.ALL_DISPLAYS[index]] : ""
-        }
-        return index + 1
-    }
-
-    func comboBoxSelectionDidChange(_ notification: Notification) {
-        if let virtualMachine {
-            if (notification.object as! NSComboBox) == videoAdapterComboBox {
-                virtualMachine.videoDevice = buildAdaptersList()[videoAdapterComboBox.indexOfSelectedItem]
-            } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
-                virtualMachine.qemuDisplay = QemuConstants.ALL_DISPLAYS[qemuDisplayComboBox.indexOfSelectedItem]
-            }
-        }
+    private var qemuVideoViews: [NSView] {
+        [videoAdapterLabel, videoAdapterComboBox, qemuDisplayLabel, qemuDisplayComboBox,
+         accelDescriptionText, accelDescriptionLabel, accelDescriptionSwitch,
+         spiceDescriptionText, spiceDescriptionLabel, spiceDescriptionSwitch, windowsArmDescriptionText]
     }
 
     @IBAction func enable3DAccelerationToggleChanged(_: Any) {
@@ -119,34 +60,220 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         }
     }
 
-    fileprivate func verifyOpenGLSupport() {
+    @IBAction func showScreenToggleChanged(_: Any) {
         if let virtualMachine {
-            let shell = Shell()
-            let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+            virtualMachine.headless = showScreenSwitch.state == .off
+            // The VM view behind the sheet shows the session buttons of headless VMs
+            (NSApp.delegate as? AppDelegate)?.rootController?.vmSettingsChanged(virtualMachine)
+        }
+        updateView()
+    }
 
-            if let qemuExecutable = runner.getQemuCommand().split(separator: " ").first {
-                let command = qemuExecutable + " -device help"
-                print(command)
+    @IBAction func enableSpiceSupport(_: Any) {
+        if let virtualMachine {
+            virtualMachine.enableSpiceDisplay = spiceDescriptionSwitch.state == .on
+        }
 
-                shell.runCommand(String(command), virtualMachine.path, uponCompletion: { _ in
-                    let devices = shell.readFromStandardOutput()
+        if spiceDescriptionSwitch.state == .on {
+            qemuDisplayComboBox.isEnabled = false
+        } else {
+            qemuDisplayComboBox.isEnabled = true
+        }
+    }
 
-                    if devices.contains("virtio-gpu-gl") || devices.contains("virtio-vga-gl") || devices.contains("ramfb-gl") {
-                        print("OpenGL SUPPORTED")
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self else { return }
-                            accelerationSuported = true
-                            updateView()
-                        }
-                    } else {
-                        print("OpenGL NOT SUPPORTED")
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self else { return }
-                            accelerationSuported = false
-                            updateView()
-                        }
+    override func viewWillAppear() {
+        showScreenLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.showScreenLabel", comment: "")
+        showScreenSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.showScreenTooltip", comment: "")
+        videoAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.videoAdapterLabel", comment: "")
+        qemuDisplayLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.qemuDisplayLabel", comment: "")
+        accelDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptiontext", comment: "")
+        accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
+        spiceDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionText", comment: "")
+        spiceDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.spiceDescriptionLabel", comment: "")
+        windowsArmDescriptionText.stringValue = NSLocalizedString("EditVMViewControllerVideo.windowsArmDescriptionText", comment: "")
+
+        updateView()
+    }
+
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        if comboBox == videoAdapterComboBox {
+            return adaptersList.count
+        } else if comboBox == qemuDisplayComboBox {
+            return displaysList.count
+        }
+        return 0
+    }
+
+    func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
+        if comboBox == videoAdapterComboBox {
+            return index >= 0 ? QemuConstants.ALL_VIDEO_ADAPTERS_DESC[adaptersList[index]] : ""
+        } else if comboBox == qemuDisplayComboBox {
+            return index >= 0 ? QemuConstants.ALL_DISPLAYS_DESC[displaysList[index]] : ""
+        }
+        return index + 1
+    }
+
+    func comboBoxSelectionDidChange(_ notification: Notification) {
+        if let virtualMachine {
+            if (notification.object as! NSComboBox) == videoAdapterComboBox {
+                virtualMachine.videoDevice = adaptersList[videoAdapterComboBox.indexOfSelectedItem]
+            } else if (notification.object as! NSComboBox) == qemuDisplayComboBox {
+                virtualMachine.qemuDisplay = displaysList[qemuDisplayComboBox.indexOfSelectedItem]
+            }
+        }
+    }
+
+    func updateView() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            if let virtualMachine, virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                let headless = virtualMachine.headless == true
+                showScreenSwitch.state = headless ? .off : .on
+                showScreenDescriptionText.stringValue = NSLocalizedString(headless ? "EditVMViewControllerVideo.showScreenOffAppleDescription" : "EditVMViewControllerVideo.showScreenOnDescription", comment: "")
+                qemuVideoBox.isHidden = true
+            } else if let virtualMachine {
+                qemuVideoBox.isHidden = false
+                videoAdapterComboBox.reloadData()
+                videoAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.videoDevice ?? Utils.getVideoForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
+                qemuDisplayComboBox.reloadData()
+                qemuDisplayComboBox.selectItem(at: displaysList.firstIndex(of: virtualMachine.qemuDisplay ?? Utils.getDisplayForSubType(virtualMachine.os, virtualMachine.subtype)) ?? 0)
+
+                if virtualMachine.os == QemuConstants.OS_MAC {
+                    videoAdapterComboBox.isEnabled = false
+                    accelDescriptionText.isHidden = true
+                    accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.enableAppleParavirtualizedGraphics", comment: "")
+                } else {
+                    videoAdapterComboBox.isEnabled = true
+                    accelDescriptionText.isHidden = false
+                    accelDescriptionLabel.stringValue = NSLocalizedString("EditVMViewControllerVideo.accelDescriptionLabel", comment: "")
+                }
+
+                if virtualMachine.architecture == QemuConstants.ARCH_ARM64, virtualMachine.subtype == QemuConstants.SUB_WINDOWS_11 {
+                    windowsArmDescriptionText.isHidden = false
+                } else {
+                    windowsArmDescriptionText.isHidden = true
+                }
+
+                if spiceSupported {
+                    spiceDescriptionText.isEnabled = true
+                    spiceDescriptionLabel.isEnabled = true
+                    spiceDescriptionSwitch.isEnabled = true
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
+
+                    spiceDescriptionSwitch.state = (virtualMachine.enableSpiceDisplay ?? true) ? .on : .off
+                    qemuDisplayComboBox.isEnabled = spiceDescriptionSwitch.state == .off
+                    if virtualMachine.enableSpiceDisplay == true {
+                        enableSpiceSupport(self)
                     }
-                })
+                } else {
+                    spiceDescriptionText.isEnabled = false
+                    spiceDescriptionLabel.isEnabled = false
+                    spiceDescriptionSwitch.isEnabled = false
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipDisabled", comment: "")
+
+                    spiceDescriptionSwitch.state = .off
+                    virtualMachine.enableSpiceDisplay = false
+                    qemuDisplayComboBox.isEnabled = true
+                }
+                #if APPSTORE
+                    // The bundled Qemu has no native display: the Spice display is the only option.
+                    spiceDescriptionSwitch.state = .on
+                    spiceDescriptionSwitch.isEnabled = false
+                    spiceDescriptionSwitch.toolTip = NSLocalizedString("EditVMViewControllerVideo.spiceAvailabilityTooltipEnabled", comment: "")
+                    qemuDisplayComboBox.isEnabled = false
+                    virtualMachine.enableSpiceDisplay = true
+                #endif
+
+                let vmArchitecture = Utils.getMachineArchitecture(virtualMachine.architecture)
+                if Utils.hostArchitecture() != vmArchitecture || Utils.isRunningInEmulation() || !accelerationSupported {
+                    accelDescriptionText.isEnabled = false
+                    accelDescriptionLabel.isEnabled = false
+                    accelDescriptionSwitch.isEnabled = false
+                    accelDescriptionSwitch.toolTip = virtualMachine.os == QemuConstants.OS_MAC ? NSLocalizedString("EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipDisabled", comment: "") : NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipDisabled", comment: "")
+
+                    accelDescriptionSwitch.state = .off
+                    virtualMachine.enable3DAcceleration = false
+                } else {
+                    accelDescriptionText.isEnabled = true
+                    accelDescriptionLabel.isEnabled = true
+                    accelDescriptionSwitch.isEnabled = true
+                    accelDescriptionSwitch.toolTip = virtualMachine.os == QemuConstants.OS_MAC ? NSLocalizedString("EditVMViewControllerVideo.appleParavirtualizedGraphicsTooltipEnabled", comment: "") : NSLocalizedString("EditVMViewControllerVideo.accelAvailabilityTooltipEnabled", comment: "")
+
+                    accelDescriptionSwitch.state = (virtualMachine.enable3DAcceleration ?? true) ? .on : .off
+                }
+
+                // A headless VM shows no screen: the display settings do not apply to it
+                let headless = virtualMachine.headless == true
+                showScreenSwitch.state = headless ? .off : .on
+                showScreenDescriptionText.stringValue = NSLocalizedString(headless ? "EditVMViewControllerVideo.showScreenOffDescription" : "EditVMViewControllerVideo.showScreenOnDescription", comment: "")
+                if headless {
+                    for control in qemuVideoViews.compactMap({ $0 as? NSControl }) {
+                        control.isEnabled = false
+                    }
+                } else {
+                    // The other controls get their state above: these texts are always enabled otherwise
+                    for control in [videoAdapterLabel, qemuDisplayLabel, windowsArmDescriptionText] as [NSControl] {
+                        control.isEnabled = true
+                    }
+                }
+            }
+        }
+    }
+
+    private func loadAdaptersList() {
+        guard let virtualMachine else { return }
+
+        let adapters = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableVideoDevices ?? QemuConstants.ALL_VIDEO_ADAPTERS
+        adaptersList = QemuUtils.removeDuplicateVideoAdapters(adapters)
+        updateView()
+    }
+
+    private func loadDisplaysList() {
+        guard let virtualMachine else { return }
+
+        var displays = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableDisplays ?? QemuConstants.ALL_DISPLAYS
+
+        displays.insert(QemuConstants.DISPLAY_DEFAULT, at: 0)
+        displaysList = displays
+        updateView()
+    }
+
+    private func verifyOpenGLSupport() {
+        if let virtualMachine {
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))
+            let virGLSupported = capabilities?.virGLSupported ?? false
+            let appleParavirtualizedGraphicsSupported = capabilities?.appleParavirtualizedGraphicsSupported ?? false
+
+            if (virtualMachine.os == QemuConstants.OS_LINUX || virtualMachine.os == QemuConstants.OS_WIN) && virGLSupported ||
+                virtualMachine.os == QemuConstants.OS_MAC && Utils.isMacVMSupportingParavirtualizedGraphics(virtualMachine) && appleParavirtualizedGraphicsSupported
+            {
+                print("3D Acceleration SUPPORTED")
+                DispatchQueue.main.async {
+                    self.accelerationSupported = true
+                }
+            } else {
+                print("3D Acceleration NOT SUPPORTED")
+                DispatchQueue.main.async {
+                    self.accelerationSupported = false
+                }
+            }
+        }
+    }
+
+    private func verifySpiceSupport() {
+        if let virtualMachine {
+            let spiceSupported = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.spiceSupported ?? false
+
+            if spiceSupported {
+                print("Spice SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = true
+                }
+            } else {
+                print("Spice NOT SUPPORTED")
+                DispatchQueue.main.async {
+                    self.spiceSupported = false
+                }
             }
         }
     }

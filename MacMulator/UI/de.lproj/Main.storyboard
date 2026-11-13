@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="24127" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25408" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="xsA-Pr-uKN">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24127"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25408"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -207,7 +207,7 @@
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem isSeparatorItem="YES" id="BWP-T9-TOD"/>
-                                                    <menuItem title="Konfigurieren..." keyEquivalent="" id="vyi-Nn-ga9">
+                                                    <menuItem title="Festplatten-Images konfigurieren..." id="vyi-Nn-ga9">
                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                         <connections>
                                                             <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="Jzh-OX-vA0"/>
@@ -217,6 +217,25 @@
                                             </menu>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
+                                        <menuItem title="Snapshots" id="ixG-sO-ySc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Snapshots" id="Led-Ho-InN">
+                                                <items>
+                                                    <menuItem title="Neuen erstellen" keyEquivalent="S" id="CRX-9n-Wma">
+                                                        <connections>
+                                                            <action selector="createNewSnapshotMenuBarClicked:" target="Voe-Tx-rLC" id="9Nc-bn-yGd"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Anzeigen oder wiederherstellen..." id="KAq-ax-Oah">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="editVMmenuBarClicked:" target="Voe-Tx-rLC" id="ilw-IA-7Jo"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="V3V-kT-wur"/>
                                         <menuItem title="Exportieren als" id="cZp-mO-IqY">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <menu key="submenu" title="Exportieren als" id="3Ko-t4-AGP">
@@ -229,16 +248,29 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="ti7-Qd-Vjw"/>
                                         <menuItem title="In QEMU-VM konvertieren" id="R2R-CL-gW6">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="convertToQemuMenuBarClicked:" target="Voe-Tx-rLC" id="dX9-Ns-BmD"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title=" In Apple-VM konvertieren" id="lrY-sV-Nll">
+                                        <menuItem title="In Apple-VM konvertieren" id="lrY-sV-Nll">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="convertToAppleMenuBarClicked:" target="Voe-Tx-rLC" id="R4L-Ul-oQv"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="In VM-Vorlage umwandeln" id="vb9-mV-nCp">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToTemplateMenuBarClicked:" target="Voe-Tx-rLC" id="QLF-No-QjO"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="In vollständigen Klon umwandeln" id="Fc1-Cl-n01">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="convertToFullCloneMenuBarClicked:" target="Voe-Tx-rLC" id="Fc1-Cl-a02"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="rOu-o6-LlE"/>
@@ -246,6 +278,13 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="showConsolemenuBarClicked:" target="Voe-Tx-rLC" id="Vfu-Jl-qmq"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="2sf-jj-A7v"/>
+                                        <menuItem title="Löschen" id="JDx-w1-vpc">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="deleteVMMenuBarClicked:" target="Voe-Tx-rLC" id="TkS-LB-klj"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -315,21 +354,29 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="MacMulator" customModuleProvider="target">
                     <connections>
-                        <outlet property="attachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
                         <outlet property="cloneVMMemuItem" destination="HJ6-jY-EPi" id="zMl-j5-LMX"/>
-                        <outlet property="configureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="convertToAppleMenuItem" destination="lrY-sV-Nll" id="6Td-Bn-QAx"/>
+                        <outlet property="convertToFullCloneMenuItem" destination="Fc1-Cl-n01" id="Fc1-Cl-o03"/>
                         <outlet property="convertToQemuMenuItem" destination="R2R-CL-gW6" id="MRo-sO-Qa3"/>
+                        <outlet property="convertToTemplateMenuItem" destination="vb9-mV-nCp" id="G73-Bi-Zuw"/>
+                        <outlet property="deleteVMMenuItem" destination="JDx-w1-vpc" id="NGa-NC-eB4"/>
                         <outlet property="exportMenuItem" destination="cZp-mO-IqY" id="1ge-FO-b1M"/>
                         <outlet property="exportToParallelsMenuItem" destination="FzN-3M-7zL" id="WsJ-pa-zEs"/>
                         <outlet property="importFromParallelsMenuItem" destination="BlF-ys-fL5" id="dCY-FF-mSN"/>
                         <outlet property="pauseVMMenuItem" destination="ETl-HI-ZzZ" id="qqr-9h-89r"/>
+                        <outlet property="preferencesMenuItem" destination="BOF-NM-1cW" id="m8t-ae-Y3g"/>
+                        <outlet property="preferencesSeparator" destination="wFC-TO-SCJ" id="JYi-0u-gcr"/>
                         <outlet property="settingsMenuItem" destination="Qce-a5-l81" id="OCY-GK-bbE"/>
                         <outlet property="showConsoleOutputmenuItem" destination="7ko-iP-uk6" id="J05-Cq-FMh"/>
                         <outlet property="showVMInFinderMenuItem" destination="kcm-AV-ZBa" id="LKi-S3-iuz"/>
+                        <outlet property="snapshotCreateMenuItem" destination="CRX-9n-Wma" id="qpD-gb-6vS"/>
+                        <outlet property="snapshotsMenuItem" destination="ixG-sO-ySc" id="P9e-T6-5gC"/>
+                        <outlet property="snapshotsViewRestoreMenuItem" destination="KAq-ax-Oah" id="sVU-Uk-4B8"/>
                         <outlet property="startVMInRecoveryMenuItem" destination="zpB-kc-SoG" id="Wwm-kT-UN6"/>
                         <outlet property="startVMMenuItem" destination="rPi-T3-q1r" id="CMy-19-2tg"/>
                         <outlet property="stopVMMenuItem" destination="Q3F-uG-aFl" id="F1f-9J-nqb"/>
+                        <outlet property="usbAttachImageMenuItem" destination="Xwl-s4-O9v" id="vGj-Eo-3cR"/>
+                        <outlet property="usbConfigureMenuItem" destination="vyi-Nn-ga9" id="rXr-Sq-PvZ"/>
                         <outlet property="usbDevicesMenuItem" destination="S7C-pL-vez" id="Cyf-X7-X0C"/>
                         <outlet property="vmMenu" destination="Ah7-Df-n96" id="XtM-qV-UmM"/>
                     </connections>
@@ -337,14 +384,14 @@
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2830" y="-1037"/>
+            <point key="canvasLocation" x="-3148" y="-1365"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="qnX-XH-1U0">
             <objects>
                 <windowController id="xsA-Pr-uKN" customClass="MainWindowController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="MacMulator" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" id="zD6-kL-rGm">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" fullSizeContentView="YES"/>
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="254" y="390" width="800" height="500"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1080"/>

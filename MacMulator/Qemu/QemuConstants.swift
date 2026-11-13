@@ -87,6 +87,7 @@ class QemuConstants {
     static let SUB_MAC_SONOMA = "macOS 14.x (Sonoma)"
     static let SUB_MAC_SEQUOIA = "macOS 15.x (Sequoia)"
     static let SUB_MAC_TAHOE = "macOS 26.x (Tahoe)"
+    static let SUB_MAC_GOLDEN_GATE = "macOS 27.x (Golden Gate)"
     static let SUB_MAC_OS_9 = "Mac OS 9"
     static let SUB_MAC_OS_8 = "Mac OS 8"
     static let SUB_SYSTEM_7 = "System 7"
@@ -106,6 +107,7 @@ class QemuConstants {
     static let DESC_MAC_SONOMA = "macOS Sonoma"
     static let DESC_MAC_SEQUOIA = "macOS Sequoia"
     static let DESC_MAC_TAHOE = "macOS Tahoe"
+    static let DESC_MAC_GOLDEN_GATE = "macOS Golden Gate"
 
     static let SUB_WIN_GENERIC = NSLocalizedString("QemuConstants.windows", comment: "")
     static let SUB_WINDOWS_11 = "Windows 11"
@@ -199,6 +201,7 @@ class QemuConstants {
     static let ICON_SONOMA = "sonoma"
     static let ICON_SEQUOIA = "sequoia"
     static let ICON_TAHOE = "tahoe"
+    static let ICON_GOLDEN_GATE = "golden.gate"
 
     static let ICON_WINDOWS_XP = "windows.xp"
     static let ICON_WINDOWS_VISTA = "windows.vista"
@@ -261,7 +264,8 @@ class QemuConstants {
     static let ARCH_RISCV64 = "qemu-system-riscv64"
 
     static let URL_APPLE_COM = "https://www.apple.com"
-    static let URL_MAC_TAHOE = "https://developer.apple.com"
+    static let URL_MAC_GOLDEN_GATE = "https://apps.apple.com/it/mac/story/id6794000017"
+    static let URL_MAC_TAHOE = "https://apps.apple.com/it/mac/story/id1828531746"
     static let URL_MAC_SEQUOIA = "https://apps.apple.com/it/app/id6596773750"
     static let URL_MAC_SONOMA = "https://apps.apple.com/it/app/macos-sonoma/id6450717509"
     static let URL_MAC_VENTURA = "https://apps.apple.com/it/app/macos-ventura/id1638787999"
@@ -362,7 +366,7 @@ class QemuConstants {
 
     static let MAX_CPUS: [String: Int] = [
         ARCH_PPC: 1,
-        ARCH_PPC64: 1,
+        ARCH_PPC64: 4,
         ARCH_X86: 4,
         ARCH_X64: ProcessInfo.processInfo.processorCount,
         ARCH_ARM: 2,
@@ -445,13 +449,23 @@ class QemuConstants {
         RES_6016_3384: "6K (6016 x 3384)",
     ]
 
-    static let supportedVMTypes: [String] = [
-        OS_MAC,
-        OS_WIN,
-        OS_LINUX,
-        OS_IOS,
-        OS_OTHER,
-    ]
+    #if APPSTORE
+        // iPod touch guests need Apple's ROM images, which the App Store flavor does not ship.
+        static let supportedVMTypes: [String] = [
+            OS_MAC,
+            OS_WIN,
+            OS_LINUX,
+            OS_OTHER,
+        ]
+    #else
+        static let supportedVMTypes: [String] = [
+            OS_MAC,
+            OS_WIN,
+            OS_LINUX,
+            OS_IOS,
+            OS_OTHER,
+        ]
+    #endif
 
     static let APPLE_NETWORK_ATTACHMENTS = [
         ATTACHMENT_NAT,
@@ -481,6 +495,8 @@ class QemuConstants {
         NETWORK_I82559ER,
         NETWORK_I82562,
         NETWORK_I82801,
+        NETWORK_IGB,
+        NETWORK_NE2K_ISA,
         NETWORK_NE2K_PCI,
         NETWORK_PCNET,
         NETWORK_ROCKER,
@@ -513,6 +529,8 @@ class QemuConstants {
         NETWORK_I82559ER: "Intel i82559ER 10/100 Ethernet",
         NETWORK_I82562: "Intel i82562 Ethernet",
         NETWORK_I82801: "Intel i82801 Ethernet",
+        NETWORK_IGB: "Intel Gigabit Ethernet (New)",
+        NETWORK_NE2K_ISA: "NE2000, bus ISA",
         NETWORK_NE2K_PCI: "NE2000, bus PCI",
         NETWORK_PCNET: "AMD PCnet FAST III Ethernet",
         NETWORK_ROCKER: "Rocker Device",
@@ -532,34 +550,36 @@ class QemuConstants {
         VGA_ATI_RADEON,
         VGA_BOCHS_DISPLAY,
         VGA_CIRRUS,
+        VGA_DM_163,
+        VGA_LED,
         VGA_RAMFB,
         VGA_SECONDARY,
+        VGA_SSD_0323,
         VGA_STANDARD,
         VGA_VIRTIO_GPU,
         VGA_VIRTIO_GPU_DEVICE,
-    ]
-
-    static let INTEL_ONLY_VIDEO_ADAPTERS = [
-        VGA_ISA,
-        VGA_ISA_CIRRUS,
-        VGA_QXL,
-        VGA_VIRTIO,
-        VGA_VMWARE,
+        VGA_VIRTIO_RAMFB,
     ]
 
     static let ALL_VIDEO_ADAPTERS_DESC = [
+        VGA_ATI: "ATI VGA",
         VGA_ATI_RAGE: "ATI Rage 128 Pro",
         VGA_ATI_RADEON: "ATI Radeon RV100",
         VGA_BOCHS_DISPLAY: "Bochs simple linear framebuffer",
         VGA_CIRRUS: "Cirrus CLGD 54xx VGA",
+        VGA_DM_163: "Arduino Colors Shield v1.1 Controller",
+        VGA_LED: "Single LED diode",
         VGA_RAMFB: "Ram framebuffer standalone device",
         VGA_SECONDARY: "Secondary VGA",
         VGA_STANDARD: "Standard QEMU VGA",
+        VGA_SSD_0323: "OSRAM Pictiva 128x64 Controller",
         VGA_VIRTIO_GPU: "VirtIO GPU PCI",
         VGA_VIRTIO_GPU_DEVICE: "VirtIO GPU device",
+        VGA_VIRTIO_RAMFB: "Hybrid VirtIO GPU with Ram framebuffer fallback",
         VGA_ISA: "Standard VGA on ISA bus",
         VGA_ISA_CIRRUS: "Cirrus VGA on ISA bus",
         VGA_QXL: "QXL Vga",
+        VGA_QXL_VGA: "QXL Vga",
         VGA_VIRTIO: "VirtIO VGA device",
         VGA_VMWARE: "VMware SVGA-II",
     ]
@@ -567,21 +587,22 @@ class QemuConstants {
     static let ALL_DISPLAYS = [
         DISPLAY_DEFAULT,
         DISPLAY_NONE,
+        DISPLAY_DBUS,
         DISPLAY_SDL,
         DISPLAY_EGL_HEADLESS,
         DISPLAY_CURSES,
         DISPLAY_COCOA,
-        DISPLAY_SPICE_APP,
     ]
 
     static let ALL_DISPLAYS_DESC = [
         DISPLAY_DEFAULT: "Default",
         DISPLAY_NONE: "None",
+        DISPLAY_DBUS: "D-Bus",
         DISPLAY_SDL: "SDL",
         DISPLAY_EGL_HEADLESS: "EGL Headless",
         DISPLAY_CURSES: "Curses",
         DISPLAY_COCOA: "Cocoa",
-        DISPLAY_SPICE_APP: "Spice",
+        DISPLAY_SPICE_APP: "Spice App",
     ]
 
     static let ALL_BOOT_MODES = [
@@ -597,94 +618,95 @@ class QemuConstants {
     ]
 
     static let vmDefaults = [
-        // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL", "default media type", "tpm required", "video device", "boot mode"],
-        [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_TAHOE, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_TAHOE, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_TAHOE, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_SEQUOIA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SEQUOIA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SEQUOIA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_MONTEREY, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_BIG_SUR, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_CATALINA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_MOJAVE, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_HIGH_SIERRA, MEDIATYPE_NVME, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_SIERRA, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_SIERRA, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, true, NETWORK_VMXNET3, nil, URL_MAC_SIERRA, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_EL_CAPITAN, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_EL_CAPITAN, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_VMXNET3, nil, URL_MAC_EL_CAPITAN, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_YOSEMITE, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_YOSEMITE, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_VMXNET3, nil, URL_MAC_YOSEMITE, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_MAVERICKS, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MAVERICKS, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000_82545EM, nil, URL_MAC_MAVERICKS, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_MOUNTAIN_LION, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_LION, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, false, NETWORK_E1000, nil, URL_MAC_SNOW_LEOPARD, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_UEFI],
-        [OS_MAC, SUB_MAC_LEOPARD, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_LEOPARD, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_TIGER, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PANTHER, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_JAGUAR, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_PUMA, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PUMA, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_CHEETAH, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_CHEETAH, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_OS_9, ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, ICON_MAC_OS_9, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_9, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_8, MEDIATYPE_DISK, false, nil, nil],
-        [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, URL_SYSTEM_7, MEDIATYPE_DISK, false, nil, nil],
-        [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MICROSOFT_COM, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_11, Utils.getPreferredArchitecture(), 2, 1024, 32768, 4096, 120, 8192, 250, ICON_WINDOWS_11, Utils.getPreferredMachineType(), Utils.getWindows11CPU(), true, Utils.getPreferredNetworkCard(), nil, URL_WINDOWS_11, MEDIATYPE_NVME, true, Utils.getPreferredVideoCard(), BOOT_UEFI_SECURE],
-        [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, nil, true, NETWORK_E1000, nil, URL_WINDOWS_10, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8_1, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_7, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_E1000, SOUND_USB, URL_WINDOWS_VISTA, MEDIATYPE_DISK, false, VGA_VIRTIO, BOOT_BIOS],
-        [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, false, NETWORK_RTL8139, SOUND_AC97, URL_WINDOWS_XP, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_WIN, SUB_WINDOWS_2000, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_2000, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_WIN, SUB_WINDOWS_ME, ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_ME, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_98, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_NT, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_95, MEDIATYPE_DISK, false, VGA_VIRTIO, nil],
-        [OS_LINUX, SUB_LINUX_GENERIC, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_ORG, MEDIATYPE_DISK, false, Utils.getPreferredVideoCard(), BOOT_UEFI],
-        [OS_LINUX, SUB_ALMA_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ALMA_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ALMA_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_ARCH_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ARCH_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ARCH_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_BODHI, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_BODHI, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_BODHI, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_CACHY_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_CACHY_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CACHY_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_CENTOS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CENTOS_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_DEBIAN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_DEEPIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ELEMENTARY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_FEDORA, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_FEDORA, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_FEDORA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_KALI_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_KUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_KUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_KUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_LUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_LUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_LUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MAGEIA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_MANJARO, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_MANJARO, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_MANJARO, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_MINT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MX_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NEPTUNE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NETRUNNER, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_OMARCHY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_OMARCHY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OMARCHY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_OPENSUSE, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_OPENSUSE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_OPENSUSE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_POP_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_POP_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_POP_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_PROXMOX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_PROXMOX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_PROXMOX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PUPPY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PURE_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS, MEDIATYPE_DISK, false, VGA_RAMFB, nil],
-        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_RED_HAT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_ROCKY_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ROCKY_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ROCKY_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKEL, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKWARE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_UBUNTU, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_UBUNTU, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_UBUNTU_MATE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_UBUNTU_MATE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU_MATE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_XUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_XUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_XUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_VANILLA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_VANILLA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_VANILLA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ZORIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI],
-        [OS_IOS, SUB_IOS_GENERIC, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil],
-        [OS_IOS, SUB_IOS_1, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil],
-        [OS_IOS, SUB_IOS_2, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil],
-        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OTHER, MACHINE_TYPE_Q800, nil, false, nil, nil, nil, nil, false, nil, nil],
+        // ["VM Type", "VM Subtype", "default Arch", "default Cpus", "min RAM", "max RAM", "default RAM", "min Disk", "max Disk", "default Disk", "icon", "machine type", "cpu", "hvf", "network", "sound", "dowloadURL", "default media type", "tpm required", "video device", "boot mode", "default display"],
+        [OS_MAC, SUB_MAC_GENERIC, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, OS_MAC.lowercased(), MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_APPLE_COM, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_GOLDEN_GATE, ARCH_ARM64, 6, 4096, 32768, 4096, 60, 8192, 120, ICON_GOLDEN_GATE, QemuConstants.NETWORK_VIRTIO_NET_PCI, nil, true, NETWORK_VMXNET3, nil, URL_MAC_GOLDEN_GATE, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_TAHOE, ARCH_ARM64, 6, 4096, 32768, 4096, 60, 8192, 120, ICON_TAHOE, QemuConstants.NETWORK_VIRTIO_NET_PCI, nil, true, NETWORK_VMXNET3, nil, URL_MAC_TAHOE, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_SEQUOIA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SEQUOIA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SEQUOIA, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_SONOMA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_SONOMA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_SONOMA, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_VENTURA, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_VENTURA, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_VENTURA, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_MONTEREY, Utils.getPreferredArchitecture(), 6, 4096, 32768, 4096, 60, 8192, Utils.getPreferredDriveSize(), ICON_MONTEREY, Utils.getPreferredMachineType(), nil, true, NETWORK_VMXNET3, nil, URL_MAC_MONTEREY, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_BIG_SUR, ARCH_X64, 4, 4096, 32768, 4096, 120, 8192, 250, ICON_BIG_SUR, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_BIG_SUR, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_CATALINA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_CATALINA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_CATALINA, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_MOJAVE, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_MOJAVE, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_MOJAVE, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_HIGH_SIERRA, ARCH_X64, 4, 2048, 32768, 4096, 120, 8192, 250, ICON_HIGH_SIERRA, MACHINE_TYPE_Q35, nil, true, NETWORK_VMXNET3, nil, URL_MAC_HIGH_SIERRA, MEDIATYPE_NVME, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_SIERRA, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_SIERRA, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, true, NETWORK_VMXNET3, nil, URL_MAC_SIERRA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_EL_CAPITAN, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_EL_CAPITAN, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_VMXNET3, nil, URL_MAC_EL_CAPITAN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_YOSEMITE, ARCH_X64, 4, 2048, 16384, 4096, 120, 8192, 250, ICON_YOSEMITE, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_VMXNET3, nil, URL_MAC_YOSEMITE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_MAVERICKS, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MAVERICKS, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000_82545EM, nil, URL_MAC_MAVERICKS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_MOUNTAIN_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_MOUNTAIN_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_MOUNTAIN_LION, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_LION, ARCH_X64, 4, 2048, 16384, 4096, 50, 4096, 120, ICON_LION, MACHINE_TYPE_Q35, CPU_PENRYN, false, NETWORK_E1000, nil, URL_MAC_LION, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_SNOW_LEOPARD, ARCH_X64, 2, 512, 8192, 1024, 10, 2048, 120, ICON_MAC_SNOW_LEOPARD, MACHINE_TYPE_Q35, CPU_PENRYN_SSE, false, NETWORK_E1000, nil, URL_MAC_SNOW_LEOPARD, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_LEOPARD, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_LEOPARD, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_LEOPARD, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_TIGER, ARCH_PPC, 1, 256, 3072, 512, 5, 500, 50, ICON_MAC_TIGER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_TIGER, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_PANTHER, ARCH_PPC, 1, 128, 2048, 512, 5, 500, 50, ICON_MAC_PANTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PANTHER, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_JAGUAR, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_JAGUAR, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_JAGUAR, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_PUMA, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_PUMA, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_CHEETAH, ARCH_PPC, 1, 128, 2048, 256, 5, 500, 50, ICON_MAC_CHEETAH, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_CHEETAH, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_OS_9, ARCH_PPC, 1, 32, 1024, 64, 5, 500, 30, ICON_MAC_OS_9, MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_9, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_MAC_OS_8, ARCH_PPC, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_MAC99, nil, false, NETWORK_SUNGEM, nil, URL_MAC_OS_8, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_MAC, SUB_SYSTEM_7, ARCH_68K, 1, 32, 512, 32, 5, 500, 30, OS_MAC.lowercased(), MACHINE_TYPE_Q800, nil, false, nil, nil, URL_SYSTEM_7, MEDIATYPE_DISK, false, nil, nil, DISPLAY_COCOA],
+        [OS_WIN, SUB_WIN_GENERIC, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, OS_WIN.lowercased(), MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MICROSOFT_COM, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_11, Utils.getPreferredArchitecture(), 2, 1024, 32768, 4096, 120, 8192, 250, ICON_WINDOWS_11, Utils.getPreferredMachineType(), Utils.getWindows11CPU(), true, Utils.getPreferredNetworkCard(), nil, URL_WINDOWS_11, MEDIATYPE_NVME, true, Utils.getPreferredVideoCard(), BOOT_UEFI_SECURE, nil],
+        [OS_WIN, SUB_WINDOWS_10, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_10, MACHINE_TYPE_Q35, nil, true, NETWORK_E1000, nil, URL_WINDOWS_10, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_8_1, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8_1, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8_1, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_8, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_8, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_8, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_7, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_7, MACHINE_TYPE_Q35, CPU_IVY_BRIDGE, true, NETWORK_E1000, nil, URL_WINDOWS_7, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_VISTA, ARCH_X64, 2, 1024, 32768, 2048, 120, 8192, 250, ICON_WINDOWS_VISTA, MACHINE_TYPE_Q35, CPU_PENRYN, true, NETWORK_E1000, SOUND_USB, URL_WINDOWS_VISTA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_BIOS, nil],
+        [OS_WIN, SUB_WINDOWS_XP, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, ICON_WINDOWS_XP, MACHINE_TYPE_PC, nil, false, NETWORK_RTL8139, SOUND_AC97, URL_WINDOWS_XP, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_WIN, SUB_WINDOWS_2000, ARCH_X86, 1, 512, 3072, 1024, 120, 4096, 250, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_2000, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_WIN, SUB_WINDOWS_ME, ARCH_X86, 1, 256, 2048, 512, 20, 500, 120, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, SOUND_AC97, URL_WINDOWS_ME, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_WIN, SUB_WINDOWS_98, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_98, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_WIN, SUB_WINDOWS_NT, ARCH_X86, 1, 128, 1024, 256, 5, 500, 50, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_NT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_WIN, SUB_WINDOWS_95, ARCH_X86, 1, 2, 512, 32, 5, 500, 10, OS_WIN.lowercased(), MACHINE_TYPE_PC, nil, false, NETWORK_VIRTIO_NET_PCI, nil, URL_WINDOWS_95, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, nil, nil],
+        [OS_LINUX, SUB_LINUX_GENERIC, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, OS_LINUX.lowercased(), Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_ORG, MEDIATYPE_DISK, false, Utils.getPreferredVideoCard(), BOOT_UEFI, nil],
+        [OS_LINUX, SUB_ALMA_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ALMA_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ALMA_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_ARCH_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ARCH_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ARCH_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_BODHI, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_BODHI, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_BODHI, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_CACHY_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_CACHY_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CACHY_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_CENTOS_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_CENTOS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_CENTOS_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_DEBIAN, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_DEBIAN, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_DEBIAN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_DEEPIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_DEEPIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_DEEPIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_ELEMENTARY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ELEMENTARY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ELEMENTARY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_FEDORA, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_FEDORA, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_FEDORA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_KALI_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_KALI_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_KALI_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_KUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_KUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_KUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_LUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_LUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_LUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_MAGEIA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MAGEIA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MAGEIA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_MANJARO, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_MANJARO, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_MANJARO, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_LINUX_MINT, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_LINUX_MINT, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_LINUX_MINT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_MX_LINUX, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_MX_LINUX, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_MX_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_NEPTUNE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NEPTUNE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NEPTUNE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_NETRUNNER, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NETRUNNER, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NETRUNNER, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_OMARCHY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_OMARCHY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OMARCHY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_OPENSUSE, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_OPENSUSE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_OPENSUSE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_POP_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_POP_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_POP_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_PROXMOX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_PROXMOX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_PROXMOX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PUPPY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_PURE_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PURE_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PURE_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_RASPBERRY_OS, ARCH_ARM64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_RASPBERRY_OS, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, URL_RASPBERRY_OS, MEDIATYPE_DISK, false, VGA_RAMFB, nil, nil],
+        [OS_LINUX, SUB_REACT_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REACT_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_REACT_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_RED_HAT, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_REDHAT, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_RED_HAT, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_ROCKY_LINUX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_ROCKY_LINUX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_ROCKY_LINUX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_SLACKEL, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKEL, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKEL, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_SLACKWARE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SLACKWARE, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SLACKWARE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_SOLUS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_SOLUS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_SOLUS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_UBUNTU, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_UBUNTU, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_UBUNTU_MATE, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_UBUNTU_MATE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_UBUNTU_MATE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_XUBUNTU, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_XUBUNTU, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_XUBUNTU, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_VANILLA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_VANILLA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_VANILLA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_ZORIN, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_ZORIN, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_ZORIN, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_IOS, SUB_IOS_GENERIC, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil, nil],
+        [OS_IOS, SUB_IOS_1, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil, nil],
+        [OS_IOS, SUB_IOS_2, ARCH_ARM, 1, 128, 2048, 1024, 0, 0, 0, ICON_IOS, MACHINE_TYPE_IPOD_TOUCH, CPU_MAX, false, nil, nil, URL_QEMU_IOS, MEDIATYPE_NAND, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_GENERIC, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_x64, ARCH_X64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_Q35, nil, true, nil, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_x86, ARCH_X86, 1, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_PC, nil, true, NETWORK_VIRTIO_NET_PCI, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM_64, ARCH_ARM64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_MAX, true, nil, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_ARM, ARCH_ARM, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_VIRT_HIGHMEM, CPU_ARM1176, false, nil, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_PPC_64, ARCH_PPC64, 2, 1, 32768, 2048, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_PPC, ARCH_PPC, 2, 1, 3072, 512, 1, 8192, 120, OTHER, MACHINE_TYPE_MAC99_PMU, nil, false, NETWORK_SUNGEM, nil, nil, nil, false, nil, nil, nil],
+        [OS_OTHER, SUB_OTHER_M68K, ARCH_68K, 1, 1, 512, 16, 1, 50, 5, OTHER, MACHINE_TYPE_Q800, nil, false, nil, nil, nil, nil, false, nil, nil, nil],
     ]
 
     static let HOST_I386 = "i386"
@@ -741,6 +763,8 @@ class QemuConstants {
     static let NETWORK_I82559ER = "i82559er"
     static let NETWORK_I82562 = "i82562"
     static let NETWORK_I82801 = "i82801"
+    static let NETWORK_IGB = "igb"
+    static let NETWORK_NE2K_ISA = "ne2k_isa"
     static let NETWORK_NE2K_PCI = "ne2k_pci"
     static let NETWORK_PCNET = "pcnet"
     static let NETWORK_ROCKER = "rocker"
@@ -759,28 +783,43 @@ class QemuConstants {
     static let ATTACHMENT_VMNET = "VZVmnetNetworkDeviceAttachment"
 
     // Intel and ARM:
+    static let VGA_ATI = "ati-vga"
     static let VGA_ATI_RAGE = "ati-vga,model=rage128p"
     static let VGA_ATI_RADEON = "ati-vga,model=model=rv100"
     static let VGA_BOCHS_DISPLAY = "bochs-display"
     static let VGA_CIRRUS = "cirrus-vga"
+    static let VGA_DM_163 = "dm163"
+    static let VGA_LED = "led"
     static let VGA_RAMFB = "ramfb"
     static let VGA_SECONDARY = "secondary-vga"
+    static let VGA_SSD_0323 = "ssd0323"
     static let VGA_STANDARD = "VGA"
     static let VGA_VIRTIO_GPU = "virtio-gpu"
+    static let VGA_VIRTIO_VGA = "virtio-vga"
+    static let VGA_VIRTIO_VGA_GL = "virtio-vga-gl"
     static let VGA_VIRTIO_GPU_DEVICE = "virtio-gpu-device"
     static let VGA_VIRTIO_GPU_GL = "virtio-gpu-gl"
     static let VGA_VIRTIO_GPU_GL_DEVICE = "virtio-gpu-gl-device"
+    static let VGA_VIRTIO_GPU_PCI = "virtio-gpu-pci"
+    static let VGA_VIRTIO_GPU_GL_PCI = "virtio-gpu-gl-pci"
+    static let VGA_VIRTIO_RAMFB = "virtio-ramfb"
+    static let VGA_VIRTIO_RAMFB_GL = "virtio-ramfb-gl"
+    static let VGA_APPLE_GFX_PCI = "apple-gfx-pci"
+    static let VGA_APPLE_GFX_MMIO = "apple-gfx-mmio"
+    static let VGA_APPLE = "'{\"driver\":\"apple-gfx-pci\",\"display-modes\":[\"1680x1050@60\",\"1280x768@60\",\"1280x800@60\",\"1440x900@60\"]}' -vga none"
 
     // Intel only:
     static let VGA_ISA = "isa-vga"
     static let VGA_ISA_CIRRUS = "isa-cirrus-vga"
     static let VGA_VIRTIO = "virtio-vga"
     static let VGA_VMWARE = "vmware-svga"
-    static let VGA_QXL = "qxl-vga"
+    static let VGA_QXL_VGA = "qxl-vga"
+    static let VGA_QXL = "qxl"
     static let VGA_VIRTIO_GL = "virtio-vga-gl"
 
     static let DISPLAY_DEFAULT = "default"
     static let DISPLAY_NONE = "none"
+    static let DISPLAY_DBUS = "dbus"
     static let DISPLAY_SDL = "sdl"
     static let DISPLAY_EGL_HEADLESS = "egl-headless"
     static let DISPLAY_CURSES = "curses"

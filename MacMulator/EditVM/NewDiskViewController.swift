@@ -24,6 +24,7 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet var cowDescriptionLabel: NSTextField!
     @IBOutlet var okButton: NSButton!
 
+    var originalVirtualDrive: VirtualDrive?
     var oldVirtualDrive: VirtualDrive?
     var newVirtualDrive: VirtualDrive?
 
@@ -32,7 +33,8 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     var mode: Mode = .ADD
 
     func setVirtualDrive(_ virtualDrive: VirtualDrive) {
-        newVirtualDrive = virtualDrive
+        originalVirtualDrive = virtualDrive
+        newVirtualDrive = virtualDrive.clone()
         oldVirtualDrive = virtualDrive.clone()
     }
 
@@ -42,65 +44,6 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
 
     func setparentController(_ parentController: EditVMViewControllerHardware) {
         self.parentController = parentController
-    }
-
-    fileprivate func updateView() {
-        if let parentController {
-            if let virtualMachine = parentController.virtualMachine {
-                if let newVirtualDrive {
-                    diskSizeSlider.intValue = newVirtualDrive.size
-                    diskSizeStepper.intValue = newVirtualDrive.size
-                    diskSizeTextField.intValue = newVirtualDrive.size
-
-                    if virtualMachine.type == MacMulatorConstants.APPLE_VM {
-                        if Utils.isAsifSupported(virtualMachine) {
-                            useCow.title = "Use ASIF format"
-                            cowDescriptionLabel.stringValue = "The ASIF image format greatly reduces the amount of disk space used by the drive, and it is highly recommended"
-                            if newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
-                                useCow.intValue = 1
-                            } else {
-                                useCow.intValue = 0
-                            }
-                            if mode == Mode.EDIT {
-                                useCow.isEnabled = false
-                                useCow.toolTip = "Updating this property on an existing drive is not supported at the moment"
-                            }
-                        } else {
-                            newVirtualDrive.format = QemuConstants.FORMAT_RAW
-
-                            useCow.intValue = 0
-                            useCow.isEnabled = false
-                            cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
-                            useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
-                        }
-
-                    } else {
-                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
-                        if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {
-                            useCow.intValue = 1
-                        } else {
-                            useCow.intValue = 0
-                        }
-                    }
-
-                    if mode == Mode.ADD {
-                        titleField.stringValue = NSLocalizedString("NewDiskViewController.createDisk", comment: "")
-                    } else {
-                        titleField.stringValue = String(format: NSLocalizedString("NewDiskViewController.editDisk", comment: ""), newVirtualDrive.name)
-                    }
-
-                    let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)
-                    let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)
-
-                    minDiskSizeLabel.stringValue = Utils.formatDisk(Int32(minDiskSize))
-                    maxDiskSizeLabel.stringValue = Utils.formatDisk(Int32(maxDiskSize))
-                    diskSizeStepper.minValue = Double(minDiskSize)
-                    diskSizeStepper.maxValue = Double(maxDiskSize)
-                    diskSizeSlider.minValue = Double(minDiskSize)
-                    diskSizeSlider.maxValue = Double(maxDiskSize)
-                }
-            }
-        }
     }
 
     @IBAction func cowCheckboxChanged(_: Any) {
@@ -200,13 +143,88 @@ class NewDiskViewController: NSViewController, NSTextFieldDelegate {
     }
 
     func diskCreated() {
-        if let newVirtualDrive {
+        if let newVirtualDrive, let originalVirtualDrive {
+            // Changes are applied to the model only after the disk was successfully created/updated
+            originalVirtualDrive.path = newVirtualDrive.path
+            originalVirtualDrive.name = newVirtualDrive.name
+            originalVirtualDrive.format = newVirtualDrive.format
+            originalVirtualDrive.size = newVirtualDrive.size
             if mode == Mode.ADD {
-                parentController?.addVirtualDrive(newVirtualDrive)
+                parentController?.addVirtualDrive(originalVirtualDrive)
             } else {
                 parentController?.reloadDrives()
             }
         }
         dismiss(self)
+    }
+
+    func diskFailedCreation(error: String) {
+        if mode == Mode.ADD {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewDiskViewController.diskCreationFailed", comment: ""), error), virtualMachine: nil)
+        } else {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("NewDiskViewController.diskUpdateFailed", comment: ""), error), virtualMachine: nil)
+        }
+    }
+
+    private func updateView() {
+        if let parentController {
+            if let virtualMachine = parentController.virtualMachine {
+                if let newVirtualDrive {
+                    diskSizeSlider.intValue = newVirtualDrive.size
+                    diskSizeStepper.intValue = newVirtualDrive.size
+                    diskSizeTextField.intValue = newVirtualDrive.size
+
+                    if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                        if Utils.isAsifSupported(virtualMachine) {
+                            useCow.title = "Use ASIF format"
+                            cowDescriptionLabel.stringValue = "The ASIF image format greatly reduces the amount of disk space used by the drive, and it is highly recommended"
+                            if newVirtualDrive.format == QemuConstants.FORMAT_ASIF {
+                                useCow.intValue = 1
+                            } else {
+                                useCow.intValue = 0
+                            }
+                        } else {
+                            newVirtualDrive.format = QemuConstants.FORMAT_RAW
+
+                            useCow.intValue = 0
+                            useCow.isEnabled = false
+                            cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                            useCow.toolTip = NSLocalizedString("NewDiskViewController.cowNotSupported", comment: "")
+                        }
+
+                    } else {
+                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.cowDescriptionLabel", comment: "")
+                        if newVirtualDrive.format == QemuConstants.FORMAT_QCOW2 {
+                            useCow.intValue = 1
+                        } else {
+                            useCow.intValue = 0
+                        }
+                    }
+
+                    if newVirtualDrive.isLinked {
+                        // Overlay layers depend on the format of their template drive, so they cannot be converted.
+                        useCow.isEnabled = false
+                        cowDescriptionLabel.stringValue = NSLocalizedString("NewDiskViewController.linkedCowDisabled", comment: "")
+                        useCow.toolTip = NSLocalizedString("NewDiskViewController.linkedCowDisabled", comment: "")
+                    }
+
+                    if mode == Mode.ADD {
+                        titleField.stringValue = NSLocalizedString("NewDiskViewController.createDisk", comment: "")
+                    } else {
+                        titleField.stringValue = String(format: NSLocalizedString("NewDiskViewController.editDisk", comment: ""), newVirtualDrive.name)
+                    }
+
+                    let minDiskSize = Utils.getMinDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)
+                    let maxDiskSize = Utils.getMaxDiskSizeForSubType(virtualMachine.os, virtualMachine.subtype)
+
+                    minDiskSizeLabel.stringValue = Utils.formatDisk(Int32(minDiskSize))
+                    maxDiskSizeLabel.stringValue = Utils.formatDisk(Int32(maxDiskSize))
+                    diskSizeStepper.minValue = Double(minDiskSize)
+                    diskSizeStepper.maxValue = Double(maxDiskSize)
+                    diskSizeSlider.minValue = Double(minDiskSize)
+                    diskSizeSlider.maxValue = Double(maxDiskSize)
+                }
+            }
+        }
     }
 }

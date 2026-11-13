@@ -1,0 +1,309 @@
+import Cocoa
+
+enum ConversionOperations {
+    case convertToApple
+    case convertToQemu
+    case convertToTemplate
+    case convertToFullClone
+}
+
+@available(macOS 13.0, *)
+class ConvertVMViewController: NSViewController {
+    @IBOutlet var convertingVMLabel: NSTextField!
+    @IBOutlet var progressBar: NSProgressIndicator!
+    @IBOutlet var estimateTimeRemainingLabel: NSTextField!
+
+    var operation: ConversionOperations?
+    var parentController: VirtualMachineViewController?
+    var virtualMachine: VirtualMachine?
+
+    func setOperation(_ operation: ConversionOperations) {
+        self.operation = operation
+    }
+
+    func setParentController(_ parentController: VirtualMachineViewController) {
+        self.parentController = parentController
+    }
+
+    func setVirtualMachine(_ vm: VirtualMachine) {
+        virtualMachine = vm
+    }
+
+    override func viewDidAppear() {
+        convertingVMLabel.stringValue = NSLocalizedString("ConvertVMViewController.convertingVM", comment: "")
+        progressBar.startAnimation(self)
+        setEstimateTimeRemainingVisible(false)
+
+        if let virtualMachine {
+            var complete = false
+            var error: String? = nil
+
+            if let currentVm = self.virtualMachine {
+                if operation == .convertToTemplate {
+                    for drive in Utils.findExternalDrives(currentVm.drives) {
+                        currentVm.removeVirtualDrive(drive.path)
+                    }
+                    // EFI code and OpenCore images are re-created on start, so drop them. EFI variable stores are kept to preserve boot entries.
+                    for drive in Utils.findFirmwareDrives(currentVm.drives) {
+                        currentVm.removeVirtualDrive(drive.path)
+                        try? FileManager.default.removeItem(atPath: drive.path)
+                    }
+                    let drives = Utils.findRawDrives(currentVm.drives)
+                    let targetFormat = currentVm.type == MacMulatorConstants.QEMU_VM ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_ASIF
+                    convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
+                        if code == 0 {
+                            do {
+                                let snapshotsPath = currentVm.path + "/Snapshots"
+                                if FileManager.default.fileExists(atPath: snapshotsPath) {
+                                    try FileManager.default.removeItem(atPath: snapshotsPath)
+                                }
+                                for snapshot in currentVm.snapshots ?? [] {
+                                    currentVm.removeSnapshot(snapshot.timestamp)
+                                }
+                                if currentVm.type == MacMulatorConstants.APPLE_VM, #available(macOS 27.0, *) {
+                                    currentVm.type = MacMulatorConstants.APPLE_TEMPLATE_VM
+                                } else if currentVm.type == MacMulatorConstants.QEMU_VM {
+                                    currentVm.type = MacMulatorConstants.QEMU_TEMPLATE_VM
+                                }
+                                currentVm.writeToPlist()
+                                complete = true
+                            } catch let snapshotError {
+                                complete = true
+                                error = snapshotError.localizedDescription
+                            }
+                        } else {
+                            complete = true
+                            error = message
+                        }
+                    }
+                } else if operation == .convertToFullClone {
+                    checkSnapshotDrives(currentVm) { code, message in
+                        DispatchQueue.main.async {
+                            if code == 0 {
+                                self.flattenDrives(currentVm.drives.filter(\.isLinked), of: currentVm) { code, message in
+                                    if code == 0 {
+                                        complete = true
+                                    } else {
+                                        complete = true
+                                        error = message
+                                    }
+                                }
+                            } else {
+                                complete = true
+                                error = message
+                            }
+                        }
+                    }
+                } else if operation == .convertToQemu {
+                    let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_ASIF }
+                    convertDrives(drives, of: currentVm, to: QemuConstants.FORMAT_QCOW2) { code, message in
+                        if code == 0 {
+                            QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
+                            VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
+                            currentVm.type = MacMulatorConstants.QEMU_VM
+                            currentVm.writeToPlist()
+                            complete = true
+                        } else {
+                            complete = true
+                            error = message
+                        }
+                    }
+                } else if operation == .convertToApple {
+                    let drives = currentVm.drives.filter { ($0.mediaType == QemuConstants.MEDIATYPE_DISK || $0.mediaType == QemuConstants.MEDIATYPE_NVME) && $0.format == QemuConstants.FORMAT_QCOW2 }
+                    let targetFormat: String = if #available(macOS 26.0, *) {
+                        QemuConstants.FORMAT_ASIF
+                    } else {
+                        QemuConstants.FORMAT_RAW
+                    }
+                    convertDrives(drives, of: currentVm, to: targetFormat) { code, message in
+                        if code == 0 {
+                            VirtualizationFrameworkLinuxSupport.createLinuxVirtualMachineData(vm: currentVm)
+                            QemuUtils.deleteAuxiliaryDriveFilesOnDisk(currentVm)
+                            currentVm.type = MacMulatorConstants.APPLE_VM
+                            currentVm.writeToPlist()
+                            complete = true
+                        } else {
+                            complete = true
+                            error = message
+                        }
+                    }
+                }
+            }
+
+            let startTime = Int64(Date().timeIntervalSince1970)
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { timer in
+
+                if !complete {
+                    let progress = self.progressBar.doubleValue
+                    if !self.progressBar.isIndeterminate, progress > 10 {
+                        self.estimateTimeRemainingLabel.stringValue = String(format: NSLocalizedString("CreateVMFileViewController.estimateTimeRemaining", comment: ""), Utils.computeTimeRemaining(startTime: startTime, progress: self.progressBar.doubleValue))
+                    }
+                } else {
+                    timer.invalidate()
+                    self.progressBar.stopAnimation(self)
+                    self.dismiss(self)
+
+                    if self.operation == .convertToFullClone {
+                        self.parentController?.vmConvertedToFullClone(virtualMachine, error)
+                    } else if error == nil {
+                        self.parentController?.vmConverted(virtualMachine)
+                    } else {
+                        self.parentController?.vmFailedConversion(virtualMachine, error ?? "")
+                    }
+                    return
+                }
+            })
+        }
+    }
+
+    private func convertDrives(_ drives: [VirtualDrive], of vm: VirtualMachine, to format: String, totalDrives: Int? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard let drive = drives.first else {
+            callback(0, nil)
+            return
+        }
+
+        let totalDrives = totalDrives ?? drives.count
+        let index = totalDrives - drives.count
+        let progress: (Double) -> Void = { percentage in
+            self.updateProgress((Double(index) * 100 + percentage) / Double(totalDrives))
+        }
+
+        convertDrive(drive, to: format, in: vm.path, progress: progress) { code, message in
+            DispatchQueue.main.async {
+                vm.writeToPlist()
+                if code == 0 {
+                    self.convertDrives(Array(drives.dropFirst()), of: vm, to: format, totalDrives: totalDrives, uponCompletion: callback)
+                } else {
+                    callback(code, message)
+                }
+            }
+        }
+    }
+
+    private func checkSnapshotDrives(_ vm: VirtualMachine, index: Int = 0, drives: [VirtualDrive]? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let snapshotDrives: [VirtualDrive]
+        if let drives {
+            snapshotDrives = drives
+        } else {
+            var snapshotDrivesToCheck: [VirtualDrive] = []
+            for snapshotPath in (vm.snapshots ?? []).flatMap(\.driveSnapshotPaths) {
+                let filename = URL(fileURLWithPath: snapshotPath).lastPathComponent
+                guard let drive = vm.drives.first(where: { $0.name + "." + MacMulatorConstants.DISK_EXTENSION == filename }) else {
+                    callback(-1, NSLocalizedString("ConvertVMViewController.linkedSnapshotsPreventFullClone", comment: ""))
+                    return
+                }
+                let snapshotDrive = drive.clone()
+                snapshotDrive.path = snapshotPath
+                snapshotDrive.backingPath = nil
+                snapshotDrivesToCheck.append(snapshotDrive)
+            }
+            snapshotDrives = snapshotDrivesToCheck
+        }
+
+        guard index < snapshotDrives.count else {
+            callback(0, nil)
+            return
+        }
+
+        DiskImageManagerFactory().create(forVM: vm).getDiskImageInfo(snapshotDrives[index], vm.path) { code, info in
+            guard code == 0 else {
+                callback(code, info)
+                return
+            }
+
+            let linkedImagePattern = #"(?im)^\s*(backing file|parent uuid):"#
+            if info.range(of: linkedImagePattern, options: .regularExpression) != nil {
+                callback(-1, NSLocalizedString("ConvertVMViewController.linkedSnapshotsPreventFullClone", comment: ""))
+            } else {
+                self.checkSnapshotDrives(vm, index: index + 1, drives: snapshotDrives, uponCompletion: callback)
+            }
+        }
+    }
+
+    /// Merges linked drives with the template ones, one at a time. Drives merged so far stay standalone if one fails.
+    private func flattenDrives(_ drives: [VirtualDrive], of vm: VirtualMachine, totalDrives: Int? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard let drive = drives.first else {
+            callback(0, nil)
+            return
+        }
+
+        let totalDrives = totalDrives ?? drives.count
+        let index = totalDrives - drives.count
+        DiskImageManagerFactory().create(forVM: vm).flattenLinkedDiskImage(drive, vm.path, uponCompletion: { code, message in
+            DispatchQueue.main.async {
+                if code == 0 {
+                    drive.backingPath = nil
+                    vm.writeToPlist()
+                    self.updateProgress(Double(index + 1) * 100 / Double(totalDrives))
+                    self.flattenDrives(Array(drives.dropFirst()), of: vm, totalDrives: totalDrives, uponCompletion: callback)
+                } else {
+                    callback(code, message)
+                }
+            }
+        })
+    }
+
+    private func convertDrive(_ drive: VirtualDrive, to format: String, in path: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let originalFormat = drive.format
+        let factory = DiskImageManagerFactory()
+        let sourceManager = factory.create(isVirtualizationFrameworkInUse: originalFormat == QemuConstants.FORMAT_ASIF)
+        let targetManager = factory.create(isVirtualizationFrameworkInUse: format == QemuConstants.FORMAT_ASIF)
+
+        drive.format = QemuConstants.FORMAT_RAW
+        if originalFormat == QemuConstants.FORMAT_RAW {
+            convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progress: progress, uponCompletion: callback)
+            return
+        }
+        sourceManager.convertDiskImage(drive, path, fromFormat: originalFormat, progress: { progress($0 / 2) }, uponCompletion: { code, message in
+            guard code == 0 else {
+                drive.format = originalFormat
+                callback(code, message)
+                return
+            }
+
+            self.convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progressOffset: 50, progress: progress, uponCompletion: callback)
+        })
+    }
+
+    private func convertFromRaw(_ drive: VirtualDrive, to format: String, in path: String, targetManager: DiskImageManager, progressOffset: Double = 0, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let scale = (100 - progressOffset) / 100
+        drive.format = format
+        targetManager.convertDiskImage(drive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: { progress(progressOffset + $0 * scale) }, uponCompletion: { code, message in
+            if code != 0 {
+                drive.format = QemuConstants.FORMAT_RAW
+            }
+            callback(code, message)
+        })
+    }
+
+    private func setEstimateTimeRemainingVisible(_ visible: Bool) {
+        estimateTimeRemainingLabel.isHidden = !visible
+        let size = NSSize(width: view.frame.width, height: visible ? 107 : 82)
+        if let window = view.window {
+            // Subviews are pinned to the top, so keep the top edge fixed while resizing.
+            var frame = window.frame
+            let newHeight = window.frameRect(forContentRect: NSRect(origin: .zero, size: size)).height
+            frame.origin.y += frame.height - newHeight
+            frame.size.height = newHeight
+            window.setFrame(frame, display: true, animate: true)
+        } else {
+            preferredContentSize = size
+        }
+    }
+
+    private func updateProgress(_ percentage: Double) {
+        DispatchQueue.main.async {
+            let bar = self.progressBar!
+            if bar.isIndeterminate {
+                bar.stopAnimation(self)
+                bar.isIndeterminate = false
+                bar.minValue = 0
+                bar.maxValue = 100
+
+                self.setEstimateTimeRemainingVisible(true)
+                self.estimateTimeRemainingLabel.stringValue = NSLocalizedString("CreateVMFileViewController.timeRemainingCalculating", comment: "")
+            }
+            bar.doubleValue = percentage
+        }
+    }
+}

@@ -22,11 +22,11 @@ class QemuMonitor {
                 try client.connect(port: UInt16(port))
 
                 var buffer = [UInt8](repeating: 0, count: 1024)
-                try client.read(&buffer, size: 1024)
+                _ = try client.read(&buffer, size: 1024)
 
                 let command = "{ \"execute\": \"qmp_capabilities\" }\r\n"
                 try client.write(Array(command.data(using: .utf8)!))
-                try client.read(&buffer, size: 1024)
+                _ = try client.read(&buffer, size: 1024)
 
                 connected = true
             }

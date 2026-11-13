@@ -8,6 +8,11 @@
 import Cocoa
 
 class QemuUtils {
+    #if APPSTORE
+        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
+        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
+    #endif
+
     static func getDriveFormatDescription(_ format: String) -> String {
         if format == QemuConstants.FORMAT_RAW {
             return "(Plain data)"
@@ -38,88 +43,6 @@ class QemuUtils {
         }
 
         return QemuConstants.HD
-    }
-
-    static func createDiskImage(path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32) -> Void) {
-        createDiskImage(path: path, name: virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION, format: virtualDrive.format, size: String(virtualDrive.size) + "G", uponCompletion: callback)
-    }
-
-    static func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let shell = Shell()
-
-        let command: String =
-            QemuImgCommandBuilder(qemuPath: qemuPath)
-                .withCommand(QemuConstants.IMAGE_CMD_CREATE)
-                .withFormat(format)
-                .withSize(size)
-                .withName(name)
-                .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_RESIZE)
-            .withName(virtualDrive.path)
-            .withShrinkArg(shrink)
-            .withShortSize(String(virtualDrive.size) + "G")
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, oldFormat: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
-            .withFormat(oldFormat)
-            .withTargetFormat(virtualDrive.format)
-            .withName(virtualDrive.path)
-            .withTargetName(virtualDrive.path)
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: callback)
-    }
-
-    static func convertVHDXToDiskImage(vhdxPath: String, vmPath: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, Int32) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_CONVERT)
-            .withName(vhdxPath)
-            .withTargetName(Utils.escape(virtualDrive.path))
-            .build()
-
-        shell.runCommand(command, vmPath, uponCompletion: {
-            terminationCode in
-
-            if terminationCode == 0 {
-                QemuUtils.getDiskImageInfo(virtualDrive.path, vmPath, uponCompletion: {
-                    infoCode, output in
-                    if infoCode == 0 {
-                        let driveSize = Utils.extractDriveSize(output)
-                        if let driveSize {
-                            callback(infoCode, driveSize)
-                        } else {
-                            callback(infoCode, -1)
-                        }
-                    } else {
-                        callback(infoCode, -1)
-                    }
-                })
-            } else {
-                callback(terminationCode, -1)
-            }
-
-        })
     }
 
     static func createAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
@@ -157,28 +80,31 @@ class QemuUtils {
             vm.addVirtualDrive(openCore)
         }
 
-        if vm.os == QemuConstants.OS_IOS {
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0")
-            try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "nor_n72ap.bin", ofType: nil)!, toPath: vm.path + "/nor-0.bin")
+        #if !APPSTORE
+            // iPod touch guests need Apple's boot ROM and NOR images, which the App Store flavor does not ship.
+            if vm.os == QemuConstants.OS_IOS {
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0")
+                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "nor_n72ap.bin", ofType: nil)!, toPath: vm.path + "/nor-0.bin")
 
-            let virtualBootRom = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                name: QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_BOOTROM,
-                size: 0
-            )
-            vm.addVirtualDrive(virtualBootRom)
+                let virtualBootRom = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_BOOTROM + "-0",
+                    name: QemuConstants.MEDIATYPE_BOOTROM + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_BOOTROM,
+                    size: 0
+                )
+                vm.addVirtualDrive(virtualBootRom)
 
-            let virtualNor = VirtualDrive(
-                path: vm.path + "/" + QemuConstants.MEDIATYPE_NOR + "-0." + MacMulatorConstants.BIN_EXTENSION,
-                name: QemuConstants.MEDIATYPE_NOR + "-0",
-                format: QemuConstants.FORMAT_RAW,
-                mediaType: QemuConstants.MEDIATYPE_NOR,
-                size: 0
-            )
-            vm.addVirtualDrive(virtualNor)
-        }
+                let virtualNor = VirtualDrive(
+                    path: vm.path + "/" + QemuConstants.MEDIATYPE_NOR + "-0." + MacMulatorConstants.BIN_EXTENSION,
+                    name: QemuConstants.MEDIATYPE_NOR + "-0",
+                    format: QemuConstants.FORMAT_RAW,
+                    mediaType: QemuConstants.MEDIATYPE_NOR,
+                    size: 0
+                )
+                vm.addVirtualDrive(virtualNor)
+            }
+        #endif
     }
 
     static func deleteAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
@@ -216,42 +142,136 @@ class QemuUtils {
         }
     }
 
-    static func updateDiskImage(oldVirtualDrive: VirtualDrive, newVirtualDrive: VirtualDrive, path: String, uponCompletion callback: @escaping (Int32) -> Void) {
-        if newVirtualDrive.size != oldVirtualDrive.size {
-            resizeDiskImage(newVirtualDrive, path, shrink: newVirtualDrive.size < oldVirtualDrive.size, uponCompletion: callback)
+    static func isBinaryAvailable(_ binary: String, _ qemuPath: String?) -> Bool {
+        guard let path = qemuPath == nil ? QemuUtils.getQemuPath() : qemuPath else { return false }
+
+        switch binary {
+        case QemuConstants.ARCH_X64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasx86_64Binary ?? false
+        case QemuConstants.ARCH_X86:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasX86Binary ?? false
+        case QemuConstants.ARCH_ARM64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasAarch64Binary ?? false
+        case QemuConstants.ARCH_ARM:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasArmBinary ?? false
+        case QemuConstants.ARCH_PPC64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasPowerPC64Binary ?? false
+        case QemuConstants.ARCH_PPC:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasPowerPCBinary ?? false
+        case QemuConstants.ARCH_RISCV64:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasRiscv64Binary ?? false
+        case QemuConstants.ARCH_RISCV32:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasRiscvBinary ?? false
+        case QemuConstants.ARCH_68K:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasM68kBinary ?? false
+        case QemuConstants.QEMU_IMG:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasQemuImgBinary ?? false
+        case QemuConstants.SWTPM:
+            return QemuCapabilitiesReporter.getInstance(forQemuPath: path)?.hasSwtpmBinary ?? false
+        default:
+            return false
         }
-        if newVirtualDrive.format != oldVirtualDrive.format {
-            convertDiskImage(newVirtualDrive, path, oldFormat: oldVirtualDrive.format, uponCompletion: callback)
+    }
+
+    static func getQemuPath() -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return WorkspaceState.shared.qemuPath
+        #endif
+    }
+
+    static func getQemuPath(for vm: VirtualMachine) -> String {
+        #if APPSTORE
+            return bundledQemuPath
+        #else
+            return vm.qemuPath ?? getQemuPath()
+        #endif
+    }
+
+    static func isSpiceDisplayEnabled(_ vm: VirtualMachine) -> Bool {
+        #if APPSTORE
+            return true
+        #else
+            let capabilities = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))
+            if capabilities?.spiceSupported == true {
+                return vm.enableSpiceDisplay == true
+            } else {
+                vm.enableSpiceDisplay = false
+                return false
+            }
+        #endif
+    }
+
+    static func isSpiceSupported(_ vm: VirtualMachine) -> Bool {
+        isSpiceDisplayEnabled(vm)
+    }
+
+    static func spiceSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("spice", vmPath)
+        #else
+            return vmPath + "/socket.spice"
+        #endif
+    }
+
+    static func sshPortMapping(for vm: VirtualMachine) -> PortMapping? {
+        vm.portMappings?.first { $0.vmPort == 22 }
+    }
+
+    static func sshArguments(for vm: VirtualMachine) -> [String]? {
+        guard let mapping = sshPortMapping(for: vm) else { return nil }
+
+        var destination = "localhost"
+        if let userName = Utils.guestUserName(vm) {
+            destination = userName + "@" + destination
         }
+        return Utils.sshArguments(for: vm, destination: destination, port: mapping.hostPort)
     }
 
-    static func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        getDiskImageInfo(virtualDrive.path, path, uponCompletion: callback)
+    static func serialSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("serial", vmPath)
+        #else
+            return NSTemporaryDirectory() + "serial-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+        #endif
     }
 
-    static func getDiskImageInfo(_ drivePath: String, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let shell = Shell()
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_INFO)
-            .withName(drivePath)
-            .build()
-
-        shell.runCommand(command, path, uponCompletion: { terminationCcode in
-            callback(terminationCcode, shell.readFromStandardOutput())
-        })
+    static func tpmSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("tpm", vmPath)
+        #else
+            return vmPath + "/tpm/socket"
+        #endif
     }
 
-    static func isBinaryAvailable(_ binary: String) -> Bool {
-        let qemuPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
-        let fileManager = FileManager.default
+    static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
+        let aliases = [
+            QemuConstants.VGA_VIRTIO_GPU_PCI: QemuConstants.VGA_VIRTIO_GPU,
+            QemuConstants.VGA_VIRTIO_GPU_GL_PCI: QemuConstants.VGA_VIRTIO_GPU_GL,
+            QemuConstants.VGA_QXL: QemuConstants.VGA_QXL_VGA,
+        ]
+        let normalized = adapters.map { aliases[$0] ?? $0 }
+        let available = Set(normalized)
 
-        return fileManager.fileExists(atPath: qemuPath + "/" + binary)
+        var seen = Set<String>()
+        return normalized.filter { adapter in
+            if adapter.hasSuffix("-gl") || adapter.contains("-gl-") {
+                let base = adapter.replacingOccurrences(of: "-gl", with: "")
+                if available.contains(base) {
+                    return false
+                }
+            }
+            if adapter == QemuConstants.VGA_APPLE_GFX_PCI || adapter == QemuConstants.VGA_APPLE_GFX_MMIO {
+                return false
+            }
+            return seen.insert(adapter).inserted
+        }
     }
 
     static func getQemuVersion(qemuPath: String, uponCompletion callback: @escaping (String?) -> Void) {
-        if !isBinaryAvailable(QemuConstants.QEMU_IMG) {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: qemuPath + "/" + QemuConstants.QEMU_IMG) {
             callback(nil)
             return
         }
@@ -261,7 +281,7 @@ class QemuUtils {
             .withCommand(QemuConstants.IMAGE_CMD_VERSION)
             .build()
 
-        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode in
+        shell.runCommand(command, NSHomeDirectory(), uponCompletion: { terminationCode, _ in
             guard terminationCode == 0 else {
                 callback(nil)
                 return
@@ -285,8 +305,20 @@ class QemuUtils {
         })
     }
 
-    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32) -> Void) {
+    static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let fileManager = FileManager.default
+        // Templates drop the OpenCore drive record along with its image, so register it again for QemuRunner.
+        if !virtualMachine.containsVirtualDrive(virtualMachine.path + "/opencore-0.img") {
+            let openCore = VirtualDrive(
+                path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
+                size: 0
+            )
+            virtualMachine.addVirtualDrive(openCore)
+            virtualMachine.writeToPlist()
+        }
         if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
             try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
         }
@@ -298,10 +330,10 @@ class QemuUtils {
         try? fileManager.moveItem(atPath: virtualMachine.path + "/" + QemuConstants.OPENCORE + ".img", toPath: virtualMachine.path + "/opencore-0.img")
         try? fileManager.removeItem(at: URL(fileURLWithPath: virtualMachine.path + "/__MACOSX"))
         let shell = Shell()
-        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode in
+        shell.runCommand("hdiutil attach -noverify " + Utils.escape(virtualMachine.path) + "/opencore-0.img", virtualMachine.path) { terminationCode, errorMessage in
 
             let shell2 = Shell()
-            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode in
+            shell2.runCommand("system_profiler SPHardwareDataType -json", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                 let json = shell2.stdout
                 print(json)
                 let jsonData = json.data(using: .utf8)!
@@ -316,7 +348,7 @@ class QemuUtils {
                 let machineDetails = systemProfilerData?.SPHardwareDataType[0]
 
                 let shell3 = Shell()
-                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode in
+                shell3.runCommand("cp /Volumes/OPENCORE/EFI/OC/config.plist /Volumes/OPENCORE/EFI/OC/config.plist.template", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
                     do {
                         var plistContent = try String(contentsOfFile: "/Volumes/OPENCORE/EFI/OC/config.plist.template")
 
@@ -336,8 +368,8 @@ class QemuUtils {
                         try plistContent.write(toFile: "/Volumes/OPENCORE/EFI/OC/config.plist", atomically: false, encoding: .utf8)
 
                         let shell4 = Shell()
-                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode in
-                            callback(terminationCode)
+                        shell4.runCommand("hdiutil detach /Volumes/OPENCORE -force", virtualMachine.path, uponCompletion: { terminationCode, errorMessage in
+                            callback(terminationCode, errorMessage)
                         })
                     } catch {
                         print("ERROR while reading/writing OpenCore config.plist: " + error.localizedDescription)
@@ -444,4 +476,10 @@ class QemuUtils {
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
+
+    #if APPSTORE
+        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
+            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+        }
+    #endif
 }

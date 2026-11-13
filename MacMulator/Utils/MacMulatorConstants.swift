@@ -7,6 +7,17 @@
 
 import Foundation
 
+// MacMulator ships in two flavors, selected by the build target through
+// SWIFT_ACTIVE_COMPILATION_CONDITIONS (and GCC_PREPROCESSOR_DEFINITIONS for ObjC):
+//  - ENTHUSIAST: universal binary, not sandboxed, runs Qemu from a user-provided directory.
+//  - APPSTORE:   Apple Silicon only, sandboxed, bundles Qemu inside the app.
+// Guard against a target that defines both or neither.
+#if APPSTORE && ENTHUSIAST
+    #error("Only one of APPSTORE and ENTHUSIAST may be defined for a target")
+#elseif !APPSTORE && !ENTHUSIAST
+    #error("Either APPSTORE or ENTHUSIAST must be defined in SWIFT_ACTIVE_COMPILATION_CONDITIONS")
+#endif
+
 class MacMulatorConstants {
     static let VM_EXTENSION = "qvm"
     static let DISK_EXTENSION = "qvd"
@@ -31,20 +42,36 @@ class MacMulatorConstants {
     static let PREFERENCES_SEGUE = "preferencesSegue"
     static let SHOW_CONSOLE_SEGUE = "showConsoleSegue"
     static let SHOW_VM_VIEW_SEGUE = "showVMViewSegue"
+    static let SHOW_SPICE_VIEW_SEGUE = "showSpiceViewSegue"
     static let SHOW_INSTALLING_OS_SEGUE = "showInstallingOSSegue"
     static let NEW_PORT_MAPPING_SEGUE = "newPortmappingSegue"
     static let EDIT_PORT_MAPPING_SEGUE = "editPortMappingSegue"
     static let SHOW_PAUSE_RESUME_VM_SEGUE = "showPauseResumeVMSegue"
     static let START_VM_SEGUE = "startVMSegue"
+    static let CONVERT_VM_SEGUE = "convertVMSegue"
+    static let DELETE_SNAPSHOT_SEGUE = "deleteSnapshotSegue"
+    static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
+    static let SHOW_PROVISIONING_OPTIONS_SEGUE = "showProvisioningOptionsSegue"
+    static let SHOW_CLONE_VIEW_SEGUE = "showCloneViewSegue"
 
+    static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
+    static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
+
+    /// Keys of the values in the workspace state file. Except PREFERENCE_KEY_VMS_FOLDER_PATH, which stays in UserDefaults:
+    /// these values used to be stored there, and are read from there only to migrate them to the state file.
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath"
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate"
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled"
 
+    /// Hidden file in the workspace folder holding the list of saved VMs and the preferences.
+    static let APP_STATE_FILE = ".macmulator.plist"
+
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
+    static let QEMU_TEMPLATE_VM = "qemu-tpl"
+    static let APPLE_TEMPLATE_VM = "apple-tpl"
 
     static let mainMenuSender = "MainMenu"
 }

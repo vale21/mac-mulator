@@ -51,17 +51,92 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
         updateView()
     }
 
-    fileprivate func updateQemuCommand(_ virtualMachine: VirtualMachine) {
-        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
-        fullCommandView.string = runner.getQemuCommand()
-        if let qemuPath = virtualMachine.qemuPath {
-            qemuPathView.stringValue = qemuPath
-        } else {
-            qemuPathView.stringValue = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        #if APPSTORE
+            // The App Store flavor always runs the bundled Qemu: a per-VM Qemu path makes no sense.
+            qemuPathLabel.isHidden = true
+            qemuPathView.isHidden = true
+            qemuPathButton.isHidden = true
+            collapseQemuPathSpace()
+        #endif
+    }
+
+    func controlTextDidChange(_ notification: Notification) {
+        if (notification.object as! NSTextField) == qemuPathView {
+            if let virtualMachine {
+                let originalPath = QemuUtils.getQemuPath()
+
+                if qemuPathView.stringValue != originalPath {
+                    if qemuPathView.stringValue != "" {
+                        virtualMachine.qemuPath = qemuPathView.stringValue
+                    } else {
+                        virtualMachine.qemuPath = nil
+                    }
+                } else {
+                    virtualMachine.qemuPath = nil
+                }
+            }
+        }
+
+        updateView()
+    }
+
+    func controlTextDidEndEditing(_ notification: Notification) {
+        if (notification.object as! NSTextField) == qemuPathView, let virtualMachine, virtualMachine.qemuPath != nil {
+            let fileManager = FileManager.default
+            if fileManager.fileExists(atPath: qemuPathView.stringValue) {
+                _ = QemuCapabilitiesReporter.getInstance(forQemuPath: qemuPathView.stringValue)
+            } else {
+                Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("PreferencesViewController.pathDoesNotExists", comment: ""), qemuPathView.stringValue), virtualMachine: nil)
+            }
         }
     }
 
-    fileprivate func updateView() {
+    func textDidChange(_ notification: Notification) {
+        if (notification.object as? NSTextView) == fullCommandView {
+            if let virtualMachine {
+                let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+                let originalCommand = runner.getQemuCommand()
+
+                if fullCommandView.string != originalCommand {
+                    if fullCommandView.string != "" {
+                        virtualMachine.qemuCommand = fullCommandView.string
+                    } else {
+                        virtualMachine.qemuCommand = nil
+                    }
+                } else {
+                    virtualMachine.qemuCommand = nil
+                }
+            }
+        }
+    }
+
+    #if APPSTORE
+        /// Hidden views still take part in Auto Layout, so the controls anchored below the Qemu path field
+        /// are re-anchored to fill the space left by the hidden Qemu path controls.
+        private func collapseQemuPathSpace() {
+            let anchoredToPathField = view.constraints.filter {
+                ($0.firstItem === accelerateVM || $0.firstItem === qemuCommandLabel) &&
+                    $0.firstAttribute == .top &&
+                    $0.secondItem === qemuPathView
+            }
+            NSLayoutConstraint.deactivate(anchoredToPathField)
+
+            NSLayoutConstraint.activate([
+                accelerateVM.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+                qemuCommandLabel.topAnchor.constraint(equalTo: accelerateVM.bottomAnchor, constant: 24),
+            ])
+        }
+    #endif
+
+    private func updateQemuCommand(_ virtualMachine: VirtualMachine) {
+        let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
+        fullCommandView.string = runner.getQemuCommand()
+        qemuPathView.stringValue = QemuUtils.getQemuPath(for: virtualMachine)
+    }
+
+    private func updateView() {
         if let virtualMachine {
             updateQemuCommand(virtualMachine)
 
@@ -81,45 +156,6 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
                     accelerateVM.state = hvf ? NSButton.StateValue.on : NSButton.StateValue.off
                 } else {
                     accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off
-                }
-            }
-        }
-    }
-
-    func controlTextDidChange(_ notification: Notification) {
-        if (notification.object as! NSTextField) == qemuPathView {
-            if let virtualMachine {
-                let originalPath = UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)
-
-                if qemuPathView.stringValue != originalPath {
-                    if qemuPathView.stringValue != "" {
-                        virtualMachine.qemuPath = qemuPathView.stringValue
-                    } else {
-                        virtualMachine.qemuPath = nil
-                    }
-                } else {
-                    virtualMachine.qemuPath = nil
-                }
-            }
-        }
-
-        updateView()
-    }
-
-    func textDidChange(_ notification: Notification) {
-        if (notification.object as? NSTextView) == fullCommandView {
-            if let virtualMachine {
-                let runner = QemuRunner(listenPort: 4444, virtualMachine: virtualMachine)
-                let originalCommand = runner.getQemuCommand()
-
-                if fullCommandView.string != originalCommand {
-                    if fullCommandView.string != "" {
-                        virtualMachine.qemuCommand = fullCommandView.string
-                    } else {
-                        virtualMachine.qemuCommand = nil
-                    }
-                } else {
-                    virtualMachine.qemuCommand = nil
                 }
             }
         }

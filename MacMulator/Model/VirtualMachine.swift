@@ -8,6 +8,13 @@
 import Foundation
 
 class VirtualMachine: Codable, Hashable {
+    private enum CodingKeys: String, CodingKey {
+        case storedId = "id"
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
+    }
+
+    /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
+    private var storedId: String?
     var os: String
     var subtype: String
     var architecture: String
@@ -22,7 +29,9 @@ class VirtualMachine: Codable, Hashable {
     var physicalBridgeNetworkDevice: String?
     var videoDevice: String?
     var qemuDisplay: String? = QemuConstants.DISPLAY_DEFAULT
-    var enable3DAcceleration: Bool? = false
+    var enable3DAcceleration: Bool? = true
+    var enableSpiceDisplay: Bool? = true
+    var headless: Bool? = false
     var drives: [VirtualDrive]
     var qemuPath: String?
     var qemuCommand: String?
@@ -32,12 +41,29 @@ class VirtualMachine: Codable, Hashable {
     var type: String?
     var pauseSupported: Bool? = false
     var bootMode: String?
+    var snapshots: [VirtualMachineSnapshot]?
+    var usbPassthroughDevices: [String]?
+    var usbPassthroughDeviceNames: [String: String]?
+    var provisioningInformation: ProvisioningInformation? = nil
+    var guestUserName: String?
 
-    private enum CodingKeys: String, CodingKey {
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode
+    /// Unique identifier, assigned at creation time and never modified afterwards.
+    /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
+    var id: String {
+        if let storedId {
+            return storedId
+        }
+        let newId = UUID().uuidString
+        storedId = newId
+        return newId
     }
 
-    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+    var hasLinkedDrives: Bool {
+        drives.contains(where: \.isLinked)
+    }
+
+    init(os: String, subtype: String, architecture: String, path: String, displayName: String, description: String, memory: Int32, cpus: Int, displayResolution: String, displayOrigin: String, networkDevice: String, physicalBridgeNetworkDevice: String?, videoDevice: String, qemuDisplay: String, enable3DAcceleration: Bool, enableSpiceDisplay: Bool, hvf: Bool, macAddress: String?, type: String, bootMode: String) {
+        storedId = UUID().uuidString
         self.os = os
         self.subtype = subtype
         self.architecture = architecture
@@ -53,12 +79,14 @@ class VirtualMachine: Codable, Hashable {
         self.videoDevice = videoDevice
         self.qemuDisplay = qemuDisplay
         self.enable3DAcceleration = enable3DAcceleration
+        self.enableSpiceDisplay = enableSpiceDisplay
         self.hvf = hvf
         drives = []
         portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
+        snapshots = []
     }
 
     func addVirtualDrive(_ drive: VirtualDrive) {
@@ -78,6 +106,21 @@ class VirtualMachine: Codable, Hashable {
         return false
     }
 
+    func addSnapshot(_ snapshot: VirtualMachineSnapshot) {
+        if snapshots == nil {
+            snapshots = []
+        }
+        snapshots?.append(snapshot)
+        notifySnapshotsChanged()
+    }
+
+    func removeSnapshot(_ timestamp: Int64) {
+        if let index = snapshots?.firstIndex(where: { $0.timestamp == timestamp }) {
+            snapshots?.remove(at: index)
+            notifySnapshotsChanged()
+        }
+    }
+
     func addPortMapping(_ portMapping: PortMapping) {
         portMappings?.append(portMapping)
     }
@@ -88,6 +131,20 @@ class VirtualMachine: Codable, Hashable {
             let xml = fileManager.contents(atPath: plistFilePath + "/" + plistFileName)
             let vm = try PropertyListDecoder().decode(VirtualMachine.self, from: xml!)
             setupPaths(vm, plistFilePath)
+            var migrated = false
+            if vm.storedId == nil {
+                // Legacy VM created before IDs were introduced: assign one.
+                _ = vm.id
+                migrated = true
+            }
+            if vm.type == nil {
+                // Legacy VM created before VM types were introduced: it can only be a QEMU one.
+                vm.type = MacMulatorConstants.QEMU_VM
+                migrated = true
+            }
+            if migrated {
+                vm.writeToPlist()
+            }
             if vm.portMappings == nil {
                 vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
             }
@@ -101,13 +158,21 @@ class VirtualMachine: Codable, Hashable {
     static func setupPaths(_ vm: VirtualMachine, _ plistFilePath: String) {
         vm.path = plistFilePath
         for drive in vm.drives {
-            if drive.mediaType != QemuConstants.MEDIATYPE_CDROM {
-                if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
-                } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
-                    drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION
+            if drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.DISK_EXTENSION
+            } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE || drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.EFI_EXTENSION
+            } else if drive.mediaType == QemuConstants.MEDIATYPE_OPENCORE {
+                drive.path = plistFilePath + "/" + drive.name + "." + MacMulatorConstants.IMG_EXTENSION
+            }
+        }
+        if let snapshots = vm.snapshots {
+            for snapshot in snapshots {
+                let snapshotFolderPath = plistFilePath + "/Snapshots/" + String(snapshot.timestamp)
+                snapshot.memorySnapshotPath = snapshotFolderPath + "/" + MacMulatorConstants.SAVE_FILE_NAME
+                snapshot.screenshotPath = snapshotFolderPath + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME
+                snapshot.driveSnapshotPaths = snapshot.driveSnapshotPaths.map { drivePath in
+                    snapshotFolderPath + "/" + URL(fileURLWithPath: drivePath).lastPathComponent
                 }
             }
         }
@@ -132,10 +197,22 @@ class VirtualMachine: Codable, Hashable {
     }
 
     static func == (lhs: VirtualMachine, rhs: VirtualMachine) -> Bool {
-        lhs.displayName == rhs.displayName
+        lhs.id == rhs.id
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(displayName)
+        hasher.combine(id)
+    }
+
+    func assignNewIdForClone() {
+        storedId = UUID().uuidString
+    }
+
+    func cleanup() {
+        provisioningInformation?.cleanup()
+    }
+
+    private func notifySnapshotsChanged() {
+        NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 }

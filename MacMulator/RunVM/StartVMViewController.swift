@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class StartVMViewController: NSViewController, RunningVMManagerViewController {
+class StartVMViewController: NSViewController {
     @IBOutlet var startVMLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!
 
@@ -37,6 +37,8 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
     }
 
     override func viewDidAppear() {
+        super.viewDidAppear()
+
         progressBar.startAnimation(self)
         var openCoreComplete = false
         var uefiComplete = false
@@ -61,7 +63,7 @@ class StartVMViewController: NSViewController, RunningVMManagerViewController {
 
                 if QemuUtils.requiresOpenCore(virtualMachine) {
                     QemuUtils.populateOpenCoreConfig(virtualMachine: virtualMachine, uponCompletion: {
-                        terminationCode in
+                        terminationCode, _ in
                         if terminationCode == 0 {
                             openCoreComplete = true
                         }

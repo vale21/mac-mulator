@@ -8,13 +8,11 @@
 import Cocoa
 
 class EditVMViewController: NSTabViewController {
-    var rootController: RootViewController?
+    var vmRunner: VirtualMachineRunner?
     var virtualMachine: VirtualMachine?
 
-    func setRootController(_ rootController: RootViewController) {
-        self.rootController = rootController
-        let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
-        hardware.setRootController(rootController)
+    func setVmRunner(_ vmRunner: VirtualMachineRunner) {
+        self.vmRunner = vmRunner
     }
 
     func setVirtualMachine(_ vm: VirtualMachine) {
@@ -27,32 +25,45 @@ class EditVMViewController: NSTabViewController {
         tabViewItems[2].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[3].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[4].label = NSLocalizedString("EditVMViewController.video", comment: "")
-        tabViewItems[5].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
+        tabViewItems[5].label = NSLocalizedString("EditVMViewController.snapshots", comment: "")
+        tabViewItems[6].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
 
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
         let network = tabViewItems[2].viewController as! EditVMViewControllerNetwork
         let networkVF = tabViewItems[3].viewController as! EditVMViewControllerNetworkVF
         let video = tabViewItems[4].viewController as! EditVMViewControllerVideo
-        let advanced = tabViewItems[5].viewController as! EditVMViewControllerAdvanced
+        let snapshots = tabViewItems[5].viewController as! EditVMViewControllerSnapshots
+        let advanced = tabViewItems[6].viewController as! EditVMViewControllerAdvanced
 
         general.setVirtualMachine(vm)
         hardware.setVirtualMachine(vm)
         network.setVirtualMachine(vm)
         networkVF.setVirtualMachine(vm)
         video.setVirtualMachine(vm)
+        snapshots.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 
-        if vm.type == MacMulatorConstants.APPLE_VM {
+        if let vmRunner {
+            hardware.setVmRunner(vmRunner)
+            snapshots.setVmRunner(vmRunner)
+        }
+
+        if vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[5])
             removeTabViewItem(tabViewItems[4])
+            removeTabViewItem(tabViewItems[2])
+        } else if vm.type == MacMulatorConstants.APPLE_VM {
+            removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[2])
         } else if vm.os == QemuConstants.OS_IOS {
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
-        } else if vm.os != QemuConstants.OS_LINUX, vm.subtype != QemuConstants.SUB_WINDOWS_11 {
-            removeTabViewItem(tabViewItems[4])
+        } else if vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[6])
+            removeTabViewItem(tabViewItems[5])
             removeTabViewItem(tabViewItems[3])
         } else {
             removeTabViewItem(tabViewItems[3])
@@ -66,7 +77,13 @@ class EditVMViewController: NSTabViewController {
     override func viewDidDisappear() {
         if let virtualMachine {
             virtualMachine.writeToPlist()
-            rootController?.refreshViewForVM(virtualMachine)
+            // The folder of the VM follows its name.
+            (NSApp.delegate as? AppDelegate)?.rootController?.renameVMFolderToMatchName(virtualMachine)
         }
+    }
+
+    func selectTab(tabIdentifier: String) {
+        guard let idx = tabViewItems.firstIndex(where: { ($0.identifier as? String) == tabIdentifier }) else { return }
+        selectedTabViewItemIndex = idx
     }
 }

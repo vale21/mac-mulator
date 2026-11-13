@@ -16,10 +16,21 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     @IBOutlet var createMappingButton: NSButton!
 
     var virtualMachine: VirtualMachine?
+    var adaptersList: [String] = []
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
+
+        loadAdaptersList()
         updateView()
+    }
+
+    @IBAction func deletePortmapping(_ sender: Any) {
+        if let virtualMachine {
+            let row = mappingsTableView.row(for: sender as! NSView)
+            virtualMachine.portMappings?.remove(at: row)
+            reloadPortMappings()
+        }
     }
 
     override func viewWillAppear() {
@@ -41,34 +52,6 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         }
 
         updateView()
-    }
-
-    func updateView() {
-        if let virtualMachine {
-            networkAdapterComboBox.reloadData()
-            networkAdapterComboBox.selectItem(at: QemuConstants.ALL_NETWORK_ADAPTERS.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)) ?? -1)
-
-            mappingsTableView.reloadData()
-        }
-    }
-
-    func reloadPortMappings() {
-        mappingsTableView.reloadData()
-    }
-
-    func addPortmapping(_ portMapping: PortMapping) {
-        if let virtualMachine {
-            virtualMachine.portMappings?.append(portMapping)
-            reloadPortMappings()
-        }
-    }
-
-    @IBAction func deletePortmapping(_ sender: Any) {
-        if let virtualMachine {
-            let row = mappingsTableView.row(for: sender as! NSView)
-            virtualMachine.portMappings?.remove(at: row)
-            reloadPortMappings()
-        }
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
@@ -124,12 +107,12 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func numberOfItems(in _: NSComboBox) -> Int {
-        QemuConstants.ALL_NETWORK_ADAPTERS_DESC.count
+        adaptersList.count
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == networkAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[QemuConstants.ALL_NETWORK_ADAPTERS[index]] : ""
+            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[adaptersList[index]] : ""
         }
         return index + 1
     }
@@ -137,8 +120,35 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     func comboBoxSelectionDidChange(_ notification: Notification) {
         if (notification.object as! NSComboBox) == networkAdapterComboBox {
             if let virtualMachine {
-                virtualMachine.networkDevice = QemuConstants.ALL_NETWORK_ADAPTERS[networkAdapterComboBox.indexOfSelectedItem]
+                virtualMachine.networkDevice = adaptersList[networkAdapterComboBox.indexOfSelectedItem]
             }
         }
+    }
+
+    func updateView() {
+        if let virtualMachine {
+            networkAdapterComboBox.reloadData()
+            networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, virtualMachine.architecture)) ?? -1)
+
+            mappingsTableView.reloadData()
+        }
+    }
+
+    func reloadPortMappings() {
+        mappingsTableView.reloadData()
+    }
+
+    func addPortmapping(_ portMapping: PortMapping) {
+        if let virtualMachine {
+            virtualMachine.portMappings?.append(portMapping)
+            reloadPortMappings()
+        }
+    }
+
+    private func loadAdaptersList() {
+        guard let virtualMachine else { return }
+
+        adaptersList = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableNetworkDevices ?? QemuConstants.ALL_NETWORK_ADAPTERS
+        updateView()
     }
 }

@@ -12,8 +12,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
 
     var rootController: RootViewController?
 
+    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
+
+    private var returnKeyMonitor: Any?
+
     func setRootController(_ rootController: RootViewController) {
         self.rootController = rootController
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+        if let returnKeyMonitor {
+            NSEvent.removeMonitor(returnKeyMonitor)
+        }
     }
 
     func numberOfRows(in _: NSTableView) -> Int {
@@ -27,11 +38,10 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeView(withIdentifier: tableColumn!.identifier, owner: self) as! VirtualMachineTableCellView
         if let rootController {
-            cell.rootController = rootController
+            cell.setRootController(rootController)
 
             let vm: VirtualMachine = rootController.getVirtualMachineAt(row)
             cell.setVirtualMachine(virtualMachine: vm)
-            cell.setRunning(rootController.isVMRunning(vm))
         }
         return cell
     }
@@ -55,8 +65,6 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         }
     }
 
-    let accountPasteboardType = NSPasteboard.PasteboardType(rawValue: "virtual.machine")
-
     override func viewDidLoad() {
         let menu = NSMenu()
         menu.autoenablesItems = false
@@ -73,22 +81,66 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.showInFinder", comment: ""), action: #selector(tableViewShowInFinderItemClicked(_:)), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""), action: #selector(tableViewCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""), action: #selector(tableViewConvertToTemplateItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.convertToFullClone", comment: ""), action: #selector(tableViewConvertToFullCloneItemClicked(_:)), keyEquivalent: ""))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""), action: #selector(tableViewTakeSnapshotItemClicked(_:)), keyEquivalent: ""))
         table.menu = menu
         table.registerForDraggedTypes([accountPasteboardType])
         table.allowsMultipleSelection = false
+
+        NotificationCenter.default.addObserver(self, selector: #selector(vmPauseStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        guard returnKeyMonitor == nil else { return }
+        // Pressing Return on the selected VM renames it, as in the Finder.
+        returnKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self, let window = view.window, event.window === window, window.firstResponder === table,
+                  event.keyCode == 36 || event.keyCode == 76, event.modifierFlags.intersection(.deviceIndependentFlagsMask).isEmpty
+            else {
+                return event
+            }
+            beginRenamingSelectedVirtualMachine()
+            return nil
+        }
     }
 
     func menuWillOpen(_ menu: NSMenu) {
         let row = table.clickedRow
         if let rootController {
             let vm = rootController.getVirtualMachineAt(row)
-            if rootController.isVMRunning(vm) {
+            if #unavailable(macOS 13.0,) {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isHidden = true
+            } else {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = Utils.isTemplateConversionSupported(vm)
+            }
+
+            // A paused VM can be cloned, a running one cannot.
+            menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.clone", comment: ""))?.isEnabled = !rootController.isVMRunning(vm)
+
+            if let fullCloneItem = menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToFullClone", comment: "")) {
+                fullCloneItem.isHidden = !vm.hasLinkedDrives || !Utils.isFullCloneConversionSupported(vm)
+                fullCloneItem.isEnabled = !rootController.isVMRunning(vm)
+            }
+
+            menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""))?.isEnabled = !Utils.isVMTemplate(vm)
+            if Utils.isVMTemplate(vm) {
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.createSnapshot", comment: ""))?.isEnabled = false
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = false
+            } else if rootController.isVMRunning(vm) {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = false
                 #if arch(arm64)
                     menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.startInRecovery", comment: ""))?.isEnabled = false
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = true
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = Utils.isPauseSupported(vm)
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = false
             } else {
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.start", comment: ""))?.isEnabled = Utils.isVMAvailable(vm)
                 #if arch(arm64)
@@ -96,6 +148,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
                 #endif
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.stop", comment: ""))?.isEnabled = false
                 menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.pause", comment: ""))?.isEnabled = false
+                // A paused VM has to be stopped before becoming a template.
+                menu.item(withTitle: NSLocalizedString("VirtualMachineListViewController.convertToTemplate", comment: ""))?.isEnabled = !rootController.isVMPaused(vm) && Utils.isTemplateConversionSupported(vm)
             }
         }
     }
@@ -104,7 +158,7 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         let virtualMachine = rootController?.getVirtualMachineAt(row)
         if let vm = virtualMachine {
             let pasteboardItem = NSPasteboardItem()
-            pasteboardItem.setString(vm.displayName, forType: accountPasteboardType)
+            pasteboardItem.setString(vm.id, forType: accountPasteboardType)
             return pasteboardItem
         }
         return nil
@@ -121,8 +175,8 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     func tableView(_ tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation _: NSTableView.DropOperation) -> Bool {
         guard
             let item = info.draggingPasteboard.pasteboardItems?.first,
-            let theString = item.string(forType: accountPasteboardType),
-            let vm = rootController?.getVirtualMachine(name: theString),
+            let vmId = item.string(forType: accountPasteboardType),
+            let vm = rootController?.getVirtualMachine(id: vmId),
             let originalRow = rootController?.getIndex(of: vm)
         else { return false }
 
@@ -163,6 +217,24 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         cloneVirtualMachine(table.clickedRow)
     }
 
+    @objc func tableViewConvertToFullCloneItemClicked(_: AnyObject) {
+        if table.clickedRow >= 0 {
+            rootController?.convertToFullCloneAt(table.clickedRow)
+        }
+    }
+
+    @objc func tableViewConvertToTemplateItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        if #available(macOS 13.0, *) {
+            convertVirtualMachineToTemplate(table.clickedRow)
+        }
+    }
+
+    @objc func tableViewTakeSnapshotItemClicked(_: AnyObject) {
+        guard table.clickedRow >= 0 else { return }
+        createVMSnapshot(table.clickedRow)
+    }
+
     @objc func tableViewStartItemClicked(_: AnyObject) {
         guard table.clickedRow >= 0 else { return }
         startVirtualMachine(table.clickedRow)
@@ -191,17 +263,45 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
     }
 
     func deleteVirtualMachine(_ index: Int) {
-        if let rootController {
-            if rootController.isVMRunning(rootController.getVirtualMachineAt(index)) {
-                let response = Utils.showPrompt(window: rootController.view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineListViewController.runningVM", comment: ""), virtualMachine: rootController.getVirtualMachineAt(index))
-                if response.rawValue == Utils.ALERT_RESP_OK {
-                    table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
-                    _ = rootController.removeVirtualMachineAt(index)
+        guard let rootController, let window = rootController.view.window else { return }
+        let vm = rootController.getVirtualMachineAt(index)
+        guard rootController.canDelete(vm) else { return }
+
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(vm.os, vm.subtype) + ".small"))
+        // The data of a linked clone can't be kept: its disks depend on the template, which could then be deleted.
+        let messageKey = vm.hasLinkedDrives ? "VirtualMachineListViewController.deleteLinkedClone" : "VirtualMachineListViewController.deleteOrRemove"
+        let infoKey = vm.hasLinkedDrives ? "VirtualMachineListViewController.deleteLinkedCloneInfo" : "VirtualMachineListViewController.deleteOrRemoveInfo"
+        alert.messageText = String(format: NSLocalizedString(messageKey, comment: ""), vm.displayName)
+        var informativeText = NSLocalizedString(infoKey, comment: "")
+        if rootController.isVMRunning(vm) {
+            informativeText += "\n\n" + NSLocalizedString("VirtualMachineListViewController.runningVMWillBeStopped", comment: "")
+        }
+        alert.informativeText = informativeText
+        let deleteButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.deleteData", comment: ""))
+        deleteButton.hasDestructiveAction = true
+        let keepButton = alert.addButton(withTitle: NSLocalizedString("VirtualMachineListViewController.keepData", comment: ""))
+        keepButton.isEnabled = !vm.hasLinkedDrives
+        alert.addButton(withTitle: NSLocalizedString("Utils.calcel", comment: ""))
+
+        alert.beginSheetModal(for: window) { response in
+            let deleteFiles: Bool
+            switch response {
+            case .alertFirstButtonReturn:
+                deleteFiles = true
+            case .alertSecondButtonReturn:
+                guard !vm.hasLinkedDrives else {
+                    Utils.showAlert(window: window, style: .critical, message: NSLocalizedString("VirtualMachineListViewController.linkedCloneMustBeFull", comment: ""), virtualMachine: vm)
+                    return
                 }
-            } else {
-                table.removeRows(at: IndexSet(integer: IndexSet.Element(index)), withAnimation: NSTableView.AnimationOptions.slideUp)
-                _ = rootController.removeVirtualMachineAt(index)
+                deleteFiles = false
+            default:
+                return
             }
+            // The list may have changed while the sheet was open: look the VM up again.
+            guard let currentIndex = rootController.getIndex(of: vm) else { return }
+            _ = rootController.removeVirtualMachineAt(currentIndex, deleteFiles: deleteFiles)
         }
     }
 
@@ -248,6 +348,19 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         rootController?.cloneVirtualMachineAt(index)
     }
 
+    @available(macOS 13.0, *)
+    func convertVirtualMachineToTemplate(_ index: Int) {
+        rootController?.convertVirtualMachineToTemplateAt(index)
+    }
+
+    func createVMSnapshot(_ index: Int) {
+        if let rootController {
+            _ = rootController.getVirtualMachineAt(index)
+            table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
+            rootController.createVMSnapshot(sender: self)
+        }
+    }
+
     func selectElement(_ index: Int) {
         table.selectRowIndexes(IndexSet(integer: IndexSet.Element(index)), byExtendingSelection: false)
     }
@@ -256,10 +369,67 @@ class VirtualMachinesListViewController: NSViewController, NSTableViewDelegate, 
         table.reloadData()
     }
 
-    func setRunning(_ index: Int, _ running: Bool) {
+    func removeRow(_ index: Int) {
+        table.removeRows(at: IndexSet(integer: index), withAnimation: NSTableView.AnimationOptions.slideUp)
+    }
+
+    func setState(_ index: Int, _ state: VirtualMachineTableCellView.CellState) {
+        guard index >= 0, index < table.numberOfRows else { return }
         let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
         if let cellView = view {
-            cellView.setRunning(running)
+            cellView.setState(state)
+        }
+    }
+
+    func setState(_ index: Int, _ vm: VirtualMachine) {
+        guard index >= 0, index < table.numberOfRows else { return }
+        let view = table.view(atColumn: 0, row: index, makeIfNecessary: false) as? VirtualMachineTableCellView
+        if let cellView = view, let rootController {
+            cellView.setState(VirtualMachineTableCellView.computeVMState(vm, rootController))
+        }
+    }
+
+    private func beginRenamingSelectedVirtualMachine() {
+        let row = table.selectedRow
+        guard row >= 0, let rootController, let cell = table.view(atColumn: 0, row: row, makeIfNecessary: false) as? VirtualMachineTableCellView else { return }
+        let vm = rootController.getVirtualMachineAt(row)
+        // The running VMs are tracked by name, so they can't be renamed.
+        guard !rootController.isVMRunning(vm) else {
+            NSSound.beep()
+            return
+        }
+        cell.beginRenaming { [weak self] newName in
+            self?.renameVirtualMachine(vm, to: newName)
+        }
+    }
+
+    private func renameVirtualMachine(_ vm: VirtualMachine, to newName: String) {
+        guard let rootController else { return }
+        if rootController.virtualMachines.contains(where: { $0 !== vm && $0.displayName == newName }) {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualMachineListViewController.renameDuplicate", comment: ""), newName), virtualMachine: vm)
+            return
+        }
+        vm.displayName = newName
+        vm.writeToPlist()
+        // The folder of the VM follows its name.
+        rootController.renameVMFolderToMatchName(vm)
+        rootController.refreshViewForVM(vm)
+        if let index = rootController.virtualMachines.firstIndex(where: { $0 === vm }) {
+            selectElement(index)
+        }
+        view.window?.makeFirstResponder(table)
+    }
+
+    @objc private func vmPauseStateChanged(_ notification: Notification) {
+        let changedVM = notification.object as? VirtualMachine
+        if changedVM != rootController?.currentVm || rootController?.isCurrentVMRunning() == true {
+            return
+        }
+
+        DispatchQueue.main.async {
+            if let changedVM {
+                self.rootController?.unsetRunningVM(changedVM)
+            }
         }
     }
 }

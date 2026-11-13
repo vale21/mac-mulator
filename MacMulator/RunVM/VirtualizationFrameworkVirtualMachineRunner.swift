@@ -12,15 +12,15 @@ import Virtualization
 class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunner, VZVirtualMachineDelegate {
     let managedVm: VirtualMachine
     let saveFileURL: URL
+    let screenshotFileURL: URL
     var vzVirtualMachine: VZVirtualMachine?
+    var passthroughDevices: [UInt64: AnyObject] = [:]
+    var pendingPassthroughIDs: Set<UInt64> = []
     var vmView: VZVirtualMachineView?
     var vmViewController: VirtualMachineContainerViewController?
+    weak var vmController: VirtualMachineViewController?
     var recoveryMode: Bool = false
-
-    init(virtualMachine: VirtualMachine) {
-        managedVm = virtualMachine
-        saveFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
-    }
+    private(set) var serialConsole: VirtualizationFrameworkSerialConsole?
 
     func getManagedVM() -> VirtualMachine {
         managedVm
@@ -34,8 +34,61 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         self.vmViewController = vmViewController
     }
 
+    func setVmController(_ vmController: VirtualMachineViewController) {
+        self.vmController = vmController
+    }
+
+    private var alertWindow: NSWindow {
+        if let window = vmView?.window {
+            return window
+        }
+        let mainWindow = (NSApp.delegate as! AppDelegate).rootController!.view.window!
+        mainWindow.makeKeyAndOrderFront(nil)
+        return mainWindow
+    }
+
+    func getConsoleOutput() -> String {
+        ""
+    }
+
+    init(virtualMachine: VirtualMachine) {
+        managedVm = virtualMachine
+        saveFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SAVE_FILE_NAME)
+        screenshotFileURL = URL(fileURLWithPath: managedVm.path).appendingPathComponent(MacMulatorConstants.SCREENSHOT_FILE_NAME)
+    }
+
+    func guestDidStop(_ virtualMachine: VZVirtualMachine) {
+        print("Stopped")
+        stopVM(guestStopped: true)
+        releaseVirtualMachine(virtualMachine)
+    }
+
+    func virtualMachine(_ virtualMachine: VZVirtualMachine, didStopWithError error: any Error) {
+        print("Stopped with error: \(error)")
+        stopVM(guestStopped: true)
+        releaseVirtualMachine(virtualMachine)
+    }
+
+    func attachView(_ view: VZVirtualMachineView, _ viewController: VirtualMachineContainerViewController) {
+        vmView = view
+        vmViewController = viewController
+        configureVmView()
+    }
+
+    func detachView() {
+        vmView?.virtualMachine = nil
+        vmView = nil
+        vmViewController = nil
+    }
+
     func runVM(recoveryMode: Bool, uponCompletion _: @escaping (VMExecutionResult, VirtualMachine) -> Void) {
         self.recoveryMode = recoveryMode
+
+        if managedVm.macAddress == nil {
+            // Keep the same MAC address across runs: the IP address of the guest is looked up through it (see GuestNetworkLookup)
+            managedVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+            managedVm.writeToPlist()
+        }
 
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
             #if arch(arm64)
@@ -58,24 +111,21 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             } else {
                 installPath = ""
             }
-            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!)
+            let console = VirtualizationFrameworkSerialConsole()
+            serialConsole = console
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
             startOrResumeVM()
         }
     }
 
     func instllationComplete(_ result: Result<Void, Error>) {
         if case let .failure(error) = result {
-            Utils.showAlert(window: vmView!.window!, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription, virtualMachine: managedVm)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Installation failed with error: " + error.localizedDescription, virtualMachine: managedVm)
         } else {
             Utils.findMainDrive(managedVm.drives)!.setBlank(blank: false)
             managedVm.writeToPlist()
             startVM()
         }
-    }
-
-    func guestDidStop(_: VZVirtualMachine) {
-        print("Stopped")
-        stopVM(guestStopped: true)
     }
 
     func isVMRunning() -> Bool {
@@ -85,15 +135,25 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     func startVM() {
         if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
-            vmView?.virtualMachine = vzVirtualMachine
-            if #available(macOS 14.0, *) {
-                self.vmView?.automaticallyReconfiguresDisplay = true
-            }
-            vmView?.capturesSystemKeys = true
+            configureVmView()
             if #available(macOS 13.0, *), Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
                 #if arch(arm64)
                     let options = VZMacOSVirtualMachineStartOptions()
                     options.startUpFromMacOSRecovery = self.recoveryMode
+                    if #available(macOS 27.0, *), let provisioningInfo = managedVm.provisioningInformation {
+                        let guestProvisioning = VZMacGuestProvisioningOptions()
+                        guestProvisioning.fullName = provisioningInfo.userFullName
+                        guestProvisioning.username = provisioningInfo.userName
+                        guestProvisioning.password = provisioningInfo.userPassword
+                        guestProvisioning.enablesRemoteLogin = provisioningInfo.enableSSh
+                        guestProvisioning.logsInAutomatically = provisioningInfo.automaticLogin
+                        do {
+                            try options.setGuestProvisioning(guestProvisioning)
+                        } catch {
+                            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.provisioningFailed", comment: ""), error.localizedDescription), virtualMachine: managedVm)
+                            return
+                        }
+                    }
                     vzVirtualMachine.start(options: options, completionHandler: { result in self.handleVMStartWithOptions(error: result) })
                 #endif
             } else {
@@ -102,29 +162,65 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
     }
 
-    fileprivate func handleVMStartWithOptions(error: (any Error)?) {
-        if error != nil {
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+    func createVMSnapshot(_ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
+            #if arch(arm64)
+                vmViewController?.takeScreenshot()
+                vmViewController?.showSnapshottingView()
+                pauseAndSaveVirtualMachine(completionHandler: {
+                    let snapshot = try? self.copyVMSnapshotFiles(running: true, managedVm: self.managedVm)
+                    self.resumeVM()
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #endif
         } else {
-            attachUSBDrives()
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
+            let snapshot = try? copyVMSnapshotFiles(running: false, managedVm: managedVm)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
+            }
         }
     }
 
-    fileprivate func handleVMStart(result: Result<Void, any Error>) {
-        switch result {
-        case let .failure(error):
-            Utils.showAlert(window: (vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
-        default:
-            attachUSBDrives()
-        }
+    func deleteVMSnapshot(snapshot: VirtualMachineSnapshot) throws {
+        managedVm.removeSnapshot(snapshot.timestamp)
+        try deleteVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
     }
 
-    fileprivate func attachUSBDrives() {
-        if #available(macOS 15.0, *) {
-            for drive in self.managedVm.drives {
-                if drive.mediaType == QemuConstants.MEDIATYPE_USB {
-                    self.attachUSBImageToVM(virtualDrive: drive)
-                }
+    func restoreVMSnapshot(snapshot: VirtualMachineSnapshot, _ underlyingHandler: ((VirtualMachineSnapshot?) -> Void)? = nil) throws {
+        if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
+            #if arch(arm64)
+                vmViewController?.showRestoringView()
+                stopVM(guestStopped: false, uponCompletion: { _ in
+                    try? self.restoreVMSnapshotFiles(snapshot: snapshot, managedVm: self.managedVm)
+                    self.vzVirtualMachine?.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
+                        let fileManager = FileManager.default
+                        try? fileManager.removeItem(at: self.saveFileURL)
+
+                        if error == nil {
+                            self.resumeVM()
+                        } else {
+                            self.startVM()
+                        }
+                    })
+                    if let underlyingHandler {
+                        underlyingHandler(snapshot)
+                    }
+                })
+            #endif
+        } else {
+            if isVMRunning() {
+                throw ValidationError.snapshotError(vmType: "Intel")
+            }
+
+            try? restoreVMSnapshotFiles(snapshot: snapshot, managedVm: managedVm)
+            if let underlyingHandler {
+                underlyingHandler(snapshot)
             }
         }
     }
@@ -133,22 +229,42 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     func resumeVM() {
         if let vzVirtualMachine {
             vzVirtualMachine.delegate = self
-            vmView?.virtualMachine = vzVirtualMachine
-            vmView?.automaticallyReconfiguresDisplay = true
-            vmView?.capturesSystemKeys = true
-
+            configureVmView()
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
-                    Utils.showAlert(window: (self.vmView?.window)!, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                } else {
+                    // Passthrough devices are not part of the saved machine state: plug back the ones saved for this VM
+                    self.attachUSBPassthroughDevices()
                 }
                 NSLog(String(vzVirtualMachine.state.rawValue))
             })
         }
     }
 
-    func stopVM(guestStopped: Bool) {
-        vzVirtualMachine?.stop(completionHandler: { _ in })
-        vmViewController?.stopVM(guestStopped)
+    func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if #available(macOS 27.0, *) {
+            releasePassthroughDevices()
+        }
+        if let uponCompletion {
+            // The caller keeps using the stopped VM (e.g. to restore a snapshot), so it must not be released here.
+            if let vzVirtualMachine {
+                vzVirtualMachine.stop(completionHandler: uponCompletion)
+            } else {
+                uponCompletion(nil)
+            }
+        } else {
+            let stoppingVirtualMachine = vzVirtualMachine
+            vzVirtualMachine?.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
+        }
+        if let vmViewController {
+            vmViewController.stopVM(guestStopped)
+        } else {
+            // Headless: there is no VM window to clean up after the VM
+            DispatchQueue.main.async {
+                self.vmController?.cleanupStoppedVM(self.managedVm)
+            }
+        }
     }
 
     func stopVMGracefully() {
@@ -164,12 +280,25 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if #available(macOS 14.0, *) {
             if let vzVirtualMachine = self.vzVirtualMachine {
                 if vzVirtualMachine.state == .running {
-                    vmViewController?.takeScreenshot()
-                    vmViewController?.showPausingView()
+                    if let vmViewController {
+                        vmViewController.takeScreenshot()
+                        vmViewController.showPausingView()
+                    } else {
+                        // Headless: show the progress on the main window, until the paused VM is released
+                        vmController?.showBusyView(BusyViewInformation(operation: "Pausing", dismissalCriteria: { [weak self] in self?.vzVirtualMachine == nil }, alertMessage: nil), for: self)
+                    }
                     #if arch(arm64)
-                        pauseAndSaveVirtualMachine(completionHandler: {
-                            self.stopVM(guestStopped: true)
-                        })
+                        if #available(macOS 27.0, *) {
+                            detachPassthroughDevicesBeforeSaving {
+                                self.pauseAndSaveVirtualMachine(completionHandler: {
+                                    self.stopVM(guestStopped: true)
+                                })
+                            }
+                        } else {
+                            self.pauseAndSaveVirtualMachine(completionHandler: {
+                                self.stopVM(guestStopped: true)
+                            })
+                        }
                     #endif
                 }
             }
@@ -180,49 +309,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         vmViewController?.view.window?.close()
     }
 
-    func getConsoleOutput() -> String {
-        ""
-    }
-
-    fileprivate func startOrResumeVM() {
-        if #available(macOS 14.0, *) {
-            #if arch(arm64)
-                let fileManager = FileManager.default
-                if fileManager.fileExists(atPath: saveFileURL.path) {
-                    restoreVirtualMachine()
-                } else {
-                    startVM()
-                }
-            #else
-                startVM()
-            #endif
-        } else {
-            startVM()
-        }
-    }
-
-    fileprivate func installAndStartVM() {
-        vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
-    }
-
     #if arch(arm64)
-
-        @available(macOS 14.0, *)
-        fileprivate func restoreVirtualMachine() {
-            vmViewController?.showResumingView()
-            vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { error in
-                let fileManager = FileManager.default
-                try? fileManager.removeItem(at: self.saveFileURL)
-                try? fileManager.removeItem(at: URL(fileURLWithPath: self.managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
-
-                if error == nil {
-                    self.resumeVM()
-                } else {
-                    self.startVM()
-                }
-            })
-        }
-
         @available(macOS 14.0, *)
         func saveVirtualMachine(completionHandler: @escaping () -> Void) {
             vzVirtualMachine?.saveMachineStateTo(url: saveFileURL, completionHandler: { error in
@@ -244,7 +331,6 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 self.saveVirtualMachine(completionHandler: completionHandler)
             })
         }
-
     #endif
 
     @available(macOS 15.0, *)
@@ -279,4 +365,272 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             }
         }
     }
+
+    @available(macOS 27.0, *)
+    func passthroughAccessoryRemoved(registryID: UInt64) {
+        #if arch(arm64)
+            guard let device = passthroughDevices.removeValue(forKey: registryID) as? VZUSBPassthroughDevice else { return }
+            vzVirtualMachine?.usbControllers.first?.detach(device: device) { _ in
+                DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                }
+            }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func releasePassthroughDevices() {
+        #if arch(arm64)
+            let registryIDs = Array(passthroughDevices.keys)
+            passthroughDevices.removeAll()
+            for registryID in registryIDs {
+                guard let accessory = UsbPassthroughManager.shared.accessory(withRegistryID: registryID) else { continue }
+                accessory.close { error in
+                    if let error {
+                        NSLog("USB passthrough release failed: %@", String(describing: error))
+                    }
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                    }
+                }
+            }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func detachPassthroughDevicesBeforeSaving(completionHandler: @escaping () -> Void) {
+        #if arch(arm64)
+            guard let usbController = vzVirtualMachine?.usbControllers.first else {
+                completionHandler()
+                return
+            }
+            let group = DispatchGroup()
+            for device in passthroughDevices.values.compactMap({ $0 as? VZUSBPassthroughDevice }) {
+                group.enter()
+                usbController.detach(device: device) { error in
+                    if let error {
+                        NSLog("USB passthrough detach before saving failed: %@", String(describing: error))
+                    }
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main, execute: completionHandler)
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func reattachSavedPassthroughDevices() {
+        #if arch(arm64)
+            guard let saved = managedVm.usbPassthroughDevices, !saved.isEmpty else { return }
+            NSLog("USB passthrough: restoring saved devices %@", saved.joined(separator: ","))
+            UsbPassthroughManager.shared.start(retryAfterFailure: true) {
+                DispatchQueue.main.async {
+                    self.restoreSavedPassthroughDevices()
+                }
+            }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func restoreSavedPassthroughDevices() {
+        #if arch(arm64)
+            guard isVMRunning(), let saved = managedVm.usbPassthroughDevices, !saved.isEmpty else { return }
+            let candidates = UsbPassthroughManager.shared.candidates()
+            var remaining = candidates.filter { !isPassthroughAttached(registryID: $0.registryID) && !pendingPassthroughIDs.contains($0.registryID) }
+            var missing = saved
+            for candidate in candidates where isPassthroughAttached(registryID: candidate.registryID) || pendingPassthroughIDs.contains(candidate.registryID) {
+                if let index = missing.firstIndex(of: candidate.key) {
+                    missing.remove(at: index)
+                }
+            }
+            for key in missing {
+                guard let index = remaining.firstIndex(where: { $0.key == key }) else { continue }
+                let candidate = remaining.remove(at: index)
+                attachPassthroughDevice(registryID: candidate.registryID, silent: true)
+            }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func isPassthroughAttached(registryID: UInt64) -> Bool {
+        #if arch(arm64)
+            guard let device = passthroughDevices[registryID] as? VZUSBPassthroughDevice else { return false }
+            let stillAttached = vzVirtualMachine?.usbControllers.first?.usbDevices.contains { $0.uuid == device.uuid } ?? false
+            if !stillAttached {
+                passthroughDevices.removeValue(forKey: registryID)
+            }
+            return stillAttached
+        #else
+            return false
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func attachPassthroughDevice(registryID: UInt64, silent: Bool = false) {
+        #if arch(arm64)
+            guard passthroughDevices[registryID] == nil, !pendingPassthroughIDs.contains(registryID),
+                  let accessory = UsbPassthroughManager.shared.accessory(withRegistryID: registryID),
+                  let usbController = vzVirtualMachine?.usbControllers.first else { return }
+            do {
+                let device = try VZUSBPassthroughDevice(configuration: VZUSBPassthroughDeviceConfiguration(device: accessory))
+                pendingPassthroughIDs.insert(registryID)
+                usbController.attach(device: device) { error in
+                    DispatchQueue.main.async {
+                        self.pendingPassthroughIDs.remove(registryID)
+                        if let error {
+                            NSLog("USB passthrough attach failed: %@", String(describing: error))
+                            if !silent {
+                                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: nil)
+                            }
+                        } else {
+                            self.passthroughDevices[registryID] = device
+                            NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                        }
+                    }
+                }
+            } catch {
+                Utils.showAlert(window: NSApp.mainWindow!, style: NSAlert.Style.critical, message: error.localizedDescription, virtualMachine: nil)
+            }
+        #endif
+    }
+
+    @available(macOS 27.0, *)
+    func detachPassthroughDevice(registryID: UInt64) {
+        #if arch(arm64)
+            guard let device = passthroughDevices[registryID] as? VZUSBPassthroughDevice, let usbController = vzVirtualMachine?.usbControllers.first else { return }
+            usbController.detach(device: device) { _ in
+                DispatchQueue.main.async {
+                    self.passthroughDevices.removeValue(forKey: registryID)
+                    NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+                }
+            }
+        #endif
+    }
+
+    private func configureVmView() {
+        vmView?.virtualMachine = vzVirtualMachine
+        if #available(macOS 14.0, *) {
+            vmView?.automaticallyReconfiguresDisplay = true
+        }
+        vmView?.capturesSystemKeys = true
+    }
+
+    private func handleVMStartWithOptions(error: (any Error)?) {
+        if error != nil {
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+        } else {
+            if let provisioningInformation = managedVm.provisioningInformation {
+                managedVm.guestUserName = provisioningInformation.userName
+                provisioningInformation.cleanup()
+                managedVm.provisioningInformation = nil
+                managedVm.writeToPlist()
+            }
+            attachUSBDrives()
+        }
+    }
+
+    private func handleVMStart(result: Result<Void, any Error>) {
+        switch result {
+        case let .failure(error):
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+        default:
+            attachUSBDrives()
+        }
+    }
+
+    private func attachUSBDrives() {
+        attachUSBPassthroughDevices()
+        if #available(macOS 15.0, *) {
+            for drive in self.managedVm.drives {
+                if drive.mediaType == QemuConstants.MEDIATYPE_USB {
+                    self.attachUSBImageToVM(virtualDrive: drive)
+                }
+            }
+        }
+    }
+
+    private func attachUSBPassthroughDevices() {
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                for controller in vzVirtualMachine?.usbControllers ?? [] {
+                    controller.delegate = self
+                }
+                reattachSavedPassthroughDevices()
+            #endif
+        }
+    }
+
+    /// Drops every reference to the stopped VZVirtualMachine, so that its configuration is deallocated.
+    /// Linked clones attach disks through DiskImage objects opened in this process, whose file descriptors
+    /// are shared with the Virtualization service: the service's lock on the overlay stays held until these
+    /// objects are released, which would make the next start fail with "Cannot acquire exclusive lock".
+    private func releaseVirtualMachine(_ stoppedVirtualMachine: VZVirtualMachine?) {
+        guard let stoppedVirtualMachine, stoppedVirtualMachine === vzVirtualMachine else { return }
+        if vmView?.virtualMachine === stoppedVirtualMachine {
+            vmView?.virtualMachine = nil
+        }
+        stoppedVirtualMachine.delegate = nil
+        vzVirtualMachine = nil
+    }
+
+    private func startOrResumeVM() {
+        if #available(macOS 14.0, *) {
+            #if arch(arm64)
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: saveFileURL.path) {
+                    restoreVirtualMachine()
+                } else {
+                    startVM()
+                }
+            #else
+                startVM()
+            #endif
+        } else {
+            startVM()
+        }
+    }
+
+    private func installAndStartVM() {
+        vmViewController?.performSegue(withIdentifier: MacMulatorConstants.SHOW_INSTALLING_OS_SEGUE, sender: self)
+    }
+
+    #if arch(arm64)
+        @available(macOS 14.0, *)
+        private func restoreVirtualMachine() {
+            if let vmViewController {
+                vmViewController.showResumingView()
+            } else {
+                vmController?.showBusyView(BusyViewInformation(operation: "Resuming", dismissalCriteria: { [weak self] in self?.isVMRunning() ?? true }, alertMessage: nil), for: self)
+            }
+            vzVirtualMachine?.restoreMachineStateFrom(url: saveFileURL, completionHandler: { error in
+                let fileManager = FileManager.default
+                try? fileManager.removeItem(at: self.saveFileURL)
+                try? fileManager.removeItem(at: URL(fileURLWithPath: self.managedVm.path + "/" + MacMulatorConstants.SCREENSHOT_FILE_NAME))
+
+                if error == nil {
+                    self.resumeVM()
+                } else {
+                    self.startVM()
+                }
+
+                (self.vmViewController?.vmController ?? self.vmController)?.setRunningStatus(self.managedVm, true)
+            })
+        }
+    #endif
 }
+
+#if arch(arm64)
+    @available(macOS 27.0, *)
+    extension VirtualizationFrameworkVirtualMachineRunner: VZUSBController.Delegate {
+        func usbController(_: VZUSBController, usbPassthroughDeviceDidDisconnect device: VZUSBPassthroughDevice) {
+            DispatchQueue.main.async {
+                for (registryID, attached) in self.passthroughDevices {
+                    if let attached = attached as? VZUSBPassthroughDevice, attached.uuid == device.uuid {
+                        self.passthroughDevices.removeValue(forKey: registryID)
+                    }
+                }
+                NotificationCenter.default.post(name: UsbPassthroughManager.didChangeNotification, object: nil)
+            }
+        }
+    }
+#endif
