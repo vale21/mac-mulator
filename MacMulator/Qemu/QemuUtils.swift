@@ -8,6 +8,11 @@
 import Cocoa
 
 class QemuUtils {
+    #if APPSTORE
+        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
+        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
+    #endif
+
     static func getDriveFormatDescription(_ format: String) -> String {
         if format == QemuConstants.FORMAT_RAW {
             return "(Plain data)"
@@ -168,16 +173,11 @@ class QemuUtils {
         }
     }
 
-    #if APPSTORE
-        static let bundledQemuPath = Bundle.main.executableURL!.deletingLastPathComponent().path
-        static let bundledQemuDataPath = Bundle.main.resourcePath! + "/qemu"
-    #endif
-
     static func getQemuPath() -> String {
         #if APPSTORE
             return bundledQemuPath
         #else
-            return UserDefaults.standard.string(forKey: MacMulatorConstants.PREFERENCE_KEY_QEMU_PATH)!
+            return WorkspaceState.shared.qemuPath
         #endif
     }
 
@@ -203,11 +203,37 @@ class QemuUtils {
         #endif
     }
 
+    static func isSpiceSupported(_ vm: VirtualMachine) -> Bool {
+        isSpiceDisplayEnabled(vm)
+    }
+
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
             return containerSocketPath("spice", vmPath)
         #else
             return vmPath + "/socket.spice"
+        #endif
+    }
+
+    static func sshPortMapping(for vm: VirtualMachine) -> PortMapping? {
+        vm.portMappings?.first { $0.vmPort == 22 }
+    }
+
+    static func sshArguments(for vm: VirtualMachine) -> [String]? {
+        guard let mapping = sshPortMapping(for: vm) else { return nil }
+
+        var destination = "localhost"
+        if let userName = Utils.guestUserName(vm) {
+            destination = userName + "@" + destination
+        }
+        return Utils.sshArguments(for: vm, destination: destination, port: mapping.hostPort)
+    }
+
+    static func serialSocketPath(forVMAt vmPath: String) -> String {
+        #if APPSTORE
+            return containerSocketPath("serial", vmPath)
+        #else
+            return NSTemporaryDirectory() + "serial-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
         #endif
     }
 
@@ -218,19 +244,6 @@ class QemuUtils {
             return vmPath + "/tpm/socket"
         #endif
     }
-
-    #if APPSTORE
-        /// A unix socket path inside the sandbox container, unique per VM and short enough for sun_path.
-        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
-            // FNV-1a hash of the path: stable across launches (unlike Hasher) and short.
-            var hash: UInt64 = 0xCBF2_9CE4_8422_2325
-            for byte in vmPath.utf8 {
-                hash ^= UInt64(byte)
-                hash = hash &* 0x0000_0100_0000_01B3
-            }
-            return NSTemporaryDirectory() + prefix + "-" + String(hash, radix: 16) + ".sock"
-        }
-    #endif
 
     static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
         let aliases = [
@@ -294,6 +307,18 @@ class QemuUtils {
 
     static func populateOpenCoreConfig(virtualMachine: VirtualMachine, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let fileManager = FileManager.default
+        // Templates drop the OpenCore drive record along with its image, so register it again for QemuRunner.
+        if !virtualMachine.containsVirtualDrive(virtualMachine.path + "/opencore-0.img") {
+            let openCore = VirtualDrive(
+                path: virtualMachine.path + "/" + QemuConstants.MEDIATYPE_OPENCORE + "-0." + MacMulatorConstants.IMG_EXTENSION,
+                name: QemuConstants.MEDIATYPE_OPENCORE + "-0",
+                format: QemuConstants.FORMAT_RAW,
+                mediaType: QemuConstants.MEDIATYPE_OPENCORE,
+                size: 0
+            )
+            virtualMachine.addVirtualDrive(openCore)
+            virtualMachine.writeToPlist()
+        }
         if fileManager.fileExists(atPath: virtualMachine.path + "/opencore-0.img") {
             try? fileManager.removeItem(atPath: virtualMachine.path + "/opencore-0.img")
         }
@@ -451,4 +476,10 @@ class QemuUtils {
     static func requiresOpenCore(_ vm: VirtualMachine) -> Bool {
         vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
+
+    #if APPSTORE
+        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
+            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+        }
+    #endif
 }

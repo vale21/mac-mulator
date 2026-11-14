@@ -33,6 +33,25 @@ class ProvisioningOptionsViewController: NSViewController, NSTextFieldDelegate {
         self.parentController = parentController
     }
 
+    @IBAction func skipVMProvisioning(_: Any) {
+        dismiss(self)
+        parentController?.vmCreated(virtualMachine!, performProvisioning: false)
+    }
+
+    @IBAction func performVMProvisioning(_: Any) {
+        guard validateProvisioningInformation() else {
+            return
+        }
+
+        if let virtualMachine {
+            virtualMachine.provisioningInformation = ProvisioningInformation(userFullName: fullNameField.stringValue.trimmingCharacters(in: .whitespaces), userName: userNameField.stringValue.trimmingCharacters(in: .whitespaces), userPassword: passwordField.stringValue, automaticLogin: loginAutomaticallySwitch.state == .on, enableSSh: enableSshSwitch.state == .on)
+            virtualMachine.writeToPlist()
+        }
+
+        dismiss(self)
+        parentController?.vmCreated(virtualMachine!, performProvisioning: false)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         descriptionTextView.stringValue = NSLocalizedString("ProvisioningOptionsViewController.description", comment: "")
@@ -59,25 +78,6 @@ class ProvisioningOptionsViewController: NSViewController, NSTextFieldDelegate {
         } else if field === userNameField {
             userNameEditedManually = !userNameField.stringValue.isEmpty
         }
-    }
-
-    @IBAction func skipVMProvisioning(_: Any) {
-        dismiss(self)
-        parentController?.vmCreated(virtualMachine!, performProvisioning: false)
-    }
-
-    @IBAction func performVMProvisioning(_: Any) {
-        guard validateProvisioningInformation() else {
-            return
-        }
-
-        if let virtualMachine {
-            virtualMachine.provisioningInformation = ProvisioningInformation(userFullName: fullNameField.stringValue.trimmingCharacters(in: .whitespaces), userName: userNameField.stringValue.trimmingCharacters(in: .whitespaces), userPassword: passwordField.stringValue, automaticLogin: loginAutomaticallySwitch.state == .on, enableSSh: enableSshSwitch.state == .on)
-            virtualMachine.writeToPlist()
-        }
-
-        dismiss(self)
-        parentController?.vmCreated(virtualMachine!, performProvisioning: false)
     }
 
     private func validateProvisioningInformation() -> Bool {

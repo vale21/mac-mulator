@@ -23,11 +23,18 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     @IBOutlet var fullConfiguration: NSButton!
     @IBOutlet var createButton: NSButton!
 
+    /// The VM just created, handed over to the provisioning options by reference rather than looked up by name.
+    private var createdVM: VirtualMachine?
+
     var rootController: RootViewController?
 
     static let DESCRIPTION_DEFAULT_MESSAGE = NSLocalizedString("NewVMViewController.defaultMessage", comment: "")
 
     var starting: Bool = true
+
+    func setRootController(_ rootController: RootViewController) {
+        self.rootController = rootController
+    }
 
     @IBAction func findInstallMedia(_: Any) {
         if vmType.stringValue == QemuConstants.OS_IOS {
@@ -92,16 +99,11 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
             destinationController.setParentController(self)
         } else if segue.identifier == MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE {
             let destinationController = segue.destinationController as! ProvisioningOptionsViewController
-            let vm = rootController?.getVirtualMachine(name: vmName.stringValue)
-            if let vm {
+            if let vm = createdVM {
                 destinationController.setVirtualMachine(vm)
                 destinationController.setParentController(self)
             }
         }
-    }
-
-    func setRootController(_ rootController: RootViewController) {
-        self.rootController = rootController
     }
 
     func numberOfItems(in comboBox: NSComboBox) -> Int {
@@ -138,6 +140,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     func vmCreated(_ vm: VirtualMachine, performProvisioning: Bool) {
+        createdVM = vm
         rootController?.addVirtualMachine(vm)
         if performProvisioning {
             performSegue(withIdentifier: vm.os == QemuConstants.OS_MAC ? MacMulatorConstants.SHOW_PROVISIONING_OPTIONS_SEGUE : MacMulatorConstants.SHOW_CLOUD_INIT_OPTIONS_SEGUE, sender: self)
@@ -153,7 +156,7 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
         Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.vmCreationFailed", comment: "") + error.localizedDescription, completionHandler: { _ in self.view.window?.close() }, virtualMachine: nil)
     }
 
-    fileprivate func validateInput() -> Bool {
+    private func validateInput() -> Bool {
         if vmType.stringValue == "" || vmName.stringValue == "" {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.critical, message: NSLocalizedString("NewVMController.errorFeldsMissing", comment: ""), virtualMachine: nil)
             return false

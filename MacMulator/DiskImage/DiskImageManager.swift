@@ -10,6 +10,10 @@ import Foundation
 protocol DiskImageManager {
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
+    func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
+
+    func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void)
+
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
     func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void)
@@ -28,6 +32,11 @@ extension DiskImageManager {
         }
 
         if newVirtualDrive.format != oldVirtualDrive.format {
+            // Overlay layers depend on the format of the drive they sit on, so they can't be converted.
+            guard !oldVirtualDrive.isLinked else {
+                callback(-1, NSLocalizedString("DiskImageManager.convertLinkedFailed", comment: ""))
+                return
+            }
             convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, progress: progress, uponCompletion: { terminationCode, errorMessage in
                 guard terminationCode == 0 else {
                     callback(terminationCode, errorMessage)

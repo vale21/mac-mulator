@@ -32,6 +32,11 @@ class QemuCapabilitiesReporter {
     let availableVideoDevices: [String]
     let availableNetworkDevices: [String]
 
+    private static let cacheQueue = DispatchQueue(label: "QemuCapabilitiesReporter.cache")
+    private static var INSTANCES: [String: QemuCapabilitiesReporter] = [:]
+    private static var cachedCommands: [String: [String]] = [:]
+    private static var availableBinaries: [String: [String: Bool]] = [:]
+
     init(qemuVersion: String, spiceSupported: Bool, virGLSupported: Bool, appleParavirtualizedGraphicsSupported: Bool, vmnetSupported: Bool, hasX86Binary: Bool, hasx86_64Binary: Bool, hasArmBinary: Bool, hasAarch64Binary: Bool, hasRiscvBinary: Bool, hasRiscv64Binary: Bool, hasPowerPCBinary: Bool, hasPowerPC64Binary: Bool, hasM68kBinary: Bool, hasQemuImgBinary: Bool, hasSwtpmBinary: Bool, availableDisplays: [String], availableVideoDevices: [String], availableNetworkDevices: [String]) {
         self.qemuVersion = qemuVersion
         self.spiceSupported = spiceSupported
@@ -53,11 +58,6 @@ class QemuCapabilitiesReporter {
         self.availableVideoDevices = availableVideoDevices
         self.availableNetworkDevices = availableNetworkDevices
     }
-
-    private static let cacheQueue = DispatchQueue(label: "QemuCapabilitiesReporter.cache")
-    private static var INSTANCES: [String: QemuCapabilitiesReporter] = [:]
-    private static var cachedCommands: [String: [String]] = [:]
-    private static var availableBinaries: [String: [String: Bool]] = [:]
 
     static func getInstance(forQemuPath qemuPath: String) -> QemuCapabilitiesReporter? {
         cacheQueue.sync {

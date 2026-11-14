@@ -62,6 +62,21 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
         updateView(with: capabilities)
     }
 
+    func numberOfRows(in tableView: NSTableView) -> Int {
+        items(for: tableView).count
+    }
+
+    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        guard let tableColumn,
+              let cell = tableView.makeView(withIdentifier: tableColumn.identifier, owner: self) as? NSTableCellView
+        else {
+            return nil
+        }
+
+        cell.textField?.stringValue = items(for: tableView)[row]
+        return cell
+    }
+
     private func updateView(with capabilities: QemuCapabilitiesReporter?) {
         refreshQemuVersion(with: capabilities)
 
@@ -106,21 +121,6 @@ class QemuCapabilitiesViewController: NSViewController, NSTableViewDataSource, N
             return networkAdapters
         }
         return []
-    }
-
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        items(for: tableView).count
-    }
-
-    func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let tableColumn,
-              let cell = tableView.makeView(withIdentifier: tableColumn.identifier, owner: self) as? NSTableCellView
-        else {
-            return nil
-        }
-
-        cell.textField?.stringValue = items(for: tableView)[row]
-        return cell
     }
 
     private func refreshQemuVersion(with capabilities: QemuCapabilitiesReporter?) {

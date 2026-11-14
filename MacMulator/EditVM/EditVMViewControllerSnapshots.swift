@@ -30,32 +30,6 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         self.vmRunner = vmRunner
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(snapshotsChanged(_:)), name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: nil)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc private func snapshotsChanged(_ notification: Notification) {
-        guard let changedVM = notification.object as? VirtualMachine, changedVM === virtualMachine else { return }
-        DispatchQueue.main.async {
-            if let currentSnapshot = self.currentSnapshot, !(self.virtualMachine?.snapshots?.contains(currentSnapshot) ?? false) {
-                self.currentSnapshot = nil
-            }
-            self.updateView()
-        }
-    }
-
-    override func viewWillAppear() {
-        newSnapshotButton.title = NSLocalizedString("EditVMViewControllerSnapshots.createNewSnapshot", comment: "")
-        restoreButton.title = NSLocalizedString("EditVMViewControllerSnapshots.restore", comment: "")
-        deleteButton.title = NSLocalizedString("EditVMViewControllerSnapshots.delete", comment: "")
-        snapshotsTableView.tableColumns[0].headerCell.title = NSLocalizedString("EditVMViewControllerSnapshots.availableSnapshots", comment: "")
-    }
-
     @IBAction func createNewSnapshot(_: Any) {
         do {
             try vmRunner?.createVMSnapshot { snapshot in
@@ -72,16 +46,20 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         }
     }
 
-    func snapshotDeleted() {
-        currentSnapshot = nil
-        updateView()
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func snapshotRestored(showAlert: Bool) {
-        updateView()
-        if showAlert {
-            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("EditVMViewControllerSnapshots.snapshotRestoredSuccessfully", comment: ""), virtualMachine: virtualMachine)
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(snapshotsChanged(_:)), name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    override func viewWillAppear() {
+        newSnapshotButton.title = NSLocalizedString("EditVMViewControllerSnapshots.createNewSnapshot", comment: "")
+        restoreButton.title = NSLocalizedString("EditVMViewControllerSnapshots.restore", comment: "")
+        deleteButton.title = NSLocalizedString("EditVMViewControllerSnapshots.delete", comment: "")
+        snapshotsTableView.tableColumns[0].headerCell.title = NSLocalizedString("EditVMViewControllerSnapshots.availableSnapshots", comment: "")
     }
 
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -156,7 +134,29 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         }
     }
 
-    fileprivate func updateView() {
+    func snapshotDeleted() {
+        currentSnapshot = nil
+        updateView()
+    }
+
+    func snapshotRestored(showAlert: Bool) {
+        updateView()
+        if showAlert {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("EditVMViewControllerSnapshots.snapshotRestoredSuccessfully", comment: ""), virtualMachine: virtualMachine)
+        }
+    }
+
+    @objc private func snapshotsChanged(_ notification: Notification) {
+        guard let changedVM = notification.object as? VirtualMachine, changedVM === virtualMachine else { return }
+        DispatchQueue.main.async {
+            if let currentSnapshot = self.currentSnapshot, !(self.virtualMachine?.snapshots?.contains(currentSnapshot) ?? false) {
+                self.currentSnapshot = nil
+            }
+            self.updateView()
+        }
+    }
+
+    private func updateView() {
         snapshotsTableView.reloadData()
         if let currentSnapshot, let index = virtualMachine?.snapshots?.firstIndex(of: currentSnapshot) {
             snapshotsTableView.selectRowIndexes(IndexSet(integer: index), byExtendingSelection: false)
@@ -166,7 +166,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         updateDetails()
     }
 
-    fileprivate func updateDetails() {
+    private func updateDetails() {
         if let currentSnapshot {
             snapshotScreenshotView.isHidden = false
             snapshotDescriptionScrollView.isHidden = false
@@ -189,7 +189,7 @@ class EditVMViewControllerSnapshots: NSViewController, NSTableViewDataSource, NS
         }
     }
 
-    fileprivate func formatTimestamp(_ snapshot: VirtualMachineSnapshot) -> String {
+    private func formatTimestamp(_ snapshot: VirtualMachineSnapshot) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(snapshot.timestamp) / 1000.0)
         let formatter = DateFormatter()
         formatter.locale = .current

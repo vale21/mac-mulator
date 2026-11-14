@@ -26,6 +26,11 @@ struct CloudInitIPConfiguration: Codable, Hashable {
 }
 
 class ProvisioningInformation: Codable, Hashable {
+    enum CodingKeys: String, CodingKey {
+        case userFullName, userName, automaticLogin, enableSSh, passwordKeychainId
+        case dnsDomains, dnsServers, sshKeys, upgradePackages, ipConfiguration
+    }
+
     var userFullName: String
     var userName: String
     var automaticLogin: Bool
@@ -42,11 +47,6 @@ class ProvisioningInformation: Codable, Hashable {
     var userPassword: String {
         get { ProvisioningPasswordStore.read(account: passwordKeychainId) ?? "" }
         set { ProvisioningPasswordStore.save(newValue, account: passwordKeychainId) }
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case userFullName, userName, automaticLogin, enableSSh, passwordKeychainId
-        case dnsDomains, dnsServers, sshKeys, upgradePackages, ipConfiguration
     }
 
     // Custom decoding so that VMs saved before the cloud-init fields existed can still be loaded
@@ -116,12 +116,6 @@ class ProvisioningInformation: Codable, Hashable {
 enum ProvisioningPasswordStore {
     private static let service = "MacMulator.provisioning"
 
-    private static func query(_ account: String) -> [String: Any] {
-        [kSecClass as String: kSecClassGenericPassword,
-         kSecAttrService as String: service,
-         kSecAttrAccount as String: account]
-    }
-
     static func save(_ password: String, account: String) {
         delete(account: account)
         var attributes = query(account)
@@ -143,6 +137,12 @@ enum ProvisioningPasswordStore {
 
     static func delete(account: String) {
         SecItemDelete(query(account) as CFDictionary)
+    }
+
+    private static func query(_ account: String) -> [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: service,
+         kSecAttrAccount as String: account]
     }
 }
 

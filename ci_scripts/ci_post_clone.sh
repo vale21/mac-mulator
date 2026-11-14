@@ -14,4 +14,9 @@
 # workflow to build against a specific one. See docs/sysroot.md.
 set -e
 
+# SwiftTerm runs a build tool plugin (SwiftTermBuildInfoPlugin), which Xcode only builds once it is trusted.
+# Trusting it in Xcode does not carry over to Xcode Cloud, so skip the check here. The key name is misspelled
+# ("Validatation") in Xcode itself.
+defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+
 "$CI_PRIMARY_REPOSITORY_PATH/scripts/fetch_sysroot.sh" ${SYSROOT_ARTIFACT_ID:+"$SYSROOT_ARTIFACT_ID"}

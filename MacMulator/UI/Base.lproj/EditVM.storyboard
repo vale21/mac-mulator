@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="25408" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="sJi-6Q-Gmn">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25098"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="25408"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
@@ -1760,181 +1760,223 @@ Gw
                         <rect key="frame" x="0.0" y="0.0" width="750" height="500"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="m8g-Mx-rE1">
-                                <rect key="frame" x="30" y="20" width="702" height="102"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hdb-b7-G0z">
+                                <rect key="frame" x="30" y="460" width="265" height="16"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="102" id="tcl-8r-utu"/>
+                                    <constraint firstAttribute="width" constant="261" id="zbM-W4-0dw"/>
                                 </constraints>
-                                <textFieldCell key="cell" id="w2b-Km-CYo">
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Show VM screen" id="gVd-7U-OKH">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="6Ma-df-oXp">
+                                <rect key="frame" x="301" y="456" width="54" height="24"/>
+                                <connections>
+                                    <action selector="showScreenToggleChanged:" target="bME-KN-L8y" id="FiH-sg-gMl"/>
+                                </connections>
+                            </switch>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="sDt-Hl-001">
+                                <rect key="frame" x="30" y="420" width="702" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="sDt-Hl-002"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" title="The VM runs with a window showing its screen." id="sDt-Hl-003">
                                     <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">Note for Windows 11 ARM users:
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <box titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bOx-Vd-001">
+                                <rect key="frame" x="20" y="20" width="710" height="388"/>
+                                <view key="contentView" id="bOx-Vd-002">
+                                    <rect key="frame" x="0.0" y="0.0" width="710" height="388"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9dJ-3u-qn2">
+                                            <rect key="frame" x="10" y="356" width="265" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Video card to attach to the VM:" id="y67-Me-TUU">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
+                                            <rect key="frame" x="281" y="353" width="417" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="Be0-7s-0eK"/>
+                                            </constraints>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="JoH-jk-AQB">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <outlet property="dataSource" destination="bME-KN-L8y" id="oTh-yv-shh"/>
+                                                <outlet property="delegate" destination="bME-KN-L8y" id="s76-IX-F8w"/>
+                                            </connections>
+                                        </comboBox>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TFC-on-HFs">
+                                            <rect key="frame" x="10" y="324" width="265" height="16"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Qemu Display to use:" id="rw5-Ta-Kng">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ECR-CG-ZXO">
+                                            <rect key="frame" x="281" y="321" width="417" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="VD4-bb-z8H"/>
+                                            </constraints>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="VbZ-bE-0nH">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <outlet property="dataSource" destination="bME-KN-L8y" id="r7c-pn-pBZ"/>
+                                                <outlet property="delegate" destination="bME-KN-L8y" id="E8P-mO-GZI"/>
+                                            </connections>
+                                        </comboBox>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bHD-eX-M1v">
+                                            <rect key="frame" x="10" y="288" width="265" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="261" id="Nve-gV-5oq"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Enable 3D acceleration" id="ujU-6w-70y">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="5V6-3d-7RZ">
+                                            <rect key="frame" x="281" y="284" width="54" height="24"/>
+                                            <connections>
+                                                <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
+                                            </connections>
+                                        </switch>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Cvm-OW-d8w">
+                                            <rect key="frame" x="10" y="226" width="690" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" id="BHV-qf-MyT"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" selectable="YES" id="vVx-QY-Ml8">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <string key="title">MacMulator can try to enable 3D acceleration in the guest VM, if it detects that the underlying Qemu supporrts it. This might bmake teh VM unstable.</string>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7UL-Jt-MFG">
+                                            <rect key="frame" x="10" y="190" width="265" height="16"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="261" id="u5h-Ds-8vv"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Use Spice display" id="lGb-kd-Yah">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="1wK-z5-mVp">
+                                            <rect key="frame" x="281" y="186" width="54" height="24"/>
+                                            <connections>
+                                                <action selector="enableSpiceSupport:" target="bME-KN-L8y" id="Can-13-19W"/>
+                                            </connections>
+                                        </switch>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qQO-GM-gW4">
+                                            <rect key="frame" x="10" y="119" width="690" height="59"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="59" id="zTK-O5-kqC"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" selectable="YES" id="Z2W-Ns-2AK">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <string key="title">With Spice display MacMulator manages the VM window in place of Qemu. It offers better integration, dynamic resolution in the VM and clipboard sharing. It is suggested if the underlying Qemu supports Spice. It is not compatible with 3D acceleration.</string>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="m8g-Mx-rE1">
+                                            <rect key="frame" x="10" y="1" width="690" height="102"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="102" id="tcl-8r-utu"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" id="w2b-Km-CYo">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <string key="title">Note for Windows 11 ARM users:
 
 The virtual machine is created with "Ram framebuffer standalone device". This is required to install Windows 11 correctly on the VM. Once Windows gets installed, the "VirtIO GPU PCI" adapter can be selected. This adapter works better and offers the possibility to select the screen resolution, if you install the proper driver. The driver can be found in the DVD that you find attached to the VM when you create it.</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="kMz-L0-DKD">
-                                <rect key="frame" x="30" y="452" width="702" height="28"/>
-                                <textFieldCell key="cell" selectable="YES" id="Y41-Tk-1j6">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">The VM is created with a default video adapter, but various adapters can work in your VM, depending on the emulated hardware and the guest operating system. Here you can change the video adapter to use:</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Cvm-OW-d8w">
-                                <rect key="frame" x="30" y="249" width="702" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="BHV-qf-MyT"/>
-                                </constraints>
-                                <textFieldCell key="cell" selectable="YES" id="vVx-QY-Ml8">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">MacMulator can try to enable 3D acceleration in the guest VM, if it detects that the underlying Qemu supporrts it. This might bmake teh VM unstable.</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kgv-EH-4Vd">
-                                <rect key="frame" x="355" y="404" width="340" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="Be0-7s-0eK"/>
-                                    <constraint firstAttribute="width" constant="340" id="LX6-Tw-6uM"/>
-                                </constraints>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="JoH-jk-AQB">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </comboBoxCell>
-                                <connections>
-                                    <outlet property="dataSource" destination="bME-KN-L8y" id="oTh-yv-shh"/>
-                                    <outlet property="delegate" destination="bME-KN-L8y" id="s76-IX-F8w"/>
-                                </connections>
-                            </comboBox>
-                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ECR-CG-ZXO">
-                                <rect key="frame" x="355" y="374" width="340" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="22" id="VD4-bb-z8H"/>
-                                    <constraint firstAttribute="width" constant="340" id="f7I-zu-Snq"/>
-                                </constraints>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" usesDataSource="YES" numberOfVisibleItems="10" id="VbZ-bE-0nH">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </comboBoxCell>
-                                <connections>
-                                    <outlet property="dataSource" destination="bME-KN-L8y" id="r7c-pn-pBZ"/>
-                                    <outlet property="delegate" destination="bME-KN-L8y" id="E8P-mO-GZI"/>
-                                </connections>
-                            </comboBox>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9dJ-3u-qn2">
-                                <rect key="frame" x="30" y="407" width="400" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Video card to attach to the VM:" id="y67-Me-TUU">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TFC-on-HFs">
-                                <rect key="frame" x="30" y="378" width="400" height="16"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Qemu Display to use:" id="rw5-Ta-Kng">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bHD-eX-M1v">
-                                <rect key="frame" x="30" y="311" width="265" height="16"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="261" id="Nve-gV-5oq"/>
-                                </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Enable 3D acceleration" id="ujU-6w-70y">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="5V6-3d-7RZ">
-                                <rect key="frame" x="301" y="307" width="54" height="24"/>
-                                <connections>
-                                    <action selector="enable3DAccelerationToggleChanged:" target="bME-KN-L8y" id="aZw-Uj-xhM"/>
-                                </connections>
-                            </switch>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="7UL-Jt-MFG">
-                                <rect key="frame" x="30" y="201" width="265" height="16"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="261" id="u5h-Ds-8vv"/>
-                                </constraints>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Use Spice display" id="lGb-kd-Yah">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="1wK-z5-mVp">
-                                <rect key="frame" x="301" y="197" width="54" height="24"/>
-                                <connections>
-                                    <action selector="enableSpiceSupport:" target="bME-KN-L8y" id="Can-13-19W"/>
-                                </connections>
-                            </switch>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="qQO-GM-gW4">
-                                <rect key="frame" x="30" y="130" width="702" height="59"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="59" id="zTK-O5-kqC"/>
-                                </constraints>
-                                <textFieldCell key="cell" selectable="YES" id="Z2W-Ns-2AK">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <string key="title">With Spice display MacMulator manages the VM window in place of Qemu. It offers better integration, dynamic resolution in the VM and clipboard sharing. It is suggested if the underlying Qemu supports Spice. It is not compatible with 3D acceleration.</string>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="bOx-Vd-002" secondAttribute="leading" constant="12" id="iB1-00-001"/>
+                                        <constraint firstItem="9dJ-3u-qn2" firstAttribute="top" secondItem="bOx-Vd-002" secondAttribute="top" constant="16" id="iB1-00-002"/>
+                                        <constraint firstItem="9dJ-3u-qn2" firstAttribute="width" constant="261" id="iB1-00-003"/>
+                                        <constraint firstItem="Kgv-EH-4Vd" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="trailing" constant="8" id="iB1-00-004"/>
+                                        <constraint firstAttribute="trailing" secondItem="Kgv-EH-4Vd" secondAttribute="trailing" constant="12" id="iB1-00-005"/>
+                                        <constraint firstItem="Kgv-EH-4Vd" firstAttribute="centerY" secondItem="9dJ-3u-qn2" secondAttribute="centerY" id="iB1-00-006"/>
+                                        <constraint firstItem="TFC-on-HFs" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-007"/>
+                                        <constraint firstItem="TFC-on-HFs" firstAttribute="width" secondItem="9dJ-3u-qn2" secondAttribute="width" id="iB1-00-008"/>
+                                        <constraint firstItem="TFC-on-HFs" firstAttribute="top" secondItem="9dJ-3u-qn2" secondAttribute="bottom" constant="16" id="iB1-00-009"/>
+                                        <constraint firstItem="ECR-CG-ZXO" firstAttribute="leading" secondItem="Kgv-EH-4Vd" secondAttribute="leading" id="iB1-00-010"/>
+                                        <constraint firstItem="ECR-CG-ZXO" firstAttribute="trailing" secondItem="Kgv-EH-4Vd" secondAttribute="trailing" id="iB1-00-011"/>
+                                        <constraint firstItem="ECR-CG-ZXO" firstAttribute="centerY" secondItem="TFC-on-HFs" secondAttribute="centerY" id="iB1-00-012"/>
+                                        <constraint firstItem="bHD-eX-M1v" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-013"/>
+                                        <constraint firstItem="bHD-eX-M1v" firstAttribute="top" secondItem="TFC-on-HFs" secondAttribute="bottom" constant="20" id="iB1-00-014"/>
+                                        <constraint firstItem="5V6-3d-7RZ" firstAttribute="leading" secondItem="bHD-eX-M1v" secondAttribute="trailing" constant="8" id="iB1-00-015"/>
+                                        <constraint firstItem="5V6-3d-7RZ" firstAttribute="centerY" secondItem="bHD-eX-M1v" secondAttribute="centerY" id="iB1-00-016"/>
+                                        <constraint firstItem="Cvm-OW-d8w" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-017"/>
+                                        <constraint firstAttribute="trailing" secondItem="Cvm-OW-d8w" secondAttribute="trailing" constant="12" id="iB1-00-018"/>
+                                        <constraint firstItem="Cvm-OW-d8w" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="8" id="iB1-00-019"/>
+                                        <constraint firstItem="7UL-Jt-MFG" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-020"/>
+                                        <constraint firstItem="7UL-Jt-MFG" firstAttribute="top" secondItem="Cvm-OW-d8w" secondAttribute="bottom" constant="20" id="iB1-00-021"/>
+                                        <constraint firstItem="1wK-z5-mVp" firstAttribute="leading" secondItem="7UL-Jt-MFG" secondAttribute="trailing" constant="8" id="iB1-00-022"/>
+                                        <constraint firstItem="1wK-z5-mVp" firstAttribute="centerY" secondItem="7UL-Jt-MFG" secondAttribute="centerY" id="iB1-00-023"/>
+                                        <constraint firstItem="qQO-GM-gW4" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-024"/>
+                                        <constraint firstAttribute="trailing" secondItem="qQO-GM-gW4" secondAttribute="trailing" constant="12" id="iB1-00-025"/>
+                                        <constraint firstItem="qQO-GM-gW4" firstAttribute="top" secondItem="1wK-z5-mVp" secondAttribute="bottom" constant="8" id="iB1-00-026"/>
+                                        <constraint firstItem="m8g-Mx-rE1" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="leading" id="iB1-00-027"/>
+                                        <constraint firstAttribute="trailing" secondItem="m8g-Mx-rE1" secondAttribute="trailing" constant="12" id="iB1-00-028"/>
+                                        <constraint firstItem="m8g-Mx-rE1" firstAttribute="top" secondItem="qQO-GM-gW4" secondAttribute="bottom" constant="16" id="iB1-00-029"/>
+                                    </constraints>
+                                </view>
+                                <font key="titleFont" metaFont="system"/>
+                            </box>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Cvm-OW-d8w" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="8" symbolic="YES" id="1aH-R3-Zqa"/>
-                            <constraint firstItem="TFC-on-HFs" firstAttribute="baseline" secondItem="ECR-CG-ZXO" secondAttribute="baseline" id="34i-yW-h9i"/>
-                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="centerY" secondItem="43X-1U-j2N" secondAttribute="centerY" constant="41" id="40u-Hw-vDW"/>
-                            <constraint firstItem="9dJ-3u-qn2" firstAttribute="trailing" secondItem="TFC-on-HFs" secondAttribute="trailing" id="46K-vU-rjn"/>
-                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="leading" secondItem="bHD-eX-M1v" secondAttribute="leading" id="86L-al-Stb"/>
-                            <constraint firstAttribute="trailing" secondItem="Cvm-OW-d8w" secondAttribute="trailing" constant="20" id="9CV-49-Q89"/>
-                            <constraint firstItem="ECR-CG-ZXO" firstAttribute="leading" secondItem="Kgv-EH-4Vd" secondAttribute="leading" id="G2b-qo-nCd"/>
-                            <constraint firstAttribute="trailing" secondItem="Kgv-EH-4Vd" secondAttribute="trailing" constant="55" id="GtP-77-qqt"/>
-                            <constraint firstItem="Kgv-EH-4Vd" firstAttribute="top" secondItem="kMz-L0-DKD" secondAttribute="bottom" constant="26" id="H1l-rc-YFj"/>
-                            <constraint firstItem="qQO-GM-gW4" firstAttribute="top" secondItem="1wK-z5-mVp" secondAttribute="bottom" constant="8" symbolic="YES" id="I2R-rn-F4X"/>
-                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="centerY" secondItem="bHD-eX-M1v" secondAttribute="centerY" id="Igv-LD-a3i"/>
-                            <constraint firstItem="7UL-Jt-MFG" firstAttribute="leading" secondItem="1wK-z5-mVp" secondAttribute="trailing" constant="-323" id="IlD-dM-cE2"/>
-                            <constraint firstItem="5V6-3d-7RZ" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="301" id="L20-DV-ZaL"/>
-                            <constraint firstItem="9dJ-3u-qn2" firstAttribute="centerY" secondItem="Kgv-EH-4Vd" secondAttribute="centerY" id="MtP-Rd-fpO"/>
-                            <constraint firstItem="Cvm-OW-d8w" firstAttribute="leading" secondItem="bHD-eX-M1v" secondAttribute="leading" id="Z9W-R6-vj0"/>
-                            <constraint firstItem="1wK-z5-mVp" firstAttribute="centerY" secondItem="7UL-Jt-MFG" secondAttribute="centerY" id="ZZZ-Qb-EDm"/>
-                            <constraint firstItem="qQO-GM-gW4" firstAttribute="trailing" secondItem="Cvm-OW-d8w" secondAttribute="trailing" id="bIT-ug-n1V"/>
-                            <constraint firstItem="m8g-Mx-rE1" firstAttribute="top" secondItem="5V6-3d-7RZ" secondAttribute="bottom" constant="185" id="d8u-D7-MGG"/>
-                            <constraint firstItem="ECR-CG-ZXO" firstAttribute="top" secondItem="Kgv-EH-4Vd" secondAttribute="bottom" constant="8" symbolic="YES" id="dBv-jL-w82"/>
-                            <constraint firstItem="kMz-L0-DKD" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="32" id="fvp-Uu-WPd"/>
-                            <constraint firstAttribute="trailing" secondItem="kMz-L0-DKD" secondAttribute="trailing" constant="20" symbolic="YES" id="gVm-ml-uXD"/>
-                            <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="TFC-on-HFs" secondAttribute="leading" id="i6Z-9O-zRs"/>
-                            <constraint firstItem="kMz-L0-DKD" firstAttribute="top" secondItem="43X-1U-j2N" secondAttribute="top" constant="20" symbolic="YES" id="kPV-6S-UGJ"/>
-                            <constraint firstItem="kMz-L0-DKD" firstAttribute="leading" secondItem="m8g-Mx-rE1" secondAttribute="leading" id="khz-0Q-yVD"/>
-                            <constraint firstItem="kMz-L0-DKD" firstAttribute="trailing" secondItem="m8g-Mx-rE1" secondAttribute="trailing" id="kkm-Cv-jnh"/>
-                            <constraint firstItem="9dJ-3u-qn2" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="32" id="lbn-G1-cYw"/>
-                            <constraint firstItem="bHD-eX-M1v" firstAttribute="leading" secondItem="5V6-3d-7RZ" secondAttribute="trailing" constant="-323" id="m2g-bm-PAb"/>
-                            <constraint firstItem="Kgv-EH-4Vd" firstAttribute="leading" secondItem="9dJ-3u-qn2" secondAttribute="trailing" constant="-73" id="o3W-rH-SE3"/>
-                            <constraint firstAttribute="bottom" secondItem="m8g-Mx-rE1" secondAttribute="bottom" constant="20" symbolic="YES" id="sxd-NR-ija"/>
-                            <constraint firstItem="qQO-GM-gW4" firstAttribute="leading" secondItem="7UL-Jt-MFG" secondAttribute="leading" id="v3Y-7E-bPW"/>
+                            <constraint firstItem="Hdb-b7-G0z" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="32" id="rB1-00-001"/>
+                            <constraint firstItem="Hdb-b7-G0z" firstAttribute="top" secondItem="43X-1U-j2N" secondAttribute="top" constant="24" id="rB1-00-002"/>
+                            <constraint firstItem="6Ma-df-oXp" firstAttribute="leading" secondItem="Hdb-b7-G0z" secondAttribute="trailing" constant="8" id="rB1-00-003"/>
+                            <constraint firstItem="6Ma-df-oXp" firstAttribute="centerY" secondItem="Hdb-b7-G0z" secondAttribute="centerY" id="rB1-00-004"/>
+                            <constraint firstItem="bOx-Vd-001" firstAttribute="top" secondItem="sDt-Hl-001" secondAttribute="bottom" constant="12" id="rB1-00-005"/>
+                            <constraint firstItem="bOx-Vd-001" firstAttribute="leading" secondItem="43X-1U-j2N" secondAttribute="leading" constant="20" id="rB1-00-006"/>
+                            <constraint firstAttribute="trailing" secondItem="bOx-Vd-001" secondAttribute="trailing" constant="20" id="rB1-00-007"/>
+                            <constraint firstAttribute="bottom" secondItem="bOx-Vd-001" secondAttribute="bottom" constant="20" id="rB1-00-008"/>
+                            <constraint firstItem="sDt-Hl-001" firstAttribute="top" secondItem="6Ma-df-oXp" secondAttribute="bottom" constant="8" id="rB1-00-009"/>
+                            <constraint firstItem="sDt-Hl-001" firstAttribute="leading" secondItem="Hdb-b7-G0z" secondAttribute="leading" id="rB1-00-010"/>
+                            <constraint firstAttribute="trailing" secondItem="sDt-Hl-001" secondAttribute="trailing" constant="20" id="rB1-00-011"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="accelDescriptionLabel" destination="bHD-eX-M1v" id="1Th-4z-4oK"/>
                         <outlet property="accelDescriptionSwitch" destination="5V6-3d-7RZ" id="rxv-3C-dw3"/>
                         <outlet property="accelDescriptionText" destination="Cvm-OW-d8w" id="y7A-Q8-TWJ"/>
+                        <outlet property="qemuVideoBox" destination="bOx-Vd-001" id="bOx-Vd-003"/>
                         <outlet property="qemuDisplayComboBox" destination="ECR-CG-ZXO" id="SfU-RY-PSA"/>
                         <outlet property="qemuDisplayLabel" destination="TFC-on-HFs" id="Ebg-Rh-8Be"/>
+                        <outlet property="showScreenDescriptionText" destination="sDt-Hl-001" id="sDt-Hl-004"/>
+                        <outlet property="showScreenLabel" destination="Hdb-b7-G0z" id="hLs-Sc-0aL"/>
+                        <outlet property="showScreenSwitch" destination="6Ma-df-oXp" id="hLs-Sw-0aS"/>
                         <outlet property="spiceDescriptionLabel" destination="7UL-Jt-MFG" id="v0D-Md-Fdk"/>
                         <outlet property="spiceDescriptionSwitch" destination="1wK-z5-mVp" id="lnK-Tl-4W1"/>
                         <outlet property="spiceDescriptionText" destination="qQO-GM-gW4" id="uMD-CU-SSG"/>
                         <outlet property="videoAdapterComboBox" destination="Kgv-EH-4Vd" id="OQY-oe-xTd"/>
                         <outlet property="videoAdapterLabel" destination="9dJ-3u-qn2" id="h0c-A0-8Wz"/>
-                        <outlet property="videoDescriptionText" destination="kMz-L0-DKD" id="ozo-yo-EDr"/>
                         <outlet property="windowsArmDescriptionText" destination="m8g-Mx-rE1" id="Q7T-7E-RfM"/>
                     </connections>
                 </viewController>
@@ -2022,18 +2064,18 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
         <scene sceneID="nYm-Td-8DV">
             <objects>
                 <viewController title="Snapshots" id="OTc-Xm-wkq" customClass="EditVMViewControllerSnapshots" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="r6c-hw-4cm">
+                    <view key="view" id="r6c-hw-4cm">
                         <rect key="frame" x="0.0" y="0.0" width="750" height="424"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-nR-DCR">
-                                <rect key="frame" x="20" y="56" width="235" height="348"/>
+                                <rect key="frame" x="20" y="224" width="235" height="180"/>
                                 <clipView key="contentView" id="jSR-2h-Yxf">
-                                    <rect key="frame" x="1" y="1" width="233" height="346"/>
+                                    <rect key="frame" x="1" y="1" width="233" height="178"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="EPp-8I-aoE" viewBased="YES" id="Qqw-MA-7Qo">
-                                            <rect key="frame" x="0.0" y="0.0" width="233" height="318"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="233" height="150"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2084,7 +2126,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="g2m-56-VQ0">
-                                    <rect key="frame" x="1" y="22" width="233" height="17"/>
+                                    <rect key="frame" x="1" y="218" width="233" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="biV-Ng-0n4">
@@ -2097,7 +2139,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ivs-Ff-Qer">
-                                <rect key="frame" x="19" y="18" width="237" height="31"/>
+                                <rect key="frame" x="19" y="18" width="237" height="199"/>
                                 <buttonCell key="cell" type="roundTextured" title="Create new snapshot" bezelStyle="texturedRounded" image="plus.app.fill" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iLW-iZ-Xzx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>

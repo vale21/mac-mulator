@@ -9,6 +9,7 @@
     import DiskImageKit
 #endif
 import Foundation
+import Virtualization
 
 class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     func createDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
@@ -19,61 +20,97 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         }
     }
 
-    @available(macOS 26.0, *)
-    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-
-        if #available(macOS 27.0, *) {
-            #if arch(arm64)
-                let blockSize = 512
-                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
-
+    func createLinkedDiskImage(_ virtualDrive: VirtualDrive, backingDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard #available(macOS 27.0, *), virtualDrive.format == QemuConstants.FORMAT_ASIF, backingDrive.format == QemuConstants.FORMAT_ASIF else {
+            callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
+            return
+        }
+        #if arch(arm64)
+            let overlayURL = URL(fileURLWithPath: path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION)
+            DispatchQueue.global().async {
                 do {
-                    _ = try DiskImage(
-                        creating: .asif(
-                            url: URL(fileURLWithPath: drivePath),
-                            blockCount: Int(blockCount),
-                            blockSize: .bytes512
-                        )
-                    )
+                    // The template is only read, so it's opened read-only and never modified.
+                    // If it is a linked clone itself, the new overlay goes on top of the whole chain.
+                    let templateStack = try Self.openReadOnlyStack(Utils.backingChain(endingAt: backingDrive.path))
+                    _ = try templateStack.appending(.asifLayer(url: overlayURL, type: .overlay))
                     callback(0, nil)
                 } catch {
-                    print("Failed to create ASIF disk image: \(error)")
-                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createAsifFailed", comment: ""), "\(error)"))
+                    print("Failed to create ASIF overlay image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createLinkedFailed", comment: ""), "\(error)"))
                 }
-            #endif
-        } else {
-            let shell = Shell()
-            let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
-
-            shell.runCommand(command, path, uponCompletion: callback)
-        }
+            }
+        #else
+            callback(-1, NSLocalizedString("DiskImageManager.linkedNotSupported", comment: ""))
+        #endif
     }
 
-    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
-        if #available(macOS 27.0, *) {
-            #if arch(arm64)
-                let blockSize = 512
-                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+    static func createDiskAttachment(for drive: VirtualDrive, readOnly: Bool = false) throws -> VZDiskImageStorageDeviceAttachment {
+        #if arch(arm64)
+            if #available(macOS 27.0, *), let backingPath = drive.backingPath {
+                let baseImage = try openReadOnlyStack(Utils.backingChain(endingAt: backingPath))
+                let overlayImage = try DiskImage(opening: .open(url: URL(fileURLWithPath: drive.path), mode: readOnly ? .readOnly : .readWrite))
+                let stackedImage = try baseImage.appending(overlayImage)
+                return try VZDiskImageStorageDeviceAttachment(diskImage: stackedImage)
+            }
+        #endif
+        return try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: drive.path), readOnly: readOnly)
+    }
 
-                do {
-                    _ = try DiskImage(
-                        creating: .raw(
-                            url: URL(fileURLWithPath: drivePath),
-                            blockCount: Int(blockCount)
-                        )
-                    )
-                    callback(0, nil)
-                } catch {
-                    print("Failed to create RAW disk image: \(error)")
-                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createRawFailed", comment: ""), "\(error)"))
-                }
-            #endif
-        } else {
-            // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
-            QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
-        }
+    func flattenLinkedDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        #if !APPSTORE && arch(arm64)
+            guard #available(macOS 27.0, *), let backingPath = virtualDrive.backingPath else {
+                callback(-1, NSLocalizedString("DiskImageManager.flattenNotSupported", comment: ""))
+                return
+            }
+            let drivePath = virtualDrive.path
+            let tempPath = (drivePath as NSString).deletingPathExtension + "-flatten." + MacMulatorConstants.DISK_EXTENSION
+            try? FileManager.default.removeItem(atPath: tempPath)
+
+            let stackSize: Int
+            do {
+                let overlay = try DiskImage(opening: .open(url: URL(fileURLWithPath: drivePath), mode: .readOnly))
+                stackSize = overlay.blockCount * overlay.blockSize.rawValue
+            } catch {
+                callback(-1, String(format: NSLocalizedString("DiskImageManager.flattenFailed", comment: ""), "\(error)"))
+                return
+            }
+
+            let fail: (Int32, String?) -> Void = { code, message in
+                try? FileManager.default.removeItem(atPath: tempPath)
+                callback(code, message)
+            }
+
+            Shell().runCommand("/usr/sbin/diskutil image create blank --fs None --format ASIF --size " + String(stackSize) + " " + Utils.escape(tempPath), path, uponCompletion: { code, message in
+                guard code == 0 else { return fail(code, message) }
+
+                // The base layer comes first, followed by every layer above it as a shadow, the drive being the topmost one.
+                let chain = Utils.backingChain(endingAt: backingPath)
+                let stackCommand = "/usr/sbin/diskutil image attach --noMount --readOnly " + Utils.escape(chain[0]) + (chain.dropFirst() + [drivePath]).map { " --shadow " + Utils.escape($0) }.joined()
+                self.attachDevice(stackCommand, path, uponCompletion: { stackDevice, message in
+                    guard let stackDevice else { return fail(-1, message) }
+                    self.attachDevice("/usr/sbin/diskutil image attach --noMount " + Utils.escape(tempPath), path, uponCompletion: { targetDevice, message in
+                        guard let targetDevice else {
+                            Shell().runCommand("/usr/sbin/diskutil eject " + stackDevice, path, uponCompletion: { _, _ in fail(-1, message) })
+                            return
+                        }
+
+                        let sourceNode = stackDevice.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
+                        let targetNode = targetDevice.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
+                        Shell().runCommand("/bin/dd if=" + sourceNode + " of=" + targetNode + " bs=1m conv=sparse", path, uponCompletion: { copyCode, copyMessage in
+                            // Always detach both images, even if the copy failed.
+                            Shell().runCommand("/usr/sbin/diskutil eject " + targetDevice, path, uponCompletion: { _, _ in
+                                Shell().runCommand("/usr/sbin/diskutil eject " + stackDevice, path, uponCompletion: { _, _ in
+                                    guard copyCode == 0 else { return fail(copyCode, copyMessage) }
+                                    self.replaceDiskImage(drivePath, with: tempPath, format: QemuConstants.FORMAT_ASIF, uponCompletion: callback)
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        #else
+            callback(-1, NSLocalizedString("DiskImageManager.flattenNotSupported", comment: ""))
+        #endif
     }
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
@@ -137,6 +174,25 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         let tempPath = (drivePath as NSString).deletingPathExtension + "-" + format.lowercased() + "-conversion." + MacMulatorConstants.DISK_EXTENSION
         try? FileManager.default.removeItem(atPath: tempPath)
 
+        // The App Store sandbox does not allow attaching disk images, so it falls back to a plain diskutil conversion,
+        // which produces a fully allocated ASIF.
+        #if !APPSTORE
+            let convertsToSparseASIF = format == QemuConstants.FORMAT_ASIF
+        #else
+            let convertsToSparseASIF = false
+        #endif
+        if convertsToSparseASIF {
+            convertToSparseASIF(drivePath, tempPath, path, progress: progress, uponCompletion: { terminationCode, errorMessage in
+                guard terminationCode == 0 else {
+                    try? FileManager.default.removeItem(atPath: tempPath)
+                    callback(terminationCode, errorMessage)
+                    return
+                }
+                self.replaceDiskImage(drivePath, with: tempPath, format: format, uponCompletion: callback)
+            })
+            return
+        }
+
         let shell = Shell()
         if let progress {
             shell.outputHandler = { output in
@@ -156,19 +212,170 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 return
             }
 
-            do {
-                _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
-                callback(0, nil)
-            } catch {
-                print(String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
-                try? FileManager.default.removeItem(atPath: tempPath)
-                callback(-1, String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
-            }
+            self.replaceDiskImage(drivePath, with: tempPath, format: format, uponCompletion: callback)
         })
     }
 
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
         getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
+    }
+
+    @available(macOS 26.0, *)
+    private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+
+                do {
+                    _ = try DiskImage(
+                        creating: .asif(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount),
+                            blockSize: .bytes512
+                        )
+                    )
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create ASIF disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createAsifFailed", comment: ""), "\(error)"))
+                }
+            #endif
+        } else {
+            let shell = Shell()
+            let command = "/usr/sbin/diskutil image create blank --fs none --format ASIF --size " + String(virtualDrive.size) + "GiB " + Utils.escape(drivePath)
+
+            shell.runCommand(command, path, uponCompletion: callback)
+        }
+    }
+
+    private func createRAWDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION
+        if #available(macOS 27.0, *) {
+            #if arch(arm64)
+                let blockSize = 512
+                let blockCount = Int(virtualDrive.size) * 1000 * 1000 * 1000 / blockSize
+
+                do {
+                    _ = try DiskImage(
+                        creating: .raw(
+                            url: URL(fileURLWithPath: drivePath),
+                            blockCount: Int(blockCount)
+                        )
+                    )
+                    callback(0, nil)
+                } catch {
+                    print("Failed to create RAW disk image: \(error)")
+                    callback(-1, String(format: NSLocalizedString("DiskImageManager.createRawFailed", comment: ""), "\(error)"))
+                }
+            #endif
+        } else {
+            // Fallback to qemu-img for RAW images on macOS < 27.0, since diskutil does not support creating RAW images.
+            QemuDiskImageManager().createDiskImage(virtualDrive, path, uponCompletion: callback)
+        }
+    }
+
+    #if arch(arm64)
+        @available(macOS 27.0, *)
+        private static func openReadOnlyStack(_ layerPaths: [String]) throws -> DiskImage {
+            var image = try DiskImage(opening: .open(url: URL(fileURLWithPath: layerPaths[0]), mode: .readOnly))
+            for layerPath in layerPaths.dropFirst() {
+                image = try image.appending(DiskImage(opening: .open(url: URL(fileURLWithPath: layerPath), mode: .readOnly)))
+            }
+            return image
+        }
+    #endif
+
+    private func attachDevice(_ command: String, _ path: String, uponCompletion callback: @escaping (String?, String?) -> Void) {
+        let shell = Shell()
+        shell.runCommand(command, path, uponCompletion: { code, message in
+            // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
+            guard code == 0,
+                  let device = shell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
+                  device.hasPrefix("/dev/disk")
+            else {
+                callback(nil, message ?? shell.readFromStandardError())
+                return
+            }
+            callback(device, nil)
+        })
+    }
+
+    private func replaceDiskImage(_ drivePath: String, with tempPath: String, format: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        do {
+            _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
+            callback(0, nil)
+        } catch {
+            print(String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
+            try? FileManager.default.removeItem(atPath: tempPath)
+            callback(-1, String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
+        }
+    }
+
+    private func convertToSparseASIF(_ sourcePath: String, _ destinationPath: String, _ path: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard let sourceSize = (try? FileManager.default.attributesOfItem(atPath: sourcePath))?[.size] as? Int else {
+            callback(-1, "Unable to read the size of " + sourcePath)
+            return
+        }
+
+        let createShell = Shell()
+        let createCommand = "/usr/sbin/diskutil image create blank --fs None --format ASIF --size " + String(sourceSize) + " " + Utils.escape(destinationPath)
+        createShell.runCommand(createCommand, path, uponCompletion: { terminationCode, errorMessage in
+            guard terminationCode == 0 else {
+                callback(terminationCode, errorMessage)
+                return
+            }
+
+            let attachShell = Shell()
+            let attachCommand = "/usr/sbin/diskutil image attach --noMount " + Utils.escape(destinationPath)
+            attachShell.runCommand(attachCommand, path, uponCompletion: { terminationCode, errorMessage in
+                // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
+                guard terminationCode == 0,
+                      let device = attachShell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
+                      device.hasPrefix("/dev/disk")
+                else {
+                    callback(terminationCode != 0 ? terminationCode : -1, errorMessage ?? attachShell.readFromStandardError())
+                    return
+                }
+
+                let copyShell = Shell()
+                if let progress {
+                    copyShell.outputHandler = { output in
+                        if let copiedBytes = self.parseCopyProgress(output), sourceSize > 0 {
+                            progress(min(100, Double(copiedBytes) * 100 / Double(sourceSize)))
+                        }
+                    }
+                }
+
+                // Write through the raw device node, which is much faster than the buffered one.
+                let rawDevice = device.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
+                let copyCommand = "/bin/dd if=" + Utils.escape(sourcePath) + " of=" + rawDevice + " bs=1m conv=sparse status=progress"
+                copyShell.runCommand(copyCommand, path, uponCompletion: { copyTerminationCode, copyErrorMessage in
+                    // Always detach the image, even if the copy failed.
+                    let detachShell = Shell()
+                    detachShell.runCommand("/usr/sbin/diskutil eject " + device, path, uponCompletion: { detachTerminationCode, detachErrorMessage in
+                        if copyTerminationCode != 0 {
+                            callback(copyTerminationCode, copyErrorMessage)
+                        } else {
+                            callback(detachTerminationCode, detachErrorMessage)
+                        }
+                    })
+                })
+            })
+        })
+    }
+
+    private func parseCopyProgress(_ output: String) -> Int? {
+        let lines = output.split(whereSeparator: { $0 == "\r" || $0 == "\n" })
+        for line in lines.reversed() {
+            let tokens = line.split(separator: " ")
+            if tokens.count >= 2, tokens[1] == "bytes", let bytes = Int(tokens[0]) {
+                return bytes
+            }
+        }
+        return nil
     }
 
     private func parseConversionProgress(_ output: String) -> Double? {
@@ -204,7 +411,11 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                             identityInfo.append(("UUID", layerUUID.uuidString))
                         }
                         if let parentUUID = diskImage.parentUUID {
-                            identityInfo.append(("Stable UUID", parentUUID.uuidString))
+                            identityInfo.append(("Parent UUID", parentUUID.uuidString))
+                        }
+
+                        if let backingPath = virtualDrive.backingPath {
+                            identityInfo.append(("Template", backingPath))
                         }
 
                         callback(0, self.formatDiskImageInfo(
