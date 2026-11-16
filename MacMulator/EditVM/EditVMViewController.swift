@@ -26,7 +26,8 @@ class EditVMViewController: NSTabViewController {
         tabViewItems[3].label = NSLocalizedString("EditVMViewController.network", comment: "")
         tabViewItems[4].label = NSLocalizedString("EditVMViewController.video", comment: "")
         tabViewItems[5].label = NSLocalizedString("EditVMViewController.snapshots", comment: "")
-        tabViewItems[6].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
+        tabViewItems[6].label = NSLocalizedString("EditVMViewController.cloudInit", comment: "")
+        tabViewItems[7].label = NSLocalizedString("EditVMViewController.advanced", comment: "")
 
         let general = tabViewItems[0].viewController as! EditVMViewControllerGeneral
         let hardware = tabViewItems[1].viewController as! EditVMViewControllerHardware
@@ -34,7 +35,8 @@ class EditVMViewController: NSTabViewController {
         let networkVF = tabViewItems[3].viewController as! EditVMViewControllerNetworkVF
         let video = tabViewItems[4].viewController as! EditVMViewControllerVideo
         let snapshots = tabViewItems[5].viewController as! EditVMViewControllerSnapshots
-        let advanced = tabViewItems[6].viewController as! EditVMViewControllerAdvanced
+        let cloudInit = tabViewItems[6].viewController as! EditVMViewControllerCloudInit
+        let advanced = tabViewItems[7].viewController as! EditVMViewControllerAdvanced
 
         general.setVirtualMachine(vm)
         hardware.setVirtualMachine(vm)
@@ -42,6 +44,7 @@ class EditVMViewController: NSTabViewController {
         networkVF.setVirtualMachine(vm)
         video.setVirtualMachine(vm)
         snapshots.setVirtualMachine(vm)
+        cloudInit.setVirtualMachine(vm)
         advanced.setVirtualMachine(vm)
 
         if let vmRunner {
@@ -49,23 +52,33 @@ class EditVMViewController: NSTabViewController {
             snapshots.setVmRunner(vmRunner)
         }
 
+        let cloudInitSupported = vm.os == QemuConstants.OS_LINUX
         if vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[7])
             removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[5])
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[2])
         } else if vm.type == MacMulatorConstants.APPLE_VM {
-            removeTabViewItem(tabViewItems[6])
+            removeTabViewItem(tabViewItems[7])
+            if !cloudInitSupported {
+                removeTabViewItem(tabViewItems[6])
+            }
             removeTabViewItem(tabViewItems[2])
         } else if vm.os == QemuConstants.OS_IOS {
+            removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[4])
             removeTabViewItem(tabViewItems[3])
             removeTabViewItem(tabViewItems[2])
         } else if vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM {
+            removeTabViewItem(tabViewItems[7])
             removeTabViewItem(tabViewItems[6])
             removeTabViewItem(tabViewItems[5])
             removeTabViewItem(tabViewItems[3])
         } else {
+            if !cloudInitSupported {
+                removeTabViewItem(tabViewItems[6])
+            }
             removeTabViewItem(tabViewItems[3])
         }
     }

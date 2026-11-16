@@ -13,14 +13,15 @@ enum CloudInitIPv4Mode: String, Codable {
 }
 
 enum CloudInitIPv6Mode: String, Codable {
-    case staticAddress, dhcp, slaac
+    // disabled: IPv6 is not configured
+    case disabled, staticAddress, dhcp, slaac
 }
 
 struct CloudInitIPConfiguration: Codable, Hashable {
     var ipv4Mode: CloudInitIPv4Mode = .staticAddress
     var ipv4Cidr: String = ""
     var ipv4Gateway: String = ""
-    var ipv6Mode: CloudInitIPv6Mode = .staticAddress
+    var ipv6Mode: CloudInitIPv6Mode = .disabled
     var ipv6Cidr: String = ""
     var ipv6Gateway: String = ""
 }
@@ -164,7 +165,7 @@ struct CloudInitValidationError: Error {
 }
 
 enum CloudInitValidator {
-    private static let keyPrefix = "CloudInitOptionsViewController."
+    private static let keyPrefix = "EditVMViewControllerCloudInit."
 
     private static let sshKeyTypes: Set<String> = [
         "ssh-rsa", "ssh-ed25519", "ssh-dss", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", "ecdsa-sha2-nistp521",
@@ -237,6 +238,7 @@ enum CloudInitValidator {
         if ipv4Mode == .staticAddress {
             let cidr = ipv4Cidr.trimmingCharacters(in: .whitespaces)
             let gateway = ipv4Gateway.trimmingCharacters(in: .whitespaces)
+            guard !cidr.isEmpty else { throw CloudInitValidationError(keyPrefix + "ipv4CidrMissing") }
             guard isValidCidr(cidr, ipv6: false) else { throw CloudInitValidationError(keyPrefix + "ipv4CidrInvalid") }
             guard gateway.isEmpty || isValidIPv4(gateway) else { throw CloudInitValidationError(keyPrefix + "ipv4GatewayInvalid") }
             config.ipv4Cidr = cidr
@@ -246,6 +248,7 @@ enum CloudInitValidator {
         if ipv6Mode == .staticAddress {
             let cidr = ipv6Cidr.trimmingCharacters(in: .whitespaces)
             let gateway = ipv6Gateway.trimmingCharacters(in: .whitespaces)
+            guard !cidr.isEmpty else { throw CloudInitValidationError(keyPrefix + "ipv6CidrMissing") }
             guard isValidCidr(cidr, ipv6: true) else { throw CloudInitValidationError(keyPrefix + "ipv6CidrInvalid") }
             guard gateway.isEmpty || isValidIPv6(gateway) else { throw CloudInitValidationError(keyPrefix + "ipv6GatewayInvalid") }
             config.ipv6Cidr = cidr
