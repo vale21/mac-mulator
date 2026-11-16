@@ -33,6 +33,8 @@
 		3B25EBB430AB603900028C39 /* SHA512Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB230AB603900028C39 /* SHA512Crypt.swift */; };
 		3B25EBB630AB603A00028C39 /* CloudInitVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */; };
 		3B25EBB730AB603A00028C39 /* CloudInitVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */; };
+		3B25EBBA30AB767A00028C39 /* ImportDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */; };
+		3B25EBBB30AB767A00028C39 /* ImportDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
 		3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
@@ -288,6 +290,7 @@
 		3B25EBAF30AB603800028C39 /* ISO9660Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO9660Image.swift; sourceTree = "<group>"; };
 		3B25EBB230AB603900028C39 /* SHA512Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512Crypt.swift; sourceTree = "<group>"; };
 		3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudInitVolume.swift; sourceTree = "<group>"; };
+		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
@@ -691,6 +694,7 @@
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
 				3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */,
+				3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */,
 			);
 			path = EditVM;
 			sourceTree = "<group>";
@@ -976,6 +980,7 @@
 				3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */,
 				3B25EBB130AB603800028C39 /* ISO9660Image.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
+				3B25EBBA30AB767A00028C39 /* ImportDriveViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
 				3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */,
 				3BDD3D4430921646007FE305 /* CloneVMViewController.swift in Sources */,
@@ -1076,6 +1081,7 @@
 				3BFB2B513078F067005A4B51 /* PortMapping.swift in Sources */,
 				3B25EBB030AB603800028C39 /* ISO9660Image.swift in Sources */,
 				3BFB2B523078F067005A4B51 /* EditVMViewController.swift in Sources */,
+				3B25EBBB30AB767A00028C39 /* ImportDriveViewController.swift in Sources */,
 				3BFB2B533078F067005A4B51 /* QemuCommandBuilder.swift in Sources */,
 				3BFB2B543078F067005A4B51 /* VirtualizationFrameworkVMCreator.swift in Sources */,
 				3BDD3D4330921646007FE305 /* CloneVMViewController.swift in Sources */,

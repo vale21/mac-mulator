@@ -35,6 +35,8 @@ class Utils {
     static let ALERT_RESP_OK = 1000
     static let IMAGE_TYPES = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
     static let IMAGE_TYPES_USB = ["img", "iso", "cdr"]
+    // Disk images that can be imported as a drive: cloud images are usually .img (often qcow2 inside) or .qcow2
+    static let IMPORT_DRIVE_TYPES = ["img", "raw", "qcow2", "qcow", "qvd", "vmdk", "vdi", "vhd", "vhdx"]
 
     /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
     /// key exchanges) be reached. The legacy algorithms are appended ("+") to the defaults, so newer guests still

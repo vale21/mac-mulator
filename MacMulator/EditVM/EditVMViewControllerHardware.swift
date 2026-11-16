@@ -22,6 +22,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet var drivesTableView: NSTableView!
     @IBOutlet var openImageButton: NSButton!
     @IBOutlet var createNewDiskButton: NSButton!
+    @IBOutlet var importDriveButton: NSButton!
 
     var virtualMachine: VirtualMachine?
     var vmRunner: VirtualMachineRunner?
@@ -140,6 +141,30 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         })
     }
 
+    /// Imports an existing disk image (e.g. a cloud image) as a new drive of the VM, copying it into the VM bundle
+    @IBAction func importDrive(_: Any) {
+        guard let virtualMachine else { return }
+        Utils.showFileSelector(fileTypes: Utils.IMPORT_DRIVE_TYPES, uponSelection: { panel in
+            guard let path = panel.url?.path else { return }
+            QemuDiskImageManager().getDiskImageDetails(path, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), uponCompletion: { details, errorMessage in
+                DispatchQueue.main.async {
+                    guard let details else {
+                        Utils.showAlert(window: self.view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveUnreadable", comment: ""), (path as NSString).lastPathComponent, errorMessage ?? ""), virtualMachine: virtualMachine)
+                        return
+                    }
+                    if details.format == QemuConstants.FORMAT_RAW {
+                        self.askToConvertRawImage(path, completion: { convert in
+                            self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_RAW)
+                        })
+                    } else {
+                        // qcow2 is copied as it is; any other format (vmdk, vdi, vhd...) is converted to qcow2
+                        self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_QCOW2)
+                    }
+                }
+            })
+        })
+    }
+
     @IBAction func deleteVirtualDrive(_ sender: Any) {
         if let virtualMachine {
             let row = drivesTableView.row(for: sender as! NSView)
@@ -169,6 +194,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         drivesTableLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.drivesTableLabel", comment: "")
         openImageButton.title = NSLocalizedString("EditVMViewControllerHardware.openImageButton", comment: "")
         createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.createNewDiskButton", comment: "")
+        importDriveButton.title = NSLocalizedString("EditVMViewControllerHardware.importDriveButton", comment: "")
 
         for column in drivesTableView.tableColumns {
             if column.identifier.rawValue == "Name" {
@@ -411,6 +437,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 createNewDiskButton.isEnabled = true
             }
 
+            // Imported drives are Qemu disk images (qcow2 or raw)
+            importDriveButton.isEnabled = virtualMachine.type == MacMulatorConstants.QEMU_VM && virtualMachine.os != QemuConstants.OS_IOS
+
             if Utils.isVMTemplate(virtualMachine) {
                 createNewDiskButton.isEnabled = false
                 openImageButton.isEnabled = false
@@ -430,6 +459,17 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         drivesTableView.reloadData()
     }
 
+    func driveImported(_ virtualDrive: VirtualDrive) {
+        guard let virtualMachine else { return }
+        virtualMachine.addVirtualDrive(virtualDrive)
+        virtualMachine.writeToPlist()
+        updateView()
+    }
+
+    func driveImportFailed(error: String) {
+        Utils.showAlert(window: view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveFailed", comment: ""), error), virtualMachine: virtualMachine)
+    }
+
     private func removeVirtualDrive(_ row: Int, _ index: Int) {
         if let virtualMachine {
             drivesTableView.removeRows(at: IndexSet(integer: IndexSet.Element(row)), withAnimation: NSTableView.AnimationOptions.slideUp)
@@ -446,5 +486,40 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 appDelegate.refreshVMMenus()
             }
         }
+    }
+
+    private func askToConvertRawImage(_ path: String, completion: @escaping (Bool) -> Void) {
+        let alert = NSAlert()
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+        alert.alertStyle = .informational
+        alert.messageText = String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), (path as NSString).lastPathComponent)
+        alert.informativeText = NSLocalizedString("EditVMViewControllerHardware.importRawImageDetail", comment: "")
+        alert.addButton(withTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToQcow2", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("EditVMViewControllerHardware.importKeepRaw", comment: ""))
+        alert.beginSheetModal(for: view.window!, completionHandler: { response in
+            completion(response == .alertFirstButtonReturn)
+        })
+    }
+
+    private func startDriveImport(_ path: String, _ details: DiskImageDetails, targetFormat: String) {
+        guard let virtualMachine,
+              let importController = storyboard?.instantiateController(withIdentifier: MacMulatorConstants.IMPORT_DRIVE_CONTROLLER) as? ImportDriveViewController
+        else { return }
+
+        let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
+        let name = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
+        let gigabyte = 1024.0 * 1024.0 * 1024.0
+        let virtualDrive = VirtualDrive(path: virtualMachine.path + "/" + name + "." + MacMulatorConstants.DISK_EXTENSION, name: name, format: targetFormat, mediaType: mediaType, size: Int32((Double(details.virtualSize) / gigabyte).rounded(.up)))
+        virtualDrive.setBlank(blank: false)
+        // A VM without a boot drive (e.g. one made to run a cloud image) boots from the imported one
+        if !virtualMachine.drives.contains(where: \.isBootDrive) {
+            virtualDrive.isBootDrive = true
+        }
+
+        importController.setImport(from: path, details: details, into: virtualDrive, of: virtualMachine)
+        importController.setParentController(self)
+        presentAsSheet(importController)
     }
 }

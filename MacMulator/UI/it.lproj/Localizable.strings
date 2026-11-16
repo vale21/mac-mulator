@@ -122,6 +122,13 @@
 "EditVMViewControllerHardware.memoryLabel" = "Memoria (MB)";
 "EditVMViewControllerHardware.onlyOneDriveAvailable" =  "Questa macchina virtuale è basata su Apple Virtualization Framework. Con questo tipo di macchine virtuali al momento è possibile configurare un solo drive virtuale.";
 "EditVMViewControllerHardware.openImageButton" = "Apri immagine...";
+"EditVMViewControllerHardware.importDriveButton" = "Importa disco...";
+"EditVMViewControllerHardware.importDriveUnreadable" = "“%@” non è un'immagine disco che MacMulator può importare.\n\n%@";
+"EditVMViewControllerHardware.importDriveFailed" = "Non è stato possibile importare il disco: %@";
+"EditVMViewControllerHardware.importRawImage" = "“%@” è un'immagine disco RAW. Vuoi convertirla in qcow2?";
+"EditVMViewControllerHardware.importRawImageDetail" = "Un disco qcow2 occupa solo lo spazio effettivamente usato dalla VM e supporta gli snapshot. Un disco RAW viene copiato così com'è.";
+"EditVMViewControllerHardware.importConvertToQcow2" = "Converti in qcow2";
+"EditVMViewControllerHardware.importKeepRaw" = "Mantieni RAW";
 "EditVMViewControllerNetwork.createMappingButton" = "Crea nuova mappatura...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
@@ -409,3 +416,7 @@
 "VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";
 
 "QemuRunner.cloudInitVolumeError" = "Non è stato possibile creare il volume cloud-init della VM: %@";
+
+"ImportDriveViewController.importingDrive" = "Importazione di %@...";
+"QemuDiskImageManager.cannotReadImage" = "Impossibile leggere %@.";
+"QemuDiskImageManager.cannotWriteImage" = "Impossibile scrivere %@.";

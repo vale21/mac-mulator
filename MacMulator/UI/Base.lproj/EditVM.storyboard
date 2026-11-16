@@ -770,6 +770,17 @@
                                     <segue destination="jnj-BN-7iT" kind="sheet" identifier="newDiskSegue" id="qMP-wa-FjT"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Bt-001">
+                                <rect key="frame" x="191" y="18" width="176" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="roundTextured" title="Import drive..." bezelStyle="texturedRounded" image="square.and.arrow.down" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iDr-Bt-002">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="importDrive:" target="fBa-tq-xkS" id="iDr-Bt-003"/>
+                                </connections>
+                            </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-qf-AbG">
                                 <rect key="frame" x="373" y="18" width="176" height="23"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -797,6 +808,7 @@
                         <outlet property="memoryStepper" destination="Hw3-U6-vgX" id="UE7-io-KWq"/>
                         <outlet property="memoryTextView" destination="Bqq-6n-VM7" id="SuW-Gc-bcH"/>
                         <outlet property="minMemoryLabel" destination="wr5-u2-BeG" id="6LA-OG-jlc"/>
+                        <outlet property="importDriveButton" destination="iDr-Bt-001" id="iDr-Bt-004"/>
                         <outlet property="openImageButton" destination="0Sa-qf-AbG" id="sh3-iZ-vLQ"/>
                     </connections>
                 </viewController>
@@ -2877,6 +2889,48 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
 </objects>
 <point key="canvasLocation" x="1645" y="400"/>
 </scene>
+        <!--Import Drive View Controller-->
+        <scene sceneID="iDr-Sn-001">
+            <objects>
+                <viewController storyboardIdentifier="importDriveViewController" id="iDr-Vc-001" customClass="ImportDriveViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="iDr-Vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="107"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Lb-001">
+                                <rect key="frame" x="18" y="71" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="Importing drive..." id="iDr-Lb-002">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Pb-001">
+                                <rect key="frame" x="20" y="44" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Lb-003">
+                                <rect key="frame" x="18" y="20" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="iDr-Lb-004">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="estimateTimeRemainingLabel" destination="iDr-Lb-003" id="iDr-Ot-001"/>
+                        <outlet property="importProgressLabel" destination="iDr-Lb-001" id="iDr-Ot-002"/>
+                        <outlet property="progressBar" destination="iDr-Pb-001" id="iDr-Ot-003"/>
+                    </connections>
+                </viewController>
+                <customObject id="iDr-Fr-001" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2435" y="-1600"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="QO0-5a-fgI"/>
@@ -2896,6 +2950,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
         <image name="network" catalog="system" width="15" height="15"/>
         <image name="plus.app.fill" catalog="system" width="15" height="14"/>
         <image name="rays" catalog="system" width="16" height="16"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="square.and.pencil" catalog="system" width="17" height="16"/>
         <image name="stopwatch" catalog="system" width="15" height="17"/>
         <image name="trash" catalog="system" width="15" height="17"/>

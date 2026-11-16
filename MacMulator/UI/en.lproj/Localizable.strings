@@ -122,6 +122,13 @@
 "EditVMViewControllerHardware.memoryLabel" = "Memory (MB)";
 "EditVMViewControllerHardware.onlyOneDriveAvailable" = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment.";
 "EditVMViewControllerHardware.openImageButton" = "Open image...";
+"EditVMViewControllerHardware.importDriveButton" = "Import drive...";
+"EditVMViewControllerHardware.importDriveUnreadable" = "“%@” is not a disk image that MacMulator can import.\n\n%@";
+"EditVMViewControllerHardware.importDriveFailed" = "The drive could not be imported: %@";
+"EditVMViewControllerHardware.importRawImage" = "“%@” is a RAW disk image. Do you want to convert it to qcow2?";
+"EditVMViewControllerHardware.importRawImageDetail" = "A qcow2 drive only takes the space that the VM actually uses, and supports snapshots. A RAW drive is copied as it is.";
+"EditVMViewControllerHardware.importConvertToQcow2" = "Convert to qcow2";
+"EditVMViewControllerHardware.importKeepRaw" = "Keep RAW";
 "EditVMViewControllerNetwork.createMappingButton" = "Create new mapping...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
@@ -409,3 +416,7 @@
 "VirtualMachineListViewController.renameDuplicate" = "A virtual machine named \"%@\" already exists.";
 
 "QemuRunner.cloudInitVolumeError" = "The cloud-init volume of the VM could not be created: %@";
+
+"ImportDriveViewController.importingDrive" = "Importing %@...";
+"QemuDiskImageManager.cannotReadImage" = "Cannot read %@.";
+"QemuDiskImageManager.cannotWriteImage" = "Cannot write %@.";
