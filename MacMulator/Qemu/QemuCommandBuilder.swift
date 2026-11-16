@@ -34,6 +34,7 @@ class QemuCommandBuilder {
     var efiVars: String?
     var globalClause: String?
     var drives: [String] = []
+    var cloudInitVolume: String?
     var network: String?
     var spice: String?
     var portMappings: [PortMapping] = []
@@ -212,6 +213,12 @@ class QemuCommandBuilder {
         return self
     }
 
+    /// The cloud-init volume is a read-only CD-ROM on its own virtio SCSI controller: it takes no drive index and no place in the boot order
+    func withCloudInitVolume(_ file: String?) -> QemuCommandBuilder {
+        cloudInitVolume = file
+        return self
+    }
+
     func withEfi(file: String) -> QemuCommandBuilder {
         efi = Utils.escape(file)
         return self
@@ -351,6 +358,12 @@ class QemuCommandBuilder {
         }
         for drive in drives {
             cmd += " " + drive
+        }
+        if let cloudInitVolume {
+            cmd += FORMATTER + "-drive if=none,id=cidata,format=raw,readonly=on,file=" + Utils.escape(cloudInitVolume)
+            // A CD-ROM (/dev/sr0 in Linux) does not take the name of a disk: a virtio disk would become vda, and the VM disk vdb
+            cmd += FORMATTER + "-device virtio-scsi-pci,id=cidata-scsi"
+            cmd += FORMATTER + "-device scsi-cd,drive=cidata,bus=cidata-scsi.0"
         }
         if let network {
             cmd += " " + network

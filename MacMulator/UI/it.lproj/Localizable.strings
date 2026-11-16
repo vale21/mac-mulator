@@ -407,3 +407,5 @@
 "RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";
 "RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";
 "VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";
+
+"QemuRunner.cloudInitVolumeError" = "Non è stato possibile creare il volume cloud-init della VM: %@";

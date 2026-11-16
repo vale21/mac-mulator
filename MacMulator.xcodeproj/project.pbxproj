@@ -27,6 +27,12 @@
 		3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */; };
 		3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */; };
 		3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */; };
+		3B25EBB030AB603800028C39 /* ISO9660Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBAF30AB603800028C39 /* ISO9660Image.swift */; };
+		3B25EBB130AB603800028C39 /* ISO9660Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBAF30AB603800028C39 /* ISO9660Image.swift */; };
+		3B25EBB330AB603900028C39 /* SHA512Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB230AB603900028C39 /* SHA512Crypt.swift */; };
+		3B25EBB430AB603900028C39 /* SHA512Crypt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB230AB603900028C39 /* SHA512Crypt.swift */; };
+		3B25EBB630AB603A00028C39 /* CloudInitVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */; };
+		3B25EBB730AB603A00028C39 /* CloudInitVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
 		3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
@@ -279,6 +285,9 @@
 		3B221D072932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkLinuxSupport.swift; sourceTree = "<group>"; };
 		3B246AF930738AB700EA2B5C /* QemuSpiceViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuSpiceViewerViewController.swift; sourceTree = "<group>"; };
 		3B249B5F263042170046DDA5 /* CreateVMFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateVMFileViewController.swift; sourceTree = "<group>"; };
+		3B25EBAF30AB603800028C39 /* ISO9660Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO9660Image.swift; sourceTree = "<group>"; };
+		3B25EBB230AB603900028C39 /* SHA512Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512Crypt.swift; sourceTree = "<group>"; };
+		3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudInitVolume.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
@@ -435,6 +444,16 @@
 			path = RunVM;
 			sourceTree = "<group>";
 		};
+		3B25EBB830AB61F800028C39 /* CloudInit */ = {
+			isa = PBXGroup;
+			children = (
+				3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */,
+				3B25EBAF30AB603800028C39 /* ISO9660Image.swift */,
+				3B25EBB230AB603900028C39 /* SHA512Crypt.swift */,
+			);
+			path = CloudInit;
+			sourceTree = "<group>";
+		};
 		3B2E6667309A07FD0033552E /* SerialConsole */ = {
 			isa = PBXGroup;
 			children = (
@@ -499,6 +518,7 @@
 				3B9B19E525C2C0B400AF3438 /* VirtualMachineTableCellView.swift */,
 				3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */,
 				3BF26883308A009200A7DBC1 /* DiskImage */,
+				3B25EBB830AB61F800028C39 /* CloudInit */,
 			);
 			path = MacMulator;
 			sourceTree = "<group>";
@@ -928,10 +948,12 @@
 				3B221D082932595600C1797A /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
 				3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */,
 				3BD7455025E7AC85005ECECB /* DriveInfoViewController.swift in Sources */,
+				3B25EBB430AB603900028C39 /* SHA512Crypt.swift in Sources */,
 				3B9D7C5E280480E400C9510B /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3B0327B92E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift in Sources */,
 				3B3FC24C308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
 				3BC81761309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
+				3B25EBB630AB603A00028C39 /* CloudInitVolume.swift in Sources */,
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,
@@ -952,6 +974,7 @@
 				3B246AFA30738ACE00EA2B5C /* QemuSpiceViewerViewController.swift in Sources */,
 				3B18445D25E4F86A00CDAA20 /* MacMulatorConstants.swift in Sources */,
 				3B03B07D284A4FCE002D465F /* PortMapping.swift in Sources */,
+				3B25EBB130AB603800028C39 /* ISO9660Image.swift in Sources */,
 				3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */,
 				3B7F945325CD51CA0063F84D /* QemuCommandBuilder.swift in Sources */,
 				3BEF5D362804419000709576 /* VirtualizationFrameworkVMCreator.swift in Sources */,
@@ -1025,10 +1048,12 @@
 				3BFB2B403078F067005A4B51 /* VirtualizationFrameworkLinuxSupport.swift in Sources */,
 				3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */,
 				3BFB2B413078F067005A4B51 /* DriveInfoViewController.swift in Sources */,
+				3B25EBB330AB603900028C39 /* SHA512Crypt.swift in Sources */,
 				3BFB2B423078F067005A4B51 /* MacOSVirtualMachineConfigurationHelper.swift in Sources */,
 				3BFB2B433078F067005A4B51 /* EditVMViewControllerNetworkVF.swift in Sources */,
 				3B3FC24B308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
 				3BC81762309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
+				3B25EBB730AB603A00028C39 /* CloudInitVolume.swift in Sources */,
 				3BFB2B443078F067005A4B51 /* DrivesTableCells.swift in Sources */,
 				3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */,
@@ -1049,6 +1074,7 @@
 				3BFB2B4F3078F067005A4B51 /* QemuSpiceViewerViewController.swift in Sources */,
 				3BFB2B503078F067005A4B51 /* MacMulatorConstants.swift in Sources */,
 				3BFB2B513078F067005A4B51 /* PortMapping.swift in Sources */,
+				3B25EBB030AB603800028C39 /* ISO9660Image.swift in Sources */,
 				3BFB2B523078F067005A4B51 /* EditVMViewController.swift in Sources */,
 				3BFB2B533078F067005A4B51 /* QemuCommandBuilder.swift in Sources */,
 				3BFB2B543078F067005A4B51 /* VirtualizationFrameworkVMCreator.swift in Sources */,
