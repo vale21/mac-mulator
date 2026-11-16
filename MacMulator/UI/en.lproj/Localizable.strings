@@ -113,6 +113,7 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Are you sure you want to remove Virtual Drive \"%@\"? This operation is not reversible.";
 "EditVMViewControllerHardware.cpusLabel" = "CPUs";
 "EditVMViewControllerHardware.createNewDiskButton" = "Create new drive...";
+"EditVMViewControllerHardware.selectNandButton" = "Select NAND...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Name";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "File location";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Size";
@@ -120,7 +121,6 @@
 "EditVMViewControllerHardware.drivesTableLabel" = "Drives";
 "EditVMViewControllerHardware.imageAlreadyLoaded" = "You already have configured image at path\n\"%@\"\nto be loaded in MacMulator.";
 "EditVMViewControllerHardware.memoryLabel" = "Memory (MB)";
-"EditVMViewControllerHardware.onlyOneDriveAvailable" = "This Virtual Machine is based on Apple Virtualization Framework. With this type of Virtual Machines only one drive can be used at the moment.";
 "EditVMViewControllerHardware.openImageButton" = "Open image...";
 "EditVMViewControllerHardware.importDriveButton" = "Import drive...";
 "EditVMViewControllerHardware.importDriveUnreadable" = "“%@” is not a disk image that MacMulator can import.\n\n%@";
@@ -129,6 +129,19 @@
 "EditVMViewControllerHardware.importRawImageDetail" = "A qcow2 drive only takes the space that the VM actually uses, and supports snapshots. A RAW drive is copied as it is.";
 "EditVMViewControllerHardware.importConvertToQcow2" = "Convert to qcow2";
 "EditVMViewControllerHardware.importKeepRaw" = "Keep RAW";
+"EditVMViewControllerHardware.importAsifImage" = "Do you want to import “%@” as an ASIF drive?";
+"EditVMViewControllerHardware.importAsifImageDetail" = "Apple VMs use RAW or ASIF drives, and other formats are converted. An ASIF drive only takes the space that the VM actually uses; a RAW drive takes its full size on disk.";
+"EditVMViewControllerHardware.importConvertToAsif" = "Convert to ASIF";
+"EditVMViewControllerHardware.importUseRaw" = "Use RAW";
+"EditVMViewControllerHardware.openImageTooltip" = "Attach an existing image to this VM, e.g. an installation ISO. The image is used where it is, without copying it.";
+"EditVMViewControllerHardware.createNewDiskTooltip" = "Create a new empty disk for this VM.";
+"EditVMViewControllerHardware.importDriveTooltip" = "Copy an existing disk image into this VM as a new disk, e.g. a cloud image. Images in a format the VM cannot use are converted.";
+"EditVMViewControllerHardware.selectNandTooltip" = "Select the NAND folder of this iPod touch VM.";
+"EditVMViewControllerHardware.drivesTemplateTooltip" = "This VM is a template, and its disks cannot be changed. Create a VM from it to change them.";
+"EditVMViewControllerHardware.drivesIOSTooltip" = "This iPod touch VM uses its NAND, and cannot use disk images.";
+"EditVMViewControllerHardware.drivesOneDriveTooltip" = "This VM is based on Apple Virtualization Framework, and can use only one disk. Delete the current disk to add another one.";
+"EditVMViewControllerHardware.openImageIPSWTooltip" = "An installation image is already attached to this VM. Remove it to attach another image.";
+"EditVMViewControllerHardware.importDriveMacOSTooltip" = "This macOS VM cannot use an imported disk: macOS can only be installed on a disk created by MacMulator.";
 "EditVMViewControllerNetwork.createMappingButton" = "Create new mapping...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
@@ -415,7 +428,7 @@
 "RootViewController.cloneRunningVM" = "A running VM cannot be cloned. Stop it first. A paused VM can be cloned.";
 "VirtualMachineListViewController.renameDuplicate" = "A virtual machine named \"%@\" already exists.";
 
-"QemuRunner.cloudInitVolumeError" = "The cloud-init volume of the VM could not be created: %@";
+"CloudInitVolume.creationFailed" = "The cloud-init volume of the VM could not be created: %@";
 
 "ImportDriveViewController.importingDrive" = "Importing %@...";
 "QemuDiskImageManager.cannotReadImage" = "Cannot read %@.";

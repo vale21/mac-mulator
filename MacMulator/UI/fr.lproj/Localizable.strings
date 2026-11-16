@@ -113,6 +113,7 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Voulez-vous vraiment supprimer le disque virtuel \"%@\" ? Cette opération est irréversible.";
 "EditVMViewControllerHardware.cpusLabel" = "Processeurs (CPU)";
 "EditVMViewControllerHardware.createNewDiskButton" = "Créer un disque...";
+"EditVMViewControllerHardware.selectNandButton" = "Sélectionner la NAND...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Nom";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "Emplacement du fichier";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Taille";
@@ -120,7 +121,6 @@
 "EditVMViewControllerHardware.drivesTableLabel" = "Disques";
 "EditVMViewControllerHardware.imageAlreadyLoaded" = "Vous avez déjà configuré une image au chemin\n\"%@\"\npour être chargée dans MacMulator.";
 "EditVMViewControllerHardware.memoryLabel" = "Mémoire (Mo)";
-"EditVMViewControllerHardware.onlyOneDriveAvailable" = "Cette machine virtuelle est basée sur le Framework de virtualisation d’Apple. Avec ce type de machine virtuelle, un seul disque peut être utilisé pour le moment.";
 "EditVMViewControllerHardware.openImageButton" = "Ouvrir une image...";
 "EditVMViewControllerHardware.importDriveButton" = "Importer un disque...";
 "EditVMViewControllerHardware.importDriveUnreadable" = "« %@ » n'est pas une image disque que MacMulator peut importer.\n\n%@";
@@ -129,6 +129,19 @@
 "EditVMViewControllerHardware.importRawImageDetail" = "Un disque qcow2 n'occupe que l'espace réellement utilisé par la VM et prend en charge les instantanés. Un disque RAW est copié tel quel.";
 "EditVMViewControllerHardware.importConvertToQcow2" = "Convertir en qcow2";
 "EditVMViewControllerHardware.importKeepRaw" = "Garder RAW";
+"EditVMViewControllerHardware.importAsifImage" = "Voulez-vous importer « %@ » comme disque ASIF ?";
+"EditVMViewControllerHardware.importAsifImageDetail" = "Les VM Apple utilisent des disques RAW ou ASIF, et les autres formats sont convertis. Un disque ASIF n'occupe que l'espace réellement utilisé par la VM ; un disque RAW occupe toute sa taille.";
+"EditVMViewControllerHardware.importConvertToAsif" = "Convertir en ASIF";
+"EditVMViewControllerHardware.importUseRaw" = "Utiliser RAW";
+"EditVMViewControllerHardware.openImageTooltip" = "Associer une image existante à cette VM, par exemple une ISO d'installation. L'image est utilisée là où elle se trouve, sans être copiée.";
+"EditVMViewControllerHardware.createNewDiskTooltip" = "Créer un nouveau disque vide pour cette VM.";
+"EditVMViewControllerHardware.importDriveTooltip" = "Copier une image disque existante dans cette VM comme nouveau disque, par exemple une image cloud. Les images dans un format que la VM ne peut pas utiliser sont converties.";
+"EditVMViewControllerHardware.selectNandTooltip" = "Sélectionner le dossier NAND de cette VM iPod touch.";
+"EditVMViewControllerHardware.drivesTemplateTooltip" = "Cette VM est un modèle, et ses disques ne peuvent pas être modifiés. Créez une VM à partir de celui-ci pour les modifier.";
+"EditVMViewControllerHardware.drivesIOSTooltip" = "Cette VM iPod touch utilise sa NAND, et ne peut pas utiliser d'images disque.";
+"EditVMViewControllerHardware.drivesOneDriveTooltip" = "Cette VM est basée sur Apple Virtualization Framework, et ne peut utiliser qu'un seul disque. Supprimez le disque actuel pour en ajouter un autre.";
+"EditVMViewControllerHardware.openImageIPSWTooltip" = "Une image d'installation est déjà associée à cette VM. Retirez-la pour associer une autre image.";
+"EditVMViewControllerHardware.importDriveMacOSTooltip" = "Cette VM macOS ne peut pas utiliser un disque importé : macOS ne peut être installé que sur un disque créé par MacMulator.";
 "EditVMViewControllerNetwork.createMappingButton" = "Créer nouvelle...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Port du Mac hôte";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nom de la redirection";
@@ -415,7 +428,7 @@
 "RootViewController.cloneRunningVM" = "Une VM en cours d'exécution ne peut pas être clonée. Arrêtez-la d'abord. Une VM en pause peut être clonée.";
 "VirtualMachineListViewController.renameDuplicate" = "Une machine virtuelle nommée \"%@\" existe déjà.";
 
-"QemuRunner.cloudInitVolumeError" = "Impossible de créer le volume cloud-init de la VM : %@";
+"CloudInitVolume.creationFailed" = "Impossible de créer le volume cloud-init de la VM : %@";
 
 "ImportDriveViewController.importingDrive" = "Importation de %@...";
 "QemuDiskImageManager.cannotReadImage" = "Impossible de lire %@.";

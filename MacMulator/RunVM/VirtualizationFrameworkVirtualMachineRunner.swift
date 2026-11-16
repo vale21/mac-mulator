@@ -111,6 +111,15 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             } else {
                 installPath = ""
             }
+            if CloudInitVolume.isSupported(managedVm) {
+                // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
+                do {
+                    try CloudInitVolume.update(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            }
             let console = VirtualizationFrameworkSerialConsole()
             serialConsole = console
             vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())

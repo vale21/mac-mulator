@@ -29,6 +29,12 @@ class LinuxVirtualMachineConfigurationHelper {
         }
     }
 
+    /// The cloud-init volume, as a read-only virtio disk
+    static func createCloudInitDeviceConfiguration(_ path: String) throws -> VZVirtioBlockDeviceConfiguration {
+        let attachment = try VZDiskImageStorageDeviceAttachment(url: URL(fileURLWithPath: path), readOnly: true)
+        return VZVirtioBlockDeviceConfiguration(attachment: attachment)
+    }
+
     static func createNetworkDeviceConfiguration(macAddress: String?, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 

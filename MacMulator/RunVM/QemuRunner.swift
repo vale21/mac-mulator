@@ -120,7 +120,7 @@ class QemuRunner: VirtualMachineRunner {
             do {
                 try CloudInitVolume.update(for: managedVm)
             } catch {
-                callback(VMExecutionResult(exitCode: -1, error: String(format: NSLocalizedString("QemuRunner.cloudInitVolumeError", comment: ""), error.localizedDescription)), managedVm)
+                callback(VMExecutionResult(exitCode: -1, error: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription)), managedVm)
                 return
             }
         }

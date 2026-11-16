@@ -113,6 +113,7 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Sei sicuro di voler rimuovere il drive virtuale \"%@\"? Questa operazione è irreversibile.";
 "EditVMViewControllerHardware.cpusLabel" = "CPUs:";
 "EditVMViewControllerHardware.createNewDiskButton" = "Crea un nuovo disco...";
+"EditVMViewControllerHardware.selectNandButton" = "Seleziona NAND...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Nome";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "Percorso del file";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Dimensione";
@@ -120,7 +121,6 @@
 "EditVMViewControllerHardware.drivesTableLabel" = "Dischi e immagini";
 "EditVMViewControllerHardware.imageAlreadyLoaded" = "Hai già configurato l'immagine al percorso\n\"%@\"\nper essere caricata in MacMulator.";
 "EditVMViewControllerHardware.memoryLabel" = "Memoria (MB)";
-"EditVMViewControllerHardware.onlyOneDriveAvailable" =  "Questa macchina virtuale è basata su Apple Virtualization Framework. Con questo tipo di macchine virtuali al momento è possibile configurare un solo drive virtuale.";
 "EditVMViewControllerHardware.openImageButton" = "Apri immagine...";
 "EditVMViewControllerHardware.importDriveButton" = "Importa disco...";
 "EditVMViewControllerHardware.importDriveUnreadable" = "“%@” non è un'immagine disco che MacMulator può importare.\n\n%@";
@@ -129,6 +129,19 @@
 "EditVMViewControllerHardware.importRawImageDetail" = "Un disco qcow2 occupa solo lo spazio effettivamente usato dalla VM e supporta gli snapshot. Un disco RAW viene copiato così com'è.";
 "EditVMViewControllerHardware.importConvertToQcow2" = "Converti in qcow2";
 "EditVMViewControllerHardware.importKeepRaw" = "Mantieni RAW";
+"EditVMViewControllerHardware.importAsifImage" = "Vuoi importare “%@” come disco ASIF?";
+"EditVMViewControllerHardware.importAsifImageDetail" = "Le VM Apple usano dischi RAW o ASIF, e gli altri formati vengono convertiti. Un disco ASIF occupa solo lo spazio effettivamente usato dalla VM; un disco RAW occupa tutta la sua dimensione.";
+"EditVMViewControllerHardware.importConvertToAsif" = "Converti in ASIF";
+"EditVMViewControllerHardware.importUseRaw" = "Usa RAW";
+"EditVMViewControllerHardware.openImageTooltip" = "Collega un'immagine esistente a questa VM, ad esempio una ISO di installazione. L'immagine viene usata dove si trova, senza copiarla.";
+"EditVMViewControllerHardware.createNewDiskTooltip" = "Crea un nuovo disco vuoto per questa VM.";
+"EditVMViewControllerHardware.importDriveTooltip" = "Copia un'immagine disco esistente in questa VM come nuovo disco, ad esempio un'immagine cloud. Le immagini in un formato che la VM non può usare vengono convertite.";
+"EditVMViewControllerHardware.selectNandTooltip" = "Seleziona la cartella NAND di questa VM iPod touch.";
+"EditVMViewControllerHardware.drivesTemplateTooltip" = "Questa VM è un template, e i suoi dischi non possono essere modificati. Crea una VM dal template per modificarli.";
+"EditVMViewControllerHardware.drivesIOSTooltip" = "Questa VM iPod touch usa la sua NAND, e non può usare immagini disco.";
+"EditVMViewControllerHardware.drivesOneDriveTooltip" = "Questa VM è basata su Apple Virtualization Framework, e può usare un solo disco. Elimina il disco attuale per aggiungerne un altro.";
+"EditVMViewControllerHardware.openImageIPSWTooltip" = "Un'immagine di installazione è già collegata a questa VM. Rimuovila per collegare un'altra immagine.";
+"EditVMViewControllerHardware.importDriveMacOSTooltip" = "Questa VM macOS non può usare un disco importato: macOS può essere installato solo su un disco creato da MacMulator.";
 "EditVMViewControllerNetwork.createMappingButton" = "Crea nuova mappatura...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
@@ -415,7 +428,7 @@
 "RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";
 "VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";
 
-"QemuRunner.cloudInitVolumeError" = "Non è stato possibile creare il volume cloud-init della VM: %@";
+"CloudInitVolume.creationFailed" = "Non è stato possibile creare il volume cloud-init della VM: %@";
 
 "ImportDriveViewController.importingDrive" = "Importazione di %@...";
 "QemuDiskImageManager.cannotReadImage" = "Impossibile leggere %@.";

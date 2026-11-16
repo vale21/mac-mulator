@@ -152,10 +152,28 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                         Utils.showAlert(window: self.view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveUnreadable", comment: ""), (path as NSString).lastPathComponent, errorMessage ?? ""), virtualMachine: virtualMachine)
                         return
                     }
-                    if details.format == QemuConstants.FORMAT_RAW {
-                        self.askToConvertRawImage(path, completion: { convert in
-                            self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_RAW)
-                        })
+                    let fileName = (path as NSString).lastPathComponent
+                    if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                        // The Virtualization framework only reads RAW and ASIF drives: any other format becomes one of them
+                        guard Utils.isAsifSupported(virtualMachine) else {
+                            self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
+                            return
+                        }
+                        self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importAsifImage", comment: ""), fileName),
+                                          detail: NSLocalizedString("EditVMViewControllerHardware.importAsifImageDetail", comment: ""),
+                                          convertTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToAsif", comment: ""),
+                                          keepTitle: NSLocalizedString("EditVMViewControllerHardware.importUseRaw", comment: ""),
+                                          completion: { convert in
+                                              self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_ASIF : QemuConstants.FORMAT_RAW)
+                                          })
+                    } else if details.format == QemuConstants.FORMAT_RAW {
+                        self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), fileName),
+                                          detail: NSLocalizedString("EditVMViewControllerHardware.importRawImageDetail", comment: ""),
+                                          convertTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToQcow2", comment: ""),
+                                          keepTitle: NSLocalizedString("EditVMViewControllerHardware.importKeepRaw", comment: ""),
+                                          completion: { convert in
+                                              self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_RAW)
+                                          })
                     } else {
                         // qcow2 is copied as it is; any other format (vmdk, vdi, vhd...) is converted to qcow2
                         self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_QCOW2)
@@ -419,31 +437,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
             drivesTableView.reloadData()
 
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
-                openImageButton.isEnabled = false
-                openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                openImageButton.isEnabled = false
-            } else {
-                openImageButton.isEnabled = true
+            if virtualMachine.os == QemuConstants.OS_IOS {
+                createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.selectNandButton", comment: "")
             }
-
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findMainDrive(virtualMachine.drives) != nil {
-                createNewDiskButton.isEnabled = false
-                createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                createNewDiskButton.title = "Select NAND..."
-            } else {
-                createNewDiskButton.isEnabled = true
-            }
-
-            // Imported drives are Qemu disk images (qcow2 or raw)
-            importDriveButton.isEnabled = virtualMachine.type == MacMulatorConstants.QEMU_VM && virtualMachine.os != QemuConstants.OS_IOS
-
-            if Utils.isVMTemplate(virtualMachine) {
-                createNewDiskButton.isEnabled = false
-                openImageButton.isEnabled = false
-            }
+            updateDriveButtons(virtualMachine)
 
             let appDelegate = NSApp.delegate as! AppDelegate
             appDelegate.refreshVMMenus()
@@ -488,16 +485,65 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         }
     }
 
-    private func askToConvertRawImage(_ path: String, completion: @escaping (Bool) -> Void) {
+    /// Enables the drive buttons, each with a tooltip saying what it does or why it is disabled.
+    /// The rules are checked in order: the first matching one decides.
+    private func updateDriveButtons(_ virtualMachine: VirtualMachine) {
+        let isTemplate = Utils.isVMTemplate(virtualMachine)
+        let isIOS = virtualMachine.os == QemuConstants.OS_IOS
+        let isAppleVM = virtualMachine.type == MacMulatorConstants.APPLE_VM
+        // Apple VMs have a single drive
+        let hasAppleMainDrive = isAppleVM && Utils.findMainDrive(virtualMachine.drives) != nil
+
+        let openImage: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            (false, "drivesIOSTooltip")
+        } else if isAppleVM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
+            (false, "openImageIPSWTooltip")
+        } else {
+            (true, "openImageTooltip")
+        }
+
+        let createNewDisk: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            // The button selects the NAND folder of the iPod touch
+            (true, "selectNandTooltip")
+        } else if hasAppleMainDrive {
+            (false, "drivesOneDriveTooltip")
+        } else {
+            (true, "createNewDiskTooltip")
+        }
+
+        let importDrive: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            (false, "drivesIOSTooltip")
+        } else if isAppleVM, virtualMachine.os != QemuConstants.OS_LINUX {
+            // A macOS drive cannot be imported: it needs the files created by the macOS installation
+            (false, "importDriveMacOSTooltip")
+        } else if hasAppleMainDrive {
+            (false, "drivesOneDriveTooltip")
+        } else {
+            (true, "importDriveTooltip")
+        }
+
+        for (button, state) in [(openImageButton!, openImage), (createNewDiskButton!, createNewDisk), (importDriveButton!, importDrive)] {
+            button.isEnabled = state.enabled
+            button.toolTip = NSLocalizedString("EditVMViewControllerHardware." + state.tooltip, comment: "")
+        }
+    }
+
+    private func askToConvert(message: String, detail: String, convertTitle: String, keepTitle: String, completion: @escaping (Bool) -> Void) {
         let alert = NSAlert()
         if let virtualMachine {
             alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
         }
         alert.alertStyle = .informational
-        alert.messageText = String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), (path as NSString).lastPathComponent)
-        alert.informativeText = NSLocalizedString("EditVMViewControllerHardware.importRawImageDetail", comment: "")
-        alert.addButton(withTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToQcow2", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("EditVMViewControllerHardware.importKeepRaw", comment: ""))
+        alert.messageText = message
+        alert.informativeText = detail
+        alert.addButton(withTitle: convertTitle)
+        alert.addButton(withTitle: keepTitle)
         alert.beginSheetModal(for: view.window!, completionHandler: { response in
             completion(response == .alertFirstButtonReturn)
         })
