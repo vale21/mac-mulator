@@ -5,6 +5,9 @@
 //  Created by Vale on 22/10/26.
 //
 
+#if arch(arm64)
+    import DiskImageKit
+#endif
 import Foundation
 
 struct DiskImageDetails {
@@ -59,6 +62,12 @@ extension DiskImageManager {
 
     func getDiskImageDetails(_ imagePath: String, qemuPath: String, uponCompletion callback: @escaping (DiskImageDetails?, String?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
+            // qemu-img does not know ASIF, and is not needed to recognize the formats imported without it
+            if (imagePath as NSString).pathExtension.lowercased() == QemuConstants.FORMAT_ASIF.lowercased() || !Utils.isQemuImgSupported(atPath: qemuPath) {
+                callback(self.detectDiskImageDetails(imagePath), nil)
+                return
+            }
+
             let process = Process()
             process.executableURL = URL(fileURLWithPath: qemuPath + "/" + QemuConstants.QEMU_IMG)
             process.arguments = ["info", "--output=json", imagePath]
@@ -88,21 +97,82 @@ extension DiskImageManager {
         }
     }
 
-    func importDiskImageWithQemuImg(from sourcePath: String, details: DiskImageDetails, to destinationPath: String, targetFormat: String, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    func copyOrConvertDiskImage(from sourcePath: String, details: DiskImageDetails, to destinationPath: String, targetFormat: String, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             let result: (Int32, String?)
                 // An image layered on a backing file is only complete together with it: converting merges them
                 = if details.format == targetFormat, !details.hasBackingFile
             {
                 self.copyDiskImage(from: sourcePath, to: destinationPath, progress: progress)
-            } else {
+            } else if Utils.isQemuImgSupported(atPath: qemuPath) {
                 self.convertDiskImage(from: sourcePath, to: destinationPath, targetFormat: targetFormat, qemuPath: qemuPath, progress: progress)
+            } else {
+                (-1, String(format: NSLocalizedString("DiskImageManager.conversionRequiresQemuImg", comment: ""), details.format, targetFormat))
             }
             if result.0 != 0 {
                 try? FileManager.default.removeItem(atPath: destinationPath)
             }
             callback(result.0, result.1)
         }
+    }
+
+    /// Best effort, without qemu-img: recognizes ASIF by its extension, and the formats that need qemu-img by their header,
+    /// so that they are not copied as RAW. Anything else is RAW.
+    private func detectDiskImageDetails(_ imagePath: String) -> DiskImageDetails {
+        let fileSize = (try? FileManager.default.attributesOfItem(atPath: imagePath)[.size] as? NSNumber)?.int64Value ?? 0
+        if (imagePath as NSString).pathExtension.lowercased() == QemuConstants.FORMAT_ASIF.lowercased() {
+            // An ASIF file is sparse: its virtual size comes from diskutil
+            return DiskImageDetails(format: QemuConstants.FORMAT_ASIF, virtualSize: asifVirtualSize(imagePath) ?? fileSize, hasBackingFile: false)
+        }
+
+        let handle = FileHandle(forReadingAtPath: imagePath)
+        let header = [UInt8]((try? handle?.read(upToCount: 72)) ?? Data())
+        try? handle?.close()
+        func starts(with magic: String) -> Bool {
+            header.starts(with: Array(magic.utf8))
+        }
+
+        // The format names are the ones of qemu-img
+        let format: String = if header.starts(with: [0x51, 0x46, 0x49, 0xFB]) { // "QFI\xfb"
+            QemuConstants.FORMAT_QCOW2
+        } else if starts(with: "KDMV") || starts(with: "# Disk DescriptorFile") {
+            "vmdk"
+        } else if starts(with: "vhdxfile") {
+            "vhdx"
+        } else if starts(with: "conectix") {
+            "vpc"
+        } else if header.count >= 68, header[64 ..< 68].elementsEqual([0x7F, 0x10, 0xDA, 0xBE]) {
+            "vdi"
+        } else {
+            QemuConstants.FORMAT_RAW
+        }
+
+        // The virtual size and backing file of a qcow2 image are in its header (big endian)
+        guard format == QemuConstants.FORMAT_QCOW2, header.count >= 32 else {
+            return DiskImageDetails(format: format, virtualSize: fileSize, hasBackingFile: false)
+        }
+        let bigEndian: (Int) -> UInt64 = { offset in header[offset ..< offset + 8].reduce(0) { $0 << 8 | UInt64($1) } }
+        return DiskImageDetails(format: format, virtualSize: Int64(bigEndian(24)), hasBackingFile: bigEndian(8) != 0)
+    }
+
+    private func asifVirtualSize(_ imagePath: String) -> Int64? {
+        // DiskImageKit also works in the App Store sandbox, where "diskutil image info" fails
+        #if arch(arm64)
+            if #available(macOS 27.0, *), let image = try? DiskImage(opening: .open(url: URL(fileURLWithPath: imagePath), mode: .readOnly)) {
+                return Int64(image.blockCount) * Int64(image.blockSize.rawValue)
+            }
+        #endif
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/sbin/diskutil")
+        process.arguments = ["image", "info", "--plist", imagePath]
+        let output = Pipe()
+        process.standardOutput = output
+        process.standardError = FileHandle.nullDevice
+        guard (try? process.run()) != nil else { return nil }
+        let data = output.fileHandleForReading.readDataToEndOfFile()
+        process.waitUntilExit()
+        let info = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any]
+        return ((info?["Size Info"] as? [String: Any])?["Total Bytes"] as? NSNumber)?.int64Value
     }
 
     private func copyDiskImage(from sourcePath: String, to destinationPath: String, progress: (Double) -> Void) -> (Int32, String?) {

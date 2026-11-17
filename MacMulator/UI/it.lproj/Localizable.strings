@@ -142,6 +142,9 @@
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "Questa VM è basata su Apple Virtualization Framework, e può usare un solo disco. Elimina il disco attuale per aggiungerne un altro.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "Un'immagine di installazione è già collegata a questa VM. Rimuovila per collegare un'altra immagine.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "Questa VM macOS non può usare un disco importato: macOS può essere installato solo su un disco creato da MacMulator.";
+"EditVMViewControllerHardware.importDriveRequiresQemuImg" = "“%@” è un'immagine %@. Per importarla serve qemu-img, che non è stato trovato: imposta il percorso di Qemu nelle Preferenze, oppure importa un'immagine in uno di questi formati: %@.";
+"EditVMViewControllerHardware.importDriveBackingRequiresQemuImg" = "“%@” dipende da un file di base. Per importarla serve qemu-img, che non è stato trovato: imposta il percorso di Qemu nelle Preferenze.";
+"EditVMViewControllerHardware.importDriveAsifNotSupported" = "“%@” è un'immagine ASIF, che solo le VM Apple possono usare.";
 "EditVMViewControllerNetwork.createMappingButton" = "Crea nuova mappatura...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
@@ -424,6 +427,7 @@
 "RootViewController.convertToFullCloneFailed" = "Impossibile convertire la VM in un clone completo: %@";
 "DiskImageManager.flattenNotSupported" = "L'unione dei dischi collegati non è supportata per questo tipo di macchina virtuale.";
 "DiskImageManager.flattenFailed" = "Impossibile unire il disco collegato: %@";
+"DiskImageManager.conversionRequiresQemuImg" = "Per convertire un'immagine %@ in %@ serve qemu-img, che non è stato trovato.";
 "RootViewController.renameFailed" = "Impossibile rinominare la cartella della macchina virtuale: %@";
 "RootViewController.cloneRunningVM" = "Una VM in esecuzione non può essere clonata. Fermala prima. Una VM in pausa può essere clonata.";
 "VirtualMachineListViewController.renameDuplicate" = "Esiste già una macchina virtuale con il nome \"%@\".";

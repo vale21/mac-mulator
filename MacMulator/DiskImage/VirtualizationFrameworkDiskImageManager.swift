@@ -221,13 +221,13 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
     }
 
     func importDiskImage(from sourcePath: String, details: DiskImageDetails, into virtualDrive: VirtualDrive, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        guard virtualDrive.format == QemuConstants.FORMAT_ASIF else {
-            importDiskImageWithQemuImg(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: virtualDrive.format, qemuPath: qemuPath, progress: progress, uponCompletion: callback)
+        guard virtualDrive.format == QemuConstants.FORMAT_ASIF, details.format != QemuConstants.FORMAT_ASIF else {
+            copyOrConvertDiskImage(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: virtualDrive.format, qemuPath: qemuPath, progress: progress, uponCompletion: callback)
             return
         }
 
-        // qemu-img does not write ASIF: the image is imported as RAW, then converted
-        importDiskImageWithQemuImg(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: QemuConstants.FORMAT_RAW, qemuPath: qemuPath, progress: { progress($0 / 2) }, uponCompletion: { errorCode, errorMessage in
+        // The image is imported as RAW, then converted to ASIF by diskutil
+        copyOrConvertDiskImage(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: QemuConstants.FORMAT_RAW, qemuPath: qemuPath, progress: { progress($0 / 2) }, uponCompletion: { errorCode, errorMessage in
             guard errorCode == 0 else {
                 callback(errorCode, errorMessage)
                 return

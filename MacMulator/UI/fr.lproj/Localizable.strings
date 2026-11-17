@@ -142,6 +142,9 @@
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "Cette VM est basée sur Apple Virtualization Framework, et ne peut utiliser qu'un seul disque. Supprimez le disque actuel pour en ajouter un autre.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "Une image d'installation est déjà associée à cette VM. Retirez-la pour associer une autre image.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "Cette VM macOS ne peut pas utiliser un disque importé : macOS ne peut être installé que sur un disque créé par MacMulator.";
+"EditVMViewControllerHardware.importDriveRequiresQemuImg" = "« %@ » est une image %@. Son importation nécessite qemu-img, qui est introuvable : définissez le chemin de Qemu dans les Préférences, ou importez une image dans l'un de ces formats : %@.";
+"EditVMViewControllerHardware.importDriveBackingRequiresQemuImg" = "« %@ » dépend d'un fichier de base. Son importation nécessite qemu-img, qui est introuvable : définissez le chemin de Qemu dans les Préférences.";
+"EditVMViewControllerHardware.importDriveAsifNotSupported" = "« %@ » est une image ASIF, que seules les VM Apple peuvent utiliser.";
 "EditVMViewControllerNetwork.createMappingButton" = "Créer nouvelle...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Port du Mac hôte";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nom de la redirection";
@@ -424,6 +427,7 @@
 "RootViewController.convertToFullCloneFailed" = "Impossible de convertir la VM en clone complet : %@";
 "DiskImageManager.flattenNotSupported" = "La fusion des disques liés n'est pas prise en charge pour ce type de machine virtuelle.";
 "DiskImageManager.flattenFailed" = "Impossible de fusionner le disque lié : %@";
+"DiskImageManager.conversionRequiresQemuImg" = "La conversion d'une image %@ en %@ nécessite qemu-img, qui est introuvable.";
 "RootViewController.renameFailed" = "Impossible de renommer le dossier de la machine virtuelle : %@";
 "RootViewController.cloneRunningVM" = "Une VM en cours d'exécution ne peut pas être clonée. Arrêtez-la d'abord. Une VM en pause peut être clonée.";
 "VirtualMachineListViewController.renameDuplicate" = "Une machine virtuelle nommée \"%@\" existe déjà.";

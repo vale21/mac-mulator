@@ -151,7 +151,7 @@ class QemuDiskImageManager: DiskImageManager {
     }
 
     func importDiskImage(from sourcePath: String, details: DiskImageDetails, into virtualDrive: VirtualDrive, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        importDiskImageWithQemuImg(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: virtualDrive.format, qemuPath: qemuPath, progress: progress, uponCompletion: callback)
+        copyOrConvertDiskImage(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: virtualDrive.format, qemuPath: qemuPath, progress: progress, uponCompletion: callback)
     }
 
     private func createDiskImage(path: String, name: String, format: String, size: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {

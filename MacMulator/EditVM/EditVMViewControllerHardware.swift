@@ -153,8 +153,16 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                         return
                     }
                     let fileName = (path as NSString).lastPathComponent
+                    guard Utils.isDiskImageImportSupported(details, virtualMachine) else {
+                        self.showImportNotSupported(fileName, details, virtualMachine)
+                        return
+                    }
                     if virtualMachine.type == MacMulatorConstants.APPLE_VM {
                         // The Virtualization framework only reads RAW and ASIF drives: any other format becomes one of them
+                        if details.format == QemuConstants.FORMAT_ASIF {
+                            self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_ASIF)
+                            return
+                        }
                         guard Utils.isAsifSupported(virtualMachine) else {
                             self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
                             return
@@ -166,6 +174,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                                           completion: { convert in
                                               self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_ASIF : QemuConstants.FORMAT_RAW)
                                           })
+                    } else if details.format == QemuConstants.FORMAT_RAW, !Utils.isQemuImgSupported(virtualMachine) {
+                        // Only qemu-img converts to qcow2
+                        self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
                     } else if details.format == QemuConstants.FORMAT_RAW {
                         self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), fileName),
                                           detail: NSLocalizedString("EditVMViewControllerHardware.importRawImageDetail", comment: ""),
@@ -532,6 +543,18 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             button.isEnabled = state.enabled
             button.toolTip = NSLocalizedString("EditVMViewControllerHardware." + state.tooltip, comment: "")
         }
+    }
+
+    private func showImportNotSupported(_ fileName: String, _ details: DiskImageDetails, _ virtualMachine: VirtualMachine) {
+        let message = if details.format == QemuConstants.FORMAT_ASIF {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveAsifNotSupported", comment: ""), fileName)
+        } else if details.hasBackingFile {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveBackingRequiresQemuImg", comment: ""), fileName)
+        } else {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveRequiresQemuImg", comment: ""), fileName, details.format.uppercased(),
+                   Utils.getDirectlyImportableDiskFormats(virtualMachine).map { $0.uppercased() }.joined(separator: ", "))
+        }
+        Utils.showAlert(window: view.window!, style: .warning, message: message, virtualMachine: virtualMachine)
     }
 
     private func askToConvert(message: String, detail: String, convertTitle: String, keepTitle: String, completion: @escaping (Bool) -> Void) {

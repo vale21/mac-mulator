@@ -290,7 +290,7 @@
 		3B25EBAF30AB603800028C39 /* ISO9660Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ISO9660Image.swift; sourceTree = "<group>"; };
 		3B25EBB230AB603900028C39 /* SHA512Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512Crypt.swift; sourceTree = "<group>"; };
 		3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudInitVolume.swift; sourceTree = "<group>"; };
-		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
+		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
