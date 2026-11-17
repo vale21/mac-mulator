@@ -675,10 +675,15 @@ class Utils {
     static func getNetworkForSubType(_ os: String, _ subtype: String, _ architecture: String) -> String {
         let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         if vmType == MacMulatorConstants.QEMU_VM {
-            return getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
+            return getQemuNetworkForSubType(os, subtype)
         } else {
             return QemuConstants.ATTACHMENT_NAT
         }
+    }
+
+    /// The default Qemu network device for the subtype, regardless of the VM type preferred for it
+    static func getQemuNetworkForSubType(_ os: String, _ subtype: String?) -> String {
+        getStringValueForSubType(os, subtype, 14) ?? QemuConstants.NETWORK_VIRTIO_NET_PCI
     }
 
     static func getVideoForSubType(_ os: String, _ subtype: String?) -> String {
