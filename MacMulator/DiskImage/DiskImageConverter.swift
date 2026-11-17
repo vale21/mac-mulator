@@ -7,8 +7,6 @@
 
 import Foundation
 
-/// Converts disk images between formats. qemu-img converts between RAW, qcow2 and the other Qemu formats, diskutil between
-/// RAW and ASIF: any other conversion goes through a temporary RAW image.
 class DiskImageConverter {
     let qemuPath: String
 
@@ -27,7 +25,6 @@ class DiskImageConverter {
         }
     }
 
-    /// Converts the image of a drive in place, from the given format to the format of the drive
     func convert(_ virtualDrive: VirtualDrive, from sourceFormat: String, progress: ((Double) -> Void)? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = virtualDrive.path
         let format = virtualDrive.format
@@ -44,7 +41,6 @@ class DiskImageConverter {
         })
     }
 
-    /// Copies or converts an image into a new file. The progress goes from 0 to 100. On failure the new file is deleted.
     func convert(_ sourcePath: String, from sourceFormat: String, to destinationPath: String, format targetFormat: String, hasBackingFile: Bool = false, progress: ((Double) -> Void)? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let finish: (Int32, String?) -> Void = { terminationCode, errorMessage in
             if terminationCode != 0 {
@@ -214,7 +210,6 @@ class DiskImageConverter {
         }
     }
 
-    /// qemu-img -p prints the progress as "(12.34/100%)"
     private func parseQemuImgProgress(_ output: String) -> Double? {
         let progressRegex = try? NSRegularExpression(pattern: #"\((\d+(?:\.\d+)?)/100%\)"#)
         let range = NSRange(output.startIndex..., in: output)
@@ -226,7 +221,6 @@ class DiskImageConverter {
         return Double(output[valueRange])
     }
 
-    /// diskutil prints the progress as "[ 12.3% completed]"
     private func parseDiskutilProgress(_ output: String) -> Double? {
         let marker = "% completed]"
         guard let markerRange = output.range(of: marker, options: .backwards),
@@ -247,7 +241,6 @@ class DiskImageConverter {
             .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    /// dd status=progress prints the bytes copied so far, e.g. "1048576 bytes (1 MB, 1 MiB) transferred"
     private func parseDdProgress(_ output: String) -> Int? {
         let lines = output.split(whereSeparator: { $0 == "\r" || $0 == "\n" })
         for line in lines.reversed() {
