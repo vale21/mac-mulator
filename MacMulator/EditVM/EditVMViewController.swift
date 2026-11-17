@@ -52,7 +52,7 @@ class EditVMViewController: NSTabViewController {
             snapshots.setVmRunner(vmRunner)
         }
 
-        let cloudInitSupported = CloudInitVolume.isSupported(vm)
+        let cloudInitSupported = Utils.isCloudInitSupported(vm)
         if vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
             removeTabViewItem(tabViewItems[7])
             removeTabViewItem(tabViewItems[6])

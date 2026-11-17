@@ -79,7 +79,7 @@ class QemuRunner: VirtualMachineRunner {
                         builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType)
                     }
                 }
-                if CloudInitVolume.isSupported(managedVm), managedVm.provisioningInformation != nil {
+                if Utils.isCloudInitSupported(managedVm), managedVm.provisioningInformation != nil {
                     builder = builder.withCloudInitVolume(CloudInitVolume.path(for: managedVm))
                 }
                 if livePreviewEnabled {
@@ -115,7 +115,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     func runVM(recoveryMode _: Bool, uponCompletion callback: @escaping (VMExecutionResult, VirtualMachine) -> Void) throws {
-        if CloudInitVolume.isSupported(managedVm) {
+        if Utils.isCloudInitSupported(managedVm) {
             // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
             do {
                 try CloudInitVolume.update(for: managedVm)

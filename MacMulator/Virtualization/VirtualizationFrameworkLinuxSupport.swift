@@ -47,7 +47,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
 
         var storageDevices: [VZStorageDeviceConfiguration] = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(drive: Utils.findMainDrive(vm.drives)!)]
         // The cloud-init volume (written by the runner at start) comes after the main drive, so the main drive stays the first disk (vda)
-        if CloudInitVolume.isSupported(vm), vm.provisioningInformation != nil,
+        if Utils.isCloudInitSupported(vm), vm.provisioningInformation != nil,
            let cloudInitDevice = try? LinuxVirtualMachineConfigurationHelper.createCloudInitDeviceConfiguration(CloudInitVolume.path(for: vm))
         {
             storageDevices.append(cloudInitDevice)

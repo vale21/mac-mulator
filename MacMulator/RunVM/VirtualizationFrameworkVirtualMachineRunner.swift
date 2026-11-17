@@ -111,7 +111,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             } else {
                 installPath = ""
             }
-            if CloudInitVolume.isSupported(managedVm) {
+            if Utils.isCloudInitSupported(managedVm) {
                 // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
                 do {
                     try CloudInitVolume.update(for: managedVm)

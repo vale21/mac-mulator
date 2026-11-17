@@ -20,15 +20,10 @@ enum CloudInitVolume {
         vm.path + "/" + fileName
     }
 
-    static func isSupported(_ vm: VirtualMachine) -> Bool {
-        vm.os == QemuConstants.OS_LINUX &&
-            [QemuConstants.ARCH_X64, QemuConstants.ARCH_X86, QemuConstants.ARCH_ARM64].contains(vm.architecture)
-    }
-
     @discardableResult
     static func update(for vm: VirtualMachine) throws -> String? {
         let path = path(for: vm)
-        guard isSupported(vm), let info = vm.provisioningInformation else {
+        guard Utils.isCloudInitSupported(vm), let info = vm.provisioningInformation else {
             if FileManager.default.fileExists(atPath: path) {
                 try FileManager.default.removeItem(atPath: path)
             }

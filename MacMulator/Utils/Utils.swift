@@ -900,6 +900,11 @@ class Utils {
         return false
     }
 
+    static func isCloudInitSupported(_ vm: VirtualMachine) -> Bool {
+        vm.os == QemuConstants.OS_LINUX &&
+            [QemuConstants.ARCH_X64, QemuConstants.ARCH_X86, QemuConstants.ARCH_ARM64].contains(vm.architecture)
+    }
+
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {
         if Utils.findMainDrive(vm.drives)?.format == QemuConstants.FORMAT_ASIF, !isAsifSupported(vm) {
             return NSLocalizedString("Utils.asifNotSupported", comment: "")
