@@ -33,6 +33,7 @@ class QemuConstants {
     static let IMAGE_CMD_VERSION = "--version"
 
     static let FORMAT_QCOW2 = "qcow2"
+    static let FORMAT_QCOW = "qcow"
     static let FORMAT_RAW = "raw"
     static let FORMAT_ASIF = "asif"
     static let FORMAT_UNKNOWN = "unknown"

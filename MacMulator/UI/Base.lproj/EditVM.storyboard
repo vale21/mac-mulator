@@ -56,6 +56,9 @@
                         </tabViewItem>
                         <tabViewItem label="Video" image="display" catalog="system" id="gv9-9f-bNO"/>
                         <tabViewItem label="Snapshots" identifier="snapshots" image="stopwatch" catalog="system" id="o2i-g5-60h"/>
+                        <tabViewItem label="Cloud-init" identifier="cloudInit" id="cIn-Ti-001">
+                            <imageReference key="image" image="cloud" catalog="system" symbolScale="default" renderingMode="template"/>
+                        </tabViewItem>
                         <tabViewItem label="Advanced" identifier="advanced" id="rXL-e0-tcc">
                             <imageReference key="image" image="gear" catalog="system" symbolScale="default" renderingMode="template"/>
                         </tabViewItem>
@@ -76,6 +79,7 @@
                         <segue destination="mu6-Mz-lIx" kind="relationship" relationship="tabItems" id="Wun-Jh-d0I"/>
                         <segue destination="bME-KN-L8y" kind="relationship" relationship="tabItems" id="uZ4-te-MXt"/>
                         <segue destination="OTc-Xm-wkq" kind="relationship" relationship="tabItems" id="g1n-Qo-fMw"/>
+                        <segue destination="cIn-Vc-001" kind="relationship" relationship="tabItems" id="cIn-Sg-001"/>
                         <segue destination="oyc-lN-MJc" kind="relationship" relationship="tabItems" id="v2w-Tj-EVa"/>
                     </connections>
                 </tabViewController>
@@ -513,7 +517,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="la4-XS-a2p" viewBased="YES" id="XFF-rf-sSL">
-                                            <rect key="frame" x="0.0" y="0.0" width="708" height="282"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="710" height="282"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -547,7 +551,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Name" width="99.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="mUo-lv-Nhy">
+                                                <tableColumn identifier="Name" width="100" minWidth="10" maxWidth="3.4028234663852886e+38" id="mUo-lv-Nhy">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Name">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -580,7 +584,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Type" width="126.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="o4C-Lm-P9O">
+                                                <tableColumn identifier="Type" width="127" minWidth="10" maxWidth="3.4028234663852886e+38" id="o4C-Lm-P9O">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Type">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -593,7 +597,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="Hcs-08-TrM" customClass="DrivesTableDriveTypeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="169.5" y="0.0" width="126" height="30"/>
+                                                            <rect key="frame" x="170" y="0.0" width="127" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ckm-MX-63N">
@@ -612,7 +616,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Size" width="95.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="gG1-Fv-uJk">
+                                                <tableColumn identifier="Size" width="96" minWidth="10" maxWidth="3.4028234663852886e+38" id="gG1-Fv-uJk">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Size">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -625,7 +629,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ian-ci-FBh" customClass="DrivesTableDriveSizeCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="313" y="0.0" width="96" height="30"/>
+                                                            <rect key="frame" x="314" y="0.0" width="96" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vp4-19-JtE">
@@ -644,7 +648,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="Path" width="169.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
+                                                <tableColumn identifier="Path" width="170" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ie2-gp-CIP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="File location">
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -657,7 +661,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ZnX-23-xj6" customClass="DrivesTableDrivePathCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="425.5" y="0.0" width="169" height="30"/>
+                                                            <rect key="frame" x="427" y="0.0" width="170" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CBk-hq-ylm">
@@ -689,7 +693,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="OAu-7N-Hdb" customClass="DrivesTableButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="612" y="0.0" width="87" height="30"/>
+                                                            <rect key="frame" x="614" y="0.0" width="87" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Mx-j6-AJ0">
@@ -742,7 +746,7 @@
                                         </tableView>
                                     </subviews>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="RBk-or-0Ck">
                                     <rect key="frame" x="1" y="294" width="708" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -751,7 +755,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <tableHeaderView key="headerView" wantsLayer="YES" id="la4-XS-a2p">
-                                    <rect key="frame" x="0.0" y="0.0" width="708" height="28"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="710" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
@@ -764,6 +768,17 @@
                                 </buttonCell>
                                 <connections>
                                     <segue destination="jnj-BN-7iT" kind="sheet" identifier="newDiskSegue" id="qMP-wa-FjT"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Bt-001">
+                                <rect key="frame" x="191" y="18" width="176" height="23"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="roundTextured" title="Import drive..." bezelStyle="texturedRounded" image="square.and.arrow.down" catalog="system" imagePosition="leading" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iDr-Bt-002">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="importDrive:" target="fBa-tq-xkS" id="iDr-Bt-003"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Sa-qf-AbG">
@@ -793,6 +808,7 @@
                         <outlet property="memoryStepper" destination="Hw3-U6-vgX" id="UE7-io-KWq"/>
                         <outlet property="memoryTextView" destination="Bqq-6n-VM7" id="SuW-Gc-bcH"/>
                         <outlet property="minMemoryLabel" destination="wr5-u2-BeG" id="6LA-OG-jlc"/>
+                        <outlet property="importDriveButton" destination="iDr-Bt-001" id="iDr-Bt-004"/>
                         <outlet property="openImageButton" destination="0Sa-qf-AbG" id="sh3-iZ-vLQ"/>
                     </connections>
                 </viewController>
@@ -2310,6 +2326,611 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
             </objects>
             <point key="canvasLocation" x="2498" y="362"/>
         </scene>
+<!--Cloud-init-->
+<scene sceneID="cIn-Sn-001">
+<objects>
+<viewController title="Cloud-init" id="cIn-Vc-001" customClass="EditVMViewControllerCloudInit" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+<view key="view" id="cIn-Vw-001">
+<rect key="frame" x="0.0" y="0.0" width="750" height="500"/>
+<autoresizingMask key="autoresizingMask"/>
+<subviews>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-001">
+<rect key="frame" x="30" y="460" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-001"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Configure the VM with cloud-init" id="cIn-Zz-002">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Sw-001">
+<rect key="frame" x="301" y="456" width="42" height="24"/>
+<connections>
+<action selector="cloudInitToggleChanged:" target="cIn-Vc-001" id="cIn-Zz-003"/>
+</connections>
+</switch>
+<textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tx-001">
+<rect key="frame" x="30" y="420" width="702" height="28"/>
+<textFieldCell key="cell" selectable="YES" title="MacMulator can pre-configure the VM user and some VM settings." id="cIn-Zz-004">
+<font key="font" metaFont="smallSystem"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<box titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Bx-001">
+<rect key="frame" x="20" y="20" width="710" height="388"/>
+<view key="contentView" id="cIn-Bx-002">
+<rect key="frame" x="0.0" y="0.0" width="710" height="388"/>
+<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+<subviews>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-010">
+<rect key="frame" x="10" y="356" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-017"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Full name" id="cIn-Zz-018">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-010">
+<rect key="frame" x="281" y="353" width="417" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cIn-Zz-019">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-011">
+<rect key="frame" x="10" y="324" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-025"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="User name" id="cIn-Zz-026">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-011">
+<rect key="frame" x="281" y="321" width="417" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cIn-Zz-027">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-012">
+<rect key="frame" x="10" y="292" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-033"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Password" id="cIn-Zz-034">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<secureTextField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-012">
+<rect key="frame" x="281" y="289" width="417" height="24"/>
+<secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="cIn-Zz-035">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+<allowedInputSourceLocales>
+<string>NSAllRomanInputSourcesLocaleIdentifier</string>
+</allowedInputSourceLocales>
+</secureTextFieldCell>
+</secureTextField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-013">
+<rect key="frame" x="10" y="260" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-041"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Re-type password" id="cIn-Zz-042">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<secureTextField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-013">
+<rect key="frame" x="281" y="257" width="417" height="24"/>
+<secureTextFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="cIn-Zz-043">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+<allowedInputSourceLocales>
+<string>NSAllRomanInputSourcesLocaleIdentifier</string>
+</allowedInputSourceLocales>
+</secureTextFieldCell>
+</secureTextField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-014">
+<rect key="frame" x="10" y="228" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-049"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="DNS domains" id="cIn-Zz-050">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-014">
+<rect key="frame" x="281" y="225" width="417" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="example.com" drawsBackground="YES" id="cIn-Zz-051">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-015">
+<rect key="frame" x="10" y="196" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-057"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="DNS servers" id="cIn-Zz-058">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-015">
+<rect key="frame" x="281" y="193" width="417" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="8.8.8.8 1.1.1.1" drawsBackground="YES" id="cIn-Zz-059">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-016">
+<rect key="frame" x="10" y="164" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-065"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="SSH keys" id="cIn-Zz-066">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<scrollView borderType="line" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Sc-001">
+<rect key="frame" x="281" y="118" width="417" height="60"/>
+<clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="cIn-Zz-067">
+<rect key="frame" x="1" y="1" width="415" height="58"/>
+<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+<subviews>
+<textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="cIn-Tv-001">
+<rect key="frame" x="0.0" y="0.0" width="415" height="58"/>
+<autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+<color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+<size key="minSize" width="415" height="58"/>
+<size key="maxSize" width="517" height="10000000"/>
+<color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+</textView>
+</subviews>
+</clipView>
+<scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="cIn-Zz-068">
+<rect key="frame" x="-100" y="-100" width="240" height="16"/>
+<autoresizingMask key="autoresizingMask"/>
+</scroller>
+<scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="cIn-Zz-069">
+<rect key="frame" x="400" y="1" width="16" height="58"/>
+<autoresizingMask key="autoresizingMask"/>
+</scroller>
+<constraints><constraint firstAttribute="height" constant="60" id="cIn-Zz-070"/></constraints>
+</scrollView>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-017">
+<rect key="frame" x="10" y="86" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-076"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Upgrade packages" id="cIn-Zz-077">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<switch horizontalHuggingPriority="750" verticalHuggingPriority="750" baseWritingDirection="leftToRight" alignment="left" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Sw-002">
+<rect key="frame" x="281" y="82" width="42" height="24"/>
+<connections>
+<action selector="upgradePackagesToggleChanged:" target="cIn-Vc-001" id="cIn-Zz-078"/>
+</connections>
+</switch>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-018">
+<rect key="frame" x="10" y="52" width="265" height="16"/>
+<constraints><constraint firstAttribute="width" constant="261" id="cIn-Zz-083"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IP configuration" id="cIn-Zz-084">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Bt-001">
+<rect key="frame" x="274" y="45" width="110" height="32"/>
+<buttonCell key="cell" type="push" title="Configure…" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cIn-Zz-085">
+<behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="showIPConfiguration:" target="cIn-Vc-001" id="cIn-Zz-086"/>
+</connections>
+</button>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tx-002">
+<rect key="frame" x="390" y="52" width="308" height="16"/>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IPv4: DHCP – IPv6: SLAAC" id="cIn-Zz-087">
+<font key="font" metaFont="smallSystem"/>
+<color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tx-003">
+<rect key="frame" x="10" y="-4" width="690" height="32"/>
+<textFieldCell key="cell" selectable="YES" title="Validation message" id="cIn-Zz-095">
+<font key="font" metaFont="smallSystem"/>
+<color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+</subviews>
+<constraints>
+<constraint firstItem="cIn-Lb-010" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-020"/>
+<constraint firstItem="cIn-Lb-010" firstAttribute="top" secondItem="cIn-Bx-002" secondAttribute="top" constant="16" id="cIn-Zz-021"/>
+<constraint firstItem="cIn-Tf-010" firstAttribute="leading" secondItem="cIn-Lb-010" secondAttribute="trailing" constant="8" id="cIn-Zz-022"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-010" secondAttribute="trailing" constant="12" id="cIn-Zz-023"/>
+<constraint firstItem="cIn-Tf-010" firstAttribute="centerY" secondItem="cIn-Lb-010" secondAttribute="centerY" id="cIn-Zz-024"/>
+<constraint firstItem="cIn-Lb-011" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-028"/>
+<constraint firstItem="cIn-Lb-011" firstAttribute="top" secondItem="cIn-Lb-010" secondAttribute="bottom" constant="16" id="cIn-Zz-029"/>
+<constraint firstItem="cIn-Tf-011" firstAttribute="leading" secondItem="cIn-Lb-011" secondAttribute="trailing" constant="8" id="cIn-Zz-030"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-011" secondAttribute="trailing" constant="12" id="cIn-Zz-031"/>
+<constraint firstItem="cIn-Tf-011" firstAttribute="centerY" secondItem="cIn-Lb-011" secondAttribute="centerY" id="cIn-Zz-032"/>
+<constraint firstItem="cIn-Lb-012" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-036"/>
+<constraint firstItem="cIn-Lb-012" firstAttribute="top" secondItem="cIn-Lb-011" secondAttribute="bottom" constant="16" id="cIn-Zz-037"/>
+<constraint firstItem="cIn-Tf-012" firstAttribute="leading" secondItem="cIn-Lb-012" secondAttribute="trailing" constant="8" id="cIn-Zz-038"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-012" secondAttribute="trailing" constant="12" id="cIn-Zz-039"/>
+<constraint firstItem="cIn-Tf-012" firstAttribute="centerY" secondItem="cIn-Lb-012" secondAttribute="centerY" id="cIn-Zz-040"/>
+<constraint firstItem="cIn-Lb-013" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-044"/>
+<constraint firstItem="cIn-Lb-013" firstAttribute="top" secondItem="cIn-Lb-012" secondAttribute="bottom" constant="16" id="cIn-Zz-045"/>
+<constraint firstItem="cIn-Tf-013" firstAttribute="leading" secondItem="cIn-Lb-013" secondAttribute="trailing" constant="8" id="cIn-Zz-046"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-013" secondAttribute="trailing" constant="12" id="cIn-Zz-047"/>
+<constraint firstItem="cIn-Tf-013" firstAttribute="centerY" secondItem="cIn-Lb-013" secondAttribute="centerY" id="cIn-Zz-048"/>
+<constraint firstItem="cIn-Lb-014" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-052"/>
+<constraint firstItem="cIn-Lb-014" firstAttribute="top" secondItem="cIn-Lb-013" secondAttribute="bottom" constant="16" id="cIn-Zz-053"/>
+<constraint firstItem="cIn-Tf-014" firstAttribute="leading" secondItem="cIn-Lb-014" secondAttribute="trailing" constant="8" id="cIn-Zz-054"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-014" secondAttribute="trailing" constant="12" id="cIn-Zz-055"/>
+<constraint firstItem="cIn-Tf-014" firstAttribute="centerY" secondItem="cIn-Lb-014" secondAttribute="centerY" id="cIn-Zz-056"/>
+<constraint firstItem="cIn-Lb-015" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-060"/>
+<constraint firstItem="cIn-Lb-015" firstAttribute="top" secondItem="cIn-Lb-014" secondAttribute="bottom" constant="16" id="cIn-Zz-061"/>
+<constraint firstItem="cIn-Tf-015" firstAttribute="leading" secondItem="cIn-Lb-015" secondAttribute="trailing" constant="8" id="cIn-Zz-062"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-015" secondAttribute="trailing" constant="12" id="cIn-Zz-063"/>
+<constraint firstItem="cIn-Tf-015" firstAttribute="centerY" secondItem="cIn-Lb-015" secondAttribute="centerY" id="cIn-Zz-064"/>
+<constraint firstItem="cIn-Lb-016" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-071"/>
+<constraint firstItem="cIn-Lb-016" firstAttribute="top" secondItem="cIn-Lb-015" secondAttribute="bottom" constant="16" id="cIn-Zz-072"/>
+<constraint firstItem="cIn-Sc-001" firstAttribute="leading" secondItem="cIn-Lb-016" secondAttribute="trailing" constant="8" id="cIn-Zz-073"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Sc-001" secondAttribute="trailing" constant="12" id="cIn-Zz-074"/>
+<constraint firstItem="cIn-Sc-001" firstAttribute="top" secondItem="cIn-Lb-016" secondAttribute="top" id="cIn-Zz-075"/>
+<constraint firstItem="cIn-Lb-017" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-079"/>
+<constraint firstItem="cIn-Lb-017" firstAttribute="top" secondItem="cIn-Sc-001" secondAttribute="bottom" constant="16" id="cIn-Zz-080"/>
+<constraint firstItem="cIn-Sw-002" firstAttribute="leading" secondItem="cIn-Lb-017" secondAttribute="trailing" constant="8" id="cIn-Zz-081"/>
+<constraint firstItem="cIn-Sw-002" firstAttribute="centerY" secondItem="cIn-Lb-017" secondAttribute="centerY" id="cIn-Zz-082"/>
+<constraint firstItem="cIn-Lb-018" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-088"/>
+<constraint firstItem="cIn-Lb-018" firstAttribute="top" secondItem="cIn-Lb-017" secondAttribute="bottom" constant="20" id="cIn-Zz-089"/>
+<constraint firstItem="cIn-Bt-001" firstAttribute="leading" secondItem="cIn-Lb-018" secondAttribute="trailing" constant="8" id="cIn-Zz-090"/>
+<constraint firstItem="cIn-Bt-001" firstAttribute="centerY" secondItem="cIn-Lb-018" secondAttribute="centerY" id="cIn-Zz-091"/>
+<constraint firstItem="cIn-Tx-002" firstAttribute="leading" secondItem="cIn-Bt-001" secondAttribute="trailing" constant="12" id="cIn-Zz-092"/>
+<constraint firstItem="cIn-Tx-002" firstAttribute="centerY" secondItem="cIn-Lb-018" secondAttribute="centerY" id="cIn-Zz-093"/>
+<constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cIn-Tx-002" secondAttribute="trailing" constant="12" id="cIn-Zz-094"/>
+<constraint firstItem="cIn-Tx-003" firstAttribute="leading" secondItem="cIn-Bx-002" secondAttribute="leading" constant="12" id="cIn-Zz-096"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tx-003" secondAttribute="trailing" constant="12" id="cIn-Zz-097"/>
+<constraint firstItem="cIn-Tx-003" firstAttribute="top" secondItem="cIn-Bt-001" secondAttribute="bottom" constant="16" id="cIn-Zz-098"/>
+</constraints>
+</view>
+<font key="titleFont" metaFont="system"/>
+</box>
+</subviews>
+<constraints>
+<constraint firstItem="cIn-Lb-001" firstAttribute="leading" secondItem="cIn-Vw-001" secondAttribute="leading" constant="32" id="cIn-Zz-005"/>
+<constraint firstItem="cIn-Lb-001" firstAttribute="top" secondItem="cIn-Vw-001" secondAttribute="top" constant="24" id="cIn-Zz-006"/>
+<constraint firstItem="cIn-Sw-001" firstAttribute="leading" secondItem="cIn-Lb-001" secondAttribute="trailing" constant="8" id="cIn-Zz-007"/>
+<constraint firstItem="cIn-Sw-001" firstAttribute="centerY" secondItem="cIn-Lb-001" secondAttribute="centerY" id="cIn-Zz-008"/>
+<constraint firstItem="cIn-Tx-001" firstAttribute="top" secondItem="cIn-Sw-001" secondAttribute="bottom" constant="8" id="cIn-Zz-009"/>
+<constraint firstItem="cIn-Tx-001" firstAttribute="leading" secondItem="cIn-Lb-001" secondAttribute="leading" id="cIn-Zz-010"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tx-001" secondAttribute="trailing" constant="20" id="cIn-Zz-011"/>
+<constraint firstItem="cIn-Tx-001" firstAttribute="height" constant="28" id="cIn-Zz-012"/>
+<constraint firstItem="cIn-Bx-001" firstAttribute="top" secondItem="cIn-Tx-001" secondAttribute="bottom" constant="12" id="cIn-Zz-013"/>
+<constraint firstItem="cIn-Bx-001" firstAttribute="leading" secondItem="cIn-Vw-001" secondAttribute="leading" constant="20" id="cIn-Zz-014"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Bx-001" secondAttribute="trailing" constant="20" id="cIn-Zz-015"/>
+<constraint firstAttribute="bottom" secondItem="cIn-Bx-001" secondAttribute="bottom" constant="20" id="cIn-Zz-016"/>
+</constraints>
+</view>
+<connections>
+<outlet property="cloudInitBox" destination="cIn-Bx-001" id="cIn-Zz-171"/>
+<outlet property="cloudInitLabel" destination="cIn-Lb-001" id="cIn-Zz-172"/>
+<outlet property="cloudInitSwitch" destination="cIn-Sw-001" id="cIn-Zz-173"/>
+<outlet property="descriptionText" destination="cIn-Tx-001" id="cIn-Zz-174"/>
+<outlet property="dnsDomainsField" destination="cIn-Tf-014" id="cIn-Zz-175"/>
+<outlet property="dnsDomainsLabel" destination="cIn-Lb-014" id="cIn-Zz-176"/>
+<outlet property="dnsServersField" destination="cIn-Tf-015" id="cIn-Zz-177"/>
+<outlet property="dnsServersLabel" destination="cIn-Lb-015" id="cIn-Zz-178"/>
+<outlet property="fullNameField" destination="cIn-Tf-010" id="cIn-Zz-179"/>
+<outlet property="fullNameLabel" destination="cIn-Lb-010" id="cIn-Zz-180"/>
+<outlet property="ipConfigButton" destination="cIn-Bt-001" id="cIn-Zz-181"/>
+<outlet property="ipConfigLabel" destination="cIn-Lb-018" id="cIn-Zz-182"/>
+<outlet property="ipConfigSummaryText" destination="cIn-Tx-002" id="cIn-Zz-183"/>
+<outlet property="ipConfigView" destination="cIn-Pv-001" id="cIn-Zz-184"/>
+<outlet property="ipv4CidrField" destination="cIn-Tf-020" id="cIn-Zz-185"/>
+<outlet property="ipv4DhcpRadio" destination="cIn-Rd-002" id="cIn-Zz-186"/>
+<outlet property="ipv4GatewayField" destination="cIn-Tf-021" id="cIn-Zz-187"/>
+<outlet property="ipv4GatewayLabel" destination="cIn-Lb-024" id="cIn-Zz-188"/>
+<outlet property="ipv4StaticRadio" destination="cIn-Rd-001" id="cIn-Zz-189"/>
+<outlet property="ipv6CidrField" destination="cIn-Tf-022" id="cIn-Zz-190"/>
+<outlet property="ipv6DhcpRadio" destination="cIn-Rd-004" id="cIn-Zz-191"/>
+<outlet property="ipv6NoneRadio" destination="cIn-Rd-006" id="cIn-Zz-906"/>
+<outlet property="ipv6GatewayField" destination="cIn-Tf-023" id="cIn-Zz-192"/>
+<outlet property="ipv6GatewayLabel" destination="cIn-Lb-027" id="cIn-Zz-193"/>
+<outlet property="ipv6SlaacRadio" destination="cIn-Rd-005" id="cIn-Zz-194"/>
+<outlet property="ipv6StaticRadio" destination="cIn-Rd-003" id="cIn-Zz-195"/>
+<outlet property="networkDeviceLabel" destination="cIn-Lb-020" id="cIn-Zz-196"/>
+<outlet property="passwordField" destination="cIn-Tf-012" id="cIn-Zz-197"/>
+<outlet property="passwordLabel" destination="cIn-Lb-012" id="cIn-Zz-198"/>
+<outlet property="retypePasswordField" destination="cIn-Tf-013" id="cIn-Zz-199"/>
+<outlet property="retypePasswordLabel" destination="cIn-Lb-013" id="cIn-Zz-200"/>
+<outlet property="sshKeysLabel" destination="cIn-Lb-016" id="cIn-Zz-201"/>
+<outlet property="sshKeysTextView" destination="cIn-Tv-001" id="cIn-Zz-202"/>
+<outlet property="upgradePackagesLabel" destination="cIn-Lb-017" id="cIn-Zz-203"/>
+<outlet property="upgradePackagesSwitch" destination="cIn-Sw-002" id="cIn-Zz-204"/>
+<outlet property="userNameField" destination="cIn-Tf-011" id="cIn-Zz-205"/>
+<outlet property="userNameLabel" destination="cIn-Lb-011" id="cIn-Zz-206"/>
+<outlet property="validationText" destination="cIn-Tx-003" id="cIn-Zz-207"/>
+</connections>
+</viewController>
+<customObject id="cIn-Fr-001" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+<customView translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Pv-001" userLabel="IP Configuration View">
+<rect key="frame" x="0.0" y="0.0" width="408" height="256"/>
+<subviews>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-020">
+<rect key="frame" x="18" y="220" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-099"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Network device:" id="cIn-Zz-100">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-021">
+<rect key="frame" x="148" y="220" width="60" height="16"/>
+<textFieldCell key="cell" lineBreakMode="clipping" title="net0" id="cIn-Zz-103">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-022">
+<rect key="frame" x="18" y="188" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-106"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IPv4:" id="cIn-Zz-107">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-001">
+<rect key="frame" x="148" y="187" width="64" height="18"/>
+<buttonCell key="cell" type="radio" title="Static" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-110">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv4ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-111"/>
+</connections>
+</button>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-002">
+<rect key="frame" x="224" y="187" width="64" height="18"/>
+<buttonCell key="cell" type="radio" title="DHCP" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-114">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv4ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-115"/>
+</connections>
+</button>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-023">
+<rect key="frame" x="18" y="156" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-118"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IPv4/CIDR:" id="cIn-Zz-119">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-020">
+<rect key="frame" x="148" y="153" width="240" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="192.168.1.10/24" drawsBackground="YES" id="cIn-Zz-122">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-024">
+<rect key="frame" x="18" y="124" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-127"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Gateway (IPv4):" id="cIn-Zz-128">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-021">
+<rect key="frame" x="148" y="121" width="240" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="192.168.1.1" drawsBackground="YES" id="cIn-Zz-131">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-025">
+<rect key="frame" x="18" y="92" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-136"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IPv6:" id="cIn-Zz-137">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-006">
+<rect key="frame" x="148" y="123" width="60" height="18"/>
+<buttonCell key="cell" type="radio" title="None" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-901">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv6ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-902"/>
+</connections>
+</button>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-003">
+<rect key="frame" x="148" y="91" width="64" height="18"/>
+<buttonCell key="cell" type="radio" title="Static" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-140">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv6ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-141"/>
+</connections>
+</button>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-004">
+<rect key="frame" x="224" y="91" width="64" height="18"/>
+<buttonCell key="cell" type="radio" title="DHCP" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-144">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv6ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-145"/>
+</connections>
+</button>
+<button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Rd-005">
+<rect key="frame" x="300" y="91" width="70" height="18"/>
+<buttonCell key="cell" type="radio" title="SLAAC" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="cIn-Zz-148">
+<behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="ipv6ModeChanged:" target="cIn-Vc-001" id="cIn-Zz-149"/>
+</connections>
+</button>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-026">
+<rect key="frame" x="18" y="60" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-152"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="IPv6/CIDR:" id="cIn-Zz-153">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-022">
+<rect key="frame" x="148" y="57" width="240" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="fd00::10/64" drawsBackground="YES" id="cIn-Zz-156">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Lb-027">
+<rect key="frame" x="18" y="28" width="124" height="16"/>
+<constraints><constraint firstAttribute="width" constant="120" id="cIn-Zz-161"/></constraints>
+<textFieldCell key="cell" lineBreakMode="clipping" title="Gateway (IPv6):" id="cIn-Zz-162">
+<font key="font" usesAppearanceFont="YES"/>
+<color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+<textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cIn-Tf-023">
+<rect key="frame" x="148" y="25" width="240" height="24"/>
+<textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="fd00::1" drawsBackground="YES" id="cIn-Zz-165">
+<font key="font" metaFont="system"/>
+<color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+<color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+</textFieldCell>
+</textField>
+</subviews>
+<constraints>
+<constraint firstItem="cIn-Lb-020" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-101"/>
+<constraint firstItem="cIn-Lb-020" firstAttribute="top" secondItem="cIn-Pv-001" secondAttribute="top" constant="20" id="cIn-Zz-102"/>
+<constraint firstItem="cIn-Lb-021" firstAttribute="leading" secondItem="cIn-Lb-020" secondAttribute="trailing" constant="8" id="cIn-Zz-104"/>
+<constraint firstItem="cIn-Lb-021" firstAttribute="firstBaseline" secondItem="cIn-Lb-020" secondAttribute="firstBaseline" id="cIn-Zz-105"/>
+<constraint firstItem="cIn-Lb-022" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-108"/>
+<constraint firstItem="cIn-Lb-022" firstAttribute="top" secondItem="cIn-Lb-020" secondAttribute="bottom" constant="16" id="cIn-Zz-109"/>
+<constraint firstItem="cIn-Rd-001" firstAttribute="leading" secondItem="cIn-Lb-022" secondAttribute="trailing" constant="8" id="cIn-Zz-112"/>
+<constraint firstItem="cIn-Rd-001" firstAttribute="centerY" secondItem="cIn-Lb-022" secondAttribute="centerY" id="cIn-Zz-113"/>
+<constraint firstItem="cIn-Rd-002" firstAttribute="leading" secondItem="cIn-Rd-001" secondAttribute="trailing" constant="12" id="cIn-Zz-116"/>
+<constraint firstItem="cIn-Rd-002" firstAttribute="centerY" secondItem="cIn-Lb-022" secondAttribute="centerY" id="cIn-Zz-117"/>
+<constraint firstItem="cIn-Lb-023" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-120"/>
+<constraint firstItem="cIn-Lb-023" firstAttribute="top" secondItem="cIn-Lb-022" secondAttribute="bottom" constant="16" id="cIn-Zz-121"/>
+<constraint firstItem="cIn-Tf-020" firstAttribute="leading" secondItem="cIn-Lb-023" secondAttribute="trailing" constant="8" id="cIn-Zz-123"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-020" secondAttribute="trailing" constant="20" id="cIn-Zz-124"/>
+<constraint firstItem="cIn-Tf-020" firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="cIn-Zz-125"/>
+<constraint firstItem="cIn-Tf-020" firstAttribute="centerY" secondItem="cIn-Lb-023" secondAttribute="centerY" id="cIn-Zz-126"/>
+<constraint firstItem="cIn-Lb-024" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-129"/>
+<constraint firstItem="cIn-Lb-024" firstAttribute="top" secondItem="cIn-Lb-023" secondAttribute="bottom" constant="16" id="cIn-Zz-130"/>
+<constraint firstItem="cIn-Tf-021" firstAttribute="leading" secondItem="cIn-Lb-024" secondAttribute="trailing" constant="8" id="cIn-Zz-132"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-021" secondAttribute="trailing" constant="20" id="cIn-Zz-133"/>
+<constraint firstItem="cIn-Tf-021" firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="cIn-Zz-134"/>
+<constraint firstItem="cIn-Tf-021" firstAttribute="centerY" secondItem="cIn-Lb-024" secondAttribute="centerY" id="cIn-Zz-135"/>
+<constraint firstItem="cIn-Lb-025" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-138"/>
+<constraint firstItem="cIn-Lb-025" firstAttribute="top" secondItem="cIn-Lb-024" secondAttribute="bottom" constant="24" id="cIn-Zz-139"/>
+<constraint firstItem="cIn-Rd-006" firstAttribute="leading" secondItem="cIn-Lb-025" secondAttribute="trailing" constant="8" id="cIn-Zz-903"/>
+<constraint firstItem="cIn-Rd-006" firstAttribute="centerY" secondItem="cIn-Lb-025" secondAttribute="centerY" id="cIn-Zz-904"/>
+<constraint firstItem="cIn-Rd-003" firstAttribute="leading" secondItem="cIn-Rd-006" secondAttribute="trailing" constant="12" id="cIn-Zz-142"/>
+<constraint firstItem="cIn-Rd-003" firstAttribute="centerY" secondItem="cIn-Lb-025" secondAttribute="centerY" id="cIn-Zz-143"/>
+<constraint firstItem="cIn-Rd-004" firstAttribute="leading" secondItem="cIn-Rd-003" secondAttribute="trailing" constant="12" id="cIn-Zz-146"/>
+<constraint firstItem="cIn-Rd-004" firstAttribute="centerY" secondItem="cIn-Lb-025" secondAttribute="centerY" id="cIn-Zz-147"/>
+<constraint firstItem="cIn-Rd-005" firstAttribute="leading" secondItem="cIn-Rd-004" secondAttribute="trailing" constant="12" id="cIn-Zz-150"/>
+<constraint firstItem="cIn-Rd-005" firstAttribute="centerY" secondItem="cIn-Lb-025" secondAttribute="centerY" id="cIn-Zz-151"/>
+<constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cIn-Rd-005" secondAttribute="trailing" constant="20" id="cIn-Zz-905"/>
+<constraint firstItem="cIn-Lb-026" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-154"/>
+<constraint firstItem="cIn-Lb-026" firstAttribute="top" secondItem="cIn-Lb-025" secondAttribute="bottom" constant="16" id="cIn-Zz-155"/>
+<constraint firstItem="cIn-Tf-022" firstAttribute="leading" secondItem="cIn-Lb-026" secondAttribute="trailing" constant="8" id="cIn-Zz-157"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-022" secondAttribute="trailing" constant="20" id="cIn-Zz-158"/>
+<constraint firstItem="cIn-Tf-022" firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="cIn-Zz-159"/>
+<constraint firstItem="cIn-Tf-022" firstAttribute="centerY" secondItem="cIn-Lb-026" secondAttribute="centerY" id="cIn-Zz-160"/>
+<constraint firstItem="cIn-Lb-027" firstAttribute="leading" secondItem="cIn-Pv-001" secondAttribute="leading" constant="20" id="cIn-Zz-163"/>
+<constraint firstItem="cIn-Lb-027" firstAttribute="top" secondItem="cIn-Lb-026" secondAttribute="bottom" constant="16" id="cIn-Zz-164"/>
+<constraint firstItem="cIn-Tf-023" firstAttribute="leading" secondItem="cIn-Lb-027" secondAttribute="trailing" constant="8" id="cIn-Zz-166"/>
+<constraint firstAttribute="trailing" secondItem="cIn-Tf-023" secondAttribute="trailing" constant="20" id="cIn-Zz-167"/>
+<constraint firstItem="cIn-Tf-023" firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="cIn-Zz-168"/>
+<constraint firstItem="cIn-Tf-023" firstAttribute="centerY" secondItem="cIn-Lb-027" secondAttribute="centerY" id="cIn-Zz-169"/>
+<constraint firstAttribute="bottom" secondItem="cIn-Lb-027" secondAttribute="bottom" constant="20" id="cIn-Zz-170"/>
+</constraints>
+</customView>
+</objects>
+<point key="canvasLocation" x="1645" y="400"/>
+</scene>
+        <!--Import Drive View Controller-->
+        <scene sceneID="iDr-Sn-001">
+            <objects>
+                <viewController storyboardIdentifier="importDriveViewController" id="iDr-Vc-001" customClass="ImportDriveViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="iDr-Vw-001">
+                        <rect key="frame" x="0.0" y="0.0" width="379" height="107"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Lb-001">
+                                <rect key="frame" x="18" y="71" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="truncatingMiddle" alignment="center" title="Importing drive..." id="iDr-Lb-002">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" doubleValue="50" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Pb-001">
+                                <rect key="frame" x="20" y="44" width="339" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            </progressIndicator>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDr-Lb-003">
+                                <rect key="frame" x="18" y="20" width="343" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Estimate time remaining: 10 minutes" id="iDr-Lb-004">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="estimateTimeRemainingLabel" destination="iDr-Lb-003" id="iDr-Ot-001"/>
+                        <outlet property="importProgressLabel" destination="iDr-Lb-001" id="iDr-Ot-002"/>
+                        <outlet property="progressBar" destination="iDr-Pb-001" id="iDr-Ot-003"/>
+                    </connections>
+                </viewController>
+                <customObject id="iDr-Fr-001" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2435" y="-1600"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="QO0-5a-fgI"/>
@@ -2320,6 +2941,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
         <image name="HD Icon" width="25" height="25"/>
         <image name="NSAddTemplate" width="18" height="17"/>
         <image name="arrow.counterclockwise" catalog="system" width="14" height="16"/>
+        <image name="cloud" catalog="system" width="20" height="14"/>
         <image name="cpu" catalog="system" width="16" height="15"/>
         <image name="display" catalog="system" width="19" height="15"/>
         <image name="folder.fill" catalog="system" width="18" height="14"/>
@@ -2328,6 +2950,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
         <image name="network" catalog="system" width="15" height="15"/>
         <image name="plus.app.fill" catalog="system" width="15" height="14"/>
         <image name="rays" catalog="system" width="16" height="16"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="square.and.pencil" catalog="system" width="17" height="16"/>
         <image name="stopwatch" catalog="system" width="15" height="17"/>
         <image name="trash" catalog="system" width="15" height="17"/>

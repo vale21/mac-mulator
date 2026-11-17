@@ -18,6 +18,10 @@ class VirtualDrive: Codable, Equatable {
     var vzDeviceUUID: String?
     var backingPath: String? // path of the template drive this drive is layered on top of (linked clones only)
 
+    // A copy of the drive settings is kept in an extended attribute of its image, so that the image carries them when it is
+    // imported in another VM. info.plist stays the reference: extended attributes are lost by some copies and by conversions.
+    private static let metadataAttribute = "it.valedev.MacMulator.drive"
+
     func setBlank(blank: Bool) {
         self.blank = blank ? 1 : 0
     }
@@ -36,6 +40,20 @@ class VirtualDrive: Codable, Equatable {
 
     func isBlank() -> Bool {
         blank != nil && blank == 1
+    }
+
+    static func readMetadata(fromImageAt imagePath: String) -> VirtualDrive? {
+        let size = getxattr(imagePath, metadataAttribute, nil, 0, 0, 0)
+        guard size > 0 else { return nil }
+        var data = Data(count: size)
+        let read = data.withUnsafeMutableBytes { getxattr(imagePath, metadataAttribute, $0.baseAddress, size, 0, 0) }
+        guard read == size else { return nil }
+        return try? PropertyListDecoder().decode(VirtualDrive.self, from: data)
+    }
+
+    func writeMetadataToImage() {
+        guard let data = try? PropertyListEncoder().encode(self) else { return }
+        _ = data.withUnsafeBytes { setxattr(path, VirtualDrive.metadataAttribute, $0.baseAddress, data.count, 0, 0) }
     }
 
     func clone() -> VirtualDrive {

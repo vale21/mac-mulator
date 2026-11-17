@@ -168,7 +168,7 @@ class ConvertVMViewController: NSViewController {
             self.updateProgress((Double(index) * 100 + percentage) / Double(totalDrives))
         }
 
-        convertDrive(drive, to: format, in: vm.path, progress: progress) { code, message in
+        convertDrive(drive, to: format, progress: progress) { code, message in
             DispatchQueue.main.async {
                 vm.writeToPlist()
                 if code == 0 {
@@ -243,34 +243,12 @@ class ConvertVMViewController: NSViewController {
         })
     }
 
-    private func convertDrive(_ drive: VirtualDrive, to format: String, in path: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    private func convertDrive(_ drive: VirtualDrive, to format: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let originalFormat = drive.format
-        let factory = DiskImageManagerFactory()
-        let sourceManager = factory.create(isVirtualizationFrameworkInUse: originalFormat == QemuConstants.FORMAT_ASIF)
-        let targetManager = factory.create(isVirtualizationFrameworkInUse: format == QemuConstants.FORMAT_ASIF)
-
-        drive.format = QemuConstants.FORMAT_RAW
-        if originalFormat == QemuConstants.FORMAT_RAW {
-            convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progress: progress, uponCompletion: callback)
-            return
-        }
-        sourceManager.convertDiskImage(drive, path, fromFormat: originalFormat, progress: { progress($0 / 2) }, uponCompletion: { code, message in
-            guard code == 0 else {
-                drive.format = originalFormat
-                callback(code, message)
-                return
-            }
-
-            self.convertFromRaw(drive, to: format, in: path, targetManager: targetManager, progressOffset: 50, progress: progress, uponCompletion: callback)
-        })
-    }
-
-    private func convertFromRaw(_ drive: VirtualDrive, to format: String, in path: String, targetManager: DiskImageManager, progressOffset: Double = 0, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let scale = (100 - progressOffset) / 100
         drive.format = format
-        targetManager.convertDiskImage(drive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: { progress(progressOffset + $0 * scale) }, uponCompletion: { code, message in
+        DiskImageConverter().convert(drive, from: originalFormat, progress: progress, uponCompletion: { code, message in
             if code != 0 {
-                drive.format = QemuConstants.FORMAT_RAW
+                drive.format = originalFormat
             }
             callback(code, message)
         })

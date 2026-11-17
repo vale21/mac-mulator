@@ -35,6 +35,7 @@ class MacMulatorConstants {
     static let NEW_VM_SEGUE = "newVMSegue"
     static let EDIT_VM_SEGUE = "editVMSegue"
     static let NEW_DISK_SEGUE = "newDiskSegue"
+    static let IMPORT_DRIVE_CONTROLLER = "importDriveViewController"
     static let EDIT_DISK_SEGUE = "editDiskSegue"
     static let CREATE_DISK_FILE_SEGUE = "createDiskFileSegue"
     static let CREATE_VM_FILE_SEGUE = "createVmFileSegue"
@@ -57,15 +58,12 @@ class MacMulatorConstants {
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
 
-    /// Keys of the values in the workspace state file. Except PREFERENCE_KEY_VMS_FOLDER_PATH, which stays in UserDefaults:
-    /// these values used to be stored there, and are read from there only to migrate them to the state file.
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath"
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate"
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled"
 
-    /// Hidden file in the workspace folder holding the list of saved VMs and the preferences.
     static let APP_STATE_FILE = ".macmulator.plist"
 
     static let QEMU_VM = "qemu"
