@@ -58,16 +58,14 @@ extension DiskImageManager {
     }
 
     func getDiskImageDetails(_ imagePath: String, qemuPath: String, uponCompletion callback: @escaping (DiskImageDetails?, String?) -> Void) {
-        // A drive saved by MacMulator carries its settings, which also tell if it is linked to a template drive
         let metadata = VirtualDrive.readMetadata(fromImageAt: imagePath)
         let complete: (DiskImageDetails?, String?) -> Void = { details, errorMessage in
             callback(details.map { DiskImageDetails(format: $0.format, virtualSize: $0.virtualSize, hasBackingFile: $0.hasBackingFile || metadata?.isLinked == true, metadata: metadata) }, errorMessage)
         }
 
-        // qemu-img does not know ASIF
         if isAsifImage(imagePath) {
-            asifVirtualSize(imagePath, uponCompletion: { virtualSize in
-                complete(DiskImageDetails(format: QemuConstants.FORMAT_ASIF, virtualSize: virtualSize ?? self.fileSize(imagePath), hasBackingFile: false), nil)
+            asifDetails(imagePath, uponCompletion: { virtualSize, isLinked in
+                complete(DiskImageDetails(format: QemuConstants.FORMAT_ASIF, virtualSize: virtualSize ?? self.fileSize(imagePath), hasBackingFile: isLinked), nil)
             })
             return
         }
@@ -121,7 +119,6 @@ extension DiskImageManager {
             QemuConstants.FORMAT_RAW
         }
 
-        // The virtual size and backing file of a qcow or qcow2 image are in its header (big endian), at the same offsets
         guard format == QemuConstants.FORMAT_QCOW2 || format == QemuConstants.FORMAT_QCOW, header.count >= 32 else {
             return DiskImageDetails(format: format, virtualSize: fileSize(imagePath), hasBackingFile: false)
         }
@@ -138,19 +135,35 @@ extension DiskImageManager {
         return (try? handle?.read(upToCount: 4)) == Data("shdw".utf8)
     }
 
-    private func asifVirtualSize(_ imagePath: String, uponCompletion callback: @escaping (Int64?) -> Void) {
+    private func asifDetails(_ imagePath: String, uponCompletion callback: @escaping (Int64?, Bool) -> Void) {
         // DiskImageKit also works in the App Store sandbox, where "diskutil image info" fails
         #if arch(arm64)
             if #available(macOS 27.0, *), let image = try? DiskImage(opening: .open(url: URL(fileURLWithPath: imagePath), mode: .readOnly)) {
-                callback(Int64(image.blockCount) * Int64(image.blockSize.rawValue))
+                callback(Int64(image.blockCount) * Int64(image.blockSize.rawValue), image.parentUUID != nil)
                 return
             }
         #endif
         let shell = Shell()
         shell.runCommand("/usr/sbin/diskutil image info --plist " + Utils.escape(imagePath), (imagePath as NSString).deletingLastPathComponent, uponCompletion: { terminationCode, _ in
-            let info = terminationCode == 0 ? try? PropertyListSerialization.propertyList(from: Data(shell.readFromStandardOutput().utf8), format: nil) as? [String: Any] : nil
-            callback(((info?["Size Info"] as? [String: Any])?["Total Bytes"] as? NSNumber)?.int64Value)
+            guard terminationCode == 0, let info = try? PropertyListSerialization.propertyList(from: Data(shell.readFromStandardOutput().utf8), format: nil) as? [String: Any] else {
+                callback(nil, self.asifHeaderHasParent(imagePath))
+                return
+            }
+            let virtualSize = ((info["Size Info"] as? [String: Any])?["Total Bytes"] as? NSNumber)?.int64Value
+            callback(virtualSize, (info["Identity Info"] as? [String: Any])?["Parent UUID"] != nil)
         })
+    }
+
+    private func asifHeaderHasParent(_ imagePath: String) -> Bool {
+        /// Last resort, when neither DiskImageKit nor diskutil can read the image. The layout is not documented, but it matches what they
+        /// report: the UUID of the image is at 0x20, the one of its parent at 0x50 (all zeros in a standalone image).
+        /// An image that cannot be read is not established to be standalone, so it counts as linked.
+        let handle = FileHandle(forReadingAtPath: imagePath)
+        defer { try? handle?.close() }
+        guard let header = try? handle?.read(upToCount: 0x60), header.count == 0x60 else {
+            return true
+        }
+        return header[0x50 ..< 0x60].contains { $0 != 0 }
     }
 
     private func fileSize(_ imagePath: String) -> Int64 {
