@@ -22,6 +22,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     @IBOutlet var drivesTableView: NSTableView!
     @IBOutlet var openImageButton: NSButton!
     @IBOutlet var createNewDiskButton: NSButton!
+    @IBOutlet var importDriveButton: NSButton!
 
     var virtualMachine: VirtualMachine?
     var vmRunner: VirtualMachineRunner?
@@ -140,6 +141,60 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         })
     }
 
+    @IBAction func importDrive(_: Any) {
+        guard let virtualMachine else { return }
+        Utils.showFileSelector(fileTypes: Utils.IMPORT_DRIVE_TYPES, uponSelection: { panel in
+            guard let path = panel.url?.path else { return }
+            DiskImageManagerFactory().create(forVM: virtualMachine).getDiskImageDetails(path, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), uponCompletion: { details, errorMessage in
+                DispatchQueue.main.async {
+                    guard let details else {
+                        Utils.showAlert(window: self.view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveUnreadable", comment: ""), (path as NSString).lastPathComponent, errorMessage ?? ""), virtualMachine: virtualMachine)
+                        return
+                    }
+                    let fileName = (path as NSString).lastPathComponent
+                    guard Utils.isDiskImageImportSupported(details, virtualMachine) else {
+                        self.showImportNotSupported(fileName, details, virtualMachine)
+                        return
+                    }
+                    // A drive saved by MacMulator, in a format this VM uses, is imported as it is
+                    if details.metadata != nil, Utils.getDirectlyImportableDiskFormats(virtualMachine).contains(details.format) {
+                        self.startDriveImport(path, details, targetFormat: details.format)
+                        return
+                    }
+                    if virtualMachine.type == MacMulatorConstants.APPLE_VM {
+                        if details.format == QemuConstants.FORMAT_ASIF {
+                            self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_ASIF)
+                            return
+                        }
+                        guard Utils.isAsifSupported(virtualMachine) else {
+                            self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
+                            return
+                        }
+                        self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importAsifImage", comment: ""), fileName),
+                                          detail: NSLocalizedString("EditVMViewControllerHardware.importAsifImageDetail", comment: ""),
+                                          convertTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToAsif", comment: ""),
+                                          keepTitle: NSLocalizedString("EditVMViewControllerHardware.importUseRaw", comment: ""),
+                                          completion: { convert in
+                                              self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_ASIF : QemuConstants.FORMAT_RAW)
+                                          })
+                    } else if details.format == QemuConstants.FORMAT_RAW, !Utils.isQemuImgSupported(virtualMachine) {
+                        self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
+                    } else if details.format == QemuConstants.FORMAT_RAW {
+                        self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), fileName),
+                                          detail: NSLocalizedString("EditVMViewControllerHardware.importRawImageDetail", comment: ""),
+                                          convertTitle: NSLocalizedString("EditVMViewControllerHardware.importConvertToQcow2", comment: ""),
+                                          keepTitle: NSLocalizedString("EditVMViewControllerHardware.importKeepRaw", comment: ""),
+                                          completion: { convert in
+                                              self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_RAW)
+                                          })
+                    } else {
+                        self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_QCOW2)
+                    }
+                }
+            })
+        })
+    }
+
     @IBAction func deleteVirtualDrive(_ sender: Any) {
         if let virtualMachine {
             let row = drivesTableView.row(for: sender as! NSView)
@@ -169,6 +224,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         drivesTableLabel.stringValue = NSLocalizedString("EditVMViewControllerHardware.drivesTableLabel", comment: "")
         openImageButton.title = NSLocalizedString("EditVMViewControllerHardware.openImageButton", comment: "")
         createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.createNewDiskButton", comment: "")
+        importDriveButton.title = NSLocalizedString("EditVMViewControllerHardware.importDriveButton", comment: "")
 
         for column in drivesTableView.tableColumns {
             if column.identifier.rawValue == "Name" {
@@ -393,28 +449,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
             drivesTableView.reloadData()
 
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
-                openImageButton.isEnabled = false
-                openImageButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                openImageButton.isEnabled = false
-            } else {
-                openImageButton.isEnabled = true
+            if virtualMachine.os == QemuConstants.OS_IOS {
+                createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.selectNandButton", comment: "")
             }
-
-            if virtualMachine.type == MacMulatorConstants.APPLE_VM, Utils.findMainDrive(virtualMachine.drives) != nil {
-                createNewDiskButton.isEnabled = false
-                createNewDiskButton.toolTip = NSLocalizedString("EditVMViewControllerHardware.onlyOneDriveAvailable", comment: "")
-            } else if virtualMachine.os == QemuConstants.OS_IOS {
-                createNewDiskButton.title = "Select NAND..."
-            } else {
-                createNewDiskButton.isEnabled = true
-            }
-
-            if Utils.isVMTemplate(virtualMachine) {
-                createNewDiskButton.isEnabled = false
-                openImageButton.isEnabled = false
-            }
+            updateDriveButtons(virtualMachine)
 
             let appDelegate = NSApp.delegate as! AppDelegate
             appDelegate.refreshVMMenus()
@@ -428,6 +466,17 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     func reloadDrives() {
         drivesTableView.reloadData()
+    }
+
+    func driveImported(_ virtualDrive: VirtualDrive) {
+        guard let virtualMachine else { return }
+        virtualMachine.addVirtualDrive(virtualDrive)
+        virtualMachine.writeToPlist()
+        updateView()
+    }
+
+    func driveImportFailed(error: String) {
+        Utils.showAlert(window: view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveFailed", comment: ""), error), virtualMachine: virtualMachine)
     }
 
     private func removeVirtualDrive(_ row: Int, _ index: Int) {
@@ -446,5 +495,106 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 appDelegate.refreshVMMenus()
             }
         }
+    }
+
+    /// Enables the drive buttons, each with a tooltip saying what it does or why it is disabled.
+    /// The rules are checked in order: the first matching one decides.
+    private func updateDriveButtons(_ virtualMachine: VirtualMachine) {
+        let isTemplate = Utils.isVMTemplate(virtualMachine)
+        let isIOS = virtualMachine.os == QemuConstants.OS_IOS
+        let isAppleVM = virtualMachine.type == MacMulatorConstants.APPLE_VM
+        // Apple VMs have a single drive
+        let hasAppleMainDrive = isAppleVM && Utils.findMainDrive(virtualMachine.drives) != nil
+
+        let openImage: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            (false, "drivesIOSTooltip")
+        } else if isAppleVM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
+            (false, "openImageIPSWTooltip")
+        } else {
+            (true, "openImageTooltip")
+        }
+
+        let createNewDisk: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            // The button selects the NAND folder of the iPod touch
+            (true, "selectNandTooltip")
+        } else if hasAppleMainDrive {
+            (false, "drivesOneDriveTooltip")
+        } else {
+            (true, "createNewDiskTooltip")
+        }
+
+        let importDrive: (enabled: Bool, tooltip: String) = if isTemplate {
+            (false, "drivesTemplateTooltip")
+        } else if isIOS {
+            (false, "drivesIOSTooltip")
+        } else if isAppleVM, virtualMachine.os != QemuConstants.OS_LINUX {
+            // A macOS drive cannot be imported: it needs the files created by the macOS installation
+            (false, "importDriveMacOSTooltip")
+        } else if hasAppleMainDrive {
+            (false, "drivesOneDriveTooltip")
+        } else {
+            (true, "importDriveTooltip")
+        }
+
+        for (button, state) in [(openImageButton!, openImage), (createNewDiskButton!, createNewDisk), (importDriveButton!, importDrive)] {
+            button.isEnabled = state.enabled
+            button.toolTip = NSLocalizedString("EditVMViewControllerHardware." + state.tooltip, comment: "")
+        }
+    }
+
+    private func showImportNotSupported(_ fileName: String, _ details: DiskImageDetails, _ virtualMachine: VirtualMachine) {
+        let message = if details.format == QemuConstants.FORMAT_ASIF, details.hasBackingFile {
+            // An ASIF linked clone is a layer over its template drive, which no tool can merge outside its VM
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveLinkedClone", comment: ""), fileName)
+        } else if details.format == QemuConstants.FORMAT_ASIF {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveAsifNotSupported", comment: ""), fileName)
+        } else if details.hasBackingFile {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveBackingRequiresQemuImg", comment: ""), fileName)
+        } else {
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveRequiresQemuImg", comment: ""), fileName, details.format.uppercased(),
+                   Utils.getDirectlyImportableDiskFormats(virtualMachine).map { $0.uppercased() }.joined(separator: ", "))
+        }
+        Utils.showAlert(window: view.window!, style: .warning, message: message, virtualMachine: virtualMachine)
+    }
+
+    private func askToConvert(message: String, detail: String, convertTitle: String, keepTitle: String, completion: @escaping (Bool) -> Void) {
+        let alert = NSAlert()
+        if let virtualMachine {
+            alert.icon = NSImage(named: NSImage.Name(Utils.getIconForSubType(virtualMachine.os, virtualMachine.subtype) + ".small"))
+        }
+        alert.alertStyle = .informational
+        alert.messageText = message
+        alert.informativeText = detail
+        alert.addButton(withTitle: convertTitle)
+        alert.addButton(withTitle: keepTitle)
+        alert.beginSheetModal(for: view.window!, completionHandler: { response in
+            completion(response == .alertFirstButtonReturn)
+        })
+    }
+
+    private func startDriveImport(_ path: String, _ details: DiskImageDetails, targetFormat: String) {
+        guard let virtualMachine,
+              let importController = storyboard?.instantiateController(withIdentifier: MacMulatorConstants.IMPORT_DRIVE_CONTROLLER) as? ImportDriveViewController
+        else { return }
+
+        // A drive saved by MacMulator keeps its media type
+        let savedMediaType = details.metadata?.mediaType
+        let mediaType = savedMediaType == QemuConstants.MEDIATYPE_DISK || savedMediaType == QemuConstants.MEDIATYPE_NVME ? savedMediaType! : Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
+        let name = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
+        let gigabyte = 1024.0 * 1024.0 * 1024.0
+        let virtualDrive = VirtualDrive(path: virtualMachine.path + "/" + name + "." + MacMulatorConstants.DISK_EXTENSION, name: name, format: targetFormat, mediaType: mediaType, size: Int32((Double(details.virtualSize) / gigabyte).rounded(.up)))
+        virtualDrive.setBlank(blank: false)
+        // A VM without a boot drive (e.g. one made to run a cloud image) boots from the imported one
+        if !virtualMachine.drives.contains(where: \.isBootDrive) {
+            virtualDrive.isBootDrive = true
+        }
+
+        importController.setImport(from: path, details: details, into: virtualDrive, of: virtualMachine)
+        importController.setParentController(self)
+        presentAsSheet(importController)
     }
 }

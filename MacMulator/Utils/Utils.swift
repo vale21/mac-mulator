@@ -35,6 +35,8 @@ class Utils {
     static let ALERT_RESP_OK = 1000
     static let IMAGE_TYPES = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
     static let IMAGE_TYPES_USB = ["img", "iso", "cdr"]
+    // Disk images that can be imported as a drive: cloud images are usually .img (often qcow2 inside) or .qcow2
+    static let IMPORT_DRIVE_TYPES = ["img", "raw", "qcow2", "qcow", "qvd", "asif", "vmdk", "vdi", "vhd", "vhdx"]
 
     /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
     /// key exchanges) be reached. The legacy algorithms are appended ("+") to the defaults, so newer guests still
@@ -896,6 +898,35 @@ class Utils {
             return vm.type == MacMulatorConstants.APPLE_VM && isMacVersionGreaterOrEqualThan(subtype: vm.subtype, target: QemuConstants.SUB_MAC_GOLDEN_GATE)
         }
         return false
+    }
+
+    static func isQemuImgSupported(_ vm: VirtualMachine) -> Bool {
+        isQemuImgSupported(atPath: QemuUtils.getQemuPath(for: vm))
+    }
+
+    static func isQemuImgSupported(atPath qemuPath: String) -> Bool {
+        FileManager.default.isExecutableFile(atPath: qemuPath + "/" + QemuConstants.QEMU_IMG)
+    }
+
+    /// The formats a VM can use directly are imported without qemu-img (a copy, or diskutil from RAW to ASIF); the others are converted by qemu-img
+    static func getDirectlyImportableDiskFormats(_ vm: VirtualMachine) -> [String] {
+        guard vm.type == MacMulatorConstants.APPLE_VM else {
+            return [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_QCOW2]
+        }
+        return isAsifSupported(vm) ? [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_ASIF] : [QemuConstants.FORMAT_RAW]
+    }
+
+    static func isDiskImageImportSupported(_ details: DiskImageDetails, _ vm: VirtualMachine) -> Bool {
+        if getDirectlyImportableDiskFormats(vm).contains(details.format), !details.hasBackingFile {
+            return true
+        }
+        // qemu-img does not convert ASIF images
+        return details.format != QemuConstants.FORMAT_ASIF && isQemuImgSupported(vm)
+    }
+
+    static func isCloudInitSupported(_ vm: VirtualMachine) -> Bool {
+        vm.os == QemuConstants.OS_LINUX &&
+            [QemuConstants.ARCH_X64, QemuConstants.ARCH_X86, QemuConstants.ARCH_ARM64].contains(vm.architecture)
     }
 
     static func getUnavailabilityMessage(_ vm: VirtualMachine) -> String {

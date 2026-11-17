@@ -45,7 +45,14 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
             height: resolution[1]
         )]
 
-        virtualMachineConfiguration.storageDevices = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(drive: Utils.findMainDrive(vm.drives)!)]
+        var storageDevices: [VZStorageDeviceConfiguration] = [LinuxVirtualMachineConfigurationHelper.createBlockDeviceConfiguration(drive: Utils.findMainDrive(vm.drives)!)]
+        // The cloud-init volume (written by the runner at start) comes after the main drive, so the main drive stays the first disk (vda)
+        if Utils.isCloudInitSupported(vm), vm.provisioningInformation != nil,
+           let cloudInitDevice = try? LinuxVirtualMachineConfigurationHelper.createCloudInitDeviceConfiguration(CloudInitVolume.path(for: vm))
+        {
+            storageDevices.append(cloudInitDevice)
+        }
+        virtualMachineConfiguration.storageDevices = storageDevices
 
         // Resolve bridged network interface identifier to pass as String?
         let selectedBridgedInterfaceIdentifier: String? = {

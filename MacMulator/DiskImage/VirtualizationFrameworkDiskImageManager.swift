@@ -101,7 +101,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                             Shell().runCommand("/usr/sbin/diskutil eject " + targetDevice, path, uponCompletion: { _, _ in
                                 Shell().runCommand("/usr/sbin/diskutil eject " + stackDevice, path, uponCompletion: { _, _ in
                                     guard copyCode == 0 else { return fail(copyCode, copyMessage) }
-                                    self.replaceDiskImage(drivePath, with: tempPath, format: QemuConstants.FORMAT_ASIF, uponCompletion: callback)
+                                    DiskImageConverter.replaceDiskImage(drivePath, with: tempPath, format: QemuConstants.FORMAT_ASIF, uponCompletion: callback)
                                 })
                             })
                         })
@@ -136,7 +136,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 } else {
                     // Convert to RAW, resize, and convert back to ASIF, since diskutil does not support resizing ASIF images on macOS < 27.0 inside the App Store sandbox.
                     virtualDrive.format = QemuConstants.FORMAT_RAW
-                    convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_ASIF, progress: progress.map { report in { report($0 / 2) } }, uponCompletion: { errorCode, errorMessage in
+                    DiskImageConverter().convert(virtualDrive, from: QemuConstants.FORMAT_ASIF, progress: progress.map { report in { report($0 / 2) } }, uponCompletion: { errorCode, errorMessage in
                         guard errorCode == 0 else {
                             callback(errorCode, errorMessage)
                             return
@@ -147,7 +147,7 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                                 return
                             }
                             virtualDrive.format = QemuConstants.FORMAT_ASIF
-                            self.convertDiskImage(virtualDrive, path, fromFormat: QemuConstants.FORMAT_RAW, progress: progress.map { report in { report(50 + $0 / 2) } }, uponCompletion: callback)
+                            DiskImageConverter().convert(virtualDrive, from: QemuConstants.FORMAT_RAW, progress: progress.map { report in { report(50 + $0 / 2) } }, uponCompletion: callback)
                         })
                     })
                 }
@@ -164,56 +164,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
                 }
             #endif
         }
-    }
-
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat _: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let drivePath = virtualDrive.path
-        let format = virtualDrive.format
-
-        // diskutil does not support in-place conversion between ASIF and RAW, so convert into a temporary file first.
-        let tempPath = (drivePath as NSString).deletingPathExtension + "-" + format.lowercased() + "-conversion." + MacMulatorConstants.DISK_EXTENSION
-        try? FileManager.default.removeItem(atPath: tempPath)
-
-        // The App Store sandbox does not allow attaching disk images, so it falls back to a plain diskutil conversion,
-        // which produces a fully allocated ASIF.
-        #if !APPSTORE
-            let convertsToSparseASIF = format == QemuConstants.FORMAT_ASIF
-        #else
-            let convertsToSparseASIF = false
-        #endif
-        if convertsToSparseASIF {
-            convertToSparseASIF(drivePath, tempPath, path, progress: progress, uponCompletion: { terminationCode, errorMessage in
-                guard terminationCode == 0 else {
-                    try? FileManager.default.removeItem(atPath: tempPath)
-                    callback(terminationCode, errorMessage)
-                    return
-                }
-                self.replaceDiskImage(drivePath, with: tempPath, format: format, uponCompletion: callback)
-            })
-            return
-        }
-
-        let shell = Shell()
-        if let progress {
-            shell.outputHandler = { output in
-                if let percentage = self.parseConversionProgress(output) {
-                    progress(percentage)
-                }
-            }
-        }
-
-        let command = "/usr/sbin/diskutil image create from --format " + format + " " + Utils.escape(drivePath) + " " + Utils.escape(tempPath)
-
-        shell.runCommand(command, path, uponCompletion: { terminationCode, errorMessage in
-            guard terminationCode == 0 else {
-                print("Failed to convert disk image to " + format + ": " + (errorMessage ?? shell.readFromStandardError()))
-                try? FileManager.default.removeItem(atPath: tempPath)
-                callback(terminationCode, errorMessage.map { self.pruneConversionProgress($0) })
-                return
-            }
-
-            self.replaceDiskImage(drivePath, with: tempPath, format: format, uponCompletion: callback)
-        })
     }
 
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void) {
@@ -301,101 +251,6 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
             }
             callback(device, nil)
         })
-    }
-
-    private func replaceDiskImage(_ drivePath: String, with tempPath: String, format: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        do {
-            _ = try FileManager.default.replaceItemAt(URL(fileURLWithPath: drivePath), withItemAt: URL(fileURLWithPath: tempPath))
-            callback(0, nil)
-        } catch {
-            print(String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
-            try? FileManager.default.removeItem(atPath: tempPath)
-            callback(-1, String(format: NSLocalizedString("DiskImageManager.replaceFailed", comment: ""), format, "\(error)"))
-        }
-    }
-
-    private func convertToSparseASIF(_ sourcePath: String, _ destinationPath: String, _ path: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        guard let sourceSize = (try? FileManager.default.attributesOfItem(atPath: sourcePath))?[.size] as? Int else {
-            callback(-1, "Unable to read the size of " + sourcePath)
-            return
-        }
-
-        let createShell = Shell()
-        let createCommand = "/usr/sbin/diskutil image create blank --fs None --format ASIF --size " + String(sourceSize) + " " + Utils.escape(destinationPath)
-        createShell.runCommand(createCommand, path, uponCompletion: { terminationCode, errorMessage in
-            guard terminationCode == 0 else {
-                callback(terminationCode, errorMessage)
-                return
-            }
-
-            let attachShell = Shell()
-            let attachCommand = "/usr/sbin/diskutil image attach --noMount " + Utils.escape(destinationPath)
-            attachShell.runCommand(attachCommand, path, uponCompletion: { terminationCode, errorMessage in
-                // The first token of the output is the /dev node of the attached image (e.g. /dev/disk8).
-                guard terminationCode == 0,
-                      let device = attachShell.readFromStandardOutput().split(whereSeparator: \.isWhitespace).first.map(String.init),
-                      device.hasPrefix("/dev/disk")
-                else {
-                    callback(terminationCode != 0 ? terminationCode : -1, errorMessage ?? attachShell.readFromStandardError())
-                    return
-                }
-
-                let copyShell = Shell()
-                if let progress {
-                    copyShell.outputHandler = { output in
-                        if let copiedBytes = self.parseCopyProgress(output), sourceSize > 0 {
-                            progress(min(100, Double(copiedBytes) * 100 / Double(sourceSize)))
-                        }
-                    }
-                }
-
-                // Write through the raw device node, which is much faster than the buffered one.
-                let rawDevice = device.replacingOccurrences(of: "/dev/disk", with: "/dev/rdisk")
-                let copyCommand = "/bin/dd if=" + Utils.escape(sourcePath) + " of=" + rawDevice + " bs=1m conv=sparse status=progress"
-                copyShell.runCommand(copyCommand, path, uponCompletion: { copyTerminationCode, copyErrorMessage in
-                    // Always detach the image, even if the copy failed.
-                    let detachShell = Shell()
-                    detachShell.runCommand("/usr/sbin/diskutil eject " + device, path, uponCompletion: { detachTerminationCode, detachErrorMessage in
-                        if copyTerminationCode != 0 {
-                            callback(copyTerminationCode, copyErrorMessage)
-                        } else {
-                            callback(detachTerminationCode, detachErrorMessage)
-                        }
-                    })
-                })
-            })
-        })
-    }
-
-    private func parseCopyProgress(_ output: String) -> Int? {
-        let lines = output.split(whereSeparator: { $0 == "\r" || $0 == "\n" })
-        for line in lines.reversed() {
-            let tokens = line.split(separator: " ")
-            if tokens.count >= 2, tokens[1] == "bytes", let bytes = Int(tokens[0]) {
-                return bytes
-            }
-        }
-        return nil
-    }
-
-    private func parseConversionProgress(_ output: String) -> Double? {
-        let marker = "% completed]"
-        guard let markerRange = output.range(of: marker, options: .backwards),
-              let openBracket = output.range(of: "[", options: .backwards, range: output.startIndex ..< markerRange.lowerBound)
-        else {
-            return nil
-        }
-        return Double(output[openBracket.upperBound ..< markerRange.lowerBound].trimmingCharacters(in: .whitespaces))
-    }
-
-    private func pruneConversionProgress(_ message: String) -> String {
-        message
-            .replacingOccurrences(of: "\\[\\s*\\d+(\\.\\d+)?% completed\\][ \\t]*", with: "", options: .regularExpression)
-            .split(whereSeparator: \.isNewline)
-            .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func getDiskImageInfo(_ drivePath: String, _ path: String, virtualDrive: VirtualDrive, uponCompletion callback: @escaping (Int32, String) -> Void) {
