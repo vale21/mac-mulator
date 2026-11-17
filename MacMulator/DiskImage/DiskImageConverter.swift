@@ -66,7 +66,7 @@ class DiskImageConverter {
         } else if involvesAsif {
             convertWithDiskutil(sourcePath, to: destinationPath, format: targetFormat, progress: progress, uponCompletion: finish)
         } else if Utils.isQemuImgSupported(atPath: qemuPath) {
-            convertWithQemuImg(sourcePath, to: destinationPath, format: targetFormat, progress: progress, uponCompletion: finish)
+            convertWithQemuImg(sourcePath, from: sourceFormat, to: destinationPath, format: targetFormat, progress: progress, uponCompletion: finish)
         } else {
             finish(-1, String(format: NSLocalizedString("DiskImageManager.conversionRequiresQemuImg", comment: ""), sourceFormat, targetFormat))
         }
@@ -165,7 +165,7 @@ class DiskImageConverter {
         })
     }
 
-    private func convertWithQemuImg(_ sourcePath: String, to destinationPath: String, format targetFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+    private func convertWithQemuImg(_ sourcePath: String, from sourceFormat: String, to destinationPath: String, format targetFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let shell = Shell()
         if let progress {
             shell.outputHandler = { output in
@@ -177,6 +177,8 @@ class DiskImageConverter {
 
         let command = QemuImgCommandBuilder(qemuPath: qemuPath)
             .withCommand(QemuConstants.IMAGE_CMD_CONVERT + " -p")
+            // The known format, not probed: a guest can write a fake qcow2 header, with a backing file on the host, in a RAW disk
+            .withFormat(sourceFormat)
             .withTargetFormat(targetFormat)
             .withName(sourcePath)
             .withTargetName(Utils.escape(destinationPath))
