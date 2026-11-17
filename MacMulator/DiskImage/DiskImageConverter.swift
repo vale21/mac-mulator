@@ -190,7 +190,15 @@ class DiskImageConverter {
     }
 
     private func copy(_ sourcePath: String, to destinationPath: String, progress: ((Double) -> Void)?) -> (Int32, String?) {
-        let chunkSize = 16 * 1024 * 1024
+        // APFS only: on the same volume a clone is immediate, and takes no space until the VM writes to the disk.
+        // On other filesystems (HFS+, exFAT, network shares) or across volumes clonefile fails, and we fall back to a copy
+        if clonefile(sourcePath, destinationPath, 0) == 0 {
+            progress?(100)
+            return (0, nil)
+        }
+
+        let chunkSize = 1024 * 1024
+        let zeroChunk = Data(count: chunkSize)
         do {
             guard let input = FileHandle(forReadingAtPath: sourcePath) else {
                 return (-1, String(format: NSLocalizedString("QemuDiskImageManager.cannotReadImage", comment: ""), sourcePath))
@@ -204,12 +212,18 @@ class DiskImageConverter {
 
             var copied: Int64 = 0
             while let chunk = try input.read(upToCount: chunkSize), !chunk.isEmpty {
-                try output.write(contentsOf: chunk)
+                // Zero chunks are not written, and the file gets its full size at the end. They stay holes only on
+                // filesystems with sparse file support (APFS): elsewhere (HFS+, exFAT) they get allocated and zero-filled
+                if chunk != zeroChunk.prefix(chunk.count) {
+                    try output.seek(toOffset: UInt64(copied))
+                    try output.write(contentsOf: chunk)
+                }
                 copied += Int64(chunk.count)
                 if totalSize > 0 {
                     progress?(Double(copied) * 100 / Double(totalSize))
                 }
             }
+            try output.truncate(atOffset: UInt64(copied))
             return (0, nil)
         } catch {
             return (-1, error.localizedDescription)
