@@ -220,6 +220,27 @@ class VirtualizationFrameworkDiskImageManager: DiskImageManager {
         getDiskImageInfo(virtualDrive.path, path, virtualDrive: virtualDrive, uponCompletion: callback)
     }
 
+    func importDiskImage(from sourcePath: String, details: DiskImageDetails, into virtualDrive: VirtualDrive, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard virtualDrive.format == QemuConstants.FORMAT_ASIF else {
+            importDiskImageWithQemuImg(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: virtualDrive.format, qemuPath: qemuPath, progress: progress, uponCompletion: callback)
+            return
+        }
+
+        // qemu-img does not write ASIF: the image is imported as RAW, then converted
+        importDiskImageWithQemuImg(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: QemuConstants.FORMAT_RAW, qemuPath: qemuPath, progress: { progress($0 / 2) }, uponCompletion: { errorCode, errorMessage in
+            guard errorCode == 0 else {
+                callback(errorCode, errorMessage)
+                return
+            }
+            self.convertDiskImage(virtualDrive, (virtualDrive.path as NSString).deletingLastPathComponent, fromFormat: QemuConstants.FORMAT_RAW, progress: { progress(50 + $0 / 2) }, uponCompletion: { errorCode, errorMessage in
+                if errorCode != 0 {
+                    try? FileManager.default.removeItem(atPath: virtualDrive.path)
+                }
+                callback(errorCode, errorMessage)
+            })
+        })
+    }
+
     @available(macOS 26.0, *)
     private func createASIFDiskImage(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String?) -> Void) {
         let drivePath = path + "/" + virtualDrive.name + "." + MacMulatorConstants.DISK_EXTENSION

@@ -39,35 +39,15 @@ class ImportDriveViewController: NSViewController {
 
         var complete = false
         var error: String? = nil
-        let finish: (Int32, String?) -> Void = { errorCode, errorMessage in
+        DiskImageManagerFactory().create(forVM: virtualMachine).importDiskImage(from: sourcePath, details: details, into: virtualDrive, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), progress: { percentage in
+            DispatchQueue.main.async {
+                self.updateProgress(percentage)
+            }
+        }, uponCompletion: { errorCode, errorMessage in
             DispatchQueue.main.async {
                 error = errorCode != 0 ? (errorMessage ?? "") : nil
                 complete = true
             }
-        }
-
-        // qemu-img does not write ASIF: the image is imported as RAW, then converted by the Virtualization framework manager
-        let convertsToAsif = virtualDrive.format == QemuConstants.FORMAT_ASIF
-        let importScale = convertsToAsif ? 0.5 : 1.0
-        QemuDiskImageManager().importDiskImage(from: sourcePath, details: details, to: virtualDrive.path, targetFormat: convertsToAsif ? QemuConstants.FORMAT_RAW : virtualDrive.format, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), progress: { percentage in
-            DispatchQueue.main.async {
-                self.updateProgress(percentage * importScale)
-            }
-        }, uponCompletion: { errorCode, errorMessage in
-            guard errorCode == 0, convertsToAsif else {
-                finish(errorCode, errorMessage)
-                return
-            }
-            VirtualizationFrameworkDiskImageManager().convertDiskImage(virtualDrive, virtualMachine.path, fromFormat: QemuConstants.FORMAT_RAW, progress: { percentage in
-                DispatchQueue.main.async {
-                    self.updateProgress(50 + percentage / 2)
-                }
-            }, uponCompletion: { errorCode, errorMessage in
-                if errorCode != 0 {
-                    try? FileManager.default.removeItem(atPath: virtualDrive.path)
-                }
-                finish(errorCode, errorMessage)
-            })
         })
 
         let startTime = Int64(Date().timeIntervalSince1970)

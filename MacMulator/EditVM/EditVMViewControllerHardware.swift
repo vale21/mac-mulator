@@ -146,7 +146,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         guard let virtualMachine else { return }
         Utils.showFileSelector(fileTypes: Utils.IMPORT_DRIVE_TYPES, uponSelection: { panel in
             guard let path = panel.url?.path else { return }
-            QemuDiskImageManager().getDiskImageDetails(path, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), uponCompletion: { details, errorMessage in
+            DiskImageManagerFactory().create(forVM: virtualMachine).getDiskImageDetails(path, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), uponCompletion: { details, errorMessage in
                 DispatchQueue.main.async {
                     guard let details else {
                         Utils.showAlert(window: self.view.window!, style: .critical, message: String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveUnreadable", comment: ""), (path as NSString).lastPathComponent, errorMessage ?? ""), virtualMachine: virtualMachine)
