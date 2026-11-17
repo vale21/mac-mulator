@@ -910,7 +910,10 @@ class Utils {
 
     /// The formats a VM can use directly are imported without qemu-img (a copy, or diskutil from RAW to ASIF); the others are converted by qemu-img
     static func getDirectlyImportableDiskFormats(_ vm: VirtualMachine) -> [String] {
-        vm.type == MacMulatorConstants.APPLE_VM ? [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_ASIF] : [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_QCOW2]
+        guard vm.type == MacMulatorConstants.APPLE_VM else {
+            return [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_QCOW2]
+        }
+        return isAsifSupported(vm) ? [QemuConstants.FORMAT_RAW, QemuConstants.FORMAT_ASIF] : [QemuConstants.FORMAT_RAW]
     }
 
     static func isDiskImageImportSupported(_ details: DiskImageDetails, _ vm: VirtualMachine) -> Bool {
