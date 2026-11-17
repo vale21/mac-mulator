@@ -182,6 +182,7 @@ class VirtualMachine: Codable, Hashable {
         do {
             let data = try PropertyListEncoder().encode(self)
             try data.write(to: URL(fileURLWithPath: plistFilePath))
+            writeDriveMetadata()
         } catch {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
@@ -191,6 +192,7 @@ class VirtualMachine: Codable, Hashable {
         do {
             let data = try PropertyListEncoder().encode(self)
             try data.write(to: URL(fileURLWithPath: path + "/" + MacMulatorConstants.INFO_PLIST))
+            writeDriveMetadata()
         } catch {
             print(String(format: NSLocalizedString("VirtualMachine.infoPlistWriteError", comment: ""), error.localizedDescription))
         }
@@ -214,5 +216,12 @@ class VirtualMachine: Codable, Hashable {
 
     private func notifySnapshotsChanged() {
         NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
+    }
+
+    /// Only the disks in the VM bundle: the images attached from elsewhere (installation ISOs...) belong to the user
+    private func writeDriveMetadata() {
+        for drive in drives where (drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME) && drive.path.hasPrefix(path + "/") {
+            drive.writeMetadataToImage()
+        }
     }
 }

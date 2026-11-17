@@ -156,6 +156,11 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                         self.showImportNotSupported(fileName, details, virtualMachine)
                         return
                     }
+                    // A drive saved by MacMulator, in a format this VM uses, is imported as it is
+                    if details.metadata != nil, Utils.getDirectlyImportableDiskFormats(virtualMachine).contains(details.format) {
+                        self.startDriveImport(path, details, targetFormat: details.format)
+                        return
+                    }
                     if virtualMachine.type == MacMulatorConstants.APPLE_VM {
                         if details.format == QemuConstants.FORMAT_ASIF {
                             self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_ASIF)
@@ -542,7 +547,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     }
 
     private func showImportNotSupported(_ fileName: String, _ details: DiskImageDetails, _ virtualMachine: VirtualMachine) {
-        let message = if details.format == QemuConstants.FORMAT_ASIF {
+        let message = if details.format == QemuConstants.FORMAT_ASIF, details.hasBackingFile {
+            // An ASIF linked clone is a layer over its template drive, which no tool can merge outside its VM
+            String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveLinkedClone", comment: ""), fileName)
+        } else if details.format == QemuConstants.FORMAT_ASIF {
             String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveAsifNotSupported", comment: ""), fileName)
         } else if details.hasBackingFile {
             String(format: NSLocalizedString("EditVMViewControllerHardware.importDriveBackingRequiresQemuImg", comment: ""), fileName)
@@ -573,7 +581,9 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
               let importController = storyboard?.instantiateController(withIdentifier: MacMulatorConstants.IMPORT_DRIVE_CONTROLLER) as? ImportDriveViewController
         else { return }
 
-        let mediaType = Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
+        // A drive saved by MacMulator keeps its media type
+        let savedMediaType = details.metadata?.mediaType
+        let mediaType = savedMediaType == QemuConstants.MEDIATYPE_DISK || savedMediaType == QemuConstants.MEDIATYPE_NVME ? savedMediaType! : Utils.getMediaTypeForSubType(virtualMachine.os, virtualMachine.subtype)
         let name = mediaType + "-" + String(Utils.computeNextDriveIndex(virtualMachine, mediaType))
         let gigabyte = 1024.0 * 1024.0 * 1024.0
         let virtualDrive = VirtualDrive(path: virtualMachine.path + "/" + name + "." + MacMulatorConstants.DISK_EXTENSION, name: name, format: targetFormat, mediaType: mediaType, size: Int32((Double(details.virtualSize) / gigabyte).rounded(.up)))

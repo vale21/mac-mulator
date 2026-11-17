@@ -14,6 +14,7 @@ struct DiskImageDetails {
     let format: String
     let virtualSize: Int64
     let hasBackingFile: Bool
+    var metadata: VirtualDrive?
 }
 
 protocol DiskImageManager {
@@ -57,16 +58,22 @@ extension DiskImageManager {
     }
 
     func getDiskImageDetails(_ imagePath: String, qemuPath: String, uponCompletion callback: @escaping (DiskImageDetails?, String?) -> Void) {
-        // qemu-img does not know ASIF: it is recognized by its extension
-        if (imagePath as NSString).pathExtension.lowercased() == QemuConstants.FORMAT_ASIF.lowercased() {
+        // A drive saved by MacMulator carries its settings, which also tell if it is linked to a template drive
+        let metadata = VirtualDrive.readMetadata(fromImageAt: imagePath)
+        let complete: (DiskImageDetails?, String?) -> Void = { details, errorMessage in
+            callback(details.map { DiskImageDetails(format: $0.format, virtualSize: $0.virtualSize, hasBackingFile: $0.hasBackingFile || metadata?.isLinked == true, metadata: metadata) }, errorMessage)
+        }
+
+        // qemu-img does not know ASIF
+        if isAsifImage(imagePath) {
             asifVirtualSize(imagePath, uponCompletion: { virtualSize in
-                callback(DiskImageDetails(format: QemuConstants.FORMAT_ASIF, virtualSize: virtualSize ?? self.fileSize(imagePath), hasBackingFile: false), nil)
+                complete(DiskImageDetails(format: QemuConstants.FORMAT_ASIF, virtualSize: virtualSize ?? self.fileSize(imagePath), hasBackingFile: false), nil)
             })
             return
         }
         guard Utils.isQemuImgSupported(atPath: qemuPath) else {
             DispatchQueue.global(qos: .userInitiated).async {
-                callback(self.detectDiskImageDetails(imagePath), nil)
+                complete(self.detectDiskImageDetails(imagePath), nil)
             }
             return
         }
@@ -83,10 +90,10 @@ extension DiskImageManager {
                   let format = json["format"] as? String,
                   let virtualSize = (json["virtual-size"] as? NSNumber)?.int64Value
             else {
-                callback(nil, errorMessage ?? shell.readFromStandardError())
+                complete(nil, errorMessage ?? shell.readFromStandardError())
                 return
             }
-            callback(DiskImageDetails(format: format, virtualSize: virtualSize, hasBackingFile: json["backing-filename"] != nil), nil)
+            complete(DiskImageDetails(format: format, virtualSize: virtualSize, hasBackingFile: json["backing-filename"] != nil), nil)
         })
     }
 
@@ -119,6 +126,15 @@ extension DiskImageManager {
         }
         let bigEndian: (Int) -> UInt64 = { offset in header[offset ..< offset + 8].reduce(0) { $0 << 8 | UInt64($1) } }
         return DiskImageDetails(format: format, virtualSize: Int64(bigEndian(24)), hasBackingFile: bigEndian(8) != 0)
+    }
+
+    private func isAsifImage(_ imagePath: String) -> Bool {
+        if (imagePath as NSString).pathExtension.lowercased() == QemuConstants.FORMAT_ASIF.lowercased() {
+            return true
+        }
+        let handle = FileHandle(forReadingAtPath: imagePath)
+        defer { try? handle?.close() }
+        return (try? handle?.read(upToCount: 4)) == Data("shdw".utf8)
     }
 
     private func asifVirtualSize(_ imagePath: String, uponCompletion callback: @escaping (Int64?) -> Void) {

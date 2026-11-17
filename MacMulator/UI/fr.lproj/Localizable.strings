@@ -145,6 +145,7 @@
 "EditVMViewControllerHardware.importDriveRequiresQemuImg" = "« %@ » est une image %@. Son importation nécessite qemu-img, qui est introuvable : définissez le chemin de Qemu dans les Préférences, ou importez une image dans l'un de ces formats : %@.";
 "EditVMViewControllerHardware.importDriveBackingRequiresQemuImg" = "« %@ » dépend d'un fichier de base. Son importation nécessite qemu-img, qui est introuvable : définissez le chemin de Qemu dans les Préférences.";
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "« %@ » est une image ASIF, que seules les VM Apple peuvent utiliser.";
+"EditVMViewControllerHardware.importDriveLinkedClone" = "« %@ » est un clone lié d'un disque modèle, et ne peut pas être importé seul. Convertissez d'abord sa VM en clone complet, puis importez de nouveau le disque.";
 "EditVMViewControllerNetwork.createMappingButton" = "Créer nouvelle...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Port du Mac hôte";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nom de la redirection";

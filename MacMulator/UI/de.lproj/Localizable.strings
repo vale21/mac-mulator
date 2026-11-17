@@ -145,6 +145,7 @@
 "EditVMViewControllerHardware.importDriveRequiresQemuImg" = "„%@“ ist ein %@-Image. Zum Importieren wird qemu-img benötigt, das nicht gefunden wurde: Lege den Qemu-Pfad in den Einstellungen fest oder importiere ein Image in einem dieser Formate: %@.";
 "EditVMViewControllerHardware.importDriveBackingRequiresQemuImg" = "„%@“ hängt von einer Basisdatei ab. Zum Importieren wird qemu-img benötigt, das nicht gefunden wurde: Lege den Qemu-Pfad in den Einstellungen fest.";
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "„%@“ ist ein ASIF-Image, das nur Apple-VMs verwenden können.";
+"EditVMViewControllerHardware.importDriveLinkedClone" = "„%@“ ist ein verknüpfter Klon eines Vorlagen-Laufwerks und kann nicht einzeln importiert werden. Wandle zuerst seine VM in einen vollständigen Klon um und importiere das Laufwerk dann erneut.";
 "EditVMViewControllerNetwork.createMappingButton" = "Neue Zuordnung erstellen...";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host-Mac-Port";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Name der Zuordnung";
