@@ -39,7 +39,7 @@ class ImportDriveViewController: NSViewController {
 
         var complete = false
         var error: String? = nil
-        DiskImageManagerFactory().create(forVM: virtualMachine).importDiskImage(from: sourcePath, details: details, into: virtualDrive, qemuPath: QemuUtils.getQemuPath(for: virtualMachine), progress: { percentage in
+        DiskImageConverter(qemuPath: QemuUtils.getQemuPath(for: virtualMachine)).convert(sourcePath, from: details.format, to: virtualDrive.path, format: virtualDrive.format, hasBackingFile: details.hasBackingFile, progress: { percentage in
             DispatchQueue.main.async {
                 self.updateProgress(percentage)
             }

@@ -35,6 +35,8 @@
 		3B25EBB730AB603A00028C39 /* CloudInitVolume.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */; };
 		3B25EBBA30AB767A00028C39 /* ImportDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */; };
 		3B25EBBB30AB767A00028C39 /* ImportDriveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */; };
+		3B25EBC030AC484A00028C39 /* DiskImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */; };
+		3B25EBC130AC484A00028C39 /* DiskImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
 		3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
@@ -291,6 +293,7 @@
 		3B25EBB230AB603900028C39 /* SHA512Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512Crypt.swift; sourceTree = "<group>"; };
 		3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudInitVolume.swift; sourceTree = "<group>"; };
 		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
+		3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */ = {isa = PBXFileReference; path = DiskImageConverter.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
@@ -669,6 +672,7 @@
 				3BAC69FD2A4AC89A00B6A027 /* VirtualizationFrameworkDiskImageManager.swift */,
 				3BF26884308A00B500A7DBC1 /* DiskImageManager.swift */,
 				3BF26887308A00C100A7DBC1 /* QemuDiskImageManager.swift */,
+				3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */,
 			);
 			path = DiskImage;
 			sourceTree = "<group>";
@@ -930,6 +934,7 @@
 				3BA0D1932C1C76CC0079AF20 /* StartVMViewController.swift in Sources */,
 				3BD657EE289BFF07002A52EA /* NewPortMappingViewController.swift in Sources */,
 				3B6A9E1425CBFDDC00123D6B /* ObjC.m in Sources */,
+				3B25EBC030AC484A00028C39 /* DiskImageConverter.swift in Sources */,
 				3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */,
 				3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */,
 				3B69E40B3094E5A50043D5CF /* EditVMViewControllerCloudInit.swift in Sources */,
@@ -1031,6 +1036,7 @@
 				3BFB2B2D3078F067005A4B51 /* StartVMViewController.swift in Sources */,
 				3BFB2B2E3078F067005A4B51 /* NewPortMappingViewController.swift in Sources */,
 				3BFB2B2F3078F067005A4B51 /* ObjC.m in Sources */,
+				3B25EBC130AC484A00028C39 /* DiskImageConverter.swift in Sources */,
 				3BFB2B303078F067005A4B51 /* ImportExportHerlper.swift in Sources */,
 				3BFB2B313078F067005A4B51 /* QemuRunner.swift in Sources */,
 				3B69E40C3094E5A50043D5CF /* EditVMViewControllerCloudInit.swift in Sources */,

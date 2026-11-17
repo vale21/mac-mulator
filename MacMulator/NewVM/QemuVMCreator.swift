@@ -122,12 +122,13 @@ class QemuVMCreator: VMCreator {
                         self.complete = true
                     })
                 } else {
-                    QemuDiskImageManager().convertVHDXToDiskImage(vhdxPath: installMedia, vmPath: vm.path, virtualDrive: virtualHDD, uponCompletion: {
-                        _, driveSize in
-                        virtualHDD.size = driveSize
-                        QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
-                        vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
-                        self.complete = true
+                    DiskImageConverter().convert(installMedia, from: QemuConstants.FORMAT_VHDX, to: virtualHDD.path, format: virtualHDD.format, uponCompletion: { _, _ in
+                        QemuDiskImageManager().getDiskImageInfo(virtualHDD, vm.path, uponCompletion: { _, info in
+                            virtualHDD.size = Utils.extractDriveSize(info) ?? -1
+                            QemuUtils.createAuxiliaryDriveFilesOnDisk(vm)
+                            vm.writeToPlist(vm.path + "/" + MacMulatorConstants.INFO_PLIST)
+                            self.complete = true
+                        })
                     })
                 }
             } else {

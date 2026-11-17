@@ -25,11 +25,7 @@ protocol DiskImageManager {
 
     func resizeDiskImage(_ virtualDrive: VirtualDrive, _ path: String, shrink: Bool, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void)
 
-    func convertDiskImage(_ virtualDrive: VirtualDrive, _ path: String, fromFormat oldFormat: String, progress: ((Double) -> Void)?, uponCompletion callback: @escaping (Int32, String?) -> Void)
-
     func getDiskImageInfo(_ virtualDrive: VirtualDrive, _ path: String, uponCompletion callback: @escaping (Int32, String) -> Void)
-
-    func importDiskImage(from sourcePath: String, details: DiskImageDetails, into virtualDrive: VirtualDrive, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void)
 }
 
 extension DiskImageManager {
@@ -48,7 +44,7 @@ extension DiskImageManager {
                 callback(-1, NSLocalizedString("DiskImageManager.convertLinkedFailed", comment: ""))
                 return
             }
-            convertDiskImage(newVirtualDrive, path, fromFormat: oldVirtualDrive.format, progress: progress, uponCompletion: { terminationCode, errorMessage in
+            DiskImageConverter().convert(newVirtualDrive, from: oldVirtualDrive.format, progress: progress, uponCompletion: { terminationCode, errorMessage in
                 guard terminationCode == 0 else {
                     callback(terminationCode, errorMessage)
                     return
@@ -94,29 +90,6 @@ extension DiskImageManager {
         })
     }
 
-    func copyOrConvertDiskImage(from sourcePath: String, details: DiskImageDetails, to destinationPath: String, targetFormat: String, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let finish: (Int32, String?) -> Void = { terminationCode, errorMessage in
-            if terminationCode != 0 {
-                try? FileManager.default.removeItem(atPath: destinationPath)
-            }
-            callback(terminationCode, errorMessage)
-        }
-
-        // An image layered on a backing file is only complete together with it: converting merges them
-        if details.format == targetFormat, !details.hasBackingFile {
-            DispatchQueue.global(qos: .userInitiated).async {
-                let result = self.copyDiskImage(from: sourcePath, to: destinationPath, progress: progress)
-                finish(result.0, result.1)
-            }
-        } else if Utils.isQemuImgSupported(atPath: qemuPath) {
-            convertDiskImage(from: sourcePath, to: destinationPath, targetFormat: targetFormat, qemuPath: qemuPath, progress: progress, uponCompletion: finish)
-        } else {
-            finish(-1, String(format: NSLocalizedString("DiskImageManager.conversionRequiresQemuImg", comment: ""), details.format, targetFormat))
-        }
-    }
-
-    /// Best effort, without qemu-img: recognizes the formats that need qemu-img by their header, so that they are not copied as RAW.
-    /// Anything else is RAW.
     private func detectDiskImageDetails(_ imagePath: String) -> DiskImageDetails {
         let handle = FileHandle(forReadingAtPath: imagePath)
         let header = [UInt8]((try? handle?.read(upToCount: 72)) ?? Data())
@@ -148,7 +121,6 @@ extension DiskImageManager {
         return DiskImageDetails(format: format, virtualSize: Int64(bigEndian(24)), hasBackingFile: bigEndian(8) != 0)
     }
 
-    /// An ASIF file is sparse: its virtual size is not the size of the file
     private func asifVirtualSize(_ imagePath: String, uponCompletion callback: @escaping (Int64?) -> Void) {
         // DiskImageKit also works in the App Store sandbox, where "diskutil image info" fails
         #if arch(arm64)
@@ -166,57 +138,5 @@ extension DiskImageManager {
 
     private func fileSize(_ imagePath: String) -> Int64 {
         (try? FileManager.default.attributesOfItem(atPath: imagePath)[.size] as? NSNumber)?.int64Value ?? 0
-    }
-
-    private func copyDiskImage(from sourcePath: String, to destinationPath: String, progress: (Double) -> Void) -> (Int32, String?) {
-        let chunkSize = 16 * 1024 * 1024
-        do {
-            guard let input = FileHandle(forReadingAtPath: sourcePath) else {
-                return (-1, String(format: NSLocalizedString("QemuDiskImageManager.cannotReadImage", comment: ""), sourcePath))
-            }
-            defer { try? input.close() }
-            let totalSize = try (FileManager.default.attributesOfItem(atPath: sourcePath)[.size] as? NSNumber)?.int64Value ?? 0
-            guard FileManager.default.createFile(atPath: destinationPath, contents: nil), let output = FileHandle(forWritingAtPath: destinationPath) else {
-                return (-1, String(format: NSLocalizedString("QemuDiskImageManager.cannotWriteImage", comment: ""), destinationPath))
-            }
-            defer { try? output.close() }
-
-            var copied: Int64 = 0
-            while let chunk = try input.read(upToCount: chunkSize), !chunk.isEmpty {
-                try output.write(contentsOf: chunk)
-                copied += Int64(chunk.count)
-                if totalSize > 0 {
-                    progress(Double(copied) * 100 / Double(totalSize))
-                }
-            }
-            return (0, nil)
-        } catch {
-            return (-1, error.localizedDescription)
-        }
-    }
-
-    private func convertDiskImage(from sourcePath: String, to destinationPath: String, targetFormat: String, qemuPath: String, progress: @escaping (Double) -> Void, uponCompletion callback: @escaping (Int32, String?) -> Void) {
-        let shell = Shell()
-        // -p prints the progress as "(12.34/100%)"
-        let progressRegex = try? NSRegularExpression(pattern: #"\((\d+(?:\.\d+)?)/100%\)"#)
-        shell.outputHandler = { output in
-            let range = NSRange(output.startIndex..., in: output)
-            if let match = progressRegex?.matches(in: output, range: range).last,
-               let valueRange = Range(match.range(at: 1), in: output), let value = Double(output[valueRange])
-            {
-                progress(value)
-            }
-        }
-
-        let command = QemuImgCommandBuilder(qemuPath: qemuPath)
-            .withCommand(QemuConstants.IMAGE_CMD_CONVERT + " -p")
-            .withTargetFormat(targetFormat)
-            .withName(sourcePath)
-            .withTargetName(Utils.escape(destinationPath))
-            .build()
-
-        shell.runCommand(command, (destinationPath as NSString).deletingLastPathComponent, uponCompletion: { terminationCode, errorMessage in
-            callback(terminationCode, terminationCode == 0 ? nil : (errorMessage ?? shell.readFromStandardError()))
-        })
     }
 }
