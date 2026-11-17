@@ -64,7 +64,7 @@ enum CloudInitVolume {
         yaml += "    shell: /bin/bash\n"
         yaml += "    sudo: \(quoted("ALL=(ALL) ALL"))\n"
         yaml += "    lock_passwd: false\n"
-        yaml += "    passwd: \(quoted(SHA512Crypt.hash(info.userPassword, salt: salt)))\n"
+        yaml += "    hashed_passwd: \(quoted(SHA512Crypt.hash(info.userPassword, salt: salt)))\n"
         if !info.sshKeys.isEmpty {
             yaml += "    ssh_authorized_keys:\n"
             yaml += info.sshKeys.map { "      - \(quoted($0))\n" }.joined()
