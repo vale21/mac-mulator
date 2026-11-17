@@ -87,6 +87,9 @@ enum CloudInitVolume {
         yaml += "    dhcp6: \(ip.ipv6Mode == .dhcp)\n"
         if ip.ipv6Mode == .slaac {
             yaml += "    accept-ra: true\n"
+        } else if ip.ipv6Mode == .disabled {
+            yaml += "    accept-ra: false\n"
+            yaml += "    link-local: []\n"
         }
 
         var addresses: [String] = []
