@@ -22,7 +22,7 @@ enum CloudInitVolume {
 
     @discardableResult
     static func update(for vm: VirtualMachine) throws -> String? {
-        let path = path(for: vm)
+        let path = Self.path(for: vm)
         guard Utils.isCloudInitSupported(vm), let info = vm.provisioningInformation else {
             if FileManager.default.fileExists(atPath: path) {
                 try FileManager.default.removeItem(atPath: path)
@@ -38,7 +38,7 @@ enum CloudInitVolume {
 
         let hostName = hostName(vm.displayName)
         let userData = userData(info)
-        let networkConfig = info.ipConfiguration.map { networkConfig($0, info, macAddress: vm.macAddress!) }
+        let networkConfig = info.ipConfiguration.map { self.networkConfig($0, info, macAddress: vm.macAddress!) }
 
         // cloud-init applies the configuration once per instance: the id changes, and the configuration
         // is applied again on the next boot, only when the configuration changes.
