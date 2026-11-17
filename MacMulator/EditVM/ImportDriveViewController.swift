@@ -7,7 +7,6 @@
 
 import Cocoa
 
-/// Copies (or converts) a disk image into the VM bundle, showing the progress and the estimated time remaining
 class ImportDriveViewController: NSViewController {
     @IBOutlet var importProgressLabel: NSTextField!
     @IBOutlet var progressBar: NSProgressIndicator!

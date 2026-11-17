@@ -13,7 +13,6 @@ enum CloudInitIPv4Mode: String, Codable {
 }
 
 enum CloudInitIPv6Mode: String, Codable {
-    // disabled: IPv6 is not configured
     case disabled, staticAddress, dhcp, slaac
 }
 
@@ -147,7 +146,6 @@ enum ProvisioningPasswordStore {
     }
 }
 
-/// A validation failure: the localization key of the message and an optional offending value
 struct CloudInitValidationError: Error {
     let messageKey: String
     let argument: CVarArg?

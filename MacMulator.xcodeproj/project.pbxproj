@@ -293,7 +293,7 @@
 		3B25EBB230AB603900028C39 /* SHA512Crypt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA512Crypt.swift; sourceTree = "<group>"; };
 		3B25EBB530AB603A00028C39 /* CloudInitVolume.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudInitVolume.swift; sourceTree = "<group>"; };
 		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
-		3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */ = {isa = PBXFileReference; path = DiskImageConverter.swift; sourceTree = "<group>"; };
+		3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskImageConverter.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
@@ -695,10 +695,10 @@
 				3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */,
 				3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */,
 				3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */,
+				3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */,
 				3BC5262C25E4F0F700A70699 /* NewDiskViewController.swift */,
 				3BFD6AA5289BD34400378325 /* NetworkMappingsTableCells.swift */,
 				3BD657ED289BFF07002A52EA /* NewPortMappingViewController.swift */,
-				3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */,
 			);
 			path = EditVM;
 			sourceTree = "<group>";

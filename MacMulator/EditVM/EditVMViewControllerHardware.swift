@@ -141,7 +141,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         })
     }
 
-    /// Imports an existing disk image (e.g. a cloud image) as a new drive of the VM, copying it into the VM bundle
     @IBAction func importDrive(_: Any) {
         guard let virtualMachine else { return }
         Utils.showFileSelector(fileTypes: Utils.IMPORT_DRIVE_TYPES, uponSelection: { panel in
@@ -158,7 +157,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                         return
                     }
                     if virtualMachine.type == MacMulatorConstants.APPLE_VM {
-                        // The Virtualization framework only reads RAW and ASIF drives: any other format becomes one of them
                         if details.format == QemuConstants.FORMAT_ASIF {
                             self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_ASIF)
                             return
@@ -175,7 +173,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                                               self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_ASIF : QemuConstants.FORMAT_RAW)
                                           })
                     } else if details.format == QemuConstants.FORMAT_RAW, !Utils.isQemuImgSupported(virtualMachine) {
-                        // Only qemu-img converts to qcow2
                         self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_RAW)
                     } else if details.format == QemuConstants.FORMAT_RAW {
                         self.askToConvert(message: String(format: NSLocalizedString("EditVMViewControllerHardware.importRawImage", comment: ""), fileName),
@@ -186,7 +183,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                                               self.startDriveImport(path, details, targetFormat: convert ? QemuConstants.FORMAT_QCOW2 : QemuConstants.FORMAT_RAW)
                                           })
                     } else {
-                        // qcow2 is copied as it is; any other format (vmdk, vdi, vhd...) is converted to qcow2
                         self.startDriveImport(path, details, targetFormat: QemuConstants.FORMAT_QCOW2)
                     }
                 }
