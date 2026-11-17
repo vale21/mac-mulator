@@ -42,6 +42,10 @@ class DiskImageConverter {
     }
 
     func convert(_ sourcePath: String, from sourceFormat: String, to destinationPath: String, format targetFormat: String, hasBackingFile: Bool = false, progress: ((Double) -> Void)? = nil, uponCompletion callback: @escaping (Int32, String?) -> Void) {
+        guard !FileManager.default.fileExists(atPath: destinationPath) else {
+            callback(-1, CocoaError(.fileWriteFileExists).localizedDescription)
+            return
+        }
         let finish: (Int32, String?) -> Void = { terminationCode, errorMessage in
             if terminationCode != 0 {
                 try? FileManager.default.removeItem(atPath: destinationPath)
