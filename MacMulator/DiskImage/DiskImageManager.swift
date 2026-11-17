@@ -107,7 +107,8 @@ extension DiskImageManager {
 
         // The format names are the ones of qemu-img
         let format: String = if header.starts(with: [0x51, 0x46, 0x49, 0xFB]) { // "QFI\xfb"
-            QemuConstants.FORMAT_QCOW2
+            // qcow (version 1) shares the magic with qcow2: Qemu opens it only as qcow, so it must be converted
+            header.count >= 8 && header[4 ..< 8].elementsEqual([0, 0, 0, 1]) ? QemuConstants.FORMAT_QCOW : QemuConstants.FORMAT_QCOW2
         } else if starts(with: "KDMV") || starts(with: "# Disk DescriptorFile") {
             "vmdk"
         } else if starts(with: "vhdxfile") {
@@ -120,8 +121,8 @@ extension DiskImageManager {
             QemuConstants.FORMAT_RAW
         }
 
-        // The virtual size and backing file of a qcow2 image are in its header (big endian)
-        guard format == QemuConstants.FORMAT_QCOW2, header.count >= 32 else {
+        // The virtual size and backing file of a qcow or qcow2 image are in its header (big endian), at the same offsets
+        guard format == QemuConstants.FORMAT_QCOW2 || format == QemuConstants.FORMAT_QCOW, header.count >= 32 else {
             return DiskImageDetails(format: format, virtualSize: fileSize(imagePath), hasBackingFile: false)
         }
         let bigEndian: (Int) -> UInt64 = { offset in header[offset ..< offset + 8].reduce(0) { $0 << 8 | UInt64($1) } }
