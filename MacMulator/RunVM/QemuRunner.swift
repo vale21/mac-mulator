@@ -481,13 +481,12 @@ class QemuRunner: VirtualMachineRunner {
         return false
     }
 
-    /// The configured network device, falling back to the subtype default when it is missing or is an Apple Virtualization attachment
     private func getNetworkDevice() -> String {
         let appleAttachments = [QemuConstants.ATTACHMENT_NAT, QemuConstants.ATTACHMENT_BRIDGED, QemuConstants.ATTACHMENT_VMNET]
         if let networkDevice = managedVm.networkDevice, !appleAttachments.contains(networkDevice) {
             return networkDevice
         }
-        return Utils.getQemuNetworkForSubType(managedVm.os, managedVm.subtype)
+        return Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, MacMulatorConstants.QEMU_VM)
     }
 
     private func sanitizeMachineTypeForPPC() -> String {

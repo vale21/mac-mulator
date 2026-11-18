@@ -100,8 +100,7 @@ class ConvertVMViewController: NSViewController {
                         if code == 0 {
                             QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
                             VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
-                            // Apple network attachments are not Qemu devices, and Qemu only supports user-mode networking.
-                            currentVm.networkDevice = Utils.getQemuNetworkForSubType(currentVm.os, currentVm.subtype)
+                            currentVm.networkDevice = Utils.getNetworkForSubType(currentVm.os, currentVm.subtype, MacMulatorConstants.QEMU_VM)
                             currentVm.physicalBridgeNetworkDevice = nil
                             currentVm.type = MacMulatorConstants.QEMU_VM
                             currentVm.writeToPlist()

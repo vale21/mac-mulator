@@ -128,7 +128,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     func updateView() {
         if let virtualMachine {
             networkAdapterComboBox.reloadData()
-            networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getQemuNetworkForSubType(virtualMachine.os, virtualMachine.subtype)) ?? -1)
+            networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, MacMulatorConstants.QEMU_VM)) ?? -1)
 
             mappingsTableView.reloadData()
         }
