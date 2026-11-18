@@ -46,6 +46,7 @@ class CreateVMFileViewController: NSViewController {
             let os = parentController.vmType.stringValue
             let subtype = parentController.vmSubType.stringValue
             let architecture = Utils.getArchitectureForSubType(os, subtype)
+            let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
             let path = Utils.computeVMPath(vmName: parentController.vmName.stringValue)
             let displayName = parentController.vmName.stringValue
             let description = computeDescription()
@@ -53,13 +54,13 @@ class CreateVMFileViewController: NSViewController {
             let cpus = Utils.getCpusForSubType(os, subtype)
             let displayResolution = QemuConstants.RES_1280_768
             let displayOrigin = QemuConstants.ORIGIN
-            let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
+            let networkDevice = Utils.getNetworkForSubType(os, subtype, vmType)
             let videoDevice = Utils.getVideoForSubType(os, subtype)
             let qemuDisplay = Utils.getDisplayForSubType(os, subtype)
             let enable3DAcceleration = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.virGLSupported ?? false
             let enableSpiceDisplay = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.spiceSupported ?? false
             let hvf = Utils.getAccelForSubType(os, subtype)
-            let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
+
             let bootMode = Utils.getBootModeForSubType(os, subtype)
 
             var macAddress: String? = nil

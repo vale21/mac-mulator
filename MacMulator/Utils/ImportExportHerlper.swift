@@ -34,6 +34,7 @@ class ImportExportHerlper {
         let os = QemuConstants.OS_MAC
         let subtype = QemuConstants.SUB_MAC_VENTURA
         let architecture = QemuConstants.ARCH_ARM64
+        let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         let path = Utils.computeVMPath(vmName: vmName)
         let displayName = vmName
         let description = "Automatically imported from Parallels VM"
@@ -41,13 +42,12 @@ class ImportExportHerlper {
         let cpus = Utils.getCpusForSubType(os, subtype)
         let displayResolution = QemuConstants.RES_1280_768
         let displayOrigin = QemuConstants.ORIGIN
-        let networkDevice = Utils.getNetworkForSubType(os, subtype, architecture)
+        let networkDevice = Utils.getNetworkForSubType(os, subtype, vmType)
         let videoDevice = Utils.getVideoForSubType(os, subtype)
         let qemuDisplay = Utils.getDisplayForSubType(os, subtype)
         let enable3DAcceleration = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.virGLSupported ?? false
         let enableSpiceDisplay = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath())?.spiceSupported ?? false
         let hvf = Utils.getAccelForSubType(os, subtype)
-        let vmType = VMCreatorFactory().getVMType(os: os, subtype: subtype, architecture: architecture)
         let bootMode = Utils.getBootModeForSubType(os, subtype)
 
         let vm = VirtualMachine(os: os, subtype: subtype, architecture: architecture, path: path, displayName: displayName, description: description, memory: Int32(memory), cpus: cpus, displayResolution: displayResolution, displayOrigin: displayOrigin, networkDevice: networkDevice, physicalBridgeNetworkDevice: nil, videoDevice: videoDevice, qemuDisplay: qemuDisplay, enable3DAcceleration: enable3DAcceleration, enableSpiceDisplay: enableSpiceDisplay, hvf: hvf, macAddress: VZMACAddress.randomLocallyAdministered().string, type: vmType, bootMode: bootMode)

@@ -266,7 +266,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     private func createBuilderForPPC() -> QemuCommandBuilder {
-        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        let networkDevice = getNetworkDevice()
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
@@ -285,7 +285,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     private func createBuilderForPPC64() -> QemuCommandBuilder {
-        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        let networkDevice = getNetworkDevice()
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withCpus(managedVm.cpus)
@@ -303,7 +303,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     private func createBuilderForI386() -> QemuCommandBuilder {
-        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        let networkDevice = getNetworkDevice()
 
         return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withBios(QemuConstants.PC_BIOS)
@@ -326,7 +326,7 @@ class QemuRunner: VirtualMachineRunner {
     private func createBuilderForX86_64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_X86_64 && !Utils.isRunningInEmulation()
         let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
-        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        let networkDevice = getNetworkDevice()
         var videoDevice = managedVm.videoDevice != nil ? managedVm.videoDevice! : Utils.getVideoForSubType(managedVm.os, managedVm.subtype)
         if managedVm.enable3DAcceleration ?? false {
             videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
@@ -418,7 +418,7 @@ class QemuRunner: VirtualMachineRunner {
     private func createBuilderForARM64() -> QemuCommandBuilder {
         let isNative = Utils.hostArchitecture() == QemuConstants.HOST_ARM64 && !Utils.isRunningInEmulation()
         let hvfConfigured = managedVm.hvf != nil ? managedVm.hvf! : Utils.getAccelForSubType(managedVm.os, managedVm.subtype)
-        let networkDevice = managedVm.networkDevice != nil ? managedVm.networkDevice! : Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, managedVm.architecture)
+        let networkDevice = getNetworkDevice()
         var videoDevice = managedVm.videoDevice != nil ? managedVm.videoDevice! : Utils.getVideoForSubType(managedVm.os, managedVm.subtype)
         if managedVm.enable3DAcceleration ?? false {
             videoDevice = Utils.convertDeviceToGLVariant(videoDevice)
@@ -479,6 +479,14 @@ class QemuRunner: VirtualMachineRunner {
             }
         }
         return false
+    }
+
+    private func getNetworkDevice() -> String {
+        let appleAttachments = [QemuConstants.ATTACHMENT_NAT, QemuConstants.ATTACHMENT_BRIDGED, QemuConstants.ATTACHMENT_VMNET]
+        if let networkDevice = managedVm.networkDevice, !appleAttachments.contains(networkDevice) {
+            return networkDevice
+        }
+        return Utils.getNetworkForSubType(managedVm.os, managedVm.subtype, MacMulatorConstants.QEMU_VM)
     }
 
     private func sanitizeMachineTypeForPPC() -> String {
