@@ -899,6 +899,14 @@ class Utils {
         return false
     }
 
+    static func isVmnetSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 26.0, *) {
+            vm.type == MacMulatorConstants.APPLE_VM || vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM
+        } else {
+            false
+        }
+    }
+
     static func isQemuImgSupported(_ vm: VirtualMachine) -> Bool {
         isQemuImgSupported(atPath: QemuUtils.getQemuPath(for: vm))
     }

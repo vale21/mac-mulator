@@ -7,6 +7,12 @@
 
 import Cocoa
 
+/// A view controller showing a VM port mappings table, that the port mapping sheet updates.
+protocol PortMappingsEditor: AnyObject {
+    func addPortmapping(_ portMapping: PortMapping)
+    func reloadPortMappings()
+}
+
 class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     enum Mode {
         case ADD
@@ -23,12 +29,12 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     @IBOutlet var hostMacPortField: NSTextField!
     @IBOutlet var hostMacPortStepper: NSStepper!
 
-    var parentController: EditVMViewControllerNetwork?
+    var parentController: PortMappingsEditor?
     var portMapping: PortMapping = .init(name: "", vmPort: Utils.random(digits: 4), hostPort: Utils.random(digits: 4))
     var origPortMapping: PortMapping?
     var mode: Mode = .ADD
 
-    func setParentController(_ parentController: EditVMViewControllerNetwork) {
+    func setParentController(_ parentController: PortMappingsEditor) {
         self.parentController = parentController
     }
 

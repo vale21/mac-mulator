@@ -467,6 +467,7 @@ class QemuConstants {
     static let APPLE_NETWORK_ATTACHMENTS_DESC: [String: String] = [
         ATTACHMENT_NAT: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeNAT", comment: ""),
         ATTACHMENT_BRIDGED: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeBridged", comment: ""),
+        ATTACHMENT_VMNET: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeVmnet", comment: ""),
     ]
 
     static let ALL_NETWORK_ADAPTERS = [

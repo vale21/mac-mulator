@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor {
     @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
     @IBOutlet var portMappingsLabel: NSTextField!
