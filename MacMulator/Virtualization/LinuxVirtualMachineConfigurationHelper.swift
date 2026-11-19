@@ -35,7 +35,7 @@ class LinuxVirtualMachineConfigurationHelper {
         return VZVirtioBlockDeviceConfiguration(attachment: attachment)
     }
 
-    static func createNetworkDeviceConfiguration(macAddress: String?, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
+    static func createNetworkDeviceConfiguration(vm: VirtualMachine, macAddress: String?, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
         var networkAttachment: VZNetworkDeviceAttachment = VZNATNetworkDeviceAttachment()
@@ -44,8 +44,8 @@ class LinuxVirtualMachineConfigurationHelper {
             let interface = interfaces.first { $0.identifier == phisicalDevice } ?? interfaces[0]
 
             networkAttachment = VZBridgedNetworkDeviceAttachment(interface: interface)
-        } else if device == QemuConstants.ATTACHMENT_VMNET {
-            // networkAttachment = VZVmnetNetworkDeviceAttachment()
+        } else if device == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let network = VmnetNetworkManager.shared.network(for: vm) {
+            networkAttachment = VZVmnetNetworkDeviceAttachment(network: network)
         }
 
         networkDevice.attachment = networkAttachment

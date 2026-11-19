@@ -479,3 +479,4 @@
 "VmnetNetwork.modeIsolated" = "Isolé";
 "VmnetNetwork.modeShared" = "Partagé";
 "VmnetNetwork.sharedName" = "Partagé";
+"VmnetNetworkManager.creationFailed" = "Impossible de créer le réseau vmnet %1$@ : %2$@ (%3$d).";

@@ -90,6 +90,15 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.writeToPlist()
         }
 
+        if managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *) {
+            do {
+                try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
+            } catch {
+                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                return
+            }
+        }
+
         if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
             #if arch(arm64)
 
@@ -580,6 +589,9 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
         stoppedVirtualMachine.delegate = nil
         vzVirtualMachine = nil
+        if #available(macOS 26.0, *) {
+            VmnetNetworkManager.shared.releaseNetwork(for: managedVm)
+        }
     }
 
     private func startOrResumeVM() {

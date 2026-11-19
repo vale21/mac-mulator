@@ -102,7 +102,7 @@ class VmnetNetwork: Codable {
         }
     }
 
-    private static func parseSubnet(_ cidr: String) -> (address: UInt32, prefixLength: UInt32)? {
+    static func parseSubnet(_ cidr: String) -> (address: UInt32, prefixLength: UInt32)? {
         guard CloudInitValidator.isValidCidr(cidr, ipv6: false) else {
             return nil
         }
@@ -117,7 +117,7 @@ class VmnetNetwork: Codable {
         return (UInt32(bigEndian: address.s_addr), prefixLength)
     }
 
-    private static func networkMask(_ prefixLength: UInt32) -> UInt32 {
+    static func networkMask(_ prefixLength: UInt32) -> UInt32 {
         prefixLength == 0 ? 0 : UInt32.max << (32 - prefixLength)
     }
 }

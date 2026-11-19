@@ -68,6 +68,7 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
 
         virtualMachineConfiguration.networkDevices = [
             LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                vm: vm,
                 macAddress: vm.macAddress,
                 device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
                 phisicalDevice: selectedBridgedInterfaceIdentifier

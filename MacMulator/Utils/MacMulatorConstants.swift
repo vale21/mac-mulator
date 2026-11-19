@@ -75,6 +75,8 @@ class MacMulatorConstants {
     static let VMNET_NEW_NETWORK_DEFAULT_SUBNET = "192.168.130.0/24"
     static let VMNET_ISOLATED_SUBNETS_RANGE = "192.168.192.0/18"
     static let VMNET_SUBNET_PREFIX_LENGTHS: ClosedRange<UInt32> = 8 ... 30
+    static let VMNET_ISOLATED_SUBNET_PREFIX_LENGTH: UInt32 = 24
+    static let VMNET_FIRST_RESERVED_HOST: UInt32 = 10
 
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
