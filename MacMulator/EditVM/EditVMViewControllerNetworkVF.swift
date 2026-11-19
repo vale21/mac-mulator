@@ -181,7 +181,6 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         mappingsTableView.reloadData()
     }
 
-    /// Called by the Manage Networks sheet when the user adds, edits or removes a network.
     func vmnetNetworksChanged() {
         updateSecondaryBoxAndDescription(attachment: selectedAttachment())
     }
@@ -195,9 +194,8 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         }
     }
 
-    /// Read from the VM rather than from the combo box: the combo boxes query their data source while
-    /// the storyboard is loading, before all the outlets are connected.
     private func selectedAttachment() -> String {
+        // Read from the VM, not the combo box: the combo boxes query their data source while the storyboard is still connecting outlets
         if let networkDevice = virtualMachine?.networkDevice, attachments.contains(networkDevice) {
             return networkDevice
         }
@@ -225,7 +223,6 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
                 vmnetNetworks = VmnetNetwork.allNetworks()
                 phisicalDeviceComboBox.reloadData()
 
-                // Networks deleted from the Manage Networks sheet fall back to the built-in shared network.
                 if VmnetNetwork.network(withId: virtualMachine.vmnetNetworkId) == nil {
                     virtualMachine.vmnetNetworkId = VmnetNetwork.SHARED_ID
                 }

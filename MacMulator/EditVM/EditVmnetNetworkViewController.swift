@@ -105,7 +105,7 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
             titleField.stringValue = NSLocalizedString("EditVmnetNetworkViewController.createNetwork", comment: "")
             nameField.stringValue = ""
             modeComboBox.selectItem(at: 0)
-            subnetField.stringValue = "192.168.130.0/24"
+            subnetField.stringValue = MacMulatorConstants.VMNET_NEW_NETWORK_DEFAULT_SUBNET
             dhcpCheckbox.state = .on
             natCheckbox.state = .on
         } else if let network {
@@ -119,7 +119,6 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
         updateNatCheckbox()
     }
 
-    /// NAT only makes sense on shared networks: host-only networks never reach outside the host Mac.
     private func updateNatCheckbox() {
         let isShared = EditVmnetNetworkViewController.MODES[max(modeComboBox.indexOfSelectedItem, 0)] == .shared
         natCheckbox.isEnabled = isShared

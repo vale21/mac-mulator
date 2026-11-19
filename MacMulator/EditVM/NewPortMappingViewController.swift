@@ -7,7 +7,6 @@
 
 import Cocoa
 
-/// A view controller showing a VM port mappings table, that the port mapping sheet updates.
 protocol PortMappingsEditor: AnyObject {
     func addPortmapping(_ portMapping: PortMapping)
     func reloadPortMappings()

@@ -70,6 +70,12 @@ class MacMulatorConstants {
 
     static let APP_STATE_FILE = ".macmulator.plist"
 
+    static let VMNET_SHARED_SUBNET = "192.168.129.0/24"
+    static let VMNET_HOST_ONLY_SUBNET = "192.168.128.0/24"
+    static let VMNET_NEW_NETWORK_DEFAULT_SUBNET = "192.168.130.0/24"
+    static let VMNET_ISOLATED_SUBNETS_RANGE = "192.168.192.0/18"
+    static let VMNET_SUBNET_PREFIX_LENGTHS: ClosedRange<UInt32> = 8 ... 30
+
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"
     static let QEMU_TEMPLATE_VM = "qemu-tpl"

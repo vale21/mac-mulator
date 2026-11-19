@@ -92,7 +92,6 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
 
         let network = networks[row]
         if let buttonsCell = cell as? VmnetNetworksButtonsCell {
-            // Built-in networks cannot be modified
             buttonsCell.editButton.isEnabled = !network.isBuiltIn
             buttonsCell.deleteButton.isEnabled = !network.isBuiltIn
             return buttonsCell
@@ -112,7 +111,6 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         default:
             break
         }
-        // Built-in networks cannot be modified: show them dimmed.
         cell.textField?.textColor = network.isBuiltIn ? .secondaryLabelColor : .labelColor
         return cell
     }
@@ -121,7 +119,6 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         networks.contains { $0 !== network && $0.name.caseInsensitiveCompare(name) == .orderedSame }
     }
 
-    /// The first network, other than the given one, whose address range overlaps the subnet
     func overlappingNetwork(with subnet: String, excluding network: VmnetNetwork?) -> VmnetNetwork? {
         networks.first { $0 !== network && VmnetNetwork.subnetsOverlap(subnet, $0.addressRange) }
     }
@@ -136,14 +133,14 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         networksChanged()
     }
 
+    @objc private func tableViewDoubleClicked(_: Any) {
+        edit(row: networksTableView.clickedRow)
+    }
+
     private func networksChanged() {
         VmnetNetwork.saveUserNetworks(networks)
         networksTableView.reloadData()
         parentController?.vmnetNetworksChanged()
-    }
-
-    @objc private func tableViewDoubleClicked(_: Any) {
-        edit(row: networksTableView.clickedRow)
     }
 
     private func edit(row: Int) {
