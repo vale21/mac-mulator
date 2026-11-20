@@ -166,6 +166,7 @@ class QemuConstants {
     static let SUB_PROXMOX = "Proxmox VE"
     static let SUB_NOBARA = "Nobara Linux"
     static let SUB_BAZZITE = "Bazzite"
+    static let SUB_PEAR_OS = "Pear OS"
 
     static let SUB_IOS_GENERIC = NSLocalizedString("QemuConstants.ios", comment: "")
     static let SUB_IOS_1 = "iOS 1.x"
@@ -252,6 +253,7 @@ class QemuConstants {
     static let ICON_PROXMOX = "proxmox"
     static let ICON_NOBARA = "nobara"
     static let ICON_BAZZITE = "bazzite"
+    static let ICON_PEAR_OS = "pear.os"
 
     static let ICON_IOS = "ios"
 
@@ -348,6 +350,7 @@ class QemuConstants {
     static let URL_PROXMOX = "https://www.proxmox.com/en/downloads/"
     static let URL_NOBARA = "https://nobaraproject.org/download-nobara/"
     static let URL_BAZZITE = "https://bazzite.gg/#image-picker"
+    static let URL_PEAR_OS = "https://pearos.xyz/#choose-build"
     static let URL_RASPBERRY_OS = "https://www.raspberrypi.com/software/operating-systems/"
     static let URL_QEMU_IOS = "https://github.com/devos50/qemu-ios/releases/"
 
@@ -689,6 +692,7 @@ class QemuConstants {
         [OS_LINUX, SUB_NOBARA, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_NOBARA, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_NOBARA, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
         [OS_LINUX, SUB_OMARCHY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_OMARCHY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_OMARCHY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
         [OS_LINUX, SUB_OPENSUSE, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_OPENSUSE, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_OPENSUSE, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
+        [OS_LINUX, SUB_PEAR_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PEAR_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PEAR_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
         [OS_LINUX, SUB_POP_OS, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_POP_OS, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_POP_OS, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
         [OS_LINUX, SUB_PROXMOX, Utils.getPreferredArchitecture(), 2, 128, 32768, 1024, 30, 8192, 120, ICON_PROXMOX, Utils.getPreferredMachineType(), nil, true, nil, nil, URL_PROXMOX, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
         [OS_LINUX, SUB_PUPPY, ARCH_X64, 2, 128, 32768, 1024, 30, 8192, 120, ICON_PUPPY, MACHINE_TYPE_Q35, nil, true, nil, nil, URL_PUPPY, MEDIATYPE_DISK, false, VGA_VIRTIO_GPU, BOOT_UEFI, nil],
