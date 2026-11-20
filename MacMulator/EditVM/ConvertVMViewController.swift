@@ -100,6 +100,8 @@ class ConvertVMViewController: NSViewController {
                         if code == 0 {
                             QemuUtils.createAuxiliaryDriveFilesOnDisk(currentVm)
                             VirtualizationFrameworkLinuxSupport.deleteLinuxVirtualMachineData(vm: currentVm)
+                            currentVm.networkDevice = Utils.getNetworkForSubType(currentVm.os, currentVm.subtype, MacMulatorConstants.QEMU_VM)
+                            currentVm.physicalBridgeNetworkDevice = nil
                             currentVm.type = MacMulatorConstants.QEMU_VM
                             currentVm.writeToPlist()
                             complete = true
