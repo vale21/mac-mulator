@@ -365,6 +365,7 @@
 "Utils.unexistingDrive" = "Drive %@ was not found. Do you want to remove it?";
 "Utils.virtualizationNotSupported" = "The VM cannot be started because Apple Virtualization Framework is not supported with this VM.";
 "Utils.workingPathError" = "Incorrect Qemu command provided: The provided executable does not run in the correct path. \n\nExpected path is: \"%@\".\n\nProvided command was: %@";
+"VirtualMachine.rdpPortMapping" = "RDP port mapping";
 "VirtualMachineViewController.guestIPAddressNotFound" = "Could not find the IP address of the VM. It might still be starting up, or its network might not be up yet. Try again in a few seconds. To connect with SSH, Remote Login (macOS) or an SSH server (Linux) must be enabled in the VM.";
 "VirtualMachineViewController.noSshPortMapping" = "The VM has no port mapping for the SSH port (22). Add one in the Network settings of the VM to connect with SSH.";
 "VirtualMachineViewController.serialConsoleNotAvailable" = "The serial console of the VM is not available. Restart the VM to enable it.";

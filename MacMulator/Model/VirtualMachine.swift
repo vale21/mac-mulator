@@ -83,7 +83,7 @@ class VirtualMachine: Codable, Hashable {
         self.enableSpiceDisplay = enableSpiceDisplay
         self.hvf = hvf
         drives = []
-        portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        portMappings = VirtualMachine.defaultPortMappings(os: os)
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
@@ -147,7 +147,7 @@ class VirtualMachine: Codable, Hashable {
                 vm.writeToPlist()
             }
             if vm.portMappings == nil {
-                vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+                vm.portMappings = defaultPortMappings(os: vm.os)
             }
             return vm
         } catch {
@@ -223,6 +223,18 @@ class VirtualMachine: Codable, Hashable {
     private func writeDriveMetadata() {
         for drive in drives where (drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME) && drive.path.hasPrefix(path + "/") {
             drive.writeMetadataToImage()
+        }
+    }
+
+    private static func defaultPortMappings(os: String) -> [PortMapping] {
+        switch os {
+        case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
+            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        case QemuConstants.OS_WIN:
+            // A random leading digit keeps the host port below 65535
+            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: Int32.random(in: 1 ... 6) * 10000 + 3389)]
+        default:
+            []
         }
     }
 }

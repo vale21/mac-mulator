@@ -365,6 +365,7 @@
 "Utils.unexistingDrive" = "Il disco %@ non è stato trovato. Lo vuoi rimuovere?";
 "Utils.virtualizationNotSupported" = "La VM non può essere avviata perché Apple Virtualization Framework non è supportato su questa VM.";
 "Utils.workingPathError" = "Il comando Qemu fornito è errato: L'eseguibile fornito non punta alla directory corretta. \n\nLa directoiry attesa è: \"%@\".\n\nIl comando fornito è: %@";
+"VirtualMachine.rdpPortMapping" = "Mappatura RDP";
 "VirtualMachineViewController.guestIPAddressNotFound" = "Impossibile trovare l'indirizzo IP della VM. Potrebbe essere ancora in avvio, o la sua rete potrebbe non essere ancora attiva. Riprova tra qualche secondo. Per collegarti con SSH, nella VM deve essere attivo Login remoto (macOS) o un server SSH (Linux).";
 "VirtualMachineViewController.noSshPortMapping" = "La VM non ha una mappatura per la porta SSH (22). Aggiungine una nelle impostazioni di rete della VM per collegarti con SSH.";
 "VirtualMachineViewController.serialConsoleNotAvailable" = "La console seriale della VM non è disponibile. Riavvia la VM per abilitarla.";
