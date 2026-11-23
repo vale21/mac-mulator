@@ -229,10 +229,9 @@ class VirtualMachine: Codable, Hashable {
     private static func defaultPortMappings(os: String) -> [PortMapping] {
         switch os {
         case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
-            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223))]
         case QemuConstants.OS_WIN:
-            // A random leading digit keeps the host port below 65535
-            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: Int32.random(in: 1 ... 6) * 10000 + 3389)]
+            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: Utils.freeHostPort(preferred: (1 ... 6).map { Int32($0) * 10000 + 3389 }, fallbackStart: 3390))]
         default:
             []
         }

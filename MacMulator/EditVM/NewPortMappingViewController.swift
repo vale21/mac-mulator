@@ -8,6 +8,7 @@
 import Cocoa
 
 protocol PortMappingsEditor: AnyObject {
+    var virtualMachine: VirtualMachine? { get }
     func addPortmapping(_ portMapping: PortMapping)
     func reloadPortMappings()
 }
@@ -61,16 +62,15 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
 
     @IBAction func okButtonPressed(_: Any) {
-        if mode == Mode.ADD {
-            parentController?.addPortmapping(portMapping)
-        } else {
-            origPortMapping?.name = portMapping.name
-            origPortMapping?.vmPort = portMapping.vmPort
-            origPortMapping?.hostPort = portMapping.hostPort
-
-            parentController?.reloadPortMappings()
+        if portMapping.hostPort != origPortMapping?.hostPort, let message = hostPortConflictMessage(portMapping.hostPort) {
+            Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.savePortMapping()
+                }
+            }, virtualMachine: parentController?.virtualMachine)
+            return
         }
-        dismiss(self)
+        savePortMapping()
     }
 
     @IBAction func cancelButtonPressed(_: Any) {
@@ -115,5 +115,37 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         } else {
             titleField.stringValue = String(format: NSLocalizedString("NewPortMappingViewController.editMapping", comment: ""), portMapping.name)
         }
+    }
+
+    private func savePortMapping() {
+        if mode == Mode.ADD {
+            parentController?.addPortmapping(portMapping)
+        } else {
+            origPortMapping?.name = portMapping.name
+            origPortMapping?.vmPort = portMapping.vmPort
+            origPortMapping?.hostPort = portMapping.hostPort
+
+            parentController?.reloadPortMappings()
+        }
+        dismiss(self)
+    }
+
+    private func hostPortConflictMessage(_ hostPort: Int32) -> String? {
+        // The VM being edited comes first: the workspace list may hold another copy of it, with the old mappings
+        let currentVM = parentController?.virtualMachine
+        let virtualMachines = (currentVM.map { [$0] } ?? []) + Utils.workspaceVirtualMachines().filter { $0.id != currentVM?.id }
+
+        for virtualMachine in virtualMachines {
+            if let mapping = virtualMachine.portMappings?.first(where: { $0 !== origPortMapping && $0.hostPort == hostPort }) {
+                if virtualMachine === currentVM {
+                    return String(format: NSLocalizedString("NewPortMappingViewController.hostPortUsedBySameVM", comment: ""), Int(hostPort), mapping.name)
+                }
+                return String(format: NSLocalizedString("NewPortMappingViewController.hostPortUsedByVM", comment: ""), Int(hostPort), mapping.name, virtualMachine.displayName)
+            }
+        }
+        if Utils.isHostPortInUse(hostPort) {
+            return String(format: NSLocalizedString("NewPortMappingViewController.hostPortInUse", comment: ""), Int(hostPort))
+        }
+        return nil
     }
 }

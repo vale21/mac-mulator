@@ -138,7 +138,7 @@ class VmnetNetworkManager {
     private func addPortForwarding(to configuration: vmnet_network_configuration_ref, network: VmnetNetwork, subnetAddress: UInt32, prefixLength: UInt32) throws {
         // Rules cannot be changed while the network is active, so they are set up at creation for every
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
-        let attachedVMs = workspaceVMs()
+        let attachedVMs = Utils.workspaceVirtualMachines()
             .filter { $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && ($0.vmnetNetworkId ?? VmnetNetwork.SHARED_ID) == network.id && $0.macAddress != nil }
             .sorted { $0.id < $1.id }
 
@@ -156,10 +156,6 @@ class VmnetNetworkManager {
                 try check(vmnet_network_configuration_add_port_forwarding_rule(configuration, UInt8(IPPROTO_TCP), sa_family_t(AF_INET), UInt16(truncatingIfNeeded: mapping.vmPort), UInt16(truncatingIfNeeded: mapping.hostPort), &reservedAddress), network)
             }
         }
-    }
-
-    private func workspaceVMs() -> [VirtualMachine] {
-        (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
     }
 
     private func check(_ status: vmnet_return_t, _ network: VmnetNetwork) throws {

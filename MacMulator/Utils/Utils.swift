@@ -1044,6 +1044,37 @@ class Utils {
         #endif
     }
 
+    static func workspaceVirtualMachines() -> [VirtualMachine] {
+        (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
+    }
+
+    static func freeHostPort(preferred: [Int32], fallbackStart: Int32) -> Int32 {
+        let mappedPorts = Set(workspaceVirtualMachines().flatMap { $0.portMappings ?? [] }.map(\.hostPort))
+        let isFree = { (port: Int32) in !mappedPorts.contains(port) && !isHostPortInUse(port) }
+
+        if let port = preferred.first(where: isFree) {
+            return port
+        }
+        return (fallbackStart ... 65535).first(where: isFree) ?? preferred.first ?? fallbackStart
+    }
+
+    static func isHostPortInUse(_ port: Int32) -> Bool {
+        let socketDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+        guard socketDescriptor >= 0 else { return false }
+        defer { close(socketDescriptor) }
+
+        var address = sockaddr_in()
+        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_port = in_port_t(UInt16(truncatingIfNeeded: port)).bigEndian
+        address.sin_addr.s_addr = INADDR_ANY
+        let result = withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { bind(socketDescriptor, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) }
+        }
+        // Only a port already bound counts: other failures (e.g. the sandbox) don't tell whether it's free
+        return result != 0 && errno == EADDRINUSE
+    }
+
     static func random(digits: Int32) -> Int32 {
         var number = String()
         for _ in 1 ... digits {

@@ -245,6 +245,9 @@
 "NewPortMappingViewController.createMapping" = "Crea nuova mappatura porte";
 "NewPortMappingViewController.editMapping" = "Modifica mappatura %@";
 "NewPortMappingViewController.hostMacPortLabel" = "Porta corrispondente sul Mac:";
+"NewPortMappingViewController.hostPortInUse" = "La porta host %d è già in uso da un'altra applicazione su questo Mac, quindi la mappatura non funzionerà finché resta occupata. Vuoi usarla comunque?";
+"NewPortMappingViewController.hostPortUsedBySameVM" = "La porta host %1$d è già usata dalla mappatura \"%2$@\" di questa VM. Vuoi usarla comunque?";
+"NewPortMappingViewController.hostPortUsedByVM" = "La porta host %1$d è già usata dalla mappatura \"%2$@\" della VM %3$@. VM con la stessa porta host non possono essere eseguite contemporaneamente. Vuoi usarla comunque?";
 "NewPortMappingViewController.nameLabel" = "Nome mappatura:";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Porta sulla macchine virtuale:";
 "NewVMController.createButton" = "Crea";

@@ -245,6 +245,9 @@
 "NewPortMappingViewController.createMapping" = "Create new port mapping";
 "NewPortMappingViewController.editMapping" = "Edit port mapping %@";
 "NewPortMappingViewController.hostMacPortLabel" = "Corresponding port on host Mac:";
+"NewPortMappingViewController.hostPortInUse" = "Host port %d is already in use by another application on this Mac, so the mapping will not work while it is. Do you want to use it anyway?";
+"NewPortMappingViewController.hostPortUsedBySameVM" = "Host port %1$d is already used by the mapping \"%2$@\" of this VM. Do you want to use it anyway?";
+"NewPortMappingViewController.hostPortUsedByVM" = "Host port %1$d is already used by the mapping \"%2$@\" of the VM %3$@. VMs with the same host port cannot run at the same time. Do you want to use it anyway?";
 "NewPortMappingViewController.nameLabel" = "Mapping name:";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Port on Virtual Machine:";
 "NewVMController.createButton" = "Create";

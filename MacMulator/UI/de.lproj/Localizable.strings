@@ -245,6 +245,9 @@
 "NewPortMappingViewController.createMapping" = "Neue Port-Zuordnung erstellen";
 "NewPortMappingViewController.editMapping" = "Port-Zuordnung %@ bearbeiten";
 "NewPortMappingViewController.hostMacPortLabel" = "Entsprechender Port auf dem Host-Mac:";
+"NewPortMappingViewController.hostPortInUse" = "Der Host-Port %d wird bereits von einer anderen App auf diesem Mac verwendet, daher funktioniert die Zuordnung nicht, solange er belegt ist. Trotzdem verwenden?";
+"NewPortMappingViewController.hostPortUsedBySameVM" = "Der Host-Port %1$d wird bereits von der Zuordnung „%2$@“ dieser VM verwendet. Trotzdem verwenden?";
+"NewPortMappingViewController.hostPortUsedByVM" = "Der Host-Port %1$d wird bereits von der Zuordnung „%2$@“ der VM %3$@ verwendet. VMs mit demselben Host-Port können nicht gleichzeitig laufen. Trotzdem verwenden?";
 "NewPortMappingViewController.nameLabel" = "Name der Zuordnung:";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Port in der VM:";
 "NewVMController.createButton" = "Erstellen";

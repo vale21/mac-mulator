@@ -245,6 +245,9 @@
 "NewPortMappingViewController.createMapping" = "Créer une nouvelle redirection de port";
 "NewPortMappingViewController.editMapping" = "Modifier la redirection de port %@";
 "NewPortMappingViewController.hostMacPortLabel" = "Port sur le Mac hôte :";
+"NewPortMappingViewController.hostPortInUse" = "Le port hôte %d est déjà utilisé par une autre application sur ce Mac : la redirection ne fonctionnera pas tant qu'il le sera. Voulez-vous l'utiliser quand même ?";
+"NewPortMappingViewController.hostPortUsedBySameVM" = "Le port hôte %1$d est déjà utilisé par la redirection « %2$@ » de cette VM. Voulez-vous l'utiliser quand même ?";
+"NewPortMappingViewController.hostPortUsedByVM" = "Le port hôte %1$d est déjà utilisé par la redirection « %2$@ » de la VM %3$@. Des VM utilisant le même port hôte ne peuvent pas fonctionner en même temps. Voulez-vous l'utiliser quand même ?";
 "NewPortMappingViewController.nameLabel" = "Nom de la redirection :";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Port sur la machine virtuelle :";
 "NewVMController.createButton" = "Créer";
