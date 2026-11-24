@@ -58,34 +58,32 @@ class QemuRunner: VirtualMachineRunner {
             Utils.removeUnexistingDrives(managedVm)
             Utils.sortDrives(managedVm)
 
-            if managedVm.os != QemuConstants.OS_IOS { // iOS has no drives, but uses the NAND
-                for drive in managedVm.drives {
-                    var driveIndex = 0
-                    if !drive.isBootDrive {
-                        driveIndex = index
-                        index += 1
-                    }
+            for drive in managedVm.drives {
+                var driveIndex = 0
+                if !drive.isBootDrive {
+                    driveIndex = index
+                    index += 1
+                }
 
-                    if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
-                        builder = builder.withEfi(file: drive.path)
-                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE {
-                        builder = builder.withEfiSecure(file: drive.path)
-                    } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
-                        builder = builder.withEfiVars(file: drive.path, global: false)
-                    } else {
-                        let mediaType = setupMediaType(managedVm.subtype, drive)
-                        let path = setupPath(drive, managedVm)
+                if drive.mediaType == QemuConstants.MEDIATYPE_EFI {
+                    builder = builder.withEfi(file: drive.path)
+                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE {
+                    builder = builder.withEfiSecure(file: drive.path)
+                } else if drive.mediaType == QemuConstants.MEDIATYPE_EFI_VARS || drive.mediaType == QemuConstants.MEDIATYPE_EFI_SECURE_VARS {
+                    builder = builder.withEfiVars(file: drive.path, global: false)
+                } else {
+                    let mediaType = setupMediaType(managedVm.subtype, drive)
+                    let path = setupPath(drive, managedVm)
 
-                        builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType)
-                    }
+                    builder = builder.withDrive(file: path, format: drive.format, index: driveIndex, media: mediaType)
                 }
-                if Utils.isCloudInitSupported(managedVm), managedVm.provisioningInformation != nil {
-                    builder = builder.withCloudInitVolume(CloudInitVolume.path(for: managedVm))
-                }
-                if livePreviewEnabled {
-                    builder = builder.withQmpString(true)
-                    builder = builder.withManagementPort(listenPort)
-                }
+            }
+            if Utils.isCloudInitSupported(managedVm), managedVm.provisioningInformation != nil {
+                builder = builder.withCloudInitVolume(CloudInitVolume.path(for: managedVm))
+            }
+            if livePreviewEnabled {
+                builder = builder.withQmpString(true)
+                builder = builder.withManagementPort(listenPort)
             }
             if managedVm.os == QemuConstants.OS_LINUX {
                 // Expose the serial console on a socket, so that a Terminal session can be opened on it
@@ -387,11 +385,7 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     private func createBuilderForARM() -> QemuCommandBuilder {
-        if managedVm.os == QemuConstants.OS_IOS {
-            return createBuilderForIOSGuests()
-        }
-
-        return QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
+        QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
             .withSerial(QemuConstants.SERIAL_STDIO)
             .withCpus(managedVm.cpus)
             .withBootArg(computeBootArg(managedVm))
@@ -401,18 +395,6 @@ class QemuRunner: VirtualMachineRunner {
             .withMachine(QemuConstants.MACHINE_TYPE_VERSATILEPB, [])
             .withCpu(sanitizeCPUTypeForARM())
             .withMemory(managedVm.memory)
-    }
-
-    private func createBuilderForIOSGuests() -> QemuCommandBuilder {
-        QemuCommandBuilder(qemuPath: QemuUtils.getQemuPath(for: managedVm), architecture: managedVm.architecture)
-            .withSerial(QemuConstants.SERIAL_MON_STDIO)
-            .withDisplay(nativeDisplayDisabled ? QemuConstants.DISPLAY_NONE : nil)
-            .withEnableSpice(spiceServerEnabled, basePath: managedVm.path)
-            .withMachine(QemuConstants.MACHINE_TYPE_IPOD_TOUCH, ["bootrom=" + Utils.escape(managedVm.drives[1].path), "nand=" + Utils.escape(managedVm.drives[0].path), "nor=" + Utils.escape(managedVm.drives[2].path)])
-            .withCpu(sanitizeCPUTypeForARM())
-            .withMemory(managedVm.memory)
-            .withRtcEnabled(false)
-            .withLogging(QemuConstants.LOG_UNIMPLEMENTED)
     }
 
     private func createBuilderForARM64() -> QemuCommandBuilder {

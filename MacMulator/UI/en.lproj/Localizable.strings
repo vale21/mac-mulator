@@ -113,7 +113,6 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Are you sure you want to remove Virtual Drive \"%@\"? This operation is not reversible.";
 "EditVMViewControllerHardware.cpusLabel" = "CPUs";
 "EditVMViewControllerHardware.createNewDiskButton" = "Create new drive...";
-"EditVMViewControllerHardware.selectNandButton" = "Select NAND...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Name";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "File location";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Size";
@@ -136,9 +135,7 @@
 "EditVMViewControllerHardware.openImageTooltip" = "Attach an existing image to this VM, e.g. an installation ISO. The image is used where it is, without copying it.";
 "EditVMViewControllerHardware.createNewDiskTooltip" = "Create a new empty disk for this VM.";
 "EditVMViewControllerHardware.importDriveTooltip" = "Copy an existing disk image into this VM as a new disk, e.g. a cloud image. Images in a format the VM cannot use are converted.";
-"EditVMViewControllerHardware.selectNandTooltip" = "Select the NAND folder of this iPod touch VM.";
 "EditVMViewControllerHardware.drivesTemplateTooltip" = "This VM is a template, and its disks cannot be changed. Create a VM from it to change them.";
-"EditVMViewControllerHardware.drivesIOSTooltip" = "This iPod touch VM uses its NAND, and cannot use disk images.";
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "This VM is based on Apple Virtualization Framework, and can use only one disk. Delete the current disk to add another one.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "An installation image is already attached to this VM. Remove it to attach another image.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "This macOS VM cannot use an imported disk: macOS can only be installed on a disk created by MacMulator.";
@@ -269,7 +266,6 @@
 "QemuConstants.efi" = "EFI Firmware";
 "QemuConstants.generic" = "Generic VM";
 "QemuConstants.hd" = "Hard Drive";
-"QemuConstants.ios" = "Generic iOS";
 "QemuConstants.ipsw" = "IPSW Install Image";
 "QemuConstants.linux" = "Generic Linux";
 "QemuConstants.m68k" = "Generic Motorola 68k VM";

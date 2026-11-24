@@ -54,9 +54,6 @@
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B4D181E2FD6F94200C75764 /* EditVMViewControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
-		3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3B57857E26652D440003C3C8 /* libintl.8.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
@@ -71,8 +68,6 @@
 		3B7365F729337C34004ACBE5 /* ImportExportHerlper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */; };
 		3B73E41625CAE040004BAA92 /* QemuRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B73E41525CAE040004BAA92 /* QemuRunner.swift */; };
 		3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B75C7EC29DF06C4007C3781 /* Localizable.strings */; };
-		3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */; };
-		3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */ = {isa = PBXBuildFile; fileRef = 3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */; };
 		3B7C1BF925D697D100DF30E2 /* EditVMViewControllerHardware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */; };
 		3B7C1BFE25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */; };
 		3B7E34283098CF4000F67411 /* QemuSerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */; };
@@ -245,30 +240,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		3B57855C266527400003C3C8 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Libs;
-			dstSubfolderSpec = 7;
-			files = (
-				3B57855D266527580003C3C8 /* libglib-2.0.0.dylib in CopyFiles */,
-				3B57857D26652D060003C3C8 /* libpcre.1.dylib in CopyFiles */,
-				3B57858026652D4B0003C3C8 /* libintl.8.dylib in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3B57855E2665275C0003C3C8 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		3B0327B82E52264E00AB6F84 /* EditVMViewControllerNetworkVF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetworkVF.swift; sourceTree = "<group>"; };
 		3B03B07A284A420F002D465F /* EditVMViewControllerNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerNetwork.swift; sourceTree = "<group>"; };
@@ -311,9 +282,6 @@
 		3B3FC24A308CF02100BE0317 /* ProvisioningInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProvisioningInformation.swift; sourceTree = "<group>"; };
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerSnapshots.swift; sourceTree = "<group>"; };
-		3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libglib-2.0.0.dylib"; sourceTree = "<group>"; };
-		3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
-		3B57857E26652D440003C3C8 /* libintl.8.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libintl.8.dylib; sourceTree = "<group>"; };
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
 		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
@@ -330,8 +298,6 @@
 		3B7365F629337C34004ACBE5 /* ImportExportHerlper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportExportHerlper.swift; sourceTree = "<group>"; };
 		3B73E41525CAE040004BAA92 /* QemuRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuRunner.swift; sourceTree = "<group>"; };
 		3B75C7EB29DF06C4007C3781 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = nor_n72ap.bin; sourceTree = "<group>"; };
-		3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = bootrom_240_4; sourceTree = "<group>"; };
 		3B7C1BF825D697D100DF30E2 /* EditVMViewControllerHardware.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerHardware.swift; sourceTree = "<group>"; };
 		3B7C1BFD25D697E800DF30E2 /* EditVMViewControllerAdvanced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerAdvanced.swift; sourceTree = "<group>"; };
 		3B7E34273098CF4000F67411 /* QemuSerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QemuSerialConsole.swift; sourceTree = "<group>"; };
@@ -539,16 +505,6 @@
 			path = MacMulatorTests;
 			sourceTree = "<group>";
 		};
-		3B578557266526460003C3C8 /* Libs */ = {
-			isa = PBXGroup;
-			children = (
-				3B57857E26652D440003C3C8 /* libintl.8.dylib */,
-				3B57857B26652CFF0003C3C8 /* libpcre.1.dylib */,
-				3B5785582665265E0003C3C8 /* libglib-2.0.0.dylib */,
-			);
-			path = Libs;
-			sourceTree = "<group>";
-		};
 		3B9D7C5C2804643500C9510B /* Virtualization */ = {
 			isa = PBXGroup;
 			children = (
@@ -633,13 +589,10 @@
 				3BDB19052CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd */,
 				3B89B6ED2CDFD5A700B67EFA /* SECURE_EFI_ARM.fd */,
 				3B3DF81B2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd */,
-				3B7906CB2C2C032800ADAD4F /* bootrom_240_4 */,
-				3B7906CA2C2C032800ADAD4F /* nor_n72ap.bin */,
 				3BFB1F852CD3F1B400EBF67D /* windows-11-drivers.iso.zip */,
 				3BDC24FF2DA16EA2006C4BB6 /* macos-guest-tools.img.zip */,
 				3BDB19072CDE5F5100B8D3A6 /* OPENCORE.zip */,
 				3B7F3C2329326F9900F1396D /* parallels_template */,
-				3B578557266526460003C3C8 /* Libs */,
 				3BBB473725CABDCB00A4DBA7 /* Assets.xcassets */,
 				3BBB473925CABDCB00A4DBA7 /* Info.plist */,
 				3BBB473825CABDCB00A4DBA7 /* MacMulator-Enthusiast.entitlements */,
@@ -713,8 +666,6 @@
 				3B391EE525C075F50030E914 /* Sources */,
 				3B391EE625C075F50030E914 /* Frameworks */,
 				3B391EE725C075F50030E914 /* Resources */,
-				3B57855E2665275C0003C3C8 /* CopyFiles */,
-				3B57855C266527400003C3C8 /* CopyFiles */,
 				3B246AFB3073A91800EA2B5C /* Embed Sysroot */,
 			);
 			buildRules = (
@@ -831,7 +782,6 @@
 				3BFB1F862CD3F1B400EBF67D /* windows-11-drivers.iso.zip in Resources */,
 				3B3DF81C2CE5FA94000F2396 /* SECURE_EFI_VARS_ARM.fd in Resources */,
 				3B75C7EA29DF06C4007C3781 /* Localizable.strings in Resources */,
-				3B7906CC2C2C032800ADAD4F /* nor_n72ap.bin in Resources */,
 				3BC4761F2CE4A77A00AEC13A /* EFI_VARS_ARM.fd in Resources */,
 				3BDC25002DA16EA2006C4BB6 /* macos-guest-tools.img.zip in Resources */,
 				3BC4761D2CE4A71D00AEC13A /* EFI_ARM.fd in Resources */,
@@ -846,7 +796,6 @@
 				3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */,
 				3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */,
 				3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */,
-				3B7906CD2C2C032800ADAD4F /* bootrom_240_4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1595,10 +1544,6 @@
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
-				EXCLUDED_SOURCE_FILE_NAMES = (
-					bootrom_240_4,
-					nor_n72ap.bin,
-				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",
@@ -1718,10 +1663,6 @@
 				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
 				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_USER_SELECTED_FILES = readwrite;
-				EXCLUDED_SOURCE_FILE_NAMES = (
-					bootrom_240_4,
-					nor_n72ap.bin,
-				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PROJECT_DIR)/Sysroot/sysroot-macOS-arm64_x86_64/Frameworks\"",

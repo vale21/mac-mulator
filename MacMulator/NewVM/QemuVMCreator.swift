@@ -71,16 +71,6 @@ class QemuVMCreator: VMCreator {
                 )
                 virtualUSB.isBootDrive = true
                 vm.addVirtualDrive(virtualUSB)
-            } else if vm.os == QemuConstants.OS_IOS {
-                // Install media is the path iPod Touch NAND
-                let virtualNAND = VirtualDrive(
-                    path: installMedia,
-                    name: QemuConstants.MEDIATYPE_NAND + "-0",
-                    format: QemuConstants.FORMAT_DIR,
-                    mediaType: QemuConstants.MEDIATYPE_NAND,
-                    size: 0
-                )
-                vm.addVirtualDrive(virtualNAND)
             } else {
                 // Install media is a CD
                 let virtualCD = VirtualDrive(
@@ -95,7 +85,7 @@ class QemuVMCreator: VMCreator {
             }
         }
 
-        if virtualHDD == nil, vm.os != QemuConstants.OS_IOS {
+        if virtualHDD == nil {
             let mediaType = Utils.getMediaTypeForSubType(vm.os, vm.subtype)
             virtualHDD = VirtualDrive(
                 path: vm.path + "/" + mediaType + "-0." + MacMulatorConstants.DISK_EXTENSION,

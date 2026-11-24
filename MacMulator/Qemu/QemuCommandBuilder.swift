@@ -42,8 +42,6 @@ class QemuCommandBuilder {
     var nic: String?
     var tpmPath: String?
     var tpmDevice: String?
-    var rtcEnabled: Bool = true
-    var logging: String?
 
     let FORMATTER = " \\\n    "
 
@@ -168,16 +166,6 @@ class QemuCommandBuilder {
         if let soudHw = sound {
             self.sound.append(soudHw)
         }
-        return self
-    }
-
-    func withRtcEnabled(_ rtcEnabled: Bool) -> QemuCommandBuilder {
-        self.rtcEnabled = rtcEnabled
-        return self
-    }
-
-    func withLogging(_ logging: String?) -> QemuCommandBuilder {
-        self.logging = logging
         return self
     }
 
@@ -374,15 +362,10 @@ class QemuCommandBuilder {
         if addQmpString == true, let managementPort {
             cmd += FORMATTER + "-qmp tcp:127.0.0.1:" + String(managementPort) + ",server,nowait"
         }
-        if rtcEnabled {
-            cmd += FORMATTER + "-rtc base=localtime,clock=host"
-        }
+        cmd += FORMATTER + "-rtc base=localtime,clock=host"
         if let tpmPath {
             let device = tpmDevice != nil ? tpmDevice! : QemuConstants.TPM_TIS_DEVICE
             cmd += FORMATTER + "-chardev socket,id=chrtpm,path=" + Utils.escape(QemuUtils.tpmSocketPath(forVMAt: tpmPath)) + " -tpmdev emulator,id=tpm0,chardev=chrtpm -device " + device + ",tpmdev=tpm0"
-        }
-        if let logging {
-            cmd += FORMATTER + "-d " + logging
         }
 
         return cmd
