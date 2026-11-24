@@ -37,19 +37,11 @@ class NewVMViewController: NSViewController, NSComboBoxDataSource, NSComboBoxDel
     }
 
     @IBAction func findInstallMedia(_: Any) {
-        if vmType.stringValue == QemuConstants.OS_IOS {
-            Utils.showDirectorySelector(uponSelection: { panel in
-                if let path = panel.url?.path {
-                    installMedia.stringValue = path
-                }
-            })
-        } else {
-            Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
-                if let path = panel.url?.path {
-                    installMedia.stringValue = path
-                }
-            })
-        }
+        Utils.showFileSelector(fileTypes: Utils.IMAGE_TYPES, uponSelection: { panel in
+            if let path = panel.url?.path {
+                installMedia.stringValue = path
+            }
+        })
     }
 
     @IBAction func downloadInstallMedia(_: Any) {

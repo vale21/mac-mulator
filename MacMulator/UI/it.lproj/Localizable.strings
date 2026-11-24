@@ -113,7 +113,6 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Sei sicuro di voler rimuovere il drive virtuale \"%@\"? Questa operazione è irreversibile.";
 "EditVMViewControllerHardware.cpusLabel" = "CPUs:";
 "EditVMViewControllerHardware.createNewDiskButton" = "Crea un nuovo disco...";
-"EditVMViewControllerHardware.selectNandButton" = "Seleziona NAND...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Nome";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "Percorso del file";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Dimensione";
@@ -136,9 +135,7 @@
 "EditVMViewControllerHardware.openImageTooltip" = "Collega un'immagine esistente a questa VM, ad esempio una ISO di installazione. L'immagine viene usata dove si trova, senza copiarla.";
 "EditVMViewControllerHardware.createNewDiskTooltip" = "Crea un nuovo disco vuoto per questa VM.";
 "EditVMViewControllerHardware.importDriveTooltip" = "Copia un'immagine disco esistente in questa VM come nuovo disco, ad esempio un'immagine cloud. Le immagini in un formato che la VM non può usare vengono convertite.";
-"EditVMViewControllerHardware.selectNandTooltip" = "Seleziona la cartella NAND di questa VM iPod touch.";
 "EditVMViewControllerHardware.drivesTemplateTooltip" = "Questa VM è un template, e i suoi dischi non possono essere modificati. Crea una VM dal template per modificarli.";
-"EditVMViewControllerHardware.drivesIOSTooltip" = "Questa VM iPod touch usa la sua NAND, e non può usare immagini disco.";
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "Questa VM è basata su Apple Virtualization Framework, e può usare un solo disco. Elimina il disco attuale per aggiungerne un altro.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "Un'immagine di installazione è già collegata a questa VM. Rimuovila per collegare un'altra immagine.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "Questa VM macOS non può usare un disco importato: macOS può essere installato solo su un disco creato da MacMulator.";
@@ -269,7 +266,6 @@
 "QemuConstants.efi" = "Firmware EFI";
 "QemuConstants.generic" = "VM Generica";
 "QemuConstants.hd" = "Disco Rigido";
-"QemuConstants.ios" = "iOS Generico";
 "QemuConstants.ipsw" = "Immagine di installazione IPSW";
 "QemuConstants.linux" = "Linux Generico";
 "QemuConstants.m68k" = "VM Generica Motorola 68k";

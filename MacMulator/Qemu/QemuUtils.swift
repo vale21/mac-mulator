@@ -38,8 +38,6 @@ class QemuUtils {
             return QemuConstants.NVRAM
         } else if driveType == QemuConstants.MEDIATYPE_NVME {
             return QemuConstants.NVME
-        } else if driveType == QemuConstants.MEDIATYPE_NAND {
-            return QemuConstants.NAND
         }
 
         return QemuConstants.HD
@@ -79,32 +77,6 @@ class QemuUtils {
             )
             vm.addVirtualDrive(openCore)
         }
-
-        #if !APPSTORE
-            // iPod touch guests need Apple's boot ROM and NOR images, which the App Store flavor does not ship.
-            if vm.os == QemuConstants.OS_IOS {
-                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "bootrom_240_4", ofType: nil)!, toPath: vm.path + "/bootrom-0")
-                try? FileManager.default.copyItem(atPath: Bundle.main.path(forResource: "nor_n72ap.bin", ofType: nil)!, toPath: vm.path + "/nor-0.bin")
-
-                let virtualBootRom = VirtualDrive(
-                    path: vm.path + "/" + QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                    name: QemuConstants.MEDIATYPE_BOOTROM + "-0",
-                    format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_BOOTROM,
-                    size: 0
-                )
-                vm.addVirtualDrive(virtualBootRom)
-
-                let virtualNor = VirtualDrive(
-                    path: vm.path + "/" + QemuConstants.MEDIATYPE_NOR + "-0." + MacMulatorConstants.BIN_EXTENSION,
-                    name: QemuConstants.MEDIATYPE_NOR + "-0",
-                    format: QemuConstants.FORMAT_RAW,
-                    mediaType: QemuConstants.MEDIATYPE_NOR,
-                    size: 0
-                )
-                vm.addVirtualDrive(virtualNor)
-            }
-        #endif
     }
 
     static func deleteAuxiliaryDriveFilesOnDisk(_ vm: VirtualMachine) {
@@ -134,11 +106,6 @@ class QemuUtils {
         if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
             try? FileManager.default.removeItem(atPath: vm.path + "/efi-secure-0.fd")
             try? FileManager.default.removeItem(atPath: vm.path + "/opencore-0")
-        }
-
-        if vm.os == QemuConstants.OS_IOS {
-            try? FileManager.default.removeItem(atPath: vm.path + "/bootrom-0")
-            try? FileManager.default.removeItem(atPath: vm.path + "/nor-0.bin")
         }
     }
 

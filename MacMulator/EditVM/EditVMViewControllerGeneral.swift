@@ -206,10 +206,6 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
             selectBootDrive(virtualMachine)
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
             updating = false
-
-            if virtualMachine.os == QemuConstants.OS_IOS {
-                resolutionTable.isHidden = true
-            }
         }
     }
 
