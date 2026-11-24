@@ -1813,7 +1813,7 @@
 			repositoryURL = "https://github.com/utmapp/CocoaSpice.git";
 			requirement = {
 				kind = revision;
-				revision = d8d29fc810047a3ddcebb351cdadc8fe4b4f308d;
+				revision = e239fab0828ebafc3a5a973fa84039400d7ac703;
 			};
 		};
 		3B6FF874266F791700368BAB /* XCRemoteSwiftPackageReference "Socket.swift" */ = {

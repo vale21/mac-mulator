@@ -32,7 +32,7 @@ frameworks (Contents/Frameworks) and executables (Contents/MacOS).
 
 Component                 Version        License            Flavor     Origin
 ------------------------  -------------  -----------------  ---------  --------------------------------------------------------------
-CocoaSpice                d8d29fc        Apache-2.0         both       https://github.com/utmapp/CocoaSpice
+CocoaSpice                e239fab        Apache-2.0         both       https://github.com/utmapp/CocoaSpice
 spice-gtk (client-glib)   0.42           LGPL-2.1-or-later  both       https://www.spice-space.org/download/gtk/spice-gtk-0.42.tar.xz
 spice-protocol            0.14.4         BSD-3-Clause       both       https://www.spice-space.org/download/releases/spice-protocol-0.14.4.tar.xz
 GLib (glib, gio, gobject,
@@ -62,7 +62,7 @@ libslirp (UTM mirror)     4.9.1          BSD-3-Clause       App Store  https://g
 zstd                      1.5.2          BSD-3-Clause       App Store  https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
 swtpm (UTM fork)          0.8.99         BSD-3-Clause       App Store  https://github.com/utmapp/swtpm/releases/download/v0.8.99/swtpm-0.8.99.tar.gz
 libtpms (osy fork)        0.9.6          BSD-3-Clause       App Store  https://github.com/osy/libtpms/releases/download/v0.9.6/libtpms-0.9.6.tar.gz
-virglrenderer (UTM fork)  5d26f60        MIT                App Store  https://github.com/utmapp/virglrenderer
+virglrenderer (UTM fork)  dd0652b        MIT                App Store  https://github.com/utmapp/virglrenderer
 libepoxy (UTM fork)       bf98587        MIT                App Store  https://github.com/utmapp/libepoxy
 ANGLE (EGL, GLESv2;
   UTM WebKit fork)        ed78ab6        BSD-3-Clause       App Store  https://github.com/utmapp/WebKit (Source/ThirdParty/ANGLE)
