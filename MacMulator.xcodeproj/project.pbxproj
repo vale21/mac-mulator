@@ -54,6 +54,7 @@
 		3B477A9525D69525008685BE /* EditVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B477A9425D69525008685BE /* EditVMViewController.swift */; };
 		3B4D181E2FD6F94200C75764 /* EditVMViewControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
+		3B59CBA730B601F600EF86EC /* VirtualMachineFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */; };
 		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
@@ -283,6 +284,7 @@
 		3B477A9425D69525008685BE /* EditVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewController.swift; sourceTree = "<group>"; };
 		3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerSnapshots.swift; sourceTree = "<group>"; };
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
+		3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineFactory.swift; sourceTree = "<group>"; };
 		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSnapshotViewController.swift; sourceTree = "<group>"; };
@@ -501,6 +503,7 @@
 				3BFF48DE26C2D2AD0093408E /* UtilsTest.swift */,
 				3B391F0125C075F50030E914 /* Info.plist */,
 				3BFF48E226C2D4AF0093408E /* MacMulatorTests-Bridging-Header.h */,
+				3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */,
 			);
 			path = MacMulatorTests;
 			sourceTree = "<group>";
@@ -973,6 +976,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B59CBA730B601F600EF86EC /* VirtualMachineFactory.swift in Sources */,
 				3BFF48DF26C2D2AD0093408E /* UtilsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1492,7 +1496,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1516,7 +1520,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_BUNDLE_IDENTIFIER = it.valedev.MacMulatorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
