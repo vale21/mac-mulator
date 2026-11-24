@@ -173,7 +173,7 @@ class Utils {
     }
 
     static func isHeadless(_ vm: VirtualMachine) -> Bool {
-        vm.os != QemuConstants.OS_IOS && vm.headless == true
+        vm.headless == true
     }
 
     static func guestUserName(_ vm: VirtualMachine) -> String? {
@@ -727,9 +727,7 @@ class Utils {
                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_VARS,
                    drive.mediaType != QemuConstants.MEDIATYPE_EFI_SECURE_VARS,
                    drive.mediaType != QemuConstants.MEDIATYPE_OPENCORE,
-                   drive.mediaType != QemuConstants.MEDIATYPE_NVRAM,
-                   drive.mediaType != QemuConstants.MEDIATYPE_BOOTROM,
-                   drive.mediaType != QemuConstants.MEDIATYPE_NOR
+                   drive.mediaType != QemuConstants.MEDIATYPE_NVRAM
                 {
                     size += 1
                 }
@@ -1154,12 +1152,10 @@ class Utils {
     }
 
     static func isVMAvailable(_ vm: VirtualMachine) -> Bool {
-        #if APPSTORE
-            // iPod touch guests are not supported by the App Store flavor (no Apple ROM images are shipped).
-            if vm.os == QemuConstants.OS_IOS {
-                return false
-            }
-        #endif
+        // iPod touch guests are no longer supported, but VMs created by older versions may still exist
+        if vm.os == QemuConstants.OS_IOS {
+            return false
+        }
         return if vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM {
             if vm.subtype == QemuConstants.SUB_WINDOWS_11 {
                 QemuUtils.isBinaryAvailable(vm.architecture, vm.qemuPath) && QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.hasSwtpmBinary == true

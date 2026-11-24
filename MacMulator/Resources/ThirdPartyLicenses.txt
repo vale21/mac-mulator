@@ -32,7 +32,7 @@ frameworks (Contents/Frameworks) and executables (Contents/MacOS).
 
 Component                 Version        License            Flavor     Origin
 ------------------------  -------------  -----------------  ---------  --------------------------------------------------------------
-CocoaSpice                d8d29fc        Apache-2.0         both       https://github.com/utmapp/CocoaSpice
+CocoaSpice                e239fab        Apache-2.0         both       https://github.com/utmapp/CocoaSpice
 spice-gtk (client-glib)   0.42           LGPL-2.1-or-later  both       https://www.spice-space.org/download/gtk/spice-gtk-0.42.tar.xz
 spice-protocol            0.14.4         BSD-3-Clause       both       https://www.spice-space.org/download/releases/spice-protocol-0.14.4.tar.xz
 GLib (glib, gio, gobject,
@@ -55,13 +55,14 @@ libusb                    1.0.25         LGPL-2.1-or-later  both       https://g
 usbredir (usbredirparser,
   usbredirhost)           0.14.0         LGPL-2.1-or-later  both       https://www.spice-space.org/download/usbredir/usbredir-0.14.0.tar.xz
 pixman                    0.38.0         MIT                both       https://www.cairographics.org/releases/pixman-0.38.0.tar.gz
-QEMU (UTM fork)           10.0.12-utm    GPL-2.0-only (*)   App Store  https://github.com/utmapp/qemu/releases/download/v10.0.12-utm/qemu-10.0.12-utm.tar.xz
+QEMU (UTM fork), with
+  qemu-img                10.0.12-utm    GPL-2.0-only (*)   App Store  https://github.com/utmapp/qemu/releases/download/v10.0.12-utm/qemu-10.0.12-utm.tar.xz
 spice-server              0.14.3         LGPL-2.1-or-later  App Store  https://www.spice-space.org/download/releases/spice-server/spice-0.14.3.tar.bz2
 libslirp (UTM mirror)     4.9.1          BSD-3-Clause       App Store  https://github.com/utmapp/libslirp/releases/download/v4.9.1-release-mirror/libslirp-v4.9.1.tar.gz
 zstd                      1.5.2          BSD-3-Clause       App Store  https://github.com/facebook/zstd/releases/download/v1.5.2/zstd-1.5.2.tar.gz
 swtpm (UTM fork)          0.8.99         BSD-3-Clause       App Store  https://github.com/utmapp/swtpm/releases/download/v0.8.99/swtpm-0.8.99.tar.gz
 libtpms (osy fork)        0.9.6          BSD-3-Clause       App Store  https://github.com/osy/libtpms/releases/download/v0.9.6/libtpms-0.9.6.tar.gz
-virglrenderer (UTM fork)  5d26f60        MIT                App Store  https://github.com/utmapp/virglrenderer
+virglrenderer (UTM fork)  dd0652b        MIT                App Store  https://github.com/utmapp/virglrenderer
 libepoxy (UTM fork)       bf98587        MIT                App Store  https://github.com/utmapp/libepoxy
 ANGLE (EGL, GLESv2;
   UTM WebKit fork)        ed78ab6        BSD-3-Clause       App Store  https://github.com/utmapp/WebKit (Source/ThirdParty/ANGLE)
@@ -96,6 +97,10 @@ OpenBIOS (openbios-ppc)   GPL-2.0-only       https://www.openbios.org
 SLOF (slof.bin)           BSD-3-Clause       https://github.com/aik/SLOF
 OpenSBI (opensbi-*.bin)   BSD-2-Clause       https://github.com/riscv-software-src/opensbi
 qboot (qboot.rom)         see pc-bios/README https://github.com/bonzini/qboot
+VOF (vof.bin,
+  vof-nvram.bin)          GPL-2.0-or-later   part of the QEMU sources
+QemuMacDrivers
+  (qemu_vga.ndrv)         GPL-2.0            https://github.com/ozbenh/QemuMacDrivers
 Other files (kvmvapic,
   linuxboot, multiboot,
   pvh, keymaps, ...)      QEMU licenses      part of the QEMU sources
@@ -103,7 +108,8 @@ Other files (kvmvapic,
 SeaBIOS is Copyright (C) Kevin O'Connor and the SeaBIOS contributors; iPXE is
 Copyright (C) Michael Brown and the iPXE contributors; OpenBIOS is Copyright (C)
 the OpenBIOS team; SLOF is Copyright (c) IBM Corporation; OpenSBI is Copyright
-(c) Western Digital Corporation and the OpenSBI contributors.
+(c) Western Digital Corporation and the OpenSBI contributors; QemuMacDrivers is
+Copyright (c) Benjamin Herrenschmidt and the QemuMacDrivers contributors.
 
 
 3. OTHER BUNDLED SOFTWARE
@@ -114,26 +120,33 @@ and do not come from the UTM sysroot.
 
 Component                      Version   License               Flavor      Origin
 -----------------------------  --------  --------------------  ----------  --------------------------------------------
-qemu-img (x86_64), with
-  libglib-2.0, libintl,
-  libpcre                      5.2.50    GPL-2.0-only; LGPL-   Enthusiast  https://www.qemu.org, https://gitlab.gnome.org/GNOME/glib,
-                                         2.1-or-later; BSD-3               https://www.gnu.org/software/gettext, https://www.pcre.org
 EDK2 OVMF / AAVMF images
   (EFI_*.fd, SECURE_EFI_*.fd)  -         BSD-2-Clause-Patent   both        https://github.com/tianocore/edk2
 OpenCore (OPENCORE.zip)        -         BSD-3-Clause          both        https://github.com/acidanthera/OpenCorePkg
+  Lilu (in the OpenCore image) 1.5.0     BSD-3-Clause          both        https://github.com/acidanthera/Lilu
+  VirtualSMC (in the OpenCore
+  image)                       1.1.9     BSD-3-Clause          both        https://github.com/acidanthera/VirtualSMC
 virtio-win drivers
-  (windows-11-drivers.iso.zip) -         GPL-2.0 / BSD-3-      both        https://github.com/virtio-win/kvm-guest-drivers-windows
-                                         Clause (see the ISO)
+  (windows-11-drivers.iso.zip) 0.1.262   BSD-3-Clause; GPL-2.0 both        https://github.com/virtio-win/kvm-guest-drivers-windows,
+                                         (QXL, see the ISO)                https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/
 spice-vdagent for macOS
-  (macos-guest-tools.img.zip)  0.22.1    GPL-3.0-or-later      both        https://gitlab.freedesktop.org/spice/linux/vd_agent (macOS port by UTM)
+  (macos-guest-tools.img.zip)  0.22.1    GPL-3.0-or-later      both        https://github.com/utmapp/vd_agent (tag spice-vdagent-0.22.1-macOS)
 SwiftTerm (Swift package,
   linked into the app)         1.99.2    MIT                   both        https://github.com/migueldeicaza/SwiftTerm
+ZIPFoundation (Swift package,
+  linked into the app)         0.9.18    MIT                   both        https://github.com/weichsel/ZIPFoundation
+Socket.swift (Swift package,
+  linked into the app)         2.4.0     MIT                   both        https://github.com/BiAtoms/Socket.swift
 
 EDK2 is Copyright (c) TianoCore contributors and Intel Corporation; OpenCore is
 Copyright (c) the Acidanthera team; the virtio-win drivers are Copyright (c)
-Red Hat, Inc.; spice-vdagent is Copyright (C) Red Hat, Inc.; SwiftTerm is
-Copyright (c) 2019-2026 Miguel de Icaza and includes code Copyright (c) the
-xterm.js authors, SourceLair Private Company and Christopher Jeffrey.
+Red Hat, Inc.; spice-vdagent is Copyright (C) Red Hat, Inc., and its macOS
+port is Copyright (c) osy and the UTM contributors; Lilu and VirtualSMC are
+Copyright (c) vit9696 and the Acidanthera team; SwiftTerm is Copyright (c)
+2019-2026 Miguel de Icaza and includes code Copyright (c) the xterm.js authors,
+SourceLair Private Company and Christopher Jeffrey; ZIPFoundation is Copyright
+(c) 2017-2024 Thomas Zoechling (https://www.peakstep.com); Socket.swift is
+Copyright (c) 2018 BiAtoms.
 
 
 4. SOURCE CODE
@@ -149,6 +162,16 @@ corresponding source code consists of:
     https://github.com/utmapp/UTM at the commit recorded in docs/sysroot.md of
     the MacMulator repository (https://github.com/vale21/mac-mulator);
   * UTM's build script, scripts/build_dependencies.sh, at the same commit.
+
+The other components licensed under the GNU General Public License, which are
+not part of the UTM sysroot, are distributed exactly as published by their
+authors. Their complete corresponding source code is:
+
+  * spice-vdagent for macOS: https://github.com/utmapp/vd_agent at the tag
+    spice-vdagent-0.22.1-macOS;
+  * virtio-win drivers: the virtio-win-0.1.262 sources, published at
+    https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.262-2/
+    and https://github.com/virtio-win/kvm-guest-drivers-windows.
 
 MacMulator's own source code, including the way these components are embedded
 (scripts/embed_sysroot_frameworks.sh) and launched, is available at
@@ -168,14 +191,14 @@ distribution, for at least three years from the distribution of the binaries.
 The following license texts apply to the components above:
 
   * Apache License 2.0 (MacMulator, UTM, CocoaSpice, Vulkan-Loader)
-  * GNU General Public License version 2 (QEMU, qemu-img, iPXE, OpenBIOS)
+  * GNU General Public License version 2 (QEMU, qemu-img, iPXE, OpenBIOS, VOF, QemuMacDrivers, QXL driver for Windows)
   * GNU General Public License version 3 (spice-vdagent; also referenced by the LGPL version 3)
-  * GNU Lesser General Public License version 2.1 (SPICE, GLib, GStreamer, gettext, libiconv, json-glib, libsoup, phodav, libusb, usbredir, libgcrypt, libgpg-error)
+  * GNU Lesser General Public License version 2.1 (SPICE, GLib, GStreamer, gettext, libiconv, json-glib, libsoup, phodav, libusb, usbredir)
   * GNU Lesser General Public License version 3 (SeaBIOS, SeaVGABIOS)
-  * BSD 3-Clause License (spice-protocol, Opus, libslirp, zstd, swtpm, libtpms, ANGLE, SLOF, OpenCore, libpcre, parts of libjpeg-turbo and virtio-win)
+  * BSD 3-Clause License (spice-protocol, Opus, libslirp, zstd, swtpm, libtpms, ANGLE, SLOF, OpenCore, Lilu, VirtualSMC, virtio-win, parts of libjpeg-turbo)
   * BSD 2-Clause License (OpenSBI)
   * BSD 2-Clause Plus Patent License (EDK2)
-  * MIT License (libffi, pixman, virglrenderer, libepoxy, SwiftTerm)
+  * MIT License (libffi, pixman, virglrenderer, libepoxy, SwiftTerm, ZIPFoundation, Socket.swift)
   * OpenSSL License and SSLeay License (OpenSSL)
   * Independent JPEG Group License (libjpeg-turbo)
   * libpng License (libpng)

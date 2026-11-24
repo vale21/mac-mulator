@@ -13,11 +13,11 @@ explains how that sysroot is obtained, pinned and updated.
 
 | What | Value |
 |---|---|
-| Artifact | `Sysroot-macos-universal` id `10846077902` |
-| MacMulator copy | `MacMulator-UTM-SysRoot-10846077902.zip` in release `1_0_0_b28` |
-| UTM commit | `7eadb056ae0f91d979059544d0ddcd2d5a40be92` (`main`, built 2026-09-25) |
+| Artifact | `Sysroot-macos-universal` id `14414638153` |
+| MacMulator copy | `MacMulator-UTM-SysRoot-14414638153.zip` in release `TBD` |
+| UTM commit | `3d4b8d8cb1ce93a8b1a9610695c12487685f0c15` (tag `v5.0.9-2`, built 2026-11-18) |
 | Qemu | 10.0.12 (UTM fork) |
-| CocoaSpice | revision `d8d29fc810047a3ddcebb351cdadc8fe4b4f308d` |
+| CocoaSpice | revision `e239fab0828ebafc3a5a973fa84039400d7ac703` |
 
 Update this table whenever the sysroot or CocoaSpice is changed.
 
@@ -61,7 +61,7 @@ which is compiled against the headers and frameworks of the sysroot. See
 2. Download the sysroot:
 
    ```sh
-   scripts/fetch_sysroot.sh 10846077902        # the copy of a specific artifact id
+   scripts/fetch_sysroot.sh 14414638153        # the copy of a specific artifact id
    scripts/fetch_sysroot.sh                    # or: the newest copy in any release
    ```
 
@@ -70,7 +70,7 @@ which is compiled against the headers and frameworks of the sysroot. See
    [Current pin](#current-pin) table. No GitHub token is needed; if one is available (`GH_TOKEN`,
    `GITHUB_TOKEN` or `gh auth login`) it is used to avoid the rate limit of anonymous API requests.
    A copy downloaded by other means can be unpacked with
-   `SYSROOT_ZIP=~/Downloads/MacMulator-UTM-SysRoot-10846077902.zip scripts/fetch_sysroot.sh`.
+   `SYSROOT_ZIP=~/Downloads/MacMulator-UTM-SysRoot-14414638153.zip scripts/fetch_sysroot.sh`.
 3. Build the `MacMulator Enthusiast` scheme and the `MacMulator App Store` scheme once each. The
    first build of each flavor is slow because the Run Script phase copies and signs the frameworks.
    Code signing needs a development certificate of the team: the embedded frameworks and the Qemu
@@ -138,7 +138,7 @@ Choosing one:
 Then download it:
 
 ```sh
-scripts/fetch_utm_sysroot.sh 10846077902    # a specific artifact id
+scripts/fetch_utm_sysroot.sh 14414638153    # a specific artifact id
 scripts/fetch_utm_sysroot.sh                # or: the newest non-expired artifact of main
 ```
 

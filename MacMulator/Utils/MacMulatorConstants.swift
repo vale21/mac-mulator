@@ -24,7 +24,6 @@ class MacMulatorConstants {
     static let EFI_EXTENSION = "fd"
     static let IMG_EXTENSION = "img"
     static let ISO_EXTENSION = "iso"
-    static let BIN_EXTENSION = "bin"
     static let IPSW_EXTENSION = "ipsw"
     static let VHD_EXTENSION = "vhd"
     static let VHDX_EXTENSION = "vhdx"

@@ -113,7 +113,6 @@
 "EditVMViewControllerHardware.confirmDeleteDrive" = "Möchtest du das virtuelle Laufwerk „%@“ wirklich entfernen? Dieser Vorgang kann nicht rückgängig gemacht werden.";
 "EditVMViewControllerHardware.cpusLabel" = "CPUs";
 "EditVMViewControllerHardware.createNewDiskButton" = "Neues Laufwerk erstellen...";
-"EditVMViewControllerHardware.selectNandButton" = "NAND auswählen...";
 "EditVMViewControllerHardware.drivesTableColumnName" = "Name";
 "EditVMViewControllerHardware.drivesTableColumnPath" = "Dateispeicherort";
 "EditVMViewControllerHardware.drivesTableColumnSize" = "Größe";
@@ -136,9 +135,7 @@
 "EditVMViewControllerHardware.openImageTooltip" = "Ein vorhandenes Image mit dieser VM verbinden, z. B. eine Installations-ISO. Das Image wird an seinem Ort verwendet, ohne es zu kopieren.";
 "EditVMViewControllerHardware.createNewDiskTooltip" = "Ein neues leeres Laufwerk für diese VM erstellen.";
 "EditVMViewControllerHardware.importDriveTooltip" = "Ein vorhandenes Disk-Image als neues Laufwerk in diese VM kopieren, z. B. ein Cloud-Image. Images in einem Format, das die VM nicht verwenden kann, werden umgewandelt.";
-"EditVMViewControllerHardware.selectNandTooltip" = "Den NAND-Ordner dieser iPod-touch-VM auswählen.";
 "EditVMViewControllerHardware.drivesTemplateTooltip" = "Diese VM ist eine Vorlage, und ihre Laufwerke können nicht geändert werden. Erstelle daraus eine VM, um sie zu ändern.";
-"EditVMViewControllerHardware.drivesIOSTooltip" = "Diese iPod-touch-VM verwendet ihren NAND und kann keine Disk-Images verwenden.";
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "Diese VM basiert auf dem Apple Virtualization Framework und kann nur ein Laufwerk verwenden. Lösche das aktuelle Laufwerk, um ein anderes hinzuzufügen.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "Mit dieser VM ist bereits ein Installations-Image verbunden. Entferne es, um ein anderes Image zu verbinden.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "Diese macOS-VM kann kein importiertes Laufwerk verwenden: macOS kann nur auf einem von MacMulator erstellten Laufwerk installiert werden.";
@@ -307,7 +304,6 @@
 "QemuConstants.efi" = "EFI-Firmware";
 "QemuConstants.generic" = "Allgemeine VM";
 "QemuConstants.hd" = "Festplatte";
-"QemuConstants.ios" = "Allgemeines iOS";
 "QemuConstants.ipsw" = "IPSW-Installationsabbild";
 "QemuConstants.linux" = "Allgemeines Linux";
 "QemuConstants.m68k" = "Allgemeine Motorola-68k-VM";

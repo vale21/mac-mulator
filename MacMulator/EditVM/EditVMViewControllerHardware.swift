@@ -244,22 +244,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
         updateView()
     }
 
-    override func shouldPerformSegue(withIdentifier identifier: NSStoryboardSegue.Identifier, sender _: Any?) -> Bool {
-        if let virtualMachine {
-            // This is bad, but it is the quckest way to differenciate the single iPod touch use case from all the others
-            if identifier == MacMulatorConstants.NEW_DISK_SEGUE, virtualMachine.os == QemuConstants.OS_IOS {
-                Utils.showDirectorySelector(uponSelection: { panel in
-                    if let path = panel.url?.path {
-                        virtualMachine.drives[0].path = path
-                        updateView()
-                    }
-                })
-                return false
-            }
-        }
-        return true
-    }
-
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if let virtualMachine {
             if segue.identifier == MacMulatorConstants.NEW_DISK_SEGUE {
@@ -300,7 +284,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             return QemuConstants.ALL_ARCHITECTURES_DESC.count
         } else {
             if let virtualMachine {
-                return virtualMachine.os == QemuConstants.OS_IOS ? 1 : QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0
+                return QemuConstants.MAX_CPUS[virtualMachine.architecture] ?? 0
             }
         }
         return 0
@@ -399,7 +383,7 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if let virtualMachine, Utils.isVMTemplate(virtualMachine) {
                 cellView.editButton.isEnabled = false
                 cellView.deleteButton.isEnabled = false
-            } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW || drive?.mediaType == QemuConstants.MEDIATYPE_NAND {
+            } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 cellView.editButton.isEnabled = false
             } else {
                 cellView.editButton.isEnabled = true
@@ -449,9 +433,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
             drivesTableView.reloadData()
 
-            if virtualMachine.os == QemuConstants.OS_IOS {
-                createNewDiskButton.title = NSLocalizedString("EditVMViewControllerHardware.selectNandButton", comment: "")
-            }
             updateDriveButtons(virtualMachine)
 
             let appDelegate = NSApp.delegate as! AppDelegate
@@ -501,15 +482,12 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
     /// The rules are checked in order: the first matching one decides.
     private func updateDriveButtons(_ virtualMachine: VirtualMachine) {
         let isTemplate = Utils.isVMTemplate(virtualMachine)
-        let isIOS = virtualMachine.os == QemuConstants.OS_IOS
         let isAppleVM = virtualMachine.type == MacMulatorConstants.APPLE_VM
         // Apple VMs have a single drive
         let hasAppleMainDrive = isAppleVM && Utils.findMainDrive(virtualMachine.drives) != nil
 
         let openImage: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
-        } else if isIOS {
-            (false, "drivesIOSTooltip")
         } else if isAppleVM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
             (false, "openImageIPSWTooltip")
         } else {
@@ -518,9 +496,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         let createNewDisk: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
-        } else if isIOS {
-            // The button selects the NAND folder of the iPod touch
-            (true, "selectNandTooltip")
         } else if hasAppleMainDrive {
             (false, "drivesOneDriveTooltip")
         } else {
@@ -529,8 +504,6 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         let importDrive: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
-        } else if isIOS {
-            (false, "drivesIOSTooltip")
         } else if isAppleVM, virtualMachine.os != QemuConstants.OS_LINUX {
             // A macOS drive cannot be imported: it needs the files created by the macOS installation
             (false, "importDriveMacOSTooltip")
