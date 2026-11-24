@@ -281,4 +281,15 @@ class UtilsTest: XCTestCase {
 
         XCTAssertEqual(1, Utils.computeNextDriveIndex(vm, QemuConstants.MEDIATYPE_DISK))
     }
+
+    func testMainDriveIsTheBootDriveAmongManyDrives() throws {
+        let efi = VirtualMachineFactory.makeDrive(name: "efi-0", mediaType: QemuConstants.MEDIATYPE_EFI)
+        let cdrom = VirtualMachineFactory.makeDrive(name: "cdrom-0", mediaType: QemuConstants.MEDIATYPE_CDROM)
+        let disk = VirtualMachineFactory.makeDrive(name: "disk-0", mediaType: QemuConstants.MEDIATYPE_DISK)
+        let bootDisk = VirtualMachineFactory.makeDrive(name: "nvme-0", mediaType: QemuConstants.MEDIATYPE_NVME)
+        bootDisk.isBootDrive = true
+        cdrom.isBootDrive = true
+
+        XCTAssertTrue(Utils.findMainDrive([efi, cdrom, disk, bootDisk]) === bootDisk)
+    }
 }
