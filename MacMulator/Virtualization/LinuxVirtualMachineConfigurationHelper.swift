@@ -38,16 +38,23 @@ class LinuxVirtualMachineConfigurationHelper {
     static func createNetworkDeviceConfiguration(vm: VirtualMachine, macAddress: String?, device: String, phisicalDevice: String?) -> VZVirtioNetworkDeviceConfiguration {
         let networkDevice = VZVirtioNetworkDeviceConfiguration()
 
-        var networkAttachment: VZNetworkDeviceAttachment = VZNATNetworkDeviceAttachment()
+        var networkAttachment: VZNetworkDeviceAttachment?
         if device == QemuConstants.ATTACHMENT_BRIDGED {
             let interfaces = VZBridgedNetworkInterface.networkInterfaces
             let interface = interfaces.first { $0.identifier == phisicalDevice } ?? interfaces[0]
 
             networkAttachment = VZBridgedNetworkDeviceAttachment(interface: interface)
-        } else if device == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let fileHandle = VmnetNetworkManager.shared.isolatedFileHandle(for: vm) {
-            networkAttachment = VZFileHandleNetworkDeviceAttachment(fileHandle: fileHandle)
-        } else if device == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let network = VmnetNetworkManager.shared.network(for: vm) {
-            networkAttachment = VZVmnetNetworkDeviceAttachment(network: network)
+        } else if device == QemuConstants.ATTACHMENT_VMNET {
+            // Without its vmnet network the VM gets no attachment: falling back to NAT would give it more access than configured
+            if #available(macOS 26.0, *) {
+                if let fileHandle = VmnetNetworkManager.shared.isolatedFileHandle(for: vm) {
+                    networkAttachment = VZFileHandleNetworkDeviceAttachment(fileHandle: fileHandle)
+                } else if let network = VmnetNetworkManager.shared.network(for: vm) {
+                    networkAttachment = VZVmnetNetworkDeviceAttachment(network: network)
+                }
+            }
+        } else {
+            networkAttachment = VZNATNetworkDeviceAttachment()
         }
 
         networkDevice.attachment = networkAttachment

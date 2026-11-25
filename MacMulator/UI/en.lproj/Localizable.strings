@@ -485,6 +485,7 @@
 "QemuDiskImageManager.cannotWriteImage" = "Cannot write %@.";
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ failed to resume: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ failed to start: %2$@";
+"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ cannot start: it uses an Advanced (vmnet) network, which requires macOS 26 or later. To run it on this Mac, choose another network mode in its Network settings.";
 "VmnetNetwork.hostOnlyName" = "Host-only";
 "VmnetNetwork.isolatedName" = "Isolated VM";
 "VmnetNetwork.modeHostOnly" = "Host-only";

@@ -90,11 +90,16 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.writeToPlist()
         }
 
-        if managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *) {
-            do {
-                try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
-            } catch {
-                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+        if managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
+            if #available(macOS 26.0, *) {
+                do {
+                    try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            } else {
+                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported", comment: ""), managedVm.displayName), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
                 return
             }
         }
