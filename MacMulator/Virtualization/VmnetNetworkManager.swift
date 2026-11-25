@@ -46,6 +46,8 @@ class VmnetNetworkManager {
     private struct ActiveNetwork {
         let network: vmnet_network_ref
         let gatewayAddress: UInt32
+        // Taken when the network is created: VMs joining later use it even if the saved settings changed since
+        let isolationGroup: VmnetIsolationGroup?
         var users: Set<String>
     }
 
@@ -54,7 +56,6 @@ class VmnetNetworkManager {
     private var activeNetworks: [String: ActiveNetwork] = [:]
     private var isolatedSubnets: [String: String] = [:]
     private var forwarders: [String: VmnetPacketForwarder] = [:]
-    private var isolationGroups: [String: VmnetIsolationGroup] = [:]
 
     func acquireNetwork(for vm: VirtualMachine) throws {
         guard let network = VmnetNetwork.network(withId: vm.vmnetNetworkId ?? VmnetNetwork.SHARED_ID) ?? VmnetNetwork.network(withId: VmnetNetwork.SHARED_ID) else { return }
@@ -63,7 +64,7 @@ class VmnetNetworkManager {
         if var active = activeNetworks[key] {
             active.users.insert(vm.id)
             activeNetworks[key] = active
-            try startForwarderIfNeeded(for: vm, network: network, vmnetNetwork: active.network)
+            try startForwarderIfNeeded(for: vm, networkName: network.name, active: active)
             return
         }
 
@@ -74,13 +75,13 @@ class VmnetNetworkManager {
         }
         do {
             let created = try createNetwork(network, subnet: subnet)
-            activeNetworks[key] = ActiveNetwork(network: created, gatewayAddress: (VmnetNetwork.parseSubnet(subnet)?.address ?? 0) + 1, users: [vm.id])
+            activeNetworks[key] = ActiveNetwork(network: created, gatewayAddress: (VmnetNetwork.parseSubnet(subnet)?.address ?? 0) + 1, isolationGroup: network.isVMIsolationEnabled ? VmnetIsolationGroup() : nil, users: [vm.id])
         } catch {
             isolatedSubnets.removeValue(forKey: vm.id)
             throw error
         }
         if let active = activeNetworks[key] {
-            try startForwarderIfNeeded(for: vm, network: network, vmnetNetwork: active.network)
+            try startForwarderIfNeeded(for: vm, networkName: network.name, active: active)
         }
     }
 
@@ -116,13 +117,11 @@ class VmnetNetworkManager {
         isolatedSubnets.removeValue(forKey: vm.id)
     }
 
-    private func startForwarderIfNeeded(for vm: VirtualMachine, network: VmnetNetwork, vmnetNetwork: vmnet_network_ref) throws {
-        guard network.isVMIsolationEnabled, forwarders[vm.id] == nil else { return }
+    private func startForwarderIfNeeded(for vm: VirtualMachine, networkName: String, active: ActiveNetwork) throws {
+        guard let isolationGroup = active.isolationGroup, forwarders[vm.id] == nil else { return }
 
-        let isolationGroup = isolationGroups[network.id] ?? VmnetIsolationGroup()
-        isolationGroups[network.id] = isolationGroup
         do {
-            forwarders[vm.id] = try VmnetPacketForwarder(network: vmnetNetwork, networkName: network.name, macAddress: vm.macAddress ?? "", isolationGroup: isolationGroup)
+            forwarders[vm.id] = try VmnetPacketForwarder(network: active.network, networkName: networkName, macAddress: vm.macAddress ?? "", isolationGroup: isolationGroup)
         } catch {
             releaseNetwork(for: vm)
             throw error
