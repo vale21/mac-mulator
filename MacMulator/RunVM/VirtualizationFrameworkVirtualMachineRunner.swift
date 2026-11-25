@@ -250,7 +250,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             configureVmView()
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
-                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: self.startFailureMessage(error, resuming: true), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
                 } else {
                     // Passthrough devices are not part of the saved machine state: plug back the ones saved for this VM
                     self.attachUSBPassthroughDevices()
@@ -534,8 +534,8 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     private func handleVMStartWithOptions(error: (any Error)?) {
-        if error != nil {
-            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+        if let error {
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: startFailureMessage(error, resuming: false), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
         } else {
             if let provisioningInformation = managedVm.provisioningInformation {
                 managedVm.guestUserName = provisioningInformation.userName
@@ -550,10 +550,24 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     private func handleVMStart(result: Result<Void, any Error>) {
         switch result {
         case let .failure(error):
-            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: startFailureMessage(error, resuming: false), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
         default:
             attachUSBDrives()
         }
+    }
+
+    private func startFailureMessage(_ error: any Error, resuming: Bool) -> String {
+        if let error = error as? VZError, error.code == .virtualMachineLimitExceeded, managedVm.os == QemuConstants.OS_MAC {
+            let runningMacVMs = ((NSApp.delegate as? AppDelegate)?.rootController?.runningVMs.keys.map(\.self) ?? [])
+                .filter { $0.id != managedVm.id && $0.os == QemuConstants.OS_MAC && $0.type == MacMulatorConstants.APPLE_VM }
+                .map(\.displayName)
+            if runningMacVMs.isEmpty {
+                return String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere", comment: ""), managedVm.displayName)
+            }
+            return String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached", comment: ""), managedVm.displayName, runningMacVMs.joined(separator: ", "))
+        }
+        let key = resuming ? "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" : "VirtualizationFrameworkVirtualMachineRunner.startFailed"
+        return String(format: NSLocalizedString(key, comment: ""), managedVm.displayName, error.localizedDescription)
     }
 
     private func attachUSBDrives() {

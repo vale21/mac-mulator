@@ -185,6 +185,11 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         updateSecondaryBoxAndDescription(attachment: selectedAttachment())
     }
 
+    func selectVmnetNetwork(_ network: VmnetNetwork) {
+        virtualMachine?.vmnetNetworkId = network.id
+        vmnetNetworksChanged()
+    }
+
     private func loadAttachments() {
         guard let virtualMachine else { return }
 
@@ -244,6 +249,9 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
 
         if network.mode == .isolated {
             descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetIsolated", comment: "")
+        } else if network.isVMIsolationEnabled {
+            let key = network.mode == .shared && network.natEnabled ? "EditVMViewControllerNetworkVF.descriptionVmnetSharedIsolated" : "EditVMViewControllerNetworkVF.descriptionVmnetHostOnlyIsolated"
+            descriptionText.stringValue = NSLocalizedString(key, comment: "")
         } else if network.mode == .hostOnly {
             descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetHostOnly", comment: "")
         } else if network.natEnabled {

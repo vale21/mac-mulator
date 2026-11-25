@@ -153,8 +153,10 @@
 "EditVMViewControllerNetworkVF.descriptionBridged" = "Im Bridged network verwendet die VM eines der physischen Netzwerkgeräte, die mit Ihrem Mac verbunden sind, um auf das Netzwerk zuzugreifen. Die VM verhält sich genau wie ein Computer, der mit dem Netzwerk des Macs verbunden ist, und kann andere Netzwerkgeräte sehen und von ihnen gesehen werden. Die Bandbreite wird zwischen der VM und Ihrem Mac geteilt.";
 "EditVMViewControllerNetworkVF.descriptionNat" = "NAT ist der einfachste Netzwerkmodus für Ihre virtuelle Maschine. In diesem Fall fungiert Ihr Mac als Netzwerkrouter für die VM und stellt ihr eine Internetverbindung zur Verfügung. Andere Geräte im Netzwerk Ihres Macs sind für die VM nicht sichtbar und umgekehrt. Ihr Mac erscheint der VM als Netzwerkgerät. Dies ist der sicherste Ansatz und die empfohlene Option.";
 "EditVMViewControllerNetworkVF.descriptionVmnetHostOnly" = "In einem reinen Host-Netzwerk kann die VM nur mit dem Host-Mac und den anderen VMs im selben Netzwerk kommunizieren. Sie hat keinen Zugriff auf das Internet oder auf andere Geräte im Netzwerk deines Macs.";
+"EditVMViewControllerNetworkVF.descriptionVmnetHostOnlyIsolated" = "VMs in diesem Netzwerk können nur mit dem Host-Mac kommunizieren: Sie haben keinen Internetzugang und sehen sich nicht gegenseitig. Um sie zu trennen, leitet MacMulator jedes Netzwerkpaket dieser VMs selbst weiter, was etwas CPU kostet und die Latenz erhöht.";
 "EditVMViewControllerNetworkVF.descriptionVmnetIsolated" = "Eine isolierte VM kann nur mit dem Host-Mac kommunizieren. Sie hat keinen Internetzugang, sieht die anderen VMs nicht und wird von ihnen nicht gesehen, auch wenn diese ebenfalls mit dem Netzwerk „Isolierte VM“ verbunden sind: Jede VM erhält ihr eigenes privates Netzwerk.";
 "EditVMViewControllerNetworkVF.descriptionVmnetShared" = "In einem gemeinsamen Netzwerk können sich alle verbundenen VMs gegenseitig sehen und über deinen Mac, der als Router dient, auf das Internet zugreifen. Das ist nützlich für verteilte Systeme wie Kubernetes-Cluster. Andere Geräte im Netzwerk deines Macs erreichen die VMs nur über Port-Zuordnungen.";
+"EditVMViewControllerNetworkVF.descriptionVmnetSharedIsolated" = "VMs in diesem Netzwerk erreichen das Internet über deinen Mac, der als Router dient, können sich aber nicht gegenseitig sehen: Jede kommuniziert nur mit dem Host-Mac und dem Internet. Um sie zu trennen, leitet MacMulator jedes Netzwerkpaket dieser VMs selbst weiter, was etwas CPU kostet und die Latenz erhöht.";
 "EditVMViewControllerNetworkVF.descriptionVmnetSharedNoNat" = "In diesem Netzwerk können sich alle verbundenen VMs gegenseitig und den Host-Mac sehen. NAT ist deaktiviert, daher können die VMs nicht auf das Internet zugreifen.";
 "EditVMViewControllerNetworkVF.manageNetworksButton" = "Netzwerke verwalten...";
 "EditVMViewControllerNetworkVF.networkMode" = "Netzwerkmodus";
@@ -203,14 +205,18 @@
 "EditVmnetNetworkViewController.editNetwork" = "Netzwerk %@ bearbeiten";
 "EditVmnetNetworkViewController.hostOnlyDescription" = "VMs sehen nur sich gegenseitig und den Host-Mac.";
 "EditVmnetNetworkViewController.invalidSubnet" = "%@ ist kein gültiges Subnetz. Verwende die CIDR-Notation, zum Beispiel 192.168.0.0/24, mit einer Präfixlänge zwischen 8 und 30.";
+"EditVmnetNetworkViewController.isolation" = "VMs voneinander isolieren";
+"EditVmnetNetworkViewController.isolationDescription" = "VMs sehen nur den Host und, mit NAT, das Internet. MacMulator leitet ihre Pakete selbst weiter: langsamer und mehr CPU-Last.";
 "EditVmnetNetworkViewController.modeLabel" = "Modus:";
 "EditVmnetNetworkViewController.nameInUse" = "Ein Netzwerk namens %@ existiert bereits.";
 "EditVmnetNetworkViewController.nameLabel" = "Netzwerkname:";
 "EditVmnetNetworkViewController.nameMissing" = "Bitte gib den Netzwerknamen ein.";
 "EditVmnetNetworkViewController.nat" = "NAT aktivieren (Internetzugang)";
+"EditVmnetNetworkViewController.networkRunning" = "Diese VMs laufen im Netzwerk %1$@: %2$@.\nEin aktives Netzwerk kann nicht geändert werden, daher gelten die neuen Einstellungen, sobald alle gestoppt sind. Möchtest du sie speichern?";
 "EditVmnetNetworkViewController.sharedDescription" = "VMs sehen sich gegenseitig und den Host-Mac und erreichen das Internet, wenn NAT aktiv ist.";
 "EditVmnetNetworkViewController.subnetLabel" = "Subnetz (CIDR):";
 "EditVmnetNetworkViewController.subnetOverlaps" = "Das Subnetz %1$@ überschneidet sich mit dem Subnetz des Netzwerks %2$@ (%3$@). Netzwerke brauchen getrennte Adressbereiche, da der Host-Mac in jedem eine Adresse hat.";
+"EditVmnetNetworkViewController.subnetOverlapsHost" = "Das Subnetz %1$@ überschneidet sich mit dem Netzwerk der Mac-Schnittstelle %2$@ (%3$@). Es zu verwenden würde die Verbindung des Macs zu diesem Netzwerk unterbrechen.";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Gast hat die virtuelle Maschine beendet.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtuelle Maschine wurde mit Fehler beendet: %@";
 "ManageSnapshotViewController.couldNotDeleteSnapshot" = "Snapshot konnte nicht gelöscht werden";
@@ -228,6 +234,8 @@
 "ManageVmnetNetworksViewController.confirmRemove" = "Möchtest du das Netzwerk %@ entfernen?\nDie verbundenen VMs werden in das integrierte gemeinsame Netzwerk verschoben.";
 "ManageVmnetNetworksViewController.description" = "Netzwerke werden von allen deinen Apple-VMs gemeinsam genutzt: VMs im selben Netzwerk können sich gegenseitig sehen. Integrierte Netzwerke können nicht geändert werden.";
 "ManageVmnetNetworksViewController.done" = "Fertig";
+"ManageVmnetNetworksViewController.modeWithIsolation" = "%@, isolierte VMs";
+"ManageVmnetNetworksViewController.networkInUse" = "Das Netzwerk %1$@ kann nicht entfernt werden, solange diese VMs darauf laufen: %2$@.";
 "ManageVmnetNetworksViewController.off" = "Aus";
 "ManageVmnetNetworksViewController.on" = "An";
 "ManageVmnetNetworksViewController.title" = "vmnet-Netzwerke";
@@ -384,6 +392,8 @@
 "VirtualizationFrameworkInstallVMViewController.installSucceeded" = "Installation erfolgreich abgeschlossen.";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Installation wird gestartet.";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Verbleibende Zeit: wird berechnet...";
+"VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached" = "%1$@ kann nicht gestartet werden: macOS erlaubt auf einem Mac höchstens 2 gleichzeitig laufende macOS-VMs, und diese laufen bereits: %2$@.\n\nFahre eine davon herunter und versuche es erneut.";
+"VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere" = "%@ kann nicht gestartet werden: macOS erlaubt auf einem Mac höchstens 2 gleichzeitig laufende macOS-VMs, und dieses Limit ist durch VMs in anderen Apps erreicht.\n\nFahre eine dieser VMs herunter und versuche es erneut.";
 "VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Gastbereitstellung fehlgeschlagen: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "VM-Snapshot wird erstellt...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Vorgang läuft...";
@@ -473,6 +483,8 @@
 "ImportDriveViewController.importingDrive" = "%@ wird importiert...";
 "QemuDiskImageManager.cannotReadImage" = "%@ kann nicht gelesen werden.";
 "QemuDiskImageManager.cannotWriteImage" = "%@ kann nicht geschrieben werden.";
+"VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ konnte nicht fortgesetzt werden: %2$@";
+"VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ konnte nicht gestartet werden: %2$@";
 "VmnetNetwork.hostOnlyName" = "Nur Host";
 "VmnetNetwork.isolatedName" = "Isolierte VM";
 "VmnetNetwork.modeHostOnly" = "Nur Host";
@@ -480,3 +492,4 @@
 "VmnetNetwork.modeShared" = "Gemeinsam";
 "VmnetNetwork.sharedName" = "Gemeinsam";
 "VmnetNetworkManager.creationFailed" = "Das vmnet-Netzwerk %1$@ konnte nicht erstellt werden: %2$@ (%3$d).";
+"VmnetNetworkManager.subnetConflict" = "Das vmnet-Netzwerk %1$@ kann nicht gestartet werden: Sein Subnetz %2$@ überschneidet sich mit dem Netzwerk der Mac-Schnittstelle %3$@ (%4$@). Wähle ein anderes Netzwerk für diese VM oder ändere das Subnetz unter Netzwerke verwalten.";

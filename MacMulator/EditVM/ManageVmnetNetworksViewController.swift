@@ -38,9 +38,16 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
     @IBAction func deleteNetwork(_ sender: Any) {
         guard let network = network(at: networksTableView.row(for: sender as! NSView)), !network.isBuiltIn else { return }
 
+        let runningVirtualMachines = runningVirtualMachineNames(on: network)
+        if !runningVirtualMachines.isEmpty {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("ManageVmnetNetworksViewController.networkInUse", comment: ""), network.name, runningVirtualMachines.joined(separator: ", ")), virtualMachine: nil)
+            return
+        }
+
         Utils.showPrompt(window: view.window!, style: NSAlert.Style.informational, message: String(format: NSLocalizedString("ManageVmnetNetworksViewController.confirmRemove", comment: ""), network.name), completionHandler: { response in
             if response.rawValue == Utils.ALERT_RESP_OK {
                 self.networks.removeAll { $0.id == network.id }
+                self.moveVirtualMachinesToSharedNetwork(from: network)
                 self.networksChanged()
             }
         }, virtualMachine: nil)
@@ -101,7 +108,7 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         case "Name":
             cell.textField?.stringValue = network.isBuiltIn ? String(format: NSLocalizedString("ManageVmnetNetworksViewController.builtIn", comment: ""), network.name) : network.name
         case "Mode":
-            cell.textField?.stringValue = network.mode.localizedName
+            cell.textField?.stringValue = network.isVMIsolationEnabled ? String(format: NSLocalizedString("ManageVmnetNetworksViewController.modeWithIsolation", comment: ""), network.mode.localizedName) : network.mode.localizedName
         case "Subnet":
             cell.textField?.stringValue = network.mode == .isolated ? String(format: NSLocalizedString("ManageVmnetNetworksViewController.automaticSubnet", comment: ""), network.addressRange) : network.subnet
         case "DHCP":
@@ -127,10 +134,18 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         networks.append(network)
         networksChanged()
         networksTableView.selectRowIndexes(IndexSet(integer: networks.count - 1), byExtendingSelection: false)
+        parentController?.selectVmnetNetwork(network)
     }
 
     func networkUpdated() {
         networksChanged()
+    }
+
+    func runningVirtualMachineNames(on network: VmnetNetwork) -> [String] {
+        guard #available(macOS 26.0, *) else { return [] }
+
+        let runningIds = VmnetNetworkManager.shared.runningVirtualMachineIds(on: network)
+        return Utils.workspaceVirtualMachines().filter { runningIds.contains($0.id) }.map(\.displayName)
     }
 
     @objc private func tableViewDoubleClicked(_: Any) {
@@ -152,6 +167,13 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
 
     private func network(at row: Int) -> VmnetNetwork? {
         row >= 0 && row < networks.count ? networks[row] : nil
+    }
+
+    private func moveVirtualMachinesToSharedNetwork(from network: VmnetNetwork) {
+        for virtualMachine in Utils.workspaceVirtualMachines() where virtualMachine.vmnetNetworkId == network.id {
+            virtualMachine.vmnetNetworkId = VmnetNetwork.SHARED_ID
+            virtualMachine.writeToPlist()
+        }
     }
 
     private func onOffString(_ value: Bool) -> String {

@@ -22,6 +22,8 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
     @IBOutlet var subnetField: NSTextField!
     @IBOutlet var dhcpCheckbox: NSButton!
     @IBOutlet var natCheckbox: NSButton!
+    @IBOutlet var isolationCheckbox: NSButton!
+    @IBOutlet var isolationDescription: NSTextField!
     @IBOutlet var modeDescription: NSTextField!
 
     static let MODES: [VmnetNetwork.Mode] = [.shared, .hostOnly]
@@ -61,20 +63,20 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
             showError(String(format: NSLocalizedString("EditVmnetNetworkViewController.subnetOverlaps", comment: ""), subnet, other.name, other.addressRange))
             return
         }
-
-        let selectedMode = EditVmnetNetworkViewController.MODES[max(modeComboBox.indexOfSelectedItem, 0)]
-        let natEnabled = selectedMode == .shared && natCheckbox.state == .on
-        if mode == Mode.ADD {
-            parentController?.addNetwork(VmnetNetwork(name: name, mode: selectedMode, subnet: subnet, dhcpEnabled: dhcpCheckbox.state == .on, natEnabled: natEnabled))
-        } else if let network {
-            network.name = name
-            network.mode = selectedMode
-            network.subnet = subnet
-            network.dhcpEnabled = dhcpCheckbox.state == .on
-            network.natEnabled = natEnabled
-            parentController?.networkUpdated()
+        if let interface = VmnetNetwork.overlappingHostInterface(subnet) {
+            showError(String(format: NSLocalizedString("EditVmnetNetworkViewController.subnetOverlapsHost", comment: ""), subnet, interface.interface, interface.subnet))
+            return
         }
-        dismiss(self)
+
+        if let network, let runningVirtualMachines = parentController?.runningVirtualMachineNames(on: network), !runningVirtualMachines.isEmpty {
+            Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("EditVmnetNetworkViewController.networkRunning", comment: ""), network.name, runningVirtualMachines.joined(separator: ", ")), completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.saveNetwork(name: name, subnet: subnet)
+                }
+            }, virtualMachine: nil)
+            return
+        }
+        saveNetwork(name: name, subnet: subnet)
     }
 
     @IBAction func cancelButtonPressed(_: Any) {
@@ -87,6 +89,8 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
         subnetLabel.stringValue = NSLocalizedString("EditVmnetNetworkViewController.subnetLabel", comment: "")
         dhcpCheckbox.title = NSLocalizedString("EditVmnetNetworkViewController.dhcp", comment: "")
         natCheckbox.title = NSLocalizedString("EditVmnetNetworkViewController.nat", comment: "")
+        isolationCheckbox.title = NSLocalizedString("EditVmnetNetworkViewController.isolation", comment: "")
+        isolationDescription.stringValue = NSLocalizedString("EditVmnetNetworkViewController.isolationDescription", comment: "")
 
         modeComboBox.removeAllItems()
         for networkMode in EditVmnetNetworkViewController.MODES {
@@ -100,6 +104,23 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
         updateNatCheckbox()
     }
 
+    private func saveNetwork(name: String, subnet: String) {
+        let selectedMode = EditVmnetNetworkViewController.MODES[max(modeComboBox.indexOfSelectedItem, 0)]
+        let natEnabled = selectedMode == .shared && natCheckbox.state == .on
+        if mode == Mode.ADD {
+            parentController?.addNetwork(VmnetNetwork(name: name, mode: selectedMode, subnet: subnet, dhcpEnabled: dhcpCheckbox.state == .on, natEnabled: natEnabled, vmIsolationEnabled: isolationCheckbox.state == .on))
+        } else if let network {
+            network.name = name
+            network.mode = selectedMode
+            network.subnet = subnet
+            network.dhcpEnabled = dhcpCheckbox.state == .on
+            network.natEnabled = natEnabled
+            network.vmIsolationEnabled = isolationCheckbox.state == .on
+            parentController?.networkUpdated()
+        }
+        dismiss(self)
+    }
+
     private func updateView() {
         if mode == Mode.ADD {
             titleField.stringValue = NSLocalizedString("EditVmnetNetworkViewController.createNetwork", comment: "")
@@ -108,6 +129,7 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
             subnetField.stringValue = MacMulatorConstants.VMNET_NEW_NETWORK_DEFAULT_SUBNET
             dhcpCheckbox.state = .on
             natCheckbox.state = .on
+            isolationCheckbox.state = .off
         } else if let network {
             titleField.stringValue = String(format: NSLocalizedString("EditVmnetNetworkViewController.editNetwork", comment: ""), network.name)
             nameField.stringValue = network.name
@@ -115,6 +137,7 @@ class EditVmnetNetworkViewController: NSViewController, NSComboBoxDelegate {
             subnetField.stringValue = network.subnet
             dhcpCheckbox.state = network.dhcpEnabled ? .on : .off
             natCheckbox.state = network.natEnabled ? .on : .off
+            isolationCheckbox.state = network.isVMIsolationEnabled ? .on : .off
         }
         updateNatCheckbox()
     }

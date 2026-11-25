@@ -172,6 +172,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
             if let existing = getVirtualMachine(id: vm.id), existing.path != vm.path {
                 // A copy of an already registered bundle carries the same ID as the original.
                 vm.assignNewIdForClone()
+                vm.reassignConflictingHostPorts()
                 vm.writeToPlist()
             }
             addVirtualMachine(vm)
@@ -570,6 +571,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
         if let tempVm = temp {
             tempVm.assignNewIdForClone()
             tempVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+            tempVm.reassignConflictingHostPorts()
             tempVm.displayName = displayName
             if tempVm.type == MacMulatorConstants.APPLE_TEMPLATE_VM {
                 tempVm.type = MacMulatorConstants.APPLE_VM

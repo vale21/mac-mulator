@@ -211,6 +211,16 @@ class VirtualMachine: Codable, Hashable {
         storedId = UUID().uuidString
     }
 
+    func reassignConflictingHostPorts() {
+        var takenPorts = Set(Utils.workspaceVirtualMachines().filter { $0.id != id }.flatMap { $0.portMappings ?? [] }.map(\.hostPort))
+        for mapping in portMappings ?? [] {
+            if takenPorts.contains(mapping.hostPort) {
+                mapping.hostPort = VirtualMachine.freeHostPort(forVMPort: mapping.vmPort, currentHostPort: mapping.hostPort, excluding: takenPorts)
+            }
+            takenPorts.insert(mapping.hostPort)
+        }
+    }
+
     func cleanup() {
         provisioningInformation?.cleanup()
     }
@@ -229,11 +239,22 @@ class VirtualMachine: Codable, Hashable {
     private static func defaultPortMappings(os: String) -> [PortMapping] {
         switch os {
         case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
-            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223))]
+            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: freeHostPort(forVMPort: 22))]
         case QemuConstants.OS_WIN:
-            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: Utils.freeHostPort(preferred: (1 ... 6).map { Int32($0) * 10000 + 3389 }, fallbackStart: 3390))]
+            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: freeHostPort(forVMPort: 3389))]
         default:
             []
+        }
+    }
+
+    private static func freeHostPort(forVMPort vmPort: Int32, currentHostPort: Int32? = nil, excluding excludedPorts: Set<Int32> = []) -> Int32 {
+        switch vmPort {
+        case 22:
+            Utils.freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223, excluding: excludedPorts)
+        case 3389:
+            Utils.freeHostPort(preferred: (1 ... 6).map { Int32($0) * 10000 + 3389 }, fallbackStart: 3390, excluding: excludedPorts)
+        default:
+            Utils.freeHostPort(preferred: [], fallbackStart: (currentHostPort ?? 10000) + 1, excluding: excludedPorts)
         }
     }
 }

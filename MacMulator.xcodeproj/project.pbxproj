@@ -63,6 +63,8 @@
 		3B4D181E2FD6F94200C75764 /* EditVMViewControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
 		3B59CBA730B601F600EF86EC /* VirtualMachineFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */; };
+		3B59CBA930B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */; };
+		3B59CBAA30B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */; };
 		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
@@ -278,7 +280,7 @@
 		3B2E0F6C30ADDFC80032F2CF /* VmnetNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetNetwork.swift; sourceTree = "<group>"; };
 		3B2E0F6F30ADE0340032F2CF /* ManageVmnetNetworksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageVmnetNetworksViewController.swift; sourceTree = "<group>"; };
 		3B2E0F7230ADE0470032F2CF /* EditVmnetNetworkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVmnetNetworkViewController.swift; sourceTree = "<group>"; };
-		3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */ = {isa = PBXFileReference; path = VmnetNetworkManager.swift; sourceTree = "<group>"; };
+		3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetNetworkManager.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
 		3B39124E2DA9C64500BF8794 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 		3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerSnapshots.swift; sourceTree = "<group>"; };
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
 		3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineFactory.swift; sourceTree = "<group>"; };
+		3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */ = {isa = PBXFileReference; path = VmnetPacketForwarder.swift; sourceTree = "<group>"; };
 		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSnapshotViewController.swift; sourceTree = "<group>"; };
@@ -534,6 +537,7 @@
 				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
 				3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */,
 				3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */,
+				3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */,
 			);
 			path = Virtualization;
 			sourceTree = "<group>";
@@ -985,6 +989,7 @@
 				3B200DAE2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift in Sources */,
 				3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */,
 				3BD212272FCC363C007CB895 /* VirtualMachineSnapshot.swift in Sources */,
+				3B59CBAA30B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */,
 				3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26885308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3B66C6CA306D1B280031A733 /* ManageSnapshotViewController.swift in Sources */,
@@ -1092,6 +1097,7 @@
 				3BFB2B673078F067005A4B51 /* VirtualMachineRunnerFactory.swift in Sources */,
 				3BFB2B683078F067005A4B51 /* CreateVMFileViewController.swift in Sources */,
 				3BFB2B693078F067005A4B51 /* VirtualMachineSnapshot.swift in Sources */,
+				3B59CBA930B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */,
 				3BFB2B6A3078F067005A4B51 /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26886308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3BFB2B6B3078F067005A4B51 /* ManageSnapshotViewController.swift in Sources */,

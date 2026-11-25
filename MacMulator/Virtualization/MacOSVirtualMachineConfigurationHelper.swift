@@ -44,6 +44,8 @@ import Virtualization
                 let interface = interfaces.first { $0.identifier == phisicalDevice } ?? interfaces[0]
 
                 networkAttachment = VZBridgedNetworkDeviceAttachment(interface: interface)
+            } else if device == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let fileHandle = VmnetNetworkManager.shared.isolatedFileHandle(for: vm) {
+                networkAttachment = VZFileHandleNetworkDeviceAttachment(fileHandle: fileHandle)
             } else if device == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let network = VmnetNetworkManager.shared.network(for: vm) {
                 networkAttachment = VZVmnetNetworkDeviceAttachment(network: network)
             }

@@ -35,6 +35,7 @@ class VmnetNetwork: Codable {
     var subnet: String
     var dhcpEnabled: Bool
     var natEnabled: Bool
+    var vmIsolationEnabled: Bool?
 
     var isBuiltIn: Bool {
         [VmnetNetwork.SHARED_ID, VmnetNetwork.HOST_ONLY_ID, VmnetNetwork.ISOLATED_ID].contains(id)
@@ -44,17 +45,22 @@ class VmnetNetwork: Codable {
         mode == .isolated ? MacMulatorConstants.VMNET_ISOLATED_SUBNETS_RANGE : subnet
     }
 
+    var isVMIsolationEnabled: Bool {
+        vmIsolationEnabled == true
+    }
+
     var supportsPortForwarding: Bool {
         mode == .shared && natEnabled
     }
 
-    init(id: String = UUID().uuidString, name: String, mode: Mode, subnet: String, dhcpEnabled: Bool, natEnabled: Bool) {
+    init(id: String = UUID().uuidString, name: String, mode: Mode, subnet: String, dhcpEnabled: Bool, natEnabled: Bool, vmIsolationEnabled: Bool = false) {
         self.id = id
         self.name = name
         self.mode = mode
         self.subnet = subnet
         self.dhcpEnabled = dhcpEnabled
         self.natEnabled = natEnabled
+        self.vmIsolationEnabled = vmIsolationEnabled
     }
 
     static func builtInNetworks() -> [VmnetNetwork] {
@@ -87,6 +93,10 @@ class VmnetNetwork: Codable {
         // Two ranges overlap when they are equal on the prefix of the larger one
         let mask = networkMask(min(firstPrefix, secondPrefix))
         return firstAddress & mask == secondAddress & mask
+    }
+
+    static func overlappingHostInterface(_ subnet: String) -> (interface: String, subnet: String)? {
+        Utils.hostInterfaceSubnets().first { subnetsOverlap(subnet, $0.subnet) }
     }
 
     static func loadUserNetworks() -> [VmnetNetwork] {

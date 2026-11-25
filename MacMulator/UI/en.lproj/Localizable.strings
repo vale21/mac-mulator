@@ -153,8 +153,10 @@
 "EditVMViewControllerNetworkVF.descriptionBridged" = "In Bridge network you let the VM use one of the physical network devices connected to your Mac to reach the network. The VM will behave exactly as a computer connected to the Mac network, and it will both see and be visible by the other network devices. The bandwdth is shared between th VM and your Mac.";
 "EditVMViewControllerNetworkVF.descriptionNat" = "A NAT is the simplest network mode for your VM. In this case you Mac acts as a network router for the VM, offering internet connectivity to it. The other devices on yor Mac network will not be visible by the VM, and viceversa. Your Mac will appear to the VM as a network device. This is the safest apprach and the suggested one.";
 "EditVMViewControllerNetworkVF.descriptionVmnetHostOnly" = "On a host-only network the VM can talk only to the host Mac and to the other VMs on the same network. It has no access to the internet or to the other devices on your Mac network.";
+"EditVMViewControllerNetworkVF.descriptionVmnetHostOnlyIsolated" = "VMs on this network can talk only to the host Mac: they have no internet access and cannot see each other. To keep them apart, MacMulator forwards every network packet of these VMs itself, which uses some CPU and adds latency.";
 "EditVMViewControllerNetworkVF.descriptionVmnetIsolated" = "An isolated VM can talk only to the host Mac. It has no access to the internet, it cannot see the other VMs, and the other VMs cannot see it, even if they are attached to the Isolated VM network too: every VM gets its own private network.";
 "EditVMViewControllerNetworkVF.descriptionVmnetShared" = "On a shared network all the VMs attached to it can see each other, and reach the internet through your Mac, which acts as a router. This is useful to run distributed systems, like Kubernetes clusters. The other devices on your Mac network can reach the VMs only through port mappings.";
+"EditVMViewControllerNetworkVF.descriptionVmnetSharedIsolated" = "VMs on this network reach the internet through your Mac, which acts as a router, but cannot see each other: each one can talk only to the host Mac and the internet. To keep them apart, MacMulator forwards every network packet of these VMs itself, which uses some CPU and adds latency.";
 "EditVMViewControllerNetworkVF.descriptionVmnetSharedNoNat" = "On this network all the VMs attached to it can see each other and the host Mac. NAT is disabled, so the VMs cannot reach the internet.";
 "EditVMViewControllerNetworkVF.manageNetworksButton" = "Manage Networks...";
 "EditVMViewControllerNetworkVF.networkMode" = "Network mode";
@@ -203,14 +205,18 @@
 "EditVmnetNetworkViewController.editNetwork" = "Edit network %@";
 "EditVmnetNetworkViewController.hostOnlyDescription" = "VMs can see each other and the host Mac only.";
 "EditVmnetNetworkViewController.invalidSubnet" = "%@ is not a valid subnet. Use the CIDR notation, for example 192.168.0.0/24, with a prefix length between 8 and 30.";
+"EditVmnetNetworkViewController.isolation" = "Isolate VMs from each other";
+"EditVmnetNetworkViewController.isolationDescription" = "VMs see only the host and, with NAT, the internet. MacMulator forwards their packets itself: slower and uses more CPU.";
 "EditVmnetNetworkViewController.modeLabel" = "Mode:";
 "EditVmnetNetworkViewController.nameInUse" = "A network named %@ already exists.";
 "EditVmnetNetworkViewController.nameLabel" = "Network name:";
 "EditVmnetNetworkViewController.nameMissing" = "Please enter the network name.";
 "EditVmnetNetworkViewController.nat" = "Enable NAT (internet access)";
+"EditVmnetNetworkViewController.networkRunning" = "These VMs are running on the network %1$@: %2$@.\nA running network cannot be changed, so the new settings will apply once they are all stopped. Do you want to save them?";
 "EditVmnetNetworkViewController.sharedDescription" = "VMs can see each other and the host Mac, and reach the internet if NAT is on.";
 "EditVmnetNetworkViewController.subnetLabel" = "Subnet (CIDR):";
 "EditVmnetNetworkViewController.subnetOverlaps" = "The subnet %1$@ overlaps the subnet of the network %2$@ (%3$@). Networks need separate address ranges, because the host Mac has an address on each of them.";
+"EditVmnetNetworkViewController.subnetOverlapsHost" = "The subnet %1$@ overlaps the network of the Mac interface %2$@ (%3$@). Using it would break the Mac connection to that network.";
 "MacOSVirtualMachineDelegate.stoppedByGuest" = "Guest did stop virtual machine.";
 "MacOSVirtualMachineDelegate.stoppedWithError" = "Virtual machine did stop with error: %@";
 "ManageSnapshotViewController.couldNotDeleteSnapshot" = "Could not delete snapshot";
@@ -228,6 +234,8 @@
 "ManageVmnetNetworksViewController.confirmRemove" = "Do you want to remove the network %@?\nThe VMs attached to it will be moved to the built-in shared network.";
 "ManageVmnetNetworksViewController.description" = "Networks are shared by all your Apple VMs: VMs attached to the same network can see each other. Built-in networks cannot be changed.";
 "ManageVmnetNetworksViewController.done" = "Done";
+"ManageVmnetNetworksViewController.modeWithIsolation" = "%@, isolated VMs";
+"ManageVmnetNetworksViewController.networkInUse" = "The network %1$@ cannot be removed while these VMs are running on it: %2$@.";
 "ManageVmnetNetworksViewController.off" = "Off";
 "ManageVmnetNetworksViewController.on" = "On";
 "ManageVmnetNetworksViewController.title" = "vmnet networks";
@@ -384,6 +392,8 @@
 "VirtualizationFrameworkInstallVMViewController.installSucceeded" = "Installation succeeded.";
 "VirtualizationFrameworkInstallVMViewController.starting" = "Starting installation.";
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Estimate time remaining: Calculating...";
+"VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached" = "%1$@ cannot start: macOS allows at most 2 macOS virtual machines running at the same time on a Mac, and these are already running: %2$@.\n\nShut one of them down and try again.";
+"VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere" = "%@ cannot start: macOS allows at most 2 macOS virtual machines running at the same time on a Mac, and that limit has been reached by VMs running in other apps.\n\nShut down one of those VMs and try again.";
 "VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Guest provisioning failed: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Creating VM snapshot...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Operating...";
@@ -473,6 +483,8 @@
 "ImportDriveViewController.importingDrive" = "Importing %@...";
 "QemuDiskImageManager.cannotReadImage" = "Cannot read %@.";
 "QemuDiskImageManager.cannotWriteImage" = "Cannot write %@.";
+"VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ failed to resume: %2$@";
+"VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ failed to start: %2$@";
 "VmnetNetwork.hostOnlyName" = "Host-only";
 "VmnetNetwork.isolatedName" = "Isolated VM";
 "VmnetNetwork.modeHostOnly" = "Host-only";
@@ -480,3 +492,4 @@
 "VmnetNetwork.modeShared" = "Shared";
 "VmnetNetwork.sharedName" = "Shared";
 "VmnetNetworkManager.creationFailed" = "Could not create the vmnet network %1$@: %2$@ (%3$d).";
+"VmnetNetworkManager.subnetConflict" = "The vmnet network %1$@ cannot be started: its subnet %2$@ overlaps the network of the Mac interface %3$@ (%4$@). Choose another network for this VM, or change the subnet in Manage Networks.";

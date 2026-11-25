@@ -2643,11 +2643,11 @@ DQ
             <objects>
                 <viewController id="eVn-Vc-001" customClass="EditVmnetNetworkViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="eVn-00-163">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="308"/>
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="376"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-151">
-                                <rect key="frame" x="18" y="267" width="404" height="21"/>
+                                <rect key="frame" x="18" y="335" width="404" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Create new network" id="eVn-00-164">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -2656,7 +2656,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-152">
-                                <rect key="frame" x="18" y="232" width="150" height="16"/>
+                                <rect key="frame" x="18" y="300" width="150" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Network name:" id="eVn-00-165">
                                     <font key="font" metaFont="system"/>
@@ -2665,7 +2665,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-153">
-                                <rect key="frame" x="174" y="229" width="246" height="21"/>
+                                <rect key="frame" x="174" y="297" width="246" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="eVn-00-166">
                                     <font key="font" metaFont="system"/>
@@ -2674,7 +2674,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-154">
-                                <rect key="frame" x="18" y="198" width="150" height="16"/>
+                                <rect key="frame" x="18" y="266" width="150" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Mode:" id="eVn-00-167">
                                     <font key="font" metaFont="system"/>
@@ -2683,7 +2683,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-155">
-                                <rect key="frame" x="174" y="192" width="249" height="25"/>
+                                <rect key="frame" x="174" y="260" width="249" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="10" id="eVn-00-168">
                                     <font key="font" metaFont="system"/>
@@ -2695,7 +2695,7 @@ DQ
                                 </connections>
                             </comboBox>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-156">
-                                <rect key="frame" x="172" y="144" width="250" height="42"/>
+                                <rect key="frame" x="172" y="212" width="250" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" title="Mode description" id="eVn-00-170">
                                     <font key="font" metaFont="smallSystem"/>
@@ -2704,7 +2704,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-157">
-                                <rect key="frame" x="18" y="114" width="150" height="16"/>
+                                <rect key="frame" x="18" y="182" width="150" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Subnet (CIDR):" id="eVn-00-171">
                                     <font key="font" metaFont="system"/>
@@ -2713,7 +2713,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-158">
-                                <rect key="frame" x="174" y="111" width="246" height="21"/>
+                                <rect key="frame" x="174" y="179" width="246" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="192.168.0.0/24" drawsBackground="YES" id="eVn-00-172">
                                     <font key="font" metaFont="system"/>
@@ -2722,7 +2722,7 @@ DQ
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-161">
-                                <rect key="frame" x="172" y="81" width="250" height="18"/>
+                                <rect key="frame" x="172" y="149" width="250" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Enable DHCP server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="eVn-00-175">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2730,7 +2730,7 @@ DQ
                                 </buttonCell>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-162">
-                                <rect key="frame" x="172" y="57" width="250" height="18"/>
+                                <rect key="frame" x="172" y="125" width="250" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Enable NAT" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="eVn-00-176">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2765,9 +2765,28 @@ Gw
                                     <action selector="cancelButtonPressed:" target="eVn-Vc-001" id="aCt-00-182"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-Is-001">
+                                <rect key="frame" x="172" y="101" width="250" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Isolate VMs from each other" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="eVn-Is-002">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-Is-003">
+                                <rect key="frame" x="190" y="55" width="232" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" title="Isolation description" id="eVn-Is-004">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="isolationCheckbox" destination="eVn-Is-001" id="eVn-Is-005"/>
+                        <outlet property="isolationDescription" destination="eVn-Is-003" id="eVn-Is-006"/>
                         <outlet property="dhcpCheckbox" destination="eVn-00-161" id="oUt-00-183"/>
                         <outlet property="modeComboBox" destination="eVn-00-155" id="oUt-00-184"/>
                         <outlet property="modeDescription" destination="eVn-00-156" id="oUt-00-185"/>

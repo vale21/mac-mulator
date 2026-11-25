@@ -36,6 +36,9 @@ class Utils {
     static let IMAGE_TYPES = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
     static let IMAGE_TYPES_USB = ["img", "iso", "cdr"]
     // Disk images that can be imported as a drive: cloud images are usually .img (often qcow2 inside) or .qcow2
+    private static let assignedHostPortsLock = NSLock()
+    private static var assignedHostPorts = Set<Int32>()
+
     static let IMPORT_DRIVE_TYPES = ["img", "raw", "qcow2", "qcow", "qvd", "asif", "vmdk", "vdi", "vhd", "vhdx"]
 
     /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
@@ -1043,17 +1046,49 @@ class Utils {
     }
 
     static func workspaceVirtualMachines() -> [VirtualMachine] {
-        (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.sync { workspaceVirtualMachines() }
+        }
+        return (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
     }
 
-    static func freeHostPort(preferred: [Int32], fallbackStart: Int32) -> Int32 {
+    static func freeHostPort(preferred: [Int32], fallbackStart: Int32, excluding excludedPorts: Set<Int32> = []) -> Int32 {
         let mappedPorts = Set(workspaceVirtualMachines().flatMap { $0.portMappings ?? [] }.map(\.hostPort))
-        let isFree = { (port: Int32) in !mappedPorts.contains(port) && !isHostPortInUse(port) }
 
-        if let port = preferred.first(where: isFree) {
-            return port
+        // Taken after reading the workspace, which may wait for the main thread
+        assignedHostPortsLock.lock()
+        defer { assignedHostPortsLock.unlock() }
+
+        // Ports handed out earlier in this session count as taken: clones are registered asynchronously,
+        // so the VMs that received them may not be in the workspace list yet
+        let takenPorts = mappedPorts.union(assignedHostPorts).union(excludedPorts)
+        let isFree = { (port: Int32) in !takenPorts.contains(port) && !isHostPortInUse(port) }
+
+        let port = preferred.first(where: isFree) ?? (min(fallbackStart, 65535) ... 65535).first(where: isFree) ?? preferred.first ?? fallbackStart
+        assignedHostPorts.insert(port)
+        return port
+    }
+
+    static func hostInterfaceSubnets() -> [(interface: String, subnet: String)] {
+        var interfaces: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&interfaces) == 0, let firstInterface = interfaces else { return [] }
+        defer { freeifaddrs(interfaces) }
+
+        var subnets: [(interface: String, subnet: String)] = []
+        for pointer in sequence(first: firstInterface, next: { $0.pointee.ifa_next }) {
+            let entry = pointer.pointee
+            let name = String(cString: entry.ifa_name)
+            // Loopback and the bridges vmnet creates for its own networks are not host networks
+            guard let address = entry.ifa_addr, let netmask = entry.ifa_netmask, address.pointee.sa_family == sa_family_t(AF_INET), !name.hasPrefix("lo"), !name.hasPrefix("bridge") else { continue }
+
+            let ipAddress = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
+            let mask = netmask.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
+            guard mask != 0, ipAddress >> 16 != 0xA9FE else { continue }
+
+            let networkAddress = String(cString: inet_ntoa(in_addr(s_addr: (ipAddress & mask).bigEndian)))
+            subnets.append((name, networkAddress + "/" + String(mask.nonzeroBitCount)))
         }
-        return (fallbackStart ... 65535).first(where: isFree) ?? preferred.first ?? fallbackStart
+        return subnets
     }
 
     static func isHostPortInUse(_ port: Int32) -> Bool {
