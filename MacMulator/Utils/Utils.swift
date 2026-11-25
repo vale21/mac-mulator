@@ -1069,6 +1069,38 @@ class Utils {
         return port
     }
 
+    static func freeHostPort(forVMPort vmPort: Int32, currentHostPort: Int32? = nil, excluding excludedPorts: Set<Int32> = []) -> Int32 {
+        switch vmPort {
+        case 22:
+            freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223, excluding: excludedPorts)
+        case 3389:
+            freeHostPort(preferred: (1 ... 6).map { Int32($0) * 10000 + 3389 }, fallbackStart: 3390, excluding: excludedPorts)
+        default:
+            freeHostPort(preferred: [], fallbackStart: (currentHostPort ?? 10000) + 1, excluding: excludedPorts)
+        }
+    }
+
+    static func defaultPortMappings(os: String) -> [PortMapping] {
+        switch os {
+        case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
+            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: freeHostPort(forVMPort: 22))]
+        case QemuConstants.OS_WIN:
+            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: freeHostPort(forVMPort: 3389))]
+        default:
+            []
+        }
+    }
+
+    static func reassignConflictingHostPorts(_ vm: VirtualMachine) {
+        var takenPorts = Set(workspaceVirtualMachines().filter { $0.id != vm.id }.flatMap { $0.portMappings ?? [] }.map(\.hostPort))
+        for mapping in vm.portMappings ?? [] {
+            if takenPorts.contains(mapping.hostPort) {
+                mapping.hostPort = freeHostPort(forVMPort: mapping.vmPort, currentHostPort: mapping.hostPort, excluding: takenPorts)
+            }
+            takenPorts.insert(mapping.hostPort)
+        }
+    }
+
     static func hostInterfaceSubnets() -> [(interface: String, subnet: String)] {
         var interfaces: UnsafeMutablePointer<ifaddrs>?
         guard getifaddrs(&interfaces) == 0, let firstInterface = interfaces else { return [] }
