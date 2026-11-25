@@ -494,4 +494,5 @@
 "VmnetNetwork.modeShared" = "Gemeinsam";
 "VmnetNetwork.sharedName" = "Gemeinsam";
 "VmnetNetworkManager.creationFailed" = "Das vmnet-Netzwerk %1$@ konnte nicht erstellt werden: %2$@ (%3$d).";
+"VmnetNetworkManager.reservationCapacityExceeded" = "Das vmnet-Netzwerk %1$@ kann nicht gestartet werden: %2$d VMs darin haben Port-Zuordnungen und benötigen je eine reservierte Adresse, aber das Subnetz bietet nur Platz für %3$d. Verwende ein größeres Subnetz für dieses Netzwerk oder entferne die Port-Zuordnungen einiger seiner VMs.";
 "VmnetNetworkManager.subnetConflict" = "Das vmnet-Netzwerk %1$@ kann nicht gestartet werden: Sein Subnetz %2$@ überschneidet sich mit dem Netzwerk der Mac-Schnittstelle %3$@ (%4$@). Wähle ein anderes Netzwerk für diese VM oder ändere das Subnetz unter Netzwerke verwalten.";

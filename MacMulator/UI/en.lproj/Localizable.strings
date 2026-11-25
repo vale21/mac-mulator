@@ -494,4 +494,5 @@
 "VmnetNetwork.modeShared" = "Shared";
 "VmnetNetwork.sharedName" = "Shared";
 "VmnetNetworkManager.creationFailed" = "Could not create the vmnet network %1$@: %2$@ (%3$d).";
+"VmnetNetworkManager.reservationCapacityExceeded" = "The vmnet network %1$@ cannot be started: %2$d VMs on it have port mappings, and each needs a reserved address, but its subnet has room for %3$d. Use a larger subnet for this network, or remove the port mappings of some of its VMs.";
 "VmnetNetworkManager.subnetConflict" = "The vmnet network %1$@ cannot be started: its subnet %2$@ overlaps the network of the Mac interface %3$@ (%4$@). Choose another network for this VM, or change the subnet in Manage Networks.";

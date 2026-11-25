@@ -41,6 +41,16 @@ struct VmnetSubnetConflictError: LocalizedError {
     }
 }
 
+struct VmnetReservationCapacityError: LocalizedError {
+    let networkName: String
+    let capacity: Int
+    let required: Int
+
+    var errorDescription: String? {
+        String(format: NSLocalizedString("VmnetNetworkManager.reservationCapacityExceeded", comment: ""), networkName, required, capacity)
+    }
+}
+
 @available(macOS 26.0, *)
 class VmnetNetworkManager {
     private struct ActiveNetwork {
@@ -190,14 +200,23 @@ class VmnetNetworkManager {
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
         let networks = VmnetNetwork.allNetworks()
         let attachedVMs = Utils.workspaceVirtualMachines()
-            .filter { $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && $0.macAddress != nil && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
+            .filter { $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && !($0.portMappings ?? []).isEmpty && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
+            .filter { $0.macAddress.flatMap { ether_aton($0) } != nil }
             .sorted { $0.id < $1.id }
 
+        // .0 is the network, .1 the host gateway and the last address the broadcast one. Small subnets have no room
+        // left for dynamic DHCP addresses below the usual first reserved host, so they reserve from the first guest address
         let lastHost = (UInt32(1) << (32 - prefixLength)) - 2
+        let firstHost = lastHost >= MacMulatorConstants.VMNET_FIRST_RESERVED_HOST * 2 ? MacMulatorConstants.VMNET_FIRST_RESERVED_HOST : 2
+        let capacity = Int(lastHost - firstHost + 1)
+        guard attachedVMs.count <= capacity else {
+            throw VmnetReservationCapacityError(networkName: network.name, capacity: capacity, required: attachedVMs.count)
+        }
+
         var usedHostPorts = Set<Int32>()
         for (index, vm) in attachedVMs.enumerated() {
-            let host = MacMulatorConstants.VMNET_FIRST_RESERVED_HOST + UInt32(index)
-            guard host <= lastHost, let macAddress = vm.macAddress, let ethernetAddress = ether_aton(macAddress) else { continue }
+            guard let macAddress = vm.macAddress, let ethernetAddress = ether_aton(macAddress) else { continue }
+            let host = firstHost + UInt32(index)
 
             var reservedAddress = in_addr(s_addr: (subnetAddress + host).bigEndian)
             try check(vmnet_network_configuration_add_dhcp_reservation(configuration, ethernetAddress, &reservedAddress), network)

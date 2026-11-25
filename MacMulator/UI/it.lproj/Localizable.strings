@@ -494,4 +494,5 @@
 "VmnetNetwork.modeShared" = "Condivisa";
 "VmnetNetwork.sharedName" = "Condivisa";
 "VmnetNetworkManager.creationFailed" = "Impossibile creare la rete vmnet %1$@: %2$@ (%3$d).";
+"VmnetNetworkManager.reservationCapacityExceeded" = "Impossibile avviare la rete vmnet %1$@: %2$d VM su di essa hanno mappature delle porte e ognuna richiede un indirizzo riservato, ma la sua sottorete ne può contenere %3$d. Usa una sottorete più grande per questa rete, o rimuovi le mappature delle porte di alcune sue VM.";
 "VmnetNetworkManager.subnetConflict" = "Impossibile avviare la rete vmnet %1$@: la sua sottorete %2$@ si sovrappone alla rete dell'interfaccia %3$@ del Mac (%4$@). Scegli un'altra rete per questa VM, o cambia la sottorete in Gestisci reti.";
