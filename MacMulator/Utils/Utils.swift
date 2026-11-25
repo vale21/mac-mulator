@@ -1110,7 +1110,7 @@ class Utils {
         }
     }
 
-    static func hostInterfaceSubnets() -> [(interface: String, subnet: String)] {
+    static func hostInterfaceSubnets(excludingAddresses excludedAddresses: Set<UInt32> = []) -> [(interface: String, subnet: String)] {
         var interfaces: UnsafeMutablePointer<ifaddrs>?
         guard getifaddrs(&interfaces) == 0, let firstInterface = interfaces else { return [] }
         defer { freeifaddrs(interfaces) }
@@ -1119,12 +1119,11 @@ class Utils {
         for pointer in sequence(first: firstInterface, next: { $0.pointee.ifa_next }) {
             let entry = pointer.pointee
             let name = String(cString: entry.ifa_name)
-            // Loopback and the bridges vmnet creates for its own networks are not host networks
-            guard let address = entry.ifa_addr, let netmask = entry.ifa_netmask, address.pointee.sa_family == sa_family_t(AF_INET), !name.hasPrefix("lo"), !name.hasPrefix("bridge") else { continue }
+            guard let address = entry.ifa_addr, let netmask = entry.ifa_netmask, address.pointee.sa_family == sa_family_t(AF_INET), !name.hasPrefix("lo") else { continue }
 
             let ipAddress = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
             let mask = netmask.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
-            guard mask != 0, ipAddress >> 16 != 0xA9FE else { continue }
+            guard mask != 0, ipAddress >> 16 != 0xA9FE, !excludedAddresses.contains(ipAddress) else { continue }
 
             let networkAddress = String(cString: inet_ntoa(in_addr(s_addr: (ipAddress & mask).bigEndian)))
             subnets.append((name, networkAddress + "/" + String(mask.nonzeroBitCount)))

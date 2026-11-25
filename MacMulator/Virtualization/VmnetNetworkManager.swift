@@ -45,6 +45,7 @@ struct VmnetSubnetConflictError: LocalizedError {
 class VmnetNetworkManager {
     private struct ActiveNetwork {
         let network: vmnet_network_ref
+        let gatewayAddress: UInt32
         var users: Set<String>
     }
 
@@ -73,7 +74,7 @@ class VmnetNetworkManager {
         }
         do {
             let created = try createNetwork(network, subnet: subnet)
-            activeNetworks[key] = ActiveNetwork(network: created, users: [vm.id])
+            activeNetworks[key] = ActiveNetwork(network: created, gatewayAddress: (VmnetNetwork.parseSubnet(subnet)?.address ?? 0) + 1, users: [vm.id])
         } catch {
             isolatedSubnets.removeValue(forKey: vm.id)
             throw error
@@ -95,6 +96,10 @@ class VmnetNetworkManager {
         activeNetworks
             .filter { $0.key == network.id || $0.key.hasPrefix(network.id + ".") }
             .reduce(into: Set<String>()) { $0.formUnion($1.value.users) }
+    }
+
+    func gatewayAddresses() -> Set<UInt32> {
+        Set(activeNetworks.values.map(\.gatewayAddress))
     }
 
     func releaseNetwork(for vm: VirtualMachine) {
@@ -135,7 +140,7 @@ class VmnetNetworkManager {
         }
 
         let used = Set(isolatedSubnets.values)
-        let hostSubnets = Utils.hostInterfaceSubnets().map(\.subnet)
+        let hostSubnets = Utils.hostInterfaceSubnets(excludingAddresses: gatewayAddresses()).map(\.subnet)
         let count = UInt32(1) << (MacMulatorConstants.VMNET_ISOLATED_SUBNET_PREFIX_LENGTH - rangePrefix)
         for index in 0 ..< count {
             let address = rangeAddress + (index << (32 - MacMulatorConstants.VMNET_ISOLATED_SUBNET_PREFIX_LENGTH))

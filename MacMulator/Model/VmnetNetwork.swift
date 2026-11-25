@@ -96,7 +96,12 @@ class VmnetNetwork: Codable {
     }
 
     static func overlappingHostInterface(_ subnet: String) -> (interface: String, subnet: String)? {
-        Utils.hostInterfaceSubnets().first { subnetsOverlap(subnet, $0.subnet) }
+        Utils.hostInterfaceSubnets(excludingAddresses: macMulatorGatewayAddresses()).first { subnetsOverlap(subnet, $0.subnet) }
+    }
+
+    static func macMulatorGatewayAddresses() -> Set<UInt32> {
+        guard #available(macOS 26.0, *) else { return [] }
+        return VmnetNetworkManager.shared.gatewayAddresses()
     }
 
     static func loadUserNetworks() -> [VmnetNetwork] {
