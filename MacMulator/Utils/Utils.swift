@@ -1061,7 +1061,7 @@ class Utils {
         return (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
     }
 
-    static func freeHostPort(preferred: [Int32], fallbackStart: Int32, excluding excludedPorts: Set<Int32> = []) -> Int32 {
+    static func freeHostPort(preferred: [Int32], fallbackStart: Int32, excluding excludedPorts: Set<Int32> = []) -> Int32? {
         let mappedPorts = Set(workspaceVirtualMachines().flatMap { $0.portMappings ?? [] }.map(\.hostPort))
 
         // Taken after reading the workspace, which may wait for the main thread
@@ -1071,14 +1071,19 @@ class Utils {
         // Ports handed out earlier in this session count as taken: clones are registered asynchronously,
         // so the VMs that received them may not be in the workspace list yet
         let takenPorts = mappedPorts.union(assignedHostPorts).union(excludedPorts)
-        let isFree = { (port: Int32) in !takenPorts.contains(port) && !isHostPortInUse(port) }
+        let ports = MacMulatorConstants.ASSIGNABLE_HOST_PORTS
+        let isFree = { (port: Int32) in ports.contains(port) && !takenPorts.contains(port) && !isHostPortInUse(port) }
 
-        let port = preferred.first(where: isFree) ?? (min(fallbackStart, 65535) ... 65535).first(where: isFree) ?? preferred.first ?? fallbackStart
+        // From the start port up to the last one, then from the first one: ports below 1024 need root to be bound
+        let start = min(max(fallbackStart, ports.lowerBound), ports.upperBound)
+        guard let port = preferred.first(where: isFree) ?? (start ... ports.upperBound).first(where: isFree) ?? (ports.lowerBound ..< start).first(where: isFree) else {
+            return nil
+        }
         assignedHostPorts.insert(port)
         return port
     }
 
-    static func freeHostPort(forVMPort vmPort: Int32, currentHostPort: Int32? = nil, excluding excludedPorts: Set<Int32> = []) -> Int32 {
+    static func freeHostPort(forVMPort vmPort: Int32, currentHostPort: Int32? = nil, excluding excludedPorts: Set<Int32> = []) -> Int32? {
         switch vmPort {
         case 22:
             freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223, excluding: excludedPorts)
@@ -1092,9 +1097,9 @@ class Utils {
     static func defaultPortMappings(os: String) -> [PortMapping] {
         switch os {
         case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
-            [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: freeHostPort(forVMPort: 22))]
+            freeHostPort(forVMPort: 22).map { [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: $0)] } ?? []
         case QemuConstants.OS_WIN:
-            [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: freeHostPort(forVMPort: 3389))]
+            freeHostPort(forVMPort: 3389).map { [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: $0)] } ?? []
         default:
             []
         }
@@ -1103,8 +1108,8 @@ class Utils {
     static func reassignConflictingHostPorts(_ vm: VirtualMachine) {
         var takenPorts = Set(workspaceVirtualMachines().filter { $0.id != vm.id }.flatMap { $0.portMappings ?? [] }.map(\.hostPort))
         for mapping in vm.portMappings ?? [] {
-            if takenPorts.contains(mapping.hostPort) {
-                mapping.hostPort = freeHostPort(forVMPort: mapping.vmPort, currentHostPort: mapping.hostPort, excluding: takenPorts)
+            if takenPorts.contains(mapping.hostPort), let freePort = freeHostPort(forVMPort: mapping.vmPort, currentHostPort: mapping.hostPort, excluding: takenPorts) {
+                mapping.hostPort = freePort
             }
             takenPorts.insert(mapping.hostPort)
         }
