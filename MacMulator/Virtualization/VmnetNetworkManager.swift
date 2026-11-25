@@ -86,7 +86,7 @@ class VmnetNetworkManager {
             throw VmnetSubnetConflictError(networkName: network.name, subnet: subnet, interface: conflict.interface, interfaceSubnet: conflict.subnet)
         }
         do {
-            let (created, portForwarding) = try createNetwork(network, subnet: subnet)
+            let (created, portForwarding) = try createNetwork(network, subnet: subnet, startingVM: vm)
             activeNetworks[key] = ActiveNetwork(network: created, gatewayAddress: (VmnetNetwork.parseSubnet(subnet)?.address ?? 0) + 1, isolationGroup: network.isVMIsolationEnabled ? VmnetIsolationGroup() : nil, portForwarding: portForwarding, users: [vm.id])
         } catch {
             isolatedSubnets.removeValue(forKey: vm.id)
@@ -172,7 +172,7 @@ class VmnetNetworkManager {
         throw VmnetNetworkError(networkName: network.name, status: .VMNET_SHARING_SERVICE_BUSY)
     }
 
-    private func createNetwork(_ network: VmnetNetwork, subnet: String) throws -> (network: vmnet_network_ref, portForwarding: [String: String]?) {
+    private func createNetwork(_ network: VmnetNetwork, subnet: String, startingVM: VirtualMachine) throws -> (network: vmnet_network_ref, portForwarding: [String: String]?) {
         var status: vmnet_return_t = .VMNET_SUCCESS
         let mode: vmnet_mode_t = network.mode == .shared ? .VMNET_SHARED_MODE : .VMNET_HOST_MODE
         guard let configuration = vmnet_network_configuration_create(mode, &status) else {
@@ -197,7 +197,7 @@ class VmnetNetworkManager {
         }
         var portForwarding: [String: String]?
         if network.supportsPortForwarding {
-            portForwarding = try addPortForwarding(to: configuration, network: network, subnetAddress: subnetAddress, prefixLength: prefixLength)
+            portForwarding = try addPortForwarding(to: configuration, network: network, subnetAddress: subnetAddress, prefixLength: prefixLength, startingVM: startingVM)
         }
 
         guard let created = vmnet_network_create(configuration, &status) else {
@@ -206,7 +206,7 @@ class VmnetNetworkManager {
         return (created, portForwarding)
     }
 
-    private func addPortForwarding(to configuration: vmnet_network_configuration_ref, network: VmnetNetwork, subnetAddress: UInt32, prefixLength: UInt32) throws -> [String: String] {
+    private func addPortForwarding(to configuration: vmnet_network_configuration_ref, network: VmnetNetwork, subnetAddress: UInt32, prefixLength: UInt32, startingVM: VirtualMachine) throws -> [String: String] {
         // Rules cannot be changed while the network is active, so they are set up at creation for every
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
         let networks = VmnetNetwork.allNetworks()
@@ -224,27 +224,39 @@ class VmnetNetworkManager {
             throw VmnetReservationCapacityError(networkName: network.name, capacity: capacity, required: attachedVMs.count)
         }
 
+        // Addresses follow the VM order, so they don't depend on which VM starts the network. When two VMs map the
+        // same host port, the VM being started gets it: the other one is stopped and can't receive the traffic anyway.
+        let hosts = Dictionary(uniqueKeysWithValues: attachedVMs.enumerated().map { ($1.id, firstHost + UInt32($0)) })
+        let rulesOrder = attachedVMs.filter { $0.id == startingVM.id } + attachedVMs.filter { $0.id != startingVM.id }
+
         var usedHostPorts = Set<Int32>()
         var portForwarding: [String: String] = [:]
-        for (index, vm) in attachedVMs.enumerated() {
-            guard let macAddress = vm.macAddress, let ethernetAddress = ether_aton(macAddress) else { continue }
-            let host = firstHost + UInt32(index)
+        for vm in rulesOrder {
+            guard let macAddress = vm.macAddress, let ethernetAddress = ether_aton(macAddress), let host = hosts[vm.id] else { continue }
 
             var reservedAddress = in_addr(s_addr: (subnetAddress + host).bigEndian)
             try check(vmnet_network_configuration_add_dhcp_reservation(configuration, ethernetAddress, &reservedAddress), network)
 
+            var installedMappings: [PortMapping] = []
             for mapping in vm.portMappings ?? [] where !usedHostPorts.contains(mapping.hostPort) {
                 usedHostPorts.insert(mapping.hostPort)
                 try check(vmnet_network_configuration_add_port_forwarding_rule(configuration, UInt8(IPPROTO_TCP), sa_family_t(AF_INET), UInt16(truncatingIfNeeded: mapping.vmPort), UInt16(truncatingIfNeeded: mapping.hostPort), &reservedAddress), network)
+                installedMappings.append(mapping)
             }
-            portForwarding[vm.id] = VmnetNetworkManager.portForwardingSignature(of: vm)
+            // Only what was installed: a VM that lost a host port to another one is told so when it joins
+            portForwarding[vm.id] = VmnetNetworkManager.portForwardingSignature(macAddress: macAddress, mappings: installedMappings)
         }
         return portForwarding
     }
 
     private static func portForwardingSignature(of vm: VirtualMachine) -> String? {
-        guard let mappings = vm.portMappings, !mappings.isEmpty, vm.isNetworkEnabled else { return nil }
-        return (vm.macAddress ?? "") + "|" + mappings.map { "\($0.vmPort):\($0.hostPort)" }.sorted().joined(separator: ",")
+        guard vm.isNetworkEnabled else { return nil }
+        return portForwardingSignature(macAddress: vm.macAddress ?? "", mappings: vm.portMappings ?? [])
+    }
+
+    private static func portForwardingSignature(macAddress: String, mappings: [PortMapping]) -> String? {
+        guard !mappings.isEmpty else { return nil }
+        return macAddress + "|" + mappings.map { "\($0.vmPort):\($0.hostPort)" }.sorted().joined(separator: ",")
     }
 
     private func check(_ status: vmnet_return_t, _ network: VmnetNetwork) throws {
