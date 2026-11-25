@@ -62,6 +62,10 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
 
     @IBAction func okButtonPressed(_: Any) {
+        if let invalidPort = [portMapping.vmPort, portMapping.hostPort].first(where: { !MacMulatorConstants.VALID_PORTS.contains($0) }) {
+            Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewPortMappingViewController.invalidPort", comment: ""), Int(invalidPort)), virtualMachine: parentController?.virtualMachine)
+            return
+        }
         if portMapping.hostPort != origPortMapping?.hostPort, let message = hostPortConflictMessage(portMapping.hostPort) {
             Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, completionHandler: { response in
                 if response.rawValue == Utils.ALERT_RESP_OK {

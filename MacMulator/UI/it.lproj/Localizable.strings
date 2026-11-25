@@ -254,6 +254,7 @@
 "NewPortMappingViewController.hostPortInUse" = "La porta host %d è già in uso da un'altra applicazione su questo Mac, quindi la mappatura non funzionerà finché resta occupata. Vuoi usarla comunque?";
 "NewPortMappingViewController.hostPortUsedBySameVM" = "La porta host %1$d è già usata dalla mappatura \"%2$@\" di questa VM. Vuoi usarla comunque?";
 "NewPortMappingViewController.hostPortUsedByVM" = "La porta host %1$d è già usata dalla mappatura \"%2$@\" della VM %3$@. VM con la stessa porta host non possono essere eseguite contemporaneamente. Vuoi usarla comunque?";
+"NewPortMappingViewController.invalidPort" = "%d non è un numero di porta valido. Usa un numero tra 1 e 65535.";
 "NewPortMappingViewController.nameLabel" = "Nome mappatura:";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Porta sulla macchine virtuale:";
 "NewVMController.createButton" = "Crea";
@@ -495,5 +496,6 @@
 "VmnetNetwork.modeShared" = "Condivisa";
 "VmnetNetwork.sharedName" = "Condivisa";
 "VmnetNetworkManager.creationFailed" = "Impossibile creare la rete vmnet %1$@: %2$@ (%3$d).";
+"VmnetNetworkManager.invalidPortMapping" = "Impossibile avviare %1$@: la sua mappatura delle porte \"%2$@\" usa %3$d, che non è un numero di porta valido (1-65535). Correggila nelle impostazioni di Rete della VM.";
 "VmnetNetworkManager.reservationCapacityExceeded" = "Impossibile avviare la rete vmnet %1$@: %2$d VM su di essa hanno mappature delle porte e ognuna richiede un indirizzo riservato, ma la sua sottorete ne può contenere %3$d. Usa una sottorete più grande per questa rete, o rimuovi le mappature delle porte di alcune sue VM.";
 "VmnetNetworkManager.subnetConflict" = "Impossibile avviare la rete vmnet %1$@: la sua sottorete %2$@ si sovrappone alla rete dell'interfaccia %3$@ del Mac (%4$@). Scegli un'altra rete per questa VM, o cambia la sottorete in Gestisci reti.";

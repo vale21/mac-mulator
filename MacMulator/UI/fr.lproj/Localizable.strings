@@ -254,6 +254,7 @@
 "NewPortMappingViewController.hostPortInUse" = "Le port hôte %d est déjà utilisé par une autre application sur ce Mac : la redirection ne fonctionnera pas tant qu'il le sera. Voulez-vous l'utiliser quand même ?";
 "NewPortMappingViewController.hostPortUsedBySameVM" = "Le port hôte %1$d est déjà utilisé par la redirection « %2$@ » de cette VM. Voulez-vous l'utiliser quand même ?";
 "NewPortMappingViewController.hostPortUsedByVM" = "Le port hôte %1$d est déjà utilisé par la redirection « %2$@ » de la VM %3$@. Des VM utilisant le même port hôte ne peuvent pas fonctionner en même temps. Voulez-vous l'utiliser quand même ?";
+"NewPortMappingViewController.invalidPort" = "%d n'est pas un numéro de port valide. Utilisez un nombre compris entre 1 et 65535.";
 "NewPortMappingViewController.nameLabel" = "Nom de la redirection :";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Port sur la machine virtuelle :";
 "NewVMController.createButton" = "Créer";
@@ -495,5 +496,6 @@
 "VmnetNetwork.modeShared" = "Partagé";
 "VmnetNetwork.sharedName" = "Partagé";
 "VmnetNetworkManager.creationFailed" = "Impossible de créer le réseau vmnet %1$@ : %2$@ (%3$d).";
+"VmnetNetworkManager.invalidPortMapping" = "Impossible de démarrer %1$@ : sa redirection de port « %2$@ » utilise %3$d, qui n'est pas un numéro de port valide (1-65535). Corrigez-la dans les réglages Réseau de la VM.";
 "VmnetNetworkManager.reservationCapacityExceeded" = "Impossible de démarrer le réseau vmnet %1$@ : %2$d VM qui l'utilisent ont des redirections de ports, et chacune nécessite une adresse réservée, mais son sous-réseau n'en permet que %3$d. Utilisez un sous-réseau plus grand pour ce réseau, ou supprimez les redirections de ports de certaines de ses VM.";
 "VmnetNetworkManager.subnetConflict" = "Impossible de démarrer le réseau vmnet %1$@ : son sous-réseau %2$@ chevauche le réseau de l'interface %3$@ du Mac (%4$@). Choisissez un autre réseau pour cette VM, ou changez le sous-réseau dans Gérer les réseaux.";

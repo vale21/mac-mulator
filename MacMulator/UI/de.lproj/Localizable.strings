@@ -254,6 +254,7 @@
 "NewPortMappingViewController.hostPortInUse" = "Der Host-Port %d wird bereits von einer anderen App auf diesem Mac verwendet, daher funktioniert die Zuordnung nicht, solange er belegt ist. Trotzdem verwenden?";
 "NewPortMappingViewController.hostPortUsedBySameVM" = "Der Host-Port %1$d wird bereits von der Zuordnung „%2$@“ dieser VM verwendet. Trotzdem verwenden?";
 "NewPortMappingViewController.hostPortUsedByVM" = "Der Host-Port %1$d wird bereits von der Zuordnung „%2$@“ der VM %3$@ verwendet. VMs mit demselben Host-Port können nicht gleichzeitig laufen. Trotzdem verwenden?";
+"NewPortMappingViewController.invalidPort" = "%d ist keine gültige Portnummer. Verwende eine Zahl zwischen 1 und 65535.";
 "NewPortMappingViewController.nameLabel" = "Name der Zuordnung:";
 "NewPortMappingViewController.virtualMachinePortLabel" = "Port in der VM:";
 "NewVMController.createButton" = "Erstellen";
@@ -495,5 +496,6 @@
 "VmnetNetwork.modeShared" = "Gemeinsam";
 "VmnetNetwork.sharedName" = "Gemeinsam";
 "VmnetNetworkManager.creationFailed" = "Das vmnet-Netzwerk %1$@ konnte nicht erstellt werden: %2$@ (%3$d).";
+"VmnetNetworkManager.invalidPortMapping" = "%1$@ kann nicht gestartet werden: Die Port-Zuordnung „%2$@“ verwendet %3$d, keine gültige Portnummer (1-65535). Korrigiere sie in den Netzwerkeinstellungen der VM.";
 "VmnetNetworkManager.reservationCapacityExceeded" = "Das vmnet-Netzwerk %1$@ kann nicht gestartet werden: %2$d VMs darin haben Port-Zuordnungen und benötigen je eine reservierte Adresse, aber das Subnetz bietet nur Platz für %3$d. Verwende ein größeres Subnetz für dieses Netzwerk oder entferne die Port-Zuordnungen einiger seiner VMs.";
 "VmnetNetworkManager.subnetConflict" = "Das vmnet-Netzwerk %1$@ kann nicht gestartet werden: Sein Subnetz %2$@ überschneidet sich mit dem Netzwerk der Mac-Schnittstelle %3$@ (%4$@). Wähle ein anderes Netzwerk für diese VM oder ändere das Subnetz unter Netzwerke verwalten.";

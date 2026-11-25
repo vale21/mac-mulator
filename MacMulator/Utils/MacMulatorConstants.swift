@@ -77,6 +77,7 @@ class MacMulatorConstants {
     static let VMNET_ISOLATED_SUBNET_PREFIX_LENGTH: UInt32 = 24
     static let VMNET_FIRST_RESERVED_HOST: UInt32 = 10
     static let ASSIGNABLE_HOST_PORTS: ClosedRange<Int32> = 1024 ... 65535
+    static let VALID_PORTS: ClosedRange<Int32> = 1 ... 65535
 
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"

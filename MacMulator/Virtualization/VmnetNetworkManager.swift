@@ -51,6 +51,16 @@ struct VmnetReservationCapacityError: LocalizedError {
     }
 }
 
+struct VmnetInvalidPortMappingError: LocalizedError {
+    let virtualMachineName: String
+    let mappingName: String
+    let port: Int32
+
+    var errorDescription: String? {
+        String(format: NSLocalizedString("VmnetNetworkManager.invalidPortMapping", comment: ""), virtualMachineName, mappingName, Int(port))
+    }
+}
+
 @available(macOS 26.0, *)
 class VmnetNetworkManager {
     private struct ActiveNetwork {
@@ -239,6 +249,13 @@ class VmnetNetworkManager {
 
             var installedMappings: [PortMapping] = []
             for mapping in vm.portMappings ?? [] where !usedHostPorts.contains(mapping.hostPort) {
+                // vmnet takes 16-bit ports: an out-of-range value would silently become another port
+                if let invalidPort = [mapping.vmPort, mapping.hostPort].first(where: { !MacMulatorConstants.VALID_PORTS.contains($0) }) {
+                    if vm.id == startingVM.id {
+                        throw VmnetInvalidPortMappingError(virtualMachineName: vm.displayName, mappingName: mapping.name, port: invalidPort)
+                    }
+                    continue
+                }
                 usedHostPorts.insert(mapping.hostPort)
                 try check(vmnet_network_configuration_add_port_forwarding_rule(configuration, UInt8(IPPROTO_TCP), sa_family_t(AF_INET), UInt16(truncatingIfNeeded: mapping.vmPort), UInt16(truncatingIfNeeded: mapping.hostPort), &reservedAddress), network)
                 installedMappings.append(mapping)
