@@ -395,6 +395,7 @@
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Verbleibende Zeit: wird berechnet...";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached" = "%1$@ kann nicht gestartet werden: macOS erlaubt auf einem Mac höchstens 2 gleichzeitig laufende macOS-VMs, und diese laufen bereits: %2$@.\n\nFahre eine davon herunter und versuche es erneut.";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere" = "%@ kann nicht gestartet werden: macOS erlaubt auf einem Mac höchstens 2 gleichzeitig laufende macOS-VMs, und dieses Limit ist durch VMs in anderen Apps erreicht.\n\nFahre eine dieser VMs herunter und versuche es erneut.";
+"VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive" = "Die Port-Zuordnungen von %1$@ funktionieren noch nicht: Das Netzwerk %2$@ wird bereits von %3$@ verwendet, und seine Portweiterleitung kann nur beim Start eingerichtet werden.\n\nUm sie zu nutzen, stoppe diese VMs und starte %1$@ erneut. Trotzdem starten?";
 "VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Gastbereitstellung fehlgeschlagen: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "VM-Snapshot wird erstellt...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Vorgang läuft...";

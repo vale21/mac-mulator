@@ -395,6 +395,7 @@
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Tempo stimato rimanente: Calcolo...";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached" = "Impossibile avviare %1$@: macOS consente al massimo 2 macchine virtuali macOS in esecuzione contemporaneamente su un Mac, e queste sono già in esecuzione: %2$@.\n\nSpegnine una e riprova.";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere" = "Impossibile avviare %@: macOS consente al massimo 2 macchine virtuali macOS in esecuzione contemporaneamente su un Mac, e il limite è stato raggiunto da VM in esecuzione in altre app.\n\nSpegni una di quelle VM e riprova.";
+"VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive" = "Le mappature delle porte di %1$@ non funzioneranno ancora: la rete %2$@ è già in uso da %3$@, e il suo inoltro delle porte può essere configurato solo al suo avvio.\n\nPer usarle, spegni quelle VM e avvia di nuovo %1$@. Vuoi avviarla comunque?";
 "VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Provisioning del sistema guest non riuscito: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Creo l'istantanea VM...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Eseguo...";

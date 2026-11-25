@@ -395,6 +395,7 @@
 "VirtualizationFrameworkInstallVMViewController.timeRemainingCalculating" = "Estimate time remaining: Calculating...";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached" = "%1$@ cannot start: macOS allows at most 2 macOS virtual machines running at the same time on a Mac, and these are already running: %2$@.\n\nShut one of them down and try again.";
 "VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere" = "%@ cannot start: macOS allows at most 2 macOS virtual machines running at the same time on a Mac, and that limit has been reached by VMs running in other apps.\n\nShut down one of those VMs and try again.";
+"VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive" = "The port mappings of %1$@ will not work yet: the network %2$@ is already running for %3$@, and its port forwarding can only be set up when it starts.\n\nTo use them, stop those VMs and start %1$@ again. Do you want to start it anyway?";
 "VirtualizationFrameworkVirtualMachineRunner.provisioningFailed" = "Guest provisioning failed: %@";
 "VirtualizationFrameworkPauseResumeVMViewController.creatingSnapshot" = "Creating VM snapshot...";
 "VirtualizationFrameworkPauseResumeVMViewController.operating" = "Operating...";

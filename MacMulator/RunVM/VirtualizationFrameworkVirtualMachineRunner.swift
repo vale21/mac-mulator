@@ -92,6 +92,13 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
 
         if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
             if #available(macOS 26.0, *) {
+                if let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: managedVm) {
+                    let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), managedVm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
+                    if Utils.showPrompt(window: alertWindow, style: NSAlert.Style.warning, message: message, virtualMachine: managedVm).rawValue != Utils.ALERT_RESP_OK {
+                        stopVM(guestStopped: true)
+                        return
+                    }
+                }
                 do {
                     try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
                 } catch {
