@@ -58,7 +58,7 @@ class VmnetNetworkManager {
     private var forwarders: [String: VmnetPacketForwarder] = [:]
 
     func acquireNetwork(for vm: VirtualMachine) throws {
-        guard let network = VmnetNetwork.network(withId: vm.vmnetNetworkId ?? VmnetNetwork.SHARED_ID) ?? VmnetNetwork.network(withId: VmnetNetwork.SHARED_ID) else { return }
+        guard let network = VmnetNetwork.effectiveNetwork(withId: vm.vmnetNetworkId) else { return }
 
         let key = networkKey(for: vm, network: network)
         if var active = activeNetworks[key] {
@@ -188,8 +188,9 @@ class VmnetNetworkManager {
     private func addPortForwarding(to configuration: vmnet_network_configuration_ref, network: VmnetNetwork, subnetAddress: UInt32, prefixLength: UInt32) throws {
         // Rules cannot be changed while the network is active, so they are set up at creation for every
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
+        let networks = VmnetNetwork.allNetworks()
         let attachedVMs = Utils.workspaceVirtualMachines()
-            .filter { $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && ($0.vmnetNetworkId ?? VmnetNetwork.SHARED_ID) == network.id && $0.macAddress != nil }
+            .filter { $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && $0.macAddress != nil && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
             .sorted { $0.id < $1.id }
 
         let lastHost = (UInt32(1) << (32 - prefixLength)) - 2

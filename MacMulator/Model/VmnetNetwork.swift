@@ -79,6 +79,11 @@ class VmnetNetwork: Codable {
         allNetworks().first { $0.id == id }
     }
 
+    static func effectiveNetwork(withId id: String?, in networks: [VmnetNetwork] = allNetworks()) -> VmnetNetwork? {
+        // A VM whose network no longer exists joins the built-in shared one
+        networks.first { $0.id == (id ?? SHARED_ID) } ?? networks.first { $0.id == SHARED_ID }
+    }
+
     static func isValidSubnet(_ cidr: String) -> Bool {
         guard let (address, prefixLength) = parseSubnet(cidr), MacMulatorConstants.VMNET_SUBNET_PREFIX_LENGTHS.contains(prefixLength) else {
             return false
