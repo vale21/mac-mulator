@@ -1045,6 +1045,15 @@ class Utils {
         #endif
     }
 
+    static func setControlsEnabled(_ enabled: Bool, in view: NSView) {
+        for subview in view.subviews {
+            if let control = subview as? NSControl {
+                control.isEnabled = enabled
+            }
+            setControlsEnabled(enabled, in: subview)
+        }
+    }
+
     static func workspaceVirtualMachines() -> [VirtualMachine] {
         guard Thread.isMainThread else {
             return DispatchQueue.main.sync { workspaceVirtualMachines() }

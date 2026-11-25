@@ -89,6 +89,7 @@ class QemuRunner: VirtualMachineRunner {
                 // Expose the serial console on a socket, so that a Terminal session can be opened on it
                 builder = builder.withSerial("unix:" + Utils.escape(QemuUtils.serialSocketPath(forVMAt: managedVm.path)) + ",server=on,wait=off")
             }
+            builder = builder.withNetworkDisabled(!managedVm.isNetworkEnabled)
             return builder.build()
         }
     }

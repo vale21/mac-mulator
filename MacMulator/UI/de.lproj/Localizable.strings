@@ -148,6 +148,7 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Name der Zuordnung";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "VM-Port";
 "EditVMViewControllerNetwork.networkAdapterLabel" = "Netzwerkadapter";
+"EditVMViewControllerNetwork.networkingLabel" = "Netzwerk aktivieren";
 "EditVMViewControllerNetwork.portMappingsDescription" = "In der untenstehenden Tabelle kannst du Port-Zuordnungen zwischen der virtuellen Maschine und dem Host-Mac definieren. Der in der Spalte „VM-Port“ definierte Port wird dem entsprechenden „Host-Mac-Port“ zugeordnet.";
 "EditVMViewControllerNetwork.portMappingsLabel" = "Port-Zuordnungen";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "Im Bridged network verwendet die VM eines der physischen Netzwerkgeräte, die mit Ihrem Mac verbunden sind, um auf das Netzwerk zuzugreifen. Die VM verhält sich genau wie ein Computer, der mit dem Netzwerk des Macs verbunden ist, und kann andere Netzwerkgeräte sehen und von ihnen gesehen werden. Die Bandbreite wird zwischen der VM und Ihrem Mac geteilt.";
@@ -485,7 +486,7 @@
 "QemuDiskImageManager.cannotWriteImage" = "%@ kann nicht geschrieben werden.";
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ konnte nicht fortgesetzt werden: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ konnte nicht gestartet werden: %2$@";
-"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ kann nicht gestartet werden: Die VM verwendet ein erweitertes Netzwerk (vmnet), das macOS 26 oder neuer erfordert. Um sie auf diesem Mac auszuführen, wähle in ihren Netzwerkeinstellungen einen anderen Netzwerkmodus.";
+"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ kann nicht gestartet werden: Die VM verwendet ein erweitertes Netzwerk (vmnet), das macOS 26 oder neuer erfordert. Um sie auf diesem Mac auszuführen, wähle in ihren Netzwerkeinstellungen einen anderen Netzwerkmodus oder deaktiviere das Netzwerk.";
 "VmnetNetwork.hostOnlyName" = "Nur Host";
 "VmnetNetwork.isolatedName" = "Isolierte VM";
 "VmnetNetwork.modeHostOnly" = "Nur Host";

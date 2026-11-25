@@ -148,6 +148,7 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Porta Macchina Virtuale";
 "EditVMViewControllerNetwork.networkAdapterLabel" = "Scheda di rete";
+"EditVMViewControllerNetwork.networkingLabel" = "Abilita la rete";
 "EditVMViewControllerNetwork.portMappingsDescription" = "Nella tabella qui sotto puoi definire delle mappature tra le porte della macchina virtuale e quelle del Mac. La porta specificata nella colonna \"Porta Macchina Virtuale\" viene mappata nella corrispondente \"Porta Host Mac\" sul tuo Mac.";
 "EditVMViewControllerNetwork.portMappingsLabel" = "Mappatura porte";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "Nella rete bridged, consenti alla VM di usare uno dei dispositivi di rete fisici collegati al tuo Mac per collegarsi al network. La VM si comporterà esattamente come un dispositivo collegato alla rete del Mac, sarà visibile e potrà vedere gli altri dispositivi di rete. La banda è condivisa tra la VM e il tuo Mac.";
@@ -485,7 +486,7 @@
 "QemuDiskImageManager.cannotWriteImage" = "Impossibile scrivere %@.";
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "Impossibile riprendere %1$@: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "Impossibile avviare %1$@: %2$@";
-"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "Impossibile avviare %@: usa una rete Avanzata (vmnet), che richiede macOS 26 o successivo. Per eseguirla su questo Mac, scegli un'altra modalità di rete nelle sue impostazioni di Rete.";
+"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "Impossibile avviare %@: usa una rete Avanzata (vmnet), che richiede macOS 26 o successivo. Per eseguirla su questo Mac, scegli un'altra modalità di rete nelle sue impostazioni di Rete, oppure disabilita la rete.";
 "VmnetNetwork.hostOnlyName" = "Solo host";
 "VmnetNetwork.isolatedName" = "VM isolata";
 "VmnetNetwork.modeHostOnly" = "Solo host";

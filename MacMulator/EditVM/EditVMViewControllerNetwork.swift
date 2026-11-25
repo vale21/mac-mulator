@@ -14,6 +14,9 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     @IBOutlet var portMappingsDescription: NSTextField!
     @IBOutlet var mappingsTableView: NSTableView!
     @IBOutlet var createMappingButton: NSButton!
+    @IBOutlet var networkingLabel: NSTextField!
+    @IBOutlet var networkingSwitch: NSSwitch!
+    @IBOutlet var networkingBox: NSBox!
 
     var virtualMachine: VirtualMachine?
     var adaptersList: [String] = []
@@ -25,6 +28,11 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         updateView()
     }
 
+    @IBAction func networkingSwitchChanged(_: Any) {
+        virtualMachine?.networkEnabled = networkingSwitch.state == .on
+        updateNetworkingControls()
+    }
+
     @IBAction func deletePortmapping(_ sender: Any) {
         if let virtualMachine {
             let row = mappingsTableView.row(for: sender as! NSView)
@@ -34,6 +42,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     override func viewWillAppear() {
+        networkingLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkingLabel", comment: "")
         networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkAdapterLabel", comment: "")
         portMappingsLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsLabel", comment: "")
         portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsDescription", comment: "")
@@ -131,6 +140,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
             networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, MacMulatorConstants.QEMU_VM)) ?? -1)
 
             mappingsTableView.reloadData()
+            updateNetworkingControls()
         }
     }
 
@@ -143,6 +153,12 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
             virtualMachine.portMappings?.append(portMapping)
             reloadPortMappings()
         }
+    }
+
+    private func updateNetworkingControls() {
+        let enabled = virtualMachine?.isNetworkEnabled ?? true
+        networkingSwitch.state = enabled ? .on : .off
+        Utils.setControlsEnabled(enabled, in: networkingBox)
     }
 
     private func loadAdaptersList() {

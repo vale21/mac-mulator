@@ -148,6 +148,7 @@
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Virtual Machine Port";
 "EditVMViewControllerNetwork.networkAdapterLabel" = "Network adapter";
+"EditVMViewControllerNetwork.networkingLabel" = "Enable networking";
 "EditVMViewControllerNetwork.portMappingsDescription" = "In the table below you will be able to define port mappings between the Virtual Machine and the Host Mac. The port defined in the \"Virtual Machine Port\" column will be mapped to the corresponding \"Host Mac Port\" on the host Mac.";
 "EditVMViewControllerNetwork.portMappingsLabel" = "Port mappings";
 "EditVMViewControllerNetworkVF.descriptionBridged" = "In Bridge network you let the VM use one of the physical network devices connected to your Mac to reach the network. The VM will behave exactly as a computer connected to the Mac network, and it will both see and be visible by the other network devices. The bandwdth is shared between th VM and your Mac.";
@@ -485,7 +486,7 @@
 "QemuDiskImageManager.cannotWriteImage" = "Cannot write %@.";
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ failed to resume: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ failed to start: %2$@";
-"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ cannot start: it uses an Advanced (vmnet) network, which requires macOS 26 or later. To run it on this Mac, choose another network mode in its Network settings.";
+"VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ cannot start: it uses an Advanced (vmnet) network, which requires macOS 26 or later. To run it on this Mac, choose another network mode in its Network settings, or disable networking.";
 "VmnetNetwork.hostOnlyName" = "Host-only";
 "VmnetNetwork.isolatedName" = "Isolated VM";
 "VmnetNetwork.modeHostOnly" = "Host-only";

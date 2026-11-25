@@ -90,7 +90,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.writeToPlist()
         }
 
-        if managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
+        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
             if #available(macOS 26.0, *) {
                 do {
                     try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)

@@ -20,6 +20,9 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     @IBOutlet var portMappingsScrollView: NSScrollView!
     @IBOutlet var mappingsTableView: NSTableView!
     @IBOutlet var createMappingButton: NSButton!
+    @IBOutlet var networkingLabel: NSTextField!
+    @IBOutlet var networkingSwitch: NSSwitch!
+    @IBOutlet var networkingBox: NSBox!
 
     var virtualMachine: VirtualMachine?
     var attachments: [String] = QemuConstants.APPLE_NETWORK_ATTACHMENTS
@@ -33,6 +36,11 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         }
     }
 
+    @IBAction func networkingSwitchChanged(_: Any) {
+        virtualMachine?.networkEnabled = networkingSwitch.state == .on
+        updateNetworkingControls()
+    }
+
     @IBAction func deletePortmapping(_ sender: Any) {
         if let virtualMachine {
             let row = mappingsTableView.row(for: sender as! NSView)
@@ -42,6 +50,7 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     }
 
     override func viewWillAppear() {
+        networkingLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkingLabel", comment: "")
         portMappingsLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsLabel", comment: "")
         portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.portMappingsDescription", comment: "")
         createMappingButton.title = NSLocalizedString("EditVMViewControllerNetwork.createMappingButton", comment: "")
@@ -164,6 +173,7 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
             updateSecondaryBoxAndDescription(attachment: selectedAttachment())
 
             networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.networkMode", comment: "")
+            updateNetworkingControls()
         }
     }
 
@@ -188,6 +198,16 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     func selectVmnetNetwork(_ network: VmnetNetwork) {
         virtualMachine?.vmnetNetworkId = network.id
         vmnetNetworksChanged()
+    }
+
+    private func updateNetworkingControls() {
+        let enabled = virtualMachine?.isNetworkEnabled ?? true
+        networkingSwitch.state = enabled ? .on : .off
+        Utils.setControlsEnabled(enabled, in: networkingBox)
+        if enabled {
+            // Enabling everything also enables controls that depend on the network mode, like the device list with NAT
+            updateSecondaryBoxAndDescription(attachment: selectedAttachment())
+        }
     }
 
     private func loadAttachments() {

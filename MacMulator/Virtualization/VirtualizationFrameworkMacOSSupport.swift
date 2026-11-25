@@ -81,7 +81,9 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
                 return VZBridgedNetworkInterface.networkInterfaces.first?.identifier
             }()
 
-            if let macAddress = vm.macAddress {
+            if !vm.isNetworkEnabled {
+                virtualMachineConfiguration.networkDevices = []
+            } else if let macAddress = vm.macAddress {
                 virtualMachineConfiguration.networkDevices = [
                     MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
                         vm: vm,

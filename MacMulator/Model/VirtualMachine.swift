@@ -10,7 +10,7 @@ import Foundation
 class VirtualMachine: Codable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case storedId = "id"
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName, vmnetNetworkId
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName, vmnetNetworkId, networkEnabled
     }
 
     /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
@@ -47,6 +47,7 @@ class VirtualMachine: Codable, Hashable {
     var provisioningInformation: ProvisioningInformation? = nil
     var guestUserName: String?
     var vmnetNetworkId: String?
+    var networkEnabled: Bool?
 
     /// Unique identifier, assigned at creation time and never modified afterwards.
     /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
@@ -57,6 +58,10 @@ class VirtualMachine: Codable, Hashable {
         let newId = UUID().uuidString
         storedId = newId
         return newId
+    }
+
+    var isNetworkEnabled: Bool {
+        networkEnabled ?? true
     }
 
     var hasLinkedDrives: Bool {
