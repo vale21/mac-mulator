@@ -276,9 +276,11 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             } else {
                 uponCompletion(nil)
             }
+        } else if let stoppingVirtualMachine = vzVirtualMachine {
+            stoppingVirtualMachine.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
         } else {
-            let stoppingVirtualMachine = vzVirtualMachine
-            vzVirtualMachine?.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
+            // Setup failed before the VM was created: the network acquired for it is released here
+            releaseNetworking()
         }
         if let vmViewController {
             vmViewController.stopVM(guestStopped)
@@ -608,6 +610,10 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
         stoppedVirtualMachine.delegate = nil
         vzVirtualMachine = nil
+        releaseNetworking()
+    }
+
+    private func releaseNetworking() {
         if #available(macOS 26.0, *) {
             VmnetNetworkManager.shared.releaseNetwork(for: managedVm)
         }
