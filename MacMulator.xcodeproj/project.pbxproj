@@ -38,6 +38,14 @@
 		3B25EBC030AC484A00028C39 /* DiskImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */; };
 		3B25EBC130AC484A00028C39 /* DiskImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */; };
 		3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */; };
+		3B2E0F6D30ADDFC80032F2CF /* VmnetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F6C30ADDFC80032F2CF /* VmnetNetwork.swift */; };
+		3B2E0F6E30ADDFC80032F2CF /* VmnetNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F6C30ADDFC80032F2CF /* VmnetNetwork.swift */; };
+		3B2E0F7030ADE0340032F2CF /* ManageVmnetNetworksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F6F30ADE0340032F2CF /* ManageVmnetNetworksViewController.swift */; };
+		3B2E0F7130ADE0340032F2CF /* ManageVmnetNetworksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F6F30ADE0340032F2CF /* ManageVmnetNetworksViewController.swift */; };
+		3B2E0F7330ADE0470032F2CF /* EditVmnetNetworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F7230ADE0470032F2CF /* EditVmnetNetworkViewController.swift */; };
+		3B2E0F7430ADE0470032F2CF /* EditVmnetNetworkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F7230ADE0470032F2CF /* EditVmnetNetworkViewController.swift */; };
+		3B2E0F7630AEE2A80032F2CF /* VmnetNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */; };
+		3B2E0F7730AEE2A80032F2CF /* VmnetNetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */; };
 		3B2E191A28AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */; };
 		3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
 		3B2E6666309A076A0033552E /* SerialConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B2E6664309A076A0033552E /* SerialConsole.swift */; };
@@ -55,6 +63,12 @@
 		3B4D181E2FD6F94200C75764 /* EditVMViewControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */; };
 		3B559E6626EB54730071E5B5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 3B559E6526EB54730071E5B5 /* ZIPFoundation */; };
 		3B59CBA730B601F600EF86EC /* VirtualMachineFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */; };
+		3B59CBA930B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */; };
+		3B59CBAA30B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */; };
+		3B59CBAC30B7220400EF86EC /* PreferencesTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */; };
+		3B59CBAD30B7220400EF86EC /* PreferencesTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */; };
+		3B59CBB030B82B6D00EF86EC /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */; };
+		3B59CBB130B82B6D00EF86EC /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */; };
 		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
@@ -267,6 +281,10 @@
 		3B25EBB930AB767A00028C39 /* ImportDriveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportDriveViewController.swift; sourceTree = "<group>"; };
 		3B25EBBF30AC484A00028C39 /* DiskImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskImageConverter.swift; sourceTree = "<group>"; };
 		3B26A3CB28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkMacOSSupport.swift; sourceTree = "<group>"; };
+		3B2E0F6C30ADDFC80032F2CF /* VmnetNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetNetwork.swift; sourceTree = "<group>"; };
+		3B2E0F6F30ADE0340032F2CF /* ManageVmnetNetworksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageVmnetNetworksViewController.swift; sourceTree = "<group>"; };
+		3B2E0F7230ADE0470032F2CF /* EditVmnetNetworkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVmnetNetworkViewController.swift; sourceTree = "<group>"; };
+		3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetNetworkManager.swift; sourceTree = "<group>"; };
 		3B2E191928AAA19B0015FED7 /* VirtualizationFrameworkInstallVMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualizationFrameworkInstallVMViewController.swift; sourceTree = "<group>"; };
 		3B2E6664309A076A0033552E /* SerialConsole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerialConsole.swift; sourceTree = "<group>"; };
 		3B39124E2DA9C64500BF8794 /* it */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = it; path = it.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -285,6 +303,9 @@
 		3B4D181D2FD6F93600C75764 /* EditVMViewControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerSnapshots.swift; sourceTree = "<group>"; };
 		3B57F5B72E01D2C400B68CE7 /* MacMulator.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; name = MacMulator.icon; path = Resources/Originals/Icon/icon/MacMulator.icon; sourceTree = "<group>"; };
 		3B59CBA630B601F600EF86EC /* VirtualMachineFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineFactory.swift; sourceTree = "<group>"; };
+		3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetPacketForwarder.swift; sourceTree = "<group>"; };
+		3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTabViewController.swift; sourceTree = "<group>"; };
+		3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSnapshotViewController.swift; sourceTree = "<group>"; };
@@ -478,7 +499,6 @@
 				3B39B8CE25C86A31004B9CBC /* MainWindowController.swift */,
 				3BBB473F25CABDD000A4DBA7 /* Model */,
 				3BA3AC1525E6645E00F02B0E /* NewVM */,
-				3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */,
 				3BB10092266F5293005D0E44 /* Qemu */,
 				3BBB473625CABDCB00A4DBA7 /* Resources */,
 				3B391EEE25C075F50030E914 /* RootViewController.swift */,
@@ -493,6 +513,7 @@
 				3BFDBF0525C15FD800A1442F /* VirtualMachineViewController.swift */,
 				3BF26883308A009200A7DBC1 /* DiskImage */,
 				3B25EBB830AB61F800028C39 /* CloudInit */,
+				3B59CBAE30B7233800EF86EC /* Preferences */,
 			);
 			path = MacMulator;
 			sourceTree = "<group>";
@@ -508,6 +529,17 @@
 			path = MacMulatorTests;
 			sourceTree = "<group>";
 		};
+		3B59CBAE30B7233800EF86EC /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				3B1FC5E426315DC4004E64DC /* PreferencesViewController.swift */,
+				3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */,
+				3B2E0F6F30ADE0340032F2CF /* ManageVmnetNetworksViewController.swift */,
+				3B2E0F7230ADE0470032F2CF /* EditVmnetNetworkViewController.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
 		3B9D7C5C2804643500C9510B /* Virtualization */ = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +553,8 @@
 				3BB2A73D2AF68E250043D9B1 /* VirtualizationFrameworkPauseResumeVMViewController.swift */,
 				3B095905295C8B2E006166AB /* VirtualizationFrameworkSupport.swift */,
 				3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */,
+				3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */,
+				3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */,
 			);
 			path = Virtualization;
 			sourceTree = "<group>";
@@ -578,6 +612,7 @@
 				3BA6C6E02DA32AE80067415E /* EditVM.storyboard */,
 				3BA6C6E12DA32AE80067415E /* Main.storyboard */,
 				3BA6C6E22DA32AE80067415E /* NewVM.storyboard */,
+				3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */,
 				3B75C7EC29DF06C4007C3781 /* Localizable.strings */,
 			);
 			path = UI;
@@ -617,6 +652,7 @@
 				3B03B07C284A4FCE002D465F /* PortMapping.swift */,
 				3B3FC24A308CF02100BE0317 /* ProvisioningInformation.swift */,
 				3BF881D9307FBFB100334D3A /* QemuCapabilitiesReporter.swift */,
+				3B2E0F6C30ADDFC80032F2CF /* VmnetNetwork.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -797,6 +833,7 @@
 				3BA6C6E72DA32AE80067415E /* EditVM.storyboard in Resources */,
 				3BCFF7352DA9C520008E01D3 /* MainContent.storyboard in Resources */,
 				3BA6C6E82DA32AE80067415E /* NewVM.storyboard in Resources */,
+				3B59CBB030B82B6D00EF86EC /* Preferences.storyboard in Resources */,
 				3BDB18FC2CDE25B700B8D3A6 /* EFI_x64.fd in Resources */,
 				3BDB19062CDE2EA100B8D3A6 /* SECURE_EFI_x64.fd in Resources */,
 			);
@@ -829,6 +866,7 @@
 				3BFB2B7F3078F067005A4B51 /* EditVM.storyboard in Resources */,
 				3BFB2B803078F067005A4B51 /* MainContent.storyboard in Resources */,
 				3BFB2B813078F067005A4B51 /* NewVM.storyboard in Resources */,
+				3B59CBB130B82B6D00EF86EC /* Preferences.storyboard in Resources */,
 				3BFB2B823078F067005A4B51 /* EFI_x64.fd in Resources */,
 				3BFB2B833078F067005A4B51 /* SECURE_EFI_x64.fd in Resources */,
 			);
@@ -898,8 +936,10 @@
 				3BBB474225CABDD000A4DBA7 /* VirtualMachine.swift in Sources */,
 				3BD88E0E26DCF0A500B4A0E5 /* AboutBoxViewController.swift in Sources */,
 				3BE72EDC3074F0D600599EBB /* RunningVMManagerViewController.swift in Sources */,
+				3B2E0F7030ADE0340032F2CF /* ManageVmnetNetworksViewController.swift in Sources */,
 				3B7F94A225C2B4B700A13B26 /* VirtualMachinesListViewController.swift in Sources */,
 				3BAC69FE2A4AC89A00B6A027 /* VirtualizationFrameworkDiskImageManager.swift in Sources */,
+				3B59CBAD30B7220400EF86EC /* PreferencesTabViewController.swift in Sources */,
 				3BBB472025CABDAE00A4DBA7 /* Utils.swift in Sources */,
 				3B1BDFC5280804A000E353CE /* VirtualMachineContainerViewController.swift in Sources */,
 				3BF881DA307FBFBA00334D3A /* QemuCapabilitiesReporter.swift in Sources */,
@@ -915,11 +955,13 @@
 				3B3FC24C308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
 				3BC81761309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
 				3B25EBB630AB603A00028C39 /* CloudInitVolume.swift in Sources */,
+				3B2E0F6E30ADDFC80032F2CF /* VmnetNetwork.swift in Sources */,
 				3BF8F62425E40224006E2C1C /* DrivesTableCells.swift in Sources */,
 				3BBFB8A42808495C00DBCAAB /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3B72856D27C782ED009D6F8E /* HostMachineDetails.swift in Sources */,
 				3B03B07B284A420F002D465F /* EditVMViewControllerNetwork.swift in Sources */,
 				3B2E6666309A076A0033552E /* SerialConsole.swift in Sources */,
+				3B2E0F7330ADE0470032F2CF /* EditVmnetNetworkViewController.swift in Sources */,
 				3BFD6AA6289BD34400378325 /* NetworkMappingsTableCells.swift in Sources */,
 				3BF26889308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3B391EEF25C075F50030E914 /* RootViewController.swift in Sources */,
@@ -950,6 +992,7 @@
 				3B200DA52802E58200F7159E /* QemuVMCreator.swift in Sources */,
 				3B1FC5E526315DC4004E64DC /* PreferencesViewController.swift in Sources */,
 				3B0D023825D6975800E015EF /* EditVMViewControllerGeneral.swift in Sources */,
+				3B2E0F7730AEE2A80032F2CF /* VmnetNetworkManager.swift in Sources */,
 				3B7F944E25CD51800063F84D /* QemuImgCommandBuilder.swift in Sources */,
 				3BF6C70F3086091600089BDF /* QemuCapabilitiesViewController.swift in Sources */,
 				3B9B19E625C2C0B400AF3438 /* VirtualMachineTableCellView.swift in Sources */,
@@ -965,6 +1008,7 @@
 				3B200DAE2802F4BF00F7159E /* VirtualMachineRunnerFactory.swift in Sources */,
 				3B249B60263042170046DDA5 /* CreateVMFileViewController.swift in Sources */,
 				3BD212272FCC363C007CB895 /* VirtualMachineSnapshot.swift in Sources */,
+				3B59CBAA30B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */,
 				3B26A3CC28D5F9A300ED336B /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26885308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3B66C6CA306D1B280031A733 /* ManageSnapshotViewController.swift in Sources */,
@@ -1001,8 +1045,10 @@
 				3BFB2B373078F067005A4B51 /* VirtualMachine.swift in Sources */,
 				3BFB2B383078F067005A4B51 /* AboutBoxViewController.swift in Sources */,
 				3BFB2B393078F067005A4B51 /* RunningVMManagerViewController.swift in Sources */,
+				3B2E0F7130ADE0340032F2CF /* ManageVmnetNetworksViewController.swift in Sources */,
 				3BFB2B3A3078F067005A4B51 /* VirtualMachinesListViewController.swift in Sources */,
 				3BFB2B3B3078F067005A4B51 /* VirtualizationFrameworkDiskImageManager.swift in Sources */,
+				3B59CBAC30B7220400EF86EC /* PreferencesTabViewController.swift in Sources */,
 				3BFB2B3C3078F067005A4B51 /* Utils.swift in Sources */,
 				3BFB2B3D3078F067005A4B51 /* VirtualMachineContainerViewController.swift in Sources */,
 				3BF881DB307FBFBA00334D3A /* QemuCapabilitiesReporter.swift in Sources */,
@@ -1018,11 +1064,13 @@
 				3B3FC24B308CF02100BE0317 /* ProvisioningInformation.swift in Sources */,
 				3BC81762309501F30025C20B /* TerminalSessionWindowController.swift in Sources */,
 				3B25EBB730AB603A00028C39 /* CloudInitVolume.swift in Sources */,
+				3B2E0F6D30ADDFC80032F2CF /* VmnetNetwork.swift in Sources */,
 				3BFB2B443078F067005A4B51 /* DrivesTableCells.swift in Sources */,
 				3BFB2B453078F067005A4B51 /* VirtualizationFrameworkVirtualMachineRunner.swift in Sources */,
 				3BFB2B463078F067005A4B51 /* HostMachineDetails.swift in Sources */,
 				3BFB2B473078F067005A4B51 /* EditVMViewControllerNetwork.swift in Sources */,
 				3B2E6665309A076A0033552E /* SerialConsole.swift in Sources */,
+				3B2E0F7430ADE0470032F2CF /* EditVmnetNetworkViewController.swift in Sources */,
 				3BFB2B483078F067005A4B51 /* NetworkMappingsTableCells.swift in Sources */,
 				3BF26888308A00C100A7DBC1 /* QemuDiskImageManager.swift in Sources */,
 				3BFB2B493078F067005A4B51 /* RootViewController.swift in Sources */,
@@ -1053,6 +1101,7 @@
 				3BFB2B5A3078F067005A4B51 /* QemuVMCreator.swift in Sources */,
 				3BFB2B5B3078F067005A4B51 /* PreferencesViewController.swift in Sources */,
 				3BFB2B5C3078F067005A4B51 /* EditVMViewControllerGeneral.swift in Sources */,
+				3B2E0F7630AEE2A80032F2CF /* VmnetNetworkManager.swift in Sources */,
 				3BFB2B5D3078F067005A4B51 /* QemuImgCommandBuilder.swift in Sources */,
 				3BF6C70E3086091600089BDF /* QemuCapabilitiesViewController.swift in Sources */,
 				3BFB2B5E3078F067005A4B51 /* VirtualMachineTableCellView.swift in Sources */,
@@ -1068,6 +1117,7 @@
 				3BFB2B673078F067005A4B51 /* VirtualMachineRunnerFactory.swift in Sources */,
 				3BFB2B683078F067005A4B51 /* CreateVMFileViewController.swift in Sources */,
 				3BFB2B693078F067005A4B51 /* VirtualMachineSnapshot.swift in Sources */,
+				3B59CBA930B6EAE200EF86EC /* VmnetPacketForwarder.swift in Sources */,
 				3BFB2B6A3078F067005A4B51 /* VirtualizationFrameworkMacOSSupport.swift in Sources */,
 				3BF26886308A00B500A7DBC1 /* DiskImageManager.swift in Sources */,
 				3BFB2B6B3078F067005A4B51 /* ManageSnapshotViewController.swift in Sources */,

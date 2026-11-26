@@ -66,13 +66,18 @@ class VirtualizationFrameworkLinuxSupport: VirtualizationFrameworkSupport {
             return VZBridgedNetworkInterface.networkInterfaces.first?.identifier
         }()
 
-        virtualMachineConfiguration.networkDevices = [
-            LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
-                macAddress: vm.macAddress,
-                device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
-                phisicalDevice: selectedBridgedInterfaceIdentifier
-            ),
-        ]
+        if vm.isNetworkEnabled {
+            virtualMachineConfiguration.networkDevices = [
+                LinuxVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                    vm: vm,
+                    macAddress: vm.macAddress,
+                    device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
+                    phisicalDevice: selectedBridgedInterfaceIdentifier
+                ),
+            ]
+        } else {
+            virtualMachineConfiguration.networkDevices = []
+        }
 
         virtualMachineConfiguration.pointingDevices = [LinuxVirtualMachineConfigurationHelper.createPointingDeviceConfiguration()]
         virtualMachineConfiguration.keyboards = [LinuxVirtualMachineConfigurationHelper.createKeyboardConfiguration()]

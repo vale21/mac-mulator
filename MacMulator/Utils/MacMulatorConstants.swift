@@ -53,8 +53,11 @@ class MacMulatorConstants {
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
     static let SHOW_PROVISIONING_OPTIONS_SEGUE = "showProvisioningOptionsSegue"
     static let SHOW_CLONE_VIEW_SEGUE = "showCloneViewSegue"
+    static let NEW_VMNET_NETWORK_SEGUE = "newVmnetNetworkSegue"
+    static let EDIT_VMNET_NETWORK_SEGUE = "editVmnetNetworkSegue"
 
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
+    static let VMNET_NETWORKS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmnetNetworksChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
@@ -62,8 +65,19 @@ class MacMulatorConstants {
     static let PREFERENCE_KEY_QEMU_PATH = "qemuPath"
     static let PREFERENCE_KEY_LIVE_PREVIEW_RATE = "livePreviewRate"
     static let PREFERENCE_KEY_LIVE_PREVIEW_ENABLED = "livePreviewEnabled"
+    static let PREFERENCE_KEY_VMNET_NETWORKS = "vmnetNetworks"
 
     static let APP_STATE_FILE = ".macmulator.plist"
+
+    static let VMNET_SHARED_SUBNET = "192.168.129.0/24"
+    static let VMNET_HOST_ONLY_SUBNET = "192.168.128.0/24"
+    static let VMNET_NEW_NETWORK_DEFAULT_SUBNET = "192.168.130.0/24"
+    static let VMNET_ISOLATED_SUBNETS_RANGE = "192.168.192.0/18"
+    static let VMNET_SUBNET_PREFIX_LENGTHS: ClosedRange<UInt32> = 8 ... 30
+    static let VMNET_ISOLATED_SUBNET_PREFIX_LENGTH: UInt32 = 24
+    static let VMNET_FIRST_RESERVED_HOST: UInt32 = 10
+    static let ASSIGNABLE_HOST_PORTS: ClosedRange<Int32> = 1024 ... 65535
+    static let VALID_PORTS: ClosedRange<Int32> = 1 ... 65535
 
     static let QEMU_VM = "qemu"
     static let APPLE_VM = "apple"

@@ -10,7 +10,7 @@ import Foundation
 class VirtualMachine: Codable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case storedId = "id"
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName, vmnetNetworkId, networkEnabled
     }
 
     /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
@@ -46,6 +46,8 @@ class VirtualMachine: Codable, Hashable {
     var usbPassthroughDeviceNames: [String: String]?
     var provisioningInformation: ProvisioningInformation? = nil
     var guestUserName: String?
+    var vmnetNetworkId: String?
+    var networkEnabled: Bool?
 
     /// Unique identifier, assigned at creation time and never modified afterwards.
     /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
@@ -56,6 +58,10 @@ class VirtualMachine: Codable, Hashable {
         let newId = UUID().uuidString
         storedId = newId
         return newId
+    }
+
+    var isNetworkEnabled: Bool {
+        networkEnabled ?? true
     }
 
     var hasLinkedDrives: Bool {
@@ -82,7 +88,7 @@ class VirtualMachine: Codable, Hashable {
         self.enableSpiceDisplay = enableSpiceDisplay
         self.hvf = hvf
         drives = []
-        portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+        portMappings = Utils.defaultPortMappings(os: os)
         self.macAddress = macAddress
         self.type = type
         self.bootMode = bootMode
@@ -146,7 +152,7 @@ class VirtualMachine: Codable, Hashable {
                 vm.writeToPlist()
             }
             if vm.portMappings == nil {
-                vm.portMappings = [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: Utils.random(digits: 2, suffix: 22))]
+                vm.portMappings = Utils.defaultPortMappings(os: vm.os)
             }
             return vm
         } catch {
@@ -218,7 +224,6 @@ class VirtualMachine: Codable, Hashable {
         NotificationCenter.default.post(name: MacMulatorConstants.SNAPSHOTS_CHANGED_NOTIFICATION, object: self)
     }
 
-    /// Only the disks in the VM bundle: the images attached from elsewhere (installation ISOs...) belong to the user
     private func writeDriveMetadata() {
         for drive in drives where (drive.mediaType == QemuConstants.MEDIATYPE_DISK || drive.mediaType == QemuConstants.MEDIATYPE_NVME) && drive.path.hasPrefix(path + "/") {
             drive.writeMetadataToImage()

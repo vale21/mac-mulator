@@ -90,41 +90,19 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.writeToPlist()
         }
 
-        if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
-            #if arch(arm64)
-
-                vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
-
-                let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
-                if isDriveBlank {
-                    installAndStartVM()
+        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: managedVm) {
+            let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), managedVm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
+            // Asynchronous: runVM is called while the VM window is being shown, where a modal session is not allowed
+            Utils.showPrompt(window: alertWindow, style: NSAlert.Style.warning, message: message, completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.acquireNetworkAndStartVM()
                 } else {
-                    startOrResumeVM()
+                    self.stopVM(guestStopped: true)
                 }
-
-            #endif
-        } else if #available(macOS 13.0, *) {
-            let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
-            var installPath: String? = nil
-            if let installMedia {
-                installPath = installMedia.path
-            } else {
-                installPath = ""
-            }
-            if Utils.isCloudInitSupported(managedVm) {
-                // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
-                do {
-                    try CloudInitVolume.update(for: managedVm)
-                } catch {
-                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
-                    return
-                }
-            }
-            let console = VirtualizationFrameworkSerialConsole()
-            serialConsole = console
-            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
-            startOrResumeVM()
+            }, virtualMachine: managedVm)
+            return
         }
+        acquireNetworkAndStartVM()
     }
 
     func instllationComplete(_ result: Result<Void, Error>) {
@@ -205,7 +183,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
             #if arch(arm64)
                 vmViewController?.showRestoringView()
-                stopVM(guestStopped: false, uponCompletion: { _ in
+                stopVM(guestStopped: false, keepingVirtualMachine: true, uponCompletion: { _ in
                     try? self.restoreVMSnapshotFiles(snapshot: snapshot, managedVm: self.managedVm)
                     self.vzVirtualMachine?.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
                         let fileManager = FileManager.default
@@ -241,7 +219,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             configureVmView()
             vzVirtualMachine.resume(completionHandler: { result in
                 if case let .failure(error) = result {
-                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to resume \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
+                    Utils.showAlert(window: self.alertWindow, style: NSAlert.Style.critical, message: self.startFailureMessage(error, resuming: true), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: self.managedVm)
                 } else {
                     // Passthrough devices are not part of the saved machine state: plug back the ones saved for this VM
                     self.attachUSBPassthroughDevices()
@@ -252,28 +230,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
-        if #available(macOS 27.0, *) {
-            releasePassthroughDevices()
-        }
-        if let uponCompletion {
-            // The caller keeps using the stopped VM (e.g. to restore a snapshot), so it must not be released here.
-            if let vzVirtualMachine {
-                vzVirtualMachine.stop(completionHandler: uponCompletion)
-            } else {
-                uponCompletion(nil)
-            }
-        } else {
-            let stoppingVirtualMachine = vzVirtualMachine
-            vzVirtualMachine?.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
-        }
-        if let vmViewController {
-            vmViewController.stopVM(guestStopped)
-        } else {
-            // Headless: there is no VM window to clean up after the VM
-            DispatchQueue.main.async {
-                self.vmController?.cleanupStoppedVM(self.managedVm)
-            }
-        }
+        stopVM(guestStopped: guestStopped, keepingVirtualMachine: false, uponCompletion: uponCompletion)
     }
 
     func stopVMGracefully() {
@@ -516,6 +473,87 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         #endif
     }
 
+    private func stopVM(guestStopped: Bool, keepingVirtualMachine: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if #available(macOS 27.0, *) {
+            releasePassthroughDevices()
+        }
+        if let stoppingVirtualMachine = vzVirtualMachine {
+            stoppingVirtualMachine.stop(completionHandler: { error in
+                // Restoring a snapshot goes on with the stopped VM and its network: everything else is released
+                if !keepingVirtualMachine {
+                    self.releaseVirtualMachine(stoppingVirtualMachine)
+                }
+                uponCompletion?(error)
+            })
+        } else {
+            // Setup failed before the VM was created: the network acquired for it is released here
+            if !keepingVirtualMachine {
+                releaseNetworking()
+            }
+            uponCompletion?(nil)
+        }
+        if let vmViewController {
+            vmViewController.stopVM(guestStopped)
+        } else {
+            // Headless: there is no VM window to clean up after the VM
+            DispatchQueue.main.async {
+                self.vmController?.cleanupStoppedVM(self.managedVm)
+            }
+        }
+    }
+
+    private func acquireNetworkAndStartVM() {
+        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
+            if #available(macOS 26.0, *) {
+                do {
+                    try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            } else {
+                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported", comment: ""), managedVm.displayName), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                return
+            }
+        }
+
+        if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
+            #if arch(arm64)
+
+                vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
+
+                let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
+                if isDriveBlank {
+                    installAndStartVM()
+                } else {
+                    startOrResumeVM()
+                }
+
+            #endif
+        } else if #available(macOS 13.0, *) {
+            let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
+            var installPath: String? = nil
+            if let installMedia {
+                installPath = installMedia.path
+            } else {
+                installPath = ""
+            }
+            if Utils.isCloudInitSupported(managedVm) {
+                // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
+                do {
+                    try CloudInitVolume.update(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            }
+            let console = VirtualizationFrameworkSerialConsole()
+            serialConsole = console
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
+            startOrResumeVM()
+        }
+    }
+
     private func configureVmView() {
         vmView?.virtualMachine = vzVirtualMachine
         if #available(macOS 14.0, *) {
@@ -525,8 +563,8 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     private func handleVMStartWithOptions(error: (any Error)?) {
-        if error != nil {
-            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+        if let error {
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: startFailureMessage(error, resuming: false), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
         } else {
             if let provisioningInformation = managedVm.provisioningInformation {
                 managedVm.guestUserName = provisioningInformation.userName
@@ -541,10 +579,24 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     private func handleVMStart(result: Result<Void, any Error>) {
         switch result {
         case let .failure(error):
-            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: "Virtual machine failed to start \(error)", completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: nil)
+            Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: startFailureMessage(error, resuming: false), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
         default:
             attachUSBDrives()
         }
+    }
+
+    private func startFailureMessage(_ error: any Error, resuming: Bool) -> String {
+        if let error = error as? VZError, error.code == .virtualMachineLimitExceeded, managedVm.os == QemuConstants.OS_MAC {
+            let runningMacVMs = ((NSApp.delegate as? AppDelegate)?.rootController?.runningVMs.keys.map(\.self) ?? [])
+                .filter { $0.id != managedVm.id && $0.os == QemuConstants.OS_MAC && $0.type == MacMulatorConstants.APPLE_VM }
+                .map(\.displayName)
+            if runningMacVMs.isEmpty {
+                return String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.macOSLimitReachedElsewhere", comment: ""), managedVm.displayName)
+            }
+            return String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.macOSLimitReached", comment: ""), managedVm.displayName, runningMacVMs.joined(separator: ", "))
+        }
+        let key = resuming ? "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" : "VirtualizationFrameworkVirtualMachineRunner.startFailed"
+        return String(format: NSLocalizedString(key, comment: ""), managedVm.displayName, error.localizedDescription)
     }
 
     private func attachUSBDrives() {
@@ -580,6 +632,13 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         }
         stoppedVirtualMachine.delegate = nil
         vzVirtualMachine = nil
+        releaseNetworking()
+    }
+
+    private func releaseNetworking() {
+        if #available(macOS 26.0, *) {
+            VmnetNetworkManager.shared.releaseNetwork(for: managedVm)
+        }
     }
 
     private func startOrResumeVM() {

@@ -36,6 +36,9 @@ class Utils {
     static let IMAGE_TYPES = ["img", "iso", "cdr", "toast", "vhd", "vhdx", "qcow2", "qvd", "dmg", "app", "ipsw", "fd"]
     static let IMAGE_TYPES_USB = ["img", "iso", "cdr"]
     // Disk images that can be imported as a drive: cloud images are usually .img (often qcow2 inside) or .qcow2
+    private static let assignedHostPortsLock = NSLock()
+    private static var assignedHostPorts = Set<Int32>()
+
     static let IMPORT_DRIVE_TYPES = ["img", "raw", "qcow2", "qcow", "qvd", "asif", "vmdk", "vdi", "vhd", "vhdx"]
 
     /// ssh options that let old guests (e.g. old macOS versions, offering only ssh-rsa or ssh-dss host keys and SHA-1
@@ -897,6 +900,22 @@ class Utils {
         return false
     }
 
+    static func isVmnetSupported(_ vm: VirtualMachine) -> Bool {
+        if #available(macOS 26.0, *) {
+            vm.type == MacMulatorConstants.APPLE_VM || vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM
+        } else {
+            false
+        }
+    }
+
+    static func isVmnetSupportedOnHost() -> Bool {
+        if #available(macOS 26.0, *) {
+            true
+        } else {
+            false
+        }
+    }
+
     static func isQemuImgSupported(_ vm: VirtualMachine) -> Bool {
         isQemuImgSupported(atPath: QemuUtils.getQemuPath(for: vm))
     }
@@ -1032,6 +1051,114 @@ class Utils {
         #else
             return QemuConstants.VGA_VIRTIO_GPU
         #endif
+    }
+
+    static func setControlsEnabled(_ enabled: Bool, in view: NSView) {
+        for subview in view.subviews {
+            if let control = subview as? NSControl {
+                control.isEnabled = enabled
+            }
+            setControlsEnabled(enabled, in: subview)
+        }
+    }
+
+    static func workspaceVirtualMachines() -> [VirtualMachine] {
+        guard Thread.isMainThread else {
+            return DispatchQueue.main.sync { workspaceVirtualMachines() }
+        }
+        return (NSApp.delegate as? AppDelegate)?.rootController?.virtualMachines ?? []
+    }
+
+    static func freeHostPort(preferred: [Int32], fallbackStart: Int32, excluding excludedPorts: Set<Int32> = []) -> Int32? {
+        let mappedPorts = Set(workspaceVirtualMachines().flatMap { $0.portMappings ?? [] }.map(\.hostPort))
+
+        // Taken after reading the workspace, which may wait for the main thread
+        assignedHostPortsLock.lock()
+        defer { assignedHostPortsLock.unlock() }
+
+        // Ports handed out earlier in this session count as taken: clones are registered asynchronously,
+        // so the VMs that received them may not be in the workspace list yet
+        let takenPorts = mappedPorts.union(assignedHostPorts).union(excludedPorts)
+        let ports = MacMulatorConstants.ASSIGNABLE_HOST_PORTS
+        let isFree = { (port: Int32) in ports.contains(port) && !takenPorts.contains(port) && !isHostPortInUse(port) }
+
+        // From the start port up to the last one, then from the first one: ports below 1024 need root to be bound
+        let start = min(max(fallbackStart, ports.lowerBound), ports.upperBound)
+        guard let port = preferred.first(where: isFree) ?? (start ... ports.upperBound).first(where: isFree) ?? (ports.lowerBound ..< start).first(where: isFree) else {
+            return nil
+        }
+        assignedHostPorts.insert(port)
+        return port
+    }
+
+    static func freeHostPort(forVMPort vmPort: Int32, currentHostPort: Int32? = nil, excluding excludedPorts: Set<Int32> = []) -> Int32? {
+        switch vmPort {
+        case 22:
+            freeHostPort(preferred: (2 ... 9).map { Int32($0) * 1100 + 22 }, fallbackStart: 2223, excluding: excludedPorts)
+        case 3389:
+            freeHostPort(preferred: (1 ... 6).map { Int32($0) * 10000 + 3389 }, fallbackStart: 3390, excluding: excludedPorts)
+        default:
+            freeHostPort(preferred: [], fallbackStart: (currentHostPort ?? 10000) + 1, excluding: excludedPorts)
+        }
+    }
+
+    static func defaultPortMappings(os: String) -> [PortMapping] {
+        switch os {
+        case QemuConstants.OS_MAC, QemuConstants.OS_LINUX:
+            freeHostPort(forVMPort: 22).map { [PortMapping(name: NSLocalizedString("VirtualMachine.sshPortMapping", comment: ""), vmPort: 22, hostPort: $0)] } ?? []
+        case QemuConstants.OS_WIN:
+            freeHostPort(forVMPort: 3389).map { [PortMapping(name: NSLocalizedString("VirtualMachine.rdpPortMapping", comment: ""), vmPort: 3389, hostPort: $0)] } ?? []
+        default:
+            []
+        }
+    }
+
+    static func reassignConflictingHostPorts(_ vm: VirtualMachine) {
+        var takenPorts = Set(workspaceVirtualMachines().filter { $0.id != vm.id }.flatMap { $0.portMappings ?? [] }.map(\.hostPort))
+        for mapping in vm.portMappings ?? [] {
+            if takenPorts.contains(mapping.hostPort), let freePort = freeHostPort(forVMPort: mapping.vmPort, currentHostPort: mapping.hostPort, excluding: takenPorts) {
+                mapping.hostPort = freePort
+            }
+            takenPorts.insert(mapping.hostPort)
+        }
+    }
+
+    static func hostInterfaceSubnets(excludingAddresses excludedAddresses: Set<UInt32> = []) -> [(interface: String, subnet: String)] {
+        var interfaces: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&interfaces) == 0, let firstInterface = interfaces else { return [] }
+        defer { freeifaddrs(interfaces) }
+
+        var subnets: [(interface: String, subnet: String)] = []
+        for pointer in sequence(first: firstInterface, next: { $0.pointee.ifa_next }) {
+            let entry = pointer.pointee
+            let name = String(cString: entry.ifa_name)
+            guard let address = entry.ifa_addr, let netmask = entry.ifa_netmask, address.pointee.sa_family == sa_family_t(AF_INET), !name.hasPrefix("lo") else { continue }
+
+            let ipAddress = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
+            let mask = netmask.withMemoryRebound(to: sockaddr_in.self, capacity: 1) { UInt32(bigEndian: $0.pointee.sin_addr.s_addr) }
+            guard mask != 0, ipAddress >> 16 != 0xA9FE, !excludedAddresses.contains(ipAddress) else { continue }
+
+            let networkAddress = String(cString: inet_ntoa(in_addr(s_addr: (ipAddress & mask).bigEndian)))
+            subnets.append((name, networkAddress + "/" + String(mask.nonzeroBitCount)))
+        }
+        return subnets
+    }
+
+    static func isHostPortInUse(_ port: Int32) -> Bool {
+        let socketDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+        guard socketDescriptor >= 0 else { return false }
+        defer { close(socketDescriptor) }
+
+        var address = sockaddr_in()
+        address.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+        address.sin_family = sa_family_t(AF_INET)
+        address.sin_port = in_port_t(UInt16(truncatingIfNeeded: port)).bigEndian
+        address.sin_addr.s_addr = INADDR_ANY
+        let result = withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { bind(socketDescriptor, $0, socklen_t(MemoryLayout<sockaddr_in>.size)) }
+        }
+        // Only a port already bound counts: other failures (e.g. the sandbox) don't tell whether it's free
+        return result != 0 && errno == EADDRINUSE
     }
 
     static func random(digits: Int32) -> Int32 {

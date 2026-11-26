@@ -40,6 +40,7 @@ class QemuCommandBuilder {
     var portMappings: [PortMapping] = []
     var managementPort: Int32?
     var nic: String?
+    var networkDisabled = false
     var tpmPath: String?
     var tpmDevice: String?
 
@@ -255,6 +256,11 @@ class QemuCommandBuilder {
         return self
     }
 
+    func withNetworkDisabled(_ networkDisabled: Bool) -> QemuCommandBuilder {
+        self.networkDisabled = networkDisabled
+        return self
+    }
+
     func withNic(_ nic: String) -> QemuCommandBuilder {
         self.nic = nic
         return self
@@ -311,7 +317,10 @@ class QemuCommandBuilder {
         if let usb, usb {
             cmd += FORMATTER + "-usb"
         }
-        if let nic {
+        if networkDisabled {
+            // Without it Qemu adds a default network card
+            cmd += FORMATTER + "-nic none"
+        } else if let nic {
             cmd += FORMATTER + "-nic user,model=" + nic
         }
         for device in device {
@@ -353,7 +362,7 @@ class QemuCommandBuilder {
             cmd += FORMATTER + "-device virtio-scsi-pci,id=cidata-scsi"
             cmd += FORMATTER + "-device scsi-cd,drive=cidata,bus=cidata-scsi.0"
         }
-        if let network {
+        if let network, !networkDisabled {
             cmd += " " + network
         }
         if let spice {

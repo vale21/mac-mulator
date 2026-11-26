@@ -47,7 +47,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private static let usbPassthroughMenuTag = 2701
 
     @IBAction func preferencesMenuBarClicked(_: Any) {
-        NSApp.mainWindow?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: self)
+        showPreferences(nil)
     }
 
     @IBAction func newVMMenuBarClicked(_: Any) {
@@ -428,14 +428,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #endif
     }
 
+    func showPreferences(_ request: PreferencesRequest?) {
+        if let window = NSApp.windows.first(where: { $0.isVisible && $0.contentViewController is PreferencesTabViewController }) {
+            (window.contentViewController as? PreferencesTabViewController)?.apply(request)
+            window.makeKeyAndOrderFront(self)
+            return
+        }
+        // Through the main window, which owns the segue, whichever window is in front
+        rootController?.view.window?.windowController?.performSegue(withIdentifier: MacMulatorConstants.PREFERENCES_SEGUE, sender: request)
+    }
+
     func refreshVMMenus() {
         defer { refreshUSBPassthroughMenu() }
         vmMenu.autoenablesItems = false
         setupSessionMenuItems()
-        #if APPSTORE
-            preferencesMenuItem.isHidden = true
-            preferencesSeparator.isHidden = true
-        #endif
+        preferencesMenuItem.isHidden = !PreferencesTabViewController.hasTabs()
+        preferencesSeparator.isHidden = !PreferencesTabViewController.hasTabs()
 
         guard let rootController else { return }
 

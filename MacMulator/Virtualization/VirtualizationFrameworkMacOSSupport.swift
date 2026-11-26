@@ -81,9 +81,12 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
                 return VZBridgedNetworkInterface.networkInterfaces.first?.identifier
             }()
 
-            if let macAddress = vm.macAddress {
+            if !vm.isNetworkEnabled {
+                virtualMachineConfiguration.networkDevices = []
+            } else if let macAddress = vm.macAddress {
                 virtualMachineConfiguration.networkDevices = [
                     MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                        vm: vm,
                         macAddress: macAddress,
                         device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
                         phisicalDevice: selectedBridgedInterfaceIdentifier
@@ -92,6 +95,7 @@ class VirtualizationFrameworkMacOSSupport: VirtualizationFrameworkSupport {
             } else {
                 virtualMachineConfiguration.networkDevices = [
                     MacOSVirtualMachineConfigurationHelper.createNetworkDeviceConfiguration(
+                        vm: vm,
                         macAddress: VZMACAddress.randomLocallyAdministered().string,
                         device: vm.networkDevice ?? QemuConstants.ATTACHMENT_NAT,
                         phisicalDevice: selectedBridgedInterfaceIdentifier

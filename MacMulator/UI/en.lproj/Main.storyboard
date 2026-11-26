@@ -558,7 +558,7 @@
         <!--NSWindowController-Fkf-Y0-JDu-->
         <scene sceneID="utZ-j1-pWG">
             <objects>
-                <controllerPlaceholder storyboardName="MainContent" referencedIdentifier="NSWindowController-Fkf-Y0-JDu" id="T2u-Qx-76b" sceneMemberID="viewController"/>
+                <controllerPlaceholder storyboardName="Preferences" referencedIdentifier="NSWindowController-Fkf-Y0-JDu" id="T2u-Qx-76b" sceneMemberID="viewController"/>
                 <customObject id="kiY-Zu-CzC" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1679" y="-704"/>
