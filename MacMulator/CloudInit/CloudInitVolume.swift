@@ -15,6 +15,9 @@ import Virtualization
 enum CloudInitVolume {
     static let fileName = "cloud-init.iso"
     private static let volumeLabel = "cidata"
+    // vmnet reserves addresses by MAC address: without this, systemd-networkd (Ubuntu Server) identifies
+    // the VM by a DUID, gets a dynamic address and misses the reservation its port forwarding points to
+    private static let dhcpIdentifier = "    dhcp-identifier: mac\n"
 
     static func path(for vm: VirtualMachine) -> String {
         vm.path + "/" + fileName
@@ -38,18 +41,15 @@ enum CloudInitVolume {
 
         let hostName = hostName(vm.displayName)
         let userData = userData(info)
-        let networkConfig = info.ipConfiguration.map { self.networkConfig($0, info, macAddress: vm.macAddress!) }
+        let networkConfig = info.ipConfiguration.map { self.networkConfig($0, info, macAddress: vm.macAddress!) } ?? defaultNetworkConfig(macAddress: vm.macAddress!)
 
         // cloud-init applies the configuration once per instance: the id changes, and the configuration
         // is applied again on the next boot, only when the configuration changes.
-        let contents = [hostName, userData, networkConfig ?? ""].joined(separator: "\n")
+        let contents = [hostName, userData, networkConfig].joined(separator: "\n")
         let hash = SHA256.hash(data: Data(contents.utf8)).prefix(8).map { String(format: "%02x", $0) }.joined()
         let metaData = "instance-id: \(quoted("iid-macmulator-" + hash))\nlocal-hostname: \(quoted(hostName))\n"
 
-        var files: [(name: String, data: Data)] = [("meta-data", Data(metaData.utf8)), ("user-data", Data(userData.utf8))]
-        if let networkConfig {
-            files.append(("network-config", Data(networkConfig.utf8)))
-        }
+        let files: [(name: String, data: Data)] = [("meta-data", Data(metaData.utf8)), ("user-data", Data(userData.utf8)), ("network-config", Data(networkConfig.utf8))]
         try ISO9660Image.write(volumeIdentifier: volumeLabel, files: files, to: URL(fileURLWithPath: path))
         return path
     }
@@ -76,6 +76,17 @@ enum CloudInitVolume {
         return yaml
     }
 
+    private static func defaultNetworkConfig(macAddress: String) -> String {
+        var yaml = "version: 2\n"
+        yaml += "ethernets:\n"
+        yaml += "  net0:\n"
+        yaml += "    match:\n"
+        yaml += "      macaddress: \(quoted(macAddress.lowercased()))\n"
+        yaml += "    dhcp4: true\n"
+        yaml += dhcpIdentifier
+        return yaml
+    }
+
     /// Network configuration version 2: https://docs.cloud-init.io/en/latest/reference/network-config-format-v2.html
     private static func networkConfig(_ ip: CloudInitIPConfiguration, _ info: ProvisioningInformation, macAddress: String) -> String {
         var yaml = "version: 2\n"
@@ -85,6 +96,9 @@ enum CloudInitVolume {
         yaml += "      macaddress: \(quoted(macAddress.lowercased()))\n"
         yaml += "    dhcp4: \(ip.ipv4Mode == .dhcp)\n"
         yaml += "    dhcp6: \(ip.ipv6Mode == .dhcp)\n"
+        if ip.ipv4Mode == .dhcp {
+            yaml += dhcpIdentifier
+        }
         if ip.ipv6Mode == .slaac {
             yaml += "    accept-ra: true\n"
         } else if ip.ipv6Mode == .disabled {
