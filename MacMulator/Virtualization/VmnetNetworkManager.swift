@@ -91,7 +91,7 @@ class VmnetNetworkManager {
         }
 
         let subnet = network.mode == .isolated ? try allocateIsolatedSubnet(for: vm, network: network) : network.subnet
-        if let conflict = VmnetNetwork.overlappingHostInterface(subnet) {
+        if let conflict = Utils.hostInterfaceSubnets().first(where: { VmnetNetwork.subnetsOverlap(subnet, $0.subnet) }) {
             isolatedSubnets.removeValue(forKey: vm.id)
             throw VmnetSubnetConflictError(networkName: network.name, subnet: subnet, interface: conflict.interface, interfaceSubnet: conflict.subnet)
         }
