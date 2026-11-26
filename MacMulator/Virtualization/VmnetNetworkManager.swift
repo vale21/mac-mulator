@@ -221,7 +221,7 @@ class VmnetNetworkManager {
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
         let networks = VmnetNetwork.allNetworks()
         let attachedVMs = Utils.workspaceVirtualMachines()
-            .filter { $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && !($0.portMappings ?? []).isEmpty && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
+            .filter { $0.type == MacMulatorConstants.APPLE_VM && $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && !($0.portMappings ?? []).isEmpty && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
             .filter { $0.macAddress.flatMap { ether_aton($0) } != nil }
             .sorted { $0.id < $1.id }
 
