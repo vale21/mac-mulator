@@ -138,17 +138,18 @@ class VmnetPacketForwarder {
     }
 
     private func forwardPacketsToVirtualMachine() {
-        while !stopped {
-            fromVmnet.reset()
-            var count = Int32(fromVmnet.count)
-            guard vmnet_read(interface, fromVmnet.packets, &count) == .VMNET_SUCCESS, count > 0 else { return }
+        guard !stopped else { return }
+        fromVmnet.reset()
+        var count = Int32(fromVmnet.count)
+        guard vmnet_read(interface, fromVmnet.packets, &count) == .VMNET_SUCCESS, count > 0 else { return }
 
-            for index in 0 ..< Int(count) where isAllowedFromNetwork(fromVmnet.buffers[index], size: fromVmnet.packets[index].vm_pkt_size) {
-                // A full socket means the VM can't keep up: the packet is dropped, as on a congested link
-                _ = send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, 0)
-            }
-            if Int(count) < fromVmnet.count {
-                return
+        for index in 0 ..< Int(count) where isAllowedFromNetwork(fromVmnet.buffers[index], size: fromVmnet.packets[index].vm_pkt_size) {
+            // A full socket means the VM can't keep up: the packet is dropped, as on a congested link
+            _ = send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, 0)
+        }
+        if Int(count) == fromVmnet.count {
+            queue.async { [weak self] in
+                self?.forwardPacketsToVirtualMachine()
             }
         }
     }
