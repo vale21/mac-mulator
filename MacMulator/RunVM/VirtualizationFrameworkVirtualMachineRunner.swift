@@ -183,7 +183,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
         if #available(macOS 14.0, *), isVMRunning(), Utils.isPauseSupported(managedVm) {
             #if arch(arm64)
                 vmViewController?.showRestoringView()
-                stopVM(guestStopped: false, uponCompletion: { _ in
+                stopVM(guestStopped: false, keepingVirtualMachine: true, uponCompletion: { _ in
                     try? self.restoreVMSnapshotFiles(snapshot: snapshot, managedVm: self.managedVm)
                     self.vzVirtualMachine?.restoreMachineStateFrom(url: self.saveFileURL, completionHandler: { error in
                         let fileManager = FileManager.default
@@ -230,30 +230,7 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
     }
 
     func stopVM(guestStopped: Bool, uponCompletion: (((any Error)?) -> Void)?) {
-        if #available(macOS 27.0, *) {
-            releasePassthroughDevices()
-        }
-        if let uponCompletion {
-            // The caller keeps using the stopped VM (e.g. to restore a snapshot), so it must not be released here.
-            if let vzVirtualMachine {
-                vzVirtualMachine.stop(completionHandler: uponCompletion)
-            } else {
-                uponCompletion(nil)
-            }
-        } else if let stoppingVirtualMachine = vzVirtualMachine {
-            stoppingVirtualMachine.stop(completionHandler: { _ in self.releaseVirtualMachine(stoppingVirtualMachine) })
-        } else {
-            // Setup failed before the VM was created: the network acquired for it is released here
-            releaseNetworking()
-        }
-        if let vmViewController {
-            vmViewController.stopVM(guestStopped)
-        } else {
-            // Headless: there is no VM window to clean up after the VM
-            DispatchQueue.main.async {
-                self.vmController?.cleanupStoppedVM(self.managedVm)
-            }
-        }
+        stopVM(guestStopped: guestStopped, keepingVirtualMachine: false, uponCompletion: uponCompletion)
     }
 
     func stopVMGracefully() {
@@ -494,6 +471,35 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 }
             }
         #endif
+    }
+
+    private func stopVM(guestStopped: Bool, keepingVirtualMachine: Bool, uponCompletion: (((any Error)?) -> Void)?) {
+        if #available(macOS 27.0, *) {
+            releasePassthroughDevices()
+        }
+        if let stoppingVirtualMachine = vzVirtualMachine {
+            stoppingVirtualMachine.stop(completionHandler: { error in
+                // Restoring a snapshot goes on with the stopped VM and its network: everything else is released
+                if !keepingVirtualMachine {
+                    self.releaseVirtualMachine(stoppingVirtualMachine)
+                }
+                uponCompletion?(error)
+            })
+        } else {
+            // Setup failed before the VM was created: the network acquired for it is released here
+            if !keepingVirtualMachine {
+                releaseNetworking()
+            }
+            uponCompletion?(nil)
+        }
+        if let vmViewController {
+            vmViewController.stopVM(guestStopped)
+        } else {
+            // Headless: there is no VM window to clean up after the VM
+            DispatchQueue.main.async {
+                self.vmController?.cleanupStoppedVM(self.managedVm)
+            }
+        }
     }
 
     private func acquireNetworkAndStartVM() {
