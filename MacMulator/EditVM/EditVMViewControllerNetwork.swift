@@ -6,12 +6,20 @@
 //
 
 import Cocoa
+import Virtualization
 
-class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor {
+class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor, VmnetNetworkSelector {
+    @IBOutlet var networkModeLabel: NSTextField!
+    @IBOutlet var networkModeComboBox: NSComboBox!
+    @IBOutlet var physicalDeviceLabel: NSTextField!
+    @IBOutlet var physicalDeviceComboBox: NSComboBox!
+    @IBOutlet var manageNetworksButton: NSButton!
     @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
+    @IBOutlet var descriptionText: NSTextField!
     @IBOutlet var portMappingsLabel: NSTextField!
     @IBOutlet var portMappingsDescription: NSTextField!
+    @IBOutlet var portMappingsScrollView: NSScrollView!
     @IBOutlet var mappingsTableView: NSTableView!
     @IBOutlet var createMappingButton: NSButton!
     @IBOutlet var networkingLabel: NSTextField!
@@ -20,12 +28,19 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
 
     var virtualMachine: VirtualMachine?
     var adaptersList: [String] = []
+    var networkModes: [String] = [QemuConstants.NETWORK_MODE_USER]
+    var vmnetNetworks: [VmnetNetwork] = []
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
 
+        loadNetworkModes()
         loadAdaptersList()
         updateView()
+    }
+
+    @IBAction func openNetworksPreferences(_: Any) {
+        (NSApp.delegate as? AppDelegate)?.showPreferences(PreferencesRequest(tabIdentifier: PreferencesTabViewController.NETWORKS_TAB, networkSelectionTarget: self))
     }
 
     @IBAction func networkingSwitchChanged(_: Any) {
@@ -41,11 +56,17 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         }
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(vmnetNetworksDidChange(_:)), name: MacMulatorConstants.VMNET_NETWORKS_CHANGED_NOTIFICATION, object: nil)
+    }
+
     override func viewWillAppear() {
         networkingLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkingLabel", comment: "")
+        networkModeLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.networkMode", comment: "")
         networkAdapterLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.networkAdapterLabel", comment: "")
+        manageNetworksButton.title = NSLocalizedString("EditVMViewControllerNetworkVF.manageNetworksButton", comment: "")
         portMappingsLabel.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsLabel", comment: "")
-        portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsDescription", comment: "")
         createMappingButton.title = NSLocalizedString("EditVMViewControllerNetwork.createMappingButton", comment: "")
 
         for column in mappingsTableView.tableColumns {
@@ -115,31 +136,61 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         30.0
     }
 
-    func numberOfItems(in _: NSComboBox) -> Int {
-        adaptersList.count
+    func numberOfItems(in comboBox: NSComboBox) -> Int {
+        if comboBox == networkAdapterComboBox {
+            adaptersList.count
+        } else if comboBox == networkModeComboBox {
+            networkModes.count
+        } else if selectedNetworkMode() == QemuConstants.NETWORK_MODE_VMNET {
+            vmnetNetworks.count
+        } else if selectedNetworkMode() == QemuConstants.NETWORK_MODE_BRIDGED {
+            VZBridgedNetworkInterface.networkInterfaces.count
+        } else {
+            0
+        }
     }
 
     func comboBox(_ comboBox: NSComboBox, objectValueForItemAt index: Int) -> Any? {
         if comboBox == networkAdapterComboBox {
-            return index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[adaptersList[index]] : ""
+            index >= 0 ? QemuConstants.ALL_NETWORK_ADAPTERS_DESC[adaptersList[index]] : ""
+        } else if comboBox == networkModeComboBox {
+            index >= 0 ? QemuConstants.QEMU_NETWORK_MODES_DESC[networkModes[index]] : ""
+        } else if selectedNetworkMode() == QemuConstants.NETWORK_MODE_VMNET {
+            vmnetNetworks[index].name
+        } else {
+            VZBridgedNetworkInterface.networkInterfaces[index].localizedDisplayName
         }
-        return index + 1
     }
 
     func comboBoxSelectionDidChange(_ notification: Notification) {
-        if (notification.object as! NSComboBox) == networkAdapterComboBox {
-            if let virtualMachine {
-                virtualMachine.networkDevice = adaptersList[networkAdapterComboBox.indexOfSelectedItem]
+        guard let virtualMachine, let comboBox = notification.object as? NSComboBox else { return }
+
+        if comboBox == networkAdapterComboBox {
+            virtualMachine.networkDevice = adaptersList[networkAdapterComboBox.indexOfSelectedItem]
+        } else if comboBox == networkModeComboBox {
+            virtualMachine.networkMode = networkModes[networkModeComboBox.indexOfSelectedItem]
+            updateNetworkModeControls()
+        } else if comboBox == physicalDeviceComboBox {
+            let index = physicalDeviceComboBox.indexOfSelectedItem
+            guard index >= 0 else { return }
+
+            if selectedNetworkMode() == QemuConstants.NETWORK_MODE_VMNET {
+                virtualMachine.vmnetNetworkId = vmnetNetworks[index].id
+                updateVmnetDescriptionAndPortMappings()
+            } else {
+                virtualMachine.physicalBridgeNetworkDevice = VZBridgedNetworkInterface.networkInterfaces[index].identifier
             }
         }
     }
 
     func updateView() {
         if let virtualMachine {
+            networkModeComboBox.reloadData()
+            networkModeComboBox.selectItem(at: networkModes.firstIndex(of: selectedNetworkMode()) ?? 0)
+
             networkAdapterComboBox.reloadData()
             networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, MacMulatorConstants.QEMU_VM)) ?? -1)
 
-            mappingsTableView.reloadData()
             updateNetworkingControls()
         }
     }
@@ -150,21 +201,130 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
 
     func addPortmapping(_ portMapping: PortMapping) {
         if let virtualMachine {
+            if virtualMachine.portMappings == nil {
+                virtualMachine.portMappings = []
+            }
             virtualMachine.portMappings?.append(portMapping)
             reloadPortMappings()
         }
+    }
+
+    func selectVmnetNetwork(_ network: VmnetNetwork) {
+        virtualMachine?.vmnetNetworkId = network.id
+        updateNetworkModeControls()
+    }
+
+    @objc private func vmnetNetworksDidChange(_: Notification) {
+        updateNetworkModeControls()
     }
 
     private func updateNetworkingControls() {
         let enabled = virtualMachine?.isNetworkEnabled ?? true
         networkingSwitch.state = enabled ? .on : .off
         Utils.setControlsEnabled(enabled, in: networkingBox)
+        // Enabling everything also enables controls that depend on the network mode, like the device list in user mode
+        updateNetworkModeControls()
+    }
+
+    private func loadNetworkModes() {
+        guard let virtualMachine else { return }
+
+        networkModes = [QemuConstants.NETWORK_MODE_USER, QemuConstants.NETWORK_MODE_BRIDGED]
+        if Utils.isVmnetSupported(virtualMachine) || Utils.isNativeQemuVmnetSupported(virtualMachine) {
+            networkModes.append(QemuConstants.NETWORK_MODE_VMNET)
+        }
     }
 
     private func loadAdaptersList() {
         guard let virtualMachine else { return }
 
         adaptersList = QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: virtualMachine))?.availableNetworkDevices ?? QemuConstants.ALL_NETWORK_ADAPTERS
-        updateView()
+    }
+
+    private func selectedNetworkMode() -> String {
+        // Read from the VM, not the combo box: the combo boxes query their data source while the storyboard is still connecting outlets
+        if let networkMode = virtualMachine?.networkMode, networkModes.contains(networkMode) {
+            return networkMode
+        }
+        return QemuConstants.NETWORK_MODE_USER
+    }
+
+    private func availableVmnetNetworks() -> [VmnetNetwork] {
+        guard let virtualMachine else { return [] }
+
+        if Utils.isVmnetSupported(virtualMachine) {
+            return VmnetNetwork.allNetworks()
+        }
+        // Without the macOS 26 vmnet API only QEMU's own vmnet-shared and vmnet-host are available
+        return VmnetNetwork.builtInNetworks().filter { $0.id == VmnetNetwork.SHARED_ID || $0.id == VmnetNetwork.HOST_ONLY_ID }
+    }
+
+    private func updateNetworkModeControls() {
+        guard let virtualMachine else { return }
+
+        let networkMode = selectedNetworkMode()
+        let networkingEnabled = virtualMachine.isNetworkEnabled
+        manageNetworksButton.isHidden = networkMode != QemuConstants.NETWORK_MODE_VMNET || !Utils.isVmnetSupported(virtualMachine)
+
+        if networkMode == QemuConstants.NETWORK_MODE_BRIDGED {
+            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
+            physicalDeviceComboBox.isEnabled = networkingEnabled
+            physicalDeviceComboBox.reloadData()
+            if let device = virtualMachine.physicalBridgeNetworkDevice, let index = VZBridgedNetworkInterface.networkInterfaces.firstIndex(where: { $0.identifier == device }) {
+                physicalDeviceComboBox.selectItem(at: index)
+            } else {
+                physicalDeviceComboBox.selectItem(at: 0)
+            }
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionBridged", comment: "")
+            setPortMappingsVisible(false)
+        } else if networkMode == QemuConstants.NETWORK_MODE_VMNET {
+            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.vmnetNetwork", comment: "")
+            physicalDeviceComboBox.isEnabled = networkingEnabled
+            vmnetNetworks = availableVmnetNetworks()
+            physicalDeviceComboBox.reloadData()
+
+            if !vmnetNetworks.contains(where: { $0.id == virtualMachine.vmnetNetworkId }) {
+                virtualMachine.vmnetNetworkId = VmnetNetwork.SHARED_ID
+            }
+            physicalDeviceComboBox.selectItem(at: vmnetNetworks.firstIndex { $0.id == virtualMachine.vmnetNetworkId } ?? 0)
+            updateVmnetDescriptionAndPortMappings()
+        } else {
+            physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
+            physicalDeviceComboBox.isEnabled = false
+            physicalDeviceComboBox.reloadData()
+            physicalDeviceComboBox.stringValue = ""
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetwork.descriptionUser", comment: "")
+            portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetwork.portMappingsDescription", comment: "")
+            setPortMappingsVisible(true)
+        }
+    }
+
+    private func updateVmnetDescriptionAndPortMappings() {
+        guard let network = VmnetNetwork.network(withId: virtualMachine?.vmnetNetworkId) else { return }
+
+        if network.mode == .isolated {
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetIsolated", comment: "")
+        } else if network.isVMIsolationEnabled {
+            let key = network.mode == .shared && network.natEnabled ? "EditVMViewControllerNetworkVF.descriptionVmnetSharedIsolated" : "EditVMViewControllerNetworkVF.descriptionVmnetHostOnlyIsolated"
+            descriptionText.stringValue = NSLocalizedString(key, comment: "")
+        } else if network.mode == .hostOnly {
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetHostOnly", comment: "")
+        } else if network.natEnabled {
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetShared", comment: "")
+        } else {
+            descriptionText.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.descriptionVmnetSharedNoNat", comment: "")
+        }
+        portMappingsDescription.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.portMappingsDescription", comment: "")
+        setPortMappingsVisible(network.supportsPortForwarding)
+    }
+
+    private func setPortMappingsVisible(_ visible: Bool) {
+        portMappingsLabel.isHidden = !visible
+        portMappingsDescription.isHidden = !visible
+        portMappingsScrollView.isHidden = !visible
+        createMappingButton.isHidden = !visible
+        if visible {
+            mappingsTableView.reloadData()
+        }
     }
 }

@@ -9,7 +9,7 @@ import Cocoa
 
 struct PreferencesRequest {
     let tabIdentifier: String?
-    weak var networkSelectionTarget: EditVMViewControllerNetworkVF?
+    weak var networkSelectionTarget: VmnetNetworkSelector?
 }
 
 class PreferencesTabViewController: NSTabViewController {

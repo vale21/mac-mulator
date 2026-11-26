@@ -762,6 +762,16 @@ class QemuConstants {
     static let NETWORK_SUNGEM = "sungem"
     static let NETWORK_TULIP = "tulip"
     static let NETWORK_USB_NET = "usb-net"
+    static let QEMU_NETWORK_MODES_DESC: [String: String] = [
+        NETWORK_MODE_USER: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeNAT", comment: ""),
+        NETWORK_MODE_BRIDGED: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeBridged", comment: ""),
+        NETWORK_MODE_VMNET: NSLocalizedString("EditVMViewControllerNetworkVF.networkModeVmnet", comment: ""),
+    ]
+
+    static let NETWORK_MODE_USER = "user"
+    static let NETWORK_MODE_BRIDGED = "bridged"
+    static let NETWORK_MODE_VMNET = "vmnet"
+
     static let NETWORK_VIRTIO_NET_DEVICE = "virtio-net-device"
     static let NETWORK_VIRTIO_NET_PCI = "virtio-net-pci"
     static let NETWORK_VIRTIO_NET_PCI_NON_TRANSITIONAL = "virtio-net-pci-non-transitional"

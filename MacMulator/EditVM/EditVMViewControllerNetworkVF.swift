@@ -8,7 +8,7 @@
 import Cocoa
 import Virtualization
 
-class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor {
+class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor, VmnetNetworkSelector {
     @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
     @IBOutlet var phisicalDeviceComboBox: NSComboBox!

@@ -144,6 +144,7 @@
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "« %@ » est une image ASIF, que seules les VM Apple peuvent utiliser.";
 "EditVMViewControllerHardware.importDriveLinkedClone" = "« %@ » est un clone lié d'un disque modèle, et ne peut pas être importé seul. Convertissez d'abord sa VM en clone complet, puis importez de nouveau le disque.";
 "EditVMViewControllerNetwork.createMappingButton" = "Créer nouvelle...";
+"EditVMViewControllerNetwork.descriptionUser" = "En mode réseau NAT, QEMU fait office de routeur pour la VM et lui fournit l'accès à Internet. Il fonctionne partout sans configuration particulière, mais il est plus lent que les autres modes et certains protocoles, comme ping, peuvent ne pas fonctionner. Votre Mac ne peut joindre la VM que via les redirections de ports.";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Port du Mac hôte";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nom de la redirection";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Port de la machine virtuelle";

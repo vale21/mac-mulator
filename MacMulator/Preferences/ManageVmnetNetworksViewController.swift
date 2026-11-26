@@ -7,6 +7,10 @@
 
 import Cocoa
 
+protocol VmnetNetworkSelector: AnyObject {
+    func selectVmnetNetwork(_ network: VmnetNetwork)
+}
+
 class VmnetNetworksButtonsCell: NSTableCellView {
     @IBOutlet var editButton: NSButton!
     @IBOutlet var deleteButton: NSButton!
@@ -17,7 +21,7 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
     @IBOutlet var networksTableView: NSTableView!
     @IBOutlet var addButton: NSButton!
 
-    weak var networkSelectionTarget: EditVMViewControllerNetworkVF?
+    weak var networkSelectionTarget: VmnetNetworkSelector?
     var networks: [VmnetNetwork] = []
     var networkToEdit: VmnetNetwork?
 
