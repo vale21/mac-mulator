@@ -233,8 +233,7 @@
 "ManageVmnetNetworksViewController.columnName" = "Nom";
 "ManageVmnetNetworksViewController.columnSubnet" = "Sous-réseau";
 "ManageVmnetNetworksViewController.confirmRemove" = "Voulez-vous supprimer le réseau %@ ?\nLes VM connectées seront déplacées vers le réseau partagé intégré.";
-"ManageVmnetNetworksViewController.description" = "Les réseaux sont partagés par toutes vos VM Apple : les VM connectées au même réseau peuvent se voir. Les réseaux intégrés ne peuvent pas être modifiés.";
-"ManageVmnetNetworksViewController.done" = "Terminé";
+"ManageVmnetNetworksViewController.description" = "Les réseaux sont partagés par toutes vos VM Apple : les VM connectées au même réseau peuvent généralement se voir, sauf si l'isolation est explicitement demandée. Les réseaux intégrés ne peuvent pas être modifiés.";
 "ManageVmnetNetworksViewController.modeWithIsolation" = "%@, VM isolées";
 "ManageVmnetNetworksViewController.networkInUse" = "Le réseau %1$@ ne peut pas être supprimé tant que ces VM l'utilisent : %2$@.";
 "ManageVmnetNetworksViewController.off" = "Non";
@@ -273,6 +272,8 @@
 "NewVMController.vmSubTypeLabel" = "Système d’exploitation";
 "NewVMController.vmTypeLabel" = "Type de VM";
 "NewVMViewController.defaultMessage" = "Vous pouvez taper ici pour écrire une description de votre machine virtuelle";
+"PreferencesTabViewController.general" = "Général";
+"PreferencesTabViewController.networks" = "Réseaux";
 "PreferencesViewController.find" = "Parcourir";
 "PreferencesViewController.pathDoesNotExists" = "Attention. Le dossier %@ n’existe pas.";
 "PreferencesViewController.qemuFolderLabel" = "Dossier des exécutables Qemu";

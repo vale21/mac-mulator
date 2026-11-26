@@ -1391,7 +1391,6 @@ Gw
                                     <rect key="frame" x="0.0" y="0.0" width="710" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hB9-iJ-8qQ">
                                             <rect key="frame" x="10" y="390" width="106" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1401,7 +1400,6 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4rw-kc-jK7">
                                             <rect key="frame" x="122" y="384" width="342" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1415,7 +1413,6 @@ Gw
                                                 <outlet property="delegate" destination="CC8-R8-wkI" id="IDK-fp-c3z"/>
                                             </connections>
                                         </comboBox>
-
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lyi-nL-Kpe">
                                             <rect key="frame" x="10" y="356" width="564" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1425,7 +1422,6 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fUP-27-CUF">
                                             <rect key="frame" x="10" y="308" width="690" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1436,7 +1432,6 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="31" horizontalPageScroll="10" verticalLineScroll="31" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AoB-Bv-bEf">
                                             <rect key="frame" x="11" y="44" width="688" height="258"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1444,14 +1439,14 @@ Gw
                                                 <rect key="frame" x="1" y="1" width="686" height="256"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="uniform" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="8rE-Ul-n3M" viewBased="YES" id="Ypw-Ld-ZcT">
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="8rE-Ul-n3M" viewBased="YES" id="Ypw-Ld-ZcT">
                                                         <rect key="frame" x="0.0" y="0.0" width="686" height="228"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn identifier="Name" width="186" minWidth="40" maxWidth="1000" id="EP5-q0-frc">
+                                                            <tableColumn identifier="Name" width="187.5" minWidth="40" maxWidth="1000" id="EP5-q0-frc">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Mapping name">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1464,11 +1459,11 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="Tjs-rh-ma1" customClass="MappingsNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="8.5" y="0.0" width="193" height="30"/>
+                                                                        <rect key="frame" x="8" y="0.0" width="186" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="l5a-7P-40p">
-                                                                                <rect key="frame" x="1" y="7" width="191" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="186" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="My Port Mapping" id="EE9-ED-3yw">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1488,7 +1483,7 @@ Gw
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="VM" width="186" minWidth="40" maxWidth="1000" id="nNX-kP-14B">
+                                                            <tableColumn identifier="VM" width="187.5" minWidth="40" maxWidth="1000" id="nNX-kP-14B">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Virtual Machine Port">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1501,11 +1496,11 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="5A0-IO-Y5j" customClass="VirtualMachinePortCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="220.5" y="0.0" width="191" height="30"/>
+                                                                        <rect key="frame" x="210.5" y="0.0" width="187" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="QCJ-E5-jLx">
-                                                                                <rect key="frame" x="1" y="7" width="189" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="187" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="1234" id="OIT-rz-R1q">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1525,7 +1520,7 @@ Gw
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="Host" width="186" minWidth="40" maxWidth="1000" id="bLb-0f-8eJ" userLabel="Host Mac Port">
+                                                            <tableColumn identifier="Host" width="187.5" minWidth="40" maxWidth="1000" id="bLb-0f-8eJ" userLabel="Host Mac Port">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Host Mac Port">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1538,11 +1533,11 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="kvA-W5-Oy4" customClass="HostMacPortCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="430.5" y="0.0" width="191" height="30"/>
+                                                                        <rect key="frame" x="415" y="0.0" width="188" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Uyp-Wz-0dz">
-                                                                                <rect key="frame" x="1" y="7" width="189" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="171" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="12345" id="XiB-kc-cQ8">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1575,7 +1570,7 @@ Gw
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="UCs-g1-oAH">
-                                                                        <rect key="frame" x="640.5" y="0.0" width="58" height="30"/>
+                                                                        <rect key="frame" x="619.5" y="0.0" width="57" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LRy-RB-Pa6">
@@ -1625,7 +1620,6 @@ Gw
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
-
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JBt-Ob-AVo">
                                             <rect key="frame" x="522" y="10" width="176" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1644,13 +1638,13 @@ Gw
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="networkingBox" destination="nQm-Bx-001" id="nQm-Ot-001"/>
-                        <outlet property="networkingLabel" destination="nQm-Lb-001" id="nQm-Ot-002"/>
-                        <outlet property="networkingSwitch" destination="nQm-Sw-001" id="nQm-Ot-003"/>
                         <outlet property="createMappingButton" destination="JBt-Ob-AVo" id="HPt-M4-Br6"/>
                         <outlet property="mappingsTableView" destination="Ypw-Ld-ZcT" id="o25-Iy-vvL"/>
                         <outlet property="networkAdapterComboBox" destination="4rw-kc-jK7" id="pei-PG-tme"/>
                         <outlet property="networkAdapterLabel" destination="hB9-iJ-8qQ" id="QWN-F4-dnu"/>
+                        <outlet property="networkingBox" destination="nQm-Bx-001" id="nQm-Ot-001"/>
+                        <outlet property="networkingLabel" destination="nQm-Lb-001" id="nQm-Ot-002"/>
+                        <outlet property="networkingSwitch" destination="nQm-Sw-001" id="nQm-Ot-003"/>
                         <outlet property="portMappingsDescription" destination="fUP-27-CUF" id="Kn6-1W-Tu6"/>
                         <outlet property="portMappingsLabel" destination="Lyi-nL-Kpe" id="3CH-Tr-Otb"/>
                     </connections>
@@ -2066,7 +2060,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                     <rect key="frame" x="0.0" y="0.0" width="710" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dUp-QD-1Jc">
                                             <rect key="frame" x="10" y="390" width="120" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2076,7 +2069,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m7W-DI-2ac">
                                             <rect key="frame" x="136" y="384" width="342" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2090,7 +2082,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <outlet property="delegate" destination="mu6-Mz-lIx" id="xLZ-Y8-SEk"/>
                                             </connections>
                                         </comboBox>
-
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T0M-Tv-Uth">
                                             <rect key="frame" x="10" y="357" width="120" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2100,7 +2091,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3IS-ql-EAi">
                                             <rect key="frame" x="136" y="351" width="342" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2114,7 +2104,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <outlet property="delegate" destination="mu6-Mz-lIx" id="rhx-Oc-F0F"/>
                                             </connections>
                                         </comboBox>
-
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNt-00-055">
                                             <rect key="frame" x="484" y="352" width="180" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2123,10 +2112,9 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <segue destination="mVn-Vc-001" kind="sheet" identifier="manageVmnetNetworksSegue" id="sGe-00-060"/>
+                                                <action selector="openNetworksPreferences:" target="mu6-Mz-lIx" id="sGe-00-060"/>
                                             </connections>
                                         </button>
-
                                         <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAC-FU-SHc">
                                             <rect key="frame" x="10" y="266" width="690" height="80"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2137,7 +2125,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNt-00-056">
                                             <rect key="frame" x="10" y="240" width="564" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2147,7 +2134,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNt-00-057">
                                             <rect key="frame" x="10" y="194" width="690" height="42"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2157,7 +2143,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-
                                         <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="31" horizontalPageScroll="10" verticalLineScroll="31" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pMx-00-001">
                                             <rect key="frame" x="11" y="44" width="688" height="144"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2165,14 +2150,14 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <rect key="frame" x="1" y="1" width="686" height="142"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="uniform" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="pMx-00-047" viewBased="YES" id="pMx-00-003">
+                                                    <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="pMx-00-047" viewBased="YES" id="pMx-00-003">
                                                         <rect key="frame" x="0.0" y="0.0" width="686" height="114"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <size key="intercellSpacing" width="17" height="0.0"/>
                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                                         <tableColumns>
-                                                            <tableColumn identifier="Name" width="186" minWidth="40" maxWidth="1000" id="pMx-00-004">
+                                                            <tableColumn identifier="Name" width="187.5" minWidth="40" maxWidth="1000" id="pMx-00-004">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Mapping name">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -2185,11 +2170,11 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="pMx-00-006" customClass="MappingsNameCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="8.5" y="0.0" width="193" height="30"/>
+                                                                        <rect key="frame" x="8" y="0.0" width="186" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pMx-00-007">
-                                                                                <rect key="frame" x="1" y="7" width="191" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="186" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="My Port Mapping" id="pMx-00-008">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -2209,7 +2194,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="VM" width="186" minWidth="40" maxWidth="1000" id="pMx-00-014">
+                                                            <tableColumn identifier="VM" width="187.5" minWidth="40" maxWidth="1000" id="pMx-00-014">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Virtual Machine Port">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -2222,11 +2207,11 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="pMx-00-016" customClass="VirtualMachinePortCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="220.5" y="0.0" width="191" height="30"/>
+                                                                        <rect key="frame" x="210.5" y="0.0" width="187" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pMx-00-017">
-                                                                                <rect key="frame" x="1" y="7" width="189" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="187" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="1234" id="pMx-00-018">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -2246,7 +2231,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                     </tableCellView>
                                                                 </prototypeCellViews>
                                                             </tableColumn>
-                                                            <tableColumn identifier="Host" width="186" minWidth="40" maxWidth="1000" id="pMx-00-024" userLabel="Host Mac Port">
+                                                            <tableColumn identifier="Host" width="187.5" minWidth="40" maxWidth="1000" id="pMx-00-024" userLabel="Host Mac Port">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Host Mac Port">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -2259,11 +2244,11 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="pMx-00-026" customClass="HostMacPortCell" customModule="MacMulator" customModuleProvider="target">
-                                                                        <rect key="frame" x="430.5" y="0.0" width="191" height="30"/>
+                                                                        <rect key="frame" x="415" y="0.0" width="188" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="pMx-00-027">
-                                                                                <rect key="frame" x="1" y="7" width="189" height="16"/>
+                                                                                <rect key="frame" x="1" y="7" width="171" height="16"/>
                                                                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="12345" id="pMx-00-028">
                                                                                     <font key="font" usesAppearanceFont="YES"/>
                                                                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -2296,7 +2281,7 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                 <prototypeCellViews>
                                                                     <tableCellView id="pMx-00-036">
-                                                                        <rect key="frame" x="640.5" y="0.0" width="58" height="30"/>
+                                                                        <rect key="frame" x="619.5" y="0.0" width="57" height="30"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pMx-00-037">
@@ -2346,7 +2331,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </tableHeaderView>
                                         </scrollView>
-
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vNt-00-058">
                                             <rect key="frame" x="522" y="10" width="176" height="23"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2364,15 +2348,15 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
                         </subviews>
                     </view>
                     <connections>
-                        <outlet property="networkingBox" destination="nVf-Bx-001" id="nVf-Ot-001"/>
-                        <outlet property="networkingLabel" destination="nVf-Lb-001" id="nVf-Ot-002"/>
-                        <outlet property="networkingSwitch" destination="nVf-Sw-001" id="nVf-Ot-003"/>
                         <outlet property="createMappingButton" destination="vNt-00-058" id="oUt-00-065"/>
                         <outlet property="descriptionText" destination="AAC-FU-SHc" id="nwl-WE-VOt"/>
                         <outlet property="manageNetworksButton" destination="vNt-00-055" id="oUt-00-066"/>
                         <outlet property="mappingsTableView" destination="pMx-00-003" id="oUt-00-067"/>
                         <outlet property="networkAdapterComboBox" destination="m7W-DI-2ac" id="XYk-kn-cXd"/>
                         <outlet property="networkAdapterLabel" destination="dUp-QD-1Jc" id="5o4-kF-Qfw"/>
+                        <outlet property="networkingBox" destination="nVf-Bx-001" id="nVf-Ot-001"/>
+                        <outlet property="networkingLabel" destination="nVf-Lb-001" id="nVf-Ot-002"/>
+                        <outlet property="networkingSwitch" destination="nVf-Sw-001" id="nVf-Ot-003"/>
                         <outlet property="phisicalDeviceComboBox" destination="3IS-ql-EAi" id="Muj-UL-qvU"/>
                         <outlet property="physicalDeviceLabel" destination="T0M-Tv-Uth" id="kB6-7w-scB"/>
                         <outlet property="portMappingsDescription" destination="vNt-00-057" id="oUt-00-068"/>
@@ -2384,499 +2368,6 @@ The virtual machine is created with "Ram framebuffer standalone device". This is
             </objects>
             <point key="canvasLocation" x="1645" y="-901"/>
         </scene>
-        <!--Manage Vmnet Networks View Controller-->
-        <scene sceneID="mVn-Sn-001">
-            <objects>
-                <viewController id="mVn-Vc-001" customClass="ManageVmnetNetworksViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="mVn-00-128">
-                        <rect key="frame" x="0.0" y="0.0" width="680" height="380"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-00-071">
-                                <rect key="frame" x="18" y="339" width="644" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Manage vmnet networks" id="mVn-00-129">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-00-072">
-                                <rect key="frame" x="18" y="291" width="644" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" title="Description" id="mVn-00-130">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="31" horizontalPageScroll="10" verticalLineScroll="31" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-00-073">
-                                <rect key="frame" x="20" y="61" width="640" height="222"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <clipView key="contentView" id="mVn-00-074">
-                                    <rect key="frame" x="1" y="1" width="638" height="220"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="31" headerView="mVn-00-076" viewBased="YES" id="mVn-00-075">
-                                            <rect key="frame" x="0.0" y="0.0" width="638" height="192"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <size key="intercellSpacing" width="17" height="0.0"/>
-                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                            <tableColumns>
-                                                <tableColumn identifier="Name" width="170" minWidth="40" maxWidth="1000" id="tCl-00-085">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Name">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tDc-00-086">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="tCv-00-083">
-                                                            <rect key="frame" x="8" y="0.0" width="168" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tTf-00-084">
-                                                                    <rect key="frame" x="0.0" y="4" width="168" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="tFc-00-087">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="tTf-00-084" firstAttribute="centerY" secondItem="tCv-00-083" secondAttribute="centerY" id="cSt-00-088"/>
-                                                                <constraint firstItem="tTf-00-084" firstAttribute="leading" secondItem="tCv-00-083" secondAttribute="leading" constant="2" id="cSt-00-089"/>
-                                                                <constraint firstItem="tTf-00-084" firstAttribute="centerX" secondItem="tCv-00-083" secondAttribute="centerX" id="cSt-00-090"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="textField" destination="tTf-00-084" id="oTf-00-091"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="Mode" width="100" minWidth="40" maxWidth="1000" id="tCl-00-094">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Mode">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tDc-00-095">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="tCv-00-092">
-                                                            <rect key="frame" x="193" y="0.0" width="100" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tTf-00-093">
-                                                                    <rect key="frame" x="0.0" y="4" width="100" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="tFc-00-096">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="tTf-00-093" firstAttribute="centerY" secondItem="tCv-00-092" secondAttribute="centerY" id="cSt-00-097"/>
-                                                                <constraint firstItem="tTf-00-093" firstAttribute="leading" secondItem="tCv-00-092" secondAttribute="leading" constant="2" id="cSt-00-098"/>
-                                                                <constraint firstItem="tTf-00-093" firstAttribute="centerX" secondItem="tCv-00-092" secondAttribute="centerX" id="cSt-00-099"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="textField" destination="tTf-00-093" id="oTf-00-100"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="Subnet" width="127.5" minWidth="40" maxWidth="1000" id="tCl-00-103">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Subnet">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tDc-00-104">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="tCv-00-101">
-                                                            <rect key="frame" x="310" y="0.0" width="128" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tTf-00-102">
-                                                                    <rect key="frame" x="0.0" y="4" width="128" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="tFc-00-105">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="tTf-00-102" firstAttribute="centerY" secondItem="tCv-00-101" secondAttribute="centerY" id="cSt-00-106"/>
-                                                                <constraint firstItem="tTf-00-102" firstAttribute="leading" secondItem="tCv-00-101" secondAttribute="leading" constant="2" id="cSt-00-107"/>
-                                                                <constraint firstItem="tTf-00-102" firstAttribute="centerX" secondItem="tCv-00-101" secondAttribute="centerX" id="cSt-00-108"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="textField" destination="tTf-00-102" id="oTf-00-109"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="DHCP" width="40" minWidth="40" maxWidth="1000" id="tCl-00-112">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="DHCP">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tDc-00-113">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="tCv-00-110">
-                                                            <rect key="frame" x="454.5" y="0.0" width="40" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tTf-00-111">
-                                                                    <rect key="frame" x="0.0" y="4" width="40" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="tFc-00-114">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="tTf-00-111" firstAttribute="centerY" secondItem="tCv-00-110" secondAttribute="centerY" id="cSt-00-115"/>
-                                                                <constraint firstItem="tTf-00-111" firstAttribute="leading" secondItem="tCv-00-110" secondAttribute="leading" constant="2" id="cSt-00-116"/>
-                                                                <constraint firstItem="tTf-00-111" firstAttribute="centerX" secondItem="tCv-00-110" secondAttribute="centerX" id="cSt-00-117"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="textField" destination="tTf-00-111" id="oTf-00-118"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="NAT" width="40" minWidth="40" maxWidth="1000" id="tCl-00-121">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="NAT">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="tDc-00-122">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="tCv-00-119">
-                                                            <rect key="frame" x="511.5" y="0.0" width="40" height="24"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="tTf-00-120">
-                                                                    <rect key="frame" x="0.0" y="4" width="40" height="16"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="tFc-00-123">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <constraints>
-                                                                <constraint firstItem="tTf-00-120" firstAttribute="centerY" secondItem="tCv-00-119" secondAttribute="centerY" id="cSt-00-124"/>
-                                                                <constraint firstItem="tTf-00-120" firstAttribute="leading" secondItem="tCv-00-119" secondAttribute="leading" constant="2" id="cSt-00-125"/>
-                                                                <constraint firstItem="tTf-00-120" firstAttribute="centerX" secondItem="tCv-00-119" secondAttribute="centerX" id="cSt-00-126"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="textField" destination="tTf-00-120" id="oTf-00-127"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="Buttons" width="60" minWidth="60" maxWidth="60" id="mVn-Bc-001">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="mVn-Bc-002">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView id="mVn-Bc-003" customClass="VmnetNetworksButtonsCell" customModule="MacMulator" customModuleProvider="target">
-                                                            <rect key="frame" x="568.5" y="0.0" width="57" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-Bc-004">
-                                                                    <rect key="frame" x="3" y="3" width="28" height="23"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="square.and.pencil" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mVn-Bc-005">
-                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                    <connections>
-                                                                        <action selector="editNetwork:" target="mVn-Vc-001" id="mVn-Bc-006"/>
-                                                                    </connections>
-                                                                </button>
-                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-Bc-007">
-                                                                    <rect key="frame" x="29" y="3" width="28" height="23"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                    <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="trash" catalog="system" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mVn-Bc-008">
-                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                    <connections>
-                                                                        <action selector="deleteNetwork:" target="mVn-Vc-001" id="mVn-Bc-009"/>
-                                                                    </connections>
-                                                                </button>
-                                                            </subviews>
-                                                            <connections>
-                                                                <outlet property="deleteButton" destination="mVn-Bc-007" id="mVn-Bc-010"/>
-                                                                <outlet property="editButton" destination="mVn-Bc-004" id="mVn-Bc-011"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                            </tableColumns>
-                                            <connections>
-                                                <outlet property="dataSource" destination="mVn-Vc-001" id="oDs-00-131"/>
-                                                <outlet property="delegate" destination="mVn-Vc-001" id="oDl-00-132"/>
-                                            </connections>
-                                        </tableView>
-                                    </subviews>
-                                </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="mVn-00-077">
-                                    <rect key="frame" x="1" y="204" width="638" height="17"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="mVn-00-078">
-                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </scroller>
-                                <tableHeaderView key="headerView" wantsLayer="YES" id="mVn-00-076">
-                                    <rect key="frame" x="0.0" y="0.0" width="638" height="28"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableHeaderView>
-                            </scrollView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-00-079">
-                                <rect key="frame" x="13" y="13" width="90" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Add..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mVn-00-133">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="addButtonPressed:" target="mVn-Vc-001" id="aCt-00-134"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVn-00-082">
-                                <rect key="frame" x="580" y="13" width="87" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Done" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mVn-00-139">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="doneButtonPressed:" target="mVn-Vc-001" id="aCt-00-140"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                    </view>
-                    <connections>
-                        <outlet property="addButton" destination="mVn-00-079" id="oUt-00-141"/>
-                        <outlet property="descriptionField" destination="mVn-00-072" id="oUt-00-142"/>
-                        <outlet property="doneButton" destination="mVn-00-082" id="oUt-00-143"/>
-                        <outlet property="networksTableView" destination="mVn-00-075" id="oUt-00-145"/>
-                        <outlet property="titleField" destination="mVn-00-071" id="oUt-00-147"/>
-                        <segue destination="eVn-Vc-001" kind="sheet" identifier="newVmnetNetworkSegue" id="sGe-00-148"/>
-                        <segue destination="eVn-Vc-001" kind="sheet" identifier="editVmnetNetworkSegue" id="sGe-00-149"/>
-                    </connections>
-                </viewController>
-                <customObject id="mVn-00-150" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2544" y="-901"/>
-        </scene>
-        <!--Edit Vmnet Network View Controller-->
-        <scene sceneID="eVn-Sn-001">
-            <objects>
-                <viewController id="eVn-Vc-001" customClass="EditVmnetNetworkViewController" customModule="MacMulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="eVn-00-163">
-                        <rect key="frame" x="0.0" y="0.0" width="440" height="376"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-151">
-                                <rect key="frame" x="18" y="335" width="404" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="Create new network" id="eVn-00-164">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-152">
-                                <rect key="frame" x="18" y="300" width="150" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Network name:" id="eVn-00-165">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-153">
-                                <rect key="frame" x="174" y="297" width="246" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="eVn-00-166">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-154">
-                                <rect key="frame" x="18" y="266" width="150" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Mode:" id="eVn-00-167">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-155">
-                                <rect key="frame" x="174" y="260" width="249" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="10" id="eVn-00-168">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </comboBoxCell>
-                                <connections>
-                                    <outlet property="delegate" destination="eVn-Vc-001" id="oDl-00-169"/>
-                                </connections>
-                            </comboBox>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-156">
-                                <rect key="frame" x="172" y="212" width="250" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" title="Mode description" id="eVn-00-170">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-157">
-                                <rect key="frame" x="18" y="182" width="150" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Subnet (CIDR):" id="eVn-00-171">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-158">
-                                <rect key="frame" x="174" y="179" width="246" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="192.168.0.0/24" drawsBackground="YES" id="eVn-00-172">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-161">
-                                <rect key="frame" x="172" y="149" width="250" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Enable DHCP server" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="eVn-00-175">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-162">
-                                <rect key="frame" x="172" y="125" width="250" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Enable NAT" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="eVn-00-176">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-177">
-                                <rect key="frame" x="132" y="13" width="80" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eVn-00-178">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="okButtonPressed:" target="eVn-Vc-001" id="aCt-00-179"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-00-180">
-                                <rect key="frame" x="213" y="13" width="80" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eVn-00-181">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-Gw
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="cancelButtonPressed:" target="eVn-Vc-001" id="aCt-00-182"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-Is-001">
-                                <rect key="frame" x="172" y="101" width="250" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Isolate VMs from each other" bezelStyle="regularSquare" imagePosition="left" alignment="left" inset="2" id="eVn-Is-002">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eVn-Is-003">
-                                <rect key="frame" x="190" y="55" width="232" height="42"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" title="Isolation description" id="eVn-Is-004">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                        </subviews>
-                    </view>
-                    <connections>
-                        <outlet property="isolationCheckbox" destination="eVn-Is-001" id="eVn-Is-005"/>
-                        <outlet property="isolationDescription" destination="eVn-Is-003" id="eVn-Is-006"/>
-                        <outlet property="dhcpCheckbox" destination="eVn-00-161" id="oUt-00-183"/>
-                        <outlet property="modeComboBox" destination="eVn-00-155" id="oUt-00-184"/>
-                        <outlet property="modeDescription" destination="eVn-00-156" id="oUt-00-185"/>
-                        <outlet property="modeLabel" destination="eVn-00-154" id="oUt-00-186"/>
-                        <outlet property="nameField" destination="eVn-00-153" id="oUt-00-187"/>
-                        <outlet property="nameLabel" destination="eVn-00-152" id="oUt-00-188"/>
-                        <outlet property="natCheckbox" destination="eVn-00-162" id="oUt-00-189"/>
-                        <outlet property="subnetField" destination="eVn-00-158" id="oUt-00-190"/>
-                        <outlet property="subnetLabel" destination="eVn-00-157" id="oUt-00-191"/>
-                        <outlet property="titleField" destination="eVn-00-151" id="oUt-00-194"/>
-                    </connections>
-                </viewController>
-                <customObject id="eVn-00-195" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3300" y="-901"/>
-        </scene>
         <!--Snapshots-->
         <scene sceneID="nYm-Td-8DV">
             <objects>
@@ -2886,13 +2377,13 @@ Gw
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-nR-DCR">
-                                <rect key="frame" x="20" y="280" width="235" height="124"/>
+                                <rect key="frame" x="20" y="336" width="235" height="68"/>
                                 <clipView key="contentView" id="jSR-2h-Yxf">
-                                    <rect key="frame" x="1" y="1" width="233" height="122"/>
+                                    <rect key="frame" x="1" y="1" width="233" height="66"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" headerView="EPp-8I-aoE" viewBased="YES" id="Qqw-MA-7Qo">
-                                            <rect key="frame" x="0.0" y="0.0" width="233" height="94"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="233" height="38"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -2943,7 +2434,7 @@ Gw
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="g2m-56-VQ0">
-                                    <rect key="frame" x="1" y="162" width="233" height="17"/>
+                                    <rect key="frame" x="1" y="106" width="233" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="biV-Ng-0n4">
@@ -2956,7 +2447,7 @@ Gw
                                 </tableHeaderView>
                             </scrollView>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ivs-Ff-Qer">
-                                <rect key="frame" x="19" y="18" width="237" height="255"/>
+                                <rect key="frame" x="19" y="18" width="237" height="311"/>
                                 <buttonCell key="cell" type="roundTextured" title="Create new snapshot" bezelStyle="texturedRounded" image="plus.app.fill" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iLW-iZ-Xzx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -3771,10 +3262,8 @@ Gw
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="QO0-5a-fgI"/>
-        <segue reference="sGe-00-148"/>
         <segue reference="NWI-dl-alA"/>
         <segue reference="qMP-wa-FjT"/>
-        <segue reference="89w-XY-z8s"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="HD Icon" width="25" height="25"/>

@@ -13,19 +13,13 @@ class VmnetNetworksButtonsCell: NSTableCellView {
 }
 
 class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
-    @IBOutlet var titleField: NSTextField!
     @IBOutlet var descriptionField: NSTextField!
     @IBOutlet var networksTableView: NSTableView!
     @IBOutlet var addButton: NSButton!
-    @IBOutlet var doneButton: NSButton!
 
-    var parentController: EditVMViewControllerNetworkVF?
+    weak var networkSelectionTarget: EditVMViewControllerNetworkVF?
     var networks: [VmnetNetwork] = []
     var networkToEdit: VmnetNetwork?
-
-    func setParentController(_ parentController: EditVMViewControllerNetworkVF) {
-        self.parentController = parentController
-    }
 
     @IBAction func addButtonPressed(_: Any) {
         performSegue(withIdentifier: MacMulatorConstants.NEW_VMNET_NETWORK_SEGUE, sender: self)
@@ -53,10 +47,6 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         }, virtualMachine: nil)
     }
 
-    @IBAction func doneButtonPressed(_: Any) {
-        dismiss(self)
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         networksTableView.target = self
@@ -64,10 +54,8 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
     }
 
     override func viewWillAppear() {
-        titleField.stringValue = NSLocalizedString("ManageVmnetNetworksViewController.title", comment: "")
         descriptionField.stringValue = NSLocalizedString("ManageVmnetNetworksViewController.description", comment: "")
         addButton.title = NSLocalizedString("ManageVmnetNetworksViewController.add", comment: "")
-        doneButton.title = NSLocalizedString("ManageVmnetNetworksViewController.done", comment: "")
 
         for column in networksTableView.tableColumns where column.identifier.rawValue != "Buttons" {
             column.headerCell.title = NSLocalizedString("ManageVmnetNetworksViewController.column" + column.identifier.rawValue, comment: "")
@@ -134,7 +122,7 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
         networks.append(network)
         networksChanged()
         networksTableView.selectRowIndexes(IndexSet(integer: networks.count - 1), byExtendingSelection: false)
-        parentController?.selectVmnetNetwork(network)
+        networkSelectionTarget?.selectVmnetNetwork(network)
     }
 
     func networkUpdated() {
@@ -155,7 +143,7 @@ class ManageVmnetNetworksViewController: NSViewController, NSTableViewDataSource
     private func networksChanged() {
         VmnetNetwork.saveUserNetworks(networks)
         networksTableView.reloadData()
-        parentController?.vmnetNetworksChanged()
+        NotificationCenter.default.post(name: MacMulatorConstants.VMNET_NETWORKS_CHANGED_NOTIFICATION, object: nil)
     }
 
     private func edit(row: Int) {

@@ -233,8 +233,7 @@
 "ManageVmnetNetworksViewController.columnName" = "Name";
 "ManageVmnetNetworksViewController.columnSubnet" = "Subnet";
 "ManageVmnetNetworksViewController.confirmRemove" = "Do you want to remove the network %@?\nThe VMs attached to it will be moved to the built-in shared network.";
-"ManageVmnetNetworksViewController.description" = "Networks are shared by all your Apple VMs: VMs attached to the same network can see each other. Built-in networks cannot be changed.";
-"ManageVmnetNetworksViewController.done" = "Done";
+"ManageVmnetNetworksViewController.description" = "Networks are shared by all your Apple VMs: VMs attached to the same network can usually see each other, unless isolation is explicitly requested. Built-in networks cannot be changed.";
 "ManageVmnetNetworksViewController.modeWithIsolation" = "%@, isolated VMs";
 "ManageVmnetNetworksViewController.networkInUse" = "The network %1$@ cannot be removed while these VMs are running on it: %2$@.";
 "ManageVmnetNetworksViewController.off" = "Off";
@@ -273,6 +272,8 @@
 "NewVMController.vmSubTypeLabel" = "Operating system";
 "NewVMController.vmTypeLabel" = "VM type";
 "NewVMViewController.defaultMessage" = "You can type here to write a description of your VM";
+"PreferencesTabViewController.general" = "General";
+"PreferencesTabViewController.networks" = "Networks";
 "PreferencesViewController.find" = "Find";
 "PreferencesViewController.pathDoesNotExists" = "Attention. Folder %@ does not exist.";
 "PreferencesViewController.qemuFolderLabel" = "Qemu binaries folder";

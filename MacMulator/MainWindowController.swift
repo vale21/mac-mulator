@@ -28,8 +28,9 @@ class MainWindowController: NSWindowController {
             destinationController.selectTab(tabIdentifier: tabToShow)
         }
         if segue.identifier == MacMulatorConstants.PREFERENCES_SEGUE {
-            let destinationController = dest.contentViewController as! PreferencesViewController
+            let destinationController = dest.contentViewController as! PreferencesTabViewController
             destinationController.setRootController(sourceController)
+            destinationController.apply(sender as? PreferencesRequest)
         }
         if segue.identifier == MacMulatorConstants.SHOW_CONSOLE_SEGUE {
             let destinationController = dest.contentViewController as! ConsoleViewController

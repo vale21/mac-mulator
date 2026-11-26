@@ -27,6 +27,7 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     var rootController: RootViewController?
     var qemuVersion: String?
     var dirty = false
+    var loaded = false
     private var initialStateFilePath: String?
 
     func setRootController(_ rootController: RootViewController) {
@@ -56,7 +57,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
     }
 
     override func viewWillAppear() {
-        view.window?.title = NSLocalizedString("PreferencesViewController.windowTitle", comment: "")
+        // Loaded once per opening: switching tabs must not discard a workspace folder not applied yet
+        guard !loaded else { return }
+        loaded = true
+
         vmFolderLabel.stringValue = NSLocalizedString("PreferencesViewController.vmFolderLabel", comment: "")
         vmFolderField.stringValue = Utils.getParentDir(WorkspaceState.shared.filePath)
         initialStateFilePath = WorkspaceState.shared.filePath
@@ -70,7 +74,10 @@ class PreferencesViewController: NSViewController, NSTextFieldDelegate {
         updateView(with: capabilities)
     }
 
-    override func viewDidDisappear() {
+    func preferencesWindowClosed() {
+        // Nothing to apply if the tab was not shown: its fields were never loaded
+        guard loaded else { return }
+        loaded = false
         WorkspaceState.shared.save()
 
         let stateFilePath = Utils.cleanFolderPath(vmFolderField.stringValue) + "/" + MacMulatorConstants.APP_STATE_FILE

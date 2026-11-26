@@ -233,8 +233,7 @@
 "ManageVmnetNetworksViewController.columnName" = "Name";
 "ManageVmnetNetworksViewController.columnSubnet" = "Subnetz";
 "ManageVmnetNetworksViewController.confirmRemove" = "Möchtest du das Netzwerk %@ entfernen?\nDie verbundenen VMs werden in das integrierte gemeinsame Netzwerk verschoben.";
-"ManageVmnetNetworksViewController.description" = "Netzwerke werden von allen deinen Apple-VMs gemeinsam genutzt: VMs im selben Netzwerk können sich gegenseitig sehen. Integrierte Netzwerke können nicht geändert werden.";
-"ManageVmnetNetworksViewController.done" = "Fertig";
+"ManageVmnetNetworksViewController.description" = "Netzwerke werden von allen deinen Apple-VMs gemeinsam genutzt: VMs im selben Netzwerk können sich in der Regel gegenseitig sehen, sofern keine Isolierung ausdrücklich angefordert wird. Integrierte Netzwerke können nicht geändert werden.";
 "ManageVmnetNetworksViewController.modeWithIsolation" = "%@, isolierte VMs";
 "ManageVmnetNetworksViewController.networkInUse" = "Das Netzwerk %1$@ kann nicht entfernt werden, solange diese VMs darauf laufen: %2$@.";
 "ManageVmnetNetworksViewController.off" = "Aus";
@@ -273,6 +272,8 @@
 "NewVMController.vmSubTypeLabel" = "Betriebssystem";
 "NewVMController.vmTypeLabel" = "VM-Typ";
 "NewVMViewController.defaultMessage" = "Hier kannst du eine Beschreibung deiner VM eingeben";
+"PreferencesTabViewController.general" = "Allgemein";
+"PreferencesTabViewController.networks" = "Netzwerke";
 "PreferencesViewController.find" = "Suchen";
 "PreferencesViewController.pathDoesNotExists" = "Achtung. Ordner %@ existiert nicht.";
 "PreferencesViewController.qemuFolderLabel" = "Ordner mit Qemu-Binaries";

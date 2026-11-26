@@ -36,6 +36,10 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
         }
     }
 
+    @IBAction func openNetworksPreferences(_: Any) {
+        (NSApp.delegate as? AppDelegate)?.showPreferences(PreferencesRequest(tabIdentifier: PreferencesTabViewController.NETWORKS_TAB, networkSelectionTarget: self))
+    }
+
     @IBAction func networkingSwitchChanged(_: Any) {
         virtualMachine?.networkEnabled = networkingSwitch.state == .on
         updateNetworkingControls()
@@ -47,6 +51,11 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
             virtualMachine.portMappings?.remove(at: row)
             reloadPortMappings()
         }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(vmnetNetworksDidChange(_:)), name: MacMulatorConstants.VMNET_NETWORKS_CHANGED_NOTIFICATION, object: nil)
     }
 
     override func viewWillAppear() {
@@ -72,12 +81,6 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
-        if segue.identifier == MacMulatorConstants.MANAGE_VMNET_NETWORKS_SEGUE {
-            let destinationController = segue.destinationController as! ManageVmnetNetworksViewController
-            destinationController.setParentController(self)
-            return
-        }
-
         let destinationController = segue.destinationController as! NewPortMappingViewController
         destinationController.setParentController(self)
         if let portMappings = virtualMachine?.portMappings {
@@ -197,6 +200,10 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
 
     func selectVmnetNetwork(_ network: VmnetNetwork) {
         virtualMachine?.vmnetNetworkId = network.id
+        vmnetNetworksChanged()
+    }
+
+    @objc private func vmnetNetworksDidChange(_: Notification) {
         vmnetNetworksChanged()
     }
 

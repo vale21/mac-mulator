@@ -90,62 +90,19 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
             managedVm.writeToPlist()
         }
 
-        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
-            if #available(macOS 26.0, *) {
-                if let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: managedVm) {
-                    let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), managedVm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
-                    if Utils.showPrompt(window: alertWindow, style: NSAlert.Style.warning, message: message, virtualMachine: managedVm).rawValue != Utils.ALERT_RESP_OK {
-                        stopVM(guestStopped: true)
-                        return
-                    }
-                }
-                do {
-                    try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
-                } catch {
-                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
-                    return
-                }
-            } else {
-                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported", comment: ""), managedVm.displayName), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
-                return
-            }
-        }
-
-        if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
-            #if arch(arm64)
-
-                vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
-
-                let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
-                if isDriveBlank {
-                    installAndStartVM()
+        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET, #available(macOS 26.0, *), let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: managedVm) {
+            let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), managedVm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
+            // Asynchronous: runVM is called while the VM window is being shown, where a modal session is not allowed
+            Utils.showPrompt(window: alertWindow, style: NSAlert.Style.warning, message: message, completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.acquireNetworkAndStartVM()
                 } else {
-                    startOrResumeVM()
+                    self.stopVM(guestStopped: true)
                 }
-
-            #endif
-        } else if #available(macOS 13.0, *) {
-            let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
-            var installPath: String? = nil
-            if let installMedia {
-                installPath = installMedia.path
-            } else {
-                installPath = ""
-            }
-            if Utils.isCloudInitSupported(managedVm) {
-                // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
-                do {
-                    try CloudInitVolume.update(for: managedVm)
-                } catch {
-                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
-                    return
-                }
-            }
-            let console = VirtualizationFrameworkSerialConsole()
-            serialConsole = console
-            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
-            startOrResumeVM()
+            }, virtualMachine: managedVm)
+            return
         }
+        acquireNetworkAndStartVM()
     }
 
     func instllationComplete(_ result: Result<Void, Error>) {
@@ -537,6 +494,58 @@ class VirtualizationFrameworkVirtualMachineRunner: NSObject, VirtualMachineRunne
                 }
             }
         #endif
+    }
+
+    private func acquireNetworkAndStartVM() {
+        if managedVm.isNetworkEnabled, managedVm.networkDevice == QemuConstants.ATTACHMENT_VMNET {
+            if #available(macOS 26.0, *) {
+                do {
+                    try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: error.localizedDescription, completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            } else {
+                Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported", comment: ""), managedVm.displayName), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                return
+            }
+        }
+
+        if Utils.isMacVMWithOSVirtualizationFramework(os: managedVm.os, subtype: managedVm.subtype) {
+            #if arch(arm64)
+
+                vzVirtualMachine = VirtualizationFrameworkMacOSSupport.decodeMacOSVirtualMachine(vm: managedVm)
+
+                let isDriveBlank = Utils.findMainDrive(managedVm.drives)!.isBlank()
+                if isDriveBlank {
+                    installAndStartVM()
+                } else {
+                    startOrResumeVM()
+                }
+
+            #endif
+        } else if #available(macOS 13.0, *) {
+            let installMedia = Utils.findUSBInstallDrive(managedVm.drives)
+            var installPath: String? = nil
+            if let installMedia {
+                installPath = installMedia.path
+            } else {
+                installPath = ""
+            }
+            if Utils.isCloudInitSupported(managedVm) {
+                // Built on every start, so that it always reflects the current provisioning information (or is removed without it)
+                do {
+                    try CloudInitVolume.update(for: managedVm)
+                } catch {
+                    Utils.showAlert(window: alertWindow, style: NSAlert.Style.critical, message: String(format: NSLocalizedString("CloudInitVolume.creationFailed", comment: ""), error.localizedDescription), completionHandler: { _ in self.stopVM(guestStopped: true) }, virtualMachine: managedVm)
+                    return
+                }
+            }
+            let console = VirtualizationFrameworkSerialConsole()
+            serialConsole = console
+            vzVirtualMachine = VirtualizationFrameworkLinuxSupport.decodeLinuxVirtualMachine(vm: managedVm, installMedia: installPath!, serialPort: console.makePortConfiguration())
+            startOrResumeVM()
+        }
     }
 
     private func configureVmView() {

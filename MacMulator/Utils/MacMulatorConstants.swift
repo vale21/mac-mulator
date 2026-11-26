@@ -53,11 +53,11 @@ class MacMulatorConstants {
     static let RESTORE_SNAPSHOT_SEGUE = "restoreSnapshotSegue"
     static let SHOW_PROVISIONING_OPTIONS_SEGUE = "showProvisioningOptionsSegue"
     static let SHOW_CLONE_VIEW_SEGUE = "showCloneViewSegue"
-    static let MANAGE_VMNET_NETWORKS_SEGUE = "manageVmnetNetworksSegue"
     static let NEW_VMNET_NETWORK_SEGUE = "newVmnetNetworkSegue"
     static let EDIT_VMNET_NETWORK_SEGUE = "editVmnetNetworkSegue"
 
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
+    static let VMNET_NETWORKS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmnetNetworksChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
