@@ -155,24 +155,21 @@ class VmnetPacketForwarder {
     }
 
     private func forwardPacketsToVmnet() {
-        while !stopped {
-            var count = 0
-            while count < toVmnet.count {
-                let size = recv(hostSocket, toVmnet.buffers[count], maxPacketSize, 0)
-                guard size > 0 else { break }
-                if isAllowedFromVirtualMachine(toVmnet.buffers[count], size: size) {
-                    toVmnet.setPacket(count, size: size)
-                    count += 1
-                }
-            }
-            guard count > 0 else { return }
-
-            var written = Int32(count)
-            _ = vmnet_write(interface, toVmnet.packets, &written)
-            if count < toVmnet.count {
-                return
+        guard !stopped else { return }
+        var count = 0
+        // Bound all datagrams examined, including those rejected by the filter.
+        for _ in 0 ..< toVmnet.count {
+            let size = recv(hostSocket, toVmnet.buffers[count], maxPacketSize, 0)
+            guard size > 0 else { break }
+            if isAllowedFromVirtualMachine(toVmnet.buffers[count], size: size) {
+                toVmnet.setPacket(count, size: size)
+                count += 1
             }
         }
+        // The read source will fire again if datagrams remain.
+        guard count > 0 else { return }
+        var written = Int32(count)
+        _ = vmnet_write(interface, toVmnet.packets, &written)
     }
 
     // vmnet doesn't apply its isolation key to these interfaces, so isolation is enforced here on the
