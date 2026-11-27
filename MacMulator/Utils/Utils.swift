@@ -853,6 +853,10 @@ class Utils {
         vm.type == MacMulatorConstants.APPLE_TEMPLATE_VM || vm.type == MacMulatorConstants.QEMU_TEMPLATE_VM
     }
 
+    static func isQemuVirtualMachine(_ vm: VirtualMachine) -> Bool {
+        vm.type == nil || vm.type == MacMulatorConstants.QEMU_VM
+    }
+
     /// Whether the linked drives of the VM can be merged with the template ones: QEMU relies on qemu-img,
     /// while Apple VMs need to attach ASIF images, which is only possible outside of the App Store sandbox.
     static func isFullCloneConversionSupported(_ vm: VirtualMachine) -> Bool {
@@ -1120,7 +1124,7 @@ class Utils {
             return String(format: NSLocalizedString("Utils.portMappingsNetworkRunning", comment: ""), network.name, runningNames.joined(separator: ", "), vm.displayName)
         }
         // Qemu takes the user mode port mappings on its command line
-        if vm.isQemuVirtualMachine, vm.isNetworkEnabled, (vm.networkMode ?? QemuConstants.NETWORK_MODE_USER) == QemuConstants.NETWORK_MODE_USER,
+        if isQemuVirtualMachine(vm), vm.isNetworkEnabled, (vm.networkMode ?? QemuConstants.NETWORK_MODE_USER) == QemuConstants.NETWORK_MODE_USER,
            (NSApp.delegate as? AppDelegate)?.rootController?.isVMRunning(vm) == true
         {
             return String(format: NSLocalizedString("Utils.portMappingsVMRunning", comment: ""), vm.displayName)

@@ -820,7 +820,7 @@ class VirtualMachineViewController: NSViewController {
     }
 
     private func startVM(sender _: Any, inRecovery: Bool) {
-        if let vm = rootController?.currentVm, vm.isQemuVirtualMachine, vm.usesVmnetNetwork, #available(macOS 26.0, *), let window = view.window,
+        if let vm = rootController?.currentVm, Utils.isQemuVirtualMachine(vm), vm.usesVmnetNetwork, #available(macOS 26.0, *), let window = view.window,
            let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: vm)
         {
             // Apple VMs ask in their runner; Qemu VMs ask here, before the VM window is shown

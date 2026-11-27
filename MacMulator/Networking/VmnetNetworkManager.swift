@@ -157,10 +157,10 @@ class VmnetNetworkManager {
 
     private func startForwarderIfNeeded(for vm: VirtualMachine, networkName: String, active: ActiveNetwork) throws {
         // Apple VMs attach to the network directly unless it isolates its VMs; Qemu VMs always go through a forwarder
-        guard active.isolationGroup != nil || vm.isQemuVirtualMachine, forwarders[vm.id] == nil else { return }
+        guard active.isolationGroup != nil || Utils.isQemuVirtualMachine(vm), forwarders[vm.id] == nil else { return }
 
         do {
-            let qemuSocketPaths = vm.isQemuVirtualMachine ? QemuUtils.networkSocketPaths(forVMAt: vm.path) : nil
+            let qemuSocketPaths = Utils.isQemuVirtualMachine(vm) ? QemuUtils.networkSocketPaths(forVMAt: vm.path) : nil
             forwarders[vm.id] = try VmnetPacketForwarder(network: active.network, networkName: networkName, macAddress: vm.macAddress ?? "", isolationGroup: active.isolationGroup, qemuSocketPaths: qemuSocketPaths)
         } catch {
             releaseNetwork(for: vm)
