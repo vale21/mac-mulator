@@ -15,6 +15,8 @@ class QemuRunner: VirtualMachineRunner {
     let livePreviewEnabled: Bool
     let managedVm: VirtualMachine
 
+    private var bridgedForwarder: VmnetBridgedForwarder?
+
     private var spiceServerEnabled: Bool {
         QemuUtils.isSpiceSupported(managedVm)
     }
@@ -123,19 +125,35 @@ class QemuRunner: VirtualMachineRunner {
                 return
             }
         }
+        if isBridgedNetwork() {
+            if managedVm.macAddress == nil {
+                // Keep the same MAC address across runs, so that the guest keeps its DHCP lease on the bridged network
+                managedVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+                managedVm.writeToPlist()
+            }
+            do {
+                try startBridgedForwarder()
+            } catch {
+                callback(VMExecutionResult(exitCode: -1, error: error.localizedDescription), managedVm)
+                return
+            }
+        }
         let command = getQemuCommand()
         do {
             try QemuRunner.validateQemuCommand(command: command, globalQemuPath: qemuPath, configuredQemuPath: QemuUtils.getQemuPath(for: managedVm)) {
                 validationResult, error in
                 if validationResult {
                     self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result, _ in
+                        self.stopBridgedForwarder()
                         callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
                     })
                 } else {
+                    self.stopBridgedForwarder()
                     callback(VMExecutionResult(exitCode: -1, error: error!.description), self.managedVm)
                 }
             }
         } catch {
+            stopBridgedForwarder()
             throw error
         }
     }
@@ -280,7 +298,7 @@ class QemuRunner: VirtualMachineRunner {
             .withAutoBoot(true)
             .withVgaEnabled(true)
             .withPortMappings(managedVm.portMappings)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
     }
 
     private func createBuilderForPPC64() -> QemuCommandBuilder {
@@ -298,7 +316,7 @@ class QemuRunner: VirtualMachineRunner {
             .withAutoBoot(true)
             .withVgaEnabled(true)
             .withPortMappings(managedVm.portMappings)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
     }
 
     private func createBuilderForI386() -> QemuCommandBuilder {
@@ -319,7 +337,7 @@ class QemuRunner: VirtualMachineRunner {
             .withPortMappings(managedVm.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
     }
 
     private func createBuilderForX86_64() -> QemuCommandBuilder {
@@ -352,7 +370,7 @@ class QemuRunner: VirtualMachineRunner {
             .withPortMappings(managedVm.portMappings)
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
             .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS)
         let sound = Utils.getSoundForSubType(managedVm.os, managedVm.subtype)
         if sound == QemuConstants.SOUND_HDA {
@@ -382,7 +400,7 @@ class QemuRunner: VirtualMachineRunner {
             .withDevice(QemuConstants.USB_KEYBOARD)
             .withDevice(QemuConstants.USB_TABLET)
             .withDevice(QemuConstants.APPLE_SMC)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
     }
 
     private func createBuilderForARM() -> QemuCommandBuilder {
@@ -425,7 +443,7 @@ class QemuRunner: VirtualMachineRunner {
             .withVga(videoDevice)
             .withNic(QemuConstants.NIC_VIRTIO)
             .withPortMappings(managedVm.portMappings)
-            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress)
+            .withNetwork(name: "network-0", device: networkDevice, macAddress: managedVm.macAddress, backend: networkBackend())
             .withTpm(Utils.getTPMForSubType(managedVm.os, managedVm.subtype) ? managedVm.path : nil, QemuConstants.TPM_TIS_DEVICE)
     }
 
@@ -462,6 +480,35 @@ class QemuRunner: VirtualMachineRunner {
             }
         }
         return false
+    }
+
+    private func isBridgedNetwork() -> Bool {
+        managedVm.isNetworkEnabled && managedVm.networkMode == QemuConstants.NETWORK_MODE_BRIDGED
+    }
+
+    private func bridgedInterfaceName() -> String? {
+        let interfaces = VZBridgedNetworkInterface.networkInterfaces
+        return (interfaces.first { $0.identifier == managedVm.physicalBridgeNetworkDevice } ?? interfaces.first)?.identifier
+    }
+
+    private func networkBackend() -> String? {
+        guard isBridgedNetwork() else { return nil }
+
+        // vmnet runs in MacMulator, which has the com.apple.vm.networking entitlement: Qemu only exchanges frames with it
+        return "dgram,local.type=unix,local.path=" + Utils.escape(QemuUtils.qemuNetworkSocketPath(forVMAt: managedVm.path)) +
+            ",remote.type=unix,remote.path=" + Utils.escape(QemuUtils.macMulatorNetworkSocketPath(forVMAt: managedVm.path))
+    }
+
+    private func startBridgedForwarder() throws {
+        guard let interfaceName = bridgedInterfaceName() else {
+            throw VmnetBridgeError(interfaceName: managedVm.physicalBridgeNetworkDevice ?? "", reason: NSLocalizedString("QemuRunner.noBridgeInterface", comment: ""))
+        }
+        bridgedForwarder = try VmnetBridgedForwarder(interfaceName: interfaceName, localSocketPath: QemuUtils.macMulatorNetworkSocketPath(forVMAt: managedVm.path), remoteSocketPath: QemuUtils.qemuNetworkSocketPath(forVMAt: managedVm.path))
+    }
+
+    private func stopBridgedForwarder() {
+        bridgedForwarder?.stop()
+        bridgedForwarder = nil
     }
 
     private func getNetworkDevice() -> String {

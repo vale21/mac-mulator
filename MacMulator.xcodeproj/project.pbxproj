@@ -69,6 +69,8 @@
 		3B59CBAD30B7220400EF86EC /* PreferencesTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */; };
 		3B59CBB030B82B6D00EF86EC /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */; };
 		3B59CBB130B82B6D00EF86EC /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */; };
+		3B59CBB330B96ED200EF86EC /* VmnetBridgedForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBB230B96ED200EF86EC /* VmnetBridgedForwarder.swift */; };
+		3B59CBB430B96ED200EF86EC /* VmnetBridgedForwarder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B59CBB230B96ED200EF86EC /* VmnetBridgedForwarder.swift */; };
 		3B5A00022A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B5A00032A00000100C1797A /* UsbPassthroughManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */; };
 		3B6492FB2CC14D830015F73F /* EditVMViewControllerVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */; };
@@ -306,6 +308,7 @@
 		3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VmnetPacketForwarder.swift; sourceTree = "<group>"; };
 		3B59CBAB30B7220400EF86EC /* PreferencesTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesTabViewController.swift; sourceTree = "<group>"; };
 		3B59CBAF30B82B6D00EF86EC /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
+		3B59CBB230B96ED200EF86EC /* VmnetBridgedForwarder.swift */ = {isa = PBXFileReference; path = VmnetBridgedForwarder.swift; sourceTree = "<group>"; };
 		3B5A00012A00000100C1797A /* UsbPassthroughManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UsbPassthroughManager.swift; sourceTree = "<group>"; };
 		3B6492FA2CC14D830015F73F /* EditVMViewControllerVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditVMViewControllerVideo.swift; sourceTree = "<group>"; };
 		3B66C6C9306D1B280031A733 /* ManageSnapshotViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageSnapshotViewController.swift; sourceTree = "<group>"; };
@@ -555,6 +558,7 @@
 				3B1BDFC4280804A000E353CE /* VirtualMachineContainerViewController.swift */,
 				3B2E0F7530AEE2A80032F2CF /* VmnetNetworkManager.swift */,
 				3B59CBA830B6EAE200EF86EC /* VmnetPacketForwarder.swift */,
+				3B59CBB230B96ED200EF86EC /* VmnetBridgedForwarder.swift */,
 			);
 			path = Virtualization;
 			sourceTree = "<group>";
@@ -985,6 +989,7 @@
 				3BDD3D4430921646007FE305 /* CloneVMViewController.swift in Sources */,
 				3B200DA72802EEDE00F7159E /* VMCreator.swift in Sources */,
 				3BF128BB26C270CA009BFF7D /* ConsoleViewController.swift in Sources */,
+				3B59CBB330B96ED200EF86EC /* VmnetBridgedForwarder.swift in Sources */,
 				3BBC4BB625DE74020001CA02 /* QemuUtils.swift in Sources */,
 				3B0B9334289289FC0077B188 /* MacOSVirtualMachineDelegate.swift in Sources */,
 				3B3A588A308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */,
@@ -1094,6 +1099,7 @@
 				3BDD3D4330921646007FE305 /* CloneVMViewController.swift in Sources */,
 				3BFB2B553078F067005A4B51 /* VMCreator.swift in Sources */,
 				3BFB2B563078F067005A4B51 /* ConsoleViewController.swift in Sources */,
+				3B59CBB430B96ED200EF86EC /* VmnetBridgedForwarder.swift in Sources */,
 				3BFB2B573078F067005A4B51 /* QemuUtils.swift in Sources */,
 				3BFB2B583078F067005A4B51 /* MacOSVirtualMachineDelegate.swift in Sources */,
 				3B3A588B308B6C3700A2A782 /* ConvertVMViewController.swift in Sources */,

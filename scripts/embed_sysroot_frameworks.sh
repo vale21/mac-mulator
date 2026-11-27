@@ -211,7 +211,7 @@ for NAME in ${QEMU_EXECUTABLES}; do
         echo "error: ${SRC} not found. Re-run scripts/fetch_sysroot.sh." >&2
         exit 1
     fi
-    if is_current "${SRC}" "${DST}"; then
+    if is_current "${SRC}" "${DST}" && [ ! "${QEMU_ENTITLEMENTS}" -nt "${DST}" ]; then
         continue
     fi
     echo "Embedding ${NAME}"

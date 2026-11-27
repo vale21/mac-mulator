@@ -195,8 +195,7 @@ class VmnetPacketForwarder {
     }
 }
 
-@available(macOS 26.0, *)
-private class PacketBatch {
+class PacketBatch {
     let count: Int
     let packetSize: Int
     let buffers: [UnsafeMutableRawPointer]

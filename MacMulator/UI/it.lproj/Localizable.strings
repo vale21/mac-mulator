@@ -333,6 +333,7 @@
 "QemuConstants.windows" = "Windows Generico";
 "QemuConstants.x64" = "VM Generica x86_64";
 "QemuConstants.x86" = "VM Generica x86";
+"QemuRunner.noBridgeInterface" = "nessuna interfaccia di rete può essere usata in bridge";
 "QemuSpiceViewerViewController.connecting" = "Connessione a %@…";
 "QemuSpiceViewerViewController.connectionFailed" = "Impossibile connettersi a %@";
 "QemuSpiceViewerViewController.error" = "Errore SPICE: %@";
@@ -491,6 +492,7 @@
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "Impossibile riprendere %1$@: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "Impossibile avviare %1$@: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "Impossibile avviare %@: usa una rete Avanzata (vmnet), che richiede macOS 26 o successivo. Per eseguirla su questo Mac, scegli un'altra modalità di rete nelle sue impostazioni di Rete, oppure disabilita la rete.";
+"VmnetBridgedForwarder.startFailed" = "Impossibile collegare in bridge la VM a %1$@: %2$@.";
 "VmnetNetwork.hostOnlyName" = "Solo host";
 "VmnetNetwork.isolatedName" = "VM isolata";
 "VmnetNetwork.modeHostOnly" = "Solo host";

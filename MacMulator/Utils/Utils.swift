@@ -904,14 +904,6 @@ class Utils {
         isVmnetSupportedOnHost()
     }
 
-    static func isNativeQemuVmnetSupported(_ vm: VirtualMachine) -> Bool {
-        #if APPSTORE
-            QemuCapabilitiesReporter.getInstance(forQemuPath: QemuUtils.getQemuPath(for: vm))?.vmnetSupported ?? false
-        #else
-            false
-        #endif
-    }
-
     static func isVmnetSupportedOnHost() -> Bool {
         if #available(macOS 26.0, *) {
             true

@@ -204,6 +204,14 @@ class QemuUtils {
         #endif
     }
 
+    static func macMulatorNetworkSocketPath(forVMAt vmPath: String) -> String {
+        NSTemporaryDirectory() + "net-mm-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+    }
+
+    static func qemuNetworkSocketPath(forVMAt vmPath: String) -> String {
+        NSTemporaryDirectory() + "net-qemu-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
+    }
+
     static func tpmSocketPath(forVMAt vmPath: String) -> String {
         #if APPSTORE
             return containerSocketPath("tpm", vmPath)

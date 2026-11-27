@@ -16,7 +16,7 @@ struct VmnetNetworkError: LocalizedError {
         String(format: NSLocalizedString("VmnetNetworkManager.creationFailed", comment: ""), networkName, VmnetNetworkError.statusName(status), Int(status.rawValue))
     }
 
-    private static func statusName(_ status: vmnet_return_t) -> String {
+    static func statusName(_ status: vmnet_return_t) -> String {
         switch status {
         case .VMNET_FAILURE: "VMNET_FAILURE"
         case .VMNET_MEM_FAILURE: "VMNET_MEM_FAILURE"

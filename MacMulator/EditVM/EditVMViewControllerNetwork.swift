@@ -230,7 +230,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         guard let virtualMachine else { return }
 
         networkModes = [QemuConstants.NETWORK_MODE_USER, QemuConstants.NETWORK_MODE_BRIDGED]
-        if Utils.isVmnetSupported(virtualMachine) || Utils.isNativeQemuVmnetSupported(virtualMachine) {
+        if Utils.isVmnetSupported(virtualMachine) {
             networkModes.append(QemuConstants.NETWORK_MODE_VMNET)
         }
     }
@@ -249,22 +249,12 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         return QemuConstants.NETWORK_MODE_USER
     }
 
-    private func availableVmnetNetworks() -> [VmnetNetwork] {
-        guard let virtualMachine else { return [] }
-
-        if Utils.isVmnetSupported(virtualMachine) {
-            return VmnetNetwork.allNetworks()
-        }
-        // Without the macOS 26 vmnet API only QEMU's own vmnet-shared and vmnet-host are available
-        return VmnetNetwork.builtInNetworks().filter { $0.id == VmnetNetwork.SHARED_ID || $0.id == VmnetNetwork.HOST_ONLY_ID }
-    }
-
     private func updateNetworkModeControls() {
         guard let virtualMachine else { return }
 
         let networkMode = selectedNetworkMode()
         let networkingEnabled = virtualMachine.isNetworkEnabled
-        manageNetworksButton.isHidden = networkMode != QemuConstants.NETWORK_MODE_VMNET || !Utils.isVmnetSupported(virtualMachine)
+        manageNetworksButton.isHidden = networkMode != QemuConstants.NETWORK_MODE_VMNET
 
         if networkMode == QemuConstants.NETWORK_MODE_BRIDGED {
             physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.phisicalDevice", comment: "")
@@ -280,10 +270,10 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         } else if networkMode == QemuConstants.NETWORK_MODE_VMNET {
             physicalDeviceLabel.stringValue = NSLocalizedString("EditVMViewControllerNetworkVF.vmnetNetwork", comment: "")
             physicalDeviceComboBox.isEnabled = networkingEnabled
-            vmnetNetworks = availableVmnetNetworks()
+            vmnetNetworks = VmnetNetwork.allNetworks()
             physicalDeviceComboBox.reloadData()
 
-            if !vmnetNetworks.contains(where: { $0.id == virtualMachine.vmnetNetworkId }) {
+            if VmnetNetwork.network(withId: virtualMachine.vmnetNetworkId) == nil {
                 virtualMachine.vmnetNetworkId = VmnetNetwork.SHARED_ID
             }
             physicalDeviceComboBox.selectItem(at: vmnetNetworks.firstIndex { $0.id == virtualMachine.vmnetNetworkId } ?? 0)

@@ -41,6 +41,7 @@ class QemuCommandBuilder {
     var managementPort: Int32?
     var nic: String?
     var networkDisabled = false
+    var userModeNetwork = true
     var tpmPath: String?
     var tpmDevice: String?
 
@@ -231,11 +232,15 @@ class QemuCommandBuilder {
         return self
     }
 
-    func withNetwork(name: String, device: String, macAddress: String?) -> QemuCommandBuilder {
-        network = FORMATTER + "-netdev user,id=" + name
-
-        for mapping in portMappings {
-            network = network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
+    func withNetwork(name: String, device: String, macAddress: String?, backend: String? = nil) -> QemuCommandBuilder {
+        if let backend {
+            network = FORMATTER + "-netdev " + backend + ",id=" + name
+            userModeNetwork = false
+        } else {
+            network = FORMATTER + "-netdev user,id=" + name
+            for mapping in portMappings {
+                network = network! + ",hostfwd=tcp::" + String(mapping.hostPort) + "-:" + String(mapping.vmPort)
+            }
         }
 
         if let macAddress {
@@ -320,7 +325,8 @@ class QemuCommandBuilder {
         if networkDisabled {
             // Without it Qemu adds a default network card
             cmd += FORMATTER + "-nic none"
-        } else if let nic {
+        } else if let nic, userModeNetwork {
+            // A second, user mode card would give the VM more access than its network mode allows
             cmd += FORMATTER + "-nic user,model=" + nic
         }
         for device in device {
