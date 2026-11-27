@@ -16,6 +16,7 @@ class QemuRunner: VirtualMachineRunner {
     let managedVm: VirtualMachine
 
     private var bridgedForwarder: VmnetBridgedForwarder?
+    private var vmnetNetworkAcquired = false
 
     private var spiceServerEnabled: Bool {
         QemuUtils.isSpiceSupported(managedVm)
@@ -125,18 +126,11 @@ class QemuRunner: VirtualMachineRunner {
                 return
             }
         }
-        if isBridgedNetwork() {
-            if managedVm.macAddress == nil {
-                // Keep the same MAC address across runs, so that the guest keeps its DHCP lease on the bridged network
-                managedVm.macAddress = VZMACAddress.randomLocallyAdministered().string
-                managedVm.writeToPlist()
-            }
-            do {
-                try startBridgedForwarder()
-            } catch {
-                callback(VMExecutionResult(exitCode: -1, error: error.localizedDescription), managedVm)
-                return
-            }
+        do {
+            try startNetwork()
+        } catch {
+            callback(VMExecutionResult(exitCode: -1, error: error.localizedDescription), managedVm)
+            return
         }
         let command = getQemuCommand()
         do {
@@ -144,16 +138,16 @@ class QemuRunner: VirtualMachineRunner {
                 validationResult, error in
                 if validationResult {
                     self.shell.runCommand(command, self.managedVm.path, uponCompletion: { result, _ in
-                        self.stopBridgedForwarder()
+                        self.stopNetwork()
                         callback(VMExecutionResult(exitCode: result, error: self.getStandardError()), self.managedVm)
                     })
                 } else {
-                    self.stopBridgedForwarder()
+                    self.stopNetwork()
                     callback(VMExecutionResult(exitCode: -1, error: error!.description), self.managedVm)
                 }
             }
         } catch {
-            stopBridgedForwarder()
+            stopNetwork()
             throw error
         }
     }
@@ -492,23 +486,50 @@ class QemuRunner: VirtualMachineRunner {
     }
 
     private func networkBackend() -> String? {
-        guard isBridgedNetwork() else { return nil }
+        guard isBridgedNetwork() || managedVm.usesVmnetNetwork else { return nil }
+
+        let socketPaths = QemuUtils.networkSocketPaths(forVMAt: managedVm.path)
 
         // vmnet runs in MacMulator, which has the com.apple.vm.networking entitlement: Qemu only exchanges frames with it
-        return "dgram,local.type=unix,local.path=" + Utils.escape(QemuUtils.qemuNetworkSocketPath(forVMAt: managedVm.path)) +
-            ",remote.type=unix,remote.path=" + Utils.escape(QemuUtils.macMulatorNetworkSocketPath(forVMAt: managedVm.path))
+        return "dgram,local.type=unix,local.path=" + Utils.escape(socketPaths.qemu) + ",remote.type=unix,remote.path=" + Utils.escape(socketPaths.macMulator)
     }
 
-    private func startBridgedForwarder() throws {
-        guard let interfaceName = bridgedInterfaceName() else {
-            throw VmnetBridgeError(interfaceName: managedVm.physicalBridgeNetworkDevice ?? "", reason: NSLocalizedString("QemuRunner.noBridgeInterface", comment: ""))
+    private func startNetwork() throws {
+        guard isBridgedNetwork() || managedVm.usesVmnetNetwork else { return }
+
+        if managedVm.macAddress == nil {
+            // Keep the same MAC address across runs: DHCP leases and reservations, and port forwarding, rely on it
+            managedVm.macAddress = VZMACAddress.randomLocallyAdministered().string
+            managedVm.writeToPlist()
         }
-        bridgedForwarder = try VmnetBridgedForwarder(interfaceName: interfaceName, localSocketPath: QemuUtils.macMulatorNetworkSocketPath(forVMAt: managedVm.path), remoteSocketPath: QemuUtils.qemuNetworkSocketPath(forVMAt: managedVm.path))
+
+        if isBridgedNetwork() {
+            guard let interfaceName = bridgedInterfaceName() else {
+                throw VmnetBridgeError(interfaceName: managedVm.physicalBridgeNetworkDevice ?? "", reason: NSLocalizedString("QemuRunner.noBridgeInterface", comment: ""))
+            }
+            bridgedForwarder = try VmnetBridgedForwarder(interfaceName: interfaceName, socketPaths: QemuUtils.networkSocketPaths(forVMAt: managedVm.path))
+        } else if #available(macOS 26.0, *) {
+            try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
+            vmnetNetworkAcquired = true
+        } else {
+            // Without its vmnet network the VM doesn't start: falling back to NAT would give it more access than configured
+            throw VmnetUnsupportedError(virtualMachineName: managedVm.displayName)
+        }
     }
 
-    private func stopBridgedForwarder() {
+    private func stopNetwork() {
         bridgedForwarder?.stop()
         bridgedForwarder = nil
+
+        guard vmnetNetworkAcquired else { return }
+        vmnetNetworkAcquired = false
+        if #available(macOS 26.0, *) {
+            let virtualMachine = managedVm
+            // VmnetNetworkManager is only used from the main thread
+            DispatchQueue.main.async {
+                VmnetNetworkManager.shared.releaseNetwork(for: virtualMachine)
+            }
+        }
     }
 
     private func getNetworkDevice() -> String {

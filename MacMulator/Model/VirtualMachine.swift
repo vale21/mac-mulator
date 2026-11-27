@@ -65,6 +65,18 @@ class VirtualMachine: Codable, Hashable {
         networkEnabled ?? true
     }
 
+    var usesVmnetNetwork: Bool {
+        guard isNetworkEnabled else { return false }
+        if type == MacMulatorConstants.APPLE_VM {
+            return networkDevice == QemuConstants.ATTACHMENT_VMNET
+        }
+        return isQemuVirtualMachine && networkMode == QemuConstants.NETWORK_MODE_VMNET
+    }
+
+    var isQemuVirtualMachine: Bool {
+        type == nil || type == MacMulatorConstants.QEMU_VM
+    }
+
     var hasLinkedDrives: Bool {
         drives.contains(where: \.isLinked)
     }

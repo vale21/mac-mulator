@@ -26,36 +26,21 @@ class VmnetBridgedForwarder {
     private let queue: DispatchQueue
     private let interface: interface_ref
     private let hostSocket: Int32
-    private let localSocketPath: String
-    private let remoteSocketPath: String
-    private var remoteAddress: sockaddr_un
+    private let socketPaths: QemuSocketPaths
+    private var qemuAddress: sockaddr_un
     private let maxPacketSize: Int
     private let fromVmnet: PacketBatch
     private let toVmnet: PacketBatch
     private var readSource: DispatchSourceRead?
     private var stopped = false
 
-    // Qemu connects with "-netdev dgram": it binds remoteSocketPath and sends one Ethernet frame per datagram to localSocketPath
-    init(interfaceName: String, localSocketPath: String, remoteSocketPath: String) throws {
-        guard var localAddress = VmnetBridgedForwarder.socketAddress(localSocketPath), let remoteAddress = VmnetBridgedForwarder.socketAddress(remoteSocketPath) else {
-            throw VmnetBridgeError(interfaceName: interfaceName, reason: "socket path too long")
-        }
-
-        // Stale sockets of a previous run would make both binds fail
-        unlink(localSocketPath)
-        unlink(remoteSocketPath)
-
-        let socketDescriptor = socket(AF_UNIX, SOCK_DGRAM, 0)
-        guard socketDescriptor >= 0 else {
-            throw VmnetBridgeError(interfaceName: interfaceName, reason: String(cString: strerror(errno)))
-        }
-        let bindResult = withUnsafePointer(to: &localAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { bind(socketDescriptor, $0, socklen_t(MemoryLayout<sockaddr_un>.size)) }
-        }
-        guard bindResult == 0 else {
-            let reason = String(cString: strerror(errno))
-            close(socketDescriptor)
-            throw VmnetBridgeError(interfaceName: interfaceName, reason: reason)
+    // Qemu connects with "-netdev dgram": it binds its own path and sends one Ethernet frame per datagram to MacMulator's
+    init(interfaceName: String, socketPaths: QemuSocketPaths) throws {
+        let socketDescriptor: Int32
+        do {
+            socketDescriptor = try UnixDatagramSocket.bind(socketPaths.macMulator, removing: socketPaths.qemu)
+        } catch {
+            throw VmnetBridgeError(interfaceName: interfaceName, reason: error.localizedDescription)
         }
         var sendBufferSize = VmnetBridgedForwarder.SOCKET_SEND_BUFFER_SIZE
         var receiveBufferSize = VmnetBridgedForwarder.SOCKET_RECEIVE_BUFFER_SIZE
@@ -85,16 +70,16 @@ class VmnetBridgedForwarder {
                 vmnet_stop_interface(startedInterface, queue) { _ in }
             }
             close(socketDescriptor)
-            unlink(localSocketPath)
+            unlink(socketPaths.macMulator)
             throw VmnetBridgeError(interfaceName: interfaceName, reason: VmnetNetworkError.statusName(startStatus) + " (" + String(startStatus.rawValue) + ")")
         }
 
         self.queue = queue
         interface = startedInterface
         hostSocket = socketDescriptor
-        self.localSocketPath = localSocketPath
-        self.remoteSocketPath = remoteSocketPath
-        self.remoteAddress = remoteAddress
+        self.socketPaths = socketPaths
+        // Validated by the bind above
+        qemuAddress = UnixDatagramSocket.socketAddress(socketPaths.qemu)!
         self.maxPacketSize = maxPacketSize
         fromVmnet = PacketBatch(count: VmnetBridgedForwarder.PACKETS_PER_BATCH, packetSize: maxPacketSize)
         toVmnet = PacketBatch(count: VmnetBridgedForwarder.PACKETS_PER_BATCH, packetSize: maxPacketSize)
@@ -110,8 +95,8 @@ class VmnetBridgedForwarder {
             readSource?.cancel()
             readSource = nil
             vmnet_stop_interface(interface, queue) { _ in }
-            unlink(localSocketPath)
-            unlink(remoteSocketPath)
+            unlink(socketPaths.macMulator)
+            unlink(socketPaths.qemu)
         }
     }
 
@@ -138,13 +123,9 @@ class VmnetBridgedForwarder {
         var count = Int32(fromVmnet.count)
         guard vmnet_read(interface, fromVmnet.packets, &count) == .VMNET_SUCCESS, count > 0 else { return }
 
-        withUnsafePointer(to: &remoteAddress) {
-            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { address in
-                for index in 0 ..< Int(count) {
-                    // Fails until Qemu has bound its socket, or when the VM can't keep up: the packet is dropped, as on a congested link
-                    _ = sendto(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, 0, address, socklen_t(MemoryLayout<sockaddr_un>.size))
-                }
-            }
+        for index in 0 ..< Int(count) {
+            // Fails until Qemu has bound its socket, or when the VM can't keep up: the packet is dropped, as on a congested link
+            UnixDatagramSocket.send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, to: &qemuAddress)
         }
         if Int(count) == fromVmnet.count {
             queue.async { [weak self] in
@@ -166,16 +147,5 @@ class VmnetBridgedForwarder {
         guard count > 0 else { return }
         var written = Int32(count)
         _ = vmnet_write(interface, toVmnet.packets, &written)
-    }
-
-    private static func socketAddress(_ path: String) -> sockaddr_un? {
-        var address = sockaddr_un()
-        let pathBytes = Array(path.utf8)
-        guard pathBytes.count < MemoryLayout.size(ofValue: address.sun_path) else { return nil }
-
-        address.sun_family = sa_family_t(AF_UNIX)
-        address.sun_len = UInt8(MemoryLayout<sockaddr_un>.size)
-        withUnsafeMutableBytes(of: &address.sun_path) { $0.copyBytes(from: pathBytes) }
-        return address
     }
 }
