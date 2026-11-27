@@ -89,13 +89,22 @@ Troubleshooting:
 
 Xcode Cloud starts from a clean clone, so it downloads the sysroot on every build:
 
-- `ci_scripts/ci_post_clone.sh` runs `scripts/fetch_sysroot.sh` right after the clone.
-- No token is required. Xcode Cloud machines share IP addresses, so GitHub's limit of 60 anonymous
-  API requests per hour can be hit; to avoid it, open the workflow in App Store Connect, go to
-  *Environment*, and add an environment variable named `GH_TOKEN` marked as **secret**, containing
-  any GitHub token (no scopes needed).
-- To build against a fixed sysroot instead of the newest copy, add an environment variable
-  `SYSROOT_ARTIFACT_ID` with the artifact id. Keep it equal to the [Current pin](#current-pin).
+- `ci_scripts/ci_post_clone.sh` runs right after the clone. It reads the artifact id from the
+  [Current pin](#current-pin) table and compares it with the newest copy in the GitHub releases
+  (`scripts/fetch_sysroot.sh --latest-id`):
+  - if a copy at least that recent exists, it downloads the pinned copy from the releases with
+    `scripts/fetch_sysroot.sh`;
+  - if the pin is newer (the sysroot was updated but its zip not uploaded yet), it downloads the
+    artifact from UTM's CI with `scripts/fetch_utm_sysroot.sh`. This needs a token and only works
+    while the artifact has not expired (90 days), so upload the copy to a release soon after
+    updating the pin.
+- To download from UTM, open the workflow in App Store Connect, go to *Environment*, and add an
+  environment variable named `GH_TOKEN` marked as **secret**, containing a GitHub token with read
+  access to *Actions* on public repositories. When only GitHub copies are used no token is
+  required, but Xcode Cloud machines share IP addresses, so GitHub's limit of 60 anonymous API
+  requests per hour can be hit; the same `GH_TOKEN` avoids it.
+- To build against a different sysroot than the pin, add an environment variable
+  `SYSROOT_ARTIFACT_ID` with the artifact id. It is handled like the pin.
 - Workflows must use the `MacMulator Enthusiast` or `MacMulator App Store` scheme. Both are
   universal (arm64 + x86_64); the App Store scheme produces the sandboxed, Qemu-bundling app.
   Being universal costs the App Store flavor about 210 MB (the embedded binaries go from 206 MB
@@ -214,8 +223,10 @@ Qemu therefore affects both flavors, not only the App Store one.
 6. Smoke test: in the Enthusiast flavor open a VM with the Spice display; in the App Store flavor
    open Preferences (it runs the bundled `qemu-img`), then start an ARM64 VM with HVF and an x86_64
    VM with TCG. Check that an Enthusiast build contains no `qemu-*` in `Contents/MacOS`.
-7. Upload `MacMulator-UTM-SysRoot-<id>.zip` to a release, update the [Current pin](#current-pin)
-   table and the `SYSROOT_ARTIFACT_ID` of the Xcode Cloud workflow if one is set, and commit.
+7. Update the [Current pin](#current-pin) table and the `SYSROOT_ARTIFACT_ID` of the Xcode Cloud
+   workflow if one is set, and commit. Xcode Cloud takes the new pin from UTM's CI until
+   `MacMulator-UTM-SysRoot-<id>.zip` is uploaded to a release; upload it before the artifact
+   expires.
 
 ## License obligations
 
