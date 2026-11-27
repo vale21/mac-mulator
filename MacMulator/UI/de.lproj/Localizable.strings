@@ -370,6 +370,8 @@
 "Utils.minute" = "Minute";
 "Utils.minutes" = "Minuten";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "Das Netzwerk %1$@ wird von %2$@ verwendet, und seine Portweiterleitung wird nur beim Start eingerichtet: Diese Änderung wird noch nicht wirksam.\n\nUm sie anzuwenden, beende alle VMs in %1$@ und starte %3$@ dann erneut.";
+"Utils.portMappingsVMRunning" = "%1$@ läuft: Änderungen an Portzuordnungen werden beim nächsten Start wirksam.\n\nUm diese Änderung anzuwenden, beende %1$@ und starte sie erneut.";
 "Utils.second" = "Sekunde";
 "Utils.seconds" = "Sekunden";
 "Utils.snapshotError" = "Snapshots im laufenden Betrieb werden für %@-VMs nicht unterstützt";

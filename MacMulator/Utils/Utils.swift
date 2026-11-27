@@ -1109,6 +1109,25 @@ class Utils {
         }
     }
 
+    static func pendingPortMappingChangeMessage(_ vm: VirtualMachine) -> String? {
+        if #available(macOS 26.0, *), vm.usesVmnetNetwork {
+            guard let network = VmnetNetwork.effectiveNetwork(withId: vm.vmnetNetworkId), network.supportsPortForwarding else { return nil }
+
+            // vmnet takes the forwarding rules when the network is created, and keeps them while any VM uses it
+            let runningIds = VmnetNetworkManager.shared.runningVirtualMachineIds(on: network)
+            let runningNames = workspaceVirtualMachines().filter { runningIds.contains($0.id) }.map(\.displayName)
+            guard !runningNames.isEmpty else { return nil }
+            return String(format: NSLocalizedString("Utils.portMappingsNetworkRunning", comment: ""), network.name, runningNames.joined(separator: ", "), vm.displayName)
+        }
+        // Qemu takes the user mode port mappings on its command line
+        if vm.isQemuVirtualMachine, vm.isNetworkEnabled, (vm.networkMode ?? QemuConstants.NETWORK_MODE_USER) == QemuConstants.NETWORK_MODE_USER,
+           (NSApp.delegate as? AppDelegate)?.rootController?.isVMRunning(vm) == true
+        {
+            return String(format: NSLocalizedString("Utils.portMappingsVMRunning", comment: ""), vm.displayName)
+        }
+        return nil
+    }
+
     static func reassignConflictingHostPorts(_ vm: VirtualMachine) {
         var takenPorts = Set(workspaceVirtualMachines().filter { $0.id != vm.id }.flatMap { $0.portMappings ?? [] }.map(\.hostPort))
         for mapping in vm.portMappings ?? [] {

@@ -370,6 +370,8 @@
 "Utils.minute" = "minute";
 "Utils.minutes" = "minutes";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "The network %1$@ is running for %2$@, and its port forwarding is only set up when it starts: this change will not take effect yet.\n\nTo apply it, stop all the VMs on %1$@, then start %3$@ again.";
+"Utils.portMappingsVMRunning" = "%1$@ is running: port mapping changes take effect the next time it starts.\n\nTo apply this change, stop %1$@ and start it again.";
 "Utils.second" = "second";
 "Utils.seconds" = "seconds";
 "Utils.snapshotError" = "Live snapshots are not supported in %@ VMs";

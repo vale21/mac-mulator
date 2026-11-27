@@ -820,6 +820,22 @@ class VirtualMachineViewController: NSViewController {
     }
 
     private func startVM(sender _: Any, inRecovery: Bool) {
+        if let vm = rootController?.currentVm, vm.isQemuVirtualMachine, vm.usesVmnetNetwork, #available(macOS 26.0, *), let window = view.window,
+           let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: vm)
+        {
+            // Apple VMs ask in their runner; Qemu VMs ask here, before the VM window is shown
+            let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), vm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
+            Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: message, completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.startCurrentVM(inRecovery: inRecovery)
+                }
+            }, virtualMachine: vm)
+            return
+        }
+        startCurrentVM(inRecovery: inRecovery)
+    }
+
+    private func startCurrentVM(inRecovery: Bool) {
         if let rootController {
             if let vm = rootController.currentVm {
                 listenPort += 1

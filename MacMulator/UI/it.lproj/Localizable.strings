@@ -370,6 +370,8 @@
 "Utils.minute" = "minuto";
 "Utils.minutes" = "minuti";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "La rete %1$@ è in uso da %2$@, e il suo port forwarding viene configurato solo quando viene avviata: questa modifica non avrà ancora effetto.\n\nPer applicarla, ferma tutte le VM su %1$@, poi avvia di nuovo %3$@.";
+"Utils.portMappingsVMRunning" = "%1$@ è in esecuzione: le modifiche alle mappature delle porte avranno effetto al prossimo avvio.\n\nPer applicare questa modifica, ferma %1$@ e avviala di nuovo.";
 "Utils.second" = "secondo";
 "Utils.seconds" = "secondi";
 "Utils.snapshotError" = "Le istantanee live non sono supportate dalle VM %@";

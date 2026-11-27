@@ -370,6 +370,8 @@
 "Utils.minute" = "minute";
 "Utils.minutes" = "minutes";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "Le réseau %1$@ est utilisé par %2$@, et sa redirection de ports n'est configurée qu'à son démarrage : cette modification ne prendra pas encore effet.\n\nPour l'appliquer, arrêtez toutes les VM sur %1$@, puis redémarrez %3$@.";
+"Utils.portMappingsVMRunning" = "%1$@ est en cours d'exécution : les modifications des redirections de ports prendront effet à son prochain démarrage.\n\nPour appliquer cette modification, arrêtez %1$@ puis redémarrez-la.";
 "Utils.second" = "seconde";
 "Utils.seconds" = "secondes";
 "Utils.snapshotError" = "Les instantanés à chaud ne sont pas pris en charge pour les VM %@";
