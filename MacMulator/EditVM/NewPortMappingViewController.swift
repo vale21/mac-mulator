@@ -62,6 +62,11 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
     }
 
     @IBAction func okButtonPressed(_: Any) {
+        // OK (or Return) does not end the editing of the focused field, so its delegate has not copied the value yet
+        portMapping.name = nameField.stringValue
+        portMapping.vmPort = virtualMachinePortField.intValue
+        portMapping.hostPort = hostMacPortField.intValue
+
         if let invalidPort = [portMapping.vmPort, portMapping.hostPort].first(where: { !MacMulatorConstants.VALID_PORTS.contains($0) }) {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: String(format: NSLocalizedString("NewPortMappingViewController.invalidPort", comment: ""), Int(invalidPort)), virtualMachine: parentController?.virtualMachine)
             return
@@ -69,12 +74,12 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         if portMapping.hostPort != origPortMapping?.hostPort, let message = hostPortConflictMessage(portMapping.hostPort) {
             Utils.showPrompt(window: view.window!, style: NSAlert.Style.warning, message: message, completionHandler: { response in
                 if response.rawValue == Utils.ALERT_RESP_OK {
-                    self.savePortMapping()
+                    self.savePortMappingAfterPendingChangeWarning()
                 }
             }, virtualMachine: parentController?.virtualMachine)
             return
         }
-        savePortMapping()
+        savePortMappingAfterPendingChangeWarning()
     }
 
     @IBAction func cancelButtonPressed(_: Any) {
@@ -119,6 +124,17 @@ class NewPortMappingViewController: NSViewController, NSTextFieldDelegate {
         } else {
             titleField.stringValue = String(format: NSLocalizedString("NewPortMappingViewController.editMapping", comment: ""), portMapping.name)
         }
+    }
+
+    private func savePortMappingAfterPendingChangeWarning() {
+        guard let virtualMachine = parentController?.virtualMachine, let message = Utils.pendingPortMappingChangeMessage(virtualMachine) else {
+            savePortMapping()
+            return
+        }
+        // Shown before saving: the sheet goes away with the save
+        Utils.showAlert(window: view.window!, style: NSAlert.Style.informational, message: message, completionHandler: { _ in
+            self.savePortMapping()
+        }, virtualMachine: virtualMachine)
     }
 
     private func savePortMapping() {

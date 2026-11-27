@@ -144,6 +144,7 @@
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "„%@“ ist ein ASIF-Image, das nur Apple-VMs verwenden können.";
 "EditVMViewControllerHardware.importDriveLinkedClone" = "„%@“ ist ein verknüpfter Klon eines Vorlagen-Laufwerks und kann nicht einzeln importiert werden. Wandle zuerst seine VM in einen vollständigen Klon um und importiere das Laufwerk dann erneut.";
 "EditVMViewControllerNetwork.createMappingButton" = "Neue Zuordnung erstellen...";
+"EditVMViewControllerNetwork.descriptionUser" = "Im NAT-Netzwerk dient QEMU als Router für die VM und stellt ihr die Internetverbindung bereit. Es funktioniert überall ohne besondere Einrichtung, ist aber langsamer als die anderen Modi, und manche Protokolle wie Ping funktionieren eventuell nicht. Dein Mac erreicht die VM nur über Portzuordnungen.";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host-Mac-Port";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Name der Zuordnung";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "VM-Port";
@@ -332,6 +333,8 @@
 "QemuConstants.windows" = "Allgemeines Windows";
 "QemuConstants.x64" = "Allgemeine x86_64-VM";
 "QemuConstants.x86" = "Allgemeine x86-VM";
+"QemuRunner.networkModeUnsupported" = "%@ kann nicht starten: Ihr Maschinentyp unterstützt nur NAT-Netzwerke. Um sie zu starten, wähle NAT in ihren Netzwerkeinstellungen oder deaktiviere das Netzwerk.";
+"QemuRunner.noBridgeInterface" = "keine Netzwerkschnittstelle kann für eine Bridge verwendet werden";
 "QemuSpiceViewerViewController.connecting" = "Verbindung zu %@ wird hergestellt…";
 "QemuSpiceViewerViewController.connectionFailed" = "Verbindung zu %@ nicht möglich";
 "QemuSpiceViewerViewController.error" = "SPICE-Fehler: %@";
@@ -368,6 +371,8 @@
 "Utils.minute" = "Minute";
 "Utils.minutes" = "Minuten";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "Das Netzwerk %1$@ wird von %2$@ verwendet, und seine Portweiterleitung wird nur beim Start eingerichtet: Diese Änderung wird noch nicht wirksam.\n\nUm sie anzuwenden, beende alle VMs in %1$@ und starte %3$@ dann erneut.";
+"Utils.portMappingsVMRunning" = "%1$@ läuft: Änderungen an Portzuordnungen werden beim nächsten Start wirksam.\n\nUm diese Änderung anzuwenden, beende %1$@ und starte sie erneut.";
 "Utils.second" = "Sekunde";
 "Utils.seconds" = "Sekunden";
 "Utils.snapshotError" = "Snapshots im laufenden Betrieb werden für %@-VMs nicht unterstützt";
@@ -490,6 +495,7 @@
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ konnte nicht fortgesetzt werden: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ konnte nicht gestartet werden: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ kann nicht gestartet werden: Die VM verwendet ein erweitertes Netzwerk (vmnet), das macOS 26 oder neuer erfordert. Um sie auf diesem Mac auszuführen, wähle in ihren Netzwerkeinstellungen einen anderen Netzwerkmodus oder deaktiviere das Netzwerk.";
+"VmnetBridgedForwarder.startFailed" = "Die VM konnte nicht per Bridge mit %1$@ verbunden werden: %2$@.";
 "VmnetNetwork.hostOnlyName" = "Nur Host";
 "VmnetNetwork.isolatedName" = "Isolierte VM";
 "VmnetNetwork.modeHostOnly" = "Nur Host";

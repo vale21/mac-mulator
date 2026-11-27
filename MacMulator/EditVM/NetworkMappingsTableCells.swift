@@ -13,22 +13,8 @@ class MappingsNameCell: NSTableCellView {
 
 class VirtualMachinePortCell: NSTableCellView {
     @IBOutlet var label: NSTextField!
-
-    override func viewWillDraw() {
-        let portNumberFormatter = NumberFormatter()
-        portNumberFormatter.hasThousandSeparators = false
-
-        label.formatter = portNumberFormatter
-    }
 }
 
 class HostMacPortCell: NSTableCellView {
     @IBOutlet var label: NSTextField!
-
-    override func viewWillDraw() {
-        let portNumberFormatter = NumberFormatter()
-        portNumberFormatter.hasThousandSeparators = false
-
-        label.formatter = portNumberFormatter
-    }
 }

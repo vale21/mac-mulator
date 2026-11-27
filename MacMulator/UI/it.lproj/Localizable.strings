@@ -144,6 +144,7 @@
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "“%@” è un'immagine ASIF, che solo le VM Apple possono usare.";
 "EditVMViewControllerHardware.importDriveLinkedClone" = "“%@” è un clone collegato di un disco template, e non può essere importato da solo. Converti prima la sua VM in un clone completo, poi importa di nuovo il disco.";
 "EditVMViewControllerNetwork.createMappingButton" = "Crea nuova mappatura...";
+"EditVMViewControllerNetwork.descriptionUser" = "Nella rete NAT QEMU fa da router per la VM, fornendole la connessione a internet. Funziona ovunque senza configurazioni particolari, ma è più lenta delle altre modalità e alcuni protocolli, come il ping, potrebbero non funzionare. Il Mac può raggiungere la VM solo tramite le mappature delle porte.";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Porta Host Mac";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Nome mappatura";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Porta Macchina Virtuale";
@@ -332,6 +333,8 @@
 "QemuConstants.windows" = "Windows Generico";
 "QemuConstants.x64" = "VM Generica x86_64";
 "QemuConstants.x86" = "VM Generica x86";
+"QemuRunner.networkModeUnsupported" = "%@ non può essere avviata: il suo tipo di macchina supporta solo la rete NAT. Per avviarla, scegli NAT nelle sue impostazioni di rete, oppure disabilita la rete.";
+"QemuRunner.noBridgeInterface" = "nessuna interfaccia di rete può essere usata in bridge";
 "QemuSpiceViewerViewController.connecting" = "Connessione a %@…";
 "QemuSpiceViewerViewController.connectionFailed" = "Impossibile connettersi a %@";
 "QemuSpiceViewerViewController.error" = "Errore SPICE: %@";
@@ -368,6 +371,8 @@
 "Utils.minute" = "minuto";
 "Utils.minutes" = "minuti";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "La rete %1$@ è in uso da %2$@, e il suo port forwarding viene configurato solo quando viene avviata: questa modifica non avrà ancora effetto.\n\nPer applicarla, ferma tutte le VM su %1$@, poi avvia di nuovo %3$@.";
+"Utils.portMappingsVMRunning" = "%1$@ è in esecuzione: le modifiche alle mappature delle porte avranno effetto al prossimo avvio.\n\nPer applicare questa modifica, ferma %1$@ e avviala di nuovo.";
 "Utils.second" = "secondo";
 "Utils.seconds" = "secondi";
 "Utils.snapshotError" = "Le istantanee live non sono supportate dalle VM %@";
@@ -490,6 +495,7 @@
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "Impossibile riprendere %1$@: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "Impossibile avviare %1$@: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "Impossibile avviare %@: usa una rete Avanzata (vmnet), che richiede macOS 26 o successivo. Per eseguirla su questo Mac, scegli un'altra modalità di rete nelle sue impostazioni di Rete, oppure disabilita la rete.";
+"VmnetBridgedForwarder.startFailed" = "Impossibile collegare in bridge la VM a %1$@: %2$@.";
 "VmnetNetwork.hostOnlyName" = "Solo host";
 "VmnetNetwork.isolatedName" = "VM isolata";
 "VmnetNetwork.modeHostOnly" = "Solo host";

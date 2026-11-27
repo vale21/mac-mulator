@@ -57,7 +57,7 @@ struct VMSessionActions {
         if !isAppleVM, screenReason == nil, !QemuUtils.isSpiceSupported(vm) {
             screenReason = NSLocalizedString("VirtualMachineViewController.sessionSpiceNotEnabled", comment: "")
         }
-        if !isAppleVM, sshReason == nil, QemuUtils.sshPortMapping(for: vm) == nil {
+        if QemuUtils.usesSSHPortMapping(vm), sshReason == nil, QemuUtils.sshPortMapping(for: vm) == nil {
             sshReason = NSLocalizedString("VirtualMachineViewController.sessionNoSshPortMapping", comment: "")
         }
 
@@ -578,7 +578,7 @@ class VirtualMachineViewController: NSViewController {
     func openSSHSession() {
         guard let vm = rootController?.currentVm, !TerminalSessionWindowController.bringExistingToFront(.ssh, vm) else { return }
 
-        if vm.type != MacMulatorConstants.APPLE_VM, QemuUtils.sshPortMapping(for: vm) == nil {
+        if QemuUtils.usesSSHPortMapping(vm), QemuUtils.sshPortMapping(for: vm) == nil {
             Utils.showAlert(window: view.window!, style: NSAlert.Style.warning, message: NSLocalizedString("VirtualMachineViewController.noSshPortMapping", comment: ""), virtualMachine: vm)
             return
         }
@@ -820,6 +820,22 @@ class VirtualMachineViewController: NSViewController {
     }
 
     private func startVM(sender _: Any, inRecovery: Bool) {
+        if let vm = rootController?.currentVm, Utils.isQemuVirtualMachine(vm), vm.usesVmnetNetwork, #available(macOS 26.0, *), let window = view.window,
+           let blocking = VmnetNetworkManager.shared.virtualMachinesBlockingPortMappings(of: vm)
+        {
+            // Apple VMs ask in their runner; Qemu VMs ask here, before the VM window is shown
+            let message = String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.portMappingsInactive", comment: ""), vm.displayName, blocking.networkName, blocking.runningVirtualMachines.joined(separator: ", "))
+            Utils.showPrompt(window: window, style: NSAlert.Style.warning, message: message, completionHandler: { response in
+                if response.rawValue == Utils.ALERT_RESP_OK {
+                    self.startCurrentVM(inRecovery: inRecovery)
+                }
+            }, virtualMachine: vm)
+            return
+        }
+        startCurrentVM(inRecovery: inRecovery)
+    }
+
+    private func startCurrentVM(inRecovery: Bool) {
         if let rootController {
             if let vm = rootController.currentVm {
                 listenPort += 1
@@ -893,7 +909,7 @@ class VirtualMachineViewController: NSViewController {
     }
 
     private func connectSSH(to vm: VirtualMachine) {
-        guard vm.type == MacMulatorConstants.APPLE_VM else {
+        guard !QemuUtils.usesSSHPortMapping(vm) else {
             if let args = QemuUtils.sshArguments(for: vm) {
                 TerminalSessionWindowController.open(.ssh, on: vm, executable: "/usr/bin/ssh", args: args)
             }

@@ -31,9 +31,59 @@ class VmnetIsolationGroup {
     }
 }
 
+struct QemuSocketPaths {
+    let macMulator: String
+    let qemu: String
+}
+
+enum UnixDatagramSocket {
+    // Stale sockets of a previous run would make the binds of MacMulator and Qemu fail
+    static func bind(_ path: String, removing otherPath: String) throws -> Int32 {
+        guard var address = socketAddress(path), socketAddress(otherPath) != nil else {
+            throw POSIXError(.ENAMETOOLONG)
+        }
+        unlink(path)
+        unlink(otherPath)
+
+        let socketDescriptor = socket(AF_UNIX, SOCK_DGRAM, 0)
+        guard socketDescriptor >= 0 else {
+            throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO)
+        }
+        let result = withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { Darwin.bind(socketDescriptor, $0, socklen_t(MemoryLayout<sockaddr_un>.size)) }
+        }
+        guard result == 0 else {
+            let error = POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO)
+            close(socketDescriptor)
+            throw error
+        }
+        return socketDescriptor
+    }
+
+    static func socketAddress(_ path: String) -> sockaddr_un? {
+        var address = sockaddr_un()
+        let pathBytes = Array(path.utf8)
+        guard pathBytes.count < MemoryLayout.size(ofValue: address.sun_path) else { return nil }
+
+        address.sun_family = sa_family_t(AF_UNIX)
+        address.sun_len = UInt8(MemoryLayout<sockaddr_un>.size)
+        withUnsafeMutableBytes(of: &address.sun_path) { $0.copyBytes(from: pathBytes) }
+        return address
+    }
+
+    static func send(_ socketDescriptor: Int32, _ buffer: UnsafeRawPointer, _ size: Int, to address: inout sockaddr_un) {
+        withUnsafePointer(to: &address) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                _ = sendto(socketDescriptor, buffer, size, 0, $0, socklen_t(MemoryLayout<sockaddr_un>.size))
+            }
+        }
+    }
+}
+
 @available(macOS 26.0, *)
 class VmnetPacketForwarder {
-    let virtualMachineFileHandle: FileHandle
+    // nil for Qemu VMs, which exchange frames with the forwarder through qemuSocketPaths instead
+    let virtualMachineFileHandle: FileHandle?
 
     private static let PACKETS_PER_BATCH = 64
     private static let SOCKET_SEND_BUFFER_SIZE: Int32 = 1024 * 1024
@@ -46,20 +96,30 @@ class VmnetPacketForwarder {
     private let hostSocket: Int32
     private let maxPacketSize: Int
     private let macAddress: UInt64
-    private let isolationGroup: VmnetIsolationGroup
+    private let isolationGroup: VmnetIsolationGroup?
+    private let qemuSocketPaths: QemuSocketPaths?
+    private var qemuAddress: sockaddr_un?
     private let fromVmnet: PacketBatch
     private let toVmnet: PacketBatch
     private var readSource: DispatchSourceRead?
     private var stopped = false
 
-    init(network: vmnet_network_ref, networkName: String, macAddress: String, isolationGroup: VmnetIsolationGroup) throws {
+    init(network: vmnet_network_ref, networkName: String, macAddress: String, isolationGroup: VmnetIsolationGroup?, qemuSocketPaths: QemuSocketPaths? = nil) throws {
         guard let parsedMacAddress = VmnetPacketForwarder.parseMacAddress(macAddress) else {
             throw VmnetNetworkError(networkName: networkName, status: .VMNET_INVALID_ARGUMENT)
         }
 
         var sockets: [Int32] = [-1, -1]
-        guard socketpair(AF_UNIX, SOCK_DGRAM, 0, &sockets) == 0 else {
-            throw VmnetNetworkError(networkName: networkName, status: .VMNET_FAILURE)
+        if let qemuSocketPaths {
+            // Qemu connects with "-netdev dgram": it binds its own path and sends one Ethernet frame per datagram to MacMulator's
+            guard let socketDescriptor = try? UnixDatagramSocket.bind(qemuSocketPaths.macMulator, removing: qemuSocketPaths.qemu) else {
+                throw VmnetNetworkError(networkName: networkName, status: .VMNET_FAILURE)
+            }
+            sockets = [socketDescriptor]
+        } else {
+            guard socketpair(AF_UNIX, SOCK_DGRAM, 0, &sockets) == 0 else {
+                throw VmnetNetworkError(networkName: networkName, status: .VMNET_FAILURE)
+            }
         }
         for socketDescriptor in sockets {
             var sendBufferSize = VmnetPacketForwarder.SOCKET_SEND_BUFFER_SIZE
@@ -70,7 +130,7 @@ class VmnetPacketForwarder {
         _ = fcntl(sockets[0], F_SETFL, fcntl(sockets[0], F_GETFL) | O_NONBLOCK)
 
         let interfaceDescription = xpc_dictionary_create(nil, nil, 0)
-        xpc_dictionary_set_bool(interfaceDescription, vmnet_enable_isolation_key, true)
+        xpc_dictionary_set_bool(interfaceDescription, vmnet_enable_isolation_key, isolationGroup != nil)
         // The VM keeps its own MAC address, which DHCP reservations and the guest IP lookup rely on
         xpc_dictionary_set_bool(interfaceDescription, vmnet_allocate_mac_address_key, false)
 
@@ -89,8 +149,10 @@ class VmnetPacketForwarder {
             if let startedInterface {
                 vmnet_stop_interface(startedInterface, queue) { _ in }
             }
-            close(sockets[0])
-            close(sockets[1])
+            sockets.forEach { close($0) }
+            if let qemuSocketPaths {
+                unlink(qemuSocketPaths.macMulator)
+            }
             throw VmnetNetworkError(networkName: networkName, status: startStatus)
         }
 
@@ -100,11 +162,13 @@ class VmnetPacketForwarder {
         self.maxPacketSize = maxPacketSize
         self.macAddress = parsedMacAddress
         self.isolationGroup = isolationGroup
+        self.qemuSocketPaths = qemuSocketPaths
+        qemuAddress = qemuSocketPaths.flatMap { UnixDatagramSocket.socketAddress($0.qemu) }
         fromVmnet = PacketBatch(count: VmnetPacketForwarder.PACKETS_PER_BATCH, packetSize: maxPacketSize)
         toVmnet = PacketBatch(count: VmnetPacketForwarder.PACKETS_PER_BATCH, packetSize: maxPacketSize)
-        virtualMachineFileHandle = FileHandle(fileDescriptor: sockets[1], closeOnDealloc: true)
+        virtualMachineFileHandle = qemuSocketPaths == nil ? FileHandle(fileDescriptor: sockets[1], closeOnDealloc: true) : nil
 
-        isolationGroup.insert(parsedMacAddress)
+        isolationGroup?.insert(parsedMacAddress)
         startForwarding()
     }
 
@@ -116,7 +180,12 @@ class VmnetPacketForwarder {
             readSource?.cancel()
             readSource = nil
             vmnet_stop_interface(interface, queue) { _ in }
-            isolationGroup.remove(macAddress)
+            isolationGroup?.remove(macAddress)
+            ObservedGuestAddresses.forget(macAddress)
+            if let qemuSocketPaths {
+                unlink(qemuSocketPaths.macMulator)
+                unlink(qemuSocketPaths.qemu)
+            }
         }
     }
 
@@ -145,7 +214,12 @@ class VmnetPacketForwarder {
 
         for index in 0 ..< Int(count) where isAllowedFromNetwork(fromVmnet.buffers[index], size: fromVmnet.packets[index].vm_pkt_size) {
             // A full socket means the VM can't keep up: the packet is dropped, as on a congested link
-            _ = send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, 0)
+            if qemuAddress != nil {
+                // Also fails until Qemu has bound its socket
+                UnixDatagramSocket.send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, to: &qemuAddress!)
+            } else {
+                _ = send(hostSocket, fromVmnet.buffers[index], fromVmnet.packets[index].vm_pkt_size, 0)
+            }
         }
         if Int(count) == fromVmnet.count {
             queue.async { [weak self] in
@@ -162,6 +236,7 @@ class VmnetPacketForwarder {
             let size = recv(hostSocket, toVmnet.buffers[count], maxPacketSize, 0)
             guard size > 0 else { break }
             if isAllowedFromVirtualMachine(toVmnet.buffers[count], size: size) {
+                ObservedGuestAddresses.observe(toVmnet.buffers[count], size: size)
                 toVmnet.setPacket(count, size: size)
                 count += 1
             }
@@ -175,11 +250,13 @@ class VmnetPacketForwarder {
     // vmnet doesn't apply its isolation key to these interfaces, so isolation is enforced here on the
     // Ethernet headers: a VM can only send with its own MAC address, and frames between VMs of the group are dropped
     private func isAllowedFromVirtualMachine(_ frame: UnsafeMutableRawPointer, size: Int) -> Bool {
+        guard let isolationGroup else { return true }
         guard size >= VmnetPacketForwarder.ETHERNET_HEADER_SIZE else { return false }
         return VmnetPacketForwarder.macAddress(in: frame, at: 6) == macAddress && !isolationGroup.contains(VmnetPacketForwarder.macAddress(in: frame, at: 0))
     }
 
     private func isAllowedFromNetwork(_ frame: UnsafeMutableRawPointer, size: Int) -> Bool {
+        guard let isolationGroup else { return true }
         guard size >= VmnetPacketForwarder.ETHERNET_HEADER_SIZE else { return false }
         return !isolationGroup.contains(VmnetPacketForwarder.macAddress(in: frame, at: 6))
     }
@@ -195,8 +272,7 @@ class VmnetPacketForwarder {
     }
 }
 
-@available(macOS 26.0, *)
-private class PacketBatch {
+class PacketBatch {
     let count: Int
     let packetSize: Int
     let buffers: [UnsafeMutableRawPointer]

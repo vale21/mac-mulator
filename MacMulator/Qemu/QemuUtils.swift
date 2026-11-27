@@ -175,11 +175,12 @@ class QemuUtils {
     }
 
     static func spiceSocketPath(forVMAt vmPath: String) -> String {
-        #if APPSTORE
-            return containerSocketPath("spice", vmPath)
-        #else
-            return vmPath + "/socket.spice"
-        #endif
+        socketPath("sp", vmPath)
+    }
+
+    static func usesSSHPortMapping(_ vm: VirtualMachine) -> Bool {
+        // Only user mode hides the guest behind Qemu: on bridged and vmnet networks the host reaches it at its own address
+        Utils.isQemuVirtualMachine(vm) && (vm.networkMode ?? QemuConstants.NETWORK_MODE_USER) == QemuConstants.NETWORK_MODE_USER
     }
 
     static func sshPortMapping(for vm: VirtualMachine) -> PortMapping? {
@@ -197,19 +198,15 @@ class QemuUtils {
     }
 
     static func serialSocketPath(forVMAt vmPath: String) -> String {
-        #if APPSTORE
-            return containerSocketPath("serial", vmPath)
-        #else
-            return NSTemporaryDirectory() + "serial-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
-        #endif
+        socketPath("se", vmPath)
+    }
+
+    static func networkSocketPaths(forVMAt vmPath: String) -> QemuSocketPaths {
+        QemuSocketPaths(macMulator: socketPath("nm", vmPath), qemu: socketPath("nq", vmPath))
     }
 
     static func tpmSocketPath(forVMAt vmPath: String) -> String {
-        #if APPSTORE
-            return containerSocketPath("tpm", vmPath)
-        #else
-            return vmPath + "/tpm/socket"
-        #endif
+        socketPath("tp", vmPath)
     }
 
     static func removeDuplicateVideoAdapters(_ adapters: [String]) -> [String] {
@@ -444,9 +441,9 @@ class QemuUtils {
         vm.os == QemuConstants.OS_MAC && vm.architecture == QemuConstants.ARCH_X64 // || (vm.subtype == QemuConstants.SUB_WINDOWS_11 && vm.architecture == QemuConstants.ARCH_X64)
     }
 
-    #if APPSTORE
-        private static func containerSocketPath(_ prefix: String, _ vmPath: String) -> String {
-            NSTemporaryDirectory() + prefix + "-" + String(Utils.stableHash(vmPath), radix: 16) + ".sock"
-        }
-    #endif
+    private static func socketPath(_ prefix: String, _ vmPath: String) -> String {
+        // Socket paths are limited to 103 bytes: the VM folder can be longer, and the sandbox temporary folder already takes ~70
+        let hash = Utils.stableHash(vmPath)
+        return NSTemporaryDirectory() + prefix + "-" + String(UInt32(truncatingIfNeeded: hash ^ (hash >> 32)), radix: 16) + ".sock"
+    }
 }

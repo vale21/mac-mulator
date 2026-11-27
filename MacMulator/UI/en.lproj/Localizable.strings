@@ -144,6 +144,7 @@
 "EditVMViewControllerHardware.importDriveAsifNotSupported" = "“%@” is an ASIF image, which only Apple VMs can use.";
 "EditVMViewControllerHardware.importDriveLinkedClone" = "“%@” is a linked clone of a template drive, and cannot be imported on its own. Convert its VM to a full clone first, then import the drive again.";
 "EditVMViewControllerNetwork.createMappingButton" = "Create new mapping...";
+"EditVMViewControllerNetwork.descriptionUser" = "In NAT networking QEMU acts as a network router for the VM, offering internet connectivity to it. It works everywhere with no special setup, but it is slower than the other modes and some protocols, like ping, may not work. The VM can be reached from your Mac only through port mappings.";
 "EditVMViewControllerNetwork.mappingsTableColumnHost" = "Host Mac Port";
 "EditVMViewControllerNetwork.mappingsTableColumnName" = "Mapping name";
 "EditVMViewControllerNetwork.mappingsTableColumnVM" = "Virtual Machine Port";
@@ -332,6 +333,8 @@
 "QemuConstants.windows" = "Generic Windows";
 "QemuConstants.x64" = "Generic x86_64 VM";
 "QemuConstants.x86" = "Generic x86 VM";
+"QemuRunner.networkModeUnsupported" = "%@ cannot start: its machine type supports only NAT networking. To run it, choose NAT in its Network settings, or disable networking.";
+"QemuRunner.noBridgeInterface" = "no network interface can be bridged";
 "QemuSpiceViewerViewController.connecting" = "Connecting to %@…";
 "QemuSpiceViewerViewController.connectionFailed" = "Unable to connect to %@";
 "QemuSpiceViewerViewController.error" = "SPICE error: %@";
@@ -368,6 +371,8 @@
 "Utils.minute" = "minute";
 "Utils.minutes" = "minutes";
 "Utils.ok" = "OK";
+"Utils.portMappingsNetworkRunning" = "The network %1$@ is running for %2$@, and its port forwarding is only set up when it starts: this change will not take effect yet.\n\nTo apply it, stop all the VMs on %1$@, then start %3$@ again.";
+"Utils.portMappingsVMRunning" = "%1$@ is running: port mapping changes take effect the next time it starts.\n\nTo apply this change, stop %1$@ and start it again.";
 "Utils.second" = "second";
 "Utils.seconds" = "seconds";
 "Utils.snapshotError" = "Live snapshots are not supported in %@ VMs";
@@ -490,6 +495,7 @@
 "VirtualizationFrameworkVirtualMachineRunner.resumeFailed" = "%1$@ failed to resume: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.startFailed" = "%1$@ failed to start: %2$@";
 "VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported" = "%@ cannot start: it uses an Advanced (vmnet) network, which requires macOS 26 or later. To run it on this Mac, choose another network mode in its Network settings, or disable networking.";
+"VmnetBridgedForwarder.startFailed" = "Could not bridge the VM to %1$@: %2$@.";
 "VmnetNetwork.hostOnlyName" = "Host-only";
 "VmnetNetwork.isolatedName" = "Isolated VM";
 "VmnetNetwork.modeHostOnly" = "Host-only";

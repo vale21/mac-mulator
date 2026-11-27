@@ -16,7 +16,7 @@ struct VmnetNetworkError: LocalizedError {
         String(format: NSLocalizedString("VmnetNetworkManager.creationFailed", comment: ""), networkName, VmnetNetworkError.statusName(status), Int(status.rawValue))
     }
 
-    private static func statusName(_ status: vmnet_return_t) -> String {
+    static func statusName(_ status: vmnet_return_t) -> String {
         switch status {
         case .VMNET_FAILURE: "VMNET_FAILURE"
         case .VMNET_MEM_FAILURE: "VMNET_MEM_FAILURE"
@@ -27,6 +27,22 @@ struct VmnetNetworkError: LocalizedError {
         case .VMNET_NOT_AUTHORIZED: "VMNET_NOT_AUTHORIZED"
         default: "vmnet_return_t"
         }
+    }
+}
+
+struct VmnetUnsupportedError: LocalizedError {
+    let virtualMachineName: String
+
+    var errorDescription: String? {
+        String(format: NSLocalizedString("VirtualizationFrameworkVirtualMachineRunner.vmnetUnsupported", comment: ""), virtualMachineName)
+    }
+}
+
+struct QemuNetworkModeUnsupportedError: LocalizedError {
+    let virtualMachineName: String
+
+    var errorDescription: String? {
+        String(format: NSLocalizedString("QemuRunner.networkModeUnsupported", comment: ""), virtualMachineName)
     }
 }
 
@@ -148,10 +164,12 @@ class VmnetNetworkManager {
     }
 
     private func startForwarderIfNeeded(for vm: VirtualMachine, networkName: String, active: ActiveNetwork) throws {
-        guard let isolationGroup = active.isolationGroup, forwarders[vm.id] == nil else { return }
+        // Apple VMs attach to the network directly unless it isolates its VMs; Qemu VMs always go through a forwarder
+        guard active.isolationGroup != nil || Utils.isQemuVirtualMachine(vm), forwarders[vm.id] == nil else { return }
 
         do {
-            forwarders[vm.id] = try VmnetPacketForwarder(network: active.network, networkName: networkName, macAddress: vm.macAddress ?? "", isolationGroup: isolationGroup)
+            let qemuSocketPaths = Utils.isQemuVirtualMachine(vm) ? QemuUtils.networkSocketPaths(forVMAt: vm.path) : nil
+            forwarders[vm.id] = try VmnetPacketForwarder(network: active.network, networkName: networkName, macAddress: vm.macAddress ?? "", isolationGroup: active.isolationGroup, qemuSocketPaths: qemuSocketPaths)
         } catch {
             releaseNetwork(for: vm)
             throw error
@@ -221,7 +239,7 @@ class VmnetNetworkManager {
         // VM attached to this network, each with a DHCP reservation to know the address to forward to.
         let networks = VmnetNetwork.allNetworks()
         let attachedVMs = Utils.workspaceVirtualMachines()
-            .filter { $0.type == MacMulatorConstants.APPLE_VM && $0.isNetworkEnabled && $0.networkDevice == QemuConstants.ATTACHMENT_VMNET && !($0.portMappings ?? []).isEmpty && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
+            .filter { $0.usesVmnetNetwork && !($0.portMappings ?? []).isEmpty && VmnetNetwork.effectiveNetwork(withId: $0.vmnetNetworkId, in: networks)?.id == network.id }
             .filter { $0.macAddress.flatMap { ether_aton($0) } != nil }
             .sorted { $0.id < $1.id }
 

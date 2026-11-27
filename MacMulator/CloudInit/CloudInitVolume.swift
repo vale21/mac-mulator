@@ -40,7 +40,7 @@ enum CloudInitVolume {
         }
 
         let hostName = hostName(vm.displayName)
-        let userData = userData(info)
+        let userData = userData(info, vmId: vm.id)
         let networkConfig = info.ipConfiguration.map { self.networkConfig($0, info, macAddress: vm.macAddress!) } ?? defaultNetworkConfig(macAddress: vm.macAddress!)
 
         // cloud-init applies the configuration once per instance: the id changes, and the configuration
@@ -54,7 +54,7 @@ enum CloudInitVolume {
         return path
     }
 
-    private static func userData(_ info: ProvisioningInformation) -> String {
+    private static func userData(_ info: ProvisioningInformation, vmId: String) -> String {
         // The salt is derived from the keychain id: the hash, and with it the instance id, is the same on every boot
         let salt = String(info.passwordKeychainId.filter { $0.isLetter || $0.isNumber }.prefix(16))
         var yaml = "#cloud-config\n"
@@ -69,11 +69,23 @@ enum CloudInitVolume {
             yaml += "    ssh_authorized_keys:\n"
             yaml += info.sshKeys.map { "      - \(quoted($0))\n" }.joined()
         }
+        // Clones share the machine id of the original, which DHCP identifies the guest by: the VM id changes on clone
+        yaml += "bootcmd:\n"
+        yaml += "  - \(quoted(machineIdResetScript(vmId: vmId)))\n"
         if info.upgradePackages {
             yaml += "package_update: true\n"
             yaml += "package_upgrade: true\n"
         }
         return yaml
+    }
+
+    private static func machineIdResetScript(vmId: String) -> String {
+        let marker = "/etc/macmulator-vm-id"
+        var script = "if [ \"$(cat \(marker) 2>/dev/null)\" != \"\(vmId)\" ]; then "
+        script += "rm -f /etc/machine-id /var/lib/dbus/machine-id; systemd-machine-id-setup; "
+        script += "if [ -d /var/lib/dbus ]; then ln -sf /etc/machine-id /var/lib/dbus/machine-id; fi; "
+        script += "echo \"\(vmId)\" > \(marker); fi"
+        return script
     }
 
     private static func defaultNetworkConfig(macAddress: String) -> String {

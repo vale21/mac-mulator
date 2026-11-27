@@ -7,6 +7,58 @@
 
 import Foundation
 
+/// The IPv4 address each VM sends from, as seen by MacMulator's packet forwarders (Qemu VMs on bridged and vmnet
+/// networks, Apple VMs on isolated vmnet networks)
+enum ObservedGuestAddresses {
+    private static let lock = NSLock()
+    private static var addresses: [UInt64: UInt32] = [:]
+
+    static func observe(_ frame: UnsafeRawPointer, size: Int) {
+        let etherType = size >= 14 ? UInt16(frame.load(fromByteOffset: 12, as: UInt8.self)) << 8 | UInt16(frame.load(fromByteOffset: 13, as: UInt8.self)) : 0
+        // Source address of an IPv4 packet, sender address of an ARP message
+        let addressOffset = switch etherType {
+        case 0x0800 where size >= 34: 26
+        case 0x0806 where size >= 42: 28
+        default: -1
+        }
+        guard addressOffset >= 0 else { return }
+
+        let address = (0 ..< 4).reduce(UInt32(0)) { ($0 << 8) | UInt32(frame.load(fromByteOffset: addressOffset + $1, as: UInt8.self)) }
+        // 0.0.0.0 while asking for a DHCP lease, 169.254.x.x when there is none
+        guard address != 0, address >> 16 != 0xA9FE else { return }
+
+        let macAddress = (6 ..< 12).reduce(UInt64(0)) { ($0 << 8) | UInt64(frame.load(fromByteOffset: $1, as: UInt8.self)) }
+        lock.lock()
+        defer { lock.unlock() }
+        addresses[macAddress] = address
+    }
+
+    static func forget(_ macAddress: String) {
+        if let key = key(macAddress) {
+            forget(key)
+        }
+    }
+
+    static func forget(_ macAddress: UInt64) {
+        lock.lock()
+        defer { lock.unlock() }
+        addresses.removeValue(forKey: macAddress)
+    }
+
+    static func address(for macAddress: String) -> String? {
+        guard let key = key(macAddress) else { return nil }
+        lock.lock()
+        let address = addresses[key]
+        lock.unlock()
+        return address.map { String(cString: inet_ntoa(in_addr(s_addr: $0.bigEndian))) }
+    }
+
+    private static func key(_ macAddress: String) -> UInt64? {
+        let bytes = macAddress.split(separator: ":").compactMap { UInt8($0, radix: 16) }
+        return bytes.count == 6 ? bytes.reduce(UInt64(0)) { ($0 << 8) | UInt64($1) } : nil
+    }
+}
+
 enum GuestNetworkLookup {
     private struct Lease {
         let ipAddress: String
@@ -16,6 +68,8 @@ enum GuestNetworkLookup {
     }
 
     private static let leasesPath = "/var/db/dhcpd_leases"
+    // The DHCP reservations of the vmnet networks: their addresses never appear in the leases
+    private static let reservationsPath = "/etc/bootptab"
     private static let maxCheckedLeases = 16
     private static let maxProbedHosts: UInt32 = 1024
 
@@ -24,6 +78,15 @@ enum GuestNetworkLookup {
         // The ARP table reflects the guests that are up now. It is empty for a process that has no access to the local
         // network (e.g. launched from Xcode), so it cannot be the only source
         if let ipAddress = ipAddressFromARPTable(mac) {
+            return ipAddress
+        }
+
+        // Addresses known to belong to this guest. Unlike ARP, they are also available without local network access
+        var knownAddresses: [String] = []
+        for ipAddress in [ObservedGuestAddresses.address(for: macAddress), reservedAddress(for: mac)].compactMap(\.self) + ownedLeaseAddresses(for: mac) where !knownAddresses.contains(ipAddress) {
+            knownAddresses.append(ipAddress)
+        }
+        if let ipAddress = firstReachable(Array(knownAddresses.prefix(maxCheckedLeases))) {
             return ipAddress
         }
 
@@ -90,6 +153,28 @@ enum GuestNetworkLookup {
             leases.append(Lease(ipAddress: ipAddress, leaseExpiry: expiry, matchesMAC: hwAddress.flatMap { normalize(String($0)) } == mac))
         }
         return leases.sorted { ($0.matchesMAC ? 1 : 0, $0.leaseExpiry) > ($1.matchesMAC ? 1 : 0, $1.leaseExpiry) }
+    }
+
+    private static func reservedAddress(for mac: [UInt8]) -> String? {
+        guard let contents = try? String(contentsOfFile: reservationsPath, encoding: .utf8) else { return nil }
+
+        // "<name> <hardware type> <mac> <ip address>" lines, after a "%" line
+        for line in contents.split(separator: "\n") {
+            let fields = line.split(whereSeparator: \.isWhitespace).map(String.init)
+            if fields.count >= 4, normalize(fields[2]) == mac {
+                return fields[3]
+            }
+        }
+        return nil
+    }
+
+    /// The lease addresses whose latest lease went to this guest: older leases of an address may have gone to another VM since
+    private static func ownedLeaseAddresses(for mac: [UInt8]) -> [String] {
+        var latestLeases: [String: Lease] = [:]
+        for lease in dhcpLeases(for: mac) where lease.leaseExpiry >= latestLeases[lease.ipAddress]?.leaseExpiry ?? 0 {
+            latestLeases[lease.ipAddress] = lease
+        }
+        return latestLeases.values.filter(\.matchesMAC).sorted { $0.leaseExpiry > $1.leaseExpiry }.map(\.ipAddress)
     }
 
     private static func isReachable(_ ipAddress: String) -> Bool {

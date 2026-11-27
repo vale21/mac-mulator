@@ -10,7 +10,7 @@ import Foundation
 class VirtualMachine: Codable, Hashable {
     private enum CodingKeys: String, CodingKey {
         case storedId = "id"
-        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName, vmnetNetworkId, networkEnabled
+        case os, subtype, architecture, displayName, description, cpus, memory, displayResolution, displayOrigin, networkDevice, physicalBridgeNetworkDevice, videoDevice, qemuDisplay, enable3DAcceleration, enableSpiceDisplay, headless, drives, qemuPath, qemuCommand, hvf, portMappings, macAddress, type, bootMode, snapshots, usbPassthroughDevices, usbPassthroughDeviceNames, provisioningInformation, guestUserName, vmnetNetworkId, networkEnabled, networkMode
     }
 
     /// Persisted as "id". Optional only so that plists written before IDs existed can be decoded.
@@ -48,6 +48,7 @@ class VirtualMachine: Codable, Hashable {
     var guestUserName: String?
     var vmnetNetworkId: String?
     var networkEnabled: Bool?
+    var networkMode: String?
 
     /// Unique identifier, assigned at creation time and never modified afterwards.
     /// VMs loaded from a legacy plist without an ID receive one in `readFromPlist`.
@@ -62,6 +63,14 @@ class VirtualMachine: Codable, Hashable {
 
     var isNetworkEnabled: Bool {
         networkEnabled ?? true
+    }
+
+    var usesVmnetNetwork: Bool {
+        guard isNetworkEnabled else { return false }
+        if type == MacMulatorConstants.APPLE_VM {
+            return networkDevice == QemuConstants.ATTACHMENT_VMNET
+        }
+        return Utils.isQemuVirtualMachine(self) && networkMode == QemuConstants.NETWORK_MODE_VMNET
     }
 
     var hasLinkedDrives: Bool {

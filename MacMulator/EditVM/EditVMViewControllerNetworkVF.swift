@@ -8,7 +8,7 @@
 import Cocoa
 import Virtualization
 
-class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor {
+class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor, VmnetNetworkSelector {
     @IBOutlet var networkAdapterLabel: NSTextField!
     @IBOutlet var networkAdapterComboBox: NSComboBox!
     @IBOutlet var phisicalDeviceComboBox: NSComboBox!
@@ -50,6 +50,9 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
             let row = mappingsTableView.row(for: sender as! NSView)
             virtualMachine.portMappings?.remove(at: row)
             reloadPortMappings()
+            if let message = Utils.pendingPortMappingChangeMessage(virtualMachine), let window = view.window {
+                Utils.showAlert(window: window, style: NSAlert.Style.informational, message: message, virtualMachine: virtualMachine)
+            }
         }
     }
 
@@ -152,12 +155,12 @@ class EditVMViewControllerNetworkVF: NSViewController, NSComboBoxDataSource, NSC
 
             if tableColumn?.identifier.rawValue == "VM" {
                 let cellView = cell as! VirtualMachinePortCell
-                cellView.label.intValue = mapping.vmPort
+                cellView.label.stringValue = String(mapping.vmPort)
             }
 
             if tableColumn?.identifier.rawValue == "Host" {
                 let cellView = cell as! HostMacPortCell
-                cellView.label.intValue = mapping.hostPort
+                cellView.label.stringValue = String(mapping.hostPort)
             }
         }
 
