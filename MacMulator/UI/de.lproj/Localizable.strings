@@ -333,6 +333,7 @@
 "QemuConstants.windows" = "Allgemeines Windows";
 "QemuConstants.x64" = "Allgemeine x86_64-VM";
 "QemuConstants.x86" = "Allgemeine x86-VM";
+"QemuRunner.networkModeUnsupported" = "%@ kann nicht starten: Ihr Maschinentyp unterstützt nur NAT-Netzwerke. Um sie zu starten, wähle NAT in ihren Netzwerkeinstellungen oder deaktiviere das Netzwerk.";
 "QemuRunner.noBridgeInterface" = "keine Netzwerkschnittstelle kann für eine Bridge verwendet werden";
 "QemuSpiceViewerViewController.connecting" = "Verbindung zu %@ wird hergestellt…";
 "QemuSpiceViewerViewController.connectionFailed" = "Verbindung zu %@ nicht möglich";

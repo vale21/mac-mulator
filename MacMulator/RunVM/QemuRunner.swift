@@ -496,6 +496,10 @@ class QemuRunner: VirtualMachineRunner {
 
     private func startNetwork() throws {
         guard isBridgedNetwork() || managedVm.usesVmnetNetwork else { return }
+        guard Utils.isQemuForwardedNetworkSupported(managedVm) else {
+            // Falling back to Qemu's default user mode card would give the VM more access than configured
+            throw QemuNetworkModeUnsupportedError(virtualMachineName: managedVm.displayName)
+        }
 
         if managedVm.macAddress == nil {
             // Keep the same MAC address across runs: DHCP leases and reservations, and port forwarding, rely on it

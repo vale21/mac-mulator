@@ -904,6 +904,11 @@ class Utils {
         return false
     }
 
+    static func isQemuForwardedNetworkSupported(_ vm: VirtualMachine) -> Bool {
+        // Bridged and vmnet networks reach Qemu through a "-netdev dgram" card, which the ARM (versatilepb) and m68k (q800) VMs don't get
+        ![QemuConstants.ARCH_ARM, QemuConstants.ARCH_68K].contains(vm.architecture)
+    }
+
     static func isVmnetSupported(_: VirtualMachine) -> Bool {
         isVmnetSupportedOnHost()
     }

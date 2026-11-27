@@ -38,6 +38,14 @@ struct VmnetUnsupportedError: LocalizedError {
     }
 }
 
+struct QemuNetworkModeUnsupportedError: LocalizedError {
+    let virtualMachineName: String
+
+    var errorDescription: String? {
+        String(format: NSLocalizedString("QemuRunner.networkModeUnsupported", comment: ""), virtualMachineName)
+    }
+}
+
 struct VmnetSubnetConflictError: LocalizedError {
     let networkName: String
     let subnet: String

@@ -232,7 +232,10 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     private func loadNetworkModes() {
         guard let virtualMachine else { return }
 
-        networkModes = [QemuConstants.NETWORK_MODE_USER, QemuConstants.NETWORK_MODE_BRIDGED]
+        networkModes = [QemuConstants.NETWORK_MODE_USER]
+        guard Utils.isQemuForwardedNetworkSupported(virtualMachine) else { return }
+
+        networkModes.append(QemuConstants.NETWORK_MODE_BRIDGED)
         if Utils.isVmnetSupported(virtualMachine) {
             networkModes.append(QemuConstants.NETWORK_MODE_VMNET)
         }
