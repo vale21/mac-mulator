@@ -511,7 +511,7 @@ class QemuRunner: VirtualMachineRunner {
             guard let interfaceName = bridgedInterfaceName() else {
                 throw VmnetBridgeError(interfaceName: managedVm.physicalBridgeNetworkDevice ?? "", reason: NSLocalizedString("QemuRunner.noBridgeInterface", comment: ""))
             }
-            bridgedForwarder = try VmnetBridgedForwarder(interfaceName: interfaceName, socketPaths: QemuUtils.networkSocketPaths(forVMAt: managedVm.path))
+            bridgedForwarder = try VmnetBridgedForwarder(interfaceName: interfaceName, macAddress: managedVm.macAddress ?? "", socketPaths: QemuUtils.networkSocketPaths(forVMAt: managedVm.path))
         } else if #available(macOS 26.0, *) {
             try VmnetNetworkManager.shared.acquireNetwork(for: managedVm)
             vmnetNetworkAcquired = true

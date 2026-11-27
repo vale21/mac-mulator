@@ -181,6 +181,7 @@ class VmnetPacketForwarder {
             readSource = nil
             vmnet_stop_interface(interface, queue) { _ in }
             isolationGroup?.remove(macAddress)
+            ObservedGuestAddresses.forget(macAddress)
             if let qemuSocketPaths {
                 unlink(qemuSocketPaths.macMulator)
                 unlink(qemuSocketPaths.qemu)
@@ -235,6 +236,7 @@ class VmnetPacketForwarder {
             let size = recv(hostSocket, toVmnet.buffers[count], maxPacketSize, 0)
             guard size > 0 else { break }
             if isAllowedFromVirtualMachine(toVmnet.buffers[count], size: size) {
+                ObservedGuestAddresses.observe(toVmnet.buffers[count], size: size)
                 toVmnet.setPacket(count, size: size)
                 count += 1
             }

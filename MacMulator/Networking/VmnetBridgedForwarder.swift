@@ -27,6 +27,7 @@ class VmnetBridgedForwarder {
     private let interface: interface_ref
     private let hostSocket: Int32
     private let socketPaths: QemuSocketPaths
+    private let macAddress: String
     private var qemuAddress: sockaddr_un
     private let maxPacketSize: Int
     private let fromVmnet: PacketBatch
@@ -35,7 +36,7 @@ class VmnetBridgedForwarder {
     private var stopped = false
 
     // Qemu connects with "-netdev dgram": it binds its own path and sends one Ethernet frame per datagram to MacMulator's
-    init(interfaceName: String, socketPaths: QemuSocketPaths) throws {
+    init(interfaceName: String, macAddress: String, socketPaths: QemuSocketPaths) throws {
         let socketDescriptor: Int32
         do {
             socketDescriptor = try UnixDatagramSocket.bind(socketPaths.macMulator, removing: socketPaths.qemu)
@@ -78,6 +79,7 @@ class VmnetBridgedForwarder {
         interface = startedInterface
         hostSocket = socketDescriptor
         self.socketPaths = socketPaths
+        self.macAddress = macAddress
         // Validated by the bind above
         qemuAddress = UnixDatagramSocket.socketAddress(socketPaths.qemu)!
         self.maxPacketSize = maxPacketSize
@@ -97,6 +99,7 @@ class VmnetBridgedForwarder {
             vmnet_stop_interface(interface, queue) { _ in }
             unlink(socketPaths.macMulator)
             unlink(socketPaths.qemu)
+            ObservedGuestAddresses.forget(macAddress)
         }
     }
 
@@ -140,6 +143,7 @@ class VmnetBridgedForwarder {
         while count < toVmnet.count {
             let size = recv(hostSocket, toVmnet.buffers[count], maxPacketSize, 0)
             guard size > 0 else { break }
+            ObservedGuestAddresses.observe(toVmnet.buffers[count], size: size)
             toVmnet.setPacket(count, size: size)
             count += 1
         }
