@@ -26,14 +26,16 @@ PINNED_ID="${SYSROOT_ARTIFACT_ID:-$(sed -n 's/^| *Artifact *|.* id `\([0-9][0-9]
 if [ -z "$PINNED_ID" ]; then
     echo "warning: no sysroot artifact id pinned in docs/sysroot.md, using the newest GitHub copy." >&2
     "$SCRIPTS/fetch_sysroot.sh"
-    exit 0
+else
+    LATEST_ID="$("$SCRIPTS/fetch_sysroot.sh" --latest-id)"
+    echo "Pinned sysroot: $PINNED_ID, newest GitHub copy: $LATEST_ID"
+    if [ "$PINNED_ID" -gt "$LATEST_ID" ]; then
+        # Package outside the repository: the release zip is not needed on CI.
+        SYSROOT_PACKAGE_DIR="${TMPDIR:-/tmp}" "$SCRIPTS/fetch_utm_sysroot.sh" "$PINNED_ID"
+    else
+        "$SCRIPTS/fetch_sysroot.sh" "$PINNED_ID"
+    fi
 fi
 
-LATEST_ID="$("$SCRIPTS/fetch_sysroot.sh" --latest-id)"
-echo "Pinned sysroot: $PINNED_ID, newest GitHub copy: $LATEST_ID"
-if [ "$PINNED_ID" -gt "$LATEST_ID" ]; then
-    # Package outside the repository: the release zip is not needed on CI.
-    SYSROOT_PACKAGE_DIR="${TMPDIR:-/tmp}" "$SCRIPTS/fetch_utm_sysroot.sh" "$PINNED_ID"
-else
-    "$SCRIPTS/fetch_sysroot.sh" "$PINNED_ID"
-fi
+echo "Sysroot/VERSION:"
+cat "$CI_PRIMARY_REPOSITORY_PATH/Sysroot/VERSION"
