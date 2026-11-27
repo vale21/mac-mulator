@@ -14,7 +14,7 @@ explains how that sysroot is obtained, pinned and updated.
 | What | Value |
 |---|---|
 | Artifact | `Sysroot-macos-universal` id `14414638153` |
-| MacMulator copy | `MacMulator-UTM-SysRoot-14414638153.zip` in release `TBD` |
+| MacMulator copy | `MacMulator-UTM-SysRoot-14414638153.zip` in release `1.0.0 Beta 29` |
 | UTM commit | `3d4b8d8cb1ce93a8b1a9610695c12487685f0c15` (tag `v5.0.9-2`, built 2026-11-18) |
 | Qemu | 10.0.12 (UTM fork) |
 | CocoaSpice | revision `e239fab0828ebafc3a5a973fa84039400d7ac703` |
