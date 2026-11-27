@@ -178,6 +178,11 @@ class QemuUtils {
         socketPath("sp", vmPath)
     }
 
+    static func usesSSHPortMapping(_ vm: VirtualMachine) -> Bool {
+        // Only user mode hides the guest behind Qemu: on bridged and vmnet networks the host reaches it at its own address
+        Utils.isQemuVirtualMachine(vm) && (vm.networkMode ?? QemuConstants.NETWORK_MODE_USER) == QemuConstants.NETWORK_MODE_USER
+    }
+
     static func sshPortMapping(for vm: VirtualMachine) -> PortMapping? {
         vm.portMappings?.first { $0.vmPort == 22 }
     }
