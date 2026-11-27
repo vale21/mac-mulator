@@ -16,9 +16,11 @@
 # runs this script.
 #
 # Usage: scripts/fetch_sysroot.sh [artifact-id]
+#        scripts/fetch_sysroot.sh --latest-id
 #
 # Without an argument the copy with the highest artifact id (the most recent
-# UTM build) found in any release is used. Set SYSROOT_ZIP to the path of an
+# UTM build) found in any release is used. --latest-id only prints that id and
+# downloads nothing. Set SYSROOT_ZIP to the path of an
 # already downloaded MacMulator-UTM-SysRoot-*.zip to skip the download.
 set -e
 
@@ -42,6 +44,12 @@ github_token () {
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/macmulator-sysroot.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 
+LATEST_ID_ONLY=
+if [ "$1" = "--latest-id" ]; then
+    LATEST_ID_ONLY=1
+    shift
+fi
+
 ARTIFACT_ID="$1"
 SOURCE=
 
@@ -61,7 +69,7 @@ else
     }
 
     # Fetch every page of the release list; the tag a copy is attached to is not known in advance.
-    echo "Looking up ${ARTIFACT_ID:-the latest} sysroot in the releases of $REPO..."
+    echo "Looking up ${ARTIFACT_ID:-the latest} sysroot in the releases of $REPO..." >&2
     PAGE=1
     while :; do
         api -o "$WORK/releases-$PAGE.json" "https://api.github.com/repos/$REPO/releases?per_page=100&page=$PAGE"
@@ -98,6 +106,10 @@ EOF
     if [ -z "$URL" ]; then
         echo "error: no $ASSET_PREFIX${REQUESTED_ID:-*}.zip asset found in the releases of $REPO." >&2
         exit 1
+    fi
+    if [ -n "$LATEST_ID_ONLY" ]; then
+        echo "$ARTIFACT_ID"
+        exit 0
     fi
 
     echo "Downloading sysroot $ARTIFACT_ID from release $TAG..."
