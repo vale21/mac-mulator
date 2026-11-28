@@ -95,6 +95,11 @@
 "EditVMViewController.snapshots" = "Snapshots";
 "EditVMViewController.video" = "Video";
 "EditVMViewController.windowTitle" = "Configure %@ VM";
+"EditVMViewController.vmPausedNotice" = "This VM is paused. Stop it to change these settings.";
+"EditVMViewController.vmRunningNotice" = "This VM is running. Stop it to change these settings.";
+"EditVMViewController.vmRunningNoticeUSBImages" = "This VM is running. Only USB images can be attached or removed until it is stopped.";
+"EditVMViewController.vmPausedNoticeNameAndDescription" = "This VM is paused. Only its name and description can be changed until it is stopped.";
+"EditVMViewController.vmRunningNoticeNameAndDescription" = "This VM is running. Only its name and description can be changed until it is stopped.";
 "EditVMViewControllerAdvanced.accelerateVM" = "Accelerate the VM using Apple Hypervisor";
 "EditVMViewControllerAdvanced.featureNotAvailable" = "This feature is not available because the VM has architecture %@, which is different from the architecture of your Mac (%@)";
 "EditVMViewControllerAdvanced.qemuCommandDescription" = "If you edit the command below, MacMulator will use it to run Qemu, regardless of the other configuration options in the other tabs. Use care when modifying it, or your VM will not start. If you are changing the executable, be sure that it is trusted. To reset it to default you can just wipe the text box.";
@@ -136,6 +141,9 @@
 "EditVMViewControllerHardware.createNewDiskTooltip" = "Create a new empty disk for this VM.";
 "EditVMViewControllerHardware.importDriveTooltip" = "Copy an existing disk image into this VM as a new disk, e.g. a cloud image. Images in a format the VM cannot use are converted.";
 "EditVMViewControllerHardware.drivesTemplateTooltip" = "This VM is a template, and its disks cannot be changed. Create a VM from it to change them.";
+"EditVMViewControllerHardware.imageNeedsStoppedVM" = "Only USB images can be attached while the VM is running. Stop the VM to add this image.";
+"EditVMViewControllerHardware.openImageVMRunningTooltip" = "Attach a USB image to the running VM.";
+"EditVMViewControllerHardware.drivesVMRunningTooltip" = "The disks of this VM cannot be changed while it is running or paused. Stop it to change them.";
 "EditVMViewControllerHardware.drivesOneDriveTooltip" = "This VM is based on Apple Virtualization Framework, and can use only one disk. Delete the current disk to add another one.";
 "EditVMViewControllerHardware.openImageIPSWTooltip" = "An installation image is already attached to this VM. Remove it to attach another image.";
 "EditVMViewControllerHardware.importDriveMacOSTooltip" = "This macOS VM cannot use an imported disk: macOS can only be installed on a disk created by MacMulator.";

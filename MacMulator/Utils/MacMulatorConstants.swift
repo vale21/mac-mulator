@@ -59,6 +59,7 @@ class MacMulatorConstants {
     static let SNAPSHOTS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.snapshotsChanged")
     static let VMNET_NETWORKS_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmnetNetworksChanged")
     static let VM_PAUSE_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmPauseStateChanged")
+    static let VM_RUN_STATE_CHANGED_NOTIFICATION = Notification.Name("MacMulator.vmRunStateChanged")
 
     static let PREFERENCE_KEY_SAVED_VMS = "savedVMs"
     static let PREFERENCE_KEY_VMS_FOLDER_PATH = "vmsFolderPath"

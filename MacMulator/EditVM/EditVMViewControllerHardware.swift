@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTableViewDataSource, NSTableViewDelegate, VMSettingsLockable {
     @IBOutlet var architectureLabel: NSTextField!
     @IBOutlet var architectureComboBox: NSComboBox!
     @IBOutlet var cpusLabel: NSTextField!
@@ -26,6 +26,14 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     var virtualMachine: VirtualMachine?
     var vmRunner: VirtualMachineRunner?
+    var vmLocked = false
+
+    var allowedEditsWhileLocked: AllowedEditsWhileLocked {
+        if let virtualMachine, isUSBHotPlugAvailable(virtualMachine) {
+            return .usbImages
+        }
+        return .nothing
+    }
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
@@ -34,6 +42,13 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
     func setVmRunner(_ vmRunner: VirtualMachineRunner) {
         self.vmRunner = vmRunner
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            updateView()
+        }
     }
 
     @IBAction func sliderChanged(_ sender: Any) {
@@ -131,6 +146,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                             mediaType: QemuConstants.MEDIATYPE_CDROM,
                             size: 0
                         )
+                    }
+                    if vmLocked, newDrive.mediaType != QemuConstants.MEDIATYPE_USB || !isUSBHotPlugAvailable(virtualMachine) {
+                        Utils.showAlert(window: self.view.window!, style: NSAlert.Style.informational, message: NSLocalizedString("EditVMViewControllerHardware.imageNeedsStoppedVM", comment: ""), virtualMachine: virtualMachine)
+                        return
                     }
                     virtualMachine.addVirtualDrive(newDrive)
                     virtualMachine.writeToPlist()
@@ -383,10 +402,16 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             if let virtualMachine, Utils.isVMTemplate(virtualMachine) {
                 cellView.editButton.isEnabled = false
                 cellView.deleteButton.isEnabled = false
+            } else if let virtualMachine, vmLocked {
+                // Only USB images can be detached from a running VM
+                cellView.editButton.isEnabled = false
+                cellView.deleteButton.isEnabled = drive?.mediaType == QemuConstants.MEDIATYPE_USB && isUSBHotPlugAvailable(virtualMachine)
             } else if drive?.mediaType == QemuConstants.MEDIATYPE_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_USB || drive?.mediaType == QemuConstants.MEDIATYPE_USB_CDROM || drive?.mediaType == QemuConstants.MEDIATYPE_IPSW {
                 cellView.editButton.isEnabled = false
+                cellView.deleteButton.isEnabled = true
             } else {
                 cellView.editButton.isEnabled = true
+                cellView.deleteButton.isEnabled = true
             }
         }
 
@@ -427,8 +452,11 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
                 memoryStepper.isEnabled = false
                 memorySlider.isEnabled = false
             } else {
-                memoryStepper.isEnabled = true
-                memorySlider.isEnabled = true
+                memoryStepper.isEnabled = !vmLocked
+                memorySlider.isEnabled = !vmLocked
+            }
+            for control in [architectureComboBox, cpusComboBox, memoryTextView] as [NSControl] {
+                control.isEnabled = !vmLocked
             }
 
             drivesTableView.reloadData()
@@ -488,6 +516,10 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         let openImage: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
+        } else if vmLocked, !isUSBHotPlugAvailable(virtualMachine) {
+            (false, "drivesVMRunningTooltip")
+        } else if vmLocked {
+            (true, "openImageVMRunningTooltip")
         } else if isAppleVM, Utils.findIPSWInstallDrive(virtualMachine.drives) != nil {
             (false, "openImageIPSWTooltip")
         } else {
@@ -496,6 +528,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         let createNewDisk: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
+        } else if vmLocked {
+            (false, "drivesVMRunningTooltip")
         } else if hasAppleMainDrive {
             (false, "drivesOneDriveTooltip")
         } else {
@@ -504,6 +538,8 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
 
         let importDrive: (enabled: Bool, tooltip: String) = if isTemplate {
             (false, "drivesTemplateTooltip")
+        } else if vmLocked {
+            (false, "drivesVMRunningTooltip")
         } else if isAppleVM, virtualMachine.os != QemuConstants.OS_LINUX {
             // A macOS drive cannot be imported: it needs the files created by the macOS installation
             (false, "importDriveMacOSTooltip")
@@ -517,6 +553,13 @@ class EditVMViewControllerHardware: NSViewController, NSComboBoxDataSource, NSCo
             button.isEnabled = state.enabled
             button.toolTip = NSLocalizedString("EditVMViewControllerHardware." + state.tooltip, comment: "")
         }
+    }
+
+    private func isUSBHotPlugAvailable(_ virtualMachine: VirtualMachine) -> Bool {
+        if #available(macOS 15.0, *) {
+            return virtualMachine.type == MacMulatorConstants.APPLE_VM && vmRunner?.isVMRunning() == true
+        }
+        return false
     }
 
     private func showImportNotSupported(_ fileName: String, _ details: DiskImageDetails, _ virtualMachine: VirtualMachine) {

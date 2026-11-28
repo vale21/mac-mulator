@@ -505,6 +505,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
+        NotificationCenter.default.post(name: MacMulatorConstants.VM_RUN_STATE_CHANGED_NOTIFICATION, object: vm)
     }
 
     func unsetRunningVM(_ vm: VirtualMachine) {
@@ -516,6 +517,7 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
         let appDelegate = NSApp.delegate as! AppDelegate
         appDelegate.refreshVMMenus()
+        NotificationCenter.default.post(name: MacMulatorConstants.VM_RUN_STATE_CHANGED_NOTIFICATION, object: vm)
     }
 
     func isCurrentVMRunning() -> Bool {
@@ -524,6 +526,10 @@ class RootViewController: NSSplitViewController, NSWindowDelegate {
 
     func isVMRunning(_ vm: VirtualMachine?) -> Bool {
         vm != nil && runningVMs[vm!] != nil
+    }
+
+    func isVMRunningOrPaused(_ vm: VirtualMachine?) -> Bool {
+        isVMRunning(vm) || isVMPaused(vm)
     }
 
     func isVMPaused(_ vm: VirtualMachine?) -> Bool {

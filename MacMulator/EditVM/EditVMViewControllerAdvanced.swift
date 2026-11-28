@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate {
+class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTextViewDelegate, VMSettingsLockable {
     @IBOutlet var qemuPathLabel: NSTextField!
     @IBOutlet var qemuPathView: NSTextField!
     @IBOutlet var accelerateVM: NSButton!
@@ -17,10 +17,18 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
     @IBOutlet var fullCommandView: NSTextView!
 
     var virtualMachine: VirtualMachine?
+    var vmLocked = false
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
         updateView()
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            updateView()
+        }
     }
 
     @IBAction func findButtonClicked(_: Any) {
@@ -158,6 +166,12 @@ class EditVMViewControllerAdvanced: NSViewController, NSTextFieldDelegate, NSTex
                     accelerateVM.state = Utils.getAccelForSubType(virtualMachine.os, virtualMachine.subtype) ? NSButton.StateValue.on : NSButton.StateValue.off
                 }
             }
+
+            accelerateVM.isEnabled = accelerateVM.isEnabled && !vmLocked
+            qemuPathView.isEnabled = !vmLocked
+            qemuPathButton.isEnabled = !vmLocked
+            fullCommandView.isEditable = !vmLocked
+            fullCommandView.textColor = vmLocked ? .disabledControlTextColor : .textColor
         }
     }
 }

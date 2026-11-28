@@ -8,7 +8,7 @@
 import Cocoa
 import Virtualization
 
-class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor, VmnetNetworkSelector {
+class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, NSTableViewDataSource, NSTableViewDelegate, PortMappingsEditor, VmnetNetworkSelector, VMSettingsLockable {
     @IBOutlet var networkModeLabel: NSTextField!
     @IBOutlet var networkModeComboBox: NSComboBox!
     @IBOutlet var physicalDeviceLabel: NSTextField!
@@ -30,6 +30,7 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     var adaptersList: [String] = []
     var networkModes: [String] = [QemuConstants.NETWORK_MODE_USER]
     var vmnetNetworks: [VmnetNetwork] = []
+    var vmLocked = false
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
@@ -37,6 +38,15 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
         loadNetworkModes()
         loadAdaptersList()
         updateView()
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            // Locking disables every control: unlocking enables them all before the view gives each one its state again
+            Utils.setControlsEnabled(true, in: view)
+            updateView()
+        }
     }
 
     @IBAction func openNetworksPreferences(_: Any) {
@@ -131,6 +141,9 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
                 }
             }
         }
+        if let cell {
+            Utils.setControlsEnabled(!vmLocked, in: cell)
+        }
 
         return cell
     }
@@ -195,6 +208,9 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
             networkAdapterComboBox.selectItem(at: adaptersList.firstIndex(of: virtualMachine.networkDevice ?? Utils.getNetworkForSubType(virtualMachine.os, virtualMachine.subtype, MacMulatorConstants.QEMU_VM)) ?? -1)
 
             updateNetworkingControls()
+            if vmLocked {
+                Utils.setControlsEnabled(false, in: view)
+            }
         }
     }
 
@@ -213,12 +229,13 @@ class EditVMViewControllerNetwork: NSViewController, NSComboBoxDataSource, NSCom
     }
 
     func selectVmnetNetwork(_ network: VmnetNetwork) {
+        guard !vmLocked else { return }
         virtualMachine?.vmnetNetworkId = network.id
         updateNetworkModeControls()
     }
 
     @objc private func vmnetNetworksDidChange(_: Notification) {
-        updateNetworkModeControls()
+        updateView()
     }
 
     private func updateNetworkingControls() {

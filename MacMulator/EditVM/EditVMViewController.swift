@@ -7,9 +7,30 @@
 
 import Cocoa
 
+enum AllowedEditsWhileLocked: String {
+    case nothing = ""
+    case nameAndDescription = "NameAndDescription"
+    case usbImages = "USBImages"
+}
+
+protocol VMSettingsLockable: AnyObject {
+    var allowedEditsWhileLocked: AllowedEditsWhileLocked { get }
+    func setVMLocked(_ locked: Bool)
+}
+
+extension VMSettingsLockable {
+    var allowedEditsWhileLocked: AllowedEditsWhileLocked {
+        .nothing
+    }
+}
+
 class EditVMViewController: NSTabViewController {
     var vmRunner: VirtualMachineRunner?
     var virtualMachine: VirtualMachine?
+    private let lockedNoticeLabel = NSTextField(wrappingLabelWithString: "")
+    private lazy var lockedNotice = makeLockedNotice()
+    private var vmPaused = false
+    private var vmLocked = false
 
     func setVmRunner(_ vmRunner: VirtualMachineRunner) {
         self.vmRunner = vmRunner
@@ -76,6 +97,31 @@ class EditVMViewController: NSTabViewController {
             }
             removeTabViewItem(tabViewItems[3])
         }
+
+        updateLockState()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(vmStateChanged(_:)), name: MacMulatorConstants.VM_RUN_STATE_CHANGED_NOTIFICATION, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(vmStateChanged(_:)), name: MacMulatorConstants.VM_PAUSE_STATE_CHANGED_NOTIFICATION, object: nil)
+    }
+
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        if let window = view.window, !window.titlebarAccessoryViewControllers.contains(lockedNotice) {
+            window.addTitlebarAccessoryViewController(lockedNotice)
+        }
+        updateLockState()
+    }
+
+    override func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
+        super.tabView(tabView, didSelect: tabViewItem)
+        updateLockedNotice()
     }
 
     override func viewWillDisappear() {
@@ -93,5 +139,67 @@ class EditVMViewController: NSTabViewController {
     func selectTab(tabIdentifier: String) {
         guard let idx = tabViewItems.firstIndex(where: { ($0.identifier as? String) == tabIdentifier }) else { return }
         selectedTabViewItemIndex = idx
+    }
+
+    @objc private func vmStateChanged(_ notification: Notification) {
+        guard let changedVM = notification.object as? VirtualMachine, changedVM === virtualMachine else { return }
+        DispatchQueue.main.async {
+            self.updateLockState()
+        }
+    }
+
+    private func updateLockState() {
+        guard let virtualMachine, let rootController = (NSApp.delegate as? AppDelegate)?.rootController else { return }
+
+        let running = rootController.isVMRunning(virtualMachine)
+        let paused = rootController.isVMPaused(virtualMachine)
+        // The VM may have been started or stopped since the panel was opened
+        let runner = rootController.getRunnerForRunningVM(virtualMachine) ?? Utils.createDummyRunnerForStoppedVM(virtualMachine)
+        vmRunner = runner
+
+        for item in tabViewItems {
+            if let hardware = item.viewController as? EditVMViewControllerHardware {
+                hardware.setVmRunner(runner)
+            } else if let snapshots = item.viewController as? EditVMViewControllerSnapshots {
+                snapshots.setVmRunner(runner)
+            }
+            (item.viewController as? VMSettingsLockable)?.setVMLocked(running || paused)
+        }
+
+        vmPaused = paused
+        vmLocked = running || paused
+        updateLockedNotice()
+    }
+
+    private func updateLockedNotice() {
+        let selectedController = tabViewItems.indices.contains(selectedTabViewItemIndex) ? tabViewItems[selectedTabViewItemIndex].viewController : nil
+        // Tabs that lock nothing, like Snapshots, show no notice
+        guard vmLocked, let lockable = selectedController as? VMSettingsLockable else {
+            lockedNotice.isHidden = true
+            return
+        }
+
+        let key = (vmPaused ? "EditVMViewController.vmPausedNotice" : "EditVMViewController.vmRunningNotice") + lockable.allowedEditsWhileLocked.rawValue
+        lockedNoticeLabel.stringValue = NSLocalizedString(key, comment: "")
+        lockedNotice.isHidden = false
+    }
+
+    private func makeLockedNotice() -> NSTitlebarAccessoryViewController {
+        let icon = NSImageView(image: NSImage(systemSymbolName: "lock.fill", accessibilityDescription: nil) ?? NSImage())
+        icon.contentTintColor = .secondaryLabelColor
+        icon.setContentHuggingPriority(.required, for: .horizontal)
+        lockedNoticeLabel.textColor = .secondaryLabelColor
+
+        let stack = NSStackView(views: [icon, lockedNoticeLabel])
+        stack.orientation = .horizontal
+        stack.alignment = .centerY
+        stack.edgeInsets = NSEdgeInsets(top: 6, left: 20, bottom: 6, right: 20)
+        stack.frame = NSRect(x: 0, y: 0, width: 600, height: 30)
+
+        let controller = NSTitlebarAccessoryViewController()
+        controller.view = stack
+        controller.layoutAttribute = .bottom
+        controller.isHidden = true
+        return controller
     }
 }

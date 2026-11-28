@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate {
+class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSComboBoxDelegate, VMSettingsLockable {
     @IBOutlet var showScreenLabel: NSTextField!
     @IBOutlet var showScreenSwitch: NSSwitch!
     @IBOutlet var showScreenDescriptionText: NSTextField!
@@ -29,6 +29,7 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
     var spiceSupported: Bool = true
     var adaptersList: [String] = []
     var displaysList: [String] = []
+    var vmLocked = false
 
     func setVirtualMachine(_ vm: VirtualMachine) {
         virtualMachine = vm
@@ -46,6 +47,15 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
         loadDisplaysList()
 
         updateView()
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            // Locking disables every control: unlocking enables them all before the view gives each one its state again
+            Utils.setControlsEnabled(true, in: view)
+            updateView()
+        }
     }
 
     private var qemuVideoViews: [NSView] {
@@ -216,6 +226,9 @@ class EditVMViewControllerVideo: NSViewController, NSComboBoxDataSource, NSCombo
                         control.isEnabled = true
                     }
                 }
+            }
+            if vmLocked {
+                Utils.setControlsEnabled(false, in: view)
             }
         }
     }

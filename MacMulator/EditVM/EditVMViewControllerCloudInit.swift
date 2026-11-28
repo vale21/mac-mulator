@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerCloudInit: NSViewController, NSTextFieldDelegate, NSTextViewDelegate, NSPopoverDelegate {
+class EditVMViewControllerCloudInit: NSViewController, NSTextFieldDelegate, NSTextViewDelegate, NSPopoverDelegate, VMSettingsLockable {
     @IBOutlet var cloudInitLabel: NSTextField!
     @IBOutlet var cloudInitSwitch: NSSwitch!
     @IBOutlet var descriptionText: NSTextField!
@@ -51,6 +51,7 @@ class EditVMViewControllerCloudInit: NSViewController, NSTextFieldDelegate, NSTe
     @IBOutlet var ipv6GatewayField: NSTextField!
 
     var virtualMachine: VirtualMachine?
+    var vmLocked = false
     private var userNameEditedManually = false
     private lazy var ipConfigPopover: NSPopover = {
         let controller = NSViewController()
@@ -67,6 +68,13 @@ class EditVMViewControllerCloudInit: NSViewController, NSTextFieldDelegate, NSTe
         virtualMachine = vm
         if isViewLoaded {
             populateView()
+        }
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            updateView()
         }
     }
 
@@ -193,7 +201,8 @@ class EditVMViewControllerCloudInit: NSViewController, NSTextFieldDelegate, NSTe
     }
 
     private func updateView() {
-        let enabled = cloudInitSwitch.state == .on
+        let enabled = cloudInitSwitch.state == .on && !vmLocked
+        cloudInitSwitch.isEnabled = !vmLocked
         let controls: [NSControl] = [fullNameLabel, fullNameField, userNameLabel, userNameField, passwordLabel, passwordField,
                                      retypePasswordLabel, retypePasswordField, dnsDomainsLabel, dnsDomainsField, dnsServersLabel,
                                      dnsServersField, sshKeysLabel, upgradePackagesLabel, upgradePackagesSwitch, ipConfigLabel,

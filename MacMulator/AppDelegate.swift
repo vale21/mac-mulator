@@ -594,7 +594,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func updateMenusForVM(_ vm: VirtualMachine, rootController: RootViewController) {
         let isRunning = rootController.isCurrentVMRunning()
-        let canConvert = !isRunning
+        let canConvert = !rootController.isVMRunningOrPaused(vm)
 
         cloneVMMemuItem.isEnabled = !isRunning
         showVMInFinderMenuItem.isEnabled = true
@@ -604,7 +604,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         snapshotsViewRestoreMenuItem.isEnabled = true
 
         updatePowerMenus(for: vm, isRunning: isRunning)
-        updateExportImportMenus(for: vm)
+        updateExportImportMenus(for: vm, isStopped: canConvert)
         updateConversionMenus(for: vm, canConvert: canConvert, rootController: rootController)
         updateUSBMenus(for: vm)
         updateSessionMenus(for: vm, isRunning: isRunning)
@@ -637,10 +637,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    private func updateExportImportMenus(for vm: VirtualMachine) {
+    private func updateExportImportMenus(for vm: VirtualMachine, isStopped: Bool) {
         importFromParallelsMenuItem.isEnabled = true
         #if arch(arm64)
-            let canExport = Utils.isFullFeaturedMacOSVM(vm)
+            let canExport = isStopped && Utils.isFullFeaturedMacOSVM(vm)
         #else
             let canExport = false
         #endif
@@ -655,7 +655,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         convertToTemplateMenuItem.isEnabled = canConvert && !rootController.isVMPaused(vm) && (vm.type == MacMulatorConstants.QEMU_VM || (vm.type == MacMulatorConstants.APPLE_VM && appleTemplatesSupported))
         convertToFullCloneMenuItem.isHidden = !Utils.isFullCloneConversionSupported(vm)
-        convertToFullCloneMenuItem.isEnabled = canConvert && vm.hasLinkedDrives
+        convertToFullCloneMenuItem.isEnabled = !rootController.isVMRunning(vm) && vm.hasLinkedDrives
 
         if vm.type == MacMulatorConstants.APPLE_VM {
             convertToQemuMenuItem.isEnabled = canConvert && !vm.hasLinkedDrives && !Utils.isMacVMWithOSVirtualizationFramework(os: vm.os, subtype: vm.subtype)

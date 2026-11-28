@@ -7,7 +7,7 @@
 
 import Cocoa
 
-class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTextViewDelegate {
+class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTableViewDelegate, NSComboBoxDataSource, NSComboBoxDelegate, NSTextFieldDelegate, NSTextViewDelegate, VMSettingsLockable {
     @IBOutlet var vmTypeLabel: NSTextField!
     @IBOutlet var vmType: NSComboBox!
     @IBOutlet var vmSubTypeLabel: NSTextField!
@@ -28,6 +28,8 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
     let accountPasteboardType = NSPasteboard.PasteboardType.string
     var updating = false
     var currentResolution: [Int] = []
+    var vmLocked = false
+    let allowedEditsWhileLocked = AllowedEditsWhileLocked.nameAndDescription
 
     let availableResolutions = Utils.getAvailableResolutions()
     let availableResolutionsDesc = Utils.getAvailableResolutionsDesc()
@@ -36,6 +38,13 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
         virtualMachine = vm
         updateView()
         currentResolution = Utils.getResolutionElements(vm.displayResolution)
+    }
+
+    func setVMLocked(_ locked: Bool) {
+        vmLocked = locked
+        if isViewLoaded {
+            updateView()
+        }
     }
 
     override func viewWillAppear() {
@@ -205,6 +214,10 @@ class EditVMViewControllerGeneral: NSViewController, NSTableViewDataSource, NSTa
 
             selectBootDrive(virtualMachine)
             resolutionTable.selectRowIndexes(IndexSet(integer: IndexSet.Element(0)), byExtendingSelection: false)
+
+            for control in [vmType, vmSubType, bootOrderTable, resolutionTable] as [NSControl] {
+                control.isEnabled = !vmLocked
+            }
             updating = false
         }
     }
